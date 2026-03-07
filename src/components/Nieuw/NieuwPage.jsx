@@ -611,10 +611,25 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     return result;
   }, [veldConfig]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [form, setForm] = useState(() => editRecord
-    ? { ...EMPTY_FORM, ...editRecord }
-    : { ...EMPTY_FORM, ringer_initiaal: settings?.ringerInitiaal || '', ringer_nummer: settings?.ringerNummer || '' }
-  );
+  const [form, setForm] = useState(() => {
+    if (editRecord) return { ...EMPTY_FORM, ...editRecord };
+    const base = { ...EMPTY_FORM, ringer_initiaal: settings?.ringerInitiaal || '', ringer_nummer: settings?.ringerNummer || '' };
+    // Vul project en locatie voor uit de meest recente vangst van vandaag binnen een uur
+    const now = Date.now();
+    const today = new Date().toISOString().split('T')[0];
+    const recent = [...(records || [])]
+      .filter(r => r.vangstdatum === today && r.timestamp && (now - new Date(r.timestamp).getTime()) <= 60 * 60 * 1000)
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+    if (recent) {
+      base.project      = recent.project      ?? base.project;
+      base.plaatscode   = recent.plaatscode   ?? base.plaatscode;
+      base.google_plaats = recent.google_plaats ?? base.google_plaats;
+      base.lat          = recent.lat          ?? base.lat;
+      base.lon          = recent.lon          ?? base.lon;
+      base.nauwk_coord  = recent.nauwk_coord  ?? base.nauwk_coord;
+    }
+    return base;
+  });
   const [formErrors, setFormErrors] = useState([]);
   const [sections, setSections] = useState({
     nieuweVangst: true,
