@@ -621,12 +621,14 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
       .filter(r => r.vangstdatum === today && r.timestamp && (now - new Date(r.timestamp).getTime()) <= 60 * 60 * 1000)
       .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
     if (recent) {
-      base.project      = recent.project      ?? base.project;
-      base.plaatscode   = recent.plaatscode   ?? base.plaatscode;
-      base.google_plaats = recent.google_plaats ?? base.google_plaats;
-      base.lat          = recent.lat          ?? base.lat;
-      base.lon          = recent.lon          ?? base.lon;
-      base.nauwk_coord  = recent.nauwk_coord  ?? base.nauwk_coord;
+      base.project        = recent.project        ?? base.project;
+      base.plaatscode     = recent.plaatscode     ?? base.plaatscode;
+      base.google_plaats  = recent.google_plaats  ?? base.google_plaats;
+      base.lat            = recent.lat            ?? base.lat;
+      base.lon            = recent.lon            ?? base.lon;
+      base.nauwk_coord    = recent.nauwk_coord    ?? base.nauwk_coord;
+      base.vangstmethode  = recent.vangstmethode  ?? base.vangstmethode;
+      base.lokmiddelen    = recent.lokmiddelen    ?? base.lokmiddelen;
     }
     return base;
   });
@@ -637,7 +639,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     ringgegevens: true,
     vogel: true,
     vangst: true,
-    locatie: false,
+    locatie: true,
     biometrieBasis: true,
     biometrieVervolg: false,
     rui: false,
@@ -1531,7 +1533,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       <span className="ruitype-seizoen">Voorjaar</span>
                       <div className="ruitype-opties">
                         <div className="ruitype-optie">
-                          <span className="ruitype-val">na 1 kj, leeftijd niet mogelijk</span>
+                          <span className="ruitype-val">volgroeid, leeftijd niet mogelijk</span>
                         </div>
                       </div>
                     </div>
@@ -1539,7 +1541,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       <span className="ruitype-seizoen">Najaar</span>
                       <div className="ruitype-opties">
                         <div className="ruitype-optie">
-                          <span className="ruitype-val">volgroeid, leeftijd niet mogelijk</span>
+                          <span className="ruitype-val">na 1 kj, leeftijd niet mogelijk</span>
                         </div>
                       </div>
                     </div>
@@ -1591,11 +1593,11 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       <div className="ruitype-opties">
                         <div className="ruitype-optie">
                           <span className="ruitype-cond">met ruigrens</span>
-                          <span className="ruitype-val">1 kj</span>
+                          <span className="ruitype-val">2 kj</span>
                         </div>
                         <div className="ruitype-optie">
                           <span className="ruitype-cond">zonder ruigrens</span>
-                          <span className="ruitype-val">na 1 kj</span>
+                          <span className="ruitype-val">na 2 kj</span>
                         </div>
                       </div>
                     </div>
@@ -1604,11 +1606,11 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       <div className="ruitype-opties">
                         <div className="ruitype-optie">
                           <span className="ruitype-cond">met ruigrens</span>
-                          <span className="ruitype-val">2 kj</span>
+                          <span className="ruitype-val">1 kj</span>
                         </div>
                         <div className="ruitype-optie">
                           <span className="ruitype-cond">zonder ruigrens</span>
-                          <span className="ruitype-val">na 2 kj</span>
+                          <span className="ruitype-val">na 1 kj</span>
                         </div>
                       </div>
                     </div>
@@ -1661,6 +1663,19 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       <span className="ruitype-seizoen">Voorjaar</span>
                       <div className="ruitype-opties">
                         <div className="ruitype-optie">
+                          <span className="ruitype-cond">ruigrens</span>
+                          <span className="ruitype-val">1 kj</span>
+                        </div>
+                        <div className="ruitype-optie">
+                          <span className="ruitype-cond">geen ruigrens</span>
+                          <span className="ruitype-val">na 1 kj</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="ruitype-groep ruitype-groep--separator">
+                      <span className="ruitype-seizoen">Najaar</span>
+                      <div className="ruitype-opties">
+                        <div className="ruitype-optie">
                           <span className="ruitype-cond">twee ruigrenzen</span>
                           <span className="ruitype-val">2 kj</span>
                         </div>
@@ -1670,19 +1685,6 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                         </div>
                         <div className="ruitype-optie">
                           <span className="ruitype-cond">twijfel</span>
-                          <span className="ruitype-val">na 1 kj</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="ruitype-groep ruitype-groep--separator">
-                      <span className="ruitype-seizoen">Najaar</span>
-                      <div className="ruitype-opties">
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">ruigrens</span>
-                          <span className="ruitype-val">1 kj</span>
-                        </div>
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">geen ruigrens</span>
                           <span className="ruitype-val">na 1 kj</span>
                         </div>
                       </div>
@@ -1736,7 +1738,12 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       <span className="ruitype-seizoen">Voorjaar</span>
                       <div className="ruitype-opties">
                         <div className="ruitype-optie">
-                          <span className="ruitype-val">niet mogelijk op kleed, na 1 kj</span>
+                          <span className="ruitype-cond">vers kleed</span>
+                          <span className="ruitype-val">1 kj</span>
+                        </div>
+                        <div className="ruitype-optie">
+                          <span className="ruitype-cond">versleten kleed</span>
+                          <span className="ruitype-val">na 1 kj</span>
                         </div>
                       </div>
                     </div>
@@ -1744,12 +1751,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       <span className="ruitype-seizoen">Najaar</span>
                       <div className="ruitype-opties">
                         <div className="ruitype-optie">
-                          <span className="ruitype-cond">vers kleed</span>
-                          <span className="ruitype-val">1 kj</span>
-                        </div>
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">versleten kleed</span>
-                          <span className="ruitype-val">na 1 kj</span>
+                          <span className="ruitype-val">niet mogelijk op kleed, na 1 kj</span>
                         </div>
                       </div>
                     </div>
