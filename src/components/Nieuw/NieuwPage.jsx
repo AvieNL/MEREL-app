@@ -956,7 +956,8 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     const errors = [];
     for (const f of requiredFields) {
       if (f.conditie && !f.conditie(form)) continue;
-      const val = f.key === 'euring_code' ? euringCode : form[f.key];
+      if (f.key === 'euring_code') continue; // auto-afgeleid, niet door gebruiker invulbaar
+      const val = form[f.key];
       const isEmpty = f.isPullusField
         ? (val === '' || val === null || val === undefined || val === '--')
         : (val === '' || val === null || val === undefined);
