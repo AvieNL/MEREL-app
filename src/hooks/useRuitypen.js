@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'vrs_ruitype_config';
 
-export const RUITYPE_TYPES = ['A', 'B', 'C', 'D'];
+export const RUITYPE_TYPES = ['A', 'B', 'C', 'D', 'X'];
 
 // Standaard seizoensteksten (na omwisseling voorjaar/najaar d.d. 2026-03)
 export const DEFAULT_RUITYPE_CONFIG = {
@@ -35,6 +35,10 @@ export const DEFAULT_RUITYPE_CONFIG = {
       { cond: 'versleten kleed', val: 'na 1 kj' },
     ],
     najaar: [{ cond: '', val: 'niet mogelijk op kleed, na 1 kj' }],
+  },
+  X: {
+    voorjaar: [{ cond: '', val: 'leeftijdsbepaling niet mogelijk' }],
+    najaar:   [{ cond: '', val: 'leeftijdsbepaling niet mogelijk' }],
   },
 };
 

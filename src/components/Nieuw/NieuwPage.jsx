@@ -1278,6 +1278,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                           {speciesInfo.ruitype === 'B' && <span className="ruitype-badge">Ruigrens bepalend</span>}
                           {speciesInfo.ruitype === 'C' && <span className="ruitype-badge">Ruigrens bepalend</span>}
                           {speciesInfo.ruitype === 'D' && <span className="ruitype-badge">Kleed bepalend</span>}
+                          {speciesInfo.ruitype === 'X' && <span className="ruitype-badge">Leeftijd niet bepaalbaar</span>}
                         </span>
                       </div>
                     )}
@@ -1694,6 +1695,9 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                     </div>
                   )}
                   {settings?.hulpModus !== 'basis' && <RuiSeizoenTekst type="D" config={ruitypenConfig} />}
+                </>}
+                {speciesInfo?.ruitype === 'X' && <>
+                  {settings?.hulpModus !== 'basis' && <RuiSeizoenTekst type="X" config={ruitypenConfig} />}
                 </>}
               </div>
 

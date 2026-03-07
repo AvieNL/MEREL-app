@@ -133,11 +133,11 @@ export default function RuitypeInfo({ ruitype }) {
   const config = useRuitypen();
   const kal = KALENDARS[ruitype];
   const seizoen = config[ruitype];
-  if (!kal || !seizoen) return null;
+  if (!seizoen) return null;
 
   return (
     <div className="rui-blok">
-      <Kalender juv={kal.juv} ad={kal.ad} />
+      {kal && <Kalender juv={kal.juv} ad={kal.ad} />}
       <Seizoenen items={[
         { seizoen: 'Voorjaar', opties: seizoen.voorjaar },
         { seizoen: 'Najaar',   opties: seizoen.najaar, separator: true },
