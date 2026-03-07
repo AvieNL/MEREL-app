@@ -395,12 +395,9 @@ const NAUWK_DATUM_OPTIONS = [
 
 const RUI_LICHAAM_OPTIONS = [
   { value: '', label: '-- Kies --' },
-  { value: 'B', label: 'B – Actieve lichaam-/dekverenrui' },
-  { value: 'J', label: 'J – Volledig juveniel verenkleed' },
-  { value: 'M', label: 'M – Actieve rui incl. slagpennen' },
-  { value: 'P', label: 'P – Partiële postjuveniele rui' },
-  { value: 'X', label: 'X – Geen rui, niet juveniel' },
-  { value: 'U', label: 'U – Onbekend / niet onderzocht' },
+  { value: '0', label: '0 – Geen rui' },
+  { value: '1', label: '1 – Gedeeltelijke rui' },
+  { value: '2', label: '2 – Volledige rui' },
 ];
 
 const EMPTY_FORM = {
@@ -959,7 +956,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     const errors = [];
     for (const f of requiredFields) {
       if (f.conditie && !f.conditie(form)) continue;
-      const val = form[f.key];
+      const val = f.key === 'euring_code' ? euringCode : form[f.key];
       const isEmpty = f.isPullusField
         ? (val === '' || val === null || val === undefined || val === '--')
         : (val === '' || val === null || val === undefined);
