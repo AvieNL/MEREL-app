@@ -216,9 +216,6 @@ const VET_OPTIONS = [
   { value: '3', label: '3 – Matig vet (⅔ fossa)' },
   { value: '4', label: '4 – Fossa gevuld, nog hol' },
   { value: '5', label: '5 – Fossa bol / uitpuilend' },
-  { value: '6', label: '6 – Vet over borstspieren zichtbaar' },
-  { value: '7', label: '7 – Vet over ¾ van borstspieren' },
-  { value: '8', label: '8 – Borstspieren niet meer zichtbaar' },
 ];
 
 const VLIEGSPIER_OPTIONS = [
