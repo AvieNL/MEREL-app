@@ -62,7 +62,7 @@ export default function ProjectDetail({ records }) {
     projectRecords.forEach(r => {
       const soort = r.vogelnaam || 'Onbekend';
       if (!perSoort[soort]) perSoort[soort] = { nieuw: 0, terugvangst: 0 };
-      if (r.metalenringinfo === 1 || r.metalenringinfo === '1') {
+      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
         perSoort[soort].nieuw++;
         nieuw++;
       } else {
@@ -101,7 +101,7 @@ export default function ProjectDetail({ records }) {
     const eersteVangst = {};
     records.forEach(r => {
       if (!r.ringnummer) return;
-      if (r.metalenringinfo === 1 || r.metalenringinfo === '1') {
+      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
         const bestaand = eersteVangst[r.ringnummer];
         if (!bestaand || (r.vangstdatum && (!bestaand.vangstdatum || r.vangstdatum < bestaand.vangstdatum))) {
           eersteVangst[r.ringnummer] = r;
@@ -112,7 +112,7 @@ export default function ProjectDetail({ records }) {
     const lijst = [];
     projectRecords.forEach(r => {
       if (!r.ringnummer) return;
-      if (r.metalenringinfo === 1 || r.metalenringinfo === '1') return;
+      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') return;
 
       const origineel = eersteVangst[r.ringnummer];
       const tvDatum = parseDate(r.vangstdatum);

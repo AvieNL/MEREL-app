@@ -57,7 +57,7 @@ function computeStats(records) {
     soorten.add(naam);
 
     if (!perSoort[naam]) perSoort[naam] = { nieuw: 0, terugvangst: 0 };
-    if (r.metalenringinfo === 1 || r.metalenringinfo === '1') {
+    if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
       perSoort[naam].nieuw++;
       nieuw++;
     } else {
@@ -81,7 +81,7 @@ function computeStats(records) {
     if (r.project) {
       if (!perProject[r.project]) perProject[r.project] = { totaal: 0, nieuw: 0, terugvangst: 0, soorten: new Set() };
       perProject[r.project].totaal++;
-      if (r.metalenringinfo === 1 || r.metalenringinfo === '1') {
+      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
         perProject[r.project].nieuw++;
       } else {
         perProject[r.project].terugvangst++;
@@ -110,7 +110,7 @@ function computeTerugvangsten(records) {
   const eersteVangst = {};
   records.forEach(r => {
     if (!r.ringnummer) return;
-    if (r.metalenringinfo === 1 || r.metalenringinfo === '1') {
+    if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
       const bestaand = eersteVangst[r.ringnummer];
       if (!bestaand || (r.vangstdatum && (!bestaand.vangstdatum || r.vangstdatum < bestaand.vangstdatum))) {
         eersteVangst[r.ringnummer] = r;
@@ -121,7 +121,7 @@ function computeTerugvangsten(records) {
   const lijst = [];
   records.forEach(r => {
     if (!r.ringnummer) return;
-    if (r.metalenringinfo === 1 || r.metalenringinfo === '1') return;
+    if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') return;
 
     const origineel = eersteVangst[r.ringnummer];
     const tvDatum = parseDate(r.vangstdatum);

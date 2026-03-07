@@ -202,7 +202,7 @@ export function VangstKaart({ targetRecords, allRecords }) {
     const eersteVangst = {};
     allRecords.forEach(r => {
       if (!r.ringnummer) return;
-      if (r.metalenringinfo === 1 || r.metalenringinfo === '1') {
+      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
         const bestaand = eersteVangst[r.ringnummer];
         if (!bestaand || (r.vangstdatum && (!bestaand.vangstdatum || r.vangstdatum < bestaand.vangstdatum))) {
           eersteVangst[r.ringnummer] = r;
@@ -218,7 +218,7 @@ export function VangstKaart({ targetRecords, allRecords }) {
       const lon = parseFloat(r.lon);
       if (!lat || !lon || isNaN(lat) || isNaN(lon)) return;
 
-      const isNieuw = r.metalenringinfo === 1 || r.metalenringinfo === '1';
+      const isNieuw = r.metalenringinfo !== 4 && r.metalenringinfo !== '4';
       markers.push({
         lat, lon,
         soort: r.vogelnaam || 'Onbekend',
@@ -314,7 +314,7 @@ export function useChartData(targetRecords) {
       if (!d) return;
       const jaar = d.getFullYear();
       if (!map[jaar]) map[jaar] = { jaar, nieuw: 0, terugvangst: 0 };
-      if (r.metalenringinfo === 1 || r.metalenringinfo === '1') {
+      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
         map[jaar].nieuw++;
       } else {
         map[jaar].terugvangst++;
