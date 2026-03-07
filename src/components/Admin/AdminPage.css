@@ -238,10 +238,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  min-width: 0;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   .admin-rui-seizoenen { grid-template-columns: 1fr; }
+}
+
+.admin-rui-seizoen {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .admin-rui-seizoen-header {
@@ -265,8 +271,10 @@
   color: var(--accent);
   font-size: 0.72rem;
   border-radius: 4px;
-  padding: 1px 6px;
+  padding: 2px 7px;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .admin-rui-entry {
@@ -274,20 +282,27 @@
   align-items: center;
   gap: 4px;
   margin-bottom: 4px;
+  min-width: 0;
 }
 
 .admin-rui-input {
-  background: var(--bg-secondary);
+  background: var(--bg-tertiary);
   border: 1px solid var(--border);
   border-radius: 4px;
   color: var(--text-primary);
   font-size: 0.8rem;
   padding: 4px 6px;
   min-width: 0;
+  width: 100%;
 }
 
-.admin-rui-input--cond { flex: 1; }
-.admin-rui-input--val  { flex: 1; }
+.admin-rui-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.admin-rui-input--cond { flex: 1 1 0; }
+.admin-rui-input--val  { flex: 1 1 0; }
 
 .admin-rui-arrow {
   color: var(--text-muted);
@@ -301,7 +316,7 @@
   color: var(--danger, #ef4444);
   font-size: 1rem;
   cursor: pointer;
-  padding: 0 4px;
+  padding: 0 2px;
   line-height: 1;
   flex-shrink: 0;
 }
