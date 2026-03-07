@@ -1015,6 +1015,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
       ringer_nummer: settings?.ringerNummer || '',
     });
     resetRuikaart();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
