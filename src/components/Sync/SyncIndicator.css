@@ -134,6 +134,44 @@
   font-size: 0.70rem;
 }
 
+.sync-popover-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.sync-clear-btn {
+  background: var(--danger, #ef4444);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sync-clear-btn:hover {
+  opacity: 0.85;
+}
+
+.sync-popover-failed-note {
+  padding: 5px 10px;
+  background: var(--danger-bg, rgba(239,68,68,0.1));
+  color: var(--danger, #ef4444);
+  font-size: 0.72rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sync-popover-item--failed {
+  opacity: 0.7;
+}
+
+.sync-popover-item--failed .sync-popover-op {
+  color: var(--danger, #ef4444);
+}
+
 /* Fout */
 .sync-indicator--error {
   background: var(--danger-bg);

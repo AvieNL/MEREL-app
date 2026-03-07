@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSync } from '../../context/SyncContext';
+import { MAX_ATTEMPTS } from '../../context/SyncContext';
 import './SyncIndicator.css';
 
 const OP_LABELS = {
@@ -27,7 +28,9 @@ function formatTime(iso) {
 }
 
 export default function SyncIndicator() {
-  const { pendingCount, pendingItems, syncing, isOnline, syncError, lastSynced, processQueue } = useSync();
+  const { pendingCount, pendingItems, syncing, isOnline, syncError, lastSynced, processQueue, clearQueue } = useSync();
+  const failedItems = pendingItems.filter(i => (i.attempts ?? 0) >= MAX_ATTEMPTS);
+  const retryableItems = pendingItems.filter(i => (i.attempts ?? 0) < MAX_ATTEMPTS);
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -68,23 +71,40 @@ export default function SyncIndicator() {
           <div className="sync-popover">
             <div className="sync-popover-header">
               <strong>{pendingCount} item{pendingCount !== 1 ? 's' : ''} in wachtrij</strong>
-              <button className="sync-force-btn" onClick={e => { e.stopPropagation(); processQueue(); setOpen(false); }}>
-                ↑ Nu synchroniseren
-              </button>
+              <div className="sync-popover-actions">
+                {retryableItems.length > 0 && (
+                  <button className="sync-force-btn" onClick={e => { e.stopPropagation(); processQueue(); setOpen(false); }}>
+                    ↑ Nu synchroniseren
+                  </button>
+                )}
+                {failedItems.length > 0 && (
+                  <button className="sync-clear-btn" onClick={e => { e.stopPropagation(); if (window.confirm(`${failedItems.length} definitief mislukt item(s) verwijderen uit de wachtrij?`)) { clearQueue(); setOpen(false); } }}>
+                    ✕ Wis wachtrij
+                  </button>
+                )}
+              </div>
             </div>
+            {failedItems.length > 0 && (
+              <div className="sync-popover-failed-note">
+                ⚠ {failedItems.length} item{failedItems.length !== 1 ? 's' : ''} definitief mislukt (na {MAX_ATTEMPTS}×) — zie foutmelding hieronder
+              </div>
+            )}
             <ul className="sync-popover-list">
-              {pendingItems.map(item => (
-                <li key={item.id} className="sync-popover-item">
-                  <span className="sync-popover-op">{OP_LABELS[item.operation] ?? item.operation}</span>
-                  <span className="sync-popover-table">{TABLE_LABELS[item.table_name] ?? item.table_name}</span>
-                  <span className="sync-popover-time">{formatTime(item.createdAt)}</span>
-                  {item.attempts > 0 && (
-                    <span className="sync-popover-attempts" title={item.lastError}>
-                      {item.attempts}× geprobeerd{item.lastError ? ` — ${item.lastError}` : ''}
-                    </span>
-                  )}
-                </li>
-              ))}
+              {pendingItems.map(item => {
+                const failed = (item.attempts ?? 0) >= MAX_ATTEMPTS;
+                return (
+                  <li key={item.id} className={`sync-popover-item${failed ? ' sync-popover-item--failed' : ''}`}>
+                    <span className="sync-popover-op">{OP_LABELS[item.operation] ?? item.operation}</span>
+                    <span className="sync-popover-table">{TABLE_LABELS[item.table_name] ?? item.table_name}</span>
+                    <span className="sync-popover-time">{formatTime(item.createdAt)}</span>
+                    {item.attempts > 0 && (
+                      <span className="sync-popover-attempts" title={item.lastError}>
+                        {failed ? '✕ definitief mislukt' : `${item.attempts}× geprobeerd`}{item.lastError ? ` — ${item.lastError}` : ''}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
             {lastSynced && (
               <div className="sync-popover-footer">Laatste sync: {formatTime(lastSynced.toISOString())}</div>

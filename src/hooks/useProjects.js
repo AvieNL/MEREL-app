@@ -6,10 +6,10 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
 
-const DEFAULT_PROJECTS = [
-  { id: 'tuin',   naam: 'Tuin - Ter Avest',          locatie: 'Breedenbroek', nummer: '1925', actief: true },
-  { id: 'overig', naam: 'Overig ringwerk - Ter Avest', locatie: 'Breedenbroek', nummer: '1722', actief: true },
-  { id: 'nk027',  naam: 'NK027',                       locatie: 'Breedenbroek', nummer: '1926', actief: true },
+const DEFAULT_PROJECT_TEMPLATES = [
+  { naam: 'Tuin - Ter Avest',          locatie: 'Breedenbroek', nummer: '1925', actief: true },
+  { naam: 'Overig ringwerk - Ter Avest', locatie: 'Breedenbroek', nummer: '1722', actief: true },
+  { naam: 'NK027',                       locatie: 'Breedenbroek', nummer: '1926', actief: true },
 ];
 
 function toProjectRow(project, userId) {
@@ -130,7 +130,7 @@ export function useProjects() {
         .select('id', { count: 'exact', head: true })
         .eq('user_id', user.id);
       if ((remoteCount ?? 0) > 0) return;
-      const defaults = DEFAULT_PROJECTS.map(p => ({ ...p, user_id: user.id }));
+      const defaults = DEFAULT_PROJECT_TEMPLATES.map(p => ({ ...p, id: generateId(), user_id: user.id }));
       await db.projecten.bulkPut(defaults);
       defaults.forEach(p => addToQueue('projecten', 'upsert', toProjectRow(p, user.id)));
     }, 2000);

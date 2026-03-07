@@ -8,7 +8,7 @@ import { pullVeldConfigIfNeeded } from '../hooks/useVeldConfig';
 
 const SyncContext = createContext(null);
 
-const MAX_ATTEMPTS = 5;
+export const MAX_ATTEMPTS = 5;
 
 export function SyncProvider({ children }) {
   const { user } = useAuth();
@@ -124,6 +124,12 @@ export function SyncProvider({ children }) {
       }
     }
 
+    // Verwijder items die het maximaal aantal pogingen hebben bereikt
+    const exhausted = await db.sync_queue.filter(i => (i.attempts ?? 0) >= MAX_ATTEMPTS).toArray();
+    if (exhausted.length > 0) {
+      await db.sync_queue.bulkDelete(exhausted.map(i => i.id));
+    }
+
     await refreshPendingCount();
     syncingRef.current = false;
     setSyncing(false);
@@ -142,6 +148,11 @@ export function SyncProvider({ children }) {
     }
   }, [user]);  // eslint-disable-line react-hooks/exhaustive-deps
 
+  async function clearQueue() {
+    await db.sync_queue.clear();
+    await refreshPendingCount();
+  }
+
   return (
     <SyncContext.Provider value={{
       pendingCount,
@@ -153,6 +164,7 @@ export function SyncProvider({ children }) {
       addToQueue,
       processQueue,
       refreshPendingCount,
+      clearQueue,
     }}>
       {children}
     </SyncContext.Provider>
