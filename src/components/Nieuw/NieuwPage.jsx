@@ -6,7 +6,40 @@ import euringCodes from '../../data/euring-codes.json';
 import { euringReference } from '../../data/euring-reference.js';
 import RuiscoreDiagram from './RuiscoreDiagram';
 import LocatiePicker from './LocatiePicker';
+import { useRuitypen } from '../../hooks/useRuitypen';
 import './NieuwPage.css';
+
+// Renders de seizoensteksten vanuit de admin-configureerbare ruitype-config
+function RuiSeizoenTekst({ type, config }) {
+  const seizoen = config?.[type];
+  if (!seizoen) return null;
+  return (
+    <div className="ruitype-kal-tekst">
+      <div className="ruitype-groep">
+        <span className="ruitype-seizoen">Voorjaar</span>
+        <div className="ruitype-opties">
+          {seizoen.voorjaar.map((o, i) => (
+            <div key={i} className="ruitype-optie">
+              {o.cond && <span className="ruitype-cond">{o.cond}</span>}
+              <span className="ruitype-val">{o.val}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="ruitype-groep ruitype-groep--separator">
+        <span className="ruitype-seizoen">Najaar</span>
+        <div className="ruitype-opties">
+          {seizoen.najaar.map((o, i) => (
+            <div key={i} className="ruitype-optie">
+              {o.cond && <span className="ruitype-cond">{o.cond}</span>}
+              <span className="ruitype-val">{o.val}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const TAAL_LABELS = {
   naam_nl: 'Nederlands',
@@ -547,6 +580,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     [speciesRefData]
   );
 
+  const ruitypenConfig = useRuitypen();
   const veldConfig = useVeldConfig();
   const configMap = useMemo(
     () => Object.fromEntries(veldConfig.map(v => [v.veld_key, v])),
@@ -1529,24 +1563,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       </div>
                     </div>
                   )}
-                  {settings?.hulpModus !== 'basis' && <div className="ruitype-kal-tekst">
-                    <div className="ruitype-groep">
-                      <span className="ruitype-seizoen">Voorjaar</span>
-                      <div className="ruitype-opties">
-                        <div className="ruitype-optie">
-                          <span className="ruitype-val">volgroeid, leeftijd niet mogelijk</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="ruitype-groep ruitype-groep--separator">
-                      <span className="ruitype-seizoen">Najaar</span>
-                      <div className="ruitype-opties">
-                        <div className="ruitype-optie">
-                          <span className="ruitype-val">na 1 kj, leeftijd niet mogelijk</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>}
+                  {settings?.hulpModus !== 'basis' && <RuiSeizoenTekst type="A" config={ruitypenConfig} />}
                 </>}
                 {speciesInfo?.ruitype === 'B' && <>
                   {settings?.hulpModus !== 'basis' && (
@@ -1588,34 +1605,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       </div>
                     </div>
                   )}
-                  {settings?.hulpModus !== 'basis' && <div className="ruitype-kal-tekst">
-                    <div className="ruitype-groep">
-                      <span className="ruitype-seizoen">Voorjaar</span>
-                      <div className="ruitype-opties">
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">met ruigrens</span>
-                          <span className="ruitype-val">2 kj</span>
-                        </div>
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">zonder ruigrens</span>
-                          <span className="ruitype-val">na 2 kj</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="ruitype-groep ruitype-groep--separator">
-                      <span className="ruitype-seizoen">Najaar</span>
-                      <div className="ruitype-opties">
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">met ruigrens</span>
-                          <span className="ruitype-val">1 kj</span>
-                        </div>
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">zonder ruigrens</span>
-                          <span className="ruitype-val">na 1 kj</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>}
+                  {settings?.hulpModus !== 'basis' && <RuiSeizoenTekst type="B" config={ruitypenConfig} />}
                 </>}
                 {speciesInfo?.ruitype === 'C' && <>
                   {settings?.hulpModus !== 'basis' && (
@@ -1659,38 +1649,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       </div>
                     </div>
                   )}
-                  {settings?.hulpModus !== 'basis' && <div className="ruitype-kal-tekst">
-                    <div className="ruitype-groep">
-                      <span className="ruitype-seizoen">Voorjaar</span>
-                      <div className="ruitype-opties">
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">ruigrens</span>
-                          <span className="ruitype-val">1 kj</span>
-                        </div>
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">geen ruigrens</span>
-                          <span className="ruitype-val">na 1 kj</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="ruitype-groep ruitype-groep--separator">
-                      <span className="ruitype-seizoen">Najaar</span>
-                      <div className="ruitype-opties">
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">twee ruigrenzen</span>
-                          <span className="ruitype-val">2 kj</span>
-                        </div>
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">één ruigrens</span>
-                          <span className="ruitype-val">na 2 kj</span>
-                        </div>
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">twijfel</span>
-                          <span className="ruitype-val">na 1 kj</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>}
+                  {settings?.hulpModus !== 'basis' && <RuiSeizoenTekst type="C" config={ruitypenConfig} />}
                 </>}
                 {speciesInfo?.ruitype === 'D' && <>
                   {settings?.hulpModus !== 'basis' && (
@@ -1734,29 +1693,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                       </div>
                     </div>
                   )}
-                  {settings?.hulpModus !== 'basis' && <div className="ruitype-kal-tekst">
-                    <div className="ruitype-groep">
-                      <span className="ruitype-seizoen">Voorjaar</span>
-                      <div className="ruitype-opties">
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">vers kleed</span>
-                          <span className="ruitype-val">1 kj</span>
-                        </div>
-                        <div className="ruitype-optie">
-                          <span className="ruitype-cond">versleten kleed</span>
-                          <span className="ruitype-val">na 1 kj</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="ruitype-groep ruitype-groep--separator">
-                      <span className="ruitype-seizoen">Najaar</span>
-                      <div className="ruitype-opties">
-                        <div className="ruitype-optie">
-                          <span className="ruitype-val">niet mogelijk op kleed, na 1 kj</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>}
+                  {settings?.hulpModus !== 'basis' && <RuiSeizoenTekst type="D" config={ruitypenConfig} />}
                 </>}
               </div>
 

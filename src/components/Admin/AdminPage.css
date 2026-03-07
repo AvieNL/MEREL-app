@@ -209,3 +209,99 @@
   vertical-align: baseline;
   text-decoration: underline;
 }
+
+/* ── Ruitypen editor ── */
+.admin-rui-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.admin-rui-header h3 {
+  margin: 0;
+}
+
+.admin-rui-type {
+  border-top: 1px solid var(--border);
+  padding: 10px 0 4px;
+}
+
+.admin-rui-type-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 8px;
+}
+
+.admin-rui-seizoenen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 520px) {
+  .admin-rui-seizoenen { grid-template-columns: 1fr; }
+}
+
+.admin-rui-seizoen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.admin-rui-seizoen-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-rui-add {
+  background: none;
+  border: 1px dashed var(--border);
+  color: var(--accent);
+  font-size: 0.72rem;
+  border-radius: 4px;
+  padding: 1px 6px;
+  cursor: pointer;
+}
+
+.admin-rui-entry {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.admin-rui-input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  padding: 4px 6px;
+  min-width: 0;
+}
+
+.admin-rui-input--cond { flex: 1; }
+.admin-rui-input--val  { flex: 1; }
+
+.admin-rui-arrow {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.admin-rui-remove {
+  background: none;
+  border: none;
+  color: var(--danger, #ef4444);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}

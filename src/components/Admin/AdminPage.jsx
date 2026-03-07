@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
 import { supabase } from '../../lib/supabase';
 import { seedVeldConfig } from '../../utils/seedVeldConfig';
+import { getRuitypenConfig, saveRuitypenConfig, RUITYPE_TYPES, DEFAULT_RUITYPE_CONFIG } from '../../hooks/useRuitypen';
 import './AdminPage.css';
 
 const ROLLEN = ['ringer', 'viewer', 'admin'];
@@ -19,6 +20,43 @@ export default function AdminPage() {
   const [savingId, setSavingId] = useState(null);
   const [seeding, setSeeding] = useState(false);
   const [seedDone, setSeedDone] = useState(false);
+  const [ruitypen, setRuitypen] = useState(() => getRuitypenConfig());
+  const [ruiSaved, setRuiSaved] = useState(false);
+
+  function updateRuiEntry(type, seizoen, index, field, value) {
+    setRuitypen(prev => {
+      const entries = [...prev[type][seizoen]];
+      entries[index] = { ...entries[index], [field]: value };
+      return { ...prev, [type]: { ...prev[type], [seizoen]: entries } };
+    });
+  }
+
+  function addRuiEntry(type, seizoen) {
+    setRuitypen(prev => ({
+      ...prev,
+      [type]: { ...prev[type], [seizoen]: [...prev[type][seizoen], { cond: '', val: '' }] },
+    }));
+  }
+
+  function removeRuiEntry(type, seizoen, index) {
+    setRuitypen(prev => {
+      const entries = prev[type][seizoen].filter((_, i) => i !== index);
+      return { ...prev, [type]: { ...prev[type], [seizoen]: entries } };
+    });
+  }
+
+  function saveRuitypen() {
+    saveRuitypenConfig(ruitypen);
+    setRuiSaved(true);
+    setTimeout(() => setRuiSaved(false), 2000);
+  }
+
+  function resetRuitypen() {
+    if (window.confirm('Ruitypen terugzetten naar standaardwaarden?')) {
+      setRuitypen(DEFAULT_RUITYPE_CONFIG);
+      saveRuitypenConfig(DEFAULT_RUITYPE_CONFIG);
+    }
+  }
 
   useEffect(() => {
     if (!isAdmin) {
@@ -197,6 +235,53 @@ export default function AdminPage() {
                 <p className="admin-success">Veldconfiguratie succesvol geseed.</p>
               )}
             </div>
+          </div>
+
+          {/* ── Ruitypen editor ── */}
+          <div className="section admin-rui-card">
+            <div className="admin-rui-header">
+              <h3>Ruitypen — seizoensleeftijden</h3>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button className="admin-btn" style={{ background: 'var(--bg-tertiary)', color: 'var(--text-primary)' }} onClick={resetRuitypen}>Standaard</button>
+                <button className="admin-btn" onClick={saveRuitypen}>Opslaan</button>
+              </div>
+            </div>
+            {ruiSaved && <p className="admin-success">Ruitypen opgeslagen.</p>}
+            {RUITYPE_TYPES.map(type => (
+              <div key={type} className="admin-rui-type">
+                <h4 className="admin-rui-type-title">Type {type}</h4>
+                <div className="admin-rui-seizoenen">
+                  {['voorjaar', 'najaar'].map(seizoen => (
+                    <div key={seizoen} className="admin-rui-seizoen">
+                      <div className="admin-rui-seizoen-header">
+                        <span className="admin-rui-seizoen-label">{seizoen === 'voorjaar' ? 'Voorjaar' : 'Najaar'}</span>
+                        <button className="admin-rui-add" onClick={() => addRuiEntry(type, seizoen)}>+ rij</button>
+                      </div>
+                      {ruitypen[type][seizoen].map((entry, i) => (
+                        <div key={i} className="admin-rui-entry">
+                          <input
+                            className="admin-rui-input admin-rui-input--cond"
+                            placeholder="conditie (optioneel)"
+                            value={entry.cond}
+                            onChange={e => updateRuiEntry(type, seizoen, i, 'cond', e.target.value)}
+                          />
+                          <span className="admin-rui-arrow">→</span>
+                          <input
+                            className="admin-rui-input admin-rui-input--val"
+                            placeholder="leeftijdslabel"
+                            value={entry.val}
+                            onChange={e => updateRuiEntry(type, seizoen, i, 'val', e.target.value)}
+                          />
+                          {ruitypen[type][seizoen].length > 1 && (
+                            <button className="admin-rui-remove" onClick={() => removeRuiEntry(type, seizoen, i)}>×</button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </>
       )}

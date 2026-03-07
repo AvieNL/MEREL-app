@@ -1,7 +1,9 @@
 /**
  * Gedeelde component: toont ruikalender + seizoensomschrijving voor ruitype A/B/C/D.
  * Wordt gebruikt in SoortDetail (soortkaart) én in NieuwPage (invoerformulier).
+ * Seizoensteksten komen uit useRuitypen (admin-bewerkbaar).
  */
+import { useRuitypen } from '../../hooks/useRuitypen';
 import './RuitypeInfo.css';
 
 const MAANDEN = ['Mei','Jun','Jul','Aug','Sep','Okt','Nov','Dec','Jan','Feb','Mrt','Apr'];
@@ -58,141 +60,88 @@ function Seizoenen({ items }) {
   );
 }
 
-// ─── Type A ────────────────────────────────────────────────────────────────
-function RuitypeA() {
-  return (
-    <div className="rui-blok">
-      <Kalender
-        juv={[
-          { type: 'pull', span: 1, tekst: 'pull.' },
-          { type: 'juv',  span: 2, tekst: 'juv' },
-          { type: 'rui',  span: 2, tekst: 'complete rui' },
-          { type: 'vol',  span: 3, tekst: 'volgroeid' },
-          { type: 'akj',  span: 4, tekst: 'na 1 kj' },
-        ]}
-        ad={[
-          { type: 'vol', span: 3, tekst: 'volgroeid' },
-          { type: 'rui', span: 2, tekst: 'complete rui' },
-          { type: 'vol', span: 3, tekst: 'volgroeid' },
-          { type: 'akj', span: 4, tekst: 'na 1 kj' },
-        ]}
-      />
-      <Seizoenen items={[
-        { seizoen: 'Voorjaar', opties: [{ val: 'na 1 kj — leeftijd niet mogelijk' }] },
-        { seizoen: 'Najaar',   opties: [{ val: 'volgroeid — leeftijd niet mogelijk' }], separator: true },
-      ]} />
-    </div>
-  );
-}
-
-// ─── Type B ────────────────────────────────────────────────────────────────
-function RuitypeB() {
-  return (
-    <div className="rui-blok">
-      <Kalender
-        juv={[
-          { type: 'pull', span: 1, tekst: 'pull.' },
-          { type: 'juv',  span: 2, tekst: 'juv' },
-          { type: 'rui',  span: 2, tekst: 'part. rui' },
-          { type: 'vol',  span: 3, tekst: '1 kj' },
-          { type: 'akj',  span: 4, tekst: '2 kj' },
-        ]}
-        ad={[
-          { type: 'vol', span: 3, tekst: '2kj / na 2kj' },
-          { type: 'rui', span: 2, tekst: 'complete rui' },
-          { type: 'akj', span: 3, tekst: 'na 1 kj' },
-          { type: 'akj', span: 4, tekst: 'na 2 kj' },
-        ]}
-      />
-      <Seizoenen items={[
-        { seizoen: 'Voorjaar', opties: [
-          { cond: 'met ruigrens',    val: '1 kj' },
-          { cond: 'zonder ruigrens', val: 'na 1 kj' },
-        ]},
-        { seizoen: 'Najaar', opties: [
-          { cond: 'met ruigrens',    val: '2 kj' },
-          { cond: 'zonder ruigrens', val: 'na 2 kj' },
-        ], separator: true },
-      ]} />
-    </div>
-  );
-}
-
-// ─── Type C ────────────────────────────────────────────────────────────────
-function RuitypeC() {
-  return (
-    <div className="rui-blok">
-      <Kalender
-        juv={[
-          { type: 'pull', span: 1, tekst: 'pull.' },
-          { type: 'juv',  span: 2, tekst: 'juv' },
-          { type: 'rui',  span: 2, tekst: 'part. rui' },
-          { type: 'vol',  span: 3, tekst: '1 kj' },
-          { type: 'rui',  span: 1, tekst: 'p.r.' },
-          { type: 'vol',  span: 3, tekst: '2 kj' },
-        ]}
-        ad={[
-          { type: 'vol', span: 3, tekst: '2kj / na 2kj' },
-          { type: 'rui', span: 2, tekst: 'complete rui' },
-          { type: 'akj', span: 3, tekst: 'na 1 kj' },
-          { type: 'rui', span: 1, tekst: 'p.r.' },
-          { type: 'akj', span: 3, tekst: 'na 2 kj' },
-        ]}
-      />
-      <Seizoenen items={[
-        { seizoen: 'Voorjaar', opties: [
-          { cond: 'twee ruigrenzen', val: '2 kj' },
-          { cond: 'één ruigrens',    val: 'na 2 kj' },
-          { cond: 'twijfel',         val: 'na 1 kj' },
-        ]},
-        { seizoen: 'Najaar', opties: [
-          { cond: 'ruigrens',     val: '1 kj' },
-          { cond: 'geen ruigrens', val: 'na 1 kj' },
-        ], separator: true },
-      ]} />
-    </div>
-  );
-}
-
-// ─── Type D ────────────────────────────────────────────────────────────────
-function RuitypeD() {
-  return (
-    <div className="rui-blok">
-      <Kalender
-        juv={[
-          { type: 'pull', span: 1, tekst: 'pull.' },
-          { type: 'juv',  span: 2, tekst: 'juv' },
-          { type: 'rui',  span: 2, tekst: 'part. rui' },
-          { type: 'vol',  span: 3, tekst: '1 kj' },
-          { type: 'rui',  span: 1, tekst: 'c.r.' },
-          { type: 'akj',  span: 3, tekst: 'na 1 kj' },
-        ]}
-        ad={[
-          { type: 'vol', span: 3, tekst: 'volgroeid' },
-          { type: 'rui', span: 2, tekst: 'complete rui' },
-          { type: 'akj', span: 3, tekst: 'na 1 kj' },
-          { type: 'rui', span: 1, tekst: 'c.r.' },
-          { type: 'akj', span: 3, tekst: 'na 1 kj' },
-        ]}
-      />
-      <Seizoenen items={[
-        { seizoen: 'Voorjaar', opties: [
-          { val: 'niet mogelijk op kleed — na 1 kj' },
-        ]},
-        { seizoen: 'Najaar', opties: [
-          { cond: 'vers kleed',     val: '1 kj' },
-          { cond: 'versleten kleed', val: 'na 1 kj' },
-        ], separator: true },
-      ]} />
-    </div>
-  );
-}
+// ─── Kalender-configuraties (hardcoded — visuele indeling) ─────────────────
+const KALENDARS = {
+  A: {
+    juv: [
+      { type: 'pull', span: 1, tekst: 'pull.' },
+      { type: 'juv',  span: 2, tekst: 'juv' },
+      { type: 'rui',  span: 2, tekst: 'complete rui' },
+      { type: 'vol',  span: 3, tekst: 'volgroeid' },
+      { type: 'akj',  span: 4, tekst: 'na 1 kj' },
+    ],
+    ad: [
+      { type: 'vol', span: 3, tekst: 'volgroeid' },
+      { type: 'rui', span: 2, tekst: 'complete rui' },
+      { type: 'vol', span: 3, tekst: 'volgroeid' },
+      { type: 'akj', span: 4, tekst: 'na 1 kj' },
+    ],
+  },
+  B: {
+    juv: [
+      { type: 'pull', span: 1, tekst: 'pull.' },
+      { type: 'juv',  span: 2, tekst: 'juv' },
+      { type: 'rui',  span: 2, tekst: 'part. rui' },
+      { type: 'vol',  span: 3, tekst: '1 kj' },
+      { type: 'akj',  span: 4, tekst: '2 kj' },
+    ],
+    ad: [
+      { type: 'vol', span: 3, tekst: '2kj / na 2kj' },
+      { type: 'rui', span: 2, tekst: 'complete rui' },
+      { type: 'akj', span: 3, tekst: 'na 1 kj' },
+      { type: 'akj', span: 4, tekst: 'na 2 kj' },
+    ],
+  },
+  C: {
+    juv: [
+      { type: 'pull', span: 1, tekst: 'pull.' },
+      { type: 'juv',  span: 2, tekst: 'juv' },
+      { type: 'rui',  span: 2, tekst: 'part. rui' },
+      { type: 'vol',  span: 3, tekst: '1 kj' },
+      { type: 'rui',  span: 1, tekst: 'p.r.' },
+      { type: 'vol',  span: 3, tekst: '2 kj' },
+    ],
+    ad: [
+      { type: 'vol', span: 3, tekst: '2kj / na 2kj' },
+      { type: 'rui', span: 2, tekst: 'complete rui' },
+      { type: 'akj', span: 3, tekst: 'na 1 kj' },
+      { type: 'rui', span: 1, tekst: 'p.r.' },
+      { type: 'akj', span: 3, tekst: 'na 2 kj' },
+    ],
+  },
+  D: {
+    juv: [
+      { type: 'pull', span: 1, tekst: 'pull.' },
+      { type: 'juv',  span: 2, tekst: 'juv' },
+      { type: 'rui',  span: 2, tekst: 'part. rui' },
+      { type: 'vol',  span: 3, tekst: '1 kj' },
+      { type: 'rui',  span: 1, tekst: 'c.r.' },
+      { type: 'akj',  span: 3, tekst: 'na 1 kj' },
+    ],
+    ad: [
+      { type: 'vol', span: 3, tekst: 'volgroeid' },
+      { type: 'rui', span: 2, tekst: 'complete rui' },
+      { type: 'akj', span: 3, tekst: 'na 1 kj' },
+      { type: 'rui', span: 1, tekst: 'c.r.' },
+      { type: 'akj', span: 3, tekst: 'na 1 kj' },
+    ],
+  },
+};
 
 // ─── Hoofd-export ──────────────────────────────────────────────────────────
-const RUITYPE_COMPONENTS = { A: RuitypeA, B: RuitypeB, C: RuitypeC, D: RuitypeD };
-
 export default function RuitypeInfo({ ruitype }) {
-  const Component = RUITYPE_COMPONENTS[ruitype];
-  if (!Component) return null;
-  return <Component />;
+  const config = useRuitypen();
+  const kal = KALENDARS[ruitype];
+  const seizoen = config[ruitype];
+  if (!kal || !seizoen) return null;
+
+  return (
+    <div className="rui-blok">
+      <Kalender juv={kal.juv} ad={kal.ad} />
+      <Seizoenen items={[
+        { seizoen: 'Voorjaar', opties: seizoen.voorjaar },
+        { seizoen: 'Najaar',   opties: seizoen.najaar, separator: true },
+      ]} />
+    </div>
+  );
 }
