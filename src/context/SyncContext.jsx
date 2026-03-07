@@ -13,6 +13,7 @@ const MAX_ATTEMPTS = 5;
 export function SyncProvider({ children }) {
   const { user } = useAuth();
   const [pendingCount, setPendingCount] = useState(0);
+  const [pendingItems, setPendingItems] = useState([]);
   const [syncing, setSyncing] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [lastSynced, setLastSynced] = useState(null);
@@ -60,8 +61,9 @@ export function SyncProvider({ children }) {
   }, [user]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function refreshPendingCount() {
-    const count = await db.sync_queue.count();
-    setPendingCount(count);
+    const items = await db.sync_queue.orderBy('id').toArray();
+    setPendingCount(items.length);
+    setPendingItems(items);
   }
 
   /**
@@ -143,6 +145,7 @@ export function SyncProvider({ children }) {
   return (
     <SyncContext.Provider value={{
       pendingCount,
+      pendingItems,
       syncing,
       isOnline,
       lastSynced,
