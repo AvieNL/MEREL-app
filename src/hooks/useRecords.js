@@ -85,30 +85,42 @@ export function useRecords() {
     const localCount = await db.vangsten
       .where('user_id').equals(user.id).count();
 
-    // Bepaal vanaf wanneer we moeten ophalen
     const meta = await db.meta.get(`last_pull_vangsten_${user.id}`);
     const lastPull = meta?.value;
 
-    let query = supabase
-      .from('vangsten')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('updated_at', { ascending: false });
+    // Pagineer: haal max 1000 records per request op tot alles binnen is
+    const PAGE = 1000;
+    let from = 0;
+    let allRows = [];
 
-    if (localCount > 0 && lastPull) {
-      // Incrementele sync: alleen wat nieuwer is dan laatste pull
-      query = query.gt('updated_at', lastPull);
+    while (true) {
+      let query = supabase
+        .from('vangsten')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .range(from, from + PAGE - 1);
+
+      if (localCount > 0 && lastPull) {
+        query = query.gt('updated_at', lastPull);
+      }
+
+      const { data, error } = await query;
+      if (error) {
+        console.error('Pull vangsten mislukt:', error.message);
+        return;
+      }
+      if (!data || data.length === 0) break;
+
+      allRows = allRows.concat(data);
+      if (data.length < PAGE) break;
+      from += PAGE;
     }
 
-    const { data, error } = await query;
-    if (error) {
-      console.error('Pull vangsten mislukt:', error.message);
-      return;
-    }
-    if (!data || data.length === 0) return;
+    if (allRows.length === 0) return;
 
-    const rows = data.map(r => ({ ...fromVangstRow(r), user_id: user.id }))
-                     .map(migrateUploaded);
+    const rows = allRows.map(r => ({ ...fromVangstRow(r), user_id: user.id }))
+                        .map(migrateUploaded);
     await db.vangsten.bulkPut(rows);
     await db.meta.put({
       key: `last_pull_vangsten_${user.id}`,
