@@ -1213,14 +1213,15 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
       r.ringnummer && normalize(r.ringnummer) === nr
     );
     if (matches.length === 0) return { eigen: false };
-    // Sorteer op datum, neem eerste vangst
     const gesorteerd = [...matches].sort((a, b) =>
       (a.vangstdatum || '').localeCompare(b.vangstdatum || '')
     );
     const eerste = gesorteerd[0];
+    const laatste = gesorteerd[gesorteerd.length - 1];
     return {
       eigen: true,
       vangstdatum: eerste.vangstdatum,
+      laatste_vangstdatum: gesorteerd.length > 1 ? laatste.vangstdatum : null,
       leeftijd: eerste.leeftijd,
       vogelnaam: eerste.vogelnaam,
     };
@@ -1437,6 +1438,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                         <span className="terugvangst-label">Eigen vogel</span>
                         <span>{terugvangstInfo.vogelnaam}</span>
                         {terugvangstInfo.vangstdatum && <span>Eerste vangst: <strong>{terugvangstInfo.vangstdatum}</strong></span>}
+                        {terugvangstInfo.laatste_vangstdatum && <span>Laatste vangst: <strong>{terugvangstInfo.laatste_vangstdatum}</strong></span>}
                         {terugvangstInfo.leeftijd && <span>Leeftijd bij eerste vangst: <strong>{LEEFTIJD_LABELS[terugvangstInfo.leeftijd] ?? terugvangstInfo.leeftijd}</strong></span>}
                       </div>
                     ) : (
