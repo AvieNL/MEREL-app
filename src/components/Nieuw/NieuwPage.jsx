@@ -801,7 +801,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     return computeRanges(soortRecords);
   }, [form.vogelnaam, records]);
 
-  // Merge: manual overrides take priority, per individual field (min/max)
+  // Merge: literatuur > gebruikersoverride > eigen vangsten
   const bioRanges = useMemo(() => {
     const BIO_KEYS = [
       { key: 'vleugel', label: 'Vleugel' },
@@ -815,38 +815,26 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     ];
     const merged = {};
     for (const f of BIO_KEYS) {
-      const ovMin = parseVal(soortOverride[`bio_${f.key}_min`]);
-      const ovMax = parseVal(soortOverride[`bio_${f.key}_max`]);
       const baseMin = parseVal(speciesInfo?.[`bio_${f.key}_min`]);
       const baseMax = parseVal(speciesInfo?.[`bio_${f.key}_max`]);
+      const ovMin   = parseVal(soortOverride[`bio_${f.key}_min`]);
+      const ovMax   = parseVal(soortOverride[`bio_${f.key}_max`]);
       const fromRec = bioRangesFromRecords[f.key];
 
-      // Soortkaart: override > admin-basis (exact, geen marge)
-      const cardMin = !isNaN(ovMin) ? ovMin : (!isNaN(baseMin) ? baseMin : NaN);
-      const cardMax = !isNaN(ovMax) ? ovMax : (!isNaN(baseMax) ? baseMax : NaN);
-      const hasCard = !isNaN(cardMin) && !isNaN(cardMax);
-
-      if (!hasCard && !fromRec) continue;
-
-      if (hasCard) {
-        merged[f.key] = {
-          label: f.label,
-          min: cardMin,
-          max: cardMax,
-          rangeMin: cardMin,
-          rangeMax: cardMax,
-          isOverride: !isNaN(ovMin) || !isNaN(ovMax),
-        };
-      } else {
-        // Alleen records beschikbaar: 10% marge als vangs
+      if (!isNaN(baseMin) && !isNaN(baseMax)) {
+        // 1. Literatuur (speciesInfo)
+        merged[f.key] = { label: f.label, min: baseMin, max: baseMax, rangeMin: baseMin, rangeMax: baseMax, source: 'literatuur' };
+      } else if (!isNaN(ovMin) && !isNaN(ovMax)) {
+        // 2. Gebruikersoverride
+        merged[f.key] = { label: f.label, min: ovMin, max: ovMax, rangeMin: ovMin, rangeMax: ovMax, source: 'override' };
+      } else if (fromRec) {
+        // 3. Eigen vangsten (10% marge)
         const margin = (fromRec.max - fromRec.min) * 0.1 || fromRec.min * 0.1;
         merged[f.key] = {
-          label: f.label,
-          min: fromRec.min,
-          max: fromRec.max,
+          label: f.label, min: fromRec.min, max: fromRec.max,
           rangeMin: +(fromRec.min - margin).toFixed(1),
           rangeMax: +(fromRec.max + margin).toFixed(1),
-          isOverride: false,
+          source: 'vangsten',
         };
       }
     }
@@ -1134,8 +1122,8 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
           className={warning ? 'input-warn' : ''}
           onChange={e => update(key, e.target.value)} />
         {range && !warning && (
-          <span className={`field-hint${range.isOverride ? ' field-hint--warn' : ''}`}>
-            Bereik: {range.min}–{range.max}
+          <span className={`field-hint field-hint--${range.source}`}>
+            {range.min}–{range.max} <em>({range.source})</em>
           </span>
         )}
         {warning && (
