@@ -258,10 +258,15 @@
 
 .project-back {
   display: inline-block;
+  background: none;
+  border: none;
   color: var(--accent);
   text-decoration: none;
   font-size: 0.85rem;
   padding: 4px 0;
+  cursor: pointer;
+  min-width: auto;
+  min-height: auto;
 }
 
 .project-back:hover {

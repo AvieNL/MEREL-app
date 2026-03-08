@@ -1,10 +1,10 @@
-import { useTheme, COLORS } from '../../hooks/useTheme';
+import { useTheme } from '../../hooks/useTheme';
 import { useSync } from '../../context/SyncContext';
 import CloudStatus from './CloudStatus';
 import './InstellingenPage.css';
 
 export default function InstellingenPage({ settings, onUpdateSettings }) {
-  const { color, mode, setColor, setMode } = useTheme();
+  const { mode, setMode } = useTheme();
   const { processQueue, syncing, pendingCount, isOnline, lastSynced } = useSync();
 
   return (
@@ -14,21 +14,6 @@ export default function InstellingenPage({ settings, onUpdateSettings }) {
       <div className="section">
         <h3>Thema</h3>
         <div className="section-content">
-          <div className="theme-colors">
-            {COLORS.map(c => (
-              <button
-                key={c.id}
-                className={`color-option${color === c.id ? ' active' : ''}`}
-                onClick={() => setColor(c.id)}
-              >
-                <span
-                  className="color-dot"
-                  style={{ background: mode === 'licht' ? c.lightDot : c.darkDot }}
-                />
-                <span className="color-label">{c.label}</span>
-              </button>
-            ))}
-          </div>
           <div className="mode-toggle">
             <button
               className={`mode-btn${mode === 'donker' ? ' active' : ''}`}

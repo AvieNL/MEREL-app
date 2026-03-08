@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
+import { useTheme } from '../../hooks/useTheme';
 import SyncIndicator from '../Sync/SyncIndicator';
 import './Header.css';
 
@@ -14,6 +15,7 @@ export default function Header({ onFullResync }) {
   const navigate = useNavigate();
   const { logout, profile, simulatedRole, setSimulatedRole } = useAuth();
   const { isSimulating, rol } = useRole();
+  const { mode, setMode } = useTheme();
 
   const isRealAdmin = profile?.rol === 'admin';
 
@@ -59,6 +61,13 @@ export default function Header({ onFullResync }) {
           <SyncIndicator />
         </div>
         <div className="header-menu" ref={menuRef}>
+          <button
+            className="theme-toggle-btn"
+            onClick={() => setMode(mode === 'donker' ? 'licht' : 'donker')}
+            aria-label={mode === 'donker' ? 'Naar licht thema' : 'Naar donker thema'}
+          >
+            {mode === 'donker' ? '☀' : '☾'}
+          </button>
           <button
             className={`hamburger-btn${isSimulating ? ' hamburger-btn--simulating' : ''}`}
             onClick={() => setMenuOpen(o => !o)}
