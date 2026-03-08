@@ -586,7 +586,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         )}
 
         {/* Kaart */}
-        <VangstKaart targetRecords={records} allRecords={records} />
+        <VangstKaart targetRecords={gefilterdRecords} allRecords={gefilterdRecords} />
 
         {/* Per project */}
         {totaalStats.projectTabel.length > 0 && (
