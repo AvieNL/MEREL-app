@@ -4,6 +4,13 @@ import { exportCSV, exportJSON, exportGrielXML, downloadFile } from '../../utils
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import './StatsPage.css';
 
+function toISO(d) {
+  if (!d) return '';
+  const parts = String(d).split('-');
+  if (parts.length === 3 && parts[0].length === 2) return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  return String(d);
+}
+
 function capitalize(s) {
   if (!s) return s;
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
@@ -234,6 +241,8 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
   const [tvSorteer, setTvSorteer] = useState('tijd');
   const [importStatus, setImportStatus] = useState(null);
   const [jaarPopup, setJaarPopup] = useState(null); // { jaar, soorten: string[] }
+  const [exportVan, setExportVan] = useState('');
+  const [exportTot, setExportTot] = useState('');
   const fileInputRef = useRef(null);
 
   const huidigeRecords = useMemo(
@@ -253,8 +262,29 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
     return sorted.slice(0, 10);
   }, [alleTerugvangsten, tvSorteer]);
 
+  function filterByDatum(data) {
+    if (!exportVan && !exportTot) return data;
+    return data.filter(r => {
+      const iso = toISO(r.vangstdatum);
+      if (!iso) return false;
+      if (exportVan && iso < exportVan) return false;
+      if (exportTot && iso > exportTot) return false;
+      return true;
+    });
+  }
+
+  function setSnelfilter(type) {
+    const nu = new Date();
+    const vandaag = nu.toISOString().slice(0, 10);
+    const gisteren = new Date(nu - 86400000).toISOString().slice(0, 10);
+    if (type === 'vandaag')   { setExportVan(vandaag);   setExportTot(vandaag); }
+    if (type === 'gisteren')  { setExportVan(gisteren);  setExportTot(gisteren); }
+    if (type === 'alles')     { setExportVan('');         setExportTot(''); }
+  }
+
   function handleExport(type, subset) {
-    const data = subset === 'huidig' ? huidigeRecords : records;
+    const base = subset === 'huidig' ? huidigeRecords : records;
+    const data = filterByDatum(base);
     const datum = new Date().toISOString().split('T')[0];
     switch (type) {
       case 'csv': {
@@ -607,6 +637,43 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
 
         <div className="section">
           <h3>Exporteren</h3>
+
+          {/* Datumfilter */}
+          <div className="export-filter">
+            <div className="export-filter-snel">
+              <button
+                className={`btn-secondary btn-sm${!exportVan && !exportTot ? ' active' : ''}`}
+                onClick={() => setSnelfilter('alles')}
+              >Alle</button>
+              <button
+                className={`btn-secondary btn-sm${exportVan === new Date().toISOString().slice(0,10) && exportVan === exportTot ? ' active' : ''}`}
+                onClick={() => setSnelfilter('vandaag')}
+              >Vandaag</button>
+              <button
+                className={`btn-secondary btn-sm${exportVan === new Date(Date.now()-86400000).toISOString().slice(0,10) && exportVan === exportTot ? ' active' : ''}`}
+                onClick={() => setSnelfilter('gisteren')}
+              >Gisteren</button>
+            </div>
+            <div className="export-filter-bereik">
+              <input
+                type="date"
+                value={exportVan}
+                onChange={e => setExportVan(e.target.value)}
+                className="export-date-input"
+              />
+              <span className="export-filter-tot">t/m</span>
+              <input
+                type="date"
+                value={exportTot}
+                onChange={e => setExportTot(e.target.value)}
+                className="export-date-input"
+              />
+            </div>
+            <p className="export-filter-count">
+              {filterByDatum(records).length} vangsten geselecteerd
+            </p>
+          </div>
+
           <div className="export-buttons">
             <button className="btn-primary" onClick={() => handleExport('griel', 'alles')}>
               Griel XML
