@@ -119,8 +119,11 @@ export function useRecords() {
 
     if (allRows.length === 0) return;
 
-    const rows = allRows.map(r => ({ ...fromVangstRow(r), user_id: user.id }))
-                        .map(migrateUploaded);
+    const rows = allRows.map(r => {
+      const record = { ...fromVangstRow(r), user_id: user.id };
+      if (!record.timestamp) record.timestamp = r.updated_at || new Date().toISOString();
+      return record;
+    }).map(migrateUploaded);
     await db.vangsten.bulkPut(rows);
     await db.meta.put({
       key: `last_pull_vangsten_${user.id}`,
