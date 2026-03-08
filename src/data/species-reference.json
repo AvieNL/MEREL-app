@@ -16478,5 +16478,30 @@
     "totaal_ring": "0",
     "totaal_kleur": "0",
     "totaal_zoonose": "0"
+  },
+  {
+    "naam_nl": "Soepeend",
+    "naam_lat": "Anas platyrhynchos domesticus",
+    "naam_en": "Domestic Duck",
+    "naam_de": "Hausente",
+    "groep": "Water",
+    "orde": "Anseriformes",
+    "familie": "Anatidae",
+    "ringmaat": "-",
+    "ruitype": "",
+    "nest_eileg": "",
+    "nest_broedels": "",
+    "nest_eieren": "",
+    "nest_ei_dagen": "",
+    "nest_jong_dagen": "",
+    "broed": "",
+    "zorg": "",
+    "verstoring": "",
+    "status_nl": "",
+    "boeken": {},
+    "totaal_hand": "0",
+    "totaal_ring": "0",
+    "totaal_kleur": "0",
+    "totaal_zoonose": "0"
   }
 ]

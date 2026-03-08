@@ -125,6 +125,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                   <span>{fmtDatum(r.vangstdatum)}</span>
                   {r.bron === 'griel_import' && <span className="badge badge-accent">Griel</span>}
                   {r.bron === 'buitenland_import' && <span className="badge badge-accent">Buitenland</span>}
+                  {r.bron === 'andere_banen_import' && <span className="badge badge-accent">Extern</span>}
                 </div>
               </div>
 
@@ -145,7 +146,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                     {r.google_plaats && <div><span className="detail-label">Plaats:</span> {r.google_plaats}</div>}
                     {r.opmerkingen && <div><span className="detail-label">Opmerkingen:</span> {r.opmerkingen}</div>}
                   </div>
-                  {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && (
+                  {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
                     <div className="record-actions">
                       {!r.uploaded && (
                         <button

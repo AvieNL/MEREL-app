@@ -7,6 +7,7 @@ import { toVangstRow, fromVangstRow } from '../utils/supabase-helpers';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
 import buitenlandData from '../data/buitenland-import.json';
+import andereBanenData from '../data/andere-banen-import.json';
 
 function migrateUploaded(record) {
   if (record.uploaded !== undefined) return record;
@@ -55,6 +56,7 @@ export function useRecords() {
     pulledRef.current = true;
     pullFromSupabase();
     importBuitenlandEenmalig();
+    importAndereBanenEenmalig();
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function importBuitenlandEenmalig() {
@@ -75,6 +77,20 @@ export function useRecords() {
     await db.vangsten.bulkPut(withIds);
     addToQueue('vangsten', 'batch_upsert', withIds.map(r => toVangstRow(r, user.id)));
     await db.meta.put({ key: `buitenland_imported_v2_${user.id}`, value: true });
+  }
+
+  async function importAndereBanenEenmalig() {
+    const meta = await db.meta.get(`andere_banen_imported_v1_${user.id}`);
+    if (meta?.value) return;
+    const withIds = andereBanenData.map(r => ({
+      ...r,
+      id: r.id || generateId(),
+      timestamp: r.timestamp || new Date().toISOString(),
+      user_id: user.id,
+    }));
+    await db.vangsten.bulkPut(withIds);
+    addToQueue('vangsten', 'batch_upsert', withIds.map(r => toVangstRow(r, user.id)));
+    await db.meta.put({ key: `andere_banen_imported_v1_${user.id}`, value: true });
   }
 
   async function pullFromSupabase() {
