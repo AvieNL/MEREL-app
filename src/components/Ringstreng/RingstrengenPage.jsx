@@ -58,6 +58,15 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
   const [form, setForm] = useState(LEEG);
   const [bewerkId, setBewerkId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [expandedVolIds, setExpandedVolIds] = useState(new Set());
+
+  function toggleVol(id) {
+    setExpandedVolIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
 
   // Bereken stats per streng vanuit de records
   const statsPerStreng = useMemo(() => {
@@ -139,58 +148,78 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
           const totaal = stats.totaal;
           const pct = totaal > 0 ? Math.round((inDb / totaal) * 100) : 0;
 
+          const isVol = stats.vol;
+          const isOpen = !isVol || expandedVolIds.has(streng.id);
+
+          const actieBtnns = (
+            <div className="ringstreng-iconen">
+              {canEdit && confirmDeleteId !== streng.id && (
+                <button className="ringstreng-icoon" onClick={e => { e.stopPropagation(); startBewerken(streng); }} title="Bewerken">✎</button>
+              )}
+              {canDelete && (
+                confirmDeleteId === streng.id ? (
+                  <>
+                    <button className="ringstreng-icoon ringstreng-icoon--delete" style={{ opacity: 1, fontSize: '0.82rem', padding: '2px 8px' }}
+                      onClick={e => { e.stopPropagation(); onDelete(streng.id); setConfirmDeleteId(null); }}>Ja</button>
+                    <button className="ringstreng-icoon" style={{ opacity: 1, fontSize: '0.82rem', padding: '2px 8px' }}
+                      onClick={e => { e.stopPropagation(); setConfirmDeleteId(null); }}>Nee</button>
+                  </>
+                ) : (
+                  <button className="ringstreng-icoon ringstreng-icoon--delete" onClick={e => { e.stopPropagation(); setConfirmDeleteId(streng.id); }} title="Verwijderen">✕</button>
+                )
+              )}
+            </div>
+          );
+
           return (
-            <div key={streng.id} className={`ringstreng-kaart${stats.vol ? ' ringstreng-kaart--vol' : ''}`}>
-              <div className="ringstreng-header">
+            <div key={streng.id} className={`ringstreng-kaart${isVol ? ' ringstreng-kaart--vol' : ''}${isVol && !isOpen ? ' ringstreng-kaart--compact' : ''}`}>
+              <div
+                className="ringstreng-header"
+                onClick={isVol ? () => toggleVol(streng.id) : undefined}
+                style={isVol ? { cursor: 'pointer' } : undefined}
+              >
                 <span className="ringstreng-maat">{streng.ringmaat}</span>
                 {streng.beschrijving && (
                   <span className="ringstreng-beschrijving">{streng.beschrijving}</span>
                 )}
-                {stats.vol && <span className="ringstreng-vol-badge">Vol</span>}
-                <div className="ringstreng-iconen">
-                  {canEdit && confirmDeleteId !== streng.id && (
-                    <button className="ringstreng-icoon" onClick={() => startBewerken(streng)} title="Bewerken">✎</button>
+                {isVol && <span className="ringstreng-vol-badge">Vol</span>}
+                {isVol
+                  ? <span className="ringstreng-toggle">{isOpen ? '▾' : '▸'}</span>
+                  : actieBtnns
+                }
+              </div>
+
+              {isOpen && (
+                <>
+                  <div className="ringstreng-range">
+                    {streng.van} – {streng.tot}
+                  </div>
+                  <div className="ringstreng-voortgang">
+                    <div className="ringstreng-balk">
+                      <div className="ringstreng-balk-fill" style={{ width: `${pct}%` }} />
+                    </div>
+                    <span className="ringstreng-stats">
+                      {inDb} in database · <strong>{stats.beschikbaar} beschikbaar</strong> · volgende: <code>{streng.huidige}</code>
+                    </span>
+                    {streng.prijsPerRing && !isNaN(parsePrijs(streng.prijsPerRing)) && (
+                      <span className="ringstreng-prijs">
+                        {formatBedrag(parsePrijs(streng.prijsPerRing))} p/st · betaald: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.totaal)}</strong> · voorraad: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.beschikbaar)}</strong>
+                      </span>
+                    )}
+                  </div>
+                  {stats.gaten.length > 0 && (
+                    <div className="ringstreng-gaten">
+                      <span className="ringstreng-gaten-label">
+                        {stats.gaten.length} {stats.gaten.length === 1 ? 'ring' : 'ringen'} ontbreekt in database
+                      </span>
+                      <span className="ringstreng-gaten-lijst">
+                        {stats.gaten.slice(0, 8).join(', ')}
+                        {stats.gaten.length > 8 && ` en ${stats.gaten.length - 8} meer`}
+                      </span>
+                    </div>
                   )}
-                  {canDelete && (
-                    confirmDeleteId === streng.id ? (
-                      <>
-                        <button className="ringstreng-icoon ringstreng-icoon--delete" style={{ opacity: 1, fontSize: '0.82rem', padding: '2px 8px' }}
-                          onClick={() => { onDelete(streng.id); setConfirmDeleteId(null); }}>Ja</button>
-                        <button className="ringstreng-icoon" style={{ opacity: 1, fontSize: '0.82rem', padding: '2px 8px' }}
-                          onClick={() => setConfirmDeleteId(null)}>Nee</button>
-                      </>
-                    ) : (
-                      <button className="ringstreng-icoon ringstreng-icoon--delete" onClick={() => setConfirmDeleteId(streng.id)} title="Verwijderen">✕</button>
-                    )
-                  )}
-                </div>
-              </div>
-              <div className="ringstreng-range">
-                {streng.van} – {streng.tot}
-              </div>
-              <div className="ringstreng-voortgang">
-                <div className="ringstreng-balk">
-                  <div className="ringstreng-balk-fill" style={{ width: `${pct}%` }} />
-                </div>
-                <span className="ringstreng-stats">
-                  {inDb} in database · <strong>{stats.beschikbaar} beschikbaar</strong> · volgende: <code>{streng.huidige}</code>
-                </span>
-                {streng.prijsPerRing && !isNaN(parsePrijs(streng.prijsPerRing)) && (
-                  <span className="ringstreng-prijs">
-                    {formatBedrag(parsePrijs(streng.prijsPerRing))} p/st · betaald: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.totaal)}</strong> · voorraad: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.beschikbaar)}</strong>
-                  </span>
-                )}
-              </div>
-              {stats.gaten.length > 0 && (
-                <div className="ringstreng-gaten">
-                  <span className="ringstreng-gaten-label">
-                    {stats.gaten.length} {stats.gaten.length === 1 ? 'ring' : 'ringen'} ontbreekt in database
-                  </span>
-                  <span className="ringstreng-gaten-lijst">
-                    {stats.gaten.slice(0, 8).join(', ')}
-                    {stats.gaten.length > 8 && ` en ${stats.gaten.length - 8} meer`}
-                  </span>
-                </div>
+                  {isVol && actieBtnns}
+                </>
               )}
             </div>
           );
