@@ -13,6 +13,15 @@ import './NieuwPage.css';
 function InfoTooltip({ items }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+
+  // Sluit bij klik buiten — altijd aanroepen (Rules of Hooks)
+  useEffect(() => {
+    if (!open) return;
+    function onDoc(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
+    document.addEventListener('pointerdown', onDoc);
+    return () => document.removeEventListener('pointerdown', onDoc);
+  }, [open]);
+
   const hasContent = items.some(it => it.text?.trim());
   if (!hasContent) return null;
 
@@ -21,14 +30,6 @@ function InfoTooltip({ items }) {
     setOpen(v => !v);
   }
   function handleMouseLeave() { setOpen(false); }
-
-  // Sluit bij klik buiten
-  useEffect(() => {
-    if (!open) return;
-    function onDoc(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
-    document.addEventListener('pointerdown', onDoc);
-    return () => document.removeEventListener('pointerdown', onDoc);
-  }, [open]);
 
   return (
     <span className="info-tooltip-wrap" ref={ref} onMouseLeave={handleMouseLeave}>
