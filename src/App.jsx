@@ -143,7 +143,7 @@ function MainApp() {
             />
           } />
           <Route path="/stats" element={
-            <StatsPage records={records} markAllAsUploaded={markAllAsUploaded} importRecords={importRecords} />
+            <StatsPage records={records} markAllAsUploaded={markAllAsUploaded} importRecords={importRecords} projects={projects} />
           } />
           <Route path="/stats/project/:naam" element={
             <ProjectDetail records={records} />

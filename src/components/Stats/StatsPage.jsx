@@ -222,7 +222,7 @@ function parseCSV(text) {
   return records;
 }
 
-export default function StatsPage({ records, markAllAsUploaded, importRecords }) {
+export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [] }) {
   const navigate = useNavigate();
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
   const [tvSorteer, setTvSorteer] = useState('tijd');
@@ -516,19 +516,23 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords })
                   </tr>
                 </thead>
                 <tbody>
-                  {totaalStats.projectTabel.map(p => (
-                    <tr key={p.naam}>
-                      <td className="tt-col-soort">
-                        <Link to={`/stats/project/${encodeURIComponent(p.naam)}`} className="project-table-link">
-                          {p.naam}
-                        </Link>
-                      </td>
-                      <td className="tt-col-num tt-col-total">{p.totaal}</td>
-                      <td className="tt-col-num">{p.nieuw || ''}</td>
-                      <td className="tt-col-num">{p.terugvangst || ''}</td>
-                      <td className="tt-col-num">{p.soorten}</td>
-                    </tr>
-                  ))}
+                  {totaalStats.projectTabel.map(p => {
+                    const eigenProject = projects.some(ep => ep.naam === p.naam);
+                    return (
+                      <tr key={p.naam} className={eigenProject ? '' : 'project-row--extern'}>
+                        <td className="tt-col-soort">
+                          <Link to={`/stats/project/${encodeURIComponent(p.naam)}`} className="project-table-link">
+                            {p.naam}
+                          </Link>
+                          {!eigenProject && <span className="project-extern-badge">extern</span>}
+                        </td>
+                        <td className="tt-col-num tt-col-total">{p.totaal}</td>
+                        <td className="tt-col-num">{p.nieuw || ''}</td>
+                        <td className="tt-col-num">{p.terugvangst || ''}</td>
+                        <td className="tt-col-num">{p.soorten}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
                 <tfoot>
                   <tr className="tt-totaal-row">

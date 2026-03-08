@@ -335,6 +335,19 @@
   color: #1e293b;
 }
 
+/* Extern project (niet in eigen projectenlijst) */
+.project-row--extern td { opacity: 0.6; }
+.project-row--extern .project-table-link { color: var(--text-muted); }
+.project-extern-badge {
+  margin-left: 6px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0 4px;
+  vertical-align: middle;
+}
+
 /* Project tabel link */
 .project-table-link {
   color: var(--accent, #38bdf8);
