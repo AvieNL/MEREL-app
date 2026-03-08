@@ -55,42 +55,30 @@ export function useRecords() {
     if (pulledRef.current) return;
     pulledRef.current = true;
     pullFromSupabase();
-    importBuitenlandEenmalig();
-    importAndereBanenEenmalig();
+    importStatischEenmalig('buitenland_v2', 'buitenland_import', buitenlandData, true);
+    importStatischEenmalig('andere_banen_v1', 'andere_banen_import', andereBanenData);
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function importBuitenlandEenmalig() {
-    const meta = await db.meta.get(`buitenland_imported_v2_${user.id}`);
+  async function importStatischEenmalig(sleutel, bronNaam, data, verwijderOude = false) {
+    const meta = await db.meta.get(`${sleutel}_${user.id}`);
     if (meta?.value) return;
-    // Verwijder eventuele oude buitenland-records (v1 had verkeerde metalenringinfo)
-    const oud = await db.vangsten
-      .where('user_id').equals(user.id)
-      .filter(r => r.bron === 'buitenland_import')
-      .primaryKeys();
-    if (oud.length > 0) await db.vangsten.bulkDelete(oud);
-    const withIds = buitenlandData.map(r => ({
+    if (verwijderOude) {
+      const oud = await db.vangsten
+        .where('user_id').equals(user.id)
+        .filter(r => r.bron === bronNaam)
+        .primaryKeys();
+      if (oud.length > 0) await db.vangsten.bulkDelete(oud);
+    }
+    const withIds = data.map(r => ({
       ...r,
       id: r.id || generateId(),
       timestamp: r.timestamp || new Date().toISOString(),
       user_id: user.id,
     }));
+    // Geen Supabase-sync: statische data zit in de app-bundle en wordt
+    // op elk apparaat opnieuw geladen vanuit de JSON. Alleen lokaal opslaan.
     await db.vangsten.bulkPut(withIds);
-    addToQueue('vangsten', 'batch_upsert', withIds.map(r => toVangstRow(r, user.id)));
-    await db.meta.put({ key: `buitenland_imported_v2_${user.id}`, value: true });
-  }
-
-  async function importAndereBanenEenmalig() {
-    const meta = await db.meta.get(`andere_banen_imported_v1_${user.id}`);
-    if (meta?.value) return;
-    const withIds = andereBanenData.map(r => ({
-      ...r,
-      id: r.id || generateId(),
-      timestamp: r.timestamp || new Date().toISOString(),
-      user_id: user.id,
-    }));
-    await db.vangsten.bulkPut(withIds);
-    addToQueue('vangsten', 'batch_upsert', withIds.map(r => toVangstRow(r, user.id)));
-    await db.meta.put({ key: `andere_banen_imported_v1_${user.id}`, value: true });
+    await db.meta.put({ key: `${sleutel}_${user.id}`, value: true });
   }
 
   async function pullFromSupabase() {
