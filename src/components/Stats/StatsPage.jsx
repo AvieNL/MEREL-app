@@ -104,12 +104,12 @@ function computeStats(records) {
   });
 
   const topSoorten = Object.entries(perSoort)
-    .map(([naam, s]) => [naam, s.nieuw + s.terugvangst])
+    .map(([, s]) => [s.naam, s.nieuw + s.terugvangst])
     .sort((a, b) => b[1] - a[1])
     .slice(0, 15);
 
   const soortenTabel = Object.entries(perSoort)
-    .map(([naam, s]) => ({ naam, nieuw: s.nieuw, terugvangst: s.terugvangst, totaal: s.nieuw + s.terugvangst }))
+    .map(([, s]) => ({ naam: s.naam, nieuw: s.nieuw, terugvangst: s.terugvangst, totaal: s.nieuw + s.terugvangst }))
     .sort((a, b) => b.totaal - a.totaal);
 
   const projectTabel = Object.entries(perProject)
