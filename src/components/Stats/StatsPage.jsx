@@ -243,16 +243,29 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
   const [jaarPopup, setJaarPopup] = useState(null); // { jaar, soorten: string[] }
   const [exportVan, setExportVan] = useState('');
   const [exportTot, setExportTot] = useState('');
+  const [eigenFilter, setEigenFilter] = useState(true);
   const fileInputRef = useRef(null);
+
+  const eigenProjectNamen = useMemo(
+    () => new Set(projects.map(p => p.naam)),
+    [projects]
+  );
+
+  const gefilterdRecords = useMemo(
+    () => eigenFilter
+      ? records.filter(r => !r.project || eigenProjectNamen.has(r.project))
+      : records,
+    [records, eigenFilter, eigenProjectNamen]
+  );
 
   const huidigeRecords = useMemo(
     () => records.filter(r => !r.uploaded && r.bron !== 'griel_import'),
     [records]
   );
   const huidigeStats = useMemo(() => computeStats(huidigeRecords), [huidigeRecords]);
-  const totaalStats = useMemo(() => computeStats(records), [records]);
-  const alleTerugvangsten = useMemo(() => computeTerugvangsten(records), [records]);
-  const { perJaar, perMaand, soortenPerJaar } = useChartData(records);
+  const totaalStats = useMemo(() => computeStats(gefilterdRecords), [gefilterdRecords]);
+  const alleTerugvangsten = useMemo(() => computeTerugvangsten(gefilterdRecords), [gefilterdRecords]);
+  const { perJaar, perMaand, soortenPerJaar } = useChartData(gefilterdRecords);
 
   const terugvangsten = useMemo(() => {
     const sorted = [...alleTerugvangsten].sort((a, b) => {
@@ -444,7 +457,19 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
 
       {/* Sectie 2: Totaal overzicht */}
       <div className="stats-section stats-section--totaal">
-        <h2 className="stats-section-title">Totaal overzicht</h2>
+        <div className="stats-section-header">
+          <h2 className="stats-section-title">Totaal overzicht</h2>
+          <div className="tv-toggle">
+            <button
+              className={`tv-toggle-btn${eigenFilter ? ' active' : ''}`}
+              onClick={() => setEigenFilter(true)}
+            >Eigen projecten</button>
+            <button
+              className={`tv-toggle-btn${!eigenFilter ? ' active' : ''}`}
+              onClick={() => setEigenFilter(false)}
+            >Alle vangsten</button>
+          </div>
+        </div>
 
         <div className="stats-grid">
           <div className="stat-card">

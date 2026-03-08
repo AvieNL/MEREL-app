@@ -48,6 +48,19 @@
   border-bottom: 2px solid var(--bg-tertiary);
 }
 
+.stats-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stats-section-header .stats-section-title {
+  margin-bottom: 0;
+}
+
 .stats-section-title {
   font-size: 1.1rem;
   font-weight: 700;
