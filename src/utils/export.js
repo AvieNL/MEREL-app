@@ -53,8 +53,9 @@ function toISO(d) {
 // Tijd naar HHMM (4 cijfers, geen dubbele punt)
 function toCatchTime(t) {
   if (!t) return '';
-  const [h, m] = String(t).split(':');
-  return h.padStart(2, '0') + (m || '00').slice(0, 2);
+  const clean = String(t).replace(/:/g, '');   // strip alle dubbele punten
+  if (clean.length <= 4) return clean.padStart(4, '0');  // '900' → '0900'
+  return clean.slice(0, 4);                              // '101500' → '1015'
 }
 
 // Weegtijd naar hh:mm:ss
