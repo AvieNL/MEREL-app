@@ -243,12 +243,9 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
               </div>
               <LocatiePicker
                 lat={lat} lon={lon}
-                onChange={({ lat: newLat, lon: newLon, google_plaats: gp, plaatscode: pc, nauwk_coord: nc }) => {
-                  if (newLat !== undefined) setLat(newLat);
-                  if (newLon !== undefined) setLon(newLon);
-                  if (gp !== undefined) setGooglePlaats(gp);
-                  if (pc !== undefined) setPlaatscode(pc);
-                  if (nc !== undefined) setNauwkCoord(nc);
+                onChange={(newLat, newLon) => {
+                  setLat(newLat);
+                  setLon(newLon);
                 }}
               />
             </div>
@@ -304,12 +301,9 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                         </div>
                         <LocatiePicker
                           lat={editLat} lon={editLon}
-                          onChange={({ lat: newLat, lon: newLon, google_plaats: gp, plaatscode: pc, nauwk_coord: nc }) => {
-                            if (newLat !== undefined) setEditLat(newLat);
-                            if (newLon !== undefined) setEditLon(newLon);
-                            if (gp !== undefined) setEditGooglePlaats(gp);
-                            if (pc !== undefined) setEditPlaatscode(pc);
-                            if (nc !== undefined) setEditNauwkCoord(nc);
+                          onChange={(newLat, newLon) => {
+                            setEditLat(newLat);
+                            setEditLon(newLon);
                           }}
                         />
                       </div>

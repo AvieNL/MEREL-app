@@ -77,14 +77,20 @@ create index vangsten_project_idx    on public.vangsten(project);
 -- PROJECTEN
 -- =====================================================
 create table public.projecten (
-  id         text primary key,
-  user_id    uuid references public.profiles(id) on delete cascade not null,
-  naam       text not null,
-  locatie    text default '',
-  nummer     text default '',
-  actief     boolean default true,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  id            text primary key,
+  user_id       uuid references public.profiles(id) on delete cascade not null,
+  naam          text not null,
+  locatie       text default '',
+  nummer        text default '',
+  actief        boolean default true,
+  vaste_locatie boolean default false,
+  plaatscode    text default '',
+  google_plaats text default '',
+  lat           text default '',
+  lon           text default '',
+  nauwk_coord   text default '0',
+  created_at    timestamptz not null default now(),
+  updated_at    timestamptz not null default now()
 );
 
 alter table public.projecten enable row level security;
