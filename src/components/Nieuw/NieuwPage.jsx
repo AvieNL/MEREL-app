@@ -1022,6 +1022,10 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
   }
 
   function handleSpeciesFocus() {
+    if (programmaticFocus.current) {
+      programmaticFocus.current = false;
+      return;
+    }
     if (form.vogelnaam.length === 0 && recentSpecies.length > 0) {
       setSuggestions(recentSpecies.slice(0, 8).map(name => ({
         naam_nl: name,
@@ -1096,6 +1100,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
     setTimeout(() => {
+      programmaticFocus.current = true;
       vogelnaamRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       vogelnaamRef.current?.focus();
     }, 50);
@@ -1177,6 +1182,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
   // Track of het ringnummer auto-ingevuld is (dan mogen we na opslaan de teller ophogen)
   const autoFilledRingId = useRef(null);
   const vogelnaamRef = useRef(null);
+  const programmaticFocus = useRef(false);
 
   // Auto-invullen ringnummer op basis van ringmaat van de geselecteerde soort
   useEffect(() => {
