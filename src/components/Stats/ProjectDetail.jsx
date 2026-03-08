@@ -60,19 +60,21 @@ export default function ProjectDetail({ records }) {
     let terugvangst = 0;
 
     projectRecords.forEach(r => {
-      const soort = r.vogelnaam || 'Onbekend';
-      if (!perSoort[soort]) perSoort[soort] = { nieuw: 0, terugvangst: 0 };
+      const rauweNaam = r.vogelnaam || 'Onbekend';
+      const key = rauweNaam.toLowerCase();
+      const display = rauweNaam.charAt(0).toUpperCase() + rauweNaam.slice(1).toLowerCase();
+      if (!perSoort[key]) perSoort[key] = { naam: display, nieuw: 0, terugvangst: 0 };
       if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
-        perSoort[soort].nieuw++;
+        perSoort[key].nieuw++;
         nieuw++;
       } else {
-        perSoort[soort].terugvangst++;
+        perSoort[key].terugvangst++;
         terugvangst++;
       }
     });
 
     const soortenTabel = Object.entries(perSoort)
-      .map(([soort, s]) => ({ soort, nieuw: s.nieuw, terugvangst: s.terugvangst, totaal: s.nieuw + s.terugvangst }))
+      .map(([, s]) => ({ soort: s.naam, nieuw: s.nieuw, terugvangst: s.terugvangst, totaal: s.nieuw + s.terugvangst }))
       .sort((a, b) => b.totaal - a.totaal);
 
     const datums = projectRecords
@@ -84,7 +86,7 @@ export default function ProjectDetail({ records }) {
 
     return {
       totaal: projectRecords.length,
-      soorten: Object.keys(perSoort).length,
+      soorten: Object.keys(perSoort).length, // keys zijn al lowercase
       nieuw,
       terugvangst,
       soortenTabel,
