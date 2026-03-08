@@ -1494,8 +1494,8 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
               <div className="form-row">
                 <div className={`form-group${errCls('geslacht')}`}>
                   <label>Geslacht * <InfoTooltip items={[
-                    { label: '♂', text: soortOverride?.geslachts_notities_m },
-                    { label: '♀', text: soortOverride?.geslachts_notities_f },
+                    { label: '♂', text: speciesInfo?.geslachts_notities_m || soortOverride?.geslachts_notities_m },
+                    { label: '♀', text: speciesInfo?.geslachts_notities_f || soortOverride?.geslachts_notities_f },
                   ]} /></label>
                   <select value={form.geslacht} onChange={e => update('geslacht', e.target.value)}>
                     {GESLACHT_OPTIONS.map(o => (
@@ -1532,8 +1532,8 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
 
               <div className={`form-group${errCls('leeftijd')}`}>
                 <label>Leeftijd * <InfoTooltip items={[
-                  { label: 'Voorjaar', text: soortOverride?.leeftijds_notities_vj },
-                  { label: 'Najaar',   text: soortOverride?.leeftijds_notities_nj },
+                  { label: 'Voorjaar', text: speciesInfo?.leeftijds_notities_vj || soortOverride?.leeftijds_notities_vj },
+                  { label: 'Najaar',   text: speciesInfo?.leeftijds_notities_nj || soortOverride?.leeftijds_notities_nj },
                 ]} /></label>
                 <select value={form.leeftijd} onChange={e => update('leeftijd', e.target.value)}>
                   {LEEFTIJD_OPTIONS.map(o => (
