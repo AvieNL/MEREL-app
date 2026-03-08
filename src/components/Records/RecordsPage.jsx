@@ -20,6 +20,16 @@ function stripDots(ring) {
   return ring ? ring.replace(/\./g, '') : '';
 }
 
+// Normaliseer datum naar dd-mm-yyyy voor weergave
+function fmtDatum(d) {
+  if (!d) return '';
+  const parts = d.split('-');
+  if (parts.length === 3 && parts[0].length === 4) {
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  }
+  return d;
+}
+
 const LEEFTIJD_LABEL = {
   '0': '?',
   '1': 'pullus',
@@ -112,7 +122,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                   </div>
                 </div>
                 <div className="record-meta">
-                  <span>{r.vangstdatum}</span>
+                  <span>{fmtDatum(r.vangstdatum)}</span>
                   {r.bron === 'griel_import' && <span className="badge badge-accent">Griel</span>}
                 </div>
               </div>
@@ -180,7 +190,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                   <div className="prullenbak-info">
                     <strong>{r.vogelnaam || 'Onbekend'}</strong>
                     {r.ringnummer && <span className="prullenbak-ring">{stripDots(r.ringnummer)}</span>}
-                    {r.vangstdatum && <span className="prullenbak-datum">{r.vangstdatum}</span>}
+                    {r.vangstdatum && <span className="prullenbak-datum">{fmtDatum(r.vangstdatum)}</span>}
                   </div>
                   <div className="prullenbak-acties">
                     {onRestore && canDelete && (
