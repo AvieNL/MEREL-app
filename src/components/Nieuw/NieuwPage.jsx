@@ -1018,7 +1018,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
       const toOpen = {};
       errors.forEach(f => { toOpen[f.section] = true; });
       setSections(prev => ({ ...prev, ...toOpen }));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.querySelector('.app-content')?.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     setFormErrors([]);
@@ -1042,11 +1042,13 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
       lat: form.lat,
       lon: form.lon,
       nauwk_coord: form.nauwk_coord,
+      vangstmethode: form.vangstmethode,
+      lokmiddelen: form.lokmiddelen,
       ringer_initiaal: settings?.ringerInitiaal || '',
       ringer_nummer: settings?.ringerNummer || '',
     });
     resetRuikaart();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelector('.app-content')?.scrollTo({ top: 0, behavior: 'smooth' });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
