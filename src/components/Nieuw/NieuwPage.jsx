@@ -9,6 +9,17 @@ import LocatiePicker from './LocatiePicker';
 import { useRuitypen } from '../../hooks/useRuitypen';
 import './NieuwPage.css';
 
+// Eenvoudige markdown-renderer: **bold**, *italic*, _underline_
+function renderMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.*?)\*\*/gs, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/gs, '<em>$1</em>')
+    .replace(/_(.*?)_/gs, '<u>$1</u>')
+    .replace(/\n/g, '<br>');
+}
+
 // Kleine tooltip achter een ⓘ-icoon — hover op desktop, tap op mobiel
 function InfoTooltip({ items }) {
   const [open, setOpen] = useState(false);
@@ -45,7 +56,7 @@ function InfoTooltip({ items }) {
           {items.map((it, i) => it.text?.trim() ? (
             <div key={i}>
               {it.label && <strong>{it.label}</strong>}
-              <p>{it.text}</p>
+              <p dangerouslySetInnerHTML={{ __html: renderMarkdown(it.text) }} />
             </div>
           ) : null)}
         </div>
