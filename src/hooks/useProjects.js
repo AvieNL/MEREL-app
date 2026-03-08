@@ -20,6 +20,12 @@ function toProjectRow(project, userId) {
     locatie: project.locatie || '',
     nummer: project.nummer || '',
     actief: project.actief !== false,
+    vaste_locatie: project.vaste_locatie || false,
+    plaatscode:    project.plaatscode    || '',
+    google_plaats: project.google_plaats || '',
+    lat:           project.lat           || '',
+    lon:           project.lon           || '',
+    nauwk_coord:   project.nauwk_coord   || '0',
     updated_at: new Date().toISOString(),
   };
 }
@@ -68,6 +74,12 @@ export function useProjects() {
       locatie: r.locatie || '',
       nummer: r.nummer || '',
       actief: r.actief !== false,
+      vaste_locatie: r.vaste_locatie || false,
+      plaatscode:    r.plaatscode    || '',
+      google_plaats: r.google_plaats || '',
+      lat:           r.lat           || '',
+      lon:           r.lon           || '',
+      nauwk_coord:   r.nauwk_coord   || '0',
     }));
 
     // Zet Supabase-data in Dexie
@@ -112,6 +124,12 @@ export function useProjects() {
         locatie: p.locatie || '',
         nummer: p.nummer || '',
         actief: p.actief !== false,
+        vaste_locatie: p.vaste_locatie || false,
+        plaatscode:    p.plaatscode    || '',
+        google_plaats: p.google_plaats || '',
+        lat:           p.lat           || '',
+        lon:           p.lon           || '',
+        nauwk_coord:   p.nauwk_coord   || '0',
         shared: true,
       })));
     }

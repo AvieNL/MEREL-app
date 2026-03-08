@@ -926,6 +926,21 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     setFormErrors(prev => prev.filter(f => f.key !== field));
   }
 
+  // Auto-vul locatie vanuit project als dat een vaste locatie heeft
+  useEffect(() => {
+    if (!form.project || !projects?.length) return;
+    const project = projects.find(p => p.naam === form.project);
+    if (!project?.vaste_locatie) return;
+    setForm(prev => ({
+      ...prev,
+      plaatscode:    project.plaatscode    || prev.plaatscode,
+      google_plaats: project.google_plaats || prev.google_plaats,
+      lat:           project.lat           || prev.lat,
+      lon:           project.lon           || prev.lon,
+      nauwk_coord:   project.nauwk_coord   || prev.nauwk_coord,
+    }));
+  }, [form.project]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Recent species from records (unique, most recent first)
   const recentSpecies = useMemo(() => {
     const seen = new Set();

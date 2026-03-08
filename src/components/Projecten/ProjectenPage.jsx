@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRole } from '../../hooks/useRole';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
+import LocatiePicker from '../Nieuw/LocatiePicker';
 import './ProjectenPage.css';
 
 // Ingebouwde component voor ledenbeheeer per project
@@ -132,13 +133,36 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
   const [editNummer, setEditNummer] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
+  const [vasteLocatie, setVasteLocatie] = useState(false);
+  const [plaatscode, setPlaatscode] = useState('NL--');
+  const [googlePlaats, setGooglePlaats] = useState('');
+  const [lat, setLat] = useState('');
+  const [lon, setLon] = useState('');
+  const [nauwkCoord, setNauwkCoord] = useState('0');
+
+  const [editVasteLocatie, setEditVasteLocatie] = useState(false);
+  const [editPlaatscode, setEditPlaatscode] = useState('NL--');
+  const [editGooglePlaats, setEditGooglePlaats] = useState('');
+  const [editLat, setEditLat] = useState('');
+  const [editLon, setEditLon] = useState('');
+  const [editNauwkCoord, setEditNauwkCoord] = useState('0');
+
   function handleAdd(e) {
     e.preventDefault();
     if (!naam.trim()) return;
-    onAdd({ naam: naam.trim(), locatie: locatie.trim(), nummer: nummer.trim() });
+    onAdd({ naam: naam.trim(), locatie: locatie.trim(), nummer: nummer.trim(),
+      vaste_locatie: vasteLocatie,
+      plaatscode: vasteLocatie ? plaatscode : '',
+      google_plaats: vasteLocatie ? googlePlaats : '',
+      lat: vasteLocatie ? lat : '',
+      lon: vasteLocatie ? lon : '',
+      nauwk_coord: vasteLocatie ? nauwkCoord : '0',
+    });
     setNaam('');
     setLocatie('');
     setNummer('');
+    setVasteLocatie(false); setPlaatscode('NL--'); setGooglePlaats('');
+    setLat(''); setLon(''); setNauwkCoord('0');
     setShowForm(false);
   }
 
@@ -147,6 +171,12 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     setEditNaam(p.naam);
     setEditLocatie(p.locatie || '');
     setEditNummer(p.nummer || '');
+    setEditVasteLocatie(p.vaste_locatie || false);
+    setEditPlaatscode(p.plaatscode || 'NL--');
+    setEditGooglePlaats(p.google_plaats || '');
+    setEditLat(p.lat || '');
+    setEditLon(p.lon || '');
+    setEditNauwkCoord(p.nauwk_coord || '0');
   }
 
   function cancelEdit() {
@@ -159,7 +189,14 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     if (newNaam !== p.naam && onRenameProject) {
       onRenameProject(p.naam, newNaam);
     }
-    onUpdate(p.id, { naam: newNaam, locatie: editLocatie.trim(), nummer: editNummer.trim() });
+    onUpdate(p.id, { naam: newNaam, locatie: editLocatie.trim(), nummer: editNummer.trim(),
+      vaste_locatie: editVasteLocatie,
+      plaatscode: editVasteLocatie ? editPlaatscode : '',
+      google_plaats: editVasteLocatie ? editGooglePlaats : '',
+      lat: editVasteLocatie ? editLat : '',
+      lon: editVasteLocatie ? editLon : '',
+      nauwk_coord: editVasteLocatie ? editNauwkCoord : '0',
+    });
     setEditId(null);
   }
 
@@ -188,6 +225,34 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
             <label>Projectnummer</label>
             <input type="text" value={nummer} onChange={e => setNummer(e.target.value)} placeholder="bijv. 1925" />
           </div>
+          <div className="form-group">
+            <label className="checkbox-label">
+              <input type="checkbox" checked={vasteLocatie} onChange={e => setVasteLocatie(e.target.checked)} />
+              Vaste locatie (coördinaten opslaan bij project)
+            </label>
+          </div>
+          {vasteLocatie && (
+            <div className="project-locatie-velden">
+              <div className="form-group">
+                <label>Plaatscode</label>
+                <input type="text" value={plaatscode} onChange={e => setPlaatscode(e.target.value)} placeholder="bijv. NL--" />
+              </div>
+              <div className="form-group">
+                <label>Plaatsnaam</label>
+                <input type="text" value={googlePlaats} onChange={e => setGooglePlaats(e.target.value)} placeholder="bijv. Breedenbroek" />
+              </div>
+              <LocatiePicker
+                lat={lat} lon={lon}
+                onChange={({ lat: newLat, lon: newLon, google_plaats: gp, plaatscode: pc, nauwk_coord: nc }) => {
+                  if (newLat !== undefined) setLat(newLat);
+                  if (newLon !== undefined) setLon(newLon);
+                  if (gp !== undefined) setGooglePlaats(gp);
+                  if (pc !== undefined) setPlaatscode(pc);
+                  if (nc !== undefined) setNauwkCoord(nc);
+                }}
+              />
+            </div>
+          )}
           <button type="submit" className="btn-success" style={{ width: '100%' }}>
             Project Toevoegen
           </button>
@@ -219,6 +284,36 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                         <input type="text" value={editNummer} onChange={e => setEditNummer(e.target.value)} />
                       </div>
                     </div>
+                    <div className="form-group">
+                      <label className="checkbox-label">
+                        <input type="checkbox" checked={editVasteLocatie} onChange={e => setEditVasteLocatie(e.target.checked)} />
+                        Vaste locatie
+                      </label>
+                    </div>
+                    {editVasteLocatie && (
+                      <div className="project-locatie-velden">
+                        <div className="form-row">
+                          <div className="form-group">
+                            <label>Plaatscode</label>
+                            <input type="text" value={editPlaatscode} onChange={e => setEditPlaatscode(e.target.value)} />
+                          </div>
+                          <div className="form-group">
+                            <label>Plaatsnaam</label>
+                            <input type="text" value={editGooglePlaats} onChange={e => setEditGooglePlaats(e.target.value)} />
+                          </div>
+                        </div>
+                        <LocatiePicker
+                          lat={editLat} lon={editLon}
+                          onChange={({ lat: newLat, lon: newLon, google_plaats: gp, plaatscode: pc, nauwk_coord: nc }) => {
+                            if (newLat !== undefined) setEditLat(newLat);
+                            if (newLon !== undefined) setEditLon(newLon);
+                            if (gp !== undefined) setEditGooglePlaats(gp);
+                            if (pc !== undefined) setEditPlaatscode(pc);
+                            if (nc !== undefined) setEditNauwkCoord(nc);
+                          }}
+                        />
+                      </div>
+                    )}
                     <div className="project-edit-actions">
                       <button type="button" className="btn-success btn-sm" onClick={() => saveEdit(p)}>
                         Opslaan
@@ -236,6 +331,9 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                         <span className="project-meta">
                           {p.nummer && <span className="project-nummer">#{p.nummer}</span>}
                           {p.locatie && <span className="project-loc">{p.locatie}</span>}
+                          {p.vaste_locatie && p.lat && p.lon && (
+                            <span className="project-loc project-loc--coords">📍 {parseFloat(p.lat).toFixed(4)}, {parseFloat(p.lon).toFixed(4)}</span>
+                          )}
                           {isShared && <span className="project-shared-badge">Gedeeld</span>}
                           <button
                             className={`btn-secondary btn-sm badge ${p.actief ? 'badge-success' : ''}`}
