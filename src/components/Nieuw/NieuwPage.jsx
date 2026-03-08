@@ -20,48 +20,20 @@ function renderMarkdown(text) {
     .replace(/\n/g, '<br>');
 }
 
-// Kleine tooltip achter een ⓘ-icoon — hover op desktop, tap op mobiel
-function InfoTooltip({ items }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-
-  // Sluit bij klik buiten — altijd aanroepen (Rules of Hooks)
-  useEffect(() => {
-    if (!open) return;
-    function onDoc(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
-    document.addEventListener('pointerdown', onDoc);
-    return () => document.removeEventListener('pointerdown', onDoc);
-  }, [open]);
-
+// Inline informatieblok onder een veld — toont soortspecifieke determinatieinfo
+function InfoPanel({ items }) {
   const hasContent = items.some(it => it.text?.trim());
   if (!hasContent) return null;
 
-  function handleClick(e) {
-    e.stopPropagation();
-    setOpen(v => !v);
-  }
-  function handleMouseLeave() { setOpen(false); }
-
   return (
-    <span className="info-tooltip-wrap" ref={ref} onMouseLeave={handleMouseLeave}>
-      <button
-        type="button"
-        className="info-tooltip-btn"
-        onClick={handleClick}
-        onMouseEnter={() => setOpen(true)}
-        aria-label="Meer informatie"
-      >ⓘ</button>
-      {open && (
-        <div className="info-tooltip-popup">
-          {items.map((it, i) => it.text?.trim() ? (
-            <div key={i}>
-              {it.label && <strong>{it.label}</strong>}
-              <p dangerouslySetInnerHTML={{ __html: renderMarkdown(it.text) }} />
-            </div>
-          ) : null)}
+    <div className="info-panel">
+      {items.map((it, i) => it.text?.trim() ? (
+        <div key={i} className="info-panel-item">
+          {it.label && <span className="info-panel-label">{it.label}</span>}
+          <span dangerouslySetInnerHTML={{ __html: renderMarkdown(it.text) }} />
         </div>
-      )}
-    </span>
+      ) : null)}
+    </div>
   );
 }
 
@@ -1529,15 +1501,16 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
             <div className="section-content">
               <div className="form-row">
                 <div className={`form-group${errCls('geslacht')}`}>
-                  <label>Geslacht * <InfoTooltip items={[
-                    { label: '♂', text: speciesInfo?.geslachts_notities_m || soortOverride?.geslachts_notities_m },
-                    { label: '♀', text: speciesInfo?.geslachts_notities_f || soortOverride?.geslachts_notities_f },
-                  ]} /></label>
+                  <label>Geslacht *</label>
                   <select value={form.geslacht} onChange={e => update('geslacht', e.target.value)}>
                     {GESLACHT_OPTIONS.map(o => (
                       <option key={o.value} value={o.value}>{o.label}</option>
                     ))}
                   </select>
+                  <InfoPanel items={[
+                    { label: '♂', text: speciesInfo?.geslachts_notities_m || soortOverride?.geslachts_notities_m },
+                    { label: '♀', text: speciesInfo?.geslachts_notities_f || soortOverride?.geslachts_notities_f },
+                  ]} />
                 </div>
                 <div className="form-group">
                   <label>Bepaling geslacht</label>
@@ -1567,15 +1540,16 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
               })()}
 
               <div className={`form-group${errCls('leeftijd')}`}>
-                <label>Leeftijd * <InfoTooltip items={[
-                  { label: 'Voorjaar', text: speciesInfo?.leeftijds_notities_vj || soortOverride?.leeftijds_notities_vj },
-                  { label: 'Najaar',   text: speciesInfo?.leeftijds_notities_nj || soortOverride?.leeftijds_notities_nj },
-                ]} /></label>
+                <label>Leeftijd *</label>
                 <select value={form.leeftijd} onChange={e => update('leeftijd', e.target.value)}>
                   {LEEFTIJD_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
                   ))}
                 </select>
+                <InfoPanel items={[
+                  { label: 'Voorjaar', text: speciesInfo?.leeftijds_notities_vj || soortOverride?.leeftijds_notities_vj },
+                  { label: 'Najaar',   text: speciesInfo?.leeftijds_notities_nj || soortOverride?.leeftijds_notities_nj },
+                ]} />
                 {form.leeftijd === '1' && (
                   <div className="pullus-velden">
                     <div className="form-row">

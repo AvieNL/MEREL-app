@@ -3,54 +3,46 @@
   padding-bottom: 24px;
 }
 
-/* Jaar-popup: lijst soorten na klik op grafiekpunt */
-.jaar-popup-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-.jaar-popup {
+/* Jaar inline soortenlijst onder de grafiek */
+.jaar-inline {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
-  border-radius: 12px 12px 0 0;
-  width: 100%;
-  max-width: 480px;
-  max-height: 70vh;
-  display: flex;
-  flex-direction: column;
+  border-radius: var(--radius);
+  margin-top: 8px;
+  overflow: hidden;
 }
-.jaar-popup-header {
+.jaar-inline-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 16px;
+  padding: 10px 14px;
   border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+  font-size: 0.9rem;
 }
-.jaar-popup-close {
+.jaar-inline-close {
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
-  padding: 4px;
+  padding: 2px 4px;
+  min-width: auto;
+  min-height: auto;
 }
-.jaar-popup-list {
+.jaar-inline-list {
   list-style: none;
   margin: 0;
-  padding: 8px 0;
-  overflow-y: auto;
+  padding: 4px 0;
+  columns: 2;
+  column-gap: 0;
 }
-.jaar-popup-list li {
-  padding: 6px 16px;
-  font-size: 0.9rem;
+.jaar-inline-list li {
+  padding: 4px 14px;
+  font-size: 0.85rem;
+  break-inside: avoid;
   border-bottom: 1px solid var(--bg-tertiary);
 }
-.jaar-popup-list li:last-child { border-bottom: none; }
+.jaar-inline-list li:last-child { border-bottom: none; }
 
 .stats-section--huidig {
   border-bottom: 2px solid var(--bg-tertiary);

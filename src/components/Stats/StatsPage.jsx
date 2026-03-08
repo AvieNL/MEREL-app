@@ -448,27 +448,27 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
           <>
             <LineChart
               data={soortenPerJaar}
-              title="Soorten per jaar"
+              title="Soorten per jaar — klik op een punt voor de soortenlijst"
               xKey="jaar"
               yKey="soorten"
-              onPointClick={pt => setJaarPopup({
-                jaar: pt.jaar,
-                soorten: [...pt.soortenSet].sort((a, b) => a.localeCompare(b, 'nl')),
-              })}
+              onPointClick={pt => setJaarPopup(prev =>
+                prev?.jaar === pt.jaar ? null : {
+                  jaar: pt.jaar,
+                  soorten: [...pt.soortenSet].sort((a, b) => a.localeCompare(b, 'nl')),
+                }
+              )}
             />
             {jaarPopup && (
-              <div className="jaar-popup-overlay" onClick={() => setJaarPopup(null)}>
-                <div className="jaar-popup" onClick={e => e.stopPropagation()}>
-                  <div className="jaar-popup-header">
-                    <strong>{jaarPopup.soorten.length} soorten in {jaarPopup.jaar}</strong>
-                    <button className="jaar-popup-close" onClick={() => setJaarPopup(null)}>✕</button>
-                  </div>
-                  <ul className="jaar-popup-list">
-                    {jaarPopup.soorten.map(s => (
-                      <li key={s}>{capitalize(s)}</li>
-                    ))}
-                  </ul>
+              <div className="jaar-inline">
+                <div className="jaar-inline-header">
+                  <strong>{jaarPopup.soorten.length} soorten in {jaarPopup.jaar}</strong>
+                  <button className="jaar-inline-close" onClick={() => setJaarPopup(null)}>✕</button>
                 </div>
+                <ul className="jaar-inline-list">
+                  {jaarPopup.soorten.map(s => (
+                    <li key={s}>{capitalize(s)}</li>
+                  ))}
+                </ul>
               </div>
             )}
           </>
