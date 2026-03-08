@@ -9,6 +9,50 @@ import LocatiePicker from './LocatiePicker';
 import { useRuitypen } from '../../hooks/useRuitypen';
 import './NieuwPage.css';
 
+// Kleine tooltip achter een ⓘ-icoon — hover op desktop, tap op mobiel
+function InfoTooltip({ items }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const hasContent = items.some(it => it.text?.trim());
+  if (!hasContent) return null;
+
+  function handleClick(e) {
+    e.stopPropagation();
+    setOpen(v => !v);
+  }
+  function handleMouseLeave() { setOpen(false); }
+
+  // Sluit bij klik buiten
+  useEffect(() => {
+    if (!open) return;
+    function onDoc(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }
+    document.addEventListener('pointerdown', onDoc);
+    return () => document.removeEventListener('pointerdown', onDoc);
+  }, [open]);
+
+  return (
+    <span className="info-tooltip-wrap" ref={ref} onMouseLeave={handleMouseLeave}>
+      <button
+        type="button"
+        className="info-tooltip-btn"
+        onClick={handleClick}
+        onMouseEnter={() => setOpen(true)}
+        aria-label="Meer informatie"
+      >ⓘ</button>
+      {open && (
+        <div className="info-tooltip-popup">
+          {items.map((it, i) => it.text?.trim() ? (
+            <div key={i}>
+              {it.label && <strong>{it.label}</strong>}
+              <p>{it.text}</p>
+            </div>
+          ) : null)}
+        </div>
+      )}
+    </span>
+  );
+}
+
 // Renders de seizoensteksten vanuit de admin-configureerbare ruitype-config
 function RuiSeizoenTekst({ type, config }) {
   const seizoen = config?.[type];
@@ -1449,7 +1493,10 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
             <div className="section-content">
               <div className="form-row">
                 <div className={`form-group${errCls('geslacht')}`}>
-                  <label>Geslacht *</label>
+                  <label>Geslacht * <InfoTooltip items={[
+                    { label: '♂', text: soortOverride?.geslachts_notities_m },
+                    { label: '♀', text: soortOverride?.geslachts_notities_f },
+                  ]} /></label>
                   <select value={form.geslacht} onChange={e => update('geslacht', e.target.value)}>
                     {GESLACHT_OPTIONS.map(o => (
                       <option key={o.value} value={o.value}>{o.label}</option>
@@ -1484,7 +1531,10 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
               })()}
 
               <div className={`form-group${errCls('leeftijd')}`}>
-                <label>Leeftijd *</label>
+                <label>Leeftijd * <InfoTooltip items={[
+                  { label: 'Voorjaar', text: soortOverride?.leeftijds_notities_vj },
+                  { label: 'Najaar',   text: soortOverride?.leeftijds_notities_nj },
+                ]} /></label>
                 <select value={form.leeftijd} onChange={e => update('leeftijd', e.target.value)}>
                   {LEEFTIJD_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
