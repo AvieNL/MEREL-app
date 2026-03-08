@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase';
 import { toVangstRow, fromVangstRow } from '../utils/supabase-helpers';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
+import buitenlandData from '../data/buitenland-import.json';
 
 function migrateUploaded(record) {
   if (record.uploaded !== undefined) return record;
@@ -53,7 +54,22 @@ export function useRecords() {
     if (pulledRef.current) return;
     pulledRef.current = true;
     pullFromSupabase();
+    importBuitenlandEenmalig();
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function importBuitenlandEenmalig() {
+    const meta = await db.meta.get(`buitenland_imported_v1_${user.id}`);
+    if (meta?.value) return;
+    const withIds = buitenlandData.map(r => ({
+      ...r,
+      id: r.id || generateId(),
+      timestamp: r.timestamp || new Date().toISOString(),
+      user_id: user.id,
+    }));
+    await db.vangsten.bulkPut(withIds);
+    addToQueue('vangsten', 'batch_upsert', withIds.map(r => toVangstRow(r, user.id)));
+    await db.meta.put({ key: `buitenland_imported_v1_${user.id}`, value: true });
+  }
 
   async function pullFromSupabase() {
     const localCount = await db.vangsten
