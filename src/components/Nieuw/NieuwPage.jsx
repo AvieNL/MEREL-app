@@ -821,12 +821,13 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
       const ovMax   = parseVal(soortOverride[`bio_${f.key}_max`]);
       const fromRec = bioRangesFromRecords[f.key];
 
-      if (!isNaN(baseMin) && !isNaN(baseMax)) {
-        // 1. Literatuur (speciesInfo)
-        merged[f.key] = { label: f.label, min: baseMin, max: baseMax, rangeMin: baseMin, rangeMax: baseMax, source: 'literatuur' };
-      } else if (!isNaN(ovMin) && !isNaN(ovMax)) {
-        // 2. Gebruikersoverride
-        merged[f.key] = { label: f.label, min: ovMin, max: ovMax, rangeMin: ovMin, rangeMax: ovMax, source: 'override' };
+      // Soortdata: speciesInfo (species-tabel) heeft prioriteit, soortOverride als fallback
+      const litMin = !isNaN(baseMin) ? baseMin : ovMin;
+      const litMax = !isNaN(baseMax) ? baseMax : ovMax;
+
+      if (!isNaN(litMin) && !isNaN(litMax)) {
+        // 1+2. Soortendata (literatuur of override — beide admin-ingevoerd)
+        merged[f.key] = { label: f.label, min: litMin, max: litMax, rangeMin: litMin, rangeMax: litMax, source: 'soortendata' };
       } else if (fromRec) {
         // 3. Eigen vangsten (10% marge)
         const margin = (fromRec.max - fromRec.min) * 0.1 || fromRec.min * 0.1;
