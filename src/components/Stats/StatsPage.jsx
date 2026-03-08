@@ -58,15 +58,16 @@ function computeStats(records) {
   let terugvangst = 0;
 
   records.forEach(r => {
-    const naam = r.vogelnaam || 'Onbekend';
-    soorten.add(naam);
+    const rauweNaam = r.vogelnaam || 'Onbekend';
+    const key = rauweNaam.toLowerCase(); // case-insensitieve groepering
+    soorten.add(key);
 
-    if (!perSoort[naam]) perSoort[naam] = { nieuw: 0, terugvangst: 0 };
+    if (!perSoort[key]) perSoort[key] = { nieuw: 0, terugvangst: 0, naam: capitalize(rauweNaam) };
     if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
-      perSoort[naam].nieuw++;
+      perSoort[key].nieuw++;
       nieuw++;
     } else {
-      perSoort[naam].terugvangst++;
+      perSoort[key].terugvangst++;
       terugvangst++;
     }
 
@@ -91,7 +92,7 @@ function computeStats(records) {
       } else {
         perProject[r.project].terugvangst++;
       }
-      perProject[r.project].soorten.add(naam);
+      perProject[r.project].soorten.add(key);
     }
   });
 

@@ -340,7 +340,7 @@ export function useChartData(targetRecords) {
       if (!d) return;
       const jaar = d.getFullYear();
       if (!map[jaar]) map[jaar] = new Set();
-      if (r.vogelnaam) map[jaar].add(r.vogelnaam);
+      if (r.vogelnaam) map[jaar].add(r.vogelnaam.toLowerCase());
     });
     return Object.entries(map)
       .map(([jaar, set]) => ({ jaar: +jaar, soorten: set.size, soortenSet: set }))
