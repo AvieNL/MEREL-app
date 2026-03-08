@@ -238,6 +238,10 @@ function parseCSV(text) {
 export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [] }) {
   const navigate = useNavigate();
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
+
+  function openSoorten(soortenTabel, titel) {
+    navigate('/stats/soorten', { state: { soortenTabel, titel } });
+  }
   const [tvSorteer, setTvSorteer] = useState('tijd');
   const [importStatus, setImportStatus] = useState(null);
   const [jaarPopup, setJaarPopup] = useState(null); // { jaar, soorten: string[] }
@@ -383,7 +387,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
             <div className="stat-value">{huidigeStats.total}</div>
             <div className="stat-label">Totaal</div>
           </div>
-          <div className="stat-card">
+          <div className="stat-card stat-card--link" onClick={() => openSoorten(huidigeStats.soortenTabel, 'Huidige vangst')}>
             <div className="stat-value">{huidigeStats.soorten}</div>
             <div className="stat-label">Soorten</div>
           </div>
@@ -476,7 +480,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
             <div className="stat-value">{totaalStats.total}</div>
             <div className="stat-label">Totaal vangsten</div>
           </div>
-          <div className="stat-card">
+          <div className="stat-card stat-card--link" onClick={() => openSoorten(totaalStats.soortenTabel, 'Totaal overzicht')}>
             <div className="stat-value">{totaalStats.soorten}</div>
             <div className="stat-label">Soorten</div>
           </div>

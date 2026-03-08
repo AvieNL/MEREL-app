@@ -47,6 +47,11 @@ export default function ProjectDetail({ records }) {
   const navigate = useNavigate();
   const { naam } = useParams();
 
+  function openSoorten() {
+    const tabel = stats.soortenTabel.map(s => ({ naam: s.soort, nieuw: s.nieuw, terugvangst: s.terugvangst, totaal: s.totaal }));
+    navigate('/stats/soorten', { state: { soortenTabel: tabel, titel: naam } });
+  }
+
   const projectRecords = useMemo(
     () => records.filter(r => r.project === naam),
     [records, naam]
@@ -172,7 +177,7 @@ export default function ProjectDetail({ records }) {
           <div className="stat-value">{stats.totaal}</div>
           <div className="stat-label">Vangsten</div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card stat-card--link" onClick={openSoorten}>
           <div className="stat-value">{stats.soorten}</div>
           <div className="stat-label">Soorten</div>
         </div>

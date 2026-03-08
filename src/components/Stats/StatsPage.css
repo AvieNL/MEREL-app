@@ -86,6 +86,21 @@
   text-align: center;
 }
 
+.stat-card--link {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.stat-card--link:hover {
+  background: var(--bg-tertiary);
+}
+
+.stat-card--link .stat-value {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  text-underline-offset: 3px;
+}
+
 .stat-value {
   font-size: 1.8rem;
   font-weight: 700;

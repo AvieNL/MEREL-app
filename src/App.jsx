@@ -8,6 +8,7 @@ import NieuwPage from './components/Nieuw/NieuwPage';
 import RecordsPage from './components/Records/RecordsPage';
 import StatsPage from './components/Stats/StatsPage';
 import ProjectDetail from './components/Stats/ProjectDetail';
+import SoortenOverzicht from './components/Stats/SoortenOverzicht';
 import SoortenPage from './components/Soorten/SoortenPage';
 import SoortDetail from './components/Soorten/SoortDetail';
 import DatabasesPage from './components/Databases/DatabasesPage';
@@ -148,6 +149,7 @@ function MainApp() {
           <Route path="/stats/project/:naam" element={
             <ProjectDetail records={records} />
           } />
+          <Route path="/stats/soorten" element={<SoortenOverzicht />} />
           <Route path="/soorten" element={
             <SoortenPage records={records} />
           } />
