@@ -109,7 +109,7 @@ function AppShell() {
 }
 
 function MainApp() {
-  const { records, deletedRecords, addRecord, updateRecord, deleteRecord, restoreRecord, permanentDeleteRecord, markAllAsUploaded, importRecords, renameProject } = useRecords();
+  const { records, deletedRecords, addRecord, updateRecord, deleteRecord, restoreRecord, permanentDeleteRecord, markAllAsUploaded, importRecords, renameProject, fullResync } = useRecords();
   const { projects, addProject, updateProject, deleteProject } = useProjects();
   const speciesOverrides = useSpeciesOverrides();
   const { settings, updateSettings } = useSettings();
@@ -117,7 +117,7 @@ function MainApp() {
 
   return (
     <div className="app-shell">
-      <Header />
+      <Header onFullResync={fullResync} />
       <MigrationBanner onComplete={() => {}} />
       <main className="app-content">
         <Routes>

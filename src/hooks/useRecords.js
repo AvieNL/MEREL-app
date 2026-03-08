@@ -215,6 +215,11 @@ export function useRecords() {
       });
   }
 
+  async function fullResync() {
+    await db.meta.delete(`last_pull_vangsten_${user.id}`);
+    await pullFromSupabase();
+  }
+
   return {
     records,
     deletedRecords,
@@ -227,5 +232,6 @@ export function useRecords() {
     markAllAsUploaded,
     importRecords,
     renameProject,
+    fullResync,
   };
 }
