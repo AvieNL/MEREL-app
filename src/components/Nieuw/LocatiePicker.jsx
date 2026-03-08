@@ -67,6 +67,9 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
       });
 
       mapInstanceRef.current = map;
+
+      // Forceer herberekening van container-afmetingen na mount
+      setTimeout(() => { if (!cancelled) map.invalidateSize(); }, 100);
     });
 
     return () => { cancelled = true; };
