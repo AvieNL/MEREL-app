@@ -1104,9 +1104,12 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
       ringer_nummer: settings?.ringerNummer || '',
     });
     resetRuikaart();
-    document.querySelector('.app-content')?.scrollTo({ top: 0, behavior: 'smooth' });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+    setTimeout(() => {
+      vogelnaamRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      vogelnaamRef.current?.focus();
+    }, 50);
   }
 
   function renderBioField(key, label) {
@@ -1184,6 +1187,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
 
   // Track of het ringnummer auto-ingevuld is (dan mogen we na opslaan de teller ophogen)
   const autoFilledRingId = useRef(null);
+  const vogelnaamRef = useRef(null);
 
   // Auto-invullen ringnummer op basis van ringmaat van de geselecteerde soort
   useEffect(() => {
@@ -1285,6 +1289,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
               <div className={`form-group species-input${errCls('vogelnaam')}`}>
                 <label>Vogelnaam *</label>
                 <input
+                  ref={vogelnaamRef}
                   type="text"
                   value={form.vogelnaam}
                   onChange={e => handleSpeciesInput(e.target.value)}
