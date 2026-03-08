@@ -58,8 +58,14 @@ export function useRecords() {
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function importBuitenlandEenmalig() {
-    const meta = await db.meta.get(`buitenland_imported_v1_${user.id}`);
+    const meta = await db.meta.get(`buitenland_imported_v2_${user.id}`);
     if (meta?.value) return;
+    // Verwijder eventuele oude buitenland-records (v1 had verkeerde metalenringinfo)
+    const oud = await db.vangsten
+      .where('user_id').equals(user.id)
+      .filter(r => r.bron === 'buitenland_import')
+      .primaryKeys();
+    if (oud.length > 0) await db.vangsten.bulkDelete(oud);
     const withIds = buitenlandData.map(r => ({
       ...r,
       id: r.id || generateId(),
@@ -68,7 +74,7 @@ export function useRecords() {
     }));
     await db.vangsten.bulkPut(withIds);
     addToQueue('vangsten', 'batch_upsert', withIds.map(r => toVangstRow(r, user.id)));
-    await db.meta.put({ key: `buitenland_imported_v1_${user.id}`, value: true });
+    await db.meta.put({ key: `buitenland_imported_v2_${user.id}`, value: true });
   }
 
   async function pullFromSupabase() {
