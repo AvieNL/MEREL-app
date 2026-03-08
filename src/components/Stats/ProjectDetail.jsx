@@ -53,6 +53,7 @@ export default function ProjectDetail({ records }) {
   );
 
   const [tvSorteer, setTvSorteer] = useState('tijd');
+  const [jaarPopup, setJaarPopup] = useState(null);
 
   const stats = useMemo(() => {
     const perSoort = {};
@@ -200,7 +201,33 @@ export default function ProjectDetail({ records }) {
       )}
 
       {soortenPerJaar.length > 1 && (
-        <LineChart data={soortenPerJaar} title="Soorten per jaar" xKey="jaar" yKey="soorten" />
+        <>
+          <LineChart
+            data={soortenPerJaar}
+            title="Soorten per jaar — klik op een punt voor de soortenlijst"
+            xKey="jaar"
+            yKey="soorten"
+            onPointClick={pt => setJaarPopup(prev =>
+              prev?.jaar === pt.jaar ? null : {
+                jaar: pt.jaar,
+                soorten: [...pt.soortenSet].sort((a, b) => a.localeCompare(b, 'nl')),
+              }
+            )}
+          />
+          {jaarPopup && (
+            <div className="jaar-inline">
+              <div className="jaar-inline-header">
+                <strong>{jaarPopup.soorten.length} soorten in {jaarPopup.jaar}</strong>
+                <button className="jaar-inline-close" onClick={() => setJaarPopup(null)}>✕</button>
+              </div>
+              <ul className="jaar-inline-list">
+                {jaarPopup.soorten.map(s => (
+                  <li key={s}>{s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
       )}
 
       {topSoorten.length > 0 && (
