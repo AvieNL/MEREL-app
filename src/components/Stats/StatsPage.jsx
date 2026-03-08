@@ -268,7 +268,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         break;
       }
       case 'griel': {
-        const xml = exportGrielXML(data);
+        const xml = exportGrielXML(data, projects);
         downloadFile(xml, `vrs-griel-${datum}.xml`, 'application/xml');
         if (subset === 'huidig') {
           setShowUploadConfirm(true);
