@@ -127,10 +127,10 @@
 }
 .field-hint em { font-style: normal; opacity: 0.7; }
 
-/* Bron-kleur bereik: literatuur=blauw, override=geel, vangsten=groen */
-.field-hint--literatuur { color: var(--accent); }
-.field-hint--override   { color: var(--warning); opacity: 1; }
-.field-hint--vangsten   { color: var(--success); }
+/* Bron-kleur bereik: zelfde als soortenpagina */
+.field-hint--literatuur { color: var(--text-secondary); }
+.field-hint--override   { color: var(--accent); font-style: italic; opacity: 1; }
+.field-hint--vangsten   { color: var(--text-muted); }
 
 /* Gekleurde geslachtssymbolen */
 .gender-m { color: var(--accent, #38bdf8); font-weight: 700; }
