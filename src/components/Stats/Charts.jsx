@@ -142,7 +142,7 @@ export function BarChartSimple({ data, title, color }) {
   );
 }
 
-export function LineChart({ data, title, xKey, yKey }) {
+export function LineChart({ data, title, xKey, yKey, onPointClick }) {
   const containerRef = useRef(null);
   const containerW = useContainerWidth(containerRef);
   if (!data.length) return <div ref={containerRef} />;
@@ -182,9 +182,9 @@ export function LineChart({ data, title, xKey, yKey }) {
           })}
           <polyline points={polyline} fill="none" stroke="var(--accent, #38bdf8)" strokeWidth="2" />
           {points.map((p, i) => (
-            <g key={i}>
-              <circle cx={p.x} cy={p.y} r="4" fill="var(--accent, #38bdf8)" />
-              <text x={p.x} y={p.y - 8} textAnchor="middle" fill="var(--text-secondary)" fontSize="9">{p.d[yKey]}</text>
+            <g key={i} style={onPointClick ? { cursor: 'pointer' } : {}} onClick={onPointClick ? () => onPointClick(p.d) : undefined}>
+              <circle cx={p.x} cy={p.y} r={onPointClick ? 6 : 4} fill="var(--accent, #38bdf8)" />
+              <text x={p.x} y={p.y - 10} textAnchor="middle" fill="var(--text-secondary)" fontSize="9">{p.d[yKey]}</text>
               <text x={p.x} y={chartH - 4} textAnchor="middle" fill="var(--text-muted)" fontSize="9">{p.d[xKey]}</text>
             </g>
           ))}
@@ -343,7 +343,7 @@ export function useChartData(targetRecords) {
       if (r.vogelnaam) map[jaar].add(r.vogelnaam);
     });
     return Object.entries(map)
-      .map(([jaar, set]) => ({ jaar: +jaar, soorten: set.size }))
+      .map(([jaar, set]) => ({ jaar: +jaar, soorten: set.size, soortenSet: set }))
       .sort((a, b) => a.jaar - b.jaar);
   }, [targetRecords]);
 

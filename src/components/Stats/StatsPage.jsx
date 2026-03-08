@@ -4,6 +4,11 @@ import { exportCSV, exportJSON, exportGrielXML, downloadFile } from '../../utils
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import './StatsPage.css';
 
+function capitalize(s) {
+  if (!s) return s;
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}
+
 function parseDate(d) {
   if (!d) return null;
   const parts = d.split('-');
@@ -227,6 +232,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
   const [tvSorteer, setTvSorteer] = useState('tijd');
   const [importStatus, setImportStatus] = useState(null);
+  const [jaarPopup, setJaarPopup] = useState(null); // { jaar, soorten: string[] }
   const fileInputRef = useRef(null);
 
   const huidigeRecords = useMemo(
@@ -361,7 +367,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
               <tbody>
                 {huidigeStats.soortenTabel.map(s => (
                   <tr key={s.naam}>
-                    <td className="tt-col-soort">{s.naam}</td>
+                    <td className="tt-col-soort">{capitalize(s.naam)}</td>
                     <td className="tt-col-num">{s.nieuw || ''}</td>
                     <td className="tt-col-num">{s.terugvangst || ''}</td>
                     <td className="tt-col-num tt-col-total">{s.totaal}</td>
@@ -438,7 +444,33 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         )}
 
         {soortenPerJaar.length > 1 && (
-          <LineChart data={soortenPerJaar} title="Soorten per jaar" xKey="jaar" yKey="soorten" />
+          <>
+            <LineChart
+              data={soortenPerJaar}
+              title="Soorten per jaar"
+              xKey="jaar"
+              yKey="soorten"
+              onPointClick={pt => setJaarPopup({
+                jaar: pt.jaar,
+                soorten: [...pt.soortenSet].sort((a, b) => a.localeCompare(b, 'nl')),
+              })}
+            />
+            {jaarPopup && (
+              <div className="jaar-popup-overlay" onClick={() => setJaarPopup(null)}>
+                <div className="jaar-popup" onClick={e => e.stopPropagation()}>
+                  <div className="jaar-popup-header">
+                    <strong>{jaarPopup.soorten.length} soorten in {jaarPopup.jaar}</strong>
+                    <button className="jaar-popup-close" onClick={() => setJaarPopup(null)}>✕</button>
+                  </div>
+                  <ul className="jaar-popup-list">
+                    {jaarPopup.soorten.map(s => (
+                      <li key={s}>{capitalize(s)}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         {/* Top soorten */}
@@ -447,7 +479,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
           <div className="top-list">
             {totaalStats.topSoorten.map(([naam, count]) => (
               <div key={naam} className="top-item">
-                <span className="top-name">{naam}</span>
+                <span className="top-name">{capitalize(naam)}</span>
                 <div className="top-bar-wrap">
                   <div
                     className="top-bar"
