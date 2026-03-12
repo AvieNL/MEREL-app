@@ -50,7 +50,7 @@ export default function Header({ onFullResync }) {
     <header className="app-header">
       {/* Hoofd-rij */}
       <div className="header-inner">
-        <h1>VRS App{isStaging && <span className="header-staging-badge">STAGING</span>}</h1>
+        <h1 onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>VRS App{isStaging && <span className="header-staging-badge">STAGING</span>}</h1>
         {profile?.ringer_naam && (
           <span className="header-ringer">
             {profile.ringer_naam}
