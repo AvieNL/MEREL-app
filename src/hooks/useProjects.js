@@ -183,7 +183,15 @@ export function useProjects() {
     addToQueue('projecten', 'delete', { id, user_id: user.id });
   }
 
-  const allProjects = [...projects, ...sharedProjects];
+  // Eigen projecten gaan voor (geen blauwe rand, wel bewerken/verwijderen).
+  // Dedupliceer op ID zodat een project nooit tweemaal verschijnt, ook niet
+  // als het via meerdere RLS-paden terugkomt (bijv. eigenaar én lid tegelijk).
+  const seen = new Set();
+  const allProjects = [...projects, ...sharedProjects].filter(p => {
+    if (seen.has(p.id)) return false;
+    seen.add(p.id);
+    return true;
+  });
 
   return { projects: allProjects, addProject, updateProject, deleteProject, refreshShared: pullSharedProjects };
 }
