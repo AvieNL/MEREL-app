@@ -117,7 +117,7 @@ export function useProjects() {
       .in('id', ids);
 
     if (shared) {
-      setSharedProjects(shared.map(p => ({
+      setSharedProjects(shared.filter(p => p.user_id !== user.id).map(p => ({
         id: p.id,
         user_id: p.user_id,
         naam: p.naam,
