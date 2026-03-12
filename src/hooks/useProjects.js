@@ -183,15 +183,15 @@ export function useProjects() {
     addToQueue('projecten', 'delete', { id, user_id: user.id });
   }
 
-  // Eigen projecten gaan voor (geen blauwe rand, wel bewerken/verwijderen).
-  // Dedupliceer op ID zodat een project nooit tweemaal verschijnt, ook niet
-  // als het via meerdere RLS-paden terugkomt (bijv. eigenaar én lid tegelijk).
-  const seen = new Set();
-  const allProjects = [...projects, ...sharedProjects].filter(p => {
-    if (seen.has(p.id)) return false;
-    seen.add(p.id);
-    return true;
-  });
+  // Eigen projecten gaan voor. Verberg gedeelde projecten waarvan de naam
+  // al voorkomt in eigen projecten (bijv. admin auto-lid van identieke projecten
+  // van een andere gebruiker).
+  const ownIds   = new Set(projects.map(p => p.id));
+  const ownNames = new Set(projects.map(p => p.naam));
+  const uniqueShared = sharedProjects.filter(
+    p => !ownIds.has(p.id) && !ownNames.has(p.naam)
+  );
+  const allProjects = [...projects, ...uniqueShared];
 
   return { projects: allProjects, addProject, updateProject, deleteProject, refreshShared: pullSharedProjects };
 }
