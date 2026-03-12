@@ -158,6 +158,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
   const [editLocatie, setEditLocatie] = useState('');
   const [editNummer, setEditNummer] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [formError, setFormError] = useState('');
 
   const [vasteLocatie, setVasteLocatie] = useState(false);
   const [plaatscode, setPlaatscode] = useState('NL--');
@@ -173,9 +174,20 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
   const [editLon, setEditLon] = useState('');
   const [editNauwkCoord, setEditNauwkCoord] = useState('0');
 
+  function nummerExists(nummer, excludeId = null) {
+    const n = nummer.trim();
+    if (!n) return false;
+    return projects.some(p => p.id !== excludeId && p.nummer === n);
+  }
+
   function handleAdd(e) {
     e.preventDefault();
     if (!naam.trim()) return;
+    if (nummerExists(nummer)) {
+      setFormError(`Projectnummer ${nummer.trim()} bestaat al (ook bij inactieve projecten).`);
+      return;
+    }
+    setFormError('');
     onAdd({ naam: naam.trim(), locatie: locatie.trim(), nummer: nummer.trim(),
       vaste_locatie: vasteLocatie,
       plaatscode: vasteLocatie ? plaatscode : '',
@@ -184,9 +196,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       lon: vasteLocatie ? lon : '',
       nauwk_coord: vasteLocatie ? nauwkCoord : '0',
     });
-    setNaam('');
-    setLocatie('');
-    setNummer('');
+    setNaam(''); setLocatie(''); setNummer('');
     setVasteLocatie(false); setPlaatscode('NL--'); setGooglePlaats('');
     setLat(''); setLon(''); setNauwkCoord('0');
     setShowForm(false);
@@ -207,11 +217,17 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
 
   function cancelEdit() {
     setEditId(null);
+    setFormError('');
   }
 
   function saveEdit(p) {
     const newNaam = editNaam.trim();
     if (!newNaam) return;
+    if (nummerExists(editNummer, p.id)) {
+      setFormError(`Projectnummer ${editNummer.trim()} bestaat al (ook bij inactieve projecten).`);
+      return;
+    }
+    setFormError('');
     if (newNaam !== p.naam && onRenameProject) {
       onRenameProject(p.naam, newNaam);
     }
@@ -276,6 +292,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
               />
             </div>
           )}
+          {formError && <p className="project-members-error">{formError}</p>}
           <button type="submit" className="btn-success" style={{ width: '100%' }}>
             Project Toevoegen
           </button>
@@ -333,6 +350,9 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                           }}
                         />
                       </div>
+                    )}
+                    {formError && editId === p.id && (
+                      <p className="project-members-error">{formError}</p>
                     )}
                     <div className="project-edit-actions">
                       <button type="button" className="btn-success btn-sm" onClick={() => saveEdit(p)}>
