@@ -5,6 +5,8 @@ import { supabase } from '../../lib/supabase';
 import LocatiePicker from '../Nieuw/LocatiePicker';
 import './ProjectenPage.css';
 
+const ROL_LABELS = { viewer: 'Kijker', ringer: 'Ringer', admin: 'Admin' };
+
 // Ingebouwde component voor ledenbeheeer per project
 function ProjectMembers({ project }) {
   const { user } = useAuth();
@@ -37,9 +39,9 @@ function ProjectMembers({ project }) {
 
       const { error: insertErr } = await supabase
         .from('project_members')
-        .insert({ project_id: project.id, user_id: userId });
+        .insert({ project_id: project.id, user_id: userId, rol: 'viewer' });
       if (insertErr) {
-        if (insertErr.code === '23505') throw new Error('Deze ringer is al lid van het project.');
+        if (insertErr.code === '23505') throw new Error('Deze gebruiker is al lid van het project.');
         throw insertErr;
       }
       setEmail('');
@@ -56,6 +58,15 @@ function ProjectMembers({ project }) {
       .eq('project_id', project.id)
       .eq('user_id', userId);
     await loadMembers();
+  }
+
+  async function changeRole(userId, newRol) {
+    await supabase.rpc('update_member_role', {
+      p_project_id: project.id,
+      p_user_id: userId,
+      p_rol: newRol,
+    });
+    setMembers(prev => prev.map(m => m.user_id === userId ? { ...m, rol: newRol } : m));
   }
 
   if (!isOwner && !project.shared) return null;
@@ -83,14 +94,29 @@ function ProjectMembers({ project }) {
                 </span>
                 {m.is_owner ? (
                   <span className="project-member-badge">Eigenaar</span>
-                ) : isOwner && (
-                  <button
-                    className="project-member-remove"
-                    onClick={() => removeMember(m.user_id)}
-                    title="Verwijderen"
-                  >
-                    ✕
-                  </button>
+                ) : isOwner ? (
+                  <span className="project-member-actions">
+                    <select
+                      className="project-member-rol-select"
+                      value={m.rol || 'viewer'}
+                      onChange={e => changeRole(m.user_id, e.target.value)}
+                    >
+                      <option value="viewer">Kijker</option>
+                      <option value="ringer">Ringer</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                    <button
+                      className="project-member-remove"
+                      onClick={() => removeMember(m.user_id)}
+                      title="Verwijderen"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                ) : (
+                  <span className="project-member-badge project-member-badge--rol">
+                    {ROL_LABELS[m.rol] || m.rol}
+                  </span>
                 )}
               </div>
             ))
@@ -102,7 +128,7 @@ function ProjectMembers({ project }) {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addMember()}
-                placeholder="e-mailadres van ringer"
+                placeholder="e-mailadres van nieuwe gebruiker"
               />
               <button
                 className="btn-success btn-sm"
