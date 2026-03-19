@@ -268,8 +268,12 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
   );
 
   const huidigeRecords = useMemo(
-    () => records.filter(r => !r.uploaded && r.bron !== 'griel_import'),
-    [records]
+    () => records.filter(r =>
+      !r.uploaded &&
+      r.bron !== 'griel_import' &&
+      euringLookup[r.vogelnaam?.toLowerCase()] !== '99999'
+    ),
+    [records, euringLookup]
   );
   const huidigeStats = useMemo(() => computeStats(huidigeRecords), [huidigeRecords]);
   const totaalStats = useMemo(() => computeStats(gefilterdRecords), [gefilterdRecords]);
