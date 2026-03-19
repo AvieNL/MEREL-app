@@ -133,6 +133,62 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
     annuleer();
   }
 
+  function renderForm(titel) {
+    return (
+      <div className="section ringstreng-bewerk-form">
+        <div className="section-content">
+          <h3 className="ringstreng-form-titel">{titel}</h3>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Ringmaat *</label>
+              <select value={form.ringmaat} onChange={e => update('ringmaat', e.target.value)}>
+                <option value="">-- Kies --</option>
+                {RINGMATEN.map(m => <option key={m} value={m}>{m}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Beschrijving</label>
+              <input type="text" value={form.beschrijving}
+                onChange={e => update('beschrijving', e.target.value)}
+                placeholder="bijv. NK027 2024" />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Eerste ringnummer *</label>
+              <input type="text" value={form.van}
+                onChange={e => update('van', e.target.value)}
+                placeholder="bijv. BU73001" />
+            </div>
+            <div className="form-group">
+              <label>Laatste ringnummer *</label>
+              <input type="text" value={form.tot}
+                onChange={e => update('tot', e.target.value)}
+                placeholder="bijv. BU74000" />
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Huidige (volgende te gebruiken)</label>
+            <input type="text" value={form.huidige}
+              onChange={e => update('huidige', e.target.value)}
+              placeholder="Vult automatisch in bij eerste ringnummer" />
+            <span className="field-hint">Past automatisch aan na elke opgeslagen vangst</span>
+          </div>
+          <div className="form-group">
+            <label>Prijs per ring (€)</label>
+            <input type="text" inputMode="decimal" value={form.prijsPerRing}
+              onChange={e => update('prijsPerRing', e.target.value)}
+              placeholder="bijv. 0,08" />
+          </div>
+          <div className="ringstreng-form-acties">
+            <button className="btn-primary" onClick={opslaan}>Opslaan</button>
+            <button className="btn-secondary" onClick={annuleer}>Annuleren</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="page ringstreng-page">
       <h2>Ringstrengen</h2>
@@ -172,55 +228,58 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
           );
 
           return (
-            <div key={streng.id} className={`ringstreng-kaart${isVol ? ' ringstreng-kaart--vol' : ''}${isVol && !isOpen ? ' ringstreng-kaart--compact' : ''}`}>
-              <div
-                className="ringstreng-header"
-                onClick={isVol ? () => toggleVol(streng.id) : undefined}
-                style={isVol ? { cursor: 'pointer' } : undefined}
-              >
-                <span className="ringstreng-maat">{streng.ringmaat}</span>
-                {streng.beschrijving && (
-                  <span className="ringstreng-beschrijving">{streng.beschrijving}</span>
-                )}
-                {isVol && <span className="ringstreng-vol-badge">Vol</span>}
-                {isVol
-                  ? <span className="ringstreng-toggle">{isOpen ? '▾' : '▸'}</span>
-                  : actieBtnns
-                }
-              </div>
-
-              {isOpen && (
-                <>
-                  <div className="ringstreng-range">
-                    {streng.van} – {streng.tot}
-                  </div>
-                  <div className="ringstreng-voortgang">
-                    <div className="ringstreng-balk">
-                      <div className="ringstreng-balk-fill" style={{ width: `${pct}%` }} />
-                    </div>
-                    <span className="ringstreng-stats">
-                      {inDb} in database · <strong>{stats.beschikbaar} beschikbaar</strong> · volgende: <code>{streng.huidige}</code>
-                    </span>
-                    {streng.prijsPerRing && !isNaN(parsePrijs(streng.prijsPerRing)) && (
-                      <span className="ringstreng-prijs">
-                        {formatBedrag(parsePrijs(streng.prijsPerRing))} p/st · betaald: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.totaal)}</strong> · voorraad: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.beschikbaar)}</strong>
-                      </span>
-                    )}
-                  </div>
-                  {stats.gaten.length > 0 && (
-                    <div className="ringstreng-gaten">
-                      <span className="ringstreng-gaten-label">
-                        {stats.gaten.length} {stats.gaten.length === 1 ? 'ring' : 'ringen'} ontbreekt in database
-                      </span>
-                      <span className="ringstreng-gaten-lijst">
-                        {stats.gaten.slice(0, 8).join(', ')}
-                        {stats.gaten.length > 8 && ` en ${stats.gaten.length - 8} meer`}
-                      </span>
-                    </div>
+            <div key={streng.id}>
+              <div className={`ringstreng-kaart${isVol ? ' ringstreng-kaart--vol' : ''}${isVol && !isOpen ? ' ringstreng-kaart--compact' : ''}`}>
+                <div
+                  className="ringstreng-header"
+                  onClick={isVol ? () => toggleVol(streng.id) : undefined}
+                  style={isVol ? { cursor: 'pointer' } : undefined}
+                >
+                  <span className="ringstreng-maat">{streng.ringmaat}</span>
+                  {streng.beschrijving && (
+                    <span className="ringstreng-beschrijving">{streng.beschrijving}</span>
                   )}
-                  {isVol && actieBtnns}
-                </>
-              )}
+                  {isVol && <span className="ringstreng-vol-badge">Vol</span>}
+                  {isVol
+                    ? <span className="ringstreng-toggle">{isOpen ? '▾' : '▸'}</span>
+                    : actieBtnns
+                  }
+                </div>
+
+                {isOpen && (
+                  <>
+                    <div className="ringstreng-range">
+                      {streng.van} – {streng.tot}
+                    </div>
+                    <div className="ringstreng-voortgang">
+                      <div className="ringstreng-balk">
+                        <div className="ringstreng-balk-fill" style={{ width: `${pct}%` }} />
+                      </div>
+                      <span className="ringstreng-stats">
+                        {inDb} in database · <strong>{stats.beschikbaar} beschikbaar</strong> · volgende: <code>{streng.huidige}</code>
+                      </span>
+                      {streng.prijsPerRing && !isNaN(parsePrijs(streng.prijsPerRing)) && (
+                        <span className="ringstreng-prijs">
+                          {formatBedrag(parsePrijs(streng.prijsPerRing))} p/st · betaald: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.totaal)}</strong> · voorraad: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.beschikbaar)}</strong>
+                        </span>
+                      )}
+                    </div>
+                    {stats.gaten.length > 0 && (
+                      <div className="ringstreng-gaten">
+                        <span className="ringstreng-gaten-label">
+                          {stats.gaten.length} {stats.gaten.length === 1 ? 'ring' : 'ringen'} ontbreekt in database
+                        </span>
+                        <span className="ringstreng-gaten-lijst">
+                          {stats.gaten.slice(0, 8).join(', ')}
+                          {stats.gaten.length > 8 && ` en ${stats.gaten.length - 8} meer`}
+                        </span>
+                      </div>
+                    )}
+                    {isVol && actieBtnns}
+                  </>
+                )}
+              </div>
+              {bewerkId === streng.id && renderForm('Ringstreng bewerken')}
             </div>
           );
         })}
@@ -253,63 +312,12 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
         );
       })()}
 
-      {toonForm ? (
-        <div className="section">
-          <div className="section-content">
-            <h3 className="ringstreng-form-titel">{bewerkId ? 'Ringstreng bewerken' : 'Nieuwe ringstreng'}</h3>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Ringmaat *</label>
-                <select value={form.ringmaat} onChange={e => update('ringmaat', e.target.value)}>
-                  <option value="">-- Kies --</option>
-                  {RINGMATEN.map(m => <option key={m} value={m}>{m}</option>)}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Beschrijving</label>
-                <input type="text" value={form.beschrijving}
-                  onChange={e => update('beschrijving', e.target.value)}
-                  placeholder="bijv. NK027 2024" />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Eerste ringnummer *</label>
-                <input type="text" value={form.van}
-                  onChange={e => update('van', e.target.value)}
-                  placeholder="bijv. BU73001" />
-              </div>
-              <div className="form-group">
-                <label>Laatste ringnummer *</label>
-                <input type="text" value={form.tot}
-                  onChange={e => update('tot', e.target.value)}
-                  placeholder="bijv. BU74000" />
-              </div>
-            </div>
-            <div className="form-group">
-              <label>Huidige (volgende te gebruiken)</label>
-              <input type="text" value={form.huidige}
-                onChange={e => update('huidige', e.target.value)}
-                placeholder="Vult automatisch in bij eerste ringnummer" />
-              <span className="field-hint">Past automatisch aan na elke opgeslagen vangst</span>
-            </div>
-            <div className="form-group">
-              <label>Prijs per ring (€)</label>
-              <input type="text" inputMode="decimal" value={form.prijsPerRing}
-                onChange={e => update('prijsPerRing', e.target.value)}
-                placeholder="bijv. 0,08" />
-            </div>
-            <div className="ringstreng-form-acties">
-              <button className="btn-primary" onClick={opslaan}>Opslaan</button>
-              <button className="btn-secondary" onClick={annuleer}>Annuleren</button>
-            </div>
-          </div>
-        </div>
-      ) : canAdd ? (
+      {toonForm && !bewerkId && renderForm('Nieuwe ringstreng')}
+      {!toonForm && canAdd && (
         <button className="btn-primary ringstreng-add-btn" onClick={() => setToonForm(true)}>
           + Nieuwe ringstreng
         </button>
-      ) : null}
+      )}
     </div>
   );
 }

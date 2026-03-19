@@ -194,6 +194,11 @@
   margin-top: 4px;
 }
 
+.ringstreng-bewerk-form {
+  margin-top: 6px;
+  border-top: 2px solid var(--accent);
+}
+
 .ringstreng-add-btn {
   width: 100%;
 }
