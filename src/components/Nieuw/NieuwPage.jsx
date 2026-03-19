@@ -603,7 +603,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
   const editRecord = location.state?.editRecord ?? null;
   const speciesRefData = useSpeciesRef();
   const speciesData = useMemo(
-    () => speciesRefData.filter(s => s.naam_nl && s.naam_lat),
+    () => speciesRefData.filter(s => s.naam_nl),
     [speciesRefData]
   );
   const euringLookup = useMemo(() => buildEuringLookup(speciesRefData), [speciesRefData]);
