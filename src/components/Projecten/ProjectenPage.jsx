@@ -33,8 +33,8 @@ function ProjectMembers({ project, onAupiSaved }) {
     setAupiDraft(map);
   }
 
-  async function saveAupi(userId) {
-    const val = (aupiDraft[userId] || '').trim();
+  async function saveAupi(userId, currentVal) {
+    const val = (currentVal ?? aupiDraft[userId] ?? '').trim();
     await supabase
       .from('project_members')
       .update({ aupi: val || null })
@@ -129,8 +129,8 @@ function ProjectMembers({ project, onAupiSaved }) {
                         placeholder="—"
                         value={aupiDraft[m.user_id] ?? ''}
                         onChange={e => setAupiDraft(prev => ({ ...prev, [m.user_id]: e.target.value }))}
-                        onBlur={() => saveAupi(m.user_id)}
-                        onKeyDown={e => e.key === 'Enter' && saveAupi(m.user_id)}
+                        onBlur={e => saveAupi(m.user_id, e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && saveAupi(m.user_id, e.target.value)}
                       />
                     ) : (
                       <span className="project-member-aupi-value">{aupis[m.user_id] || '—'}</span>
