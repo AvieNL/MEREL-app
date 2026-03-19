@@ -1,6 +1,7 @@
 import { useMemo, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { exportCSV, exportJSON, exportGrielXML, downloadFile } from '../../utils/export';
+import euringCodes from '../../data/euring-codes.json';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import './StatsPage.css';
 
@@ -325,6 +326,18 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
 
         // Valideer AUPIs voor alle projecten in deze export
         const teExporteren = data.filter(r => r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && r.bron !== 'griel_import');
+
+        // Blokkeer export als een record geen EURING-soortcode heeft
+        const geenCode = teExporteren.filter(r => !euringCodes[r.vogelnaam?.toLowerCase()]);
+        if (geenCode.length > 0) {
+          const namen = [...new Set(geenCode.map(r => r.vogelnaam || '(leeg)'))].slice(0, 5).join(', ');
+          setExportError(
+            `Export geblokkeerd: geen EURING-code voor ${geenCode.length} record(s) — soorten: ${namen}. ` +
+            `Corrigeer de vogelnaam zodat deze overeenkomt met een bekende soort.`
+          );
+          return;
+        }
+
         const projectenInExport = [...new Set(teExporteren.map(r => r.project).filter(Boolean))];
         const ontbrekend = projectenInExport.filter(naam => !projectAupis[naam]);
 

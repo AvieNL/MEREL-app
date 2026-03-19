@@ -255,13 +255,14 @@ const VLIEGSPIER_OPTIONS = [
 ];
 
 const BROEDVLEK_OPTIONS = [
-  { value: '0', label: '0 – Geen broedvlek waarneembaar' },
-  { value: '1', label: '1 – Beginnend' },
-  { value: '2', label: '2 – Goed begrensd' },
-  { value: '3', label: '3 – Geaderd en rood' },
-  { value: '4', label: '4 – Gerimpeld' },
-  { value: '5', label: '5 – Bevederd aan het worden' },
-  { value: 'P', label: 'P – Aanwezig, mate niet genoteerd' },
+  { value: '0', label: '0 – Niet bepaald' },
+  { value: '1', label: '1 – Broedvlek afwezig' },
+  { value: '2', label: '2 – Broedvlek aanwezig (geen details genoteerd)' },
+  { value: '3', label: '3 – Startende broedvlek (eileg)' },
+  { value: '4', label: '4 – Duidelijk begrensd (begin van het broeden)' },
+  { value: '5', label: '5 – Geaderd en rood (zit op eieren)' },
+  { value: '6', label: '6 – Gerimpeld (jongen aanwezig)' },
+  { value: '7', label: '7 – Groeit dicht (jongen uitgevlogen)' },
 ];
 
 const HANDICAP_OPTIONS = [
@@ -303,13 +304,14 @@ const HANDICAP_OPTIONS = [
 ];
 
 const CLOACA_OPTIONS = [
-  { value: '0', label: '0 – Niet onderzocht' },
-  { value: '1', label: '1 – Geen zwelling' },
-  { value: '2', label: '2 – Lichte zwelling' },
-  { value: '3', label: '3 – Matige zwelling' },
-  { value: '4', label: '4 – Sterke zwelling' },
-  { value: '5', label: '5 – Zeer sterke zwelling (cloacale protuberans)' },
-  { value: '6', label: '6 – Zwelling afnemend' },
+  { value: '0', label: '0 – Niet bepaald' },
+  { value: '1', label: '1 – Niet ontwikkeld (geslacht onzeker)' },
+  { value: '2', label: '2 – Bol/kegelvormig met plooi en 7 lange veren (man)' },
+  { value: '3', label: '3 – Iets bolvormig met 7 lange veren (man)' },
+  { value: '4', label: '4 – Enigszins uitstekend met 7 lange veren (man?)' },
+  { value: '5', label: '5 – Verwijd, zacht gewelfd, 5 korte veren (vrouw)' },
+  { value: '6', label: '6 – Zacht gewelfd met 5 korte veren (vrouw)' },
+  { value: '7', label: '7 – Niet verwijd, onopvallend, 5 korte veren (vrouw?)' },
 ];
 
 const PLAATSCODE_OPTIONS = [
@@ -1046,6 +1048,15 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
         ? (val === '' || val === null || val === undefined || val === '--')
         : (val === '' || val === null || val === undefined);
       if (isEmpty) errors.push(f);
+    }
+
+    // EURING-code verplicht: vogelnaam moet bekend zijn in euring-codes.json
+    if (!euringCode && form.vogelnaam) {
+      errors.push({
+        key: 'vogelnaam',
+        label: `"${form.vogelnaam}" heeft geen EURING-code — kies een soort uit de lijst`,
+        section: 'nieuweVangst',
+      });
     }
 
     if (errors.length > 0) {

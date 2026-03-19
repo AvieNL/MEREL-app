@@ -170,7 +170,10 @@ export function exportGrielXML(records, projects = [], projectAupis = {}) {
     b('TarsusLengthToe',              bioDecimal(r.tarsus_teen));
     b('TarsusWidth',                  bioDecimal(r.tarsus_dikte));
     b('TotalHeadLength',              bioDecimal(r.kop_snavel));
-    b('PectoralMuscleScore',          r.borstspier || null);
+    // App slaat 0-3 op; GRIEL XSD verwacht 1-4 — verschuif met +1
+    b('PectoralMuscleScore', r.borstspier !== undefined && r.borstspier !== null && r.borstspier !== ''
+      ? String(Number(r.borstspier) + 1)
+      : null);
     // StateOfWingPoint: niet in onze app
     b('ClawLength',                   bioDecimal(r.achternagel));
     b('Weight',                       bioDecimal(r.gewicht));
