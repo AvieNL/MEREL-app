@@ -75,7 +75,6 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
       const v = parseRing(streng.van);
       const t = parseRing(streng.tot);
       const h = parseRing(streng.huidige);
-      if (streng.ringmaat === 'Onderzoek') return { inDatabase: new Set(), gaten: [], totaal: 0, beschikbaar: 0, vol: false };
       if (!v || !t || !h || !sameScheme(v, t)) return { inDatabase: new Set(), gaten: [], totaal: 0, beschikbaar: 0, vol: false };
 
       const totaalRingen = t.num - v.num + 1;
@@ -126,8 +125,7 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
   }
 
   function opslaan() {
-    if (!form.ringmaat) return;
-    if (form.ringmaat !== 'Onderzoek' && (!form.van || !form.tot)) return;
+    if (!form.ringmaat || !form.van || !form.tot) return;
     if (bewerkId) {
       onUpdate(bewerkId, form);
     } else {
