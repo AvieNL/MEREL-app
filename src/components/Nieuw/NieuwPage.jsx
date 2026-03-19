@@ -895,7 +895,15 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
   }, [form, bioRanges]);
 
   function update(field, value) {
-    setForm(prev => ({ ...prev, [field]: value }));
+    setForm(prev => {
+      const next = { ...prev, [field]: value };
+      if (field === 'leeftijd' && value !== '1') {
+        next.pul_leeftijd = '--';
+        next.nauwk_pul_leeftijd = '--';
+        next.broedselgrootte = '--';
+      }
+      return next;
+    });
     setFormErrors(prev => prev.filter(f => f.key !== field));
   }
 
