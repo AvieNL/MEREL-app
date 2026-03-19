@@ -25,7 +25,10 @@ function ProjectMembers({ project }) {
       .eq('project_id', project.id);
     const aupiMap = {};
     (aupiData || []).forEach(r => { aupiMap[r.user_id] = r.aupi || ''; });
-    setMembers((memberData || []).map(m => ({ ...m, aupi: aupiMap[m.user_id] || '' })));
+    setMembers((memberData || []).map(m => ({
+      ...m,
+      aupi: m.is_owner ? (project.aupi || '') : (aupiMap[m.user_id] || ''),
+    })));
   }
 
   useEffect(() => {
@@ -154,7 +157,11 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       .eq('project_id', p.id);
     const aupiMap = {};
     (aupiData || []).forEach(r => { aupiMap[r.user_id] = r.aupi || ''; });
-    setEditMembers((memberData || []).map(m => ({ ...m, aupi: aupiMap[m.user_id] || '' })));
+    setEditMembers((memberData || []).map(m => ({
+      ...m,
+      // Eigenaar-AUPI komt uit projecten.aupi, leden-AUPI uit project_members.aupi
+      aupi: m.is_owner ? (p.aupi || '') : (aupiMap[m.user_id] || ''),
+    })));
   }
 
   function cancelEdit() {
@@ -172,6 +179,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     }
     setFormError('');
     if (newNaam !== p.naam && onRenameProject) onRenameProject(p.naam, newNaam);
+    const ownerAupi = editMembers.find(m => m.is_owner)?.aupi || '';
     onUpdate(p.id, {
       naam: newNaam, locatie: editLocatie.trim(), nummer: editNummer.trim(),
       vaste_locatie: editVasteLocatie,
@@ -180,11 +188,12 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       lat: editVasteLocatie ? editLat : '',
       lon: editVasteLocatie ? editLon : '',
       nauwk_coord: editVasteLocatie ? editNauwkCoord : '0',
+      aupi: ownerAupi,
     });
 
-    // Sla AUPIs op
+    // Sla leden-AUPIs op via RPC (niet de eigenaar)
     const aupiErrors = [];
-    for (const m of editMembers) {
+    for (const m of editMembers.filter(m => !m.is_owner)) {
       const { error: aupiErr } = await supabase.rpc('update_member_aupi', {
         p_project_id: p.id,
         p_user_id: m.user_id,

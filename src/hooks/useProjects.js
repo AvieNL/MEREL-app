@@ -26,6 +26,7 @@ function toProjectRow(project, userId) {
     lat:           project.lat           || '',
     lon:           project.lon           || '',
     nauwk_coord:   project.nauwk_coord   || '0',
+    aupi:          project.aupi          || '',
     updated_at: new Date().toISOString(),
   };
 }
@@ -82,6 +83,7 @@ export function useProjects() {
       lat:           r.lat           || '',
       lon:           r.lon           || '',
       nauwk_coord:   r.nauwk_coord   || '0',
+      aupi:          r.aupi          || '',
     }));
 
     // Zet Supabase-data in Dexie
@@ -139,12 +141,21 @@ export function useProjects() {
 
   async function pullMyAupis() {
     if (!user) return;
-    const { data } = await supabase
+    const map = {};
+    // Eigen projecten: AUPI staat op projecten.aupi
+    const { data: ownData } = await supabase
+      .from('projecten')
+      .select('id, aupi')
+      .eq('user_id', user.id);
+    (ownData || []).forEach(({ id, aupi }) => {
+      if (aupi) map[id] = aupi;
+    });
+    // Gedeelde projecten (als lid): AUPI staat op project_members.aupi
+    const { data: memberData } = await supabase
       .from('project_members')
       .select('project_id, aupi')
       .eq('user_id', user.id);
-    const map = {};
-    (data || []).forEach(({ project_id, aupi }) => {
+    (memberData || []).forEach(({ project_id, aupi }) => {
       if (aupi) map[project_id] = aupi;
     });
     setMyAupis(map);
