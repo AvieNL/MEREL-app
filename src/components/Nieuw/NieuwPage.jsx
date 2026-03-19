@@ -902,6 +902,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
 
   // Auto-vul locatie vanuit project als dat een vaste locatie heeft
   useEffect(() => {
+    if (editRecord) return;
     if (!form.project || !projects?.length) return;
     const project = projects.find(p => p.naam === form.project);
     if (!project?.vaste_locatie) return;
@@ -1184,6 +1185,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
 
   // Auto-invullen ringnummer op basis van ringmaat van de geselecteerde soort
   useEffect(() => {
+    if (editRecord) return;
     if (isTerugvangst) return;
     if (!speciesInfo?.ringmaat) return;
 
