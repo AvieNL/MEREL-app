@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
 import { useRole } from '../../hooks/useRole';
+import { buildEuringLookup } from '../../utils/euring-lookup';
 import './SoortenPage.css';
 
 const FILTER_DEFS = [
@@ -33,6 +34,8 @@ export default function SoortenPage({ records }) {
     [speciesRef]
   );
 
+  const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
+
   const countPerSoort = useMemo(() => {
     const counts = {};
     records.forEach(r => {
@@ -57,14 +60,14 @@ export default function SoortenPage({ records }) {
     }
 
     if (filters.nlIsLat)    result = result.filter(s => s.naam_nl === s.naam_lat);
-    if (filters.geenEuring) result = result.filter(s => !s.euring_code);
+    if (filters.geenEuring) result = result.filter(s => !euringLookup[s.naam_nl?.toLowerCase()]);
     if (filters.geenEn)     result = result.filter(s => !s.naam_en);
     if (filters.geenDe)     result = result.filter(s => !s.naam_de);
     if (filters.geenFr)     result = result.filter(s => !s.naam_fr);
     if (filters.geenEs)     result = result.filter(s => !s.naam_es);
 
     return result;
-  }, [soorten, zoek, filters]);
+  }, [soorten, zoek, filters, euringLookup]);
 
   const activeCount = Object.values(filters).filter(Boolean).length;
 
