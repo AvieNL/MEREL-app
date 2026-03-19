@@ -6,15 +6,17 @@ import { buildEuringLookup } from '../../utils/euring-lookup';
 import './SoortenPage.css';
 
 const FILTER_DEFS = [
-  { key: 'nlIsLat',   label: 'NL = Latijn' },
+  { key: 'gevangen',   label: 'Gevangen' },
+  { key: 'nlIsLat',    label: 'NL = Latijn' },
   { key: 'geenEuring', label: 'Zonder EURING' },
-  { key: 'geenEn',    label: 'Zonder Engels' },
-  { key: 'geenDe',    label: 'Zonder Duits' },
-  { key: 'geenFr',    label: 'Zonder Frans' },
-  { key: 'geenEs',    label: 'Zonder Spaans' },
+  { key: 'geenEn',     label: 'Zonder Engels' },
+  { key: 'geenDe',     label: 'Zonder Duits' },
+  { key: 'geenFr',     label: 'Zonder Frans' },
+  { key: 'geenEs',     label: 'Zonder Spaans' },
 ];
 
 const EMPTY_FILTERS = {
+  gevangen: false,
   nlIsLat: false, geenEuring: false,
   geenEn: false,  geenDe: false,
   geenFr: false,  geenEs: false,
@@ -60,6 +62,7 @@ export default function SoortenPage({ records }) {
       );
     }
 
+    if (filters.gevangen)   result = result.filter(s => (countPerSoort[s.naam_nl?.toLowerCase()] || 0) > 0);
     if (filters.nlIsLat)    result = result.filter(s => s.naam_nl === s.naam_lat);
     if (filters.geenEuring) result = result.filter(s => !euringLookup[s.naam_nl?.toLowerCase()]);
     if (filters.geenEn)     result = result.filter(s => !s.naam_en);

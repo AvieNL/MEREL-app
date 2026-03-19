@@ -439,6 +439,20 @@
   padding: 5px 8px 4px;
   background: var(--bg-tertiary);
   letter-spacing: 0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sd-bio-edit-rec-hint {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.sd-bio-edit-rec-hint em {
+  font-style: normal;
+  opacity: 0.7;
 }
 
 .sd-bio-edit-subrow {
@@ -797,6 +811,25 @@
 
 .sd-bio-legend-dot--lit  { background: var(--text-primary); }
 .sd-bio-legend-dot--user { background: var(--accent); }
+.sd-bio-legend-dot--rec  { background: var(--text-muted); }
+
+/* Eigen vangsten rijen in biometrietabel */
+.sd-bio-row-rec td {
+  font-size: 0.78rem;
+  opacity: 0.9;
+}
+.sd-bio-rec {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.sd-bio-rec-tag {
+  color: var(--text-muted);
+}
+.sd-bio-rec-n {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  margin-left: 2px;
+}
 
 /* Nestgegevens + Determinatieboeken naast elkaar */
 .sd-two-cards {

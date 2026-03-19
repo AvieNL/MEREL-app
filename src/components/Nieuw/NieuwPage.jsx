@@ -538,14 +538,14 @@ function renderGeslachtTekst(str) {
 
 function computeRanges(soortRecords) {
   const fields = [
-    { key: 'vleugel', label: 'Vleugel' },
-    { key: 'gewicht', label: 'Gewicht' },
+    { key: 'vleugel',       label: 'Vleugel' },
     { key: 'handpenlengte', label: 'P8' },
-    { key: 'staartlengte', label: 'Staart' },
-    { key: 'kop_snavel', label: 'Kop+snavel' },
+    { key: 'staartlengte',  label: 'Staart' },
+    { key: 'kop_snavel',    label: 'Snavel-veer' },
+    { key: 'snavel_schedel',label: 'Snavel-schedel' },
     { key: 'tarsus_lengte', label: 'Tarsus' },
-    { key: 'tarsus_dikte', label: 'Tarsus dikte' },
-    { key: 'snavel_schedel', label: 'Snavel-schedel' },
+    { key: 'tarsus_dikte',  label: 'Tarsus dikte' },
+    { key: 'gewicht',       label: 'Gewicht' },
   ];
   const ranges = {};
   for (const f of fields) {
@@ -777,14 +777,14 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
   // Merge: literatuur > gebruikersoverride > eigen vangsten
   const bioRanges = useMemo(() => {
     const BIO_KEYS = [
-      { key: 'vleugel', label: 'Vleugel' },
-      { key: 'gewicht', label: 'Gewicht' },
+      { key: 'vleugel',       label: 'Vleugel' },
       { key: 'handpenlengte', label: 'P8' },
-      { key: 'staartlengte', label: 'Staart' },
-      { key: 'kop_snavel', label: 'Kop+snavel' },
+      { key: 'staartlengte',  label: 'Staart' },
+      { key: 'kop_snavel',    label: 'Snavel-veer' },
+      { key: 'snavel_schedel',label: 'Snavel-schedel' },
       { key: 'tarsus_lengte', label: 'Tarsus' },
-      { key: 'tarsus_dikte', label: 'Tarsus dikte' },
-      { key: 'snavel_schedel', label: 'Snavel-schedel' },
+      { key: 'tarsus_dikte',  label: 'Tarsus dikte' },
+      { key: 'gewicht',       label: 'Gewicht' },
     ];
     const merged = {};
     for (const f of BIO_KEYS) {
@@ -1136,6 +1136,11 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
         {range && !warning && (
           <span className={`field-hint field-hint--${range.source}`}>
             {range.min}–{range.max} <em>({range.source})</em>
+          </span>
+        )}
+        {range && range.source === 'soortendata' && bioRangesFromRecords[key] && (
+          <span className="field-hint field-hint--vangsten">
+            {bioRangesFromRecords[key].min}–{bioRangesFromRecords[key].max} <em>(vangsten, n={bioRangesFromRecords[key].n})</em>
           </span>
         )}
         {warning && (

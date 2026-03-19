@@ -83,15 +83,20 @@ function resizeImage(file, maxWidth = 400) {
   });
 }
 
+function parseVal(v) {
+  if (v === undefined || v === null || v === '') return NaN;
+  return parseFloat(String(v).replace(',', '.'));
+}
+
 const BIO_FIELDS = [
-  { key: 'vleugel', label: 'Vleugel', unit: 'mm' },
-  { key: 'gewicht', label: 'Gewicht', unit: 'g' },
-  { key: 'handpenlengte', label: 'P8 / Handpen', unit: 'mm' },
-  { key: 'staartlengte', label: 'Staart', unit: 'mm' },
-  { key: 'kop_snavel', label: 'Kop+snavel', unit: 'mm' },
-  { key: 'tarsus_lengte', label: 'Tarsus', unit: 'mm' },
-  { key: 'tarsus_dikte', label: 'Tarsus dikte', unit: 'mm' },
-  { key: 'snavel_schedel', label: 'Snavel-schedel', unit: 'mm' },
+  { key: 'vleugel',      label: 'Vleugel',        unit: 'mm' },
+  { key: 'handpenlengte',label: 'P8 / Handpen',   unit: 'mm' },
+  { key: 'staartlengte', label: 'Staart',          unit: 'mm' },
+  { key: 'kop_snavel',   label: 'Snavel-veer',     unit: 'mm' },
+  { key: 'snavel_schedel',label: 'Snavel-schedel', unit: 'mm' },
+  { key: 'tarsus_lengte',label: 'Tarsus',          unit: 'mm' },
+  { key: 'tarsus_dikte', label: 'Tarsus dikte',    unit: 'mm' },
+  { key: 'gewicht',      label: 'Gewicht',         unit: 'g'  },
 ];
 
 const ALL_BOEKEN = [
@@ -180,6 +185,19 @@ export default function SoortDetail({ records, speciesOverrides }) {
     const lower = decodedNaam.toLowerCase();
     return records.filter(r => r.vogelnaam && r.vogelnaam.toLowerCase() === lower);
   }, [records, decodedNaam]);
+
+  // Biometriebereiken berekend uit eigen vangsten (min 3 records, geen pullus)
+  const bioRangesFromCatches = useMemo(() => {
+    const ranges = {};
+    const nonPullus = soortRecords.filter(r => r.leeftijd !== '1');
+    for (const f of BIO_FIELDS) {
+      const vals = nonPullus.map(r => parseVal(r[f.key])).filter(v => !isNaN(v) && v > 0);
+      if (vals.length >= 3) {
+        ranges[f.key] = { min: Math.min(...vals), max: Math.max(...vals), n: vals.length };
+      }
+    }
+    return ranges;
+  }, [soortRecords]);
 
   // Biometriewaarde: uit samengevoegde soortdata (admin-base + gebruikersoverride)
   const getBioValue = (field, stat) => soort[`bio_${field}_${stat}`] ?? '';
@@ -381,7 +399,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const hasBioData = BIO_FIELDS.some(b =>
     getBioValue(b.key, 'min') || getBioValue(b.key, 'max') ||
     soort[`bio_${b.key}_M_min`] || soort[`bio_${b.key}_M_max`] ||
-    soort[`bio_${b.key}_F_min`] || soort[`bio_${b.key}_F_max`]
+    soort[`bio_${b.key}_F_min`] || soort[`bio_${b.key}_F_max`] ||
+    bioRangesFromCatches[b.key]
   );
   const bioCellCls = (key) => {
     if (bioUserOverride[key] !== undefined && bioUserOverride[key] !== '') return 'sd-bio-num sd-bio-user-ov';
@@ -764,7 +783,14 @@ export default function SoortDetail({ records, speciesOverrides }) {
                 <h3 className="sd-card-title">Biometrie</h3>
                 {BIO_FIELDS.map(f => (
                   <div key={f.key} className="sd-bio-edit-group">
-                    <div className="sd-bio-edit-field-label">{f.label} ({f.unit})</div>
+                    <div className="sd-bio-edit-field-label">
+                      {f.label} ({f.unit})
+                      {bioRangesFromCatches[f.key] && (
+                        <span className="sd-bio-edit-rec-hint">
+                          ~ {bioRangesFromCatches[f.key].min}–{bioRangesFromCatches[f.key].max} <em>n={bioRangesFromCatches[f.key].n}</em>
+                        </span>
+                      )}
+                    </div>
                     {[
                       { prefix: null, label: 'Alg.', cls: '' },
                       { prefix: 'M',  label: '\u2642\uFE0E', cls: ' sd-bio-edit-subrow--m' },
@@ -839,11 +865,24 @@ export default function SoortDetail({ records, speciesOverrides }) {
                           );
                         }
                       });
+                      const recRange = bioRangesFromCatches[b.key];
+                      if (recRange) {
+                        rows.push(
+                          <tr key={`${b.key}-rec`} className="sd-bio-row-rec">
+                            <td className="sd-bio-field sd-bio-field--gender">
+                              <span className="sd-bio-rec-tag">~</span> {b.label}
+                              <span className="sd-bio-rec-n"> n={recRange.n}</span>
+                            </td>
+                            <td className="sd-bio-num sd-bio-rec">{fmtBio(recRange.min) || '—'}</td>
+                            <td className="sd-bio-num sd-bio-rec">{fmtBio(recRange.max) || '—'}</td>
+                          </tr>
+                        );
+                      }
                       return rows;
                     })}
                   </tbody>
                 </table>
-                {(hasAdminBio || hasUserBio) && (
+                {(hasAdminBio || hasUserBio || BIO_FIELDS.some(b => bioRangesFromCatches[b.key])) && (
                   <div className="sd-bio-legend">
                     {hasAdminBio && (
                       <span className="sd-bio-legend-item">
@@ -855,6 +894,12 @@ export default function SoortDetail({ records, speciesOverrides }) {
                       <span className="sd-bio-legend-item">
                         <span className="sd-bio-legend-dot sd-bio-legend-dot--user" />
                         Door jou ingevoerd
+                      </span>
+                    )}
+                    {BIO_FIELDS.some(b => bioRangesFromCatches[b.key]) && (
+                      <span className="sd-bio-legend-item">
+                        <span className="sd-bio-legend-dot sd-bio-legend-dot--rec" />
+                        Eigen vangsten
                       </span>
                     )}
                   </div>
