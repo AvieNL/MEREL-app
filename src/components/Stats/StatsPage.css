@@ -392,6 +392,17 @@
   flex: 1;
 }
 
+.export-error {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: var(--warning);
+  background: rgba(234,179,8,0.1);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  line-height: 1.5;
+}
+
 /* Grafieken */
 .chart-block {
   margin-bottom: 20px;

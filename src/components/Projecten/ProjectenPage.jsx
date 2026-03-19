@@ -8,19 +8,40 @@ import './ProjectenPage.css';
 const ROL_LABELS = { viewer: 'Kijker', ringer: 'Ringer', admin: 'Admin' };
 
 // Ingebouwde component voor ledenbeheeer per project
-function ProjectMembers({ project }) {
+function ProjectMembers({ project, onAupiSaved }) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [aupis, setAupis] = useState({});  // user_id → aupi
+  const [aupiDraft, setAupiDraft] = useState({});  // user_id → draft
 
   const isOwner = project.user_id === user?.id;
 
   async function loadMembers() {
     const { data } = await supabase.rpc('get_project_members', { p_project_id: project.id });
     setMembers(data || []);
+    const { data: aupiData } = await supabase
+      .from('project_members')
+      .select('user_id, aupi')
+      .eq('project_id', project.id);
+    const map = {};
+    (aupiData || []).forEach(r => { map[r.user_id] = r.aupi || ''; });
+    setAupis(map);
+    setAupiDraft(map);
+  }
+
+  async function saveAupi(userId) {
+    const val = (aupiDraft[userId] || '').trim();
+    await supabase
+      .from('project_members')
+      .update({ aupi: val || null })
+      .eq('project_id', project.id)
+      .eq('user_id', userId);
+    setAupis(prev => ({ ...prev, [userId]: val }));
+    if (onAupiSaved) onAupiSaved();
   }
 
   useEffect(() => {
@@ -84,42 +105,62 @@ function ProjectMembers({ project }) {
           {members.length === 0 ? (
             <p className="project-members-empty">Nog geen leden toegevoegd.</p>
           ) : (
-            members.map(m => (
-              <div key={m.user_id} className="project-member-row">
-                <span className="project-member-name">
-                  {m.ringer_naam || m.email}
-                  {m.email && m.ringer_naam && (
-                    <span className="project-member-email">{m.email}</span>
+            members.map(m => {
+              const canEditAupi = isOwner || m.user_id === user?.id;
+              return (
+                <div key={m.user_id} className="project-member-row">
+                  <span className="project-member-name">
+                    {m.ringer_naam || m.email}
+                    {m.email && m.ringer_naam && (
+                      <span className="project-member-email">{m.email}</span>
+                    )}
+                  </span>
+                  <span className="project-member-aupi">
+                    <label className="project-member-aupi-label">AUPI</label>
+                    {canEditAupi ? (
+                      <input
+                        className="project-member-aupi-input"
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="bijv. 7095"
+                        value={aupiDraft[m.user_id] ?? ''}
+                        onChange={e => setAupiDraft(prev => ({ ...prev, [m.user_id]: e.target.value }))}
+                        onBlur={() => saveAupi(m.user_id)}
+                        onKeyDown={e => e.key === 'Enter' && saveAupi(m.user_id)}
+                      />
+                    ) : (
+                      <span className="project-member-aupi-value">{aupis[m.user_id] || '—'}</span>
+                    )}
+                  </span>
+                  {m.is_owner ? (
+                    <span className="project-member-badge">Eigenaar</span>
+                  ) : isOwner ? (
+                    <span className="project-member-actions">
+                      <select
+                        className="project-member-rol-select"
+                        value={m.rol || 'viewer'}
+                        onChange={e => changeRole(m.user_id, e.target.value)}
+                      >
+                        <option value="viewer">Kijker</option>
+                        <option value="ringer">Ringer</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                      <button
+                        className="project-member-remove"
+                        onClick={() => removeMember(m.user_id)}
+                        title="Verwijderen"
+                      >
+                        ✕
+                      </button>
+                    </span>
+                  ) : (
+                    <span className="project-member-badge project-member-badge--rol">
+                      {ROL_LABELS[m.rol] || m.rol}
+                    </span>
                   )}
-                </span>
-                {m.is_owner ? (
-                  <span className="project-member-badge">Eigenaar</span>
-                ) : isOwner ? (
-                  <span className="project-member-actions">
-                    <select
-                      className="project-member-rol-select"
-                      value={m.rol || 'viewer'}
-                      onChange={e => changeRole(m.user_id, e.target.value)}
-                    >
-                      <option value="viewer">Kijker</option>
-                      <option value="ringer">Ringer</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                    <button
-                      className="project-member-remove"
-                      onClick={() => removeMember(m.user_id)}
-                      title="Verwijderen"
-                    >
-                      ✕
-                    </button>
-                  </span>
-                ) : (
-                  <span className="project-member-badge project-member-badge--rol">
-                    {ROL_LABELS[m.rol] || m.rol}
-                  </span>
-                )}
-              </div>
-            ))
+                </div>
+              );
+            })
           )}
           {isOwner && (
             <div className="project-members-add">
@@ -146,7 +187,7 @@ function ProjectMembers({ project }) {
   );
 }
 
-export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onRenameProject }) {
+export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onRenameProject, onAupiSaved }) {
   const { canAdd, canEdit, canDelete } = useRole();
   const { user } = useAuth();
   const [showForm, setShowForm] = useState(false);
@@ -401,7 +442,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                         </div>
                       )}
                     </div>
-                    <ProjectMembers project={p} />
+                    <ProjectMembers project={p} onAupiSaved={onAupiSaved} />
                   </>
                 )}
               </div>

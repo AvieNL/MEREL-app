@@ -243,3 +243,36 @@
   background: var(--accent-bg);
   color: var(--accent);
 }
+
+.project-member-aupi {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.project-member-aupi-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.project-member-aupi-input {
+  width: 68px;
+  font-size: 0.78rem;
+  padding: 2px 6px;
+  min-height: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.project-member-aupi-value {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  min-width: 30px;
+  text-align: center;
+}

@@ -111,7 +111,7 @@ function AppShell() {
 
 function MainApp() {
   const { records, deletedRecords, addRecord, updateRecord, deleteRecord, restoreRecord, permanentDeleteRecord, markAllAsUploaded, importRecords, renameProject, fullResync } = useRecords();
-  const { projects, addProject, updateProject, deleteProject } = useProjects();
+  const { projects, addProject, updateProject, deleteProject, myAupis, refreshAupis } = useProjects();
   const speciesOverrides = useSpeciesOverrides();
   const { settings, updateSettings } = useSettings();
   const { ringStrengen, addRingstreng, updateRingstreng, deleteRingstreng, advanceHuidige } = useRingStrengen();
@@ -144,7 +144,7 @@ function MainApp() {
             />
           } />
           <Route path="/stats" element={
-            <StatsPage records={records} markAllAsUploaded={markAllAsUploaded} importRecords={importRecords} projects={projects} />
+            <StatsPage records={records} markAllAsUploaded={markAllAsUploaded} importRecords={importRecords} projects={projects} myAupis={myAupis} />
           } />
           <Route path="/stats/project/:naam" element={
             <ProjectDetail records={records} />
@@ -159,7 +159,7 @@ function MainApp() {
           <Route path="/databases" element={<DatabasesPage />} />
           <Route path="/over" element={<OverPage />} />
           <Route path="/projecten" element={
-            <ProjectenPage projects={projects} onAdd={addProject} onUpdate={updateProject} onDelete={deleteProject} onRenameProject={renameProject} />
+            <ProjectenPage projects={projects} onAdd={addProject} onUpdate={updateProject} onDelete={deleteProject} onRenameProject={renameProject} onAupiSaved={refreshAupis} />
           } />
           <Route path="/instellingen" element={
             <InstellingenPage settings={settings} onUpdateSettings={updateSettings} />

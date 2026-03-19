@@ -102,15 +102,9 @@ function today() {
  * @param {Array} records - Vangstrecords
  * @param {Array} projects - Projectenlijst (voor ActingUserProjectID via nummer)
  */
-export function exportGrielXML(records, projects = []) {
-  // Projectnummer-map: naam → nummer (ActingUserProjectID)
-  const projectNummer = {};
-  projects.forEach(p => {
-    if (p.naam && p.nummer) projectNummer[p.naam] = p.nummer;
-  });
-
+export function exportGrielXML(records, projects = [], projectAupis = {}) {
   const captures = records.map(r => {
-    const actingId = r.project ? (projectNummer[r.project] || '') : '';
+    const actingId = r.project ? (projectAupis[r.project] || '') : '';
     const specCode  = speciesCode(r.vogelnaam);
     const catchDate = toISO(r.vangstdatum);
     const reportingDate = today();

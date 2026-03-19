@@ -35,6 +35,7 @@ export function useProjects() {
   const { addToQueue } = useSync();
   const pulledRef = useRef(false);
   const [sharedProjects, setSharedProjects] = useState([]);
+  const [myAupis, setMyAupis] = useState({});  // { [project_id]: aupi }
 
   const projects = useLiveQuery(
     () => {
@@ -56,6 +57,7 @@ export function useProjects() {
     pulledRef.current = true;
     pullFromSupabase();
     pullSharedProjects();
+    pullMyAupis();
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function pullFromSupabase() {
@@ -135,6 +137,19 @@ export function useProjects() {
     }
   }
 
+  async function pullMyAupis() {
+    if (!user) return;
+    const { data } = await supabase
+      .from('project_members')
+      .select('project_id, aupi')
+      .eq('user_id', user.id);
+    const map = {};
+    (data || []).forEach(({ project_id, aupi }) => {
+      if (aupi) map[project_id] = aupi;
+    });
+    setMyAupis(map);
+  }
+
   // Eerste run zonder Supabase-data: laad defaults
   useEffect(() => {
     if (!user || projects.length > 0) return;
@@ -193,5 +208,5 @@ export function useProjects() {
   );
   const allProjects = [...projects, ...uniqueShared];
 
-  return { projects: allProjects, addProject, updateProject, deleteProject, refreshShared: pullSharedProjects };
+  return { projects: allProjects, addProject, updateProject, deleteProject, refreshShared: pullSharedProjects, myAupis, refreshAupis: pullMyAupis };
 }

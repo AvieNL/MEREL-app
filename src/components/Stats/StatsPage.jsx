@@ -235,9 +235,10 @@ function parseCSV(text) {
   return records;
 }
 
-export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [] }) {
+export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [], myAupis = {} }) {
   const navigate = useNavigate();
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
+  const [exportError, setExportError] = useState('');
 
   function openSoorten(soortenTabel, titel) {
     navigate('/stats/soorten', { state: { soortenTabel, titel } });
@@ -300,6 +301,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
   }
 
   function handleExport(type, subset) {
+    setExportError('');
     const base = subset === 'huidig' ? huidigeRecords : records;
     const data = filterByDatum(base);
     const datum = new Date().toISOString().split('T')[0];
@@ -315,7 +317,27 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         break;
       }
       case 'griel': {
-        const xml = exportGrielXML(data.filter(r => r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import'), projects);
+        // Bouw project_naam → aupi map
+        const projectAupis = {};
+        projects.forEach(p => {
+          if (myAupis[p.id]) projectAupis[p.naam] = myAupis[p.id];
+        });
+
+        // Valideer AUPIs voor alle projecten in deze export
+        const teExporteren = data.filter(r => r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import');
+        const projectenInExport = [...new Set(teExporteren.map(r => r.project).filter(Boolean))];
+        const ontbrekend = projectenInExport.filter(naam => !projectAupis[naam]);
+
+        if (ontbrekend.length > 0) {
+          setExportError(
+            `ActingUserProjectID (AUPI) ontbreekt voor: ${ontbrekend.join(', ')}. ` +
+            `Ga naar Projecten → open het project → klik op "Leden" → voer het AUPI-nummer in naast jouw naam. ` +
+            `Je vindt dit nummer in GRIEL via: Mijn administratie → Mijn projecten → klik op het + naast het project.`
+          );
+          return;
+        }
+
+        const xml = exportGrielXML(teExporteren, projects, projectAupis);
         downloadFile(xml, `vrs-griel-${datum}.xml`, 'application/xml');
         if (subset === 'huidig') {
           setShowUploadConfirm(true);
@@ -442,6 +464,10 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
               Griel XML exporteren
             </button>
           </div>
+        )}
+
+        {exportError && (
+          <p className="export-error">{exportError}</p>
         )}
 
         {showUploadConfirm && (
@@ -714,6 +740,9 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
               JSON
             </button>
           </div>
+          {exportError && (
+            <p className="export-error">{exportError}</p>
+          )}
         </div>
       </div>
     </div>
