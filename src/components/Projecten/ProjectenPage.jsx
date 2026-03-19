@@ -183,12 +183,21 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     });
 
     // Sla AUPIs op
+    const aupiErrors = [];
     for (const m of editMembers) {
-      await supabase.rpc('update_member_aupi', {
+      const { error: aupiErr } = await supabase.rpc('update_member_aupi', {
         p_project_id: p.id,
         p_user_id: m.user_id,
         p_aupi: m.aupi || null,
       });
+      if (aupiErr) {
+        console.error('AUPI opslaan mislukt:', aupiErr, { project_id: p.id, user_id: m.user_id });
+        aupiErrors.push(`${m.ringer_naam || m.email}: ${aupiErr.message}`);
+      }
+    }
+    if (aupiErrors.length > 0) {
+      setFormError(`AUPI opslaan mislukt: ${aupiErrors.join('; ')}`);
+      return;
     }
     if (onAupiSaved) onAupiSaved();
     setEditId(null);
