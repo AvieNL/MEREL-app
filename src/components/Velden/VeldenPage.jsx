@@ -50,7 +50,7 @@ const SECTIES_FALLBACK = [
       { xml: 'broedselgrootte',       app: 'Broedgrootte',                   type: 'tekst',    standaard: '--',       verplicht: 'pullus' },
       { xml: 'status',                app: 'Status',                         type: 'code',     standaard: 'U',        verplicht: true },
       { xml: 'conditie',              app: 'Conditie',                       type: 'code',     standaard: '8',        verplicht: true },
-      { xml: 'omstandigheden',        app: 'Omstandigheden',                 type: 'code',     standaard: '99',       verplicht: true },
+      { xml: 'omstandigheden',        app: 'Omstandigheden',                 type: 'code',     standaard: '20',       verplicht: true },
       { xml: 'zeker_omstandigheden',  app: 'Zekerheid omstandigheden',       type: 'nummer',   standaard: '0' },
       { xml: 'gemanipuleerd',         app: 'Gemanipuleerd',                  type: 'code',     standaard: 'N',        verplicht: true },
       { xml: 'barcode',               app: 'Barcode (als gemanipuleerd=M)',  type: 'tekst',    standaard: '' },
@@ -174,12 +174,16 @@ export default function VeldenPage() {
 
   function startEdit(veld) {
     if (!isAdmin) return;
-    setEditVeld(veld.veld_key ?? veld.xml);
+    const veldKey = veld.veld_key ?? veld.xml;
+    const refCodes = euringReference[veldKey]?.codes;
+    setEditVeld(veldKey);
     setEditState({
       verplicht: veld.verplicht ?? 'nee',
       standaard: veld.standaard ?? '',
       zichtbaar: veld.zichtbaar !== false,
-      codes: veld.codes ? veld.codes.map(c => ({ ...c })) : null,
+      codes: veld.codes
+        ? veld.codes.map(c => ({ ...c }))
+        : (refCodes ? refCodes.map(c => ({ ...c, zichtbaar: true })) : null),
     });
     setSaveError('');
   }

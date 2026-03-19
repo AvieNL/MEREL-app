@@ -142,7 +142,7 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
       tag('PlaceUserDescription',        (r.google_plaats || r.plaatscode || '').slice(0, 100)),
       tag('AccOfCoordinates',            r.nauwk_coord || '0'),
       tag('Condition',                   r.conditie || '8'),
-      tag('Circumstances',               r.omstandigheden || '99'),
+      tag('Circumstances',               r.omstandigheden || '20'),
       tag('CircumstancesPresumed',       r.zeker_omstandigheden ?? 0),
       tag('Remarks',                     (r.opmerkingen || '').slice(0, 100)),
       tag('EURINGCodeIdentifier',        '4'),

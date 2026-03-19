@@ -41,7 +41,7 @@ const SECTIES = [
       { xml: 'broedselgrootte',       type: 'tekst',    standaard: '--',       verplicht: 'pullus' },
       { xml: 'status',                type: 'code',     standaard: 'U',        verplicht: true },
       { xml: 'conditie',              type: 'code',     standaard: '8',        verplicht: true },
-      { xml: 'omstandigheden',        type: 'code',     standaard: '99',       verplicht: true },
+      { xml: 'omstandigheden',        type: 'code',     standaard: '20',       verplicht: true },
       { xml: 'zeker_omstandigheden',  type: 'nummer',   standaard: '0' },
       { xml: 'gemanipuleerd',         type: 'code',     standaard: 'N',        verplicht: true },
       { xml: 'barcode',               type: 'tekst',    standaard: '' },
