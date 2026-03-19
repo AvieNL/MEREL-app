@@ -154,7 +154,7 @@ export function exportGrielXML(records, projects = [], projectAupis = {}) {
     const bio = [];
     const b = (name, val) => { if (val !== null && val !== '') bio.push(bioTag(name, val)); };
 
-    b('NetNumber',                    r.netnummer || null);
+    b('NetNumber',                    r.netnummer ? String(r.netnummer).slice(0, 10) : null);
     // CesPeriod: niet in onze app
     b('WingStraightFlat',             bioDecimal(r.vleugel));
     // WingNotStraightFlat / WingNotStraightNotFlat: niet in onze app
@@ -190,8 +190,11 @@ export function exportGrielXML(records, projects = [], projectAupis = {}) {
     b('BarCode',                      r.barcode || null);
     b('Other1',                       r.opmerkingen1 || null);
     b('Other2',                       r.opmerkingen2 || null);
-    // Observer: waarnemer biometrie (ringersnummer als getal)
-    b('Observer',                     r.waarnemer_bio || null);
+    // Observer: ringersnummer als integer — tekst weglaten
+    const observerInt = r.waarnemer_bio !== undefined && r.waarnemer_bio !== null && r.waarnemer_bio !== ''
+      ? parseInt(String(r.waarnemer_bio).trim(), 10)
+      : NaN;
+    b('Observer', !isNaN(observerInt) && observerInt > 0 ? String(observerInt) : null);
 
     if (bio.length > 0) {
       captureLines.push(`    <Biometrics>`);

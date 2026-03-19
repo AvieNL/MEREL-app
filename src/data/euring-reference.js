@@ -281,14 +281,11 @@ export const euringReference = {
     ],
   },
   rui_lichaam: {
-    label: 'Rui (Moult)',
+    label: 'Rui lichaamsveren (BodyMoult)',
     codes: [
-      { code: 'B', beschrijving: 'Actieve lichaam-/dekverenrui (niet postjuveniel of hoofdrui)' },
-      { code: 'J', beschrijving: 'Volledig juveniel verenkleed' },
-      { code: 'M', beschrijving: 'Actieve rui inclusief slagpennen' },
-      { code: 'P', beschrijving: 'Partiële postjuveniele rui (zonder slagpennen)' },
-      { code: 'X', beschrijving: 'Onderzocht op rui, geen rui gevonden, niet juveniel' },
-      { code: 'U', beschrijving: 'Onbekend / niet onderzocht' },
+      { code: '0', beschrijving: 'Geen rui' },
+      { code: '1', beschrijving: 'Gedeeltelijke rui (tot ca. 20 veertjes in bloedspoel)' },
+      { code: '2', beschrijving: 'Volledige rui (> 0 veertjes in bloedspoel)' },
     ],
   },
   geslachtsbepaling: {
