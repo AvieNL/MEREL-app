@@ -174,7 +174,7 @@ export function useRecords() {
   function updateRecord(id, updates) {
     db.vangsten.get(id).then(existing => {
       if (!existing) return;
-      const updated = { ...existing, ...updates };
+      const updated = { ...existing, ...updates, handmatig_gewijzigd_at: new Date().toISOString() };
       db.vangsten.put(updated);
       addToQueue('vangsten', 'upsert', toVangstRow(updated, user.id));
     });
@@ -197,18 +197,20 @@ export function useRecords() {
   }
 
   function markAsUploaded(ids) {
-    db.vangsten.where('id').anyOf(ids).modify({ uploaded: true });
+    const exportedAt = new Date().toISOString();
+    db.vangsten.where('id').anyOf(ids).modify({ uploaded: true, exported_at: exportedAt });
     addToQueue('vangsten', 'mark_uploaded', { ids });
   }
 
   function markAllAsUploaded() {
+    const exportedAt = new Date().toISOString();
     db.vangsten
       .where('user_id').equals(user.id)
       .and(r => !r.uploaded)
       .primaryKeys()
       .then(ids => {
         if (ids.length === 0) return;
-        db.vangsten.where('id').anyOf(ids).modify({ uploaded: true });
+        db.vangsten.where('id').anyOf(ids).modify({ uploaded: true, exported_at: exportedAt });
         addToQueue('vangsten', 'mark_uploaded', { ids });
       });
   }

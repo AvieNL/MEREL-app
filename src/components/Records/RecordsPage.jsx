@@ -30,6 +30,19 @@ function fmtDatum(d) {
   return d;
 }
 
+// ISO timestamp naar dd-mm-yyyy HH:MM
+function fmtTimestamp(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  if (isNaN(d)) return '';
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const yyyy = d.getFullYear();
+  const hh = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+  return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
+}
+
 const LEEFTIJD_LABEL = {
   '0': '?',
   '1': 'pullus',
@@ -157,15 +170,18 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                     {r.google_plaats && <div><span className="detail-label">Plaats:</span> {r.google_plaats}</div>}
                     {r.opmerkingen && <div><span className="detail-label">Opmerkingen:</span> {r.opmerkingen}</div>}
                   </div>
+                  <div className="record-datums">
+                    <div><span className="detail-label">Aangemaakt:</span> {fmtDatum(r.vangstdatum)}</div>
+                    {r.exported_at && <div><span className="detail-label">Geëxporteerd naar Griel:</span> {fmtTimestamp(r.exported_at)}</div>}
+                    {r.handmatig_gewijzigd_at && <div><span className="detail-label">Handmatig gewijzigd:</span> {fmtTimestamp(r.handmatig_gewijzigd_at)}</div>}
+                  </div>
                   {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
                     <div className="record-actions">
-                      {!r.uploaded && (
-                        <button
-                          className="record-action-btn record-edit-btn"
-                          title="Wijzigen"
-                          onClick={e => { e.stopPropagation(); navigate('/', { state: { editRecord: r } }); }}
-                        >✏️</button>
-                      )}
+                      <button
+                        className="record-action-btn record-edit-btn"
+                        title="Wijzigen"
+                        onClick={e => { e.stopPropagation(); navigate('/', { state: { editRecord: r } }); }}
+                      >✏️</button>
                       {onDelete && (
                         <button
                           className="record-action-btn record-delete-btn"
