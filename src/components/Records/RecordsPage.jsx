@@ -86,7 +86,13 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
         (r.project && r.project.toLowerCase().includes(lower))
       );
     })();
-    return [...base].sort((a, b) => (b.vangstdatum || '').localeCompare(a.vangstdatum || ''));
+    // Zet dd-mm-yyyy om naar yyyy-mm-dd voor correcte sortering
+    const toSortKey = d => {
+      if (!d) return '';
+      const p = d.split('-');
+      return p.length === 3 && p[0].length === 2 ? `${p[2]}-${p[1]}-${p[0]}` : d;
+    };
+    return [...base].sort((a, b) => toSortKey(b.vangstdatum).localeCompare(toSortKey(a.vangstdatum)));
   }, [records, zoek]);
 
   return (
