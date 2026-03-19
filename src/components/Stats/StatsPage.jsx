@@ -324,7 +324,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         });
 
         // Valideer AUPIs voor alle projecten in deze export
-        const teExporteren = data.filter(r => r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import');
+        const teExporteren = data.filter(r => r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && r.bron !== 'griel_import');
         const projectenInExport = [...new Set(teExporteren.map(r => r.project).filter(Boolean))];
         const ontbrekend = projectenInExport.filter(naam => !projectAupis[naam]);
 

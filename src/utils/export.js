@@ -50,9 +50,9 @@ function toISO(d) {
   return String(d);
 }
 
-// Tijd naar HHMM (4 cijfers, geen dubbele punt)
+// Tijd naar HHMM (4 cijfers, geen dubbele punt) of '----' bij onbekend
 function toCatchTime(t) {
-  if (!t) return '';
+  if (!t) return '----';
   const clean = String(t).replace(/:/g, '');   // strip alle dubbele punten
   if (clean.length <= 4) return clean.padStart(4, '0');  // '900' → '0900'
   return clean.slice(0, 4);                              // '101500' → '1015'
@@ -79,15 +79,17 @@ function toSex(g) {
 function speciesCode(naam) {
   if (!naam) return '';
   const code = euringCodes[naam.toLowerCase()];
-  return code ? String(parseInt(code, 10)) : '';  // bijv. "00720" → "720"
+  return code ? String(parseInt(code, 10)).padStart(5, '0') : '';  // bijv. "720" → "00720"
 }
 
 // Decimaal met punt (GRIEL gebruikt Engelse notatie in Biometrics)
+// tpDecimal heeft minExclusive 0 — waarde 0 is ongeldig, behandel als ontbrekend
 function bioDecimal(val) {
   if (val === undefined || val === null || val === '') return null;
   const s = String(val).replace(',', '.');
   const n = parseFloat(s);
-  return isNaN(n) ? null : String(n);
+  if (isNaN(n) || n <= 0) return null;
+  return String(n);
 }
 
 // Vandaag als yyyy-mm-dd
@@ -114,7 +116,7 @@ export function exportGrielXML(records, projects = [], projectAupis = {}) {
       tag('Modus', 'Insert'),
       tag('ReportingDate', reportingDate),
       `    <Executor>`,
-      `      <ActingUserProjectID>${xmlEsc(actingId)}</ActingUserProjectID>`,
+      `      <ActingUserProjectID>${xmlEsc(String(actingId).trim())}</ActingUserProjectID>`,
       `    </Executor>`,
       tag('RingScheme',                  r.centrale || 'NLA'),
       tag('RingNumber',                  r.ringnummer || ''),
@@ -123,27 +125,27 @@ export function exportGrielXML(records, projects = [], projectAupis = {}) {
       tag('PrimaryIdentificationMethod', r.identificatie_methode || 'A0'),
       tag('VerificationOfMetalRing',     r.verificatie ?? 0),
       tag('MetalRingInformation',        r.metalenringinfo ?? 1),
-      tag('OtherMarks',                  r.andere_merktekens || ''),
+      tag('OtherMarks',                  r.andere_merktekens || 'ZZ'),
       tag('Species',                     specCode),
       tag('Manipulated',                 r.gemanipuleerd || 'N'),
       tag('MovedBefore',                 r.verplaatst ?? 0),
-      tag('CatchingMethod',              r.vangstmethode || ''),
+      tag('CatchingMethod',              r.vangstmethode || '-'),
       tag('CatchingLures',               r.lokmiddelen || 'N'),
       tag('Sex',                         toSex(r.geslacht)),
-      tag('Age',                         r.leeftijd || ''),
+      tag('Age',                         r.leeftijd || '0'),
       tag('Status',                      r.status || 'U'),
       tag('BroodSize',                   r.broedselgrootte || '--'),
       tag('PullusAge',                   (!r.pul_leeftijd || r.pul_leeftijd === '--') ? '99' : r.pul_leeftijd),
       tag('AccOfPullusAge',              (!r.nauwk_pul_leeftijd || r.nauwk_pul_leeftijd === '--') ? 'U' : r.nauwk_pul_leeftijd),
       tag('AccOfDate',                   r.nauwk_vangstdatum ?? 0),
-      tag('Latitude',                    r.lat || ''),
-      tag('Longitude',                   r.lon || ''),
+      ...(r.lat ? [tag('Latitude',  r.lat)] : []),
+      ...(r.lon ? [tag('Longitude', r.lon)] : []),
       tag('PlaceUserDescription',        (r.google_plaats || r.plaatscode || '').slice(0, 100)),
-      tag('AccOfCoordinates',            r.nauwk_coord ?? ''),
-      tag('Condition',                   r.conditie || ''),
-      tag('Circumstances',               r.omstandigheden || ''),
+      tag('AccOfCoordinates',            r.nauwk_coord || '0'),
+      tag('Condition',                   r.conditie || '8'),
+      tag('Circumstances',               r.omstandigheden || '99'),
       tag('CircumstancesPresumed',       r.zeker_omstandigheden ?? 0),
-      tag('Remarks',                     r.opmerkingen || ''),
+      tag('Remarks',                     (r.opmerkingen || '').slice(0, 100)),
       tag('EURINGCodeIdentifier',        '4'),
     ];
 
