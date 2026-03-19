@@ -77,14 +77,16 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
   }, [location.state?.filterSoort]);
 
   const filtered = useMemo(() => {
-    if (!zoek) return records;
-    const lower = zoek.toLowerCase();
-    return records.filter(r =>
-      (r.vogelnaam && r.vogelnaam.toLowerCase().includes(lower)) ||
-      (r.ringnummer && r.ringnummer.toLowerCase().includes(lower)) ||
-      (r.vangstdatum && r.vangstdatum.includes(lower)) ||
-      (r.project && r.project.toLowerCase().includes(lower))
-    );
+    const base = !zoek ? records : (() => {
+      const lower = zoek.toLowerCase();
+      return records.filter(r =>
+        (r.vogelnaam && r.vogelnaam.toLowerCase().includes(lower)) ||
+        (r.ringnummer && r.ringnummer.toLowerCase().includes(lower)) ||
+        (r.vangstdatum && r.vangstdatum.includes(lower)) ||
+        (r.project && r.project.toLowerCase().includes(lower))
+      );
+    })();
+    return [...base].sort((a, b) => (b.vangstdatum || '').localeCompare(a.vangstdatum || ''));
   }, [records, zoek]);
 
   return (
