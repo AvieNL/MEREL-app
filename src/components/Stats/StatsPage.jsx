@@ -237,10 +237,18 @@ function parseCSV(text) {
   return records;
 }
 
+// Vogelnamen die niet in statistieken worden meegeteld
+const STATS_UITGESLOTEN = new Set(['ring vernietigd of verloren']);
+
 export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [], myAupis = {} }) {
   const navigate = useNavigate();
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
+
+  const statsRecords = useMemo(
+    () => records.filter(r => !STATS_UITGESLOTEN.has(r.vogelnaam?.toLowerCase())),
+    [records]
+  );
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
   const [exportError, setExportError] = useState('');
 
@@ -262,18 +270,14 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
 
   const gefilterdRecords = useMemo(
     () => eigenFilter
-      ? records.filter(r => !r.project || eigenProjectNamen.has(r.project))
-      : records,
-    [records, eigenFilter, eigenProjectNamen]
+      ? statsRecords.filter(r => !r.project || eigenProjectNamen.has(r.project))
+      : statsRecords,
+    [statsRecords, eigenFilter, eigenProjectNamen]
   );
 
   const huidigeRecords = useMemo(
-    () => records.filter(r =>
-      !r.uploaded &&
-      r.bron !== 'griel_import' &&
-      euringLookup[r.vogelnaam?.toLowerCase()] !== '99999'
-    ),
-    [records, euringLookup]
+    () => statsRecords.filter(r => !r.uploaded && r.bron !== 'griel_import'),
+    [statsRecords]
   );
   const huidigeStats = useMemo(() => computeStats(huidigeRecords), [huidigeRecords]);
   const totaalStats = useMemo(() => computeStats(gefilterdRecords), [gefilterdRecords]);
