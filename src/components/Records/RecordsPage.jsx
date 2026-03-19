@@ -25,7 +25,7 @@ function fmtDatum(d) {
   if (!d) return '';
   const parts = d.split('-');
   if (parts.length === 3 && parts[0].length === 4) {
-    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    return `${parts[2].padStart(2, '0')}-${parts[1].padStart(2, '0')}-${parts[0]}`;
   }
   return d;
 }
@@ -86,11 +86,14 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
         (r.project && r.project.toLowerCase().includes(lower))
       );
     })();
-    // Zet dd-mm-yyyy om naar yyyy-mm-dd voor correcte sortering
+    // Normaliseer naar yyyy-mm-dd voor correcte sortering (ook yyyy-m-d en dd-mm-yyyy)
     const toSortKey = d => {
       if (!d) return '';
       const p = d.split('-');
-      return p.length === 3 && p[0].length === 2 ? `${p[2]}-${p[1]}-${p[0]}` : d;
+      if (p.length !== 3) return d;
+      if (p[0].length === 4) return `${p[0]}-${p[1].padStart(2, '0')}-${p[2].padStart(2, '0')}`;
+      if (p[2].length === 4) return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
+      return d;
     };
     return [...base].sort((a, b) => toSortKey(b.vangstdatum).localeCompare(toSortKey(a.vangstdatum)));
   }, [records, zoek]);

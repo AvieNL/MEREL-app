@@ -56,7 +56,8 @@ export function useRecords() {
     pulledRef.current = true;
     pullFromSupabase();
     importStatischEenmalig('buitenland_v2', 'buitenland_import', buitenlandData, true);
-    importStatischEenmalig('andere_banen_v1', 'andere_banen_import', andereBanenData);
+    importStatischEenmalig('andere_banen_v2', 'andere_banen_import', andereBanenData, true);
+    normalizeVangstdatums();
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function importStatischEenmalig(sleutel, bronNaam, data, verwijderOude = false) {
@@ -129,6 +130,28 @@ export function useRecords() {
       key: `last_pull_vangsten_${user.id}`,
       value: new Date().toISOString(),
     });
+  }
+
+  // Eenmalige migratie: normaliseer vangstdatums naar yyyy-mm-dd
+  async function normalizeVangstdatums() {
+    const meta = await db.meta.get(`normalize_dates_v2_${user.id}`);
+    if (meta?.value) return;
+    const all = await db.vangsten.where('user_id').equals(user.id).toArray();
+    const toFix = all.filter(r => r.vangstdatum && r.vangstdatum !== toYMD(r.vangstdatum));
+    if (toFix.length > 0) {
+      const fixed = toFix.map(r => ({ ...r, vangstdatum: toYMD(r.vangstdatum) }));
+      await db.vangsten.bulkPut(fixed);
+    }
+    await db.meta.put({ key: `normalize_dates_v2_${user.id}`, value: true });
+  }
+
+  function toYMD(d) {
+    if (!d) return d;
+    const p = d.split('-');
+    if (p.length !== 3) return d;
+    if (p[0].length === 4) return `${p[0]}-${p[1].padStart(2, '0')}-${p[2].padStart(2, '0')}`;
+    if (p[2].length === 4) return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
+    return d;
   }
 
   // --- Mutaties ---
