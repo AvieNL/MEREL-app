@@ -144,9 +144,11 @@
 
 .project-members-panel {
   margin-top: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 6px;
   padding: 10px 12px;
   background: var(--bg-tertiary);
   border-radius: var(--radius-sm);
@@ -156,13 +158,11 @@
   font-size: 0.8rem;
   color: var(--text-muted);
   margin: 0;
+  grid-column: 1 / -1;
 }
 
 .project-member-row {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  gap: 8px;
+  display: contents;
 }
 
 .project-member-name {
@@ -207,6 +207,7 @@
   display: flex;
   gap: 6px;
   margin-top: 4px;
+  grid-column: 1 / -1;
 }
 
 .project-members-add input {
@@ -220,6 +221,7 @@
   font-size: 0.78rem;
   color: var(--danger);
   margin: 0;
+  grid-column: 1 / -1;
 }
 
 .project-member-actions {
@@ -261,9 +263,9 @@
 }
 
 .project-member-aupi-input {
-  width: 52px;
+  width: 6ch;
   font-size: 0.8rem;
-  padding: 2px 4px;
+  padding: 2px 3px;
   min-height: 0;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
@@ -281,7 +283,7 @@
 .project-member-aupi-value {
   font-size: 0.8rem;
   color: var(--text-muted);
-  width: 52px;
+  width: 6ch;
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
