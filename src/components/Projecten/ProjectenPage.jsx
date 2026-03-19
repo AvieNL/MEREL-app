@@ -6,112 +6,35 @@ import LocatiePicker from '../Nieuw/LocatiePicker';
 import './ProjectenPage.css';
 
 const ROL_LABELS = { viewer: 'Kijker', ringer: 'Ringer', admin: 'Admin' };
+const AUPI_TITLE = 'ActingUserProjectID: jouw persoonlijk lidnummer voor dit project in GRIEL. Te vinden via: Mijn administratie → Mijn projecten → klik op het + naast het project.';
 
-// Ingebouwde component voor ledenbeheeer per project
-function ProjectMembers({ project, onAupiSaved }) {
+// Read-only ledenlijst op de projectkaart
+function ProjectMembers({ project }) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState([]);
-  const [email, setEmail] = useState('');
-  const [newAupi, setNewAupi] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [aupis, setAupis] = useState({});  // user_id → aupi
-  const [aupiDraft, setAupiDraft] = useState({});  // user_id → draft
 
   const isOwner = project.user_id === user?.id;
+  if (!isOwner && !project.shared) return null;
 
   async function loadMembers() {
-    const { data } = await supabase.rpc('get_project_members', { p_project_id: project.id });
-    setMembers(data || []);
+    const { data: memberData } = await supabase.rpc('get_project_members', { p_project_id: project.id });
     const { data: aupiData } = await supabase
       .from('project_members')
       .select('user_id, aupi')
       .eq('project_id', project.id);
-    const map = {};
-    (aupiData || []).forEach(r => { map[r.user_id] = r.aupi || ''; });
-    setAupis(map);
-    setAupiDraft(map);
-  }
-
-  async function saveAupi(userId, currentVal) {
-    const val = (currentVal ?? aupiDraft[userId] ?? '').trim();
-    const { error: updateErr } = await supabase
-      .rpc('update_member_aupi', {
-        p_project_id: project.id,
-        p_user_id: userId,
-        p_aupi: val || null,
-      });
-    if (updateErr) {
-      setError(`AUPI opslaan mislukt: ${updateErr.message}`);
-      return;
-    }
-    setAupis(prev => ({ ...prev, [userId]: val }));
-    if (onAupiSaved) onAupiSaved();
+    const aupiMap = {};
+    (aupiData || []).forEach(r => { aupiMap[r.user_id] = r.aupi || ''; });
+    setMembers((memberData || []).map(m => ({ ...m, aupi: aupiMap[m.user_id] || '' })));
   }
 
   useEffect(() => {
     if (open) loadMembers();
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function addMember() {
-    const trimmed = email.trim().toLowerCase();
-    if (!trimmed) return;
-    setLoading(true);
-    setError('');
-    try {
-      const { data: userId, error: lookupErr } = await supabase.rpc('lookup_user_id', { p_email: trimmed });
-      if (lookupErr || !userId) throw new Error('Geen account gevonden voor dit e-mailadres.');
-      if (userId === user.id) throw new Error('Je kunt jezelf niet toevoegen.');
-
-      const { error: insertErr } = await supabase
-        .from('project_members')
-        .insert({ project_id: project.id, user_id: userId, rol: 'viewer' });
-      if (insertErr) {
-        if (insertErr.code === '23505') throw new Error('Deze gebruiker is al lid van het project.');
-        throw insertErr;
-      }
-      if (newAupi.trim()) {
-        await supabase.rpc('update_member_aupi', {
-          p_project_id: project.id,
-          p_user_id: userId,
-          p_aupi: newAupi.trim(),
-        });
-      }
-      setEmail('');
-      setNewAupi('');
-      await loadMembers();
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function removeMember(userId) {
-    await supabase.from('project_members').delete()
-      .eq('project_id', project.id)
-      .eq('user_id', userId);
-    await loadMembers();
-  }
-
-  async function changeRole(userId, newRol) {
-    await supabase.rpc('update_member_role', {
-      p_project_id: project.id,
-      p_user_id: userId,
-      p_rol: newRol,
-    });
-    setMembers(prev => prev.map(m => m.user_id === userId ? { ...m, rol: newRol } : m));
-  }
-
-  if (!isOwner && !project.shared) return null;
-
   return (
     <div className="project-members">
-      <button
-        className="project-members-toggle"
-        onClick={() => setOpen(o => !o)}
-      >
+      <button className="project-members-toggle" onClick={() => setOpen(o => !o)}>
         {open ? '▾' : '▸'} {open ? 'Leden' : `Leden${members.length > 0 ? ` (${members.length})` : ''}`}
       </button>
       {open && (
@@ -119,97 +42,24 @@ function ProjectMembers({ project, onAupiSaved }) {
           {members.length === 0 ? (
             <p className="project-members-empty">Nog geen leden toegevoegd.</p>
           ) : (
-            members.map(m => {
-              const canEditAupi = isOwner || m.user_id === user?.id;
-              return (
-                <div key={m.user_id} className="project-member-row">
-                  <span className="project-member-name">
-                    {m.ringer_naam || m.email}
-                    {m.email && m.ringer_naam && (
-                      <span className="project-member-email">{m.email}</span>
-                    )}
-                  </span>
-                  <span className="project-member-aupi">
-                    <abbr
-                      className="project-member-aupi-label"
-                      title="ActingUserProjectID: jouw persoonlijk lidnummer voor dit project in GRIEL. Te vinden via: Mijn administratie → Mijn projecten → klik op het + naast het project."
-                    >AUPI</abbr>
-                    {canEditAupi ? (
-                      <input
-                        className="project-member-aupi-input"
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={6}
-                        placeholder="—"
-                        value={aupiDraft[m.user_id] ?? ''}
-                        onChange={e => setAupiDraft(prev => ({ ...prev, [m.user_id]: e.target.value }))}
-                        onBlur={e => saveAupi(m.user_id, e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && saveAupi(m.user_id, e.target.value)}
-                      />
-                    ) : (
-                      <span className="project-member-aupi-value">{aupis[m.user_id] || '—'}</span>
-                    )}
-                  </span>
-                  {m.is_owner ? (
-                    <span className="project-member-badge">Eigenaar</span>
-                  ) : isOwner ? (
-                    <span className="project-member-actions">
-                      <select
-                        className="project-member-rol-select"
-                        value={m.rol || 'viewer'}
-                        onChange={e => changeRole(m.user_id, e.target.value)}
-                      >
-                        <option value="viewer">Kijker</option>
-                        <option value="ringer">Ringer</option>
-                        <option value="admin">Admin</option>
-                      </select>
-                      <button
-                        className="project-member-remove"
-                        onClick={() => removeMember(m.user_id)}
-                        title="Verwijderen"
-                      >
-                        ✕
-                      </button>
-                    </span>
-                  ) : (
-                    <span className="project-member-badge project-member-badge--rol">
-                      {ROL_LABELS[m.rol] || m.rol}
-                    </span>
+            members.map(m => (
+              <div key={m.user_id} className="project-member-row">
+                <span className="project-member-name">
+                  {m.ringer_naam || m.email}
+                  {m.email && m.ringer_naam && (
+                    <span className="project-member-email">{m.email}</span>
                   )}
-                </div>
-              );
-            })
+                </span>
+                <span className="project-member-aupi">
+                  <abbr className="project-member-aupi-label" title={AUPI_TITLE}>AUPI</abbr>
+                  <span className="project-member-aupi-value">{m.aupi || '—'}</span>
+                </span>
+                <span className="project-member-badge">
+                  {m.is_owner ? 'Eigenaar' : (ROL_LABELS[m.rol] || m.rol)}
+                </span>
+              </div>
+            ))
           )}
-          {isOwner && (
-            <div className="project-members-add">
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && addMember()}
-                placeholder="e-mailadres van nieuwe gebruiker"
-              />
-              <input
-                className="project-member-aupi-input"
-                type="text"
-                inputMode="numeric"
-                maxLength={6}
-                placeholder="AUPI"
-                value={newAupi}
-                onChange={e => setNewAupi(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && addMember()}
-                title="ActingUserProjectID van dit lid in GRIEL"
-              />
-              <button
-                className="btn-success btn-sm"
-                onClick={addMember}
-                disabled={loading || !email.trim()}
-              >
-                {loading ? '...' : 'Toevoegen'}
-              </button>
-            </div>
-          )}
-          {error && <p className="project-members-error">{error}</p>}
         </div>
       )}
     </div>
@@ -244,6 +94,13 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
   const [editLon, setEditLon] = useState('');
   const [editNauwkCoord, setEditNauwkCoord] = useState('0');
 
+  // Leden + AUPIs in bewerkingsmodus
+  const [editMembers, setEditMembers] = useState([]);   // { user_id, ringer_naam, email, rol, is_owner, aupi }
+  const [newMemberEmail, setNewMemberEmail] = useState('');
+  const [newMemberAupi, setNewMemberAupi] = useState('');
+  const [newMemberLoading, setNewMemberLoading] = useState(false);
+  const [newMemberError, setNewMemberError] = useState('');
+
   function nummerExists(nummer, excludeId = null) {
     const n = nummer.trim();
     if (!n) return false;
@@ -258,7 +115,8 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       return;
     }
     setFormError('');
-    onAdd({ naam: naam.trim(), locatie: locatie.trim(), nummer: nummer.trim(),
+    onAdd({
+      naam: naam.trim(), locatie: locatie.trim(), nummer: nummer.trim(),
       vaste_locatie: vasteLocatie,
       plaatscode: vasteLocatie ? plaatscode : '',
       google_plaats: vasteLocatie ? googlePlaats : '',
@@ -272,7 +130,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     setShowForm(false);
   }
 
-  function startEdit(p) {
+  async function startEdit(p) {
     setEditId(p.id);
     setEditNaam(p.naam);
     setEditLocatie(p.locatie || '');
@@ -283,14 +141,29 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     setEditLat(p.lat || '');
     setEditLon(p.lon || '');
     setEditNauwkCoord(p.nauwk_coord || '0');
+    setNewMemberEmail('');
+    setNewMemberAupi('');
+    setNewMemberError('');
+    setFormError('');
+
+    // Laad leden + AUPIs
+    const { data: memberData } = await supabase.rpc('get_project_members', { p_project_id: p.id });
+    const { data: aupiData } = await supabase
+      .from('project_members')
+      .select('user_id, aupi')
+      .eq('project_id', p.id);
+    const aupiMap = {};
+    (aupiData || []).forEach(r => { aupiMap[r.user_id] = r.aupi || ''; });
+    setEditMembers((memberData || []).map(m => ({ ...m, aupi: aupiMap[m.user_id] || '' })));
   }
 
   function cancelEdit() {
     setEditId(null);
+    setEditMembers([]);
     setFormError('');
   }
 
-  function saveEdit(p) {
+  async function saveEdit(p) {
     const newNaam = editNaam.trim();
     if (!newNaam) return;
     if (nummerExists(editNummer, p.id)) {
@@ -298,10 +171,9 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       return;
     }
     setFormError('');
-    if (newNaam !== p.naam && onRenameProject) {
-      onRenameProject(p.naam, newNaam);
-    }
-    onUpdate(p.id, { naam: newNaam, locatie: editLocatie.trim(), nummer: editNummer.trim(),
+    if (newNaam !== p.naam && onRenameProject) onRenameProject(p.naam, newNaam);
+    onUpdate(p.id, {
+      naam: newNaam, locatie: editLocatie.trim(), nummer: editNummer.trim(),
       vaste_locatie: editVasteLocatie,
       plaatscode: editVasteLocatie ? editPlaatscode : '',
       google_plaats: editVasteLocatie ? editGooglePlaats : '',
@@ -309,7 +181,72 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       lon: editVasteLocatie ? editLon : '',
       nauwk_coord: editVasteLocatie ? editNauwkCoord : '0',
     });
+
+    // Sla AUPIs op
+    for (const m of editMembers) {
+      await supabase.rpc('update_member_aupi', {
+        p_project_id: p.id,
+        p_user_id: m.user_id,
+        p_aupi: m.aupi || null,
+      });
+    }
+    if (onAupiSaved) onAupiSaved();
     setEditId(null);
+    setEditMembers([]);
+  }
+
+  async function addEditMember(projectId) {
+    const trimmed = newMemberEmail.trim().toLowerCase();
+    if (!trimmed) return;
+    setNewMemberLoading(true);
+    setNewMemberError('');
+    try {
+      const { data: userId, error: lookupErr } = await supabase.rpc('lookup_user_id', { p_email: trimmed });
+      if (lookupErr || !userId) throw new Error('Geen account gevonden voor dit e-mailadres.');
+      if (userId === user.id) throw new Error('Je kunt jezelf niet toevoegen.');
+      if (editMembers.some(m => m.user_id === userId)) throw new Error('Deze gebruiker is al lid van het project.');
+
+      const { error: insertErr } = await supabase
+        .from('project_members')
+        .insert({ project_id: projectId, user_id: userId, rol: 'viewer' });
+      if (insertErr) {
+        if (insertErr.code === '23505') throw new Error('Deze gebruiker is al lid van het project.');
+        throw insertErr;
+      }
+
+      // Reload members fresh
+      const { data: memberData } = await supabase.rpc('get_project_members', { p_project_id: projectId });
+      const newMember = memberData?.find(m => m.user_id === userId);
+      if (newMember) {
+        setEditMembers(prev => [...prev, { ...newMember, aupi: newMemberAupi.trim() }]);
+      }
+      setNewMemberEmail('');
+      setNewMemberAupi('');
+    } catch (e) {
+      setNewMemberError(e.message);
+    } finally {
+      setNewMemberLoading(false);
+    }
+  }
+
+  async function removeEditMember(projectId, userId) {
+    await supabase.from('project_members').delete()
+      .eq('project_id', projectId)
+      .eq('user_id', userId);
+    setEditMembers(prev => prev.filter(m => m.user_id !== userId));
+  }
+
+  function updateEditMemberField(userId, field, value) {
+    setEditMembers(prev => prev.map(m => m.user_id === userId ? { ...m, [field]: value } : m));
+  }
+
+  async function changeEditRole(projectId, userId, newRol) {
+    await supabase.rpc('update_member_role', {
+      p_project_id: projectId,
+      p_user_id: userId,
+      p_rol: newRol,
+    });
+    updateEditMemberField(userId, 'rol', newRol);
   }
 
   return (
@@ -353,13 +290,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                 <label>Plaatsnaam</label>
                 <input type="text" value={googlePlaats} onChange={e => setGooglePlaats(e.target.value)} placeholder="bijv. Breedenbroek" />
               </div>
-              <LocatiePicker
-                lat={lat} lon={lon}
-                onChange={(newLat, newLon) => {
-                  setLat(newLat);
-                  setLon(newLon);
-                }}
-              />
+              <LocatiePicker lat={lat} lon={lon} onChange={(newLat, newLon) => { setLat(newLat); setLon(newLon); }} />
             </div>
           )}
           {formError && <p className="project-members-error">{formError}</p>}
@@ -414,13 +345,92 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                         </div>
                         <LocatiePicker
                           lat={editLat} lon={editLon}
-                          onChange={(newLat, newLon) => {
-                            setEditLat(newLat);
-                            setEditLon(newLon);
-                          }}
+                          onChange={(newLat, newLon) => { setEditLat(newLat); setEditLon(newLon); }}
                         />
                       </div>
                     )}
+
+                    {/* Leden & AUPIs */}
+                    <div className="edit-members-section">
+                      <label className="edit-members-label">Leden</label>
+                      <div className="project-members-panel">
+                        {editMembers.length === 0 ? (
+                          <p className="project-members-empty">Nog geen leden.</p>
+                        ) : (
+                          editMembers.map(m => (
+                            <div key={m.user_id} className="project-member-row">
+                              <span className="project-member-name">
+                                {m.ringer_naam || m.email}
+                                {m.email && m.ringer_naam && (
+                                  <span className="project-member-email">{m.email}</span>
+                                )}
+                              </span>
+                              <span className="project-member-aupi">
+                                <abbr className="project-member-aupi-label" title={AUPI_TITLE}>AUPI</abbr>
+                                <input
+                                  className="project-member-aupi-input"
+                                  type="text"
+                                  inputMode="numeric"
+                                  maxLength={6}
+                                  placeholder="—"
+                                  value={m.aupi}
+                                  onChange={e => updateEditMemberField(m.user_id, 'aupi', e.target.value)}
+                                />
+                              </span>
+                              {m.is_owner ? (
+                                <span className="project-member-badge">Eigenaar</span>
+                              ) : (
+                                <span className="project-member-actions">
+                                  <select
+                                    className="project-member-rol-select"
+                                    value={m.rol || 'viewer'}
+                                    onChange={e => changeEditRole(p.id, m.user_id, e.target.value)}
+                                  >
+                                    <option value="viewer">Kijker</option>
+                                    <option value="ringer">Ringer</option>
+                                    <option value="admin">Admin</option>
+                                  </select>
+                                  <button
+                                    className="project-member-remove"
+                                    onClick={() => removeEditMember(p.id, m.user_id)}
+                                    title="Verwijderen"
+                                  >✕</button>
+                                </span>
+                              )}
+                            </div>
+                          ))
+                        )}
+                        <div className="project-members-add">
+                          <input
+                            type="email"
+                            value={newMemberEmail}
+                            onChange={e => setNewMemberEmail(e.target.value)}
+                            onKeyDown={e => e.key === 'Enter' && addEditMember(p.id)}
+                            placeholder="e-mailadres nieuw lid"
+                          />
+                          <input
+                            className="project-member-aupi-input"
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={6}
+                            placeholder="AUPI"
+                            value={newMemberAupi}
+                            onChange={e => setNewMemberAupi(e.target.value)}
+                            onKeyDown={e => e.key === 'Enter' && addEditMember(p.id)}
+                            title={AUPI_TITLE}
+                          />
+                          <button
+                            className="btn-success btn-sm"
+                            onClick={() => addEditMember(p.id)}
+                            disabled={newMemberLoading || !newMemberEmail.trim()}
+                          >
+                            {newMemberLoading ? '...' : 'Toevoegen'}
+                          </button>
+                        </div>
+                        {newMemberError && <p className="project-members-error">{newMemberError}</p>}
+                      </div>
+                    </div>
+
                     {formError && editId === p.id && (
                       <p className="project-members-error">{formError}</p>
                     )}
@@ -471,7 +481,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                         </div>
                       )}
                     </div>
-                    <ProjectMembers project={p} onAupiSaved={onAupiSaved} />
+                    <ProjectMembers project={p} />
                   </>
                 )}
               </div>

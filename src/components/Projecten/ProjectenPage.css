@@ -108,6 +108,17 @@
   gap: 8px;
 }
 
+.edit-members-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.edit-members-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 /* Gedeeld project */
 .project-card--shared {
   border-left: 3px solid var(--accent);
