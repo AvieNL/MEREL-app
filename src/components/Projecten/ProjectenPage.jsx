@@ -13,6 +13,7 @@ function ProjectMembers({ project, onAupiSaved }) {
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [email, setEmail] = useState('');
+  const [newAupi, setNewAupi] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [aupis, setAupis] = useState({});  // user_id → aupi
@@ -35,11 +36,16 @@ function ProjectMembers({ project, onAupiSaved }) {
 
   async function saveAupi(userId, currentVal) {
     const val = (currentVal ?? aupiDraft[userId] ?? '').trim();
-    await supabase
-      .from('project_members')
-      .update({ aupi: val || null })
-      .eq('project_id', project.id)
-      .eq('user_id', userId);
+    const { error: updateErr } = await supabase
+      .rpc('update_member_aupi', {
+        p_project_id: project.id,
+        p_user_id: userId,
+        p_aupi: val || null,
+      });
+    if (updateErr) {
+      setError(`AUPI opslaan mislukt: ${updateErr.message}`);
+      return;
+    }
     setAupis(prev => ({ ...prev, [userId]: val }));
     if (onAupiSaved) onAupiSaved();
   }
@@ -65,7 +71,15 @@ function ProjectMembers({ project, onAupiSaved }) {
         if (insertErr.code === '23505') throw new Error('Deze gebruiker is al lid van het project.');
         throw insertErr;
       }
+      if (newAupi.trim()) {
+        await supabase.rpc('update_member_aupi', {
+          p_project_id: project.id,
+          p_user_id: userId,
+          p_aupi: newAupi.trim(),
+        });
+      }
       setEmail('');
+      setNewAupi('');
       await loadMembers();
     } catch (e) {
       setError(e.message);
@@ -174,6 +188,17 @@ function ProjectMembers({ project, onAupiSaved }) {
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addMember()}
                 placeholder="e-mailadres van nieuwe gebruiker"
+              />
+              <input
+                className="project-member-aupi-input"
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                placeholder="AUPI"
+                value={newAupi}
+                onChange={e => setNewAupi(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && addMember()}
+                title="ActingUserProjectID van dit lid in GRIEL"
               />
               <button
                 className="btn-success btn-sm"
