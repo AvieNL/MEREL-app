@@ -382,6 +382,22 @@
   margin: 0;
 }
 
+.trektellen-link {
+  text-align: right;
+  margin-top: 6px;
+}
+
+.trektellen-link a {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.trektellen-link a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 .export-buttons {
   display: flex;
   gap: 8px;

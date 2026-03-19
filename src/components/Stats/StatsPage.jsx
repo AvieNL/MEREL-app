@@ -502,6 +502,14 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
           <p className="stats-empty">Geen niet-geüploade vangsten.</p>
         )}
 
+        {huidigeStats.total > 1 && (
+          <div className="trektellen-link">
+            <a href="https://www.trektellen.nl" target="_blank" rel="noopener noreferrer">
+              trektellen.nl
+            </a>
+          </div>
+        )}
+
         {huidigeStats.total > 0 && (
           <div className="export-buttons">
             <button className="btn-primary" onClick={() => handleExport('griel', 'huidig')}>
