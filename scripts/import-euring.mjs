@@ -121,8 +121,9 @@ async function main() {
   }
 
   const rows = parseCSV(csvText);
-  const spRows = rows.filter(r => r.Status === 'sp');
-  console.log(`EURING CSV: ${rows.length} rijen totaal, ${spRows.length} met Status=sp\n`);
+  const INCLUDE_STATUSES = new Set(['sp', 'ssp', 'h', 'a', 'f']);
+  const spRows = rows.filter(r => INCLUDE_STATUSES.has(r.Status));
+  console.log(`EURING CSV: ${rows.length} rijen totaal, ${spRows.length} met Status=sp/ssp/h/a/f\n`);
 
   // Haal alle bestaande soorten op
   console.log('Supabase soorten ophalen...');
@@ -174,13 +175,19 @@ async function main() {
     }
   }
 
+  // Dedupliceer op naam_nl (laatste wint bij conflict)
+  const upsertMap = new Map();
+  for (const u of upserts) upsertMap.set(u.naam_nl, u);
+  const deduped = [...upsertMap.values()];
+
   console.log(`Resultaat:`);
   console.log(`  Gekoppeld (update):  ${matched}`);
   console.log(`  Nieuw (insert):      ${newEntries}`);
   console.log(`  Overgeslagen:        ${skipped}`);
-  console.log(`  Totaal te upserten:  ${upserts.length}\n`);
+  console.log(`  Duplicaten verwijderd: ${upserts.length - deduped.length}`);
+  console.log(`  Totaal te upserten:  ${deduped.length}\n`);
 
-  if (upserts.length === 0) {
+  if (deduped.length === 0) {
     console.log('Niets te doen.');
     return;
   }
@@ -189,8 +196,8 @@ async function main() {
   const BATCH = 500;
   let done = 0;
 
-  for (let i = 0; i < upserts.length; i += BATCH) {
-    const batch = upserts.slice(i, i + BATCH);
+  for (let i = 0; i < deduped.length; i += BATCH) {
+    const batch = deduped.slice(i, i + BATCH);
     const { error } = await supabase
       .from('species')
       .upsert(batch, { onConflict: 'naam_nl' });
@@ -201,7 +208,7 @@ async function main() {
     }
 
     done += batch.length;
-    process.stdout.write(`\rUpsert voortgang: ${done}/${upserts.length}`);
+    process.stdout.write(`\rUpsert voortgang: ${done}/${deduped.length}`);
   }
 
   console.log('\n\nKlaar!');
