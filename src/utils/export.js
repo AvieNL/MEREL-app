@@ -58,14 +58,14 @@ function toCatchTime(t) {
   return clean.slice(0, 4);                              // '101500' → '1015'
 }
 
-// Weegtijd naar hh:mm:ss
+// Weegtijd naar hh:mm:ss — null bij onvolledige invoer (xs:time vereist 4 cijfers)
 function toWeighingTime(t) {
-  if (!t) return '';
+  if (!t) return null;
   const clean = String(t).replace(/:/g, '');
   if (clean.length >= 4) {
     return `${clean.slice(0, 2)}:${clean.slice(2, 4)}:00`;
   }
-  return t;
+  return null;
 }
 
 // Geslacht: V → F (GRIEL gebruikt F voor vrouw)

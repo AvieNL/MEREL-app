@@ -338,6 +338,26 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
           return;
         }
 
+        // Blokkeer export bij ontbrekende vangstdatum (xs:date vereist)
+        const geenDatum = teExporteren.filter(r => !r.vangstdatum);
+        if (geenDatum.length > 0) {
+          setExportError(
+            `Export geblokkeerd: ${geenDatum.length} record(s) zonder vangstdatum. ` +
+            `Corrigeer deze vangsten voor het exporteren.`
+          );
+          return;
+        }
+
+        // Blokkeer export bij ringnummer < 4 tekens (XSD minLength 4)
+        const kortRing = teExporteren.filter(r => !r.ringnummer || String(r.ringnummer).trim().length < 4);
+        if (kortRing.length > 0) {
+          setExportError(
+            `Export geblokkeerd: ${kortRing.length} record(s) met leeg of te kort ringnummer (minimaal 4 tekens). ` +
+            `Corrigeer deze vangsten voor het exporteren.`
+          );
+          return;
+        }
+
         const projectenInExport = [...new Set(teExporteren.map(r => r.project).filter(Boolean))];
         const ontbrekend = projectenInExport.filter(naam => !projectAupis[naam]);
 
