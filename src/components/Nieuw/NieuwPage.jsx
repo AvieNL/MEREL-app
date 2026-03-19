@@ -475,7 +475,7 @@ const EMPTY_FORM = {
   centrale: 'NLA',
   status: 'U',
   conditie: '8',
-  omstandigheden: '99',
+  omstandigheden: '20',
   plaatscode: 'NL--',
   google_plaats: '',
   lat: '',
@@ -1240,9 +1240,9 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
 
   function toggleTerugvangst() {
     if (isTerugvangst) {
-      setForm(prev => ({ ...prev, metalenringinfo: 2, centrale: 'NLA', omstandigheden: '99' }));
+      setForm(prev => ({ ...prev, metalenringinfo: 2, centrale: 'NLA', omstandigheden: '20' }));
     } else {
-      setForm(prev => ({ ...prev, metalenringinfo: 4, omstandigheden: '28', ringnummer: '' }));
+      setForm(prev => ({ ...prev, metalenringinfo: 4, omstandigheden: '20', ringnummer: '' }));
     }
   }
 
