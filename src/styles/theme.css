@@ -608,3 +608,11 @@ button, a, label, select {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* EURING-code hint achter vogelnaam */
+.euring-hint {
+  font-size: 0.78em;
+  color: var(--text-muted);
+  font-weight: normal;
+  margin-left: 4px;
+}

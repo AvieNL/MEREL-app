@@ -604,7 +604,12 @@ export default function SoortDetail({ records, speciesOverrides }) {
               autoFocus
             />
           ) : (
-            <h2 className="sd-title">{soort.naam_nl}</h2>
+            <h2 className="sd-title">
+              {soort.naam_nl}
+              {euringLookup[soort.naam_nl?.toLowerCase()] && (
+                <span className="euring-hint">({euringLookup[soort.naam_nl.toLowerCase()]})</span>
+              )}
+            </h2>
           )}
           {soort.naam_lat && <p className="sd-subtitle">{soort.naam_lat}</p>}
           <div className="sd-badges">

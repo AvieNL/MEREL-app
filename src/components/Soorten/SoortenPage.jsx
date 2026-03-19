@@ -157,7 +157,12 @@ export default function SoortenPage({ records }) {
               onClick={() => navigate(`/soorten/${encodeURIComponent(s.naam_nl)}`)}
             >
               <div className="soort-info">
-                <strong>{s.naam_nl}</strong>
+                <strong>
+                  {s.naam_nl}
+                  {euringLookup[s.naam_nl?.toLowerCase()] && (
+                    <span className="euring-hint">({euringLookup[s.naam_nl.toLowerCase()]})</span>
+                  )}
+                </strong>
                 <span className="soort-lat">{s.naam_lat}</span>
               </div>
               <div className="soort-meta">

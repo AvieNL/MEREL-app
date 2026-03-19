@@ -1,6 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRole } from '../../hooks/useRole';
+import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { buildEuringLookup } from '../../utils/euring-lookup';
 import './RecordsPage.css';
 
 function geslachtIcoon(g) {
@@ -69,6 +71,8 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
   const location = useLocation();
   const navigate = useNavigate();
   const { canDelete } = useRole();
+  const speciesRef = useSpeciesRef();
+  const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
 
   useEffect(() => {
     const openId = location.state?.openId;
@@ -139,7 +143,12 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
               <div className="record-header">
                 <span className={`record-type${isTerugvangst ? ' record-type--tv' : ''}`}>{isTerugvangst ? 'TV' : 'NV'}</span>
                 <div className="record-main">
-                  <strong>{r.vogelnaam || 'Onbekend'}</strong>
+                  <strong>
+                    {r.vogelnaam || 'Onbekend'}
+                    {r.vogelnaam && euringLookup[r.vogelnaam.toLowerCase()] && (
+                      <span className="euring-hint">({euringLookup[r.vogelnaam.toLowerCase()]})</span>
+                    )}
+                  </strong>
                   <div className="record-ring-row">
                     <span className="record-ring ring-link" onClick={e => { e.stopPropagation(); setExpanded(r.id); setTimeout(() => { document.getElementById(`record-${r.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50); }}>{stripDots(r.ringnummer)}</span>
                     {r.geslacht && r.geslacht !== 'U' && geslachtIcoon(r.geslacht)}
