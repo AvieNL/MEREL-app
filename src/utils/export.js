@@ -135,7 +135,7 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
       tag('Status',                      r.status || 'U'),
       tag('BroodSize',                   r.broedselgrootte || '--'),
       tag('PullusAge',                   r.leeftijd === '1' ? (r.pul_leeftijd && r.pul_leeftijd !== '--' ? r.pul_leeftijd : '99') : '--'),
-      ...(r.leeftijd === '1' ? [tag('AccOfPullusAge', r.nauwk_pul_leeftijd && r.nauwk_pul_leeftijd !== '--' ? r.nauwk_pul_leeftijd : 'U')] : []),
+      tag('AccOfPullusAge',              r.leeftijd === '1' ? (r.nauwk_pul_leeftijd && r.nauwk_pul_leeftijd !== '--' ? r.nauwk_pul_leeftijd : 'U') : '0'),
       tag('AccOfDate',                   r.nauwk_vangstdatum ?? 0),
       ...(r.lat ? [tag('Latitude',  r.lat)] : []),
       ...(r.lon ? [tag('Longitude', r.lon)] : []),
