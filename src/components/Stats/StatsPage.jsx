@@ -1,7 +1,8 @@
 import { useMemo, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { exportCSV, exportJSON, exportGrielXML, downloadFile } from '../../utils/export';
-import euringCodes from '../../data/euring-codes.json';
+import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { buildEuringLookup } from '../../utils/euring-lookup';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import './StatsPage.css';
 
@@ -238,6 +239,8 @@ function parseCSV(text) {
 
 export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [], myAupis = {} }) {
   const navigate = useNavigate();
+  const speciesRef = useSpeciesRef();
+  const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
   const [exportError, setExportError] = useState('');
 
@@ -328,7 +331,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         const teExporteren = data.filter(r => r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && r.bron !== 'griel_import');
 
         // Blokkeer export als een record geen EURING-soortcode heeft
-        const geenCode = teExporteren.filter(r => !euringCodes[r.vogelnaam?.toLowerCase()]);
+        const geenCode = teExporteren.filter(r => !euringLookup[r.vogelnaam?.toLowerCase()]);
         if (geenCode.length > 0) {
           const namen = [...new Set(geenCode.map(r => r.vogelnaam || '(leeg)'))].slice(0, 5).join(', ');
           setExportError(
@@ -370,7 +373,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
           return;
         }
 
-        const xml = exportGrielXML(teExporteren, projects, projectAupis);
+        const xml = exportGrielXML(teExporteren, projects, projectAupis, euringLookup);
         downloadFile(xml, `vrs-griel-${datum}.xml`, 'application/xml');
         if (subset === 'huidig') {
           setShowUploadConfirm(true);

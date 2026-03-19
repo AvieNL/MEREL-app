@@ -2,8 +2,8 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useVeldConfig } from '../../hooks/useVeldConfig';
-import euringCodes from '../../data/euring-codes.json';
 import { euringReference } from '../../data/euring-reference.js';
+import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuiscoreDiagram from './RuiscoreDiagram';
 import LocatiePicker from './LocatiePicker';
 import { useRuitypen } from '../../hooks/useRuitypen';
@@ -606,6 +606,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     () => speciesRefData.filter(s => s.naam_nl && s.naam_lat),
     [speciesRefData]
   );
+  const euringLookup = useMemo(() => buildEuringLookup(speciesRefData), [speciesRefData]);
 
   const ruitypenConfig = useRuitypen();
   const veldConfig = useVeldConfig();
@@ -756,14 +757,12 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
     return getOverride(form.vogelnaam);
   }, [form.vogelnaam, getOverride]);
 
-  // Get EURING code (soortOverride.euring_code has priority over the JSON lookup)
+  // Get EURING code — soortOverride heeft hoogste prioriteit, dan euringLookup (Supabase + JSON fallback)
   const euringCode = useMemo(() => {
     if (!form.vogelnaam) return '';
     if (soortOverride?.euring_code) return soortOverride.euring_code;
-    if (speciesInfo?.euring_code) return speciesInfo.euring_code;
-    const key = form.vogelnaam.toLowerCase();
-    return euringCodes[key] || '';
-  }, [form.vogelnaam, soortOverride, speciesInfo]);
+    return euringLookup[form.vogelnaam.toLowerCase()] || '';
+  }, [form.vogelnaam, soortOverride, euringLookup]);
 
   // Compute biometry ranges from existing records for selected species
   const bioRangesFromRecords = useMemo(() => {
@@ -958,7 +957,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
 
       // Also match on EURING code
       if (bestScore !== 0) {
-        const spCode = euringCodes[sp.naam_nl?.toLowerCase()];
+        const spCode = sp.euring_code || euringLookup[sp.naam_nl?.toLowerCase()];
         if (spCode) {
           const codeScore = fuzzyMatch(query, spCode);
           if (codeScore >= 0 && (bestScore < 0 || codeScore < bestScore)) {
@@ -1303,7 +1302,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
                 {suggestions.length > 0 && (
                   <ul className="suggestions">
                     {suggestions.map(s => {
-                      const code = euringCodes[s.naam_nl?.toLowerCase()] || '';
+                      const code = euringLookup[s.naam_nl?.toLowerCase()] || '';
                       return (
                         <li key={s.naam_nl + (s.matchedField || '')} onClick={() => selectSpecies(s.naam_nl)}>
                           <div className="suggestion-content">

@@ -1,4 +1,3 @@
-import euringCodes from '../data/euring-codes.json';
 
 // CSV Export
 export function exportCSV(records) {
@@ -75,10 +74,10 @@ function toSex(g) {
   return g;
 }
 
-// EURING-soortcode opzoeken op naam (lowercase)
-function speciesCode(naam) {
-  if (!naam) return '';
-  const code = euringCodes[naam.toLowerCase()];
+// EURING-soortcode opzoeken op naam (lowercase) via meegegeven lookup
+function speciesCode(naam, lookup) {
+  if (!naam || !lookup) return '';
+  const code = lookup[naam.toLowerCase()];
   return code ? String(parseInt(code, 10)).padStart(5, '0') : '';  // bijv. "720" → "00720"
 }
 
@@ -104,10 +103,10 @@ function today() {
  * @param {Array} records - Vangstrecords
  * @param {Array} projects - Projectenlijst (voor ActingUserProjectID via nummer)
  */
-export function exportGrielXML(records, projects = [], projectAupis = {}) {
+export function exportGrielXML(records, projects = [], projectAupis = {}, euringLookup = {}) {
   const captures = records.map(r => {
     const actingId = r.project ? (projectAupis[r.project] || '') : '';
-    const specCode  = speciesCode(r.vogelnaam);
+    const specCode  = speciesCode(r.vogelnaam, euringLookup);
     const catchDate = toISO(r.vangstdatum);
     const reportingDate = today();
 

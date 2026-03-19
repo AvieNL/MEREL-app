@@ -4,7 +4,7 @@ import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
 import { useRole } from '../../hooks/useRole';
 import { db } from '../../lib/db';
 import { supabase } from '../../lib/supabase';
-import euringCodes from '../../data/euring-codes.json';
+import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuitypeInfo from './RuitypeInfo';
 import { VangstKaart } from '../Stats/Charts';
 import './SoortDetail.css';
@@ -153,6 +153,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const [isDragging, setIsDragging] = useState(false);
   const { isAdmin, isViewer } = useRole();
   const speciesRef = useSpeciesRef();
+  const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
   const soorten = useMemo(
     () => speciesRef.filter(s => s.naam_nl && !s.naam_nl.includes('groene tekst')),
     [speciesRef]
@@ -213,7 +214,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
     });
     // Geslachtsbepaling: apart voor man en vrouw
     // Migratie: oude geslachts_notities / ruitype_notities valt terug op ♂-veld
-    data.euring_code = soort.euring_code || euringCodes[decodedNaam.toLowerCase()] || '';
+    data.euring_code = soort.euring_code || euringLookup[decodedNaam.toLowerCase()] || '';
     data.geslachts_notities_m = soort.geslachts_notities_m ?? soort.geslachts_notities ?? soort.ruitype_notities ?? '';
     data.geslachts_notities_f = soort.geslachts_notities_f ?? '';
     // Leeftijdsbepaling: apart voor voorjaar en najaar
@@ -730,7 +731,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
         {EDITABLE_FIELDS.ring.map(f =>
           renderField(f.key, f.label, {
             showEmpty: editMode,
-            fallback: f.key === 'euring_code' ? (euringCodes[decodedNaam.toLowerCase()] || '') : undefined,
+            fallback: f.key === 'euring_code' ? (euringLookup[decodedNaam.toLowerCase()] || '') : undefined,
           })
         )}
         {!editMode && soort.ruitype && (
