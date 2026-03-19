@@ -49,18 +49,29 @@ export async function pullSpeciesIfNeeded(force = false) {
       }
     }
 
-    const { data, error } = await supabase
-      .from('species')
-      .select('naam_nl, data');
+    // Gepagineerd ophalen (Supabase max 1000 rijen per request)
+    const PAGE = 1000;
+    let offset = 0;
+    let allData = [];
+    while (true) {
+      const { data, error } = await supabase
+        .from('species')
+        .select('naam_nl, data')
+        .range(offset, offset + PAGE - 1);
+      if (error) return;
+      if (!data || data.length === 0) break;
+      allData = allData.concat(data);
+      if (data.length < PAGE) break;
+      offset += PAGE;
+    }
 
-    if (error || !data || data.length === 0) return;
+    if (allData.length === 0) return;
 
-    // data.map(r => r.data) geeft het volledige soortobject incl. naam_nl
-    const rows = data.map(r => r.data);
+    const rows = allData.map(r => r.data);
     await db.species.bulkPut(rows);
 
     // Verwijder lokale soorten die op een ander apparaat zijn gewist
-    const supabaseNames = new Set(data.map(r => r.data?.naam_nl).filter(Boolean));
+    const supabaseNames = new Set(allData.map(r => r.data?.naam_nl).filter(Boolean));
     const localAll = await db.species.toArray();
     const toDelete = localAll.filter(r => !supabaseNames.has(r.naam_nl)).map(r => r.naam_nl);
     if (toDelete.length > 0) await db.species.bulkDelete(toDelete);

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
 import { useRole } from '../../hooks/useRole';
 import './SoortenPage.css';
 
@@ -23,6 +23,7 @@ export default function SoortenPage({ records }) {
   const [zoek, setZoek] = useState('');
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const navigate = useNavigate();
   const { isAdmin } = useRole();
   const speciesRef = useSpeciesRef();
@@ -75,6 +76,12 @@ export default function SoortenPage({ records }) {
     setFilters(EMPTY_FILTERS);
   }
 
+  async function handleVervers() {
+    setSyncing(true);
+    await pullSpeciesIfNeeded(true);
+    setSyncing(false);
+  }
+
   return (
     <div className="page soorten-page">
       <div className="soorten-topbar">
@@ -93,12 +100,22 @@ export default function SoortenPage({ records }) {
           Filter{activeCount > 0 && <span className="soorten-filter-badge">{activeCount}</span>}
         </button>
         {isAdmin && (
-          <button
-            className="btn-primary soorten-nieuw-btn"
-            onClick={() => navigate('/soorten/__nieuw__')}
-          >
-            + Nieuw
-          </button>
+          <>
+            <button
+              className="soorten-filter-btn"
+              onClick={handleVervers}
+              disabled={syncing}
+              title="Soorten opnieuw ophalen uit Supabase"
+            >
+              {syncing ? '...' : '↻'}
+            </button>
+            <button
+              className="btn-primary soorten-nieuw-btn"
+              onClick={() => navigate('/soorten/__nieuw__')}
+            >
+              + Nieuw
+            </button>
+          </>
         )}
       </div>
 
