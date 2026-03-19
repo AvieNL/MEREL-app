@@ -55,7 +55,8 @@ export default function SoortenPage({ records }) {
       result = result.filter(s =>
         s.naam_nl.toLowerCase().includes(lower) ||
         (s.naam_lat && s.naam_lat.toLowerCase().includes(lower)) ||
-        (s.naam_en && s.naam_en.toLowerCase().includes(lower))
+        (s.naam_en && s.naam_en.toLowerCase().includes(lower)) ||
+        (euringLookup[s.naam_nl?.toLowerCase()] && euringLookup[s.naam_nl.toLowerCase()].includes(lower))
       );
     }
 
