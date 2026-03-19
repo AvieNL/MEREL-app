@@ -116,13 +116,17 @@ function ProjectMembers({ project, onAupiSaved }) {
                     )}
                   </span>
                   <span className="project-member-aupi">
-                    <label className="project-member-aupi-label">AUPI</label>
+                    <abbr
+                      className="project-member-aupi-label"
+                      title="ActingUserProjectID: jouw persoonlijk lidnummer voor dit project in GRIEL. Te vinden via: Mijn administratie → Mijn projecten → klik op het + naast het project."
+                    >AUPI</abbr>
                     {canEditAupi ? (
                       <input
                         className="project-member-aupi-input"
                         type="text"
                         inputMode="numeric"
-                        placeholder="bijv. 7095"
+                        maxLength={6}
+                        placeholder="—"
                         value={aupiDraft[m.user_id] ?? ''}
                         onChange={e => setAupiDraft(prev => ({ ...prev, [m.user_id]: e.target.value }))}
                         onBlur={() => saveAupi(m.user_id)}

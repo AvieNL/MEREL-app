@@ -159,9 +159,9 @@
 }
 
 .project-member-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
 }
 
@@ -247,32 +247,41 @@
 .project-member-aupi {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-left: auto;
-  margin-right: 8px;
+  gap: 5px;
+  justify-content: flex-end;
 }
 
 .project-member-aupi-label {
   font-size: 0.7rem;
   color: var(--text-muted);
   white-space: nowrap;
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
 }
 
 .project-member-aupi-input {
-  width: 68px;
-  font-size: 0.78rem;
-  padding: 2px 6px;
+  width: 52px;
+  font-size: 0.8rem;
+  padding: 2px 4px;
   min-height: 0;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   background: var(--bg-primary);
   color: var(--text-primary);
   text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.project-member-aupi-input:focus {
+  border-color: var(--accent);
+  outline: none;
 }
 
 .project-member-aupi-value {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  min-width: 30px;
+  width: 52px;
   text-align: center;
+  font-variant-numeric: tabular-nums;
 }
