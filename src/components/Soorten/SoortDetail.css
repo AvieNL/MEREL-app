@@ -710,70 +710,62 @@
   color: var(--text-secondary);
 }
 
-/* Biometrie tabel */
-.sd-bio-section {
+/* Biometrie groepsindeling */
+.sd-bio-list {
   margin-top: 8px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.sd-bio-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.82rem;
-  margin-top: 4px;
+.sd-bio-group {
+  border-bottom: 1px solid rgba(71, 85, 105, 0.15);
+  padding-bottom: 6px;
 }
 
-.sd-bio-table th {
-  text-align: left;
+.sd-bio-group:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.sd-bio-group-label {
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--text-muted);
-  padding: 3px 6px 3px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.75rem;
-  white-space: nowrap;
-}
-
-.sd-bio-table th:not(:first-child) {
-  text-align: right;
-  padding-left: 16px;
-  padding-right: 0;
-}
-
-.sd-bio-table td {
-  padding: 3px 6px 3px 0;
-  border-bottom: 1px solid rgba(71, 85, 105, 0.2);
-  white-space: nowrap;
-}
-
-.sd-bio-table td:not(:first-child) {
-  padding-left: 16px;
-  padding-right: 0;
-  text-align: right;
-}
-
-.sd-bio-field {
-  color: var(--text-primary);
+  color: var(--text-secondary);
+  margin-bottom: 3px;
 }
 
 .sd-bio-unit {
   color: var(--text-muted);
   font-size: 0.72rem;
+  font-weight: 400;
 }
 
-.sd-bio-num {
-  text-align: right;
-  color: var(--text-secondary);
+.sd-bio-subrow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 1px 0 1px 10px;
+  font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
 }
 
-.sd-bio-avg {
-  color: var(--accent);
-  font-weight: 600;
+.sd-bio-subrow-cat {
+  width: 28px;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
 }
 
+.sd-bio-subrow--m .sd-bio-subrow-cat { color: var(--accent); }
+.sd-bio-subrow--f .sd-bio-subrow-cat { color: #e879f9; }
 
 /* Databron-kleuren biometrie */
+.sd-bio-num {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
 .sd-bio-lit {
   color: var(--text-primary);
 }

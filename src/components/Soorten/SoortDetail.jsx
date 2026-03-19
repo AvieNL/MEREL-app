@@ -824,64 +824,52 @@ export default function SoortDetail({ records, speciesOverrides }) {
             ) : (
               <>
                 <h3 className="sd-card-title">Biometrie</h3>
-                <table className="sd-bio-table">
-                  <thead>
-                    <tr>
-                      <th>Meting</th>
-                      <th>Min</th>
-                      <th>Max</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {BIO_FIELDS.flatMap(b => {
-                      const minKey = `bio_${b.key}_min`;
-                      const maxKey = `bio_${b.key}_max`;
-                      const minVal = getBioValue(b.key, 'min');
-                      const maxVal = getBioValue(b.key, 'max');
-                      const rows = [];
-                      if (minVal || maxVal) {
-                        rows.push(
-                          <tr key={b.key}>
-                            <td className="sd-bio-field">{b.label} <span className="sd-bio-unit">({b.unit})</span></td>
-                            <td className={bioCellCls(minKey)}>{fmtBio(minVal) || '—'}</td>
-                            <td className={bioCellCls(maxKey)}>{fmtBio(maxVal) || '—'}</td>
-                          </tr>
-                        );
-                      }
-                      [['M', '\u2642\uFE0E', 'sd-bio-row-m'], ['F', '\u2640\uFE0E', 'sd-bio-row-f']].forEach(([g, sym, cls]) => {
-                        const gMinKey = `bio_${b.key}_${g}_min`;
-                        const gMaxKey = `bio_${b.key}_${g}_max`;
-                        const gMin = soort[gMinKey];
-                        const gMax = soort[gMaxKey];
-                        if (gMin || gMax) {
-                          rows.push(
-                            <tr key={`${b.key}-${g}`} className={cls}>
-                              <td className="sd-bio-field sd-bio-field--gender">
-                                <span className="sd-bio-gender-tag">{sym}</span> {b.label}
-                              </td>
-                              <td className={bioCellCls(gMinKey)}>{fmtBio(gMin) || '—'}</td>
-                              <td className={bioCellCls(gMaxKey)}>{fmtBio(gMax) || '—'}</td>
-                            </tr>
-                          );
-                        }
-                      });
-                      const recRange = bioRangesFromCatches[b.key];
-                      if (recRange) {
-                        rows.push(
-                          <tr key={`${b.key}-rec`} className="sd-bio-row-rec">
-                            <td className="sd-bio-field sd-bio-field--gender">
-                              <span className="sd-bio-rec-tag">~</span> {b.label}
-                              <span className="sd-bio-rec-n"> n={recRange.n}</span>
-                            </td>
-                            <td className="sd-bio-num sd-bio-rec">{fmtBio(recRange.min) || '—'}</td>
-                            <td className="sd-bio-num sd-bio-rec">{fmtBio(recRange.max) || '—'}</td>
-                          </tr>
-                        );
-                      }
-                      return rows;
-                    })}
-                  </tbody>
-                </table>
+                <div className="sd-bio-list">
+                  {BIO_FIELDS.map(b => {
+                    const minVal = getBioValue(b.key, 'min');
+                    const maxVal = getBioValue(b.key, 'max');
+                    const gRows = [['M', '\u2642\uFE0E'], ['F', '\u2640\uFE0E']].map(([g, sym]) => ({
+                      g, sym,
+                      min: soort[`bio_${b.key}_${g}_min`],
+                      max: soort[`bio_${b.key}_${g}_max`],
+                      minKey: `bio_${b.key}_${g}_min`,
+                    })).filter(r => r.min || r.max);
+                    const recRange = bioRangesFromCatches[b.key];
+                    if (!minVal && !maxVal && gRows.length === 0 && !recRange) return null;
+                    return (
+                      <div key={b.key} className="sd-bio-group">
+                        <div className="sd-bio-group-label">
+                          {b.label} <span className="sd-bio-unit">({b.unit})</span>
+                        </div>
+                        {(minVal || maxVal) && (
+                          <div className="sd-bio-subrow">
+                            <span className="sd-bio-subrow-cat">Alg.</span>
+                            <span className={bioCellCls(`bio_${b.key}_min`)}>
+                              {fmtBio(minVal) || '—'} – {fmtBio(maxVal) || '—'}
+                            </span>
+                          </div>
+                        )}
+                        {gRows.map(({ g, sym, min, max, minKey }) => (
+                          <div key={g} className={`sd-bio-subrow sd-bio-subrow--${g.toLowerCase()}`}>
+                            <span className="sd-bio-subrow-cat">{sym}</span>
+                            <span className={bioCellCls(minKey)}>
+                              {fmtBio(min) || '—'} – {fmtBio(max) || '—'}
+                            </span>
+                          </div>
+                        ))}
+                        {recRange && (
+                          <div className="sd-bio-subrow sd-bio-subrow--rec">
+                            <span className="sd-bio-subrow-cat sd-bio-rec-tag">~</span>
+                            <span className="sd-bio-rec">
+                              {fmtBio(recRange.min) || '—'} – {fmtBio(recRange.max) || '—'}
+                            </span>
+                            <span className="sd-bio-rec-n">n={recRange.n}</span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
                 {(hasAdminBio || hasUserBio || BIO_FIELDS.some(b => bioRangesFromCatches[b.key])) && (
                   <div className="sd-bio-legend">
                     {hasAdminBio && (
