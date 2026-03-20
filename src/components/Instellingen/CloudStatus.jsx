@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useAuth } from '../../context/AuthContext';
 import { useSync } from '../../context/SyncContext';
@@ -7,17 +8,18 @@ import { db } from '../../lib/db';
 import { supabase } from '../../lib/supabase';
 import { formatDatum } from '../../utils/dateHelper';
 
-function fmtTijd(date) {
+function fmtTijd(date, t) {
   if (!date) return '—';
   const tijd = date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
   const isVandaag = date.toDateString() === new Date().toDateString();
-  return isVandaag ? `vandaag ${tijd}` : `${formatDatum(date.toISOString().slice(0, 10))} ${tijd}`;
+  return isVandaag ? `${t('cloud_today')} ${tijd}` : `${formatDatum(date.toISOString().slice(0, 10))} ${tijd}`;
 }
 
 export default function CloudStatus() {
   const { user } = useAuth();
   const { pendingCount, syncError, lastSynced, isOnline, syncLost, syncLostItems, clearSyncLost } = useSync();
   const speciesError = useSpeciesError();
+  const { t } = useTranslation();
   const [online, setOnline] = useState(null);
   const [loadingOnline, setLoadingOnline] = useState(true);
   const [onlineError, setOnlineError] = useState('');
@@ -66,7 +68,7 @@ export default function CloudStatus() {
         ringstrengen: ringstrengen.count ?? 0,
       });
     } catch {
-      setOnlineError('Kon clouddata niet ophalen');
+      setOnlineError(t('cloud_error'));
     } finally {
       setLoadingOnline(false);
     }
@@ -94,10 +96,10 @@ export default function CloudStatus() {
   }
 
   const tabelRijen = [
-    { label: 'Vangsten',     lokaal: lokaalVangsten,    online: online?.vangsten },
-    { label: 'In prullenbak',lokaal: lokaalVerwijderd,  online: null, sub: true },
-    { label: 'Projecten',    lokaal: lokaalProjecten,   online: online?.projecten },
-    { label: 'Ringstrengen', lokaal: lokaalRingstrengen,online: online?.ringstrengen },
+    { label: t('cloud_catches'),     lokaal: lokaalVangsten,    online: online?.vangsten },
+    { label: t('cloud_trash'),       lokaal: lokaalVerwijderd,  online: null, sub: true },
+    { label: t('cloud_projects'),    lokaal: lokaalProjecten,   online: online?.projecten },
+    { label: t('cloud_ring_strings'),lokaal: lokaalRingstrengen,online: online?.ringstrengen },
   ];
 
   const fout = syncError || onlineError || speciesError;
@@ -115,7 +117,7 @@ export default function CloudStatus() {
       <div className="cloud-status__header">
         <div className={`cloud-status__dot cloud-status__dot--${isOnline ? 'online' : 'offline'}`} />
         <span className={`cloud-status__label cloud-status__label--${isOnline ? 'online' : 'offline'}`}>
-          {isOnline ? 'Verbonden' : 'Offline'}
+          {isOnline ? t('status_online') : t('status_offline')}
         </span>
         <button className="cloud-status__refresh" onClick={vernieuwen} title="Vernieuwen">↻</button>
       </div>
@@ -124,8 +126,8 @@ export default function CloudStatus() {
         <thead>
           <tr>
             <th></th>
-            <th>Lokaal</th>
-            <th>Online</th>
+            <th>{t('cloud_status_local')}</th>
+            <th>{t('cloud_status_online')}</th>
           </tr>
         </thead>
         <tbody>
@@ -145,22 +147,22 @@ export default function CloudStatus() {
 
       <div className="cloud-status__tijden">
         <div className="cloud-status__tijd-rij">
-          <span>Laatste pull</span>
-          <span>{fmtTijd(lastPull)}</span>
+          <span>{t('cloud_last_pull')}</span>
+          <span>{fmtTijd(lastPull, t)}</span>
         </div>
         <div className="cloud-status__tijd-rij">
-          <span>Laatste sync</span>
-          <span>{fmtTijd(lastSynced)}</span>
+          <span>{t('cloud_last_sync')}</span>
+          <span>{fmtTijd(lastSynced, t)}</span>
         </div>
         {pendingCount > 0 && (
           <div className="cloud-status__tijd-rij cloud-status__pending">
-            <span>Wacht op versturen</span>
-            <span>{pendingCount} wijziging{pendingCount !== 1 ? 'en' : ''}</span>
+            <span>{t('cloud_pending')}</span>
+            <span>{t('cloud_pending_count', { count: pendingCount })}</span>
           </div>
         )}
         {storageMb !== null && (
           <div className={`cloud-status__tijd-rij${storagePercent >= 80 ? ' cloud-status__storage--vol' : ''}`}>
-            <span>Opslag apparaat</span>
+            <span>{t('cloud_storage')}</span>
             <span>{storageMb}{storagePercent !== null ? ` (${storagePercent}%)` : ''}</span>
           </div>
         )}
@@ -169,7 +171,7 @@ export default function CloudStatus() {
       {verloren && (
         <div className="cloud-status__lost">
           <span>
-            {syncLost} wijziging{syncLost !== 1 ? 'en' : ''} kon{syncLost !== 1 ? 'den' : ''} niet worden gesynchroniseerd en {syncLost !== 1 ? 'zijn' : 'is'} verwijderd uit de wachtrij.
+            {t('cloud_lost', { count: syncLost })}
             {syncLostItems.length > 0 && (
               <span className="cloud-status__lost-items">
                 {' '}({syncLostItems.slice(0, 5).join(', ')}{syncLostItems.length > 5 ? ` en ${syncLostItems.length - 5} meer` : ''})

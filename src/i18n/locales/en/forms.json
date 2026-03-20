@@ -1,0 +1,12 @@
+{
+  "full_name": "Full name",
+  "full_name_placeholder": "e.g. John Smith",
+  "initial": "Initial",
+  "initial_placeholder": "e.g. JS",
+  "ringer_number": "Ringer number",
+  "ringer_number_placeholder": "e.g. 3254",
+  "email": "Email address",
+  "email_placeholder": "your@email.com",
+  "password": "Password",
+  "password_placeholder_register": "At least 6 characters"
+}

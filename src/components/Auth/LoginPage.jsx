@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import './LoginPage.css';
 
 export default function LoginPage() {
   const { login, register } = useAuth();
+  const { t } = useTranslation(['common', 'forms', 'errors']);
   const [mode, setMode] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,14 +23,14 @@ export default function LoginPage() {
         await login(email, password);
       } else {
         await register(email, password);
-        setSuccess('Account aangemaakt. Controleer je e-mail om te bevestigen, log daarna in.');
+        setSuccess(t('errors:register_success'));
         setMode('login');
       }
     } catch (err) {
       const messages = {
-        'Invalid login credentials': 'Onbekend e-mailadres of onjuist wachtwoord.',
-        'Email not confirmed': 'Bevestig eerst je e-mailadres via de ontvangen mail.',
-        'User already registered': 'Dit e-mailadres is al geregistreerd.',
+        'Invalid login credentials': t('errors:invalid_credentials'),
+        'Email not confirmed':       t('errors:email_not_confirmed'),
+        'User already registered':   t('errors:user_already_registered'),
       };
       setError(messages[err.message] || err.message);
     } finally {
@@ -49,8 +51,8 @@ export default function LoginPage() {
               <path d="M20 6 L24 2 L22 8" fill="currentColor" opacity="0.6" />
             </svg>
           </div>
-          <h1>VRS Breedenbroek</h1>
-          <p>Vogelringregistratie</p>
+          <h1>{t('app_name')}</h1>
+          <p>{t('app_subtitle')}</p>
         </div>
 
         <div className="login-tabs">
@@ -59,26 +61,26 @@ export default function LoginPage() {
             className={mode === 'login' ? 'active' : ''}
             onClick={() => { setMode('login'); setError(''); setSuccess(''); }}
           >
-            Inloggen
+            {t('nav_login', 'Inloggen')}
           </button>
           <button
             type="button"
             className={mode === 'register' ? 'active' : ''}
             onClick={() => { setMode('register'); setError(''); setSuccess(''); }}
           >
-            Registreren
+            {t('nav_register', 'Registreren')}
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="login-field">
-            <label htmlFor="login-email">E-mailadres</label>
+            <label htmlFor="login-email">{t('forms:email')}</label>
             <input
               id="login-email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="jouw@email.nl"
+              placeholder={t('forms:email_placeholder')}
               required
               autoComplete="email"
               autoFocus
@@ -86,13 +88,13 @@ export default function LoginPage() {
           </div>
 
           <div className="login-field">
-            <label htmlFor="login-password">Wachtwoord</label>
+            <label htmlFor="login-password">{t('forms:password')}</label>
             <input
               id="login-password"
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder={mode === 'register' ? 'Minimaal 6 tekens' : ''}
+              placeholder={mode === 'register' ? t('forms:password_placeholder_register') : ''}
               required
               minLength={6}
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
@@ -104,8 +106,8 @@ export default function LoginPage() {
 
           <button type="submit" className="login-btn" disabled={loading}>
             {loading
-              ? 'Even wachten...'
-              : mode === 'login' ? 'Inloggen' : 'Account aanmaken'
+              ? t('btn_busy')
+              : mode === 'login' ? t('nav_login') : t('nav_account_create', 'Account aanmaken')
             }
           </button>
         </form>

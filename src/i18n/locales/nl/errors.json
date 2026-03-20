@@ -1,0 +1,9 @@
+{
+  "invalid_credentials": "Onbekend e-mailadres of onjuist wachtwoord.",
+  "email_not_confirmed": "Bevestig eerst je e-mailadres via de ontvangen mail.",
+  "user_already_registered": "Dit e-mailadres is al geregistreerd.",
+  "quota_exceeded": "Apparaat heeft onvoldoende opslagruimte. Verwijder oude vangsten of maak ruimte vrij op je apparaat.",
+  "sync_partial_failure": "Synchronisatie gedeeltelijk mislukt. Wordt opnieuw geprobeerd.",
+  "record_save_failed": "Wijziging kon niet worden opgeslagen. Probeer het opnieuw.",
+  "register_success": "Account aangemaakt. Controleer je e-mail om te bevestigen, log daarna in."
+}

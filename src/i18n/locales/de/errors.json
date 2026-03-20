@@ -1,0 +1,9 @@
+{
+  "invalid_credentials": "Unbekannte E-Mail-Adresse oder falsches Passwort.",
+  "email_not_confirmed": "Bitte bestätige zuerst deine E-Mail-Adresse über die erhaltene Mail.",
+  "user_already_registered": "Diese E-Mail-Adresse ist bereits registriert.",
+  "quota_exceeded": "Der Gerätespeicher ist voll. Lösche alte Fänge oder gib Speicherplatz auf deinem Gerät frei.",
+  "sync_partial_failure": "Synchronisation teilweise fehlgeschlagen. Wird erneut versucht.",
+  "record_save_failed": "Änderung konnte nicht gespeichert werden. Bitte erneut versuchen.",
+  "register_success": "Konto erstellt. Prüfe deine E-Mail zur Bestätigung und melde dich dann an."
+}

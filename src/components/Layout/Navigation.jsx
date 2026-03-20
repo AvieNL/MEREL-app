@@ -1,17 +1,19 @@
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useRole } from '../../hooks/useRole';
 import './Navigation.css';
 
 const ALL_TABS = [
-  { path: '/', label: 'Nieuw', icon: '＋', requiresEdit: true },
-  { path: '/records', label: 'Records', icon: '☰' },
-  { path: '/stats', label: 'Stats', icon: '◔' },
-  { path: '/soorten', label: 'Soorten', icon: '◉' },
+  { path: '/', labelKey: 'nav_new', icon: '＋', requiresEdit: true },
+  { path: '/records', labelKey: 'nav_records', icon: '☰' },
+  { path: '/stats', labelKey: 'nav_stats', icon: '◔' },
+  { path: '/soorten', labelKey: 'nav_species', icon: '◉' },
 ];
 
 export default function Navigation() {
   const { canAdd } = useRole();
-  const tabs = ALL_TABS.filter(t => !t.requiresEdit || canAdd);
+  const { t } = useTranslation();
+  const tabs = ALL_TABS.filter(tab => !tab.requiresEdit || canAdd);
 
   return (
     <nav className="bottom-nav">
@@ -23,7 +25,7 @@ export default function Navigation() {
           className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
         >
           <span className="nav-icon">{tab.icon}</span>
-          <span className="nav-label">{tab.label}</span>
+          <span className="nav-label">{t(tab.labelKey)}</span>
         </NavLink>
       ))}
     </nav>

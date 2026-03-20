@@ -1,5 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import i18n from './i18n/index.js';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SyncProvider } from './context/SyncContext';
@@ -33,6 +35,7 @@ import './styles/theme.css';
 
 function UpdateBanner() {
   const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW();
+  const { t } = useTranslation();
   if (!needRefresh) return null;
   return (
     <div style={{
@@ -47,7 +50,7 @@ function UpdateBanner() {
         boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
         pointerEvents: 'all', fontSize: '0.9rem', fontWeight: 600,
       }}>
-        Nieuwe versie beschikbaar
+        {t('update_available')}
         <button
           onClick={() => updateServiceWorker(true)}
           style={{
@@ -58,7 +61,7 @@ function UpdateBanner() {
             minWidth: 'auto', minHeight: 'auto',
           }}
         >
-          Vernieuwen
+          {t('btn_refresh')}
         </button>
       </div>
     </div>
@@ -67,20 +70,27 @@ function UpdateBanner() {
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <ToastProvider>
-        <AuthProvider>
-          <SyncProvider>
-            <BrowserRouter>
-              <UpdateBanner />
-              <AppShell />
-              <ToastContainer />
-            </BrowserRouter>
-          </SyncProvider>
-        </AuthProvider>
-      </ToastProvider>
-    </ErrorBoundary>
+    <I18nextProvider i18n={i18n}>
+      <ErrorBoundary>
+        <ToastProvider>
+          <AuthProvider>
+            <SyncProvider>
+              <BrowserRouter>
+                <UpdateBanner />
+                <AppShell />
+                <ToastContainer />
+              </BrowserRouter>
+            </SyncProvider>
+          </AuthProvider>
+        </ToastProvider>
+      </ErrorBoundary>
+    </I18nextProvider>
   );
+}
+
+function LoadingText() {
+  const { t } = useTranslation();
+  return <>{t('loading')}</>;
 }
 
 function AppShell() {
@@ -105,7 +115,7 @@ function AppShell() {
           borderRadius: '50%',
           animation: 'spin 0.8s linear infinite',
         }} />
-        Laden...
+        <LoadingText />
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );

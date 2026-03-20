@@ -1,0 +1,9 @@
+{
+  "invalid_credentials": "Unknown email address or incorrect password.",
+  "email_not_confirmed": "Please confirm your email address via the email you received.",
+  "user_already_registered": "This email address is already registered.",
+  "quota_exceeded": "Device storage is full. Delete old catches or free up space on your device.",
+  "sync_partial_failure": "Sync partially failed. Will retry automatically.",
+  "record_save_failed": "Could not save change. Please try again.",
+  "register_success": "Account created. Check your email to confirm, then log in."
+}

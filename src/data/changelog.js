@@ -1,6 +1,15 @@
-export const VERSIE = '1.2.5';
+export const VERSIE = '1.2.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.2.6',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'i18n: meertalige ondersteuning — taalwisselaar toegevoegd in Instellingen (Nederlands, English, Deutsch)',
+      'i18n: navigatie, loginscherm, instellingenpagina, cloudsynchronisatiestatus en systeemmeldingen vertaald',
+      'i18n: taalvoorkeur wordt opgeslagen in localStorage en automatisch herkend via browsertaal',
+    ],
+  },
   {
     versie: '1.2.5',
     datum: '2026-03-21',

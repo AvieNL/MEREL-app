@@ -1,0 +1,12 @@
+{
+  "full_name": "Vollständiger Name",
+  "full_name_placeholder": "z.B. Max Mustermann",
+  "initial": "Kürzel",
+  "initial_placeholder": "z.B. MM",
+  "ringer_number": "Beringernummer",
+  "ringer_number_placeholder": "z.B. 3254",
+  "email": "E-Mail-Adresse",
+  "email_placeholder": "deine@email.de",
+  "password": "Passwort",
+  "password_placeholder_register": "Mindestens 6 Zeichen"
+}

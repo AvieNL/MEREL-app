@@ -1,0 +1,12 @@
+{
+  "full_name": "Volledige naam",
+  "full_name_placeholder": "bijv. Thijs ter Avest",
+  "initial": "Initiaal",
+  "initial_placeholder": "bijv. TtA",
+  "ringer_number": "Ringernummer",
+  "ringer_number_placeholder": "bijv. 3254",
+  "email": "E-mailadres",
+  "email_placeholder": "jouw@email.nl",
+  "password": "Wachtwoord",
+  "password_placeholder_register": "Minimaal 6 tekens"
+}

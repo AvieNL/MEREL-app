@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, useRef } f
 import { useAuth } from './AuthContext';
 import { useToast } from './ToastContext';
 import { db } from '../lib/db';
+import i18n from '../i18n/index.js';
 import { pullSpeciesIfNeeded } from '../hooks/useSpeciesRef';
 import { pullSpeciesOverrides } from '../hooks/useSpeciesOverrides';
 import { pullVeldConfigIfNeeded } from '../hooks/useVeldConfig';
@@ -163,10 +164,7 @@ export function SyncProvider({ children }) {
       });
     } catch (err) {
       if (isQuotaError(err)) {
-        addToast(
-          'Apparaat heeft onvoldoende opslagruimte. Verwijder oude vangsten of maak ruimte vrij op je apparaat.',
-          'error', 0
-        );
+        addToast(i18n.t('errors:quota_exceeded'), 'error', 0);
         return;
       }
       throw err;
@@ -247,7 +245,7 @@ export function SyncProvider({ children }) {
     } else {
       const stillPending = await db.sync_queue.count();
       if (stillPending > 0) {
-        setSyncError('Synchronisatie gedeeltelijk mislukt. Wordt opnieuw geprobeerd.');
+        setSyncError(i18n.t('errors:sync_partial_failure'));
       }
     }
   }, [user]);  // eslint-disable-line react-hooks/exhaustive-deps

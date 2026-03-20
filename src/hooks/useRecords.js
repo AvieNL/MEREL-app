@@ -9,6 +9,7 @@ import { toYMD } from '../utils/dateHelper';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
 import { useToast } from '../context/ToastContext';
+import i18n from '../i18n/index.js';
 
 function migrateUploaded(record) {
   if (record.uploaded !== undefined) return record;
@@ -138,7 +139,7 @@ export function useRecords() {
       addToQueue('vangsten', 'upsert', toVangstRow(updated, user.id));
     }).catch(err => {
       console.error('updateRecord mislukt:', err);
-      addToast('Wijziging kon niet worden opgeslagen. Probeer het opnieuw.', 'error');
+      addToast(i18n.t('errors:record_save_failed'), 'error');
     });
   }
 
