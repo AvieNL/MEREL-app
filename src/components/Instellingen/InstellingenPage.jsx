@@ -88,7 +88,7 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
           <div className="sync-acties">
             <div className="sync-actie">
               <div className="sync-actie-tekst">
-                <strong>Wijzigingen versturen</strong>
+                <strong>Wijzigingen versturen <span className="sync-label">(sync)</span></strong>
                 <span>Stuurt lokale wijzigingen die nog niet zijn gesynchroniseerd naar de cloud. Gebeurt normaal automatisch zodra je internet hebt.</span>
               </div>
               <div className="sync-actie-controls">
@@ -108,7 +108,7 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
             </div>
             <div className="sync-actie">
               <div className="sync-actie-tekst">
-                <strong>Gegevens ophalen</strong>
+                <strong>Gegevens ophalen <span className="sync-label">(pull)</span></strong>
                 <span>Haalt alle vangsten opnieuw op vanuit de cloud. Gebruik dit als de app niet up-to-date lijkt na een synchronisatiefout of gebruik op een ander apparaat.</span>
               </div>
               <div className="sync-actie-controls">

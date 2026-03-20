@@ -84,6 +84,12 @@
   color: var(--text-primary);
 }
 
+.sync-label {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
 .sync-actie-tekst span {
   font-size: 0.78rem;
   color: var(--text-muted);

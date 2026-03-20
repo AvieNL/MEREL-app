@@ -16,7 +16,10 @@ export function SyncProvider({ children }) {
   const [pendingItems, setPendingItems] = useState([]);
   const [syncing, setSyncing] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [lastSynced, setLastSynced] = useState(null);
+  const [lastSynced, setLastSynced] = useState(() => {
+    const stored = localStorage.getItem('vrs-last-synced');
+    return stored ? new Date(stored) : null;
+  });
   const [syncError, setSyncError] = useState('');
   const syncingRef = useRef(false);
 
@@ -135,7 +138,9 @@ export function SyncProvider({ children }) {
     setSyncing(false);
 
     if (!hasErrors) {
-      setLastSynced(new Date());
+      const now = new Date();
+      setLastSynced(now);
+      localStorage.setItem('vrs-last-synced', now.toISOString());
       setSyncError('');
       if (user) {
         pullSpeciesOverrides(user.id).catch(e => console.warn('Override pull mislukt:', e.message));
