@@ -1,41 +1,14 @@
-export const VERSIE = '1.0.5';
+export const VERSIE = '1.0.1';
 
 export const CHANGELOG = [
-  {
-    versie: '1.0.5',
-    datum: '2026-03-20',
-    wijzigingen: [
-      'Versienummer achter de paginatitel geplaatst',
-    ],
-  },
-  {
-    versie: '1.0.4',
-    datum: '2026-03-20',
-    wijzigingen: [
-      'Over-pagina: betere app-beschrijving, volgorde aangepast',
-      'Maker: ringernummer verwijderd, e-mailadres toegevoegd',
-    ],
-  },
-  {
-    versie: '1.0.3',
-    datum: '2026-03-20',
-    wijzigingen: [
-      'Datumnotatie in versiegeschiedenis gecorrigeerd naar dd-mm-yyyy',
-    ],
-  },
-  {
-    versie: '1.0.2',
-    datum: '2026-03-20',
-    wijzigingen: [
-      'Bronnen aangevuld: Handkenmerken voor Dummies (Klaasen, Sandifort & De Vries) en Demongin (2016)',
-    ],
-  },
   {
     versie: '1.0.1',
     datum: '2026-03-20',
     wijzigingen: [
-      'Bronnen aangevuld met auteurs, Griel-specificatie en Leaflet',
-      'Bronnen boven versiegeschiedenis geplaatst',
+      'Over-pagina: app-beschrijving herschreven en boven Maker geplaatst',
+      'Maker: ringernummer verwijderd, e-mailadres toegevoegd',
+      'Versienummer achter de paginatitel geplaatst',
+      'Bronnen aangevuld en gesorteerd: auteurs, Griel-specificatie, Handkenmerken, Demongin, Leaflet',
     ],
   },
   {
