@@ -1,6 +1,16 @@
-export const VERSIE = '1.0.9';
+export const VERSIE = '1.1.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.1.0',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Performance: React.lazy code-splitting — hoofdbundel 806 kB → 687 kB',
+      'Performance: Leaflet niet langer dubbel geladen (CDN verwijderd, alleen npm-bundel)',
+      'Performance: VangstKaart laadt Leaflet nu via dynamic import i.p.v. window.L',
+      'Performance: db.species.orderBy gebruikt index i.p.v. volledige tabel scan',
+    ],
+  },
   {
     versie: '1.0.9',
     datum: '2026-03-20',

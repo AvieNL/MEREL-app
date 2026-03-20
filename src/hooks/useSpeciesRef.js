@@ -15,7 +15,7 @@ export function useSpeciesRef() {
   const pulledRef = useRef(false);
 
   const species = useLiveQuery(
-    () => db.species.toArray(),
+    () => db.species.orderBy('naam_nl').toArray(),
     [],
     []
   ) ?? [];

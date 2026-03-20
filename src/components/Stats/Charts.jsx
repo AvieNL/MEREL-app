@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
 import { parseDate } from '../../utils/statsHelper';
 import { buildEersteVangstMap } from '../../utils/catchHelper';
+import 'leaflet/dist/leaflet.css';
 
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 
@@ -228,52 +229,60 @@ export function VangstKaart({ targetRecords, allRecords }) {
   }, [targetRecords, allRecords]);
 
   useEffect(() => {
-    if (!mapRef.current || !window.L || kaartData.markers.length === 0) return;
+    if (!mapRef.current || kaartData.markers.length === 0) return;
     if (mapInstanceRef.current) {
       mapInstanceRef.current.remove();
       mapInstanceRef.current = null;
     }
 
-    const L = window.L;
-    const map = L.map(mapRef.current, { scrollWheelZoom: false });
-    mapInstanceRef.current = map;
+    let destroyed = false;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap',
-      maxZoom: 18,
-    }).addTo(map);
+    import('leaflet').then(({ default: L }) => {
+      if (destroyed || !mapRef.current) return;
 
-    const bounds = [];
+      const map = L.map(mapRef.current, { scrollWheelZoom: false });
+      mapInstanceRef.current = map;
 
-    kaartData.markers.forEach(m => {
-      const color = m.isNieuw ? '#38bdf8' : '#22c55e';
-      const marker = L.circleMarker([m.lat, m.lon], {
-        radius: 6,
-        fillColor: color,
-        color: '#fff',
-        weight: 1,
-        fillOpacity: 0.8,
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap',
+        maxZoom: 18,
       }).addTo(map);
-      marker.bindPopup(`<b>${m.soort}</b><br>${m.ring}<br>${m.datum}`);
-      bounds.push([m.lat, m.lon]);
-    });
 
-    kaartData.lijnen.forEach(l => {
-      L.polyline([l.from, l.to], {
-        color: '#f97316',
-        weight: 2,
-        opacity: 0.7,
-        dashArray: '6 4',
-      }).addTo(map);
-    });
+      const bounds = [];
 
-    if (bounds.length > 0) {
-      map.fitBounds(bounds, { padding: [30, 30], maxZoom: 14 });
-    }
+      kaartData.markers.forEach(m => {
+        const color = m.isNieuw ? '#38bdf8' : '#22c55e';
+        const marker = L.circleMarker([m.lat, m.lon], {
+          radius: 6,
+          fillColor: color,
+          color: '#fff',
+          weight: 1,
+          fillOpacity: 0.8,
+        }).addTo(map);
+        marker.bindPopup(`<b>${m.soort}</b><br>${m.ring}<br>${m.datum}`);
+        bounds.push([m.lat, m.lon]);
+      });
+
+      kaartData.lijnen.forEach(l => {
+        L.polyline([l.from, l.to], {
+          color: '#f97316',
+          weight: 2,
+          opacity: 0.7,
+          dashArray: '6 4',
+        }).addTo(map);
+      });
+
+      if (bounds.length > 0) {
+        map.fitBounds(bounds, { padding: [30, 30], maxZoom: 14 });
+      }
+    });
 
     return () => {
-      map.remove();
-      mapInstanceRef.current = null;
+      destroyed = true;
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
     };
   }, [kaartData]);
 

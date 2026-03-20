@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -5,20 +6,21 @@ import { SyncProvider } from './context/SyncContext';
 import Header from './components/Layout/Header';
 import Navigation from './components/Layout/Navigation';
 import NieuwPage from './components/Nieuw/NieuwPage';
-import RecordsPage from './components/Records/RecordsPage';
-import StatsPage from './components/Stats/StatsPage';
-import ProjectDetail from './components/Stats/ProjectDetail';
-import SoortenOverzicht from './components/Stats/SoortenOverzicht';
-import SoortenPage from './components/Soorten/SoortenPage';
-import SoortDetail from './components/Soorten/SoortDetail';
-import DatabasesPage from './components/Databases/DatabasesPage';
-import OverPage from './components/Over/OverPage';
-import InstellingenPage from './components/Instellingen/InstellingenPage';
-import ProjectenPage from './components/Projecten/ProjectenPage';
-import RingstrengenPage from './components/Ringstreng/RingstrengenPage';
 import LoginPage from './components/Auth/LoginPage';
 import MigrationBanner from './components/Sync/MigrationBanner';
-import AdminPage from './components/Admin/AdminPage';
+
+const RecordsPage     = lazy(() => import('./components/Records/RecordsPage'));
+const StatsPage       = lazy(() => import('./components/Stats/StatsPage'));
+const ProjectDetail   = lazy(() => import('./components/Stats/ProjectDetail'));
+const SoortenOverzicht = lazy(() => import('./components/Stats/SoortenOverzicht'));
+const SoortenPage     = lazy(() => import('./components/Soorten/SoortenPage'));
+const SoortDetail     = lazy(() => import('./components/Soorten/SoortDetail'));
+const DatabasesPage   = lazy(() => import('./components/Databases/DatabasesPage'));
+const OverPage        = lazy(() => import('./components/Over/OverPage'));
+const InstellingenPage = lazy(() => import('./components/Instellingen/InstellingenPage'));
+const ProjectenPage   = lazy(() => import('./components/Projecten/ProjectenPage'));
+const RingstrengenPage = lazy(() => import('./components/Ringstreng/RingstrengenPage'));
+const AdminPage       = lazy(() => import('./components/Admin/AdminPage'));
 import { useRecords } from './hooks/useRecords';
 import { useProjects } from './hooks/useProjects';
 import { useSpeciesOverrides } from './hooks/useSpeciesOverrides';
@@ -120,6 +122,7 @@ function MainApp() {
       <Header />
       <MigrationBanner onComplete={() => {}} />
       <main className="app-content">
+        <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<NieuwPage />} />
           <Route path="/records" element={
@@ -163,6 +166,7 @@ function MainApp() {
           } />
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
+        </Suspense>
       </main>
       <Navigation />
     </div>
