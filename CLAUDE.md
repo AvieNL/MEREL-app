@@ -10,7 +10,7 @@ Ringernummer: 3254
 ## Tech stack
 - React 18 met Vite als bundler
 - Vanilla CSS met CSS custom properties (geen Tailwind)
-- localStorage voor data-opslag (geen backend)
+- Supabase als backend + localStorage/IndexedDB (Dexie) voor offline cache
 - Service Worker voor offline gebruik
 
 ## Projectstructuur
@@ -48,13 +48,12 @@ De export moet voldoen aan de Griel bulkupload specificatie:
 - Alle verplichte EURING-velden moeten aanwezig zijn
 
 ## Data
-- `data/species.json` - 580 Nederlandse vogelsoorten voor autocomplete
-- `data/euring-codes.json` - Soortcodes voor XML-export
-- `data/griel-import.json` - 436 bestaande vangsten uit Griel-export
+- Soorten (~3565) komen uit Supabase (`species` tabel), offline gecached in Dexie. Inclusief EURING-codes, namen, ringmaat, ruitype, nestdata, boeken en biometrie.
+- `data/griel-import.json` - 436 bestaande vangsten uit Griel-export (eenmalige historische import)
 
 ## Soortenpagina's
 De app heeft een "Soorten" pagina met voor elke vogelsoort een detailpagina.
-Data komt uit `data/species-reference.json` (580 soorten, geëxporteerd uit de VRS spreadsheet).
+Data komt uitsluitend uit Supabase (via `useSpeciesRef` hook → Dexie cache).
 
 Elke soortpagina toont:
 - Namen (NL, Latijn, Engels, Duits)
