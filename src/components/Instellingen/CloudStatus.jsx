@@ -1,22 +1,53 @@
 import { useState, useEffect } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { useAuth } from '../../context/AuthContext';
+import { useSync } from '../../context/SyncContext';
+import { db } from '../../lib/db';
 import { supabase } from '../../lib/supabase';
+import { formatDatum } from '../../utils/dateHelper';
 
+function fmtTijd(date) {
+  if (!date) return '—';
+  const tijd = date.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+  const isVandaag = date.toDateString() === new Date().toDateString();
+  return isVandaag ? `vandaag ${tijd}` : `${formatDatum(date.toISOString().slice(0, 10))} ${tijd}`;
+}
 
 export default function CloudStatus() {
   const { user } = useAuth();
-  const [counts, setCounts] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { pendingCount, syncError, lastSynced, isOnline } = useSync();
+  const [online, setOnline] = useState(null);
+  const [loadingOnline, setLoadingOnline] = useState(true);
+  const [onlineError, setOnlineError] = useState('');
+  const [lastPull, setLastPull] = useState(null);
+
+  // Lokale tellingen — reactief via Dexie
+  const lokaalVangsten = useLiveQuery(
+    () => user ? db.vangsten.where('user_id').equals(user.id).filter(r => !r.deleted_at).count() : 0,
+    [user?.id], 0
+  ) ?? 0;
+  const lokaalVerwijderd = useLiveQuery(
+    () => user ? db.vangsten.where('user_id').equals(user.id).filter(r => !!r.deleted_at).count() : 0,
+    [user?.id], 0
+  ) ?? 0;
+  const lokaalProjecten = useLiveQuery(
+    () => user ? db.projecten.where('user_id').equals(user.id).count() : 0,
+    [user?.id], 0
+  ) ?? 0;
+  const lokaalRingstrengen = useLiveQuery(
+    () => user ? db.ringstrengen.where('user_id').equals(user.id).count() : 0,
+    [user?.id], 0
+  ) ?? 0;
 
   useEffect(() => {
     if (!user) return;
-    loadCounts();
-  }, [user]);
+    laadOnline();
+    laadLastPull();
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  async function loadCounts() {
-    setLoading(true);
-    setError('');
+  async function laadOnline() {
+    setLoadingOnline(true);
+    setOnlineError('');
     try {
       const [vangsten, projecten, ringstrengen] = await Promise.all([
         supabase.from('vangsten').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
@@ -24,52 +55,88 @@ export default function CloudStatus() {
         supabase.from('ringstrengen').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
       ]);
       if (vangsten.error) throw vangsten.error;
-      setCounts({
+      setOnline({
         vangsten: vangsten.count ?? 0,
         projecten: projecten.count ?? 0,
         ringstrengen: ringstrengen.count ?? 0,
       });
-    } catch (err) {
-      setError('Kon clouddata niet ophalen: ' + err.message);
+    } catch {
+      setOnlineError('Kon clouddata niet ophalen');
     } finally {
-      setLoading(false);
+      setLoadingOnline(false);
     }
   }
+
+  async function laadLastPull() {
+    const meta = await db.meta.get(`last_pull_vangsten_${user.id}`);
+    if (meta?.value) setLastPull(new Date(meta.value));
+  }
+
+  function vernieuwen() {
+    laadOnline();
+    laadLastPull();
+  }
+
+  const tabelRijen = [
+    { label: 'Vangsten',     lokaal: lokaalVangsten,    online: online?.vangsten },
+    { label: 'In prullenbak',lokaal: lokaalVerwijderd,  online: null, sub: true },
+    { label: 'Projecten',    lokaal: lokaalProjecten,   online: online?.projecten },
+    { label: 'Ringstrengen', lokaal: lokaalRingstrengen,online: online?.ringstrengen },
+  ];
+
+  const fout = syncError || onlineError;
 
   return (
     <div className="cloud-status">
       <div className="cloud-status__header">
-        <div className="cloud-status__dot cloud-status__dot--online" />
-        <span className="cloud-status__label">Verbonden met Supabase</span>
-        <button className="cloud-status__refresh" onClick={loadCounts} title="Vernieuwen">
-          ↻
-        </button>
+        <div className={`cloud-status__dot cloud-status__dot--${isOnline ? 'online' : 'offline'}`} />
+        <span className={`cloud-status__label cloud-status__label--${isOnline ? 'online' : 'offline'}`}>
+          {isOnline ? 'Verbonden' : 'Offline'}
+        </span>
+        <button className="cloud-status__refresh" onClick={vernieuwen} title="Vernieuwen">↻</button>
       </div>
 
-      {loading && (
-        <div className="cloud-status__loading">Tellen...</div>
-      )}
+      <table className="cloud-status__table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Lokaal</th>
+            <th>Online</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tabelRijen.map(rij => (
+            <tr key={rij.label} className={rij.sub ? 'cloud-status__row--sub' : ''}>
+              <td>{rij.label}</td>
+              <td>{rij.lokaal}</td>
+              <td>
+                {rij.online !== null && rij.online !== undefined
+                  ? (loadingOnline ? '…' : rij.online)
+                  : '—'}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-      {error && (
-        <div className="cloud-status__error">{error}</div>
-      )}
-
-      {counts && !loading && (
-        <div className="cloud-status__counts">
-          <div className="cloud-status__count-item">
-            <span className="cloud-status__count-num">{counts.vangsten}</span>
-            <span className="cloud-status__count-label">vangsten</span>
-          </div>
-          <div className="cloud-status__count-item">
-            <span className="cloud-status__count-num">{counts.projecten}</span>
-            <span className="cloud-status__count-label">projecten</span>
-          </div>
-          <div className="cloud-status__count-item">
-            <span className="cloud-status__count-num">{counts.ringstrengen}</span>
-            <span className="cloud-status__count-label">ringstrengen</span>
-          </div>
+      <div className="cloud-status__tijden">
+        <div className="cloud-status__tijd-rij">
+          <span>Laatste pull</span>
+          <span>{fmtTijd(lastPull)}</span>
         </div>
-      )}
+        <div className="cloud-status__tijd-rij">
+          <span>Laatste sync</span>
+          <span>{fmtTijd(lastSynced)}</span>
+        </div>
+        {pendingCount > 0 && (
+          <div className="cloud-status__tijd-rij cloud-status__pending">
+            <span>Wacht op versturen</span>
+            <span>{pendingCount} wijziging{pendingCount !== 1 ? 'en' : ''}</span>
+          </div>
+        )}
+      </div>
+
+      {fout && <div className="cloud-status__error">{fout}</div>}
     </div>
   );
 }
