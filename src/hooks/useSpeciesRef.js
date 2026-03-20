@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../lib/db';
 import { supabase } from '../lib/supabase';
@@ -25,20 +25,14 @@ export function useSpeciesError() {
  * Geeft alle soorten terug uit de lokale Dexie-cache (offline-first).
  * Pull van Supabase als de cache leeg is of ouder dan 24 uur.
  */
+// Pull wordt getriggerd door SyncContext (bij inloggen en app-heractivering).
+// useSpeciesRef leest alleen uit de lokale Dexie-cache.
 export function useSpeciesRef() {
-  const pulledRef = useRef(false);
-
   const species = useLiveQuery(
     () => db.species.orderBy('naam_nl').toArray(),
     [],
     []
   ) ?? [];
-
-  useEffect(() => {
-    if (pulledRef.current) return;
-    pulledRef.current = true;
-    pullIfNeeded();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return species;
 }
@@ -97,8 +91,4 @@ export async function pullSpeciesIfNeeded(force = false) {
   } finally {
     _pulling = false;
   }
-}
-
-async function pullIfNeeded() {
-  await pullSpeciesIfNeeded(false);
 }

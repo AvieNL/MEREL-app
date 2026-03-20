@@ -56,14 +56,18 @@ export function SyncProvider({ children }) {
     };
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Bij (her)inloggen: pending count ophalen en wachtrij verwerken
+  // Bij (her)inloggen: pending count ophalen, wachtrij verwerken en referentiedata refreshen
   useEffect(() => {
     if (!user) {
       setPendingCount(0);
       return;
     }
     refreshPendingCount();
-    if (navigator.onLine) processQueue();
+    if (navigator.onLine) {
+      processQueue();
+      pullSpeciesIfNeeded(false).catch(e => console.warn('Species pull mislukt:', e.message));
+      pullVeldConfigIfNeeded(false).catch(e => console.warn('VeldConfig pull mislukt:', e.message));
+    }
   }, [user]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   // App wordt weer actief (bijv. terugkomen van achtergrond): sync uitvoeren

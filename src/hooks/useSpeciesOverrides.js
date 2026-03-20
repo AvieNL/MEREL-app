@@ -94,6 +94,18 @@ export function useSpeciesOverrides() {
     });
   }, [user, overrides, addToQueue]);
 
+  /**
+   * Geeft de samengevoegde soortdata terug voor weergave en validatie.
+   *
+   * Merge-prioriteit (laag → hoog):
+   *   1. defaultSoort  — admin-invoer uit de `species`-tabel (literatuurdata)
+   *   2. override      — gebruikersspecifieke aanpassingen uit `species_overrides`
+   *   3. boeken        — aparte merge: literatuurboeken worden uitgebreid met
+   *                      gebruikerstoevoegingen (beide bronnen blijven bewaard)
+   *
+   * Resultaat: gebruiker ziet altijd zijn eigen aanpassingen,
+   * maar valt terug op admin-data waar geen override bestaat.
+   */
   const getMerged = useCallback((naam, defaultSoort) => {
     const override = overrides[naam] || {};
     const mergedBoeken = defaultSoort.boeken || override.boeken

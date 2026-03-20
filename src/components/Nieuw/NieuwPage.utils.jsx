@@ -1,4 +1,4 @@
-import { parseVal } from '../../utils/bioHelper';
+export { computeBioRanges as computeRanges } from '../../utils/bioHelper';
 
 // Fuzzy match: all characters of query must appear in order in target
 // Returns score (lower = better) or -1 if no match
@@ -30,36 +30,3 @@ export function renderGeslachtTekst(str) {
   });
 }
 
-// Bereken min/max ranges uit vangstrecords per biometrie-veld (min 3 records, +10% marge)
-export function computeRanges(soortRecords) {
-  const fields = [
-    { key: 'vleugel',       label: 'Vleugel' },
-    { key: 'handpenlengte', label: 'P8' },
-    { key: 'staartlengte',  label: 'Staart' },
-    { key: 'kop_snavel',    label: 'Snavel-veer' },
-    { key: 'snavel_schedel',label: 'Snavel-schedel' },
-    { key: 'tarsus_lengte', label: 'Tarsus' },
-    { key: 'tarsus_dikte',  label: 'Tarsus dikte' },
-    { key: 'gewicht',       label: 'Gewicht' },
-  ];
-  const ranges = {};
-  for (const f of fields) {
-    const vals = soortRecords
-      .map(r => parseVal(r[f.key]))
-      .filter(v => !isNaN(v) && v > 0);
-    if (vals.length >= 3) {
-      const min = Math.min(...vals);
-      const max = Math.max(...vals);
-      const margin = (max - min) * 0.1 || min * 0.1;
-      ranges[f.key] = {
-        label: f.label,
-        min: min,
-        max: max,
-        rangeMin: +(min - margin).toFixed(1),
-        rangeMax: +(max + margin).toFixed(1),
-        n: vals.length,
-      };
-    }
-  }
-  return ranges;
-}

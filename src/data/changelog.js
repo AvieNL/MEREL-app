@@ -1,6 +1,16 @@
-export const VERSIE = '1.1.3';
+export const VERSIE = '1.1.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.1.4',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Refactor: SoortDetail opgesplitst — editor-modus in SoortDetailEditor.jsx (1022 → 712 regels)',
+      'Refactor: computeBioRanges gecentraliseerd in utils/bioHelper.js — NieuwPage en SoortDetail gebruiken dezelfde logica',
+      'Refactor: species-pull gecentraliseerd in SyncContext — useSpeciesRef leest alleen nog uit de lokale cache',
+      'Docs: merge-prioriteit gedocumenteerd in useSpeciesOverrides.getMerged()',
+    ],
+  },
   {
     versie: '1.1.3',
     datum: '2026-03-20',
