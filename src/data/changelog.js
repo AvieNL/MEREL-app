@@ -1,6 +1,15 @@
-export const VERSIE = '1.1.1';
+export const VERSIE = '1.1.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.1.2',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'PWA: PNG-iconen gegenereerd (192×192 en 512×512) — manifest verwees naar ontbrekende bestanden',
+      'PWA: maskable icon toegevoegd voor betere weergave op Android',
+      'PWA: shortcuts toegevoegd (Nieuwe vangst, Vangsten, Statistieken) voor snelle toegang vanuit het homescreen',
+    ],
+  },
   {
     versie: '1.1.1',
     datum: '2026-03-20',
