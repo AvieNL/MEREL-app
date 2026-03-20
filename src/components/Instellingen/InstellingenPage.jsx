@@ -1,37 +1,15 @@
 import { useState } from 'react';
-import { useTheme } from '../../hooks/useTheme';
 import { useSync } from '../../context/SyncContext';
 import CloudStatus from './CloudStatus';
 import './InstellingenPage.css';
 
 export default function InstellingenPage({ settings, onUpdateSettings, onFullResync }) {
-  const { mode, setMode } = useTheme();
   const { processQueue, syncing, pendingCount, isOnline, lastSynced } = useSync();
   const [resyncing, setResyncing] = useState(false);
 
   return (
     <div className="page instellingen-page">
       <h2>Instellingen</h2>
-
-      <div className="section">
-        <h3>Thema</h3>
-        <div className="section-content">
-          <div className="mode-toggle">
-            <button
-              className={`mode-btn${mode === 'donker' ? ' active' : ''}`}
-              onClick={() => setMode('donker')}
-            >
-              Donker
-            </button>
-            <button
-              className={`mode-btn${mode === 'licht' ? ' active' : ''}`}
-              onClick={() => setMode('licht')}
-            >
-              Licht
-            </button>
-          </div>
-        </div>
-      </div>
 
       <div className="section">
         <h3>Hulpweergave</h3>

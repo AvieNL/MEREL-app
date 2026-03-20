@@ -62,10 +62,11 @@ export default function Header() {
         <div className="header-menu" ref={menuRef}>
           <button
             className="theme-toggle-btn"
-            onClick={() => setMode(mode === 'donker' ? 'licht' : 'donker')}
-            aria-label={mode === 'donker' ? 'Naar licht thema' : 'Naar donker thema'}
+            onClick={() => setMode({ donker: 'licht', licht: 'systeem', systeem: 'donker' }[mode] || 'donker')}
+            aria-label={{ donker: 'Naar licht thema', licht: 'Naar systeemthema', systeem: 'Naar donker thema' }[mode]}
+            title={{ donker: 'Licht', licht: 'Systeem', systeem: 'Donker' }[mode]}
           >
-            {mode === 'donker' ? '☀' : '☾'}
+            {{ donker: '☀', licht: '◑', systeem: '☾' }[mode] || '☾'}
           </button>
           <button
             className={`hamburger-btn${isSimulating ? ' hamburger-btn--simulating' : ''}`}
