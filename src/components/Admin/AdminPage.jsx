@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
 import { supabase } from '../../lib/supabase';
-import { seedVeldConfig } from '../../utils/seedVeldConfig';
 import { getRuitypenConfig, saveRuitypenConfig, RUITYPE_TYPES, DEFAULT_RUITYPE_CONFIG } from '../../hooks/useRuitypen';
 import './AdminPage.css';
 
@@ -18,8 +17,6 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [savingId, setSavingId] = useState(null);
-  const [seeding, setSeeding] = useState(false);
-  const [seedDone, setSeedDone] = useState(false);
   const [ruitypen, setRuitypen] = useState(() => getRuitypenConfig());
   const [ruiSaved, setRuiSaved] = useState(false);
 
@@ -98,20 +95,6 @@ export default function AdminPage() {
     setLoading(false);
   }
 
-  async function handleSeed() {
-    setSeeding(true);
-    setSeedDone(false);
-    setError('');
-    try {
-      await seedVeldConfig();
-      setSeedDone(true);
-    } catch (e) {
-      setError('Seed mislukt: ' + e.message);
-    } finally {
-      setSeeding(false);
-    }
-  }
-
   async function changeRol(profileId, newRol) {
     if (profileId === user.id) return; // Admin mag eigen rol niet wijzigen
     setSavingId(profileId);
@@ -132,10 +115,6 @@ export default function AdminPage() {
   return (
     <div className="page admin-page">
       <h2>Admin panel</h2>
-
-      <button className="admin-link-btn" onClick={() => navigate('/velden')}>
-        📋 Veldenoverzicht (EURING)
-      </button>
 
       {loading && <div className="admin-status">Gebruikers laden...</div>}
 
@@ -210,30 +189,6 @@ export default function AdminPage() {
                 <strong>Viewer</strong> — kan data alleen bekijken, niet bewerken.<br />
                 <strong>Admin</strong> — volledige toegang inclusief dit panel.
               </p>
-            </div>
-          </div>
-
-          <div className="section">
-            <h3>Veldconfiguratie</h3>
-            <div className="section-content">
-              <p className="admin-hint">
-                Vul de <code>veld_config</code>-tabel in Supabase met de standaard EURING-velddefinities.
-                Voer dit eenmalig uit na het aanmaken van de tabel. Daarna kun je via het{' '}
-                <button className="admin-link-btn admin-link-btn--inline" onClick={() => navigate('/velden')}>
-                  Veldenoverzicht
-                </button>{' '}
-                individuele velden en codes aanpassen.
-              </p>
-              <button
-                className="admin-btn"
-                onClick={handleSeed}
-                disabled={seeding || !navigator.onLine}
-              >
-                {seeding ? 'Bezig met seeden...' : 'Seed veldconfiguratie'}
-              </button>
-              {seedDone && (
-                <p className="admin-success">Veldconfiguratie succesvol geseed.</p>
-              )}
             </div>
           </div>
 
