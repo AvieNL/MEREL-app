@@ -52,3 +52,32 @@
   left: 0;
   color: var(--accent, #38bdf8);
 }
+
+.over-changelog {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.over-changelog-entry {
+  border-left: 2px solid var(--accent, #38bdf8);
+  padding-left: 0.75rem;
+}
+
+.over-changelog-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.over-changelog-versie {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.over-changelog-datum {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
