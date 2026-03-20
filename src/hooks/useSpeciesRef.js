@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../lib/db';
+import { fetchAllPages } from '../utils/supabaseHelper';
 import { supabase } from '../lib/supabase';
 import { PULL_INTERVAL_MS } from '../data/constants';
 
@@ -57,23 +58,15 @@ export async function pullSpeciesIfNeeded(force = false) {
     }
 
     // Gepagineerd ophalen (Supabase max 1000 rijen per request)
-    const PAGE = 1000;
-    let offset = 0;
-    let allData = [];
-    while (true) {
-      const { data, error } = await supabase
-        .from('species')
-        .select('naam_nl, data')
-        .range(offset, offset + PAGE - 1);
-      if (error) {
-        console.error('Soorten ophalen mislukt:', error.message);
-        setSpeciesError('Soorten konden niet worden opgehaald. Controleer je verbinding.');
-        return;
-      }
-      if (!data || data.length === 0) break;
-      allData = allData.concat(data);
-      if (data.length < PAGE) break;
-      offset += PAGE;
+    let allData;
+    try {
+      allData = await fetchAllPages((from, to) =>
+        supabase.from('species').select('naam_nl, data').range(from, to)
+      );
+    } catch (err) {
+      console.error('Soorten ophalen mislukt:', err.message);
+      setSpeciesError('Soorten konden niet worden opgehaald. Controleer je verbinding.');
+      return;
     }
 
     if (allData.length === 0) return;

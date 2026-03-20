@@ -283,6 +283,14 @@
   color: var(--warning) !important;
 }
 
+.cloud-status__storage--vol {
+  color: var(--warning) !important;
+}
+
+.cloud-status__storage--vol span:last-child {
+  color: var(--warning) !important;
+}
+
 .sync-force-btn {
   font-size: 0.85rem;
   padding: 8px 14px;

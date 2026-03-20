@@ -151,6 +151,9 @@ export default function SoortenPage({ records }) {
         {filtered.length} van {soorten.length} soorten
       </div>
 
+      {filtered.length === 0 && (
+        <p className="soorten-leeg">Geen soorten gevonden voor "{zoek}".</p>
+      )}
       <div className="soorten-list">
         {filtered.map(s => {
           const count = countPerSoort[s.naam_nl.toLowerCase()] || 0;

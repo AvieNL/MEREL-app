@@ -157,3 +157,10 @@
   color: var(--text-muted);
   padding-bottom: 6px;
 }
+
+.soorten-leeg {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 24px 0;
+  text-align: center;
+}

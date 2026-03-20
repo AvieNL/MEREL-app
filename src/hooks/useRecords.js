@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { generateId } from '../utils/storage';
 import { db } from '../lib/db';
 import { supabase } from '../lib/supabase';
+import { fetchAllPages } from '../utils/supabaseHelper';
 import { toVangstRow, fromVangstRow } from '../utils/supabase-helpers';
 import { toYMD } from '../utils/dateHelper';
 import { useAuth } from '../context/AuthContext';
@@ -65,32 +66,21 @@ export function useRecords() {
     const lastPull = meta?.value;
 
     // Pagineer: haal max 1000 records per request op tot alles binnen is
-    const PAGE = 1000;
-    let from = 0;
-    let allRows = [];
-
-    while (true) {
-      let query = supabase
-        .from('vangsten')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('updated_at', { ascending: false })
-        .range(from, from + PAGE - 1);
-
-      if (localCount > 0 && lastPull) {
-        query = query.gt('updated_at', lastPull);
-      }
-
-      const { data, error } = await query;
-      if (error) {
-        console.error('Pull vangsten mislukt:', error.message);
-        return;
-      }
-      if (!data || data.length === 0) break;
-
-      allRows = allRows.concat(data);
-      if (data.length < PAGE) break;
-      from += PAGE;
+    let allRows;
+    try {
+      allRows = await fetchAllPages((from, to) => {
+        let q = supabase
+          .from('vangsten')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('updated_at', { ascending: false })
+          .range(from, to);
+        if (localCount > 0 && lastPull) q = q.gt('updated_at', lastPull);
+        return q;
+      });
+    } catch (err) {
+      console.error('Pull vangsten mislukt:', err.message);
+      return;
     }
 
     if (allRows.length === 0) return;

@@ -11,13 +11,14 @@ import {
   ALL_RINGCENTRALES,
   EMPTY_FORM, REQUIRED_FIELDS,
 } from './NieuwPage.constants';
-import { fuzzyMatch, computeRanges } from './NieuwPage.utils';
+import { fuzzyMatch } from './NieuwPage.utils';
 import { RUIKAART_SLAGEN } from '../../data/constants';
 import { useRecords } from '../../hooks/useRecords';
 import { useProjects } from '../../hooks/useProjects';
 import { useSpeciesOverrides } from '../../hooks/useSpeciesOverrides';
 import { useSettings } from '../../hooks/useSettings';
 import { useRingStrengen } from '../../hooks/useRingStrengen';
+import { useBioRanges } from '../../hooks/useBioRanges';
 import { NieuwFormContext } from './NieuwFormContext';
 import SectieSoort from './SectieSoort';
 import SectieProject from './SectieProject';
@@ -147,7 +148,7 @@ export default function NieuwPage() {
   const [saved, setSaved] = useState(false);
   const [ruikaart, setRuikaart] = useState(Array(RUIKAART_SLAGEN).fill(''));
 
-  function updateRuikaart(index, value) {
+  const updateRuikaart = useCallback((index, value) => {
     // Laatste veld (19) = L/R, rest alleen 0-5
     if (index === 19) {
       if (value !== '' && !/^[LRlr]$/.test(value)) return;
@@ -155,24 +156,26 @@ export default function NieuwPage() {
     } else {
       if (value !== '' && !/^[0-5]$/.test(value)) return;
     }
-    const next = [...ruikaart];
-    next[index] = value;
-    setRuikaart(next);
-    // Auto-sum primaries (index 9-18) naar handpen_score
-    const hasAnyPrimary = next.slice(9, 19).some(v => v !== '');
-    if (hasAnyPrimary) {
-      const primSum = next.slice(9, 19).reduce((sum, v) => sum + (parseInt(v) || 0), 0);
-      update('handpen_score', String(primSum));
-    }
+    setRuikaart(prev => {
+      const next = [...prev];
+      next[index] = value;
+      // Auto-sum primaries (index 9-18) naar handpen_score
+      const hasAnyPrimary = next.slice(9, 19).some(v => v !== '');
+      if (hasAnyPrimary) {
+        const primSum = next.slice(9, 19).reduce((sum, v) => sum + (parseInt(v) || 0), 0);
+        update('handpen_score', String(primSum));
+      }
+      return next;
+    });
     // Auto-advance naar volgend veld bij geldig karakter
     if (value !== '' && index < 19) {
       document.querySelector(`[data-rui="${index + 1}"]`)?.focus();
     }
-  }
+  }, [update]);
 
-  function resetRuikaart() {
+  const resetRuikaart = useCallback(() => {
     setRuikaart(Array(RUIKAART_SLAGEN).fill(''));
-  }
+  }, []);
 
   // Find species reference data for selected species
   const speciesInfo = useMemo(() => {
@@ -200,137 +203,10 @@ export default function NieuwPage() {
     return euringLookup[form.vogelnaam.toLowerCase()] || '';
   }, [form.vogelnaam, soortOverride, euringLookup]);
 
-  // Compute biometry ranges from existing records for selected species
-  const bioRangesFromRecords = useMemo(() => {
-    if (!form.vogelnaam) return {};
-    const lower = form.vogelnaam.toLowerCase();
-    const soortRecords = records.filter(
-      r => r.vogelnaam && r.vogelnaam.toLowerCase() === lower && r.leeftijd !== '1'
-    );
-    return computeRanges(soortRecords);
-  }, [form.vogelnaam, records]);
+  const { bioRangesFromRecords, bioRanges, bioGenderRanges, genderHint, warnings } =
+    useBioRanges(form.vogelnaam, speciesInfo, soortOverride, records, form);
 
-  // Merge: literatuur > gebruikersoverride > eigen vangsten
-  const bioRanges = useMemo(() => {
-    const BIO_KEYS = [
-      { key: 'vleugel',       label: 'Vleugel' },
-      { key: 'handpenlengte', label: 'P8' },
-      { key: 'staartlengte',  label: 'Staart' },
-      { key: 'kop_snavel',    label: 'Snavel-veer' },
-      { key: 'snavel_schedel',label: 'Snavel-schedel' },
-      { key: 'tarsus_lengte', label: 'Tarsus' },
-      { key: 'tarsus_dikte',  label: 'Tarsus dikte' },
-      { key: 'gewicht',       label: 'Gewicht' },
-    ];
-    const merged = {};
-    for (const f of BIO_KEYS) {
-      const baseMin = parseVal(speciesInfo?.[`bio_${f.key}_min`]);
-      const baseMax = parseVal(speciesInfo?.[`bio_${f.key}_max`]);
-      const ovMin   = parseVal(soortOverride[`bio_${f.key}_min`]);
-      const ovMax   = parseVal(soortOverride[`bio_${f.key}_max`]);
-      const fromRec = bioRangesFromRecords[f.key];
-
-      // Soortdata: speciesInfo (species-tabel) heeft prioriteit, soortOverride als fallback
-      const litMin = !isNaN(baseMin) ? baseMin : ovMin;
-      const litMax = !isNaN(baseMax) ? baseMax : ovMax;
-
-      if (!isNaN(litMin) && !isNaN(litMax)) {
-        // 1+2. Soortendata (literatuur of override — beide admin-ingevoerd)
-        merged[f.key] = { label: f.label, min: litMin, max: litMax, rangeMin: litMin, rangeMax: litMax, source: 'soortendata' };
-      } else if (fromRec) {
-        // 3. Eigen vangsten (10% marge)
-        const margin = (fromRec.max - fromRec.min) * 0.1 || fromRec.min * 0.1;
-        merged[f.key] = {
-          label: f.label, min: fromRec.min, max: fromRec.max,
-          rangeMin: +(fromRec.min - margin).toFixed(1),
-          rangeMax: +(fromRec.max + margin).toFixed(1),
-          source: 'vangsten',
-        };
-      }
-    }
-    return merged;
-  }, [bioRangesFromRecords, soortOverride, speciesInfo]);
-
-  // Geslachtsspecifieke bereiken vanuit soortdata + overrides
-  const bioGenderRanges = useMemo(() => {
-    const BIO_KEYS = ['vleugel', 'gewicht', 'handpenlengte', 'staartlengte', 'kop_snavel', 'tarsus_lengte', 'tarsus_dikte', 'snavel_schedel'];
-    const result = { M: {}, F: {} };
-    for (const gender of ['M', 'F']) {
-      for (const key of BIO_KEYS) {
-        // Override heeft prioriteit boven basisdata
-        const ovMin = parseVal(soortOverride[`bio_${key}_${gender}_min`]);
-        const ovMax = parseVal(soortOverride[`bio_${key}_${gender}_max`]);
-        const baseMin = parseVal(speciesInfo?.[`bio_${key}_${gender}_min`]);
-        const baseMax = parseVal(speciesInfo?.[`bio_${key}_${gender}_max`]);
-        const min = !isNaN(ovMin) ? ovMin : (!isNaN(baseMin) ? baseMin : NaN);
-        const max = !isNaN(ovMax) ? ovMax : (!isNaN(baseMax) ? baseMax : NaN);
-        if (!isNaN(min) && !isNaN(max)) {
-          // Kleine marge (5%) om grensgevallen niet te snel uit te sluiten
-          const margin = (max - min) * 0.05 || Math.abs(min) * 0.02;
-          result[gender][key] = {
-            min, max,
-            rangeMin: +(min - margin).toFixed(1),
-            rangeMax: +(max + margin).toFixed(1),
-          };
-        }
-      }
-    }
-    return result;
-  }, [soortOverride, speciesInfo]);
-
-  // Geslachtshint op basis van biometrie
-  const genderHint = useMemo(() => {
-    const mR = bioGenderRanges.M;
-    const fR = bioGenderRanges.F;
-    // Alleen zinvol als er velden zijn met zowel M- als F-bereik
-    const dualFields = Object.keys(mR).filter(k => fR[k]);
-    if (dualFields.length === 0) return null;
-
-    let mScore = 0; // velden die duidelijk op ♂ wijzen
-    let fScore = 0; // velden die duidelijk op ♀ wijzen
-    let checked = 0;
-
-    for (const key of dualFields) {
-      const val = parseVal(form[key]);
-      if (isNaN(val) || val <= 0) continue;
-      const inM = val >= mR[key].rangeMin && val <= mR[key].rangeMax;
-      const inF = val >= fR[key].rangeMin && val <= fR[key].rangeMax;
-      checked++;
-      if (inM && !inF) mScore++;
-      else if (inF && !inM) fScore++;
-    }
-
-    if (checked === 0) return null;
-    // Suggereer geslacht als alle bekeken velden in dezelfde richting wijzen,
-    // of als de meerderheid (≥ 2 velden) duidelijk één kant op wijst
-    if (mScore > 0 && fScore === 0) return 'M';
-    if (fScore > 0 && mScore === 0) return 'F';
-    if (mScore >= 2 && mScore > fScore * 2) return 'M';
-    if (fScore >= 2 && fScore > mScore * 2) return 'F';
-    return null;
-  }, [form, bioGenderRanges]);
-
-  // Check current form values against ranges
-  const warnings = useMemo(() => {
-    const w = [];
-    for (const [key, range] of Object.entries(bioRanges)) {
-      const val = parseVal(form[key]);
-      if (!isNaN(val) && val > 0) {
-        if (val < range.rangeMin || val > range.rangeMax) {
-          w.push({
-            key,
-            label: range.label,
-            value: val,
-            min: range.rangeMin,
-            max: range.rangeMax,
-          });
-        }
-      }
-    }
-    return w;
-  }, [form, bioRanges]);
-
-  function update(field, value) {
+  const update = useCallback((field, value) => {
     setForm(prev => {
       const next = { ...prev, [field]: value };
       if (field === 'leeftijd' && value !== '1') {
@@ -341,7 +217,7 @@ export default function NieuwPage() {
       return next;
     });
     setFormErrors(prev => prev.filter(f => f.key !== field));
-  }
+  }, []);
 
   // Auto-vul locatie vanuit project als dat een vaste locatie heeft
   useEffect(() => {
@@ -432,12 +308,14 @@ export default function NieuwPage() {
     return results.slice(0, 10);
   }, [recentSet, speciesData]);
 
-  function handleSpeciesInput(value) {
+  const handleSpeciesInput = useCallback((value) => {
     update('vogelnaam', value);
+    clearTimeout(searchDebounceRef.current);
     if (value.length >= 2) {
-      setSuggestions(searchSpecies(value));
+      searchDebounceRef.current = setTimeout(() => {
+        setSuggestions(searchSpecies(value));
+      }, 150);
     } else if (value.length === 0) {
-      // Show recent species when input is empty
       if (recentSpecies.length > 0) {
         setSuggestions(recentSpecies.slice(0, 8).map(name => ({
           naam_nl: name,
@@ -452,9 +330,9 @@ export default function NieuwPage() {
     } else {
       setSuggestions([]);
     }
-  }
+  }, [update, searchSpecies, recentSpecies]);
 
-  function handleSpeciesFocus() {
+  const handleSpeciesFocus = useCallback(() => {
     if (programmaticFocus.current) {
       programmaticFocus.current = false;
       return;
@@ -468,16 +346,16 @@ export default function NieuwPage() {
         isRecent: true,
       })));
     }
-  }
+  }, [form.vogelnaam, recentSpecies]);
 
-  function selectSpecies(name) {
+  const selectSpecies = useCallback((name) => {
     update('vogelnaam', name);
     setSuggestions([]);
-  }
+  }, [update]);
 
-  function toggleSection(key) {
+  const toggleSection = useCallback((key) => {
     setSections(prev => ({ ...prev, [key]: !prev[key] }));
-  }
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -630,6 +508,7 @@ export default function NieuwPage() {
   const autoFilledRingId = useRef(null);
   const vogelnaamRef = useRef(null);
   const programmaticFocus = useRef(false);
+  const searchDebounceRef = useRef(null);
 
   // Auto-invullen ringnummer op basis van ringmaat van de geselecteerde soort
   useEffect(() => {
@@ -681,13 +560,12 @@ export default function NieuwPage() {
     };
   }, [isTerugvangst, form.ringnummer, records]);
 
-  function toggleTerugvangst() {
-    if (isTerugvangst) {
-      setForm(prev => ({ ...prev, metalenringinfo: 2, centrale: 'NLA', omstandigheden: '20' }));
-    } else {
-      setForm(prev => ({ ...prev, metalenringinfo: 4, omstandigheden: '20', ringnummer: '' }));
-    }
-  }
+  const toggleTerugvangst = useCallback(() => {
+    setForm(prev => prev.metalenringinfo === 4
+      ? { ...prev, metalenringinfo: 2, centrale: 'NLA', omstandigheden: '20' }
+      : { ...prev, metalenringinfo: 4, omstandigheden: '20', ringnummer: '' }
+    );
+  }, []);
 
   const contextValue = {
     form,

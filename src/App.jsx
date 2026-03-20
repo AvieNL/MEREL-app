@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SyncProvider } from './context/SyncContext';
+import ErrorBoundary from './components/ErrorBoundary';
+import { ToastProvider } from './context/ToastContext';
+import ToastContainer from './components/Toast/ToastContainer';
 import Header from './components/Layout/Header';
 import Navigation from './components/Layout/Navigation';
 import NieuwPage from './components/Nieuw/NieuwPage';
@@ -64,14 +67,19 @@ function UpdateBanner() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <SyncProvider>
-        <BrowserRouter>
-          <UpdateBanner />
-          <AppShell />
-        </BrowserRouter>
-      </SyncProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <ToastProvider>
+        <AuthProvider>
+          <SyncProvider>
+            <BrowserRouter>
+              <UpdateBanner />
+              <AppShell />
+              <ToastContainer />
+            </BrowserRouter>
+          </SyncProvider>
+        </AuthProvider>
+      </ToastProvider>
+    </ErrorBoundary>
   );
 }
 

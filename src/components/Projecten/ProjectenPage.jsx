@@ -399,6 +399,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                                     className="project-member-remove"
                                     onClick={() => removeEditMember(p.id, m.user_id)}
                                     title="Verwijderen"
+                                    aria-label="Lid verwijderen"
                                   >✕</button>
                                 </span>
                               )}
@@ -481,7 +482,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                             <button className="project-icoon" onClick={() => startEdit(p)} title="Bewerken">✎</button>
                           )}
                           {canDelete && isOwn && (
-                            <button className="project-icoon project-icoon--delete" onClick={() => setConfirmDeleteId(p.id)} title="Verwijderen">✕</button>
+                            <button className="project-icoon project-icoon--delete" onClick={() => setConfirmDeleteId(p.id)} title="Verwijderen" aria-label="Project verwijderen">✕</button>
                           )}
                         </div>
                       )}

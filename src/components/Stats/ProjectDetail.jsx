@@ -171,7 +171,7 @@ export default function ProjectDetail({ records }) {
             <div className="jaar-inline">
               <div className="jaar-inline-header">
                 <strong>{jaarPopup.soorten.length} soorten in {jaarPopup.jaar}</strong>
-                <button className="jaar-inline-close" onClick={() => setJaarPopup(null)}>✕</button>
+                <button className="jaar-inline-close" onClick={() => setJaarPopup(null)} aria-label="Sluiten">✕</button>
               </div>
               <ul className="jaar-inline-list">
                 {jaarPopup.soorten.map(s => (

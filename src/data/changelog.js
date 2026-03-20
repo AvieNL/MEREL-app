@@ -1,6 +1,74 @@
-export const VERSIE = '1.1.4';
+export const VERSIE = '1.2.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.2.2',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Toegankelijkheid: aria-label toegevoegd aan alle icoon-knoppen (✕ sluiten, verwijderen) in 6 componenten',
+      'UX: lege staat toegevoegd aan Soorten — toont melding als zoekresultaat leeg is',
+      'HTML: meta description toegevoegd',
+      'Refactor: harde kleurwaarden in Charts.jsx samengevoegd in benoemde constanten',
+    ],
+  },
+  {
+    versie: '1.2.1',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Sync: wachtrij-deduplicatie — meerdere edits van hetzelfde record offline worden samengevoegd tot één upsert',
+      'Sync: exponentiële backoff na mislukking (30s → 60s → 120s → … → max 8 min) — Supabase niet langer elke seconde aangesproken bij storingen',
+      'Sync: backoff wordt gereset bij herverbinding — items worden direct opnieuw geprobeerd als internet terugkomt',
+    ],
+  },
+  {
+    versie: '1.2.0',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Refactor: fetchAllPages helper in utils/supabaseHelper.js — dubbel pagineringspatroon in useRecords en useSpeciesRef samengevoegd',
+      'Refactor: useBioRanges hook — 5 biometrie-useMemos uit NieuwPage geëxtraheerd naar src/hooks/useBioRanges.js',
+    ],
+  },
+  {
+    versie: '1.1.9',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Performance: AdminPage N+1 opgelost — vangstentelling per gebruiker in één Supabase-request i.p.v. één per gebruiker',
+      'Performance: filterByDatum in StatsPage in useCallback — stabiele referentie bij export',
+    ],
+  },
+  {
+    versie: '1.1.8',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Performance: soortzoekopdracht debouncet op 150ms — zoeken door 3500+ soorten niet meer op elke toetsaanslag',
+      'Performance: update, toggleSection, handleSpeciesInput, updateRuikaart e.a. in useCallback — stabiele referenties',
+    ],
+  },
+  {
+    versie: '1.1.7',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Offline: QuotaExceededError afgevangen in sync-wachtrij — gebruiker krijgt een duidelijke melding bij vol apparaat',
+      'Offline: opslaggebruik zichtbaar in Instellingen → Cloudstatus (oranje waarschuwing boven 80%)',
+    ],
+  },
+  {
+    versie: '1.1.6',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'UX: ToastContext toegevoegd — gecentraliseerde meldingen in de gehele app',
+      'UX: export- en importmeldingen in StatsPage tonen nu als toast (niet langer inline)',
+    ],
+  },
+  {
+    versie: '1.1.5',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Security: AdminPage gebruikt nu realRol (Supabase) i.p.v. simulatedRole voor toegangscontrole',
+      'Stability: ErrorBoundary toegevoegd — crashes tonen nu een herstelbaar foutscherm i.p.v. een lege pagina',
+      'Validatie: importbestand wordt gecontroleerd op verplichte velden (vogelnaam, ringnummer, vangstdatum) vóór opslaan',
+    ],
+  },
   {
     versie: '1.1.4',
     datum: '2026-03-20',

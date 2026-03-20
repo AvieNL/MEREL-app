@@ -1,10 +1,20 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from './AuthContext';
+import { useToast } from './ToastContext';
 import { db } from '../lib/db';
 import { pullSpeciesIfNeeded } from '../hooks/useSpeciesRef';
 import { pullSpeciesOverrides } from '../hooks/useSpeciesOverrides';
 import { pullVeldConfigIfNeeded } from '../hooks/useVeldConfig';
 import { executeQueueItem } from '../utils/syncQueue';
+
+function isQuotaError(err) {
+  return (
+    err?.name === 'QuotaExceededError' ||
+    err?.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+    err?.inner?.name === 'QuotaExceededError' ||
+    String(err?.message).toLowerCase().includes('quota')
+  );
+}
 
 const SyncContext = createContext(null);
 
@@ -12,6 +22,7 @@ export const MAX_ATTEMPTS = 5;
 
 export function SyncProvider({ children }) {
   const { user } = useAuth();
+  const { addToast } = useToast();
   const [pendingCount, setPendingCount] = useState(0);
   const [pendingItems, setPendingItems] = useState([]);
   const [syncing, setSyncing] = useState(false);
@@ -42,8 +53,10 @@ export function SyncProvider({ children }) {
 
   // Online/offline detectie
   useEffect(() => {
-    const handleOnline = () => {
+    const handleOnline = async () => {
       setIsOnline(true);
+      // Reset backoff voor alle wachtende items bij herverbinding
+      await db.sync_queue.toCollection().modify({ nextRetryAt: null });
       processQueue();
     };
     const handleOffline = () => setIsOnline(false);
@@ -92,23 +105,56 @@ export function SyncProvider({ children }) {
 
   /**
    * Voeg een mutatie toe aan de sync-wachtrij.
+   * Dedupliceert: als er al een item staat voor dezelfde tabel + operatie + record-id,
+   * wordt dat item overschreven in plaats van een nieuw item toegevoegd.
    * Wordt direct verwerkt als er internet is.
    */
   const addToQueue = useCallback(async (tableName, operation, data) => {
-    await db.sync_queue.add({
-      table_name: tableName,
-      operation,       // 'upsert' | 'delete' | 'batch_upsert'
-      data,
-      createdAt: new Date().toISOString(),
-      attempts: 0,
-    });
+    try {
+      // Dedupliceer identieke operaties op hetzelfde record (bijv. meerdere edits offline)
+      if (data?.id && ['upsert', 'soft_delete', 'restore'].includes(operation)) {
+        const existing = await db.sync_queue
+          .where('table_name').equals(tableName)
+          .filter(item => item.operation === operation && item.data?.id === data.id)
+          .first();
+        if (existing) {
+          await db.sync_queue.update(existing.id, {
+            data,
+            attempts: 0,
+            nextRetryAt: null,
+            createdAt: new Date().toISOString(),
+          });
+          await refreshPendingCount();
+          if (navigator.onLine && user && !syncingRef.current) processQueue();
+          return;
+        }
+      }
+
+      await db.sync_queue.add({
+        table_name: tableName,
+        operation,
+        data,
+        createdAt: new Date().toISOString(),
+        attempts: 0,
+        nextRetryAt: null,
+      });
+    } catch (err) {
+      if (isQuotaError(err)) {
+        addToast(
+          'Apparaat heeft onvoldoende opslagruimte. Verwijder oude vangsten of maak ruimte vrij op je apparaat.',
+          'error', 0
+        );
+        return;
+      }
+      throw err;
+    }
     await refreshPendingCount();
 
     // Direct proberen als online
     if (navigator.onLine && user && !syncingRef.current) {
       processQueue();
     }
-  }, [user]);  // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user, addToast]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   /**
    * Verwerk de sync-wachtrij: verstuur pending mutaties naar Supabase.
@@ -131,20 +177,27 @@ export function SyncProvider({ children }) {
     setSyncError('');
 
     let hasErrors = false;
+    const now = Date.now();
 
     for (const item of pending) {
       if (item.attempts >= MAX_ATTEMPTS) continue;
+      // Backoff: sla items over die nog in de wachttijd zitten
+      if (item.nextRetryAt && item.nextRetryAt > now) continue;
 
       try {
         await executeQueueItem(item, user.id);
         await db.sync_queue.delete(item.id);
       } catch (err) {
         hasErrors = true;
+        const attempts = (item.attempts || 0) + 1;
+        // Exponentiële backoff: 30s → 60s → 120s → 240s → 480s (max ~8 min)
+        const backoffMs = Math.min(30_000 * Math.pow(2, attempts - 1), 8 * 60_000);
         await db.sync_queue.update(item.id, {
-          attempts: (item.attempts || 0) + 1,
+          attempts,
           lastError: err.message,
+          nextRetryAt: Date.now() + backoffMs,
         });
-        console.warn(`Sync mislukt (poging ${item.attempts + 1}/${MAX_ATTEMPTS}):`, err.message);
+        console.warn(`Sync mislukt (poging ${attempts}/${MAX_ATTEMPTS}, volgende poging over ${Math.round(backoffMs/1000)}s):`, err.message);
       }
     }
 

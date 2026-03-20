@@ -1,4 +1,5 @@
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef, useCallback } from 'react';
+import { useToast } from '../../context/ToastContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { exportCSV, exportJSON, exportGrielXML, downloadFile } from '../../utils/export';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
@@ -189,6 +190,7 @@ const STATS_UITGESLOTEN = ['ring vernietigd of verloren'];
 
 export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [], myAupis = {} }) {
   const navigate = useNavigate();
+  const { addToast } = useToast();
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
 
@@ -197,14 +199,12 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
     [records]
   );
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
-  const [exportError, setExportError] = useState('');
   const [exporting, setExporting] = useState(false);
 
   function openSoorten(soortenTabel, titel) {
     navigate('/stats/soorten', { state: { soortenTabel, titel } });
   }
   const [tvSorteer, setTvSorteer] = useState('tijd');
-  const [importStatus, setImportStatus] = useState(null);
   const [jaarPopup, setJaarPopup] = useState(null); // { jaar, soorten: string[] }
   const [exportVan, setExportVan] = useState('');
   const [exportTot, setExportTot] = useState('');
@@ -240,7 +240,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
     return sorted.slice(0, 10);
   }, [alleTerugvangsten, tvSorteer]);
 
-  function filterByDatum(data) {
+  const filterByDatum = useCallback((data) => {
     if (!exportVan && !exportTot) return data;
     return data.filter(r => {
       const iso = toYMD(r.vangstdatum);
@@ -249,7 +249,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
       if (exportTot && iso > exportTot) return false;
       return true;
     });
-  }
+  }, [exportVan, exportTot]);
 
   function setSnelfilter(type) {
     const nu = new Date();
@@ -261,7 +261,6 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
   }
 
   function handleExport(type, subset) {
-    setExportError('');
     setExporting(type);
     const base = subset === 'huidig' ? huidigeRecords : records;
     const data = filterByDatum(base);
@@ -291,30 +290,36 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         const geenCode = teExporteren.filter(r => !euringLookup[r.vogelnaam?.toLowerCase()]);
         if (geenCode.length > 0) {
           const namen = [...new Set(geenCode.map(r => r.vogelnaam || '(leeg)'))].slice(0, 5).join(', ');
-          setExportError(
+          addToast(
             `Export geblokkeerd: geen EURING-code voor ${geenCode.length} record(s) — soorten: ${namen}. ` +
-            `Corrigeer de vogelnaam zodat deze overeenkomt met een bekende soort.`
+            `Corrigeer de vogelnaam zodat deze overeenkomt met een bekende soort.`,
+            'error', 0
           );
+          setExporting(false);
           return;
         }
 
         // Blokkeer export bij ontbrekende vangstdatum (xs:date vereist)
         const geenDatum = teExporteren.filter(r => !r.vangstdatum);
         if (geenDatum.length > 0) {
-          setExportError(
+          addToast(
             `Export geblokkeerd: ${geenDatum.length} record(s) zonder vangstdatum. ` +
-            `Corrigeer deze vangsten voor het exporteren.`
+            `Corrigeer deze vangsten voor het exporteren.`,
+            'error', 0
           );
+          setExporting(false);
           return;
         }
 
         // Blokkeer export bij ringnummer < 4 tekens (XSD minLength 4)
         const kortRing = teExporteren.filter(r => !r.ringnummer || String(r.ringnummer).trim().length < 4);
         if (kortRing.length > 0) {
-          setExportError(
+          addToast(
             `Export geblokkeerd: ${kortRing.length} record(s) met leeg of te kort ringnummer (minimaal 4 tekens). ` +
-            `Corrigeer deze vangsten voor het exporteren.`
+            `Corrigeer deze vangsten voor het exporteren.`,
+            'error', 0
           );
+          setExporting(false);
           return;
         }
 
@@ -322,11 +327,13 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         const ontbrekend = projectenInExport.filter(naam => !projectAupis[naam]);
 
         if (ontbrekend.length > 0) {
-          setExportError(
+          addToast(
             `ActingUserProjectID (AUPI) ontbreekt voor: ${ontbrekend.join(', ')}. ` +
             `Ga naar Projecten → open het project → klik op "Leden" → voer het AUPI-nummer in naast jouw naam. ` +
-            `Je vindt dit nummer in GRIEL via: Mijn administratie → Mijn projecten → klik op het + naast het project.`
+            `Je vindt dit nummer in GRIEL via: Mijn administratie → Mijn projecten → klik op het + naast het project.`,
+            'error', 0
           );
+          setExporting(false);
           return;
         }
 
@@ -370,13 +377,19 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         }
 
         if (parsed.length === 0) {
-          setImportStatus({ type: 'error', message: 'Geen records gevonden in bestand.' });
+          addToast('Geen records gevonden in bestand.', 'error', 0);
         } else {
-          const count = importRecords(parsed);
-          setImportStatus({ type: 'success', message: `${count} records geïmporteerd.` });
+          const REQUIRED = ['vogelnaam', 'ringnummer', 'vangstdatum'];
+          const invalid = parsed.filter(r => REQUIRED.some(f => !r[f]));
+          if (invalid.length > 0) {
+            addToast(`${invalid.length} record(s) missen verplichte velden (vogelnaam, ringnummer, vangstdatum).`, 'error', 0);
+          } else {
+            const count = importRecords(parsed);
+            addToast(`${count} records geïmporteerd.`, 'success');
+          }
         }
       } catch (err) {
-        setImportStatus({ type: 'error', message: `Fout bij importeren: ${err.message}` });
+        addToast(`Fout bij importeren: ${err.message}`, 'error', 0);
       }
 
       // Reset file input
@@ -462,13 +475,6 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
           </div>
         )}
 
-        {exportError && (
-          <div className="export-error">
-            <span>{exportError}</span>
-            <button className="export-error__close" onClick={() => setExportError('')}>✕</button>
-          </div>
-        )}
-
         {showUploadConfirm && (
           <div className="upload-confirm">
             <p>Export gelukt! Wil je deze vangsten als geüpload markeren?</p>
@@ -546,7 +552,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
               <div className="jaar-inline">
                 <div className="jaar-inline-header">
                   <strong>{jaarPopup.soorten.length} soorten in {jaarPopup.jaar}</strong>
-                  <button className="jaar-inline-close" onClick={() => setJaarPopup(null)}>✕</button>
+                  <button className="jaar-inline-close" onClick={() => setJaarPopup(null)} aria-label="Sluiten">✕</button>
                 </div>
                 <ul className="jaar-inline-list">
                   {jaarPopup.soorten.map(s => (
@@ -682,11 +688,6 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
               Bestand kiezen...
             </label>
           </div>
-          {importStatus && (
-            <div className={`import-status import-status--${importStatus.type}`}>
-              {importStatus.message}
-            </div>
-          )}
         </div>
 
         <div className="section">
@@ -739,9 +740,6 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
               {exporting === 'json' ? 'Exporteren…' : 'JSON'}
             </button>
           </div>
-          {exportError && (
-            <p className="export-error">{exportError}</p>
-          )}
         </div>
       </div>
     </div>

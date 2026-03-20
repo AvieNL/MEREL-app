@@ -11,7 +11,7 @@ const ROL_LABEL = { admin: 'Admin', ringer: 'Ringer', viewer: 'Viewer' };
 
 export default function AdminPage() {
   const { user } = useAuth();
-  const { isAdmin } = useRole();
+  const { isRealAdmin } = useRole();
   const navigate = useNavigate();
   const [gebruikers, setGebruikers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,12 +56,12 @@ export default function AdminPage() {
   }
 
   useEffect(() => {
-    if (!isAdmin) {
+    if (!isRealAdmin) {
       navigate('/');
       return;
     }
     loadGebruikers();
-  }, [isAdmin]);  // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isRealAdmin]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function loadGebruikers() {
     setLoading(true);
@@ -80,17 +80,19 @@ export default function AdminPage() {
       return;
     }
 
-    // Haal vangstenaantal per gebruiker op
-    const metCounts = await Promise.all(
-      data.map(async (p) => {
-        const { count } = await supabase
-          .from('vangsten')
-          .select('id', { count: 'exact', head: true })
-          .eq('user_id', p.id);
-        return { ...p, vangsten_count: count ?? 0 };
-      })
-    );
+    // Haal vangstenaantal per gebruiker op in één request (i.p.v. N afzonderlijke count-calls)
+    const userIds = data.map(p => p.id);
+    const { data: vangstRows } = await supabase
+      .from('vangsten')
+      .select('user_id')
+      .in('user_id', userIds);
 
+    const countByUser = {};
+    for (const v of vangstRows || []) {
+      countByUser[v.user_id] = (countByUser[v.user_id] || 0) + 1;
+    }
+
+    const metCounts = data.map(p => ({ ...p, vangsten_count: countByUser[p.id] ?? 0 }));
     setGebruikers(metCounts);
     setLoading(false);
   }
@@ -110,7 +112,7 @@ export default function AdminPage() {
     setSavingId(null);
   }
 
-  if (!isAdmin) return null;
+  if (!isRealAdmin) return null;
 
   return (
     <div className="page admin-page">
@@ -228,7 +230,7 @@ export default function AdminPage() {
                             onChange={e => updateRuiEntry(type, seizoen, i, 'val', e.target.value)}
                           />
                           {ruitypen[type][seizoen].length > 1 && (
-                            <button className="admin-rui-remove" onClick={() => removeRuiEntry(type, seizoen, i)}>×</button>
+                            <button className="admin-rui-remove" onClick={() => removeRuiEntry(type, seizoen, i)} aria-label="Rij verwijderen">×</button>
                           )}
                         </div>
                       ))}

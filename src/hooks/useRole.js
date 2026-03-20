@@ -17,11 +17,12 @@ export function useRole() {
     rol,
     realRol,
     isSimulating: !!simulatedRole,
-    isAdmin:  rol === 'admin',
-    isRinger: rol === 'ringer',
-    isViewer: rol === 'viewer',
-    canAdd:    rol !== 'viewer',
-    canEdit:   rol !== 'viewer',
-    canDelete: rol !== 'viewer',
+    isAdmin:     rol === 'admin',
+    isRealAdmin: realRol === 'admin',
+    isRinger:    rol === 'ringer',
+    isViewer:    rol === 'viewer',
+    canAdd:      rol !== 'viewer',
+    canEdit:     rol !== 'viewer',
+    canDelete:   rol !== 'viewer',
   };
 }

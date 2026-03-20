@@ -222,7 +222,7 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
                       onClick={e => { e.stopPropagation(); setConfirmDeleteId(null); }}>Nee</button>
                   </>
                 ) : (
-                  <button className="ringstreng-icoon ringstreng-icoon--delete" onClick={e => { e.stopPropagation(); setConfirmDeleteId(streng.id); }} title="Verwijderen">✕</button>
+                  <button className="ringstreng-icoon ringstreng-icoon--delete" onClick={e => { e.stopPropagation(); setConfirmDeleteId(streng.id); }} title="Verwijderen" aria-label="Ringstreng verwijderen">✕</button>
                 )
               )}
             </div>

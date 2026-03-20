@@ -5,6 +5,12 @@ import 'leaflet/dist/leaflet.css';
 
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 
+// Kaartkleur-constanten — spiegelen de CSS custom properties
+// (Leaflet accepteert geen CSS variables, vandaar hex-waarden hier)
+const KAART_KLEUR_NIEUW       = '#38bdf8'; // --accent
+const KAART_KLEUR_TERUGVANGST = '#22c55e'; // --success
+const KAART_KLEUR_LIJN        = '#f97316'; // --warning-orange
+
 function useContainerWidth(ref) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
@@ -251,7 +257,7 @@ export function VangstKaart({ targetRecords, allRecords }) {
       const bounds = [];
 
       kaartData.markers.forEach(m => {
-        const color = m.isNieuw ? '#38bdf8' : '#22c55e';
+        const color = m.isNieuw ? KAART_KLEUR_NIEUW : KAART_KLEUR_TERUGVANGST;
         const marker = L.circleMarker([m.lat, m.lon], {
           radius: 6,
           fillColor: color,
@@ -265,7 +271,7 @@ export function VangstKaart({ targetRecords, allRecords }) {
 
       kaartData.lijnen.forEach(l => {
         L.polyline([l.from, l.to], {
-          color: '#f97316',
+          color: KAART_KLEUR_LIJN,
           weight: 2,
           opacity: 0.7,
           dashArray: '6 4',
@@ -293,8 +299,8 @@ export function VangstKaart({ targetRecords, allRecords }) {
       <h3>Vangstlocaties</h3>
       <div ref={mapRef} className="kaart-container" />
       <div className="chart-legend">
-        <span className="chart-legend-item"><span className="chart-dot" style={{ background: '#38bdf8' }} /> Nieuw</span>
-        <span className="chart-legend-item"><span className="chart-dot" style={{ background: '#22c55e' }} /> Terugvangst</span>
+        <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_NIEUW }} /> Nieuw</span>
+        <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_TERUGVANGST }} /> Terugvangst</span>
       </div>
     </div>
   );

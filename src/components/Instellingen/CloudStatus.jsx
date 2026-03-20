@@ -22,6 +22,7 @@ export default function CloudStatus() {
   const [loadingOnline, setLoadingOnline] = useState(true);
   const [onlineError, setOnlineError] = useState('');
   const [lastPull, setLastPull] = useState(null);
+  const [storageInfo, setStorageInfo] = useState(null);
 
   // Lokale tellingen — reactief via Dexie
   const lokaalVangsten = useLiveQuery(
@@ -45,6 +46,7 @@ export default function CloudStatus() {
     if (!user) return;
     laadOnline();
     laadLastPull();
+    laadStorage();
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function laadOnline() {
@@ -74,9 +76,20 @@ export default function CloudStatus() {
     if (meta?.value) setLastPull(new Date(meta.value));
   }
 
+  async function laadStorage() {
+    if (!navigator.storage?.estimate) return;
+    try {
+      const { usage, quota } = await navigator.storage.estimate();
+      setStorageInfo({ usage, quota });
+    } catch {
+      // niet beschikbaar in deze browser
+    }
+  }
+
   function vernieuwen() {
     laadOnline();
     laadLastPull();
+    laadStorage();
   }
 
   const tabelRijen = [
@@ -88,6 +101,13 @@ export default function CloudStatus() {
 
   const fout = syncError || onlineError || speciesError;
   const verloren = syncLost > 0;
+
+  const storagePercent = storageInfo?.quota
+    ? Math.round((storageInfo.usage / storageInfo.quota) * 100)
+    : null;
+  const storageMb = storageInfo
+    ? `${(storageInfo.usage / 1024 / 1024).toFixed(1)} MB`
+    : null;
 
   return (
     <div className="cloud-status">
@@ -137,6 +157,12 @@ export default function CloudStatus() {
             <span>{pendingCount} wijziging{pendingCount !== 1 ? 'en' : ''}</span>
           </div>
         )}
+        {storageMb !== null && (
+          <div className={`cloud-status__tijd-rij${storagePercent >= 80 ? ' cloud-status__storage--vol' : ''}`}>
+            <span>Opslag apparaat</span>
+            <span>{storageMb}{storagePercent !== null ? ` (${storagePercent}%)` : ''}</span>
+          </div>
+        )}
       </div>
 
       {verloren && (
@@ -144,7 +170,7 @@ export default function CloudStatus() {
           <span>
             {syncLost} wijziging{syncLost !== 1 ? 'en' : ''} kon{syncLost !== 1 ? 'den' : ''} niet worden gesynchroniseerd en {syncLost !== 1 ? 'zijn' : 'is'} verwijderd uit de wachtrij.
           </span>
-          <button className="cloud-status__lost-dismiss" onClick={clearSyncLost}>✕</button>
+          <button className="cloud-status__lost-dismiss" onClick={clearSyncLost} aria-label="Melding sluiten">✕</button>
         </div>
       )}
       {fout && <div className="cloud-status__error">{fout}</div>}
