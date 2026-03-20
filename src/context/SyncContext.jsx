@@ -9,10 +9,11 @@ import { executeQueueItem } from '../utils/syncQueue';
 
 function getLabelForQueueItem(tableName, data) {
   if (tableName === 'vangsten') {
-    const ring = data?.ringnummer ?? '';
+    const naam  = data?.vogelnaam  ?? '';
+    const ring  = data?.ringnummer ?? '';
     const datum = data?.vangstdatum ?? '';
-    if (ring) return datum ? `${ring} (${datum})` : ring;
-    if (datum) return datum;
+    const parts = [naam, ring, datum].filter(Boolean);
+    if (parts.length > 0) return parts.join(' · ');
   }
   return tableName;
 }
