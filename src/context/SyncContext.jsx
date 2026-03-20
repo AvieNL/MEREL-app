@@ -7,6 +7,15 @@ import { pullSpeciesOverrides } from '../hooks/useSpeciesOverrides';
 import { pullVeldConfigIfNeeded } from '../hooks/useVeldConfig';
 import { executeQueueItem } from '../utils/syncQueue';
 
+function getLabelForQueueItem(tableName, data) {
+  if (tableName === 'vangsten') {
+    const naam = data?.vogelnaam ?? '';
+    const datum = data?.vangstdatum ?? '';
+    if (naam) return datum ? `${naam} (${datum})` : naam;
+  }
+  return tableName;
+}
+
 function isQuotaError(err) {
   return (
     err?.name === 'QuotaExceededError' ||
@@ -36,19 +45,30 @@ export function SyncProvider({ children }) {
     const stored = localStorage.getItem('vrs-sync-lost');
     return stored ? parseInt(stored, 10) : 0;
   });
+  const [syncLostItems, setSyncLostItems] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('vrs-sync-lost-items') || '[]'); }
+    catch { return []; }
+  });
   const syncingRef = useRef(false);
 
-  function addSyncLost(count) {
+  function addSyncLost(count, labels = []) {
     setSyncLost(prev => {
       const next = prev + count;
       localStorage.setItem('vrs-sync-lost', String(next));
+      return next;
+    });
+    setSyncLostItems(prev => {
+      const next = [...prev, ...labels];
+      localStorage.setItem('vrs-sync-lost-items', JSON.stringify(next));
       return next;
     });
   }
 
   function clearSyncLost() {
     setSyncLost(0);
+    setSyncLostItems([]);
     localStorage.removeItem('vrs-sync-lost');
+    localStorage.removeItem('vrs-sync-lost-items');
   }
 
   // Online/offline detectie
@@ -134,6 +154,7 @@ export function SyncProvider({ children }) {
         table_name: tableName,
         operation,
         data,
+        label: getLabelForQueueItem(tableName, data),
         createdAt: new Date().toISOString(),
         attempts: 0,
         nextRetryAt: null,
@@ -204,7 +225,8 @@ export function SyncProvider({ children }) {
     // Verwijder items die het maximaal aantal pogingen hebben bereikt en waarschuw de gebruiker
     const exhausted = await db.sync_queue.filter(i => (i.attempts ?? 0) >= MAX_ATTEMPTS).toArray();
     if (exhausted.length > 0) {
-      addSyncLost(exhausted.length);
+      const lostLabels = exhausted.map(i => i.label || i.table_name).filter(Boolean);
+      addSyncLost(exhausted.length, lostLabels);
       await db.sync_queue.bulkDelete(exhausted.map(i => i.id));
     }
 
@@ -242,6 +264,7 @@ export function SyncProvider({ children }) {
       lastSynced,
       syncError,
       syncLost,
+      syncLostItems,
       clearSyncLost,
       addToQueue,
       processQueue,

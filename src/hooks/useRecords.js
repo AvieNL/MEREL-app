@@ -8,6 +8,7 @@ import { toVangstRow, fromVangstRow } from '../utils/supabase-helpers';
 import { toYMD } from '../utils/dateHelper';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
+import { useToast } from '../context/ToastContext';
 
 function migrateUploaded(record) {
   if (record.uploaded !== undefined) return record;
@@ -17,6 +18,7 @@ function migrateUploaded(record) {
 export function useRecords() {
   const { user } = useAuth();
   const { addToQueue } = useSync();
+  const { addToast } = useToast();
   const pulledRef = useRef(false);
 
   // Actieve vangsten (niet soft-deleted)
@@ -129,12 +131,15 @@ export function useRecords() {
   }
 
   function updateRecord(id, updates) {
-    db.vangsten.get(id).then(existing => {
+    db.vangsten.get(id).then(async existing => {
       if (!existing) return;
       const updated = { ...existing, ...updates, handmatig_gewijzigd_at: new Date().toISOString() };
-      db.vangsten.put(updated);
+      await db.vangsten.put(updated);
       addToQueue('vangsten', 'upsert', toVangstRow(updated, user.id));
-    }).catch(err => console.error('updateRecord mislukt:', err));
+    }).catch(err => {
+      console.error('updateRecord mislukt:', err);
+      addToast('Wijziging kon niet worden opgeslagen. Probeer het opnieuw.', 'error');
+    });
   }
 
   function deleteRecord(id) {

@@ -5,38 +5,39 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
 
-// Module-level vlag zodat gelijktijdige aanroepen niet overlappen
-let _pulling = false;
+// Module-level promise-referentie: gelijktijdige aanroepen wachten op dezelfde pull
+let _pullPromise = null;
 
 /**
  * Pull alle species overrides van Supabase naar de lokale Dexie-cache.
  * Verwijdert ook lokale rijen die op een ander apparaat zijn gewist.
  * Exporteerbaar zodat SyncContext dit ook kan aanroepen.
  */
-export async function pullSpeciesOverrides(userId) {
-  if (_pulling || !navigator.onLine) return;
-  _pulling = true;
-  try {
-    const { data, error } = await supabase
-      .from('species_overrides')
-      .select('*')
-      .eq('user_id', userId);
-    if (error || !data) return;
+export function pullSpeciesOverrides(userId) {
+  if (!navigator.onLine) return Promise.resolve();
+  if (_pullPromise) return _pullPromise;
+  _pullPromise = _doOverridesPull(userId).finally(() => { _pullPromise = null; });
+  return _pullPromise;
+}
 
-    // Upsert alle Supabase-rijen lokaal
-    const rows = data.map(r => ({ user_id: userId, soort_naam: r.soort_naam, data: r.data }));
-    if (rows.length > 0) await db.species_overrides.bulkPut(rows);
+async function _doOverridesPull(userId) {
+  const { data, error } = await supabase
+    .from('species_overrides')
+    .select('*')
+    .eq('user_id', userId);
+  if (error || !data) return;
 
-    // Verwijder lokale rijen die op een ander apparaat zijn gewist
-    const supabaseNames = new Set(data.map(r => r.soort_naam));
-    const localAll = await db.species_overrides.where('user_id').equals(userId).toArray();
-    const toDelete = localAll
-      .filter(r => !supabaseNames.has(r.soort_naam))
-      .map(r => [userId, r.soort_naam]);
-    if (toDelete.length > 0) await db.species_overrides.bulkDelete(toDelete);
-  } finally {
-    _pulling = false;
-  }
+  // Upsert alle Supabase-rijen lokaal
+  const rows = data.map(r => ({ user_id: userId, soort_naam: r.soort_naam, data: r.data }));
+  if (rows.length > 0) await db.species_overrides.bulkPut(rows);
+
+  // Verwijder lokale rijen die op een ander apparaat zijn gewist
+  const supabaseNames = new Set(data.map(r => r.soort_naam));
+  const localAll = await db.species_overrides.where('user_id').equals(userId).toArray();
+  const toDelete = localAll
+    .filter(r => !supabaseNames.has(r.soort_naam))
+    .map(r => [userId, r.soort_naam]);
+  if (toDelete.length > 0) await db.species_overrides.bulkDelete(toDelete);
 }
 
 export function useSpeciesOverrides() {

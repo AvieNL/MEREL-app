@@ -16,7 +16,7 @@ function fmtTijd(date) {
 
 export default function CloudStatus() {
   const { user } = useAuth();
-  const { pendingCount, syncError, lastSynced, isOnline, syncLost, clearSyncLost } = useSync();
+  const { pendingCount, syncError, lastSynced, isOnline, syncLost, syncLostItems, clearSyncLost } = useSync();
   const speciesError = useSpeciesError();
   const [online, setOnline] = useState(null);
   const [loadingOnline, setLoadingOnline] = useState(true);
@@ -169,6 +169,11 @@ export default function CloudStatus() {
         <div className="cloud-status__lost">
           <span>
             {syncLost} wijziging{syncLost !== 1 ? 'en' : ''} kon{syncLost !== 1 ? 'den' : ''} niet worden gesynchroniseerd en {syncLost !== 1 ? 'zijn' : 'is'} verwijderd uit de wachtrij.
+            {syncLostItems.length > 0 && (
+              <span className="cloud-status__lost-items">
+                {' '}({syncLostItems.slice(0, 5).join(', ')}{syncLostItems.length > 5 ? ` en ${syncLostItems.length - 5} meer` : ''})
+              </span>
+            )}
           </span>
           <button className="cloud-status__lost-dismiss" onClick={clearSyncLost} aria-label="Melding sluiten">✕</button>
         </div>

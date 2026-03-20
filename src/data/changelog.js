@@ -1,6 +1,16 @@
-export const VERSIE = '1.2.2';
+export const VERSIE = '1.2.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.2.3',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Fix: JSONB null-check in useRingStrengen — crash bij ontbrekende data-kolom in Supabase opgelost',
+      'Fix: race condition in species/veldconfig/override pulls — boolean flag vervangen door Promise-referentie',
+      'Fix: updateRecord toont nu een foutmelding als de lokale schrijfoperatie mislukt (was: stille fout)',
+      'UX: verloren sync-items tonen nu de naam en datum van de betrokken vangst in CloudStatus',
+    ],
+  },
   {
     versie: '1.2.2',
     datum: '2026-03-20',

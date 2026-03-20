@@ -42,7 +42,7 @@ export function useRingStrengen() {
     const { data, error } = await query;
     if (error || !data || data.length === 0) return;
 
-    const rows = data.map(r => ({ ...r.data, id: r.id, user_id: user.id }));
+    const rows = data.map(r => ({ ...(r.data ?? {}), id: r.id, user_id: user.id }));
     await db.ringstrengen.bulkPut(rows);
     await db.meta.put({
       key: `last_pull_ringstrengen_${user.id}`,
