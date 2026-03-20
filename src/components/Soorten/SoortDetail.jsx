@@ -10,6 +10,7 @@ import { VangstKaart } from '../Stats/Charts';
 import { renderMarkdown } from '../../utils/textHelper';
 import { formatDatum } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL } from '../../data/constants';
+import { parseVal } from '../../utils/bioHelper';
 import './SoortDetail.css';
 
 // Textarea met B/I/U-opmaakbalk die automatisch meegroeit
@@ -73,10 +74,6 @@ function resizeImage(file, maxWidth = 400) {
   });
 }
 
-function parseVal(v) {
-  if (v === undefined || v === null || v === '') return NaN;
-  return parseFloat(String(v).replace(',', '.'));
-}
 
 const BIO_FIELDS = [
   { key: 'vleugel',      label: 'Vleugel',        unit: 'mm' },

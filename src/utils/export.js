@@ -1,4 +1,5 @@
 import { toYMD } from './dateHelper';
+import { bioDecimal } from './bioHelper';
 
 // CSV Export
 export function exportCSV(records) {
@@ -75,13 +76,6 @@ function speciesCode(naam, lookup) {
 
 // Decimaal met punt (GRIEL gebruikt Engelse notatie in Biometrics)
 // tpDecimal heeft minExclusive 0 — waarde 0 is ongeldig, behandel als ontbrekend
-function bioDecimal(val) {
-  if (val === undefined || val === null || val === '') return null;
-  const s = String(val).replace(',', '.');
-  const n = parseFloat(s);
-  if (isNaN(n) || n <= 0) return null;
-  return String(n);
-}
 
 // Vandaag als yyyy-mm-dd
 function today() {

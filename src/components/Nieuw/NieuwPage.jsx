@@ -9,6 +9,7 @@ import LocatiePicker from './LocatiePicker';
 import { useRuitypen } from '../../hooks/useRuitypen';
 import { renderMarkdown } from '../../utils/textHelper';
 import { toYMD } from '../../utils/dateHelper';
+import { parseVal } from '../../utils/bioHelper';
 import './NieuwPage.css';
 
 // Inline informatieblok onder een veld — toont soortspecifieke determinatieinfo
@@ -512,10 +513,6 @@ const EMPTY_FORM = {
 };
 
 // Parse a value that might use comma or dot as decimal separator
-function parseVal(v) {
-  if (v === undefined || v === null || v === '') return NaN;
-  return parseFloat(String(v).replace(',', '.'));
-}
 
 // Compute min/max ranges from records for a species, with 10% margin
 function renderGeslachtTekst(str) {
