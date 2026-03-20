@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
 import { parseDate } from '../../utils/statsHelper';
+import { buildEersteVangstMap } from '../../utils/catchHelper';
 
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 
@@ -192,16 +193,7 @@ export function VangstKaart({ targetRecords, allRecords }) {
   const mapInstanceRef = useRef(null);
 
   const kaartData = useMemo(() => {
-    const eersteVangst = {};
-    allRecords.forEach(r => {
-      if (!r.ringnummer) return;
-      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
-        const bestaand = eersteVangst[r.ringnummer];
-        if (!bestaand || (r.vangstdatum && (!bestaand.vangstdatum || r.vangstdatum < bestaand.vangstdatum))) {
-          eersteVangst[r.ringnummer] = r;
-        }
-      }
-    });
+    const eersteVangst = buildEersteVangstMap(allRecords);
 
     const markers = [];
     const lijnen = [];
