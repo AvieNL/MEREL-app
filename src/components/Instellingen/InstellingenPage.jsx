@@ -14,6 +14,9 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
       <div className="section">
         <h3>Hulpweergave</h3>
         <div className="section-content">
+          <p className="admin-hint">
+            Uitgebreid toont hulpinformatie in het invoerformulier: soortinfo, seizoensleeftijden bij rui en uitleg bij EURING-codes. Basis verbergt dit voor een rustiger formulier.
+          </p>
           <div className="mode-toggle">
             <button
               className={`mode-btn${settings.hulpModus === 'uitgebreid' ? ' active' : ''}`}
