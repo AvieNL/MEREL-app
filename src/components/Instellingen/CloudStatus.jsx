@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 
+
 export default function CloudStatus() {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [counts, setCounts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -43,13 +44,6 @@ export default function CloudStatus() {
         <button className="cloud-status__refresh" onClick={loadCounts} title="Vernieuwen">
           ↻
         </button>
-      </div>
-
-      <div className="cloud-status__account">
-        <span className="cloud-status__email">{user?.email}</span>
-        {profile?.rol && (
-          <span className="cloud-status__rol">{profile.rol}</span>
-        )}
       </div>
 
       {loading && (

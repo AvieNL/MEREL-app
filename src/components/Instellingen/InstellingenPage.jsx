@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import { useSync } from '../../context/SyncContext';
 import CloudStatus from './CloudStatus';
 import './InstellingenPage.css';
 
+const ROL_LABEL = { admin: 'Admin', ringer: 'Ringer', viewer: 'Viewer' };
+
 export default function InstellingenPage({ settings, onUpdateSettings, onFullResync }) {
+  const { user, profile } = useAuth();
   const { processQueue, syncing, pendingCount, isOnline, lastSynced } = useSync();
   const [resyncing, setResyncing] = useState(false);
 
@@ -43,6 +47,14 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
               />
             </div>
           </div>
+          {user && (
+            <div className="instellingen-account-info">
+              <span className="instellingen-account-email">{user.email}</span>
+              {profile?.rol && (
+                <span className="cloud-status__rol">{ROL_LABEL[profile.rol] || profile.rol}</span>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -70,43 +82,47 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
       </div>
 
       <div className="section">
-        <h3>Cloud & account</h3>
+        <h3>Synchronisatie</h3>
         <div className="section-content">
           <CloudStatus />
-          <div className="sync-controls">
-            <button
-              className="btn-secondary sync-force-btn"
-              onClick={processQueue}
-              disabled={syncing || !isOnline || pendingCount === 0}
-            >
-              {syncing ? 'Synchroniseren...' : `Forceer sync${pendingCount > 0 ? ` (${pendingCount})` : ''}`}
-            </button>
-            {lastSynced && (
-              <span className="sync-last-time">
-                Laatste sync: {lastSynced.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}
-              </span>
-            )}
-            {!isOnline && (
-              <span className="sync-offline-note">Offline — sync niet mogelijk</span>
-            )}
+          <div className="sync-acties">
+            <div className="sync-actie">
+              <div className="sync-actie-tekst">
+                <strong>Wijzigingen versturen</strong>
+                <span>Stuurt lokale wijzigingen die nog niet zijn gesynchroniseerd naar de cloud. Gebeurt normaal automatisch zodra je internet hebt.</span>
+              </div>
+              <div className="sync-actie-controls">
+                <button
+                  className="btn-secondary sync-force-btn"
+                  onClick={processQueue}
+                  disabled={syncing || !isOnline || pendingCount === 0}
+                >
+                  {syncing ? 'Synchroniseren...' : `Verstuur${pendingCount > 0 ? ` (${pendingCount})` : ''}`}
+                </button>
+                {lastSynced && (
+                  <span className="sync-last-time">
+                    Laatste sync: {lastSynced.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="sync-actie">
+              <div className="sync-actie-tekst">
+                <strong>Gegevens ophalen</strong>
+                <span>Haalt alle vangsten opnieuw op vanuit de cloud. Gebruik dit als de app niet up-to-date lijkt na een synchronisatiefout of gebruik op een ander apparaat.</span>
+              </div>
+              <div className="sync-actie-controls">
+                <button
+                  className="btn-secondary sync-force-btn"
+                  onClick={async () => { setResyncing(true); await onFullResync(); setResyncing(false); }}
+                  disabled={resyncing || !isOnline}
+                >
+                  {resyncing ? 'Bezig…' : '↺ Herlaad alle data'}
+                </button>
+              </div>
+            </div>
+            {!isOnline && <span className="sync-offline-note">Offline — synchronisatie niet mogelijk</span>}
           </div>
-        </div>
-      </div>
-
-      <div className="section">
-        <h3>Data herstellen</h3>
-        <div className="section-content">
-          <p className="admin-hint">
-            Haal alle vangsten opnieuw op vanuit de cloud. Gebruik dit als de app niet up-to-date lijkt na een synchronisatiefout of na gebruik op een ander apparaat.
-          </p>
-          <button
-            className="btn-secondary sync-force-btn"
-            onClick={async () => { setResyncing(true); await onFullResync(); setResyncing(false); }}
-            disabled={resyncing || !isOnline}
-          >
-            {resyncing ? 'Bezig…' : '↺ Herlaad alle data'}
-          </button>
-          {!isOnline && <span className="sync-offline-note">Offline — niet mogelijk</span>}
         </div>
       </div>
 

@@ -3,58 +3,6 @@
   margin-bottom: 16px;
 }
 
-/* Kleurenkiezer */
-.theme-colors {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.color-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  background: var(--bg-tertiary);
-  border: 2px solid transparent;
-  border-radius: var(--radius);
-  padding: 10px 12px;
-  min-width: 0;
-  min-height: 0;
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-
-.color-option:hover {
-  border-color: var(--border);
-}
-
-.color-option.active {
-  border-color: var(--accent);
-}
-
-.color-dot {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 1px solid rgba(128, 128, 128, 0.25);
-  display: block;
-  flex-shrink: 0;
-  transition: background 0.2s;
-}
-
-.color-label {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  font-weight: 500;
-}
-
-.color-option.active .color-label {
-  color: var(--accent);
-}
-
 /* Donker/Licht schakelaar */
 .mode-toggle {
   display: inline-flex;
@@ -85,6 +33,68 @@
 .mode-btn.active {
   background: var(--accent);
   color: var(--bg-primary);
+}
+
+/* Account-info onder Mijn gegevens */
+.instellingen-account-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.instellingen-account-email {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+/* Sync-acties in het synchronisatieblok */
+.sync-acties {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.sync-actie {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.sync-actie:last-of-type {
+  border-bottom: none;
+}
+
+.sync-actie-tekst {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sync-actie-tekst strong {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.sync-actie-tekst span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.sync-actie-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 /* Cloud status */
@@ -135,17 +145,6 @@
   background: var(--accent-bg);
 }
 
-.cloud-status__account {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.cloud-status__email {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-}
-
 .cloud-status__rol {
   font-size: 0.7rem;
   background: var(--accent-bg);
@@ -193,17 +192,6 @@
 .cloud-status__count-label {
   font-size: 0.72rem;
   color: var(--text-muted);
-}
-
-/* Sync controls */
-.sync-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  margin-top: 4px;
 }
 
 .sync-force-btn {
