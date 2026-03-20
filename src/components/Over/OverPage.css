@@ -10,9 +10,11 @@
 }
 
 .over-version {
-  color: var(--text-secondary, #94a3b8);
-  font-size: 0.875rem;
-  margin-bottom: 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin-left: 0.4rem;
+  vertical-align: middle;
 }
 
 .over-sectie {

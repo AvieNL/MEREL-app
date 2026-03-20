@@ -1,6 +1,13 @@
-export const VERSIE = '1.0.4';
+export const VERSIE = '1.0.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.0.5',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Versienummer achter de paginatitel geplaatst',
+    ],
+  },
   {
     versie: '1.0.4',
     datum: '2026-03-20',

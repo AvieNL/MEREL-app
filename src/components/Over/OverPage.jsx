@@ -5,8 +5,7 @@ import './OverPage.css';
 export default function OverPage() {
   return (
     <div className="over-page">
-      <h1>VRS App</h1>
-      <p className="over-version">v{VERSIE}</p>
+      <h1>VRS App <span className="over-version">v{VERSIE}</span></h1>
 
       <div className="over-sectie">
         <h2>Over deze app</h2>
