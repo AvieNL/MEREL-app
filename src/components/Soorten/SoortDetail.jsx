@@ -986,14 +986,9 @@ export default function SoortDetail({ records, speciesOverrides }) {
               <span className="sd-sub-title">Recente vangsten</span>
               {[...soortRecords]
                 .sort((a, b) => {
-                  const parseDate = d => {
-                    if (!d) return 0;
-                    const [dd, mm, yyyy] = d.split('-');
-                    return new Date(yyyy, mm - 1, dd).getTime();
-                  };
-                  const dateA = parseDate(a.vangstdatum);
-                  const dateB = parseDate(b.vangstdatum);
-                  if (dateB !== dateA) return dateB - dateA;
+                  const dateA = a.vangstdatum || '';
+                  const dateB = b.vangstdatum || '';
+                  if (dateB !== dateA) return dateB > dateA ? 1 : -1;
                   // Zelfde datum: ringnummer als tiebreaker, maar alleen voor nieuwe vangsten
                   const isTvA = a.metalenringinfo === 4 || a.metalenringinfo === '4';
                   const isTvB = b.metalenringinfo === 4 || b.metalenringinfo === '4';
