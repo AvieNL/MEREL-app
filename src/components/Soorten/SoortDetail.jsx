@@ -1011,7 +1011,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
                         className="sd-recent-ring ring-link"
                         onClick={() => navigate('/records', { state: { openId: r.id } })}
                       >{r.ringnummer}</span>
-                      <span className="sd-recent-date">{r.vangstdatum}</span>
+                      <span className="sd-recent-date">{r.vangstdatum ? r.vangstdatum.split('-').reverse().join('-') : ''}</span>
                       <span className="sd-recent-meta">
                         {r.geslacht && r.geslacht !== 'U' && <>{r.geslacht}</>}
                         {r.leeftijd && <> · {leeftijdLabel(r.leeftijd)}</>}
