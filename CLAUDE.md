@@ -8,19 +8,37 @@ Thijs ter Avest - VRS Breedenbroek (Gelderland)
 Ringernummer: 3254
 
 ## Tech stack
-- React 18 met Vite als bundler
+- React 19 met Vite als bundler
 - Vanilla CSS met CSS custom properties (geen Tailwind)
-- Supabase als backend + localStorage/IndexedDB (Dexie) voor offline cache
-- Service Worker voor offline gebruik
+- Supabase als backend (PostgreSQL + RLS)
+- Dexie (IndexedDB) voor offline-first cache
+- Service Worker via vite-plugin-pwa voor offline gebruik
+- React Router v7 voor navigatie
+- Leaflet voor kaartweergave
 
 ## Projectstructuur
 ```
 src/
   components/     # React componenten, elk in eigen map
-  data/           # Statische data (soorten, EURING codes, Griel import)
-  hooks/          # Custom hooks (useRecords, useProjects)
-  utils/          # Export functies (Griel XML, CSV), storage helpers
-  styles/         # CSS theme en globale stijlen
+    Admin/        # Gebruikersbeheer, ruitypen
+    Auth/         # Login
+    Databases/    # Database-overzichtspagina
+    Instellingen/ # Instellingen, sync-status, thema
+    Layout/       # Header, navigatie
+    Nieuw/        # Invoerformulier nieuwe/bewerkte vangst
+    Over/         # Over-pagina met changelog
+    Projecten/    # Projectbeheer
+    Records/      # Vangstlijst
+    Ringstreng/   # Ringstrengen beheer
+    Soorten/      # Soortenpagina's en detailpagina
+    Stats/        # Statistieken, grafieken, exports
+    Sync/         # MigrationBanner
+  context/        # AuthContext, SyncContext
+  data/           # Statische data en constanten
+  hooks/          # 10 custom hooks
+  lib/            # db.js (Dexie), supabase.js (client)
+  styles/         # theme.css (CSS custom properties)
+  utils/          # Export (XML/CSV), helpers, lookup
 public/           # PWA manifest, service worker, icons
 ```
 
@@ -29,6 +47,12 @@ public/           # PWA manifest, service worker, icons
 - Mobile-first responsive, minimaal 44px touch targets
 - Nederlandse UI-teksten
 - Inklapbare formulier-secties voor snelle invoer
+
+## Gebruikersrollen
+Drie rollen via Supabase `profiles.rol`, simuleerbaar via sessionStorage:
+- **admin** — volledig toegang + admin panel
+- **ringer** — eigen data beheren (standaard)
+- **viewer** — alleen lezen
 
 ## Griel/EURING veldsysteem
 De app ondersteunt alle 65 velden uit het Griel-systeem (Vogeltrekstation).
@@ -48,37 +72,66 @@ De export moet voldoen aan de Griel bulkupload specificatie:
 - Alle verplichte EURING-velden moeten aanwezig zijn
 
 ## Data
-- Soorten (~3565) komen uit Supabase (`species` tabel), offline gecached in Dexie. Inclusief EURING-codes, namen, ringmaat, ruitype, nestdata, boeken en biometrie.
-- `data/griel-import.json` - 436 bestaande vangsten uit Griel-export (eenmalige historische import)
+- **Soorten (~3565)** komen uit Supabase (`species` tabel), offline gecached in Dexie. Bevat: namen (NL/Latijn/EN/DE/FR/ES), EURING-code, ringmaat, ruitype, nestdata, determinatieboeken, biometriegrenzen per geslacht.
+- **EURING-codes** zitten in het `data`-veld van elke soort in Supabase — geen apart bestand.
+- **`data/euring-reference.js`** — hardcoded EURING Exchange Code lijsten (metalenringinfo, leeftijd, geslacht, etc.) voor de keuzelijsten in het formulier.
+- **`data/constants.js`** — app-brede constanten (PULL_INTERVAL_MS, RUIKAART_SLAGEN, MAX_GRIEL_TEKST).
+- **`data/changelog.js`** — versiegeschiedenis en huidig versienummer.
+- **`data/andere-banen-import.json`** en **`data/buitenland-import.json`** — eenmalige historische importbestanden.
 
 ## Soortenpagina's
-De app heeft een "Soorten" pagina met voor elke vogelsoort een detailpagina.
-Data komt uitsluitend uit Supabase (via `useSpeciesRef` hook → Dexie cache).
+Data komt uitsluitend uit Supabase via `useSpeciesRef()` → Dexie cache.
 
 Elke soortpagina toont:
-- Namen (NL, Latijn, Engels, Duits)
-- Ringmaat, ruitype
-- Nestgegevens (eileg, broedels, eieren, ei-dagen, jong-dagen, broedzorg)
-- Determinatieboeken met paginanummers
-- Vangststatistieken van de gebruiker (uit opgeslagen records)
+- Hero: foto, Nederlandse naam, Latijnse naam, ringmaat, ruitype
+- Geslachts- en leeftijdsbepaling (♂/♀, voorjaar/najaar)
+- Ring & Rui (ringmaat, ruitype, EURING-code, ruikalender)
+- Namen (NL, Latijn, EN, DE, FR, ES) + taxonomie (familie, orde)
+- Biometrie met algemene en geslachtsspecifieke min/max ranges, inclusief eigen vangsten
+- Nestgegevens (eileg, broedels, eieren, broedtijd, nestjong, broedzorg)
+- Determinatieboeken met paginanummers (Svensson, Demongin, Baker, Klaassen, etc.)
+- Mijn vangsten: teller, geslacht/leeftijd verdeling, kaart, recente 10 vangsten
 
 ### Biometrie-validatie bij invoer
-Als een soort wordt geselecteerd in het invoerformulier:
-1. Toon de ringmaat en ruitype als info-balk
-2. Controleer ingevoerde biometrie tegen bekende min/max ranges
-3. Toon een gele waarschuwing als een waarde buiten de normale range valt
-4. Blokkeer NIET het opslaan (het is een waarschuwing, geen fout)
+Bij soortselectie in het invoerformulier worden biometriegrenzen getoond en gecontroleerd.
+Prioriteit van bronnen (hoog → laag):
+1. Literatuurdata uit de `species` tabel (Supabase)
+2. Gebruikersoverschrijving via `species_overrides`
+3. Eigen vangsten (min 3 records, ±10% marge, nestjongen uitgesloten)
 
-De ranges worden opgebouwd vanuit de opgeslagen vangsten van die soort
-(neem min en max van bestaande data + 10% marge).
+Toon gele waarschuwing bij waarde buiten range — blokkeer opslaan NIET.
+
+## Offline & sync
+- Mutaties worden in een `sync_queue` (Dexie) gezet en verwerkt zodra online
+- Max 5 pogingen per item, daarna verwijderd
+- Pull van species/overrides/veldconfig bij login en bij tab-focus
+- `lastSynced` opgeslagen in localStorage
+- Gesynchroniseerde tabellen: vangsten, projecten, ringstrengen, species_overrides, profiles
+
+## App-pagina's
+| Route | Pagina |
+|---|---|
+| `/` | Nieuw/bewerk vangst |
+| `/records` | Vangstlijst |
+| `/stats` | Statistieken & export |
+| `/soorten` | Soortenbrowser |
+| `/soorten/:naam` | Soortdetailpagina |
+| `/projecten` | Projectbeheer |
+| `/ringstrengen` | Ringstrengen |
+| `/instellingen` | Instellingen & sync |
+| `/databases` | Databaseoverzicht |
+| `/over` | Over & changelog |
+| `/admin` | Admin panel |
 
 ## Commando's
-- `npm run dev` - development server op localhost
+- `npm run dev` - development server
 - `npm run build` - productie build naar dist/
 - `npm run preview` - preview van productie build
+- `npm run lint` - ESLint
 
 ## Conventies
 - Componentnamen in PascalCase
 - Hook namen beginnen met `use`
-- Nederlandse variabelenamen voor domein-specifieke concepten (vangst, soort, ringnummer)
-- Engelse namen voor technische concepten (state, handler, export)
+- Nederlandse variabelenamen voor domein-specifieke concepten (vangst, soort, ringnummer, rui)
+- Engelse namen voor technische concepten (state, handler, export, sync)
+- Bij elke commit: versienummer en changelog.js bijwerken
