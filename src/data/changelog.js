@@ -1,6 +1,14 @@
-export const VERSIE = '1.3.0';
+export const VERSIE = '1.3.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.3.1',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Tests: Vitest opgezet — 56 unit tests voor dateHelper, bioHelper en Griel XML-export',
+      'Tests: exportGriel dekt datum/tijd-conversie, geslacht, pullus-velden, XML-escaping en biometrie',
+    ],
+  },
   {
     versie: '1.3.0',
     datum: '2026-03-21',
