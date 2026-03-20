@@ -4,6 +4,7 @@ import { generateId } from '../utils/storage';
 import { db } from '../lib/db';
 import { supabase } from '../lib/supabase';
 import { toVangstRow, fromVangstRow } from '../utils/supabase-helpers';
+import { toYMD } from '../utils/dateHelper';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
 import buitenlandData from '../data/buitenland-import.json';
@@ -145,14 +146,6 @@ export function useRecords() {
     await db.meta.put({ key: `normalize_dates_v2_${user.id}`, value: true });
   }
 
-  function toYMD(d) {
-    if (!d) return d;
-    const p = d.split('-');
-    if (p.length !== 3) return d;
-    if (p[0].length === 4) return `${p[0]}-${p[1].padStart(2, '0')}-${p[2].padStart(2, '0')}`;
-    if (p[2].length === 4) return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
-    return d;
-  }
 
   // --- Mutaties ---
 

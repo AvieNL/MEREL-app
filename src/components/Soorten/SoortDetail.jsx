@@ -8,6 +8,7 @@ import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuitypeInfo from './RuitypeInfo';
 import { VangstKaart } from '../Stats/Charts';
 import { renderMarkdown } from '../../utils/textHelper';
+import { formatDatum } from '../../utils/dateHelper';
 import './SoortDetail.css';
 
 // Textarea met B/I/U-opmaakbalk die automatisch meegroeit
@@ -53,13 +54,6 @@ const LEEFTIJD_LABEL = {
 };
 function leeftijdLabel(code) { return LEEFTIJD_LABEL[code] || code; }
 
-function formatDatum(d) {
-  if (!d) return '';
-  const p = d.split('-');
-  if (p.length !== 3) return d;
-  if (p[0].length === 4) return `${p[2].padStart(2,'0')}-${p[1].padStart(2,'0')}-${p[0]}`;
-  return `${p[0].padStart(2,'0')}-${p[1].padStart(2,'0')}-${p[2]}`;
-}
 
 
 function resizeImage(file, maxWidth = 400) {

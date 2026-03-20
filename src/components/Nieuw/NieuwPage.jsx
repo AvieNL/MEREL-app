@@ -8,6 +8,7 @@ import RuiscoreDiagram from './RuiscoreDiagram';
 import LocatiePicker from './LocatiePicker';
 import { useRuitypen } from '../../hooks/useRuitypen';
 import { renderMarkdown } from '../../utils/textHelper';
+import { toYMD } from '../../utils/dateHelper';
 import './NieuwPage.css';
 
 // Inline informatieblok onder een veld — toont soortspecifieke determinatieinfo
@@ -1221,15 +1222,8 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
       r.ringnummer && normalize(r.ringnummer) === nr
     );
     if (matches.length === 0) return { eigen: false };
-    // Normaliseer dd-mm-yyyy → yyyy-mm-dd voor correcte chronologische sortering
-    const toISO = d => {
-      if (!d) return '';
-      const parts = d.split('-');
-      if (parts.length === 3 && parts[0].length === 2) return `${parts[2]}-${parts[1]}-${parts[0]}`;
-      return d;
-    };
     const gesorteerd = [...matches].sort((a, b) =>
-      toISO(a.vangstdatum).localeCompare(toISO(b.vangstdatum))
+      (toYMD(a.vangstdatum) || '').localeCompare(toYMD(b.vangstdatum) || '')
     );
     const eerste = gesorteerd[0];
     const laatste = gesorteerd[gesorteerd.length - 1];

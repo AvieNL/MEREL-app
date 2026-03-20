@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
+import { formatDatum } from '../../utils/dateHelper';
 import './StatsPage.css';
 
 export default function ProjectDetail({ records }) {
@@ -119,12 +120,6 @@ export default function ProjectDetail({ records }) {
     return sorted.slice(0, 10);
   }, [alleTerugvangsten, tvSorteer]);
 
-  function formatDatum(d) {
-    if (!d) return '—';
-    const parts = d.split('-');
-    if (parts[0].length === 4) return `${parts[2]}-${parts[1]}-${parts[0]}`;
-    return d;
-  }
 
   const topMax = topSoorten.length > 0 ? topSoorten[0].totaal : 1;
 
@@ -276,7 +271,7 @@ export default function ProjectDetail({ records }) {
                   <tr key={`${tv.ringnummer}-${tv.datum}-${i}`}>
                     <td className="tt-col-soort">{tv.soort}</td>
                     <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
-                    <td className="tv-datum">{formatDatum(tv.datum)}</td>
+                    <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
                     <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>
                     <td className="tt-col-num tv-afstand">{formatAfstand(tv.afstandKm)}</td>
                   </tr>

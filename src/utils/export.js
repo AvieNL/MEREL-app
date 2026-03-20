@@ -1,3 +1,4 @@
+import { toYMD } from './dateHelper';
 
 // CSV Export
 export function exportCSV(records) {
@@ -39,15 +40,6 @@ function bioTag(name, value) {
   return `      <${name}>${xmlEsc(value)}</${name}>`;
 }
 
-// Datum naar yyyy-mm-dd (GRIEL-formaat)
-function toISO(d) {
-  if (!d) return '';
-  const parts = String(d).split('-');
-  if (parts.length === 3 && parts[0].length === 2) {
-    return `${parts[2]}-${parts[1]}-${parts[0]}`;
-  }
-  return String(d);
-}
 
 // Tijd naar HHMM (4 cijfers, geen dubbele punt) of '----' bij onbekend
 function toCatchTime(t) {
@@ -107,7 +99,7 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
   const captures = records.map(r => {
     const actingId = r.project ? (projectAupis[r.project] || '') : '';
     const specCode  = speciesCode(r.vogelnaam, euringLookup);
-    const catchDate = toISO(r.vangstdatum);
+    const catchDate = toYMD(r.vangstdatum);
     const reportingDate = today();
 
     // ── Capture-velden (volgorde conform XSD) ───────────────────────────────

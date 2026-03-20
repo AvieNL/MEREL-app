@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useRole } from '../../hooks/useRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { buildEuringLookup } from '../../utils/euring-lookup';
+import { formatDatum } from '../../utils/dateHelper';
 import './RecordsPage.css';
 
 function geslachtIcoon(g) {
@@ -23,14 +24,6 @@ function stripDots(ring) {
 }
 
 // Normaliseer datum naar dd-mm-yyyy voor weergave
-function fmtDatum(d) {
-  if (!d) return '';
-  const parts = d.split('-');
-  if (parts.length === 3 && parts[0].length === 4) {
-    return `${parts[2].padStart(2, '0')}-${parts[1].padStart(2, '0')}-${parts[0]}`;
-  }
-  return d;
-}
 
 // ISO timestamp naar dd-mm-yyyy HH:MM
 function fmtTimestamp(ts) {
@@ -155,7 +148,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                   </div>
                 </div>
                 <div className="record-meta">
-                  <span>{fmtDatum(r.vangstdatum)}</span>
+                  <span>{formatDatum(r.vangstdatum)}</span>
                   {r.bron === 'griel_import' && <span className="badge badge-accent">Griel</span>}
                   {r.bron === 'buitenland_import' && <span className="badge badge-accent">Buitenland</span>}
                   {r.bron === 'andere_banen_import' && <span className="badge badge-accent">Extern</span>}
@@ -180,7 +173,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                     {r.opmerkingen && <div><span className="detail-label">Opmerkingen:</span> {r.opmerkingen}</div>}
                   </div>
                   <div className="record-datums">
-                    <div><span className="detail-label">Aangemaakt:</span> {fmtDatum(r.vangstdatum)}</div>
+                    <div><span className="detail-label">Aangemaakt:</span> {formatDatum(r.vangstdatum)}</div>
                     {r.exported_at && <div><span className="detail-label">Geëxporteerd naar Griel:</span> {fmtTimestamp(r.exported_at)}</div>}
                     {r.handmatig_gewijzigd_at && <div><span className="detail-label">Handmatig gewijzigd:</span> {fmtTimestamp(r.handmatig_gewijzigd_at)}</div>}
                   </div>
@@ -228,7 +221,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                   <div className="prullenbak-info">
                     <strong>{r.vogelnaam || 'Onbekend'}</strong>
                     {r.ringnummer && <span className="prullenbak-ring">{stripDots(r.ringnummer)}</span>}
-                    {r.vangstdatum && <span className="prullenbak-datum">{fmtDatum(r.vangstdatum)}</span>}
+                    {r.vangstdatum && <span className="prullenbak-datum">{formatDatum(r.vangstdatum)}</span>}
                   </div>
                   <div className="prullenbak-acties">
                     {onRestore && canDelete && (

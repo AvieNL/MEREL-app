@@ -5,14 +5,8 @@ import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
+import { formatDatum, toYMD } from '../../utils/dateHelper';
 import './StatsPage.css';
-
-function toISO(d) {
-  if (!d) return '';
-  const parts = String(d).split('-');
-  if (parts.length === 3 && parts[0].length === 2) return `${parts[2]}-${parts[1]}-${parts[0]}`;
-  return String(d);
-}
 
 function capitalize(s) {
   if (!s) return s;
@@ -256,7 +250,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
   function filterByDatum(data) {
     if (!exportVan && !exportTot) return data;
     return data.filter(r => {
-      const iso = toISO(r.vangstdatum);
+      const iso = toYMD(r.vangstdatum);
       if (!iso) return false;
       if (exportVan && iso < exportVan) return false;
       if (exportTot && iso > exportTot) return false;
@@ -396,12 +390,6 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
     reader.readAsText(file);
   }
 
-  function formatDatum(d) {
-    if (!d) return '—';
-    const parts = d.split('-');
-    if (parts[0].length === 4) return `${parts[2]}-${parts[1]}-${parts[0]}`;
-    return d;
-  }
 
   return (
     <div className="page stats-page">
@@ -617,7 +605,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
                     <tr key={`${tv.ringnummer}-${tv.datum}-${i}`}>
                       <td className="tt-col-soort">{tv.soort}</td>
                       <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
-                      <td className="tv-datum">{formatDatum(tv.datum)}</td>
+                      <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
                       <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>
                       <td className="tt-col-num tv-afstand">{formatAfstand(tv.afstandKm)}</td>
                     </tr>
