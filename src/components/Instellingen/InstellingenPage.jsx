@@ -1,11 +1,13 @@
+import { useState } from 'react';
 import { useTheme } from '../../hooks/useTheme';
 import { useSync } from '../../context/SyncContext';
 import CloudStatus from './CloudStatus';
 import './InstellingenPage.css';
 
-export default function InstellingenPage({ settings, onUpdateSettings }) {
+export default function InstellingenPage({ settings, onUpdateSettings, onFullResync }) {
   const { mode, setMode } = useTheme();
   const { processQueue, syncing, pendingCount, isOnline, lastSynced } = useSync();
+  const [resyncing, setResyncing] = useState(false);
 
   return (
     <div className="page instellingen-page">
@@ -72,6 +74,23 @@ export default function InstellingenPage({ settings, onUpdateSettings }) {
               <span className="sync-offline-note">Offline — sync niet mogelijk</span>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="section">
+        <h3>Data herstellen</h3>
+        <div className="section-content">
+          <p className="admin-hint">
+            Haal alle vangsten opnieuw op vanuit de cloud. Gebruik dit als de app niet up-to-date lijkt na een synchronisatiefout of na gebruik op een ander apparaat.
+          </p>
+          <button
+            className="btn-secondary sync-force-btn"
+            onClick={async () => { setResyncing(true); await onFullResync(); setResyncing(false); }}
+            disabled={resyncing || !isOnline}
+          >
+            {resyncing ? 'Bezig…' : '↺ Herlaad alle data'}
+          </button>
+          {!isOnline && <span className="sync-offline-note">Offline — niet mogelijk</span>}
         </div>
       </div>
 

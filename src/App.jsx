@@ -117,7 +117,7 @@ function MainApp() {
 
   return (
     <div className="app-shell">
-      <Header onFullResync={fullResync} />
+      <Header />
       <MigrationBanner onComplete={() => {}} />
       <main className="app-content">
         <Routes>
@@ -161,7 +161,7 @@ function MainApp() {
             <ProjectenPage projects={projects} onAdd={addProject} onUpdate={updateProject} onDelete={deleteProject} onRenameProject={renameProject} onAupiSaved={refreshAupis} />
           } />
           <Route path="/instellingen" element={
-            <InstellingenPage settings={settings} onUpdateSettings={updateSettings} />
+            <InstellingenPage settings={settings} onUpdateSettings={updateSettings} onFullResync={fullResync} />
           } />
           <Route path="/ringstrengen" element={
             <RingstrengenPage

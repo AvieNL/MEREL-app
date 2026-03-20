@@ -8,9 +8,8 @@ import './Header.css';
 
 const ROL_LABELS = { admin: 'Admin', ringer: 'Ringer', viewer: 'Viewer' };
 
-export default function Header({ onFullResync }) {
+export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [resyncing, setResyncing] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
   const { logout, profile, simulatedRole, setSimulatedRole } = useAuth();
@@ -86,14 +85,6 @@ export default function Header({ onFullResync }) {
               <button onClick={() => goTo('/projecten')}>Projecten</button>
               <button onClick={() => goTo('/ringstrengen')}>Ringstrengen</button>
               <button onClick={() => goTo('/instellingen')}>Instellingen</button>
-              {onFullResync && (
-                <button
-                  onClick={async () => { setMenuOpen(false); setResyncing(true); await onFullResync(); setResyncing(false); }}
-                  disabled={resyncing}
-                >
-                  {resyncing ? 'Bezig…' : '↺ Herlaad alle data'}
-                </button>
-              )}
               <button onClick={() => goTo('/over')}>Over</button>
 
               {isRealAdmin && (
