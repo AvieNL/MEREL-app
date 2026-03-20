@@ -9,6 +9,7 @@ import RuitypeInfo from './RuitypeInfo';
 import { VangstKaart } from '../Stats/Charts';
 import { renderMarkdown } from '../../utils/textHelper';
 import { formatDatum } from '../../utils/dateHelper';
+import { LEEFTIJD_LABEL } from '../../data/constants';
 import './SoortDetail.css';
 
 // Textarea met B/I/U-opmaakbalk die automatisch meegroeit
@@ -48,10 +49,6 @@ function FormattedTextarea({ value, onChange, placeholder }) {
   );
 }
 
-const LEEFTIJD_LABEL = {
-  '0': '?', '1': 'pullus', '2': 'onb.', '3': '1kj', '4': '+1kj',
-  '5': '2kj', '6': '+2kj', '7': '3kj', '8': '+3kj', '9': '4kj+', 'A': '+4kj',
-};
 function leeftijdLabel(code) { return LEEFTIJD_LABEL[code] || code; }
 
 

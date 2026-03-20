@@ -4,6 +4,7 @@ import { useRole } from '../../hooks/useRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import { formatDatum } from '../../utils/dateHelper';
+import { LEEFTIJD_LABEL } from '../../data/constants';
 import './RecordsPage.css';
 
 function geslachtIcoon(g) {
@@ -38,19 +39,6 @@ function fmtTimestamp(ts) {
   return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
 }
 
-const LEEFTIJD_LABEL = {
-  '0': '?',
-  '1': 'pullus',
-  '2': 'onb.',
-  '3': '1kj',
-  '4': '+1kj',
-  '5': '2kj',
-  '6': '+2kj',
-  '7': '3kj',
-  '8': '+3kj',
-  '9': '4kj+',
-  'A': '+4kj',
-};
 
 function leeftijdLabel(code) {
   if (!code) return '';
