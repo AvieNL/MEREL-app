@@ -1,6 +1,13 @@
-export const VERSIE = '1.0.3';
+export const VERSIE = '1.0.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.0.4',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Opruiming: euring-codes.json fallback verwijderd — alle 3565 soorten hebben EURING-code in Supabase',
+    ],
+  },
   {
     versie: '1.0.3',
     datum: '2026-03-20',
