@@ -7,6 +7,19 @@ export function formatDatum(d) {
   return `${p[0].padStart(2, '0')}-${p[1].padStart(2, '0')}-${p[2]}`;
 }
 
+// ISO timestamp weergeven als dd-mm-yyyy HH:MM
+export function formatDatumTijd(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  if (isNaN(d)) return '';
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const yyyy = d.getFullYear();
+  const hh = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+  return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
+}
+
 // Datum normaliseren naar yyyy-mm-dd (voor opslag en sortering)
 export function toYMD(d) {
   if (!d) return d;

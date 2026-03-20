@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useRole } from '../../hooks/useRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { buildEuringLookup } from '../../utils/euring-lookup';
-import { formatDatum } from '../../utils/dateHelper';
+import { formatDatum, formatDatumTijd } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL, MAX_RECORDS_WEERGAVE } from '../../data/constants';
 import './RecordsPage.css';
 
@@ -25,19 +25,6 @@ function stripDots(ring) {
 }
 
 // Normaliseer datum naar dd-mm-yyyy voor weergave
-
-// ISO timestamp naar dd-mm-yyyy HH:MM
-function fmtTimestamp(ts) {
-  if (!ts) return '';
-  const d = new Date(ts);
-  if (isNaN(d)) return '';
-  const dd = String(d.getDate()).padStart(2, '0');
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const yyyy = d.getFullYear();
-  const hh = String(d.getHours()).padStart(2, '0');
-  const min = String(d.getMinutes()).padStart(2, '0');
-  return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
-}
 
 
 function leeftijdLabel(code) {
@@ -162,8 +149,8 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                   </div>
                   <div className="record-datums">
                     <div><span className="detail-label">Aangemaakt:</span> {formatDatum(r.vangstdatum)}</div>
-                    {r.exported_at && <div><span className="detail-label">Geëxporteerd naar Griel:</span> {fmtTimestamp(r.exported_at)}</div>}
-                    {r.handmatig_gewijzigd_at && <div><span className="detail-label">Handmatig gewijzigd:</span> {fmtTimestamp(r.handmatig_gewijzigd_at)}</div>}
+                    {r.exported_at && <div><span className="detail-label">Geëxporteerd naar Griel:</span> {formatDatumTijd(r.exported_at)}</div>}
+                    {r.handmatig_gewijzigd_at && <div><span className="detail-label">Handmatig gewijzigd:</span> {formatDatumTijd(r.handmatig_gewijzigd_at)}</div>}
                   </div>
                   {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
                     <div className="record-actions">

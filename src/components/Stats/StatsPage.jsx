@@ -185,7 +185,7 @@ function parseCSV(text) {
 }
 
 // Vogelnamen die niet in statistieken worden meegeteld
-const STATS_UITGESLOTEN = new Set(['ring vernietigd of verloren']);
+const STATS_UITGESLOTEN = ['ring vernietigd of verloren'];
 
 export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [], myAupis = {} }) {
   const navigate = useNavigate();
@@ -193,7 +193,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
 
   const statsRecords = useMemo(
-    () => records.filter(r => !STATS_UITGESLOTEN.has(r.vogelnaam?.toLowerCase())),
+    () => records.filter(r => !STATS_UITGESLOTEN.includes(r.vogelnaam?.toLowerCase())),
     [records]
   );
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);

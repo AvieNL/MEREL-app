@@ -1,6 +1,15 @@
-export const VERSIE = '1.1.2';
+export const VERSIE = '1.1.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.1.3',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Refactor: hamburger-icoon vervangen door inline SVG',
+      'Refactor: formatDatumTijd toegevoegd aan dateHelper — dubbele implementatie in RecordsPage verwijderd',
+      'Refactor: STATS_UITGESLOTEN vereenvoudigd van Set naar array',
+    ],
+  },
   {
     versie: '1.1.2',
     datum: '2026-03-20',
