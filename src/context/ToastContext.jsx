@@ -7,6 +7,10 @@ let _nextId = 0;
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
+  const removeToast = useCallback((id) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  }, []);
+
   const addToast = useCallback((message, type = 'info', duration = 4000) => {
     const id = ++_nextId;
     setToasts(prev => [...prev, { id, message, type }]);
@@ -14,11 +18,7 @@ export function ToastProvider({ children }) {
       setTimeout(() => removeToast(id), duration);
     }
     return id;
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  function removeToast(id) {
-    setToasts(prev => prev.filter(t => t.id !== id));
-  }
+  }, [removeToast]);
 
   return (
     <ToastContext.Provider value={{ addToast, removeToast, toasts }}>
