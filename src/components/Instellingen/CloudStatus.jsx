@@ -15,7 +15,7 @@ function fmtTijd(date) {
 
 export default function CloudStatus() {
   const { user } = useAuth();
-  const { pendingCount, syncError, lastSynced, isOnline } = useSync();
+  const { pendingCount, syncError, lastSynced, isOnline, syncLost, clearSyncLost } = useSync();
   const [online, setOnline] = useState(null);
   const [loadingOnline, setLoadingOnline] = useState(true);
   const [onlineError, setOnlineError] = useState('');
@@ -85,6 +85,7 @@ export default function CloudStatus() {
   ];
 
   const fout = syncError || onlineError;
+  const verloren = syncLost > 0;
 
   return (
     <div className="cloud-status">
@@ -136,6 +137,14 @@ export default function CloudStatus() {
         )}
       </div>
 
+      {verloren && (
+        <div className="cloud-status__lost">
+          <span>
+            {syncLost} wijziging{syncLost !== 1 ? 'en' : ''} kon{syncLost !== 1 ? 'den' : ''} niet worden gesynchroniseerd en {syncLost !== 1 ? 'zijn' : 'is'} verwijderd uit de wachtrij.
+          </span>
+          <button className="cloud-status__lost-dismiss" onClick={clearSyncLost}>✕</button>
+        </div>
+      )}
       {fout && <div className="cloud-status__error">{fout}</div>}
     </div>
   );

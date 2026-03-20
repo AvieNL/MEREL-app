@@ -1,10 +1,10 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from './AuthContext';
-import { supabase } from '../lib/supabase';
 import { db } from '../lib/db';
 import { pullSpeciesIfNeeded } from '../hooks/useSpeciesRef';
 import { pullSpeciesOverrides } from '../hooks/useSpeciesOverrides';
 import { pullVeldConfigIfNeeded } from '../hooks/useVeldConfig';
+import { executeQueueItem } from '../utils/syncQueue';
 
 const SyncContext = createContext(null);
 
@@ -21,7 +21,24 @@ export function SyncProvider({ children }) {
     return stored ? new Date(stored) : null;
   });
   const [syncError, setSyncError] = useState('');
+  const [syncLost, setSyncLost] = useState(() => {
+    const stored = localStorage.getItem('vrs-sync-lost');
+    return stored ? parseInt(stored, 10) : 0;
+  });
   const syncingRef = useRef(false);
+
+  function addSyncLost(count) {
+    setSyncLost(prev => {
+      const next = prev + count;
+      localStorage.setItem('vrs-sync-lost', String(next));
+      return next;
+    });
+  }
+
+  function clearSyncLost() {
+    setSyncLost(0);
+    localStorage.removeItem('vrs-sync-lost');
+  }
 
   // Online/offline detectie
   useEffect(() => {
@@ -127,9 +144,10 @@ export function SyncProvider({ children }) {
       }
     }
 
-    // Verwijder items die het maximaal aantal pogingen hebben bereikt
+    // Verwijder items die het maximaal aantal pogingen hebben bereikt en waarschuw de gebruiker
     const exhausted = await db.sync_queue.filter(i => (i.attempts ?? 0) >= MAX_ATTEMPTS).toArray();
     if (exhausted.length > 0) {
+      addSyncLost(exhausted.length);
       await db.sync_queue.bulkDelete(exhausted.map(i => i.id));
     }
 
@@ -166,6 +184,8 @@ export function SyncProvider({ children }) {
       isOnline,
       lastSynced,
       syncError,
+      syncLost,
+      clearSyncLost,
       addToQueue,
       processQueue,
       refreshPendingCount,
@@ -182,74 +202,3 @@ export function useSync() {
   return ctx;
 }
 
-// --- Interne helper: voert één queue-item uit tegen Supabase ---
-
-async function executeQueueItem(item, userId) {
-  const { table_name, operation, data } = item;
-
-  if (operation === 'upsert') {
-    const { error } = await supabase.from(table_name).upsert(data);
-    if (error) throw error;
-
-  } else if (operation === 'delete') {
-    const { error } = await supabase
-      .from(table_name)
-      .delete()
-      .eq('id', data.id)
-      .eq('user_id', userId);
-    if (error) throw error;
-
-  } else if (operation === 'batch_upsert') {
-    // data is een array van rows
-    const rows = data;
-    for (let i = 0; i < rows.length; i += 100) {
-      const { error } = await supabase.from(table_name).upsert(rows.slice(i, i + 100));
-      if (error) throw error;
-    }
-
-  } else if (operation === 'species_override_upsert') {
-    const { error } = await supabase
-      .from('species_overrides')
-      .upsert(data, { onConflict: 'user_id,soort_naam' });
-    if (error) throw error;
-
-  } else if (operation === 'species_override_delete') {
-    const { error } = await supabase
-      .from('species_overrides')
-      .delete()
-      .eq('user_id', data.user_id)
-      .eq('soort_naam', data.soort_naam);
-    if (error) throw error;
-
-  } else if (operation === 'profile_update') {
-    const { error } = await supabase
-      .from('profiles')
-      .update(data)
-      .eq('id', userId);
-    if (error) throw error;
-
-  } else if (operation === 'mark_uploaded') {
-    const { error } = await supabase
-      .from('vangsten')
-      .update({ uploaded: true, updated_at: new Date().toISOString() })
-      .eq('user_id', userId)
-      .in('id', data.ids);
-    if (error) throw error;
-
-  } else if (operation === 'soft_delete') {
-    const { error } = await supabase
-      .from('vangsten')
-      .update({ deleted_at: data.deleted_at, updated_at: new Date().toISOString() })
-      .eq('id', data.id)
-      .eq('user_id', userId);
-    if (error) throw error;
-
-  } else if (operation === 'restore') {
-    const { error } = await supabase
-      .from('vangsten')
-      .update({ deleted_at: null, updated_at: new Date().toISOString() })
-      .eq('id', data.id)
-      .eq('user_id', userId);
-    if (error) throw error;
-  }
-}
