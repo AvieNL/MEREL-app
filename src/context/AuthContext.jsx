@@ -57,13 +57,19 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function loadProfile(userId) {
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    setProfile(data);
-    setLoading(false);
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      if (error) console.error('Profiel laden mislukt:', error.message);
+      setProfile(data ?? null);
+    } catch (err) {
+      console.error('Profiel laden mislukt:', err.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function login(email, password) {

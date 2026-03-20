@@ -409,6 +409,9 @@
 }
 
 .export-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   margin-top: 10px;
   font-size: 0.82rem;
   color: var(--warning);
@@ -417,6 +420,19 @@
   border-radius: var(--radius-sm);
   padding: 8px 12px;
   line-height: 1.5;
+}
+
+.export-error span { flex: 1; }
+
+.export-error__close {
+  background: none;
+  border: none;
+  color: var(--warning);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 /* Grafieken */

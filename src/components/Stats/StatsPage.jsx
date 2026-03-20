@@ -198,6 +198,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
   );
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
   const [exportError, setExportError] = useState('');
+  const [exporting, setExporting] = useState(false);
 
   function openSoorten(soortenTabel, titel) {
     navigate('/stats/soorten', { state: { soortenTabel, titel } });
@@ -261,6 +262,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
 
   function handleExport(type, subset) {
     setExportError('');
+    setExporting(type);
     const base = subset === 'huidig' ? huidigeRecords : records;
     const data = filterByDatum(base);
     const datum = new Date().toISOString().split('T')[0];
@@ -336,6 +338,7 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
         break;
       }
     }
+    setExporting(false);
   }
 
   function handleConfirmUploaded() {
@@ -453,14 +456,17 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
 
         {huidigeStats.total > 0 && (
           <div className="export-buttons">
-            <button className="btn-primary" onClick={() => handleExport('griel', 'huidig')}>
-              Griel XML exporteren
+            <button className="btn-primary" onClick={() => handleExport('griel', 'huidig')} disabled={!!exporting}>
+              {exporting === 'griel' ? 'Exporteren…' : 'Griel XML exporteren'}
             </button>
           </div>
         )}
 
         {exportError && (
-          <p className="export-error">{exportError}</p>
+          <div className="export-error">
+            <span>{exportError}</span>
+            <button className="export-error__close" onClick={() => setExportError('')}>✕</button>
+          </div>
         )}
 
         {showUploadConfirm && (
@@ -723,14 +729,14 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
           </div>
 
           <div className="export-buttons">
-            <button className="btn-primary" onClick={() => handleExport('griel', 'alles')}>
-              Griel XML
+            <button className="btn-primary" onClick={() => handleExport('griel', 'alles')} disabled={!!exporting}>
+              {exporting === 'griel' ? 'Exporteren…' : 'Griel XML'}
             </button>
-            <button className="btn-secondary" onClick={() => handleExport('csv', 'alles')}>
-              CSV
+            <button className="btn-secondary" onClick={() => handleExport('csv', 'alles')} disabled={!!exporting}>
+              {exporting === 'csv' ? 'Exporteren…' : 'CSV'}
             </button>
-            <button className="btn-secondary" onClick={() => handleExport('json', 'alles')}>
-              JSON
+            <button className="btn-secondary" onClick={() => handleExport('json', 'alles')} disabled={!!exporting}>
+              {exporting === 'json' ? 'Exporteren…' : 'JSON'}
             </button>
           </div>
           {exportError && (

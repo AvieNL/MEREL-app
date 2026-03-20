@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useAuth } from '../../context/AuthContext';
 import { useSync } from '../../context/SyncContext';
+import { useSpeciesError } from '../../hooks/useSpeciesRef';
 import { db } from '../../lib/db';
 import { supabase } from '../../lib/supabase';
 import { formatDatum } from '../../utils/dateHelper';
@@ -16,6 +17,7 @@ function fmtTijd(date) {
 export default function CloudStatus() {
   const { user } = useAuth();
   const { pendingCount, syncError, lastSynced, isOnline, syncLost, clearSyncLost } = useSync();
+  const speciesError = useSpeciesError();
   const [online, setOnline] = useState(null);
   const [loadingOnline, setLoadingOnline] = useState(true);
   const [onlineError, setOnlineError] = useState('');
@@ -84,7 +86,7 @@ export default function CloudStatus() {
     { label: 'Ringstrengen', lokaal: lokaalRingstrengen,online: online?.ringstrengen },
   ];
 
-  const fout = syncError || onlineError;
+  const fout = syncError || onlineError || speciesError;
   const verloren = syncLost > 0;
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../lib/db';
 import { supabase } from '../lib/supabase';
@@ -6,6 +6,20 @@ import { PULL_INTERVAL_MS } from '../data/constants';
 
 // Module-level vlag zodat gelijktijdige hook-instanties niet tegelijk pullen
 let _pulling = false;
+let _pullError = null;
+const _errorListeners = new Set();
+
+function setSpeciesError(msg) {
+  _pullError = msg;
+  _errorListeners.forEach(fn => fn());
+}
+
+export function useSpeciesError() {
+  return useSyncExternalStore(
+    cb => { _errorListeners.add(cb); return () => _errorListeners.delete(cb); },
+    () => _pullError
+  );
+}
 
 /**
  * Geeft alle soorten terug uit de lokale Dexie-cache (offline-first).
@@ -57,7 +71,11 @@ export async function pullSpeciesIfNeeded(force = false) {
         .from('species')
         .select('naam_nl, data')
         .range(offset, offset + PAGE - 1);
-      if (error) return;
+      if (error) {
+        console.error('Soorten ophalen mislukt:', error.message);
+        setSpeciesError('Soorten konden niet worden opgehaald. Controleer je verbinding.');
+        return;
+      }
       if (!data || data.length === 0) break;
       allData = allData.concat(data);
       if (data.length < PAGE) break;

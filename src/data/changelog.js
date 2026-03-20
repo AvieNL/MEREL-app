@@ -1,6 +1,15 @@
-export const VERSIE = '1.1.0';
+export const VERSIE = '1.1.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.1.1',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'UX: exportfout toont nu een sluitknop (✕) en exportknoppen zijn uitgeschakeld tijdens export',
+      'Fix: app blijft niet meer hangen als profiel laden mislukt (altijd setLoading(false))',
+      'Fix: foutmelding bij mislukte soortenpull zichtbaar in Cloudstatus',
+    ],
+  },
   {
     versie: '1.1.0',
     datum: '2026-03-20',
