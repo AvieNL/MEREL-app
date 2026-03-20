@@ -1,6 +1,15 @@
-export const VERSIE = '1.0.4';
+export const VERSIE = '1.0.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.0.5',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Grote opruiming: alle historische seed- en migratiebestanden verwijderd (data zit volledig in Supabase)',
+      'useRecords: statische JSON-import van buitenland/andere-banen vervangen door Supabase pull',
+      'App-bundel verkleind van ~2.6 MB naar ~1.0 MB',
+    ],
+  },
   {
     versie: '1.0.4',
     datum: '2026-03-20',

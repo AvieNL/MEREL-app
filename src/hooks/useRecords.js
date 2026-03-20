@@ -7,8 +7,6 @@ import { toVangstRow, fromVangstRow } from '../utils/supabase-helpers';
 import { toYMD } from '../utils/dateHelper';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
-import buitenlandData from '../data/buitenland-import.json';
-import andereBanenData from '../data/andere-banen-import.json';
 
 function migrateUploaded(record) {
   if (record.uploaded !== undefined) return record;
@@ -56,32 +54,8 @@ export function useRecords() {
     if (pulledRef.current) return;
     pulledRef.current = true;
     pullFromSupabase();
-    importStatischEenmalig('buitenland_v2', 'buitenland_import', buitenlandData, true);
-    importStatischEenmalig('andere_banen_v2', 'andere_banen_import', andereBanenData, true);
     normalizeVangstdatums();
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function importStatischEenmalig(sleutel, bronNaam, data, verwijderOude = false) {
-    const meta = await db.meta.get(`${sleutel}_${user.id}`);
-    if (meta?.value) return;
-    if (verwijderOude) {
-      const oud = await db.vangsten
-        .where('user_id').equals(user.id)
-        .filter(r => r.bron === bronNaam)
-        .primaryKeys();
-      if (oud.length > 0) await db.vangsten.bulkDelete(oud);
-    }
-    const withIds = data.map(r => ({
-      ...r,
-      id: r.id || generateId(),
-      timestamp: r.timestamp || new Date().toISOString(),
-      user_id: user.id,
-    }));
-    // Geen Supabase-sync: statische data zit in de app-bundle en wordt
-    // op elk apparaat opnieuw geladen vanuit de JSON. Alleen lokaal opslaan.
-    await db.vangsten.bulkPut(withIds);
-    await db.meta.put({ key: `${sleutel}_${user.id}`, value: true });
-  }
 
   async function pullFromSupabase() {
     const localCount = await db.vangsten
