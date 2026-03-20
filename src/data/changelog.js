@@ -1,6 +1,16 @@
-export const VERSIE = '1.2.4';
+export const VERSIE = '1.2.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.2.5',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Fix: CloudStatus controleerde alleen de eerste van drie Supabase-aanroepen op fouten — nu worden alle drie gecontroleerd',
+      'Fix: stille fout bij projecten-pull vervangen door assertNoError — fout is nu zichtbaar in console',
+      'Stabiliteit: assertNoError helper toegevoegd aan supabaseHelper voor uniform foutpatroon',
+      'DX: supabase.js gooit nu een duidelijke fout bij ontbrekende omgevingsvariabelen in development',
+    ],
+  },
   {
     versie: '1.2.4',
     datum: '2026-03-21',

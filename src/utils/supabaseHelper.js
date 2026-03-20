@@ -3,6 +3,19 @@ import { supabase } from '../lib/supabase';
 const PAGE_SIZE = 1000;
 
 /**
+ * Gooit een Error als het Supabase-resultaat een fout bevat.
+ * @param {{ data: unknown, error: unknown }} result
+ * @param {string} context  Beschrijving voor in de foutmelding (bijv. 'pullProjecten')
+ * @returns {unknown}       result.data bij succes
+ */
+export function assertNoError(result, context = '') {
+  if (result.error) {
+    throw new Error(context ? `[${context}] ${result.error.message}` : result.error.message);
+  }
+  return result.data;
+}
+
+/**
  * Haalt alle pagina's op van een Supabase-query.
  * @param {(from: number, to: number) => SupabaseQueryBuilder} buildQuery
  *   Functie die een query retourneert voor het gegeven bereik.

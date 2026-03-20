@@ -58,7 +58,8 @@ export default function CloudStatus() {
         supabase.from('projecten').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
         supabase.from('ringstrengen').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
       ]);
-      if (vangsten.error) throw vangsten.error;
+      const firstError = [vangsten, projecten, ringstrengen].find(r => r.error);
+      if (firstError) throw firstError.error;
       setOnline({
         vangsten: vangsten.count ?? 0,
         projecten: projecten.count ?? 0,

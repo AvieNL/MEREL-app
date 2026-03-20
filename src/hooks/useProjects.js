@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { generateId } from '../utils/storage';
 import { db } from '../lib/db';
 import { supabase } from '../lib/supabase';
+import { assertNoError } from '../utils/supabaseHelper';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
 
@@ -56,19 +57,20 @@ export function useProjects() {
     }
     if (pulledRef.current) return;
     pulledRef.current = true;
-    pullFromSupabase();
+    pullFromSupabase().catch(e => console.error('Projecten pull mislukt:', e.message));
     pullSharedProjects();
     pullMyAupis();
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function pullFromSupabase() {
     // Haal altijd alle projecten op (projecten zijn klein, altijd volledige sync)
-    const { data, error } = await supabase
+    const result = await supabase
       .from('projecten')
       .select('*')
       .eq('user_id', user.id);
 
-    if (error || !data) return;
+    const data = assertNoError(result, 'pullProjecten');
+    if (!data) return;
 
     const rows = data.map(r => ({
       id: r.id,
