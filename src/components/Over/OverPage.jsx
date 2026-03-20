@@ -23,6 +23,17 @@ export default function OverPage() {
       </div>
 
       <div className="over-sectie">
+        <h2>Bronnen</h2>
+        <ul>
+          <li>EURING Exchange Code 2000+ v1161 — du Feu, Clark, Fiedler, Baillie &amp; Laesser (2016)</li>
+          <li>Ringmaten NLA — Speek, Van der Jeugd &amp; Van den Berg (2025)</li>
+          <li>CES-handleiding — Vogeltrekstation (2012)</li>
+          <li>Griel bulkupload specificatie — Vogeltrekstation</li>
+          <li>Leaflet — open-source kaartbibliotheek</li>
+        </ul>
+      </div>
+
+      <div className="over-sectie">
         <h2>Versiegeschiedenis</h2>
         <div className="over-changelog">
           {CHANGELOG.map(entry => (
@@ -37,15 +48,6 @@ export default function OverPage() {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="over-sectie">
-        <h2>Bronnen</h2>
-        <ul>
-          <li>EURING Exchange Code 2000+ v1161 (2016)</li>
-          <li>Ringmaten NLA — Speek, Van der Jeugd &amp; Van den Berg (2025)</li>
-          <li>CES-handleiding — Vogeltrekstation (2012)</li>
-        </ul>
       </div>
     </div>
   );
