@@ -148,6 +148,19 @@ export default function NieuwPage() {
   const [saved, setSaved] = useState(false);
   const [ruikaart, setRuikaart] = useState(Array(RUIKAART_SLAGEN).fill(''));
 
+  const update = useCallback((field, value) => {
+    setForm(prev => {
+      const next = { ...prev, [field]: value };
+      if (field === 'leeftijd' && value !== '1') {
+        next.pul_leeftijd = '--';
+        next.nauwk_pul_leeftijd = '--';
+        next.broedselgrootte = '--';
+      }
+      return next;
+    });
+    setFormErrors(prev => prev.filter(f => f.key !== field));
+  }, []);
+
   const updateRuikaart = useCallback((index, value) => {
     // Laatste veld (19) = L/R, rest alleen 0-5
     if (index === 19) {
@@ -205,19 +218,6 @@ export default function NieuwPage() {
 
   const { bioRangesFromRecords, bioRanges, bioGenderRanges, genderHint, warnings } =
     useBioRanges(form.vogelnaam, speciesInfo, soortOverride, records, form);
-
-  const update = useCallback((field, value) => {
-    setForm(prev => {
-      const next = { ...prev, [field]: value };
-      if (field === 'leeftijd' && value !== '1') {
-        next.pul_leeftijd = '--';
-        next.nauwk_pul_leeftijd = '--';
-        next.broedselgrootte = '--';
-      }
-      return next;
-    });
-    setFormErrors(prev => prev.filter(f => f.key !== field));
-  }, []);
 
   // Auto-vul locatie vanuit project als dat een vaste locatie heeft
   useEffect(() => {
