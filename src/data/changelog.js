@@ -1,6 +1,17 @@
-export const VERSIE = '1.2.3';
+export const VERSIE = '1.2.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.2.4',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Toegankelijkheid: focus-visible outline toegevoegd voor toetsenbordgebruikers',
+      'Toegankelijkheid: :disabled stijl voor knoppen — uitgeschakelde knoppen zijn nu visueel onderscheidbaar',
+      'Toegankelijkheid: btn-sm minimale tikvlakgrootte verhoogd naar 36×36px',
+      'Responsive: form-row valt terug op 1 kolom op schermen ≤ 400px (bijv. iPhone SE)',
+      'Toegankelijkheid: prefers-reduced-motion — animaties en transities worden onderdrukt indien gewenst',
+    ],
+  },
   {
     versie: '1.2.3',
     datum: '2026-03-20',
