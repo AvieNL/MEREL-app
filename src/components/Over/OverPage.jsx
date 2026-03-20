@@ -9,18 +9,22 @@ export default function OverPage() {
       <p className="over-version">v{VERSIE}</p>
 
       <div className="over-sectie">
-        <h2>Maker</h2>
-        <p>Thijs ter Avest</p>
-        <p>VRS Breedenbroek (Gelderland)</p>
-        <p>Ringernummer: 3254</p>
+        <h2>Over deze app</h2>
+        <p>
+          VRS App is een digitaal veldregistratiesysteem voor vogelringers.
+          De app vervangt papieren formulieren en maakt het mogelijk om vangsten
+          direct in het veld te registreren — ook zonder internetverbinding.
+          Gegevens worden automatisch gesynchroniseerd met de cloud en kunnen
+          worden geëxporteerd naar Griel XML-formaat voor aanlevering bij het
+          Vogeltrekstation.
+        </p>
       </div>
 
       <div className="over-sectie">
-        <h2>Over deze app</h2>
-        <p>
-          Vogelringregistratie-app voor in het veld. Werkt offline als PWA en
-          exporteert naar Griel XML-formaat voor het Vogeltrekstation.
-        </p>
+        <h2>Maker</h2>
+        <p>Thijs ter Avest</p>
+        <p>VRS Breedenbroek (Gelderland)</p>
+        <p><a href="mailto:thijs@teravest.net">thijs@teravest.net</a></p>
       </div>
 
       <div className="over-sectie">

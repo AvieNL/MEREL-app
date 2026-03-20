@@ -1,6 +1,14 @@
-export const VERSIE = '1.0.3';
+export const VERSIE = '1.0.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.0.4',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Over-pagina: betere app-beschrijving, volgorde aangepast',
+      'Maker: ringernummer verwijderd, e-mailadres toegevoegd',
+    ],
+  },
   {
     versie: '1.0.3',
     datum: '2026-03-20',
