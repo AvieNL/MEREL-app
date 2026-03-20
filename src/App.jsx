@@ -121,18 +121,7 @@ function MainApp() {
       <MigrationBanner onComplete={() => {}} />
       <main className="app-content">
         <Routes>
-          <Route path="/" element={
-            <NieuwPage
-              onSave={addRecord}
-              onUpdate={updateRecord}
-              projects={projects.filter(p => p.actief)}
-              records={records}
-              speciesOverrides={speciesOverrides}
-              settings={settings}
-              ringStrengen={ringStrengen}
-              onAdvanceRing={advanceHuidige}
-            />
-          } />
+          <Route path="/" element={<NieuwPage />} />
           <Route path="/records" element={
             <RecordsPage
               records={records}

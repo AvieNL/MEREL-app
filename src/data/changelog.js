@@ -1,6 +1,22 @@
-export const VERSIE = '1.0.6';
+export const VERSIE = '1.0.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.0.8',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Refactor: NieuwPage opgesplitst in 7 sectiecomponenten via NieuwFormContext',
+      'Refactor: NieuwPage haalt data zelf op via hooks — geen props meer vanuit App',
+    ],
+  },
+  {
+    versie: '1.0.7',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Sync: verloren wijzigingen (na 5 mislukte pogingen) worden zichtbaar gemeld in Instellingen → Cloudstatus',
+      'Refactor: executeQueueItem verplaatst naar utils/syncQueue.js (betere scheiding van verantwoordelijkheden)',
+    ],
+  },
   {
     versie: '1.0.6',
     datum: '2026-03-20',
