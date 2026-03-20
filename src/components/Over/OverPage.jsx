@@ -29,6 +29,8 @@ export default function OverPage() {
           <li>Ringmaten NLA — Speek, Van der Jeugd &amp; Van den Berg (2025)</li>
           <li>CES-handleiding — Vogeltrekstation (2012)</li>
           <li>Griel bulkupload specificatie — Vogeltrekstation</li>
+          <li>Handkenmerken voor Dummies (en gevorderen) 2.0 — Klaasen, Sandifort &amp; De Vries</li>
+          <li>Identification Guide to Birds in the Hand — Demongin (2016)</li>
           <li>Leaflet — open-source kaartbibliotheek</li>
         </ul>
       </div>
