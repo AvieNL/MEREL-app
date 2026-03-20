@@ -1,6 +1,13 @@
-export const VERSIE = '1.0.8';
+export const VERSIE = '1.0.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.0.9',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Security: DOMPurify toegevoegd aan renderMarkdown als extra sanitatielaag',
+    ],
+  },
   {
     versie: '1.0.8',
     datum: '2026-03-20',
