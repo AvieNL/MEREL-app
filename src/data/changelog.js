@@ -1,6 +1,13 @@
-export const VERSIE = '1.0.1';
+export const VERSIE = '1.0.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.0.2',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Fix: taalfout "ringen ontbreekt" gecorrigeerd naar "ringen ontbreken" bij ringstrengen',
+    ],
+  },
   {
     versie: '1.0.1',
     datum: '2026-03-20',

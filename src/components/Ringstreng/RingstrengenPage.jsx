@@ -268,7 +268,7 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
                     {stats.gaten.length > 0 && (
                       <div className="ringstreng-gaten">
                         <span className="ringstreng-gaten-label">
-                          {stats.gaten.length} {stats.gaten.length === 1 ? 'ring' : 'ringen'} ontbreekt in database
+                          {stats.gaten.length} {stats.gaten.length === 1 ? 'ring ontbreekt' : 'ringen ontbreken'} in database
                         </span>
                         <span className="ringstreng-gaten-lijst">
                           {stats.gaten.slice(0, 8).join(', ')}
