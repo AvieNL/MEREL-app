@@ -62,6 +62,14 @@ const LEEFTIJD_LABEL = {
 };
 function leeftijdLabel(code) { return LEEFTIJD_LABEL[code] || code; }
 
+function formatDatum(d) {
+  if (!d) return '';
+  const p = d.split('-');
+  if (p.length !== 3) return d;
+  if (p[0].length === 4) return `${p[2].padStart(2,'0')}-${p[1].padStart(2,'0')}-${p[0]}`;
+  return `${p[0].padStart(2,'0')}-${p[1].padStart(2,'0')}-${p[2]}`;
+}
+
 
 function resizeImage(file, maxWidth = 400) {
   return new Promise((resolve) => {
@@ -1011,7 +1019,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
                         className="sd-recent-ring ring-link"
                         onClick={() => navigate('/records', { state: { openId: r.id } })}
                       >{r.ringnummer}</span>
-                      <span className="sd-recent-date">{r.vangstdatum ? r.vangstdatum.split('-').reverse().join('-') : ''}</span>
+                      <span className="sd-recent-date">{formatDatum(r.vangstdatum)}</span>
                       <span className="sd-recent-meta">
                         {r.geslacht && r.geslacht !== 'U' && <>{r.geslacht}</>}
                         {r.leeftijd && <> · {leeftijdLabel(r.leeftijd)}</>}
