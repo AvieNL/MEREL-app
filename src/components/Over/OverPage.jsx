@@ -1,4 +1,5 @@
 import { VERSIE, CHANGELOG } from '../../data/changelog';
+import { formatDatum } from '../../utils/dateHelper';
 import './OverPage.css';
 
 export default function OverPage() {
@@ -42,7 +43,7 @@ export default function OverPage() {
             <div key={entry.versie} className="over-changelog-entry">
               <div className="over-changelog-header">
                 <span className="over-changelog-versie">v{entry.versie}</span>
-                <span className="over-changelog-datum">{entry.datum}</span>
+                <span className="over-changelog-datum">{formatDatum(entry.datum)}</span>
               </div>
               <ul>
                 {entry.wijzigingen.map((w, i) => <li key={i}>{w}</li>)}

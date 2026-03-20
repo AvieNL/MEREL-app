@@ -1,6 +1,13 @@
-export const VERSIE = '1.0.2';
+export const VERSIE = '1.0.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.0.3',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Datumnotatie in versiegeschiedenis gecorrigeerd naar dd-mm-yyyy',
+    ],
+  },
   {
     versie: '1.0.2',
     datum: '2026-03-20',
