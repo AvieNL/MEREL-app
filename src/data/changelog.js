@@ -1,6 +1,14 @@
-export const VERSIE = '1.0.5';
+export const VERSIE = '1.0.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.0.6',
+    datum: '2026-03-20',
+    wijzigingen: [
+      'Security: SUPABASE_SERVICE_KEY verwijderd uit .env.local (niet gebruikt, hoort niet in client-omgeving)',
+      'PWA: Service Worker van autoUpdate naar prompt — update-banner werkt nu correct',
+    ],
+  },
   {
     versie: '1.0.5',
     datum: '2026-03-20',
