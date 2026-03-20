@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../lib/db';
 import { supabase } from '../lib/supabase';
-
-const PULL_INTERVAL_MS = 60 * 60 * 1000; // 1 uur
+import { PULL_INTERVAL_MS } from '../data/constants';
 
 // Module-level vlag zodat gelijktijdige hook-instanties niet tegelijk pullen
 let _pulling = false;

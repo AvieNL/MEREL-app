@@ -201,7 +201,7 @@ export function useProjects() {
       const updated = { ...existing, ...updates };
       db.projecten.put(updated);
       addToQueue('projecten', 'upsert', toProjectRow(updated, user.id));
-    });
+    }).catch(err => console.error('updateProject mislukt:', err));
   }
 
   function deleteProject(id) {

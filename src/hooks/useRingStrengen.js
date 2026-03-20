@@ -73,7 +73,7 @@ export function useRingStrengen() {
       const updated = { ...existing, ...updates };
       db.ringstrengen.put(updated);
       addToQueue('ringstrengen', 'upsert', toRingstrengRow(updated));
-    });
+    }).catch(err => console.error('updateRingstreng mislukt:', err));
   }
 
   function deleteRingstreng(id) {
@@ -93,7 +93,7 @@ export function useRingStrengen() {
       const updated = { ...r, huidige: nextFull };
       db.ringstrengen.put(updated);
       addToQueue('ringstrengen', 'upsert', toRingstrengRow(updated));
-    });
+    }).catch(err => console.error('advanceHuidige mislukt:', err));
   }
 
   return { ringStrengen, addRingstreng, updateRingstreng, deleteRingstreng, advanceHuidige };

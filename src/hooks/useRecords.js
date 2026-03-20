@@ -170,7 +170,7 @@ export function useRecords() {
       const updated = { ...existing, ...updates, handmatig_gewijzigd_at: new Date().toISOString() };
       db.vangsten.put(updated);
       addToQueue('vangsten', 'upsert', toVangstRow(updated, user.id));
-    });
+    }).catch(err => console.error('updateRecord mislukt:', err));
   }
 
   function deleteRecord(id) {
@@ -205,7 +205,7 @@ export function useRecords() {
         if (ids.length === 0) return;
         db.vangsten.where('id').anyOf(ids).modify({ uploaded: true, exported_at: exportedAt });
         addToQueue('vangsten', 'mark_uploaded', { ids });
-      });
+      }).catch(err => console.error('markAllAsUploaded mislukt:', err));
   }
 
   function importRecords(newRecords) {
@@ -233,7 +233,7 @@ export function useRecords() {
         const updated = affected.map(r => ({ ...r, project: newName }));
         db.vangsten.bulkPut(updated);
         addToQueue('vangsten', 'batch_upsert', updated.map(r => toVangstRow(r, user.id)));
-      });
+      }).catch(err => console.error('renameProject mislukt:', err));
   }
 
   async function fullResync() {

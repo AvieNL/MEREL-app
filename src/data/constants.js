@@ -1,3 +1,6 @@
+// Interval voor Supabase-pulls van gedeelde tabellen (species, veldconfig)
+export const PULL_INTERVAL_MS = 60 * 60 * 1000; // 1 uur
+
 // Korte weergavelabels voor leeftijdcodes (EURING)
 export const LEEFTIJD_LABEL = {
   '0': '?',

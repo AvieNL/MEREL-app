@@ -1,8 +1,9 @@
 export function parseDate(d) {
   if (!d) return null;
   const parts = d.split('-');
+  if (parts.length !== 3) return null;
   if (parts[0].length === 4) return new Date(+parts[0], +parts[1] - 1, +parts[2]);
-  if (parts[2] && parts[2].length === 4) return new Date(+parts[2], +parts[1] - 1, +parts[0]);
+  if (parts[2].length === 4) return new Date(+parts[2], +parts[1] - 1, +parts[0]);
   return null;
 }
 
