@@ -42,7 +42,18 @@ export function AuthProvider({ children }) {
       }
     });
 
-    return () => subscription.unsubscribe();
+    // Sync simulatedRole wanneer een andere tab sessionStorage wijzigt
+    function onStorage(e) {
+      if (e.key === 'vrs-simulated-role') {
+        setSimulatedRoleState(e.newValue || null);
+      }
+    }
+    window.addEventListener('storage', onStorage);
+
+    return () => {
+      subscription.unsubscribe();
+      window.removeEventListener('storage', onStorage);
+    };
   }, []);
 
   async function loadProfile(userId) {

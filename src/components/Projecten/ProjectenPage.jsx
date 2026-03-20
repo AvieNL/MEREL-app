@@ -6,6 +6,7 @@ import LocatiePicker from '../Nieuw/LocatiePicker';
 import './ProjectenPage.css';
 
 const ROL_LABELS = { viewer: 'Kijker', ringer: 'Ringer', admin: 'Admin' };
+const FORM_DEFAULT = { naam: '', locatie: '', nummer: '', vasteLocatie: false, plaatscode: 'NL--', googlePlaats: '', lat: '', lon: '', nauwkCoord: '0' };
 const AUPI_TITLE = 'ActingUserProjectID: jouw persoonlijk lidnummer voor dit project in GRIEL. Te vinden via: Mijn administratie → Mijn projecten → klik op het + naast het project.';
 
 // Read-only ledenlijst op de projectkaart
@@ -73,29 +74,15 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
   const { canAdd, canEdit, canDelete } = useRole();
   const { user } = useAuth();
   const [showForm, setShowForm] = useState(false);
-  const [naam, setNaam] = useState('');
-  const [locatie, setLocatie] = useState('');
-  const [nummer, setNummer] = useState('');
   const [editId, setEditId] = useState(null);
-  const [editNaam, setEditNaam] = useState('');
-  const [editLocatie, setEditLocatie] = useState('');
-  const [editNummer, setEditNummer] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [formError, setFormError] = useState('');
 
-  const [vasteLocatie, setVasteLocatie] = useState(false);
-  const [plaatscode, setPlaatscode] = useState('NL--');
-  const [googlePlaats, setGooglePlaats] = useState('');
-  const [lat, setLat] = useState('');
-  const [lon, setLon] = useState('');
-  const [nauwkCoord, setNauwkCoord] = useState('0');
+  const [addForm, setAddForm] = useState(FORM_DEFAULT);
+  const setAdd = (field, value) => setAddForm(f => ({ ...f, [field]: value }));
 
-  const [editVasteLocatie, setEditVasteLocatie] = useState(false);
-  const [editPlaatscode, setEditPlaatscode] = useState('NL--');
-  const [editGooglePlaats, setEditGooglePlaats] = useState('');
-  const [editLat, setEditLat] = useState('');
-  const [editLon, setEditLon] = useState('');
-  const [editNauwkCoord, setEditNauwkCoord] = useState('0');
+  const [editForm, setEditForm] = useState(FORM_DEFAULT);
+  const setEdit = (field, value) => setEditForm(f => ({ ...f, [field]: value }));
 
   // Leden + AUPIs in bewerkingsmodus
   const [editMembers, setEditMembers] = useState([]);   // { user_id, ringer_naam, email, rol, is_owner, aupi }
@@ -112,38 +99,38 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
 
   function handleAdd(e) {
     e.preventDefault();
-    if (!naam.trim()) return;
-    if (nummerExists(nummer)) {
-      setFormError(`Projectnummer ${nummer.trim()} bestaat al (ook bij inactieve projecten).`);
+    if (!addForm.naam.trim()) return;
+    if (nummerExists(addForm.nummer)) {
+      setFormError(`Projectnummer ${addForm.nummer.trim()} bestaat al (ook bij inactieve projecten).`);
       return;
     }
     setFormError('');
     onAdd({
-      naam: naam.trim(), locatie: locatie.trim(), nummer: nummer.trim(),
-      vaste_locatie: vasteLocatie,
-      plaatscode: vasteLocatie ? plaatscode : '',
-      google_plaats: vasteLocatie ? googlePlaats : '',
-      lat: vasteLocatie ? lat : '',
-      lon: vasteLocatie ? lon : '',
-      nauwk_coord: vasteLocatie ? nauwkCoord : '0',
+      naam: addForm.naam.trim(), locatie: addForm.locatie.trim(), nummer: addForm.nummer.trim(),
+      vaste_locatie: addForm.vasteLocatie,
+      plaatscode: addForm.vasteLocatie ? addForm.plaatscode : '',
+      google_plaats: addForm.vasteLocatie ? addForm.googlePlaats : '',
+      lat: addForm.vasteLocatie ? addForm.lat : '',
+      lon: addForm.vasteLocatie ? addForm.lon : '',
+      nauwk_coord: addForm.vasteLocatie ? addForm.nauwkCoord : '0',
     });
-    setNaam(''); setLocatie(''); setNummer('');
-    setVasteLocatie(false); setPlaatscode('NL--'); setGooglePlaats('');
-    setLat(''); setLon(''); setNauwkCoord('0');
+    setAddForm(FORM_DEFAULT);
     setShowForm(false);
   }
 
   async function startEdit(p) {
     setEditId(p.id);
-    setEditNaam(p.naam);
-    setEditLocatie(p.locatie || '');
-    setEditNummer(p.nummer || '');
-    setEditVasteLocatie(p.vaste_locatie || false);
-    setEditPlaatscode(p.plaatscode || 'NL--');
-    setEditGooglePlaats(p.google_plaats || '');
-    setEditLat(p.lat || '');
-    setEditLon(p.lon || '');
-    setEditNauwkCoord(p.nauwk_coord || '0');
+    setEditForm({
+      naam: p.naam,
+      locatie: p.locatie || '',
+      nummer: p.nummer || '',
+      vasteLocatie: p.vaste_locatie || false,
+      plaatscode: p.plaatscode || 'NL--',
+      googlePlaats: p.google_plaats || '',
+      lat: p.lat || '',
+      lon: p.lon || '',
+      nauwkCoord: p.nauwk_coord || '0',
+    });
     setNewMemberEmail('');
     setNewMemberAupi('');
     setNewMemberError('');
@@ -171,23 +158,23 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
   }
 
   async function saveEdit(p) {
-    const newNaam = editNaam.trim();
+    const newNaam = editForm.naam.trim();
     if (!newNaam) return;
-    if (nummerExists(editNummer, p.id)) {
-      setFormError(`Projectnummer ${editNummer.trim()} bestaat al (ook bij inactieve projecten).`);
+    if (nummerExists(editForm.nummer, p.id)) {
+      setFormError(`Projectnummer ${editForm.nummer.trim()} bestaat al (ook bij inactieve projecten).`);
       return;
     }
     setFormError('');
     if (newNaam !== p.naam && onRenameProject) onRenameProject(p.naam, newNaam);
     const ownerAupi = editMembers.find(m => m.is_owner)?.aupi || '';
     onUpdate(p.id, {
-      naam: newNaam, locatie: editLocatie.trim(), nummer: editNummer.trim(),
-      vaste_locatie: editVasteLocatie,
-      plaatscode: editVasteLocatie ? editPlaatscode : '',
-      google_plaats: editVasteLocatie ? editGooglePlaats : '',
-      lat: editVasteLocatie ? editLat : '',
-      lon: editVasteLocatie ? editLon : '',
-      nauwk_coord: editVasteLocatie ? editNauwkCoord : '0',
+      naam: newNaam, locatie: editForm.locatie.trim(), nummer: editForm.nummer.trim(),
+      vaste_locatie: editForm.vasteLocatie,
+      plaatscode: editForm.vasteLocatie ? editForm.plaatscode : '',
+      google_plaats: editForm.vasteLocatie ? editForm.googlePlaats : '',
+      lat: editForm.vasteLocatie ? editForm.lat : '',
+      lon: editForm.vasteLocatie ? editForm.lon : '',
+      nauwk_coord: editForm.vasteLocatie ? editForm.nauwkCoord : '0',
       aupi: ownerAupi,
     });
 
@@ -282,33 +269,33 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
         <form className="section" onSubmit={handleAdd}>
           <div className="form-group">
             <label>Projectnaam *</label>
-            <input type="text" value={naam} onChange={e => setNaam(e.target.value)} placeholder="bijv. CES Breedenbroek 2025" />
+            <input type="text" value={addForm.naam} onChange={e => setAdd('naam', e.target.value)} placeholder="bijv. CES Breedenbroek 2025" />
           </div>
           <div className="form-group">
             <label>Locatie</label>
-            <input type="text" value={locatie} onChange={e => setLocatie(e.target.value)} placeholder="bijv. Breedenbroek" />
+            <input type="text" value={addForm.locatie} onChange={e => setAdd('locatie', e.target.value)} placeholder="bijv. Breedenbroek" />
           </div>
           <div className="form-group">
             <label>Projectnummer</label>
-            <input type="text" value={nummer} onChange={e => setNummer(e.target.value)} placeholder="bijv. 1925" />
+            <input type="text" value={addForm.nummer} onChange={e => setAdd('nummer', e.target.value)} placeholder="bijv. 1925" />
           </div>
           <div className="form-group">
             <label className="checkbox-label">
-              <input type="checkbox" checked={vasteLocatie} onChange={e => setVasteLocatie(e.target.checked)} />
+              <input type="checkbox" checked={addForm.vasteLocatie} onChange={e => setAdd('vasteLocatie', e.target.checked)} />
               Vaste locatie (coördinaten opslaan bij project)
             </label>
           </div>
-          {vasteLocatie && (
+          {addForm.vasteLocatie && (
             <div className="project-locatie-velden">
               <div className="form-group">
                 <label>Plaatscode</label>
-                <input type="text" value={plaatscode} onChange={e => setPlaatscode(e.target.value)} placeholder="bijv. NL--" />
+                <input type="text" value={addForm.plaatscode} onChange={e => setAdd('plaatscode', e.target.value)} placeholder="bijv. NL--" />
               </div>
               <div className="form-group">
                 <label>Plaatsnaam</label>
-                <input type="text" value={googlePlaats} onChange={e => setGooglePlaats(e.target.value)} placeholder="bijv. Breedenbroek" />
+                <input type="text" value={addForm.googlePlaats} onChange={e => setAdd('googlePlaats', e.target.value)} placeholder="bijv. Breedenbroek" />
               </div>
-              <LocatiePicker lat={lat} lon={lon} onChange={(newLat, newLon) => { setLat(newLat); setLon(newLon); }} />
+              <LocatiePicker lat={addForm.lat} lon={addForm.lon} onChange={(newLat, newLon) => setAddForm(f => ({ ...f, lat: newLat, lon: newLon }))} />
             </div>
           )}
           {formError && <p className="project-members-error">{formError}</p>}
@@ -331,39 +318,39 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                   <div className="project-edit">
                     <div className="form-group">
                       <label>Naam</label>
-                      <input type="text" value={editNaam} onChange={e => setEditNaam(e.target.value)} />
+                      <input type="text" value={editForm.naam} onChange={e => setEdit('naam', e.target.value)} />
                     </div>
                     <div className="form-row">
                       <div className="form-group">
                         <label>Locatie</label>
-                        <input type="text" value={editLocatie} onChange={e => setEditLocatie(e.target.value)} />
+                        <input type="text" value={editForm.locatie} onChange={e => setEdit('locatie', e.target.value)} />
                       </div>
                       <div className="form-group">
                         <label>Nummer</label>
-                        <input type="text" value={editNummer} onChange={e => setEditNummer(e.target.value)} />
+                        <input type="text" value={editForm.nummer} onChange={e => setEdit('nummer', e.target.value)} />
                       </div>
                     </div>
                     <div className="form-group">
                       <label className="checkbox-label">
-                        <input type="checkbox" checked={editVasteLocatie} onChange={e => setEditVasteLocatie(e.target.checked)} />
+                        <input type="checkbox" checked={editForm.vasteLocatie} onChange={e => setEdit('vasteLocatie', e.target.checked)} />
                         Vaste locatie
                       </label>
                     </div>
-                    {editVasteLocatie && (
+                    {editForm.vasteLocatie && (
                       <div className="project-locatie-velden">
                         <div className="form-row">
                           <div className="form-group">
                             <label>Plaatscode</label>
-                            <input type="text" value={editPlaatscode} onChange={e => setEditPlaatscode(e.target.value)} />
+                            <input type="text" value={editForm.plaatscode} onChange={e => setEdit('plaatscode', e.target.value)} />
                           </div>
                           <div className="form-group">
                             <label>Plaatsnaam</label>
-                            <input type="text" value={editGooglePlaats} onChange={e => setEditGooglePlaats(e.target.value)} />
+                            <input type="text" value={editForm.googlePlaats} onChange={e => setEdit('googlePlaats', e.target.value)} />
                           </div>
                         </div>
                         <LocatiePicker
-                          lat={editLat} lon={editLon}
-                          onChange={(newLat, newLon) => { setEditLat(newLat); setEditLon(newLon); }}
+                          lat={editForm.lat} lon={editForm.lon}
+                          onChange={(newLat, newLon) => setEditForm(f => ({ ...f, lat: newLat, lon: newLon }))}
                         />
                       </div>
                     )}

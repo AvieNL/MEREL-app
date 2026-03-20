@@ -1,5 +1,6 @@
 import { toYMD } from './dateHelper';
 import { bioDecimal } from './bioHelper';
+import { MAX_GRIEL_TEKST } from '../data/constants';
 
 // CSV Export
 export function exportCSV(records) {
@@ -125,12 +126,12 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
       tag('AccOfDate',                   r.nauwk_vangstdatum ?? 0),
       ...(r.lat ? [tag('Latitude',  r.lat)] : []),
       ...(r.lon ? [tag('Longitude', r.lon)] : []),
-      tag('PlaceUserDescription',        (r.google_plaats || r.plaatscode || '').slice(0, 100)),
+      tag('PlaceUserDescription',        (r.google_plaats || r.plaatscode || '').slice(0, MAX_GRIEL_TEKST)),
       tag('AccOfCoordinates',            r.nauwk_coord || '0'),
       tag('Condition',                   r.conditie || '8'),
       tag('Circumstances',               r.omstandigheden || '20'),
       tag('CircumstancesPresumed',       r.zeker_omstandigheden ?? 0),
-      tag('Remarks',                     (r.opmerkingen || '').slice(0, 100)),
+      tag('Remarks',                     (r.opmerkingen || '').slice(0, MAX_GRIEL_TEKST)),
       tag('EURINGCodeIdentifier',        '4'),
     ];
 

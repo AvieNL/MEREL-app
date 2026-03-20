@@ -4,7 +4,7 @@ import { useRole } from '../../hooks/useRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import { formatDatum } from '../../utils/dateHelper';
-import { LEEFTIJD_LABEL } from '../../data/constants';
+import { LEEFTIJD_LABEL, MAX_RECORDS_WEERGAVE } from '../../data/constants';
 import './RecordsPage.css';
 
 function geslachtIcoon(g) {
@@ -112,7 +112,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
         {filtered.length === 0 ? (
           <div className="empty-state">Geen vangsten gevonden</div>
         ) : (
-          filtered.slice(0, 100).map(r => {
+          filtered.slice(0, MAX_RECORDS_WEERGAVE).map(r => {
             const isTerugvangst = r.metalenringinfo === 4 || r.metalenringinfo === '4';
             return (
             <div

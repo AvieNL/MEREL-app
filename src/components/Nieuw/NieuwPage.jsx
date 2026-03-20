@@ -18,6 +18,7 @@ import {
   NAUWK_DATUM_OPTIONS, RUI_LICHAAM_OPTIONS, TAAL_LABELS, EMPTY_FORM, REQUIRED_FIELDS,
 } from './NieuwPage.constants';
 import { fuzzyMatch, renderGeslachtTekst, computeRanges } from './NieuwPage.utils';
+import { RUIKAART_SLAGEN } from '../../data/constants';
 import InfoPanel from './InfoPanel';
 import RuiSeizoenTekst from './RuiSeizoenTekst';
 import './NieuwPage.css';
@@ -134,7 +135,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
   });
   const [suggestions, setSuggestions] = useState([]);
   const [saved, setSaved] = useState(false);
-  const [ruikaart, setRuikaart] = useState(Array(20).fill(''));
+  const [ruikaart, setRuikaart] = useState(Array(RUIKAART_SLAGEN).fill(''));
 
   function updateRuikaart(index, value) {
     // Laatste veld (19) = L/R, rest alleen 0-5
@@ -160,7 +161,7 @@ export default function NieuwPage({ onSave, onUpdate, projects, records, species
   }
 
   function resetRuikaart() {
-    setRuikaart(Array(20).fill(''));
+    setRuikaart(Array(RUIKAART_SLAGEN).fill(''));
   }
 
   // Find species reference data for selected species
