@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useRole } from '../../hooks/useRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { buildEuringLookup } from '../../utils/euring-lookup';
@@ -24,9 +25,6 @@ function stripDots(ring) {
   return ring ? ring.replace(/\./g, '') : '';
 }
 
-// Normaliseer datum naar dd-mm-yyyy voor weergave
-
-
 function leeftijdLabel(code) {
   if (!code) return '';
   return LEEFTIJD_LABEL[code] || code;
@@ -41,6 +39,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
   const { canDelete } = useRole();
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const openId = location.state?.openId;
@@ -71,7 +70,6 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
         (r.project && r.project.toLowerCase().includes(lower))
       );
     })();
-    // Normaliseer naar yyyy-mm-dd voor correcte sortering (ook yyyy-m-d en dd-mm-yyyy)
     const toSortKey = d => {
       if (!d) return '';
       const p = d.split('-');
@@ -90,14 +88,14 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
           type="search"
           value={zoek}
           onChange={e => setZoek(e.target.value)}
-          placeholder="Zoek op soort, ring, datum, project..."
+          placeholder={t('records_search_placeholder')}
         />
-        <span className="result-count">{filtered.length} vangsten</span>
+        <span className="result-count">{t('records_count', { count: filtered.length })}</span>
       </div>
 
       <div className="records-list">
         {filtered.length === 0 ? (
-          <div className="empty-state">Geen vangsten gevonden</div>
+          <div className="empty-state">{t('records_empty')}</div>
         ) : (
           filtered.slice(0, MAX_RECORDS_WEERGAVE).map(r => {
             const isTerugvangst = r.metalenringinfo === 4 || r.metalenringinfo === '4';
@@ -112,7 +110,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                 <span className={`record-type${isTerugvangst ? ' record-type--tv' : ''}`}>{isTerugvangst ? 'TV' : 'NV'}</span>
                 <div className="record-main">
                   <strong>
-                    {r.vogelnaam || 'Onbekend'}
+                    {r.vogelnaam || t('records_unknown')}
                     {r.vogelnaam && euringLookup[r.vogelnaam.toLowerCase()] && (
                       <span className="euring-hint">({euringLookup[r.vogelnaam.toLowerCase()]})</span>
                     )}
@@ -133,24 +131,24 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
               {expanded === r.id && (
                 <div className="record-details">
                   <div className="detail-grid">
-                    {r.leeftijd && <div><span className="detail-label">Leeftijd:</span> {leeftijdLabel(r.leeftijd)}</div>}
-                    {r.geslacht && r.geslacht !== 'U' && <div><span className="detail-label">Geslacht:</span> {geslachtIcoon(r.geslacht)}</div>}
-                    {r.vangstmethode && <div><span className="detail-label">Methode:</span> {r.vangstmethode}</div>}
-                    {r.project && <div><span className="detail-label">Project:</span> {r.project}</div>}
-                    {r.vleugel && <div><span className="detail-label">Vleugel:</span> {r.vleugel} mm</div>}
-                    {r.gewicht && <div><span className="detail-label">Gewicht:</span> {r.gewicht} g</div>}
-                    {r.handpenlengte && <div><span className="detail-label">P8:</span> {r.handpenlengte} mm</div>}
-                    {r.staartlengte && <div><span className="detail-label">Staart:</span> {r.staartlengte} mm</div>}
-                    {r.tarsus_lengte && <div><span className="detail-label">Tarsus:</span> {r.tarsus_lengte} mm</div>}
-                    {r.vet && <div><span className="detail-label">Vet:</span> {r.vet}</div>}
-                    {r.tijd && <div><span className="detail-label">Tijd:</span> {fmtTijd(r.tijd)}</div>}
-                    {r.google_plaats && <div><span className="detail-label">Plaats:</span> {r.google_plaats}</div>}
-                    {r.opmerkingen && <div><span className="detail-label">Opmerkingen:</span> {r.opmerkingen}</div>}
+                    {r.leeftijd && <div><span className="detail-label">{t('records_label_age')}</span> {leeftijdLabel(r.leeftijd)}</div>}
+                    {r.geslacht && r.geslacht !== 'U' && <div><span className="detail-label">{t('records_label_sex')}</span> {geslachtIcoon(r.geslacht)}</div>}
+                    {r.vangstmethode && <div><span className="detail-label">{t('records_label_method')}</span> {r.vangstmethode}</div>}
+                    {r.project && <div><span className="detail-label">{t('records_label_project')}</span> {r.project}</div>}
+                    {r.vleugel && <div><span className="detail-label">{t('records_label_wing')}</span> {r.vleugel} mm</div>}
+                    {r.gewicht && <div><span className="detail-label">{t('records_label_weight')}</span> {r.gewicht} g</div>}
+                    {r.handpenlengte && <div><span className="detail-label">{t('records_label_p8')}</span> {r.handpenlengte} mm</div>}
+                    {r.staartlengte && <div><span className="detail-label">{t('records_label_tail')}</span> {r.staartlengte} mm</div>}
+                    {r.tarsus_lengte && <div><span className="detail-label">{t('records_label_tarsus')}</span> {r.tarsus_lengte} mm</div>}
+                    {r.vet && <div><span className="detail-label">{t('records_label_fat')}</span> {r.vet}</div>}
+                    {r.tijd && <div><span className="detail-label">{t('records_label_time')}</span> {fmtTijd(r.tijd)}</div>}
+                    {r.google_plaats && <div><span className="detail-label">{t('records_label_place')}</span> {r.google_plaats}</div>}
+                    {r.opmerkingen && <div><span className="detail-label">{t('records_label_remarks')}</span> {r.opmerkingen}</div>}
                   </div>
                   <div className="record-datums">
-                    <div><span className="detail-label">Aangemaakt:</span> {formatDatum(r.vangstdatum)}</div>
-                    {r.exported_at && <div><span className="detail-label">Geëxporteerd naar Griel:</span> {formatDatumTijd(r.exported_at)}</div>}
-                    {r.handmatig_gewijzigd_at && <div><span className="detail-label">Handmatig gewijzigd:</span> {formatDatumTijd(r.handmatig_gewijzigd_at)}</div>}
+                    <div><span className="detail-label">{t('records_label_created')}</span> {formatDatum(r.vangstdatum)}</div>
+                    {r.exported_at && <div><span className="detail-label">{t('records_label_exported')}</span> {formatDatumTijd(r.exported_at)}</div>}
+                    {r.handmatig_gewijzigd_at && <div><span className="detail-label">{t('records_label_modified')}</span> {formatDatumTijd(r.handmatig_gewijzigd_at)}</div>}
                   </div>
                   {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
                     <div className="record-actions">
@@ -176,7 +174,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
         )}
         {filtered.length > 100 && (
           <div className="empty-state">
-            Toont eerste 100 van {filtered.length} resultaten. Verfijn je zoekopdracht.
+            {t('records_showing_first', { total: filtered.length })}
           </div>
         )}
       </div>
@@ -187,14 +185,17 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
             className="prullenbak-toggle"
             onClick={() => setPrullenbakOpen(o => !o)}
           >
-            {prullenbakOpen ? '▾' : '▸'} Prullenbak ({deletedRecords.length})
+            {prullenbakOpen
+              ? t('records_trash', { count: deletedRecords.length })
+              : t('records_trash_closed', { count: deletedRecords.length })
+            }
           </button>
           {prullenbakOpen && (
             <div className="prullenbak-list">
               {deletedRecords.map(r => (
                 <div key={r.id} className="prullenbak-item">
                   <div className="prullenbak-info">
-                    <strong>{r.vogelnaam || 'Onbekend'}</strong>
+                    <strong>{r.vogelnaam || t('records_unknown')}</strong>
                     {r.ringnummer && <span className="prullenbak-ring">{stripDots(r.ringnummer)}</span>}
                     {r.vangstdatum && <span className="prullenbak-datum">{formatDatum(r.vangstdatum)}</span>}
                   </div>
@@ -204,7 +205,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                         className="btn-success prullenbak-btn"
                         onClick={() => onRestore(r.id)}
                       >
-                        Herstellen
+                        {t('records_restore')}
                       </button>
                     )}
                     {onPermanentDelete && canDelete && (
@@ -212,7 +213,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                         className="btn-danger prullenbak-btn"
                         onClick={() => onPermanentDelete(r.id)}
                       >
-                        Definitief
+                        {t('records_delete_permanent')}
                       </button>
                     )}
                   </div>

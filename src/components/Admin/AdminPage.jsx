@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
 import { supabase } from '../../lib/supabase';
@@ -7,18 +8,24 @@ import { getRuitypenConfig, saveRuitypenConfig, RUITYPE_TYPES, DEFAULT_RUITYPE_C
 import './AdminPage.css';
 
 const ROLLEN = ['ringer', 'viewer', 'admin'];
-const ROL_LABEL = { admin: 'Admin', ringer: 'Ringer', viewer: 'Viewer' };
 
 export default function AdminPage() {
   const { user } = useAuth();
   const { isRealAdmin } = useRole();
   const navigate = useNavigate();
+  const { t } = useTranslation(['common', 'errors']);
   const [gebruikers, setGebruikers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [savingId, setSavingId] = useState(null);
   const [ruitypen, setRuitypen] = useState(() => getRuitypenConfig());
   const [ruiSaved, setRuiSaved] = useState(false);
+
+  const ROL_LABEL = {
+    admin: t('role_admin'),
+    ringer: t('role_ringer'),
+    viewer: t('role_viewer'),
+  };
 
   function updateRuiEntry(type, seizoen, index, field, value) {
     setRuitypen(prev => {
@@ -49,7 +56,7 @@ export default function AdminPage() {
   }
 
   function resetRuitypen() {
-    if (window.confirm('Ruitypen terugzetten naar standaardwaarden?')) {
+    if (window.confirm(t('admin_rui_confirm_reset'))) {
       setRuitypen(DEFAULT_RUITYPE_CONFIG);
       saveRuitypenConfig(DEFAULT_RUITYPE_CONFIG);
     }
@@ -73,14 +80,11 @@ export default function AdminPage() {
       .order('created_at', { ascending: true });
 
     if (err) {
-      setError(
-        'Kon gebruikers niet laden. Voer eerst supabase-phase3.sql uit in het Supabase SQL-editor.'
-      );
+      setError(t('errors:admin_load_error'));
       setLoading(false);
       return;
     }
 
-    // Haal vangstenaantal per gebruiker op in één request (i.p.v. N afzonderlijke count-calls)
     const userIds = data.map(p => p.id);
     const { data: vangstRows } = await supabase
       .from('vangsten')
@@ -98,7 +102,7 @@ export default function AdminPage() {
   }
 
   async function changeRol(profileId, newRol) {
-    if (profileId === user.id) return; // Admin mag eigen rol niet wijzigen
+    if (profileId === user.id) return;
     setSavingId(profileId);
     const { error: err } = await supabase
       .from('profiles')
@@ -116,9 +120,9 @@ export default function AdminPage() {
 
   return (
     <div className="page admin-page">
-      <h2>Admin panel</h2>
+      <h2>{t('admin_title')}</h2>
 
-      {loading && <div className="admin-status">Gebruikers laden...</div>}
+      {loading && <div className="admin-status">{t('admin_loading_users')}</div>}
 
       {error && (
         <div className="admin-error">
@@ -129,7 +133,7 @@ export default function AdminPage() {
       {!loading && !error && (
         <>
           <div className="section">
-            <h3>Gebruikers ({gebruikers.length})</h3>
+            <h3>{t('admin_users', { count: gebruikers.length })}</h3>
             <div className="admin-users">
               {gebruikers.map(g => (
                 <div
@@ -138,15 +142,15 @@ export default function AdminPage() {
                 >
                   <div className="admin-user-info">
                     <div className="admin-user-name">
-                      {g.ringer_naam || <em>Naam niet ingesteld</em>}
+                      {g.ringer_naam || <em>{t('admin_name_not_set')}</em>}
                       {g.id === user.id && (
-                        <span className="admin-badge admin-badge--self">Jij</span>
+                        <span className="admin-badge admin-badge--self">{t('admin_you')}</span>
                       )}
                     </div>
                     <div className="admin-user-meta">
                       <span className="admin-user-email-inline">{g.email || '–'}</span>
                       {g.ringer_nummer && <span>· #{g.ringer_nummer}</span>}
-                      <span className="admin-count">· {g.vangsten_count} vangsten</span>
+                      <span className="admin-count">· {t('admin_catches', { count: g.vangsten_count })}</span>
                     </div>
                   </div>
 
@@ -161,7 +165,7 @@ export default function AdminPage() {
                         onChange={e => changeRol(g.id, e.target.value)}
                         disabled={savingId === g.id}
                         className="rol-select"
-                        aria-label={`Rol van ${g.ringer_naam || g.email}`}
+                        aria-label={t('admin_aria_role', { name: g.ringer_naam || g.email })}
                       >
                         {ROLLEN.map(r => (
                           <option key={r} value={r}>{ROL_LABEL[r]}</option>
@@ -169,7 +173,7 @@ export default function AdminPage() {
                       </select>
                     )}
                     {savingId === g.id && (
-                      <span className="admin-saving">Opslaan...</span>
+                      <span className="admin-saving">{t('admin_saving')}</span>
                     )}
                   </div>
                 </div>
@@ -178,18 +182,14 @@ export default function AdminPage() {
           </div>
 
           <div className="section">
-            <h3>Nieuwe gebruiker uitnodigen</h3>
+            <h3>{t('admin_invite_title')}</h3>
             <div className="section-content">
+              <p className="admin-hint">{t('admin_invite_hint')}</p>
               <p className="admin-hint">
-                Laat de nieuwe gebruiker zelf een account aanmaken via het inlogscherm
-                (Registreren). Zodra ze zijn ingelogd, verschijnen ze hier en kun je
-                hun rol instellen.
-              </p>
-              <p className="admin-hint">
-                <strong>Rol uitleg:</strong><br />
-                <strong>Ringer</strong> — kan eigen vangsten toevoegen en beheren.<br />
-                <strong>Viewer</strong> — kan data alleen bekijken, niet bewerken.<br />
-                <strong>Admin</strong> — volledige toegang inclusief dit panel.
+                <strong>{t('admin_role_explanation')}</strong><br />
+                <strong>{t('role_ringer')}</strong> — {t('admin_role_ringer_desc').replace(/^Ringer — |^Beringer — |^Ringer — /, '')}<br />
+                <strong>{t('role_viewer')}</strong> — {t('admin_role_viewer_desc').replace(/^Viewer — |^Betrachter — /, '')}<br />
+                <strong>{t('role_admin')}</strong> — {t('admin_role_admin_desc').replace(/^Admin — /, '')}
               </p>
             </div>
           </div>
@@ -197,40 +197,40 @@ export default function AdminPage() {
           {/* ── Ruitypen editor ── */}
           <div className="section admin-rui-card">
             <div className="admin-rui-header">
-              <h3>Ruitypen — seizoensleeftijden</h3>
+              <h3>{t('admin_ruitypes_title')}</h3>
               <div style={{ display: 'flex', gap: 8 }}>
-                <button className="admin-btn" style={{ background: 'var(--bg-tertiary)', color: 'var(--text-primary)' }} onClick={resetRuitypen}>Standaard</button>
-                <button className="admin-btn" onClick={saveRuitypen}>Opslaan</button>
+                <button className="admin-btn" style={{ background: 'var(--bg-tertiary)', color: 'var(--text-primary)' }} onClick={resetRuitypen}>{t('admin_btn_reset')}</button>
+                <button className="admin-btn" onClick={saveRuitypen}>{t('admin_btn_save')}</button>
               </div>
             </div>
-            {ruiSaved && <p className="admin-success">Ruitypen opgeslagen.</p>}
+            {ruiSaved && <p className="admin-success">{t('admin_rui_saved')}</p>}
             {RUITYPE_TYPES.map(type => (
               <div key={type} className="admin-rui-type">
-                <h4 className="admin-rui-type-title">Type {type}</h4>
+                <h4 className="admin-rui-type-title">{t('admin_rui_type', { type })}</h4>
                 <div className="admin-rui-seizoenen">
                   {['voorjaar', 'najaar'].map(seizoen => (
                     <div key={seizoen} className="admin-rui-seizoen">
                       <div className="admin-rui-seizoen-header">
-                        <span className="admin-rui-seizoen-label">{seizoen === 'voorjaar' ? 'Voorjaar' : 'Najaar'}</span>
-                        <button className="admin-rui-add" onClick={() => addRuiEntry(type, seizoen)}>+ rij</button>
+                        <span className="admin-rui-seizoen-label">{seizoen === 'voorjaar' ? t('admin_rui_spring') : t('admin_rui_autumn')}</span>
+                        <button className="admin-rui-add" onClick={() => addRuiEntry(type, seizoen)}>{t('admin_rui_add_row')}</button>
                       </div>
                       {ruitypen[type][seizoen].map((entry, i) => (
                         <div key={i} className="admin-rui-entry">
                           <input
                             className="admin-rui-input admin-rui-input--cond"
-                            placeholder="conditie (optioneel)"
+                            placeholder={t('admin_rui_condition_placeholder')}
                             value={entry.cond}
                             onChange={e => updateRuiEntry(type, seizoen, i, 'cond', e.target.value)}
                           />
                           <span className="admin-rui-arrow">→</span>
                           <input
                             className="admin-rui-input admin-rui-input--val"
-                            placeholder="leeftijdslabel"
+                            placeholder={t('admin_rui_age_placeholder')}
                             value={entry.val}
                             onChange={e => updateRuiEntry(type, seizoen, i, 'val', e.target.value)}
                           />
                           {ruitypen[type][seizoen].length > 1 && (
-                            <button className="admin-rui-remove" onClick={() => removeRuiEntry(type, seizoen, i)} aria-label="Rij verwijderen">×</button>
+                            <button className="admin-rui-remove" onClick={() => removeRuiEntry(type, seizoen, i)} aria-label={t('admin_rui_remove_row')}>×</button>
                           )}
                         </div>
                       ))}

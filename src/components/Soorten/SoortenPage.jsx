@@ -1,19 +1,10 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
 import { useRole } from '../../hooks/useRole';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import './SoortenPage.css';
-
-const FILTER_DEFS = [
-  { key: 'gevangen',   label: 'Gevangen' },
-  { key: 'nlIsLat',    label: 'NL = Latijn' },
-  { key: 'geenEuring', label: 'Zonder EURING' },
-  { key: 'geenEn',     label: 'Zonder Engels' },
-  { key: 'geenDe',     label: 'Zonder Duits' },
-  { key: 'geenFr',     label: 'Zonder Frans' },
-  { key: 'geenEs',     label: 'Zonder Spaans' },
-];
 
 const EMPTY_FILTERS = {
   gevangen: false,
@@ -29,7 +20,18 @@ export default function SoortenPage({ records }) {
   const [syncing, setSyncing] = useState(false);
   const navigate = useNavigate();
   const { isAdmin } = useRole();
+  const { t } = useTranslation();
   const speciesRef = useSpeciesRef();
+
+  const FILTER_DEFS = [
+    { key: 'gevangen',   label: t('species_filter_caught') },
+    { key: 'nlIsLat',    label: t('species_filter_nl_is_lat') },
+    { key: 'geenEuring', label: t('species_filter_no_euring') },
+    { key: 'geenEn',     label: t('species_filter_no_en') },
+    { key: 'geenDe',     label: t('species_filter_no_de') },
+    { key: 'geenFr',     label: t('species_filter_no_fr') },
+    { key: 'geenEs',     label: t('species_filter_no_es') },
+  ];
 
   const soorten = useMemo(
     () => speciesRef.filter(s => s.naam_nl && !s.naam_nl.includes('groene tekst')),
@@ -96,15 +98,15 @@ export default function SoortenPage({ records }) {
           type="search"
           value={zoek}
           onChange={e => setZoek(e.target.value)}
-          placeholder="Zoek soort..."
+          placeholder={t('species_search_placeholder')}
           className="soorten-search"
         />
         <button
           className={`soorten-filter-btn ${activeCount > 0 ? 'soorten-filter-btn--active' : ''}`}
           onClick={() => setFilterOpen(o => !o)}
-          aria-label="Filters"
+          aria-label={t('species_filter')}
         >
-          Filter{activeCount > 0 && <span className="soorten-filter-badge">{activeCount}</span>}
+          {t('species_filter')}{activeCount > 0 && <span className="soorten-filter-badge">{activeCount}</span>}
         </button>
         {isAdmin && (
           <>
@@ -112,7 +114,7 @@ export default function SoortenPage({ records }) {
               className="soorten-filter-btn"
               onClick={handleVervers}
               disabled={syncing}
-              title="Soorten opnieuw ophalen uit Supabase"
+              title={t('species_refresh_title')}
             >
               {syncing ? '...' : '↻'}
             </button>
@@ -120,7 +122,7 @@ export default function SoortenPage({ records }) {
               className="btn-primary soorten-nieuw-btn"
               onClick={() => navigate('/soorten/__nieuw__')}
             >
-              + Nieuw
+              {t('species_add_new')}
             </button>
           </>
         )}
@@ -141,18 +143,18 @@ export default function SoortenPage({ records }) {
           </div>
           {activeCount > 0 && (
             <button className="soorten-filter-reset" onClick={resetFilters}>
-              Wis filters
+              {t('species_filter_reset')}
             </button>
           )}
         </div>
       )}
 
       <div className="soorten-count">
-        {filtered.length} van {soorten.length} soorten
+        {t('species_count', { filtered: filtered.length, total: soorten.length })}
       </div>
 
       {filtered.length === 0 && (
-        <p className="soorten-leeg">Geen soorten gevonden voor "{zoek}".</p>
+        <p className="soorten-leeg">{t('species_empty', { search: zoek })}</p>
       )}
       <div className="soorten-list">
         {filtered.map(s => {

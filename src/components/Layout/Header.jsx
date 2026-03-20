@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
 import { useTheme } from '../../hooks/useTheme';
 import SyncIndicator from '../Sync/SyncIndicator';
 import './Header.css';
-
-const ROL_LABELS = { admin: 'Admin', ringer: 'Ringer', viewer: 'Viewer' };
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,8 +14,15 @@ export default function Header() {
   const { logout, profile, simulatedRole, setSimulatedRole } = useAuth();
   const { isSimulating, rol } = useRole();
   const { mode, setMode } = useTheme();
+  const { t } = useTranslation();
 
   const isRealAdmin = profile?.rol === 'admin';
+
+  const ROL_LABELS = {
+    admin: t('role_admin'),
+    ringer: t('role_ringer'),
+    viewer: t('role_viewer'),
+  };
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -45,6 +51,19 @@ export default function Header() {
 
   const isStaging = import.meta.env.VITE_STAGING === 'true';
 
+  const THEME_NEXT = { donker: 'licht', licht: 'systeem', systeem: 'donker' };
+  const THEME_ARIA = {
+    donker: t('theme_to_light'),
+    licht: t('theme_to_system'),
+    systeem: t('theme_to_dark'),
+  };
+  const THEME_TITLE = {
+    donker: t('theme_light'),
+    licht: t('theme_system'),
+    systeem: t('theme_dark'),
+  };
+  const THEME_ICON = { donker: '☀', licht: '◑', systeem: '☾' };
+
   return (
     <header className="app-header">
       {/* Hoofd-rij */}
@@ -62,11 +81,11 @@ export default function Header() {
         <div className="header-menu" ref={menuRef}>
           <button
             className="theme-toggle-btn"
-            onClick={() => setMode({ donker: 'licht', licht: 'systeem', systeem: 'donker' }[mode] || 'donker')}
-            aria-label={{ donker: 'Naar licht thema', licht: 'Naar systeemthema', systeem: 'Naar donker thema' }[mode]}
-            title={{ donker: 'Licht', licht: 'Systeem', systeem: 'Donker' }[mode]}
+            onClick={() => setMode(THEME_NEXT[mode] || 'donker')}
+            aria-label={THEME_ARIA[mode]}
+            title={THEME_TITLE[mode]}
           >
-            {{ donker: '☀', licht: '◑', systeem: '☾' }[mode] || '☾'}
+            {THEME_ICON[mode] || '☾'}
           </button>
           <button
             className={`hamburger-btn${isSimulating ? ' hamburger-btn--simulating' : ''}`}
@@ -84,17 +103,17 @@ export default function Header() {
             <div className="header-dropdown">
               {isRealAdmin && (
                 <button onClick={() => goTo('/admin')} className="header-admin-btn">
-                  ⚙ Admin panel
+                  ⚙ {t('nav_admin')}
                 </button>
               )}
-              <button onClick={() => goTo('/projecten')}>Projecten</button>
-              <button onClick={() => goTo('/ringstrengen')}>Ringstrengen</button>
-              <button onClick={() => goTo('/instellingen')}>Instellingen</button>
-              <button onClick={() => goTo('/over')}>Over</button>
+              <button onClick={() => goTo('/projecten')}>{t('nav_projects')}</button>
+              <button onClick={() => goTo('/ringstrengen')}>{t('nav_ring_strings')}</button>
+              <button onClick={() => goTo('/instellingen')}>{t('nav_settings')}</button>
+              <button onClick={() => goTo('/over')}>{t('nav_about')}</button>
 
               {isRealAdmin && (
                 <div className="header-role-section">
-                  <span className="header-role-label">Rol simuleren</span>
+                  <span className="header-role-label">{t('nav_simulate_role')}</span>
                   <div className="header-role-btns">
                     {['admin', 'ringer', 'viewer'].map(r => (
                       <button
@@ -110,17 +129,17 @@ export default function Header() {
               )}
 
               <div className="header-dropdown-divider" />
-              <button onClick={handleLogout} className="header-logout-btn">Uitloggen</button>
+              <button onClick={handleLogout} className="header-logout-btn">{t('nav_logout')}</button>
             </div>
           )}
         </div>
       </div>
 
-      {/* Simulatiebanner — zichtbaar als admin een andere rol simuleert */}
+      {/* Simulatiebanner */}
       {isSimulating && (
         <div className="header-sim-banner">
-          Simuleert: <strong>{ROL_LABELS[simulatedRole]}</strong>
-          <button onClick={() => setSimulatedRole(null)}>↩ Terug naar Admin</button>
+          {t('nav_simulating')} <strong>{ROL_LABELS[simulatedRole]}</strong>
+          <button onClick={() => setSimulatedRole(null)}>{t('nav_back_to_admin')}</button>
         </div>
       )}
     </header>

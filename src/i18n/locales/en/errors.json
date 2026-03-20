@@ -5,5 +5,20 @@
   "quota_exceeded": "Device storage is full. Delete old catches or free up space on your device.",
   "sync_partial_failure": "Sync partially failed. Will retry automatically.",
   "record_save_failed": "Could not save change. Please try again.",
-  "register_success": "Account created. Check your email to confirm, then log in."
+  "register_success": "Account created. Check your email to confirm, then log in.",
+  "export_no_euring": "Export blocked: no EURING code for {{count}} record(s) — species: {{names}}. Correct the species name to match a known species.",
+  "export_no_date": "Export blocked: {{count}} record(s) without catch date. Correct these catches before exporting.",
+  "export_short_ring": "Export blocked: {{count}} record(s) with empty or too short ring number (minimum 4 characters). Correct these catches before exporting.",
+  "export_no_aupi": "ActingUserProjectID (AUPI) missing for: {{projects}}. Go to Projects → open the project → click on \"Members\" → enter your AUPI number next to your name. Find this number in GRIEL via: My administration → My projects → click the + next to the project.",
+  "import_no_records": "No records found in file.",
+  "import_missing_fields": "{{count}} record(s) missing required fields (species name, ring number, catch date).",
+  "import_success": "{{count}} records imported.",
+  "import_failed": "Import error: {{msg}}",
+  "admin_load_error": "Could not load users. First run supabase-phase3.sql in the Supabase SQL editor.",
+  "project_number_exists": "Project number {{number}} already exists (including inactive projects).",
+  "project_user_not_found": "No account found for this email address.",
+  "project_cannot_add_self": "You cannot add yourself.",
+  "project_already_member": "This user is already a member of the project.",
+  "project_aupi_save_failed": "AUPI save failed: {{errors}}",
+  "migration_failed": "Migration failed: {{msg}}"
 }

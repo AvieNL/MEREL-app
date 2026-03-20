@@ -1,14 +1,17 @@
+import { useTranslation } from 'react-i18next';
 import { VERSIE, CHANGELOG } from '../../data/changelog';
 import { formatDatum } from '../../utils/dateHelper';
 import './OverPage.css';
 
 export default function OverPage() {
+  const { t } = useTranslation();
+
   return (
     <div className="over-page">
       <h1>VRS App <span className="over-version">v{VERSIE}</span></h1>
 
       <div className="over-sectie">
-        <h2>Over deze app</h2>
+        <h2>{t('about_title')}</h2>
         <p>
           VRS App is een digitaal veldregistratiesysteem voor vogelringers.
           De app vervangt papieren formulieren en maakt het mogelijk om vangsten
@@ -20,14 +23,14 @@ export default function OverPage() {
       </div>
 
       <div className="over-sectie">
-        <h2>Maker</h2>
+        <h2>{t('about_maker')}</h2>
         <p>Thijs ter Avest</p>
         <p>VRS Breedenbroek (Gelderland)</p>
         <p><a href="mailto:thijs@teravest.net">thijs@teravest.net</a></p>
       </div>
 
       <div className="over-sectie">
-        <h2>Bronnen</h2>
+        <h2>{t('about_sources')}</h2>
         <ul>
           <li>EURING Exchange Code 2000+ v1161 — du Feu, Clark, Fiedler, Baillie &amp; Laesser (2016)</li>
           <li>Ringmaten NLA — Speek, Van der Jeugd &amp; Van den Berg (2025)</li>
@@ -40,7 +43,7 @@ export default function OverPage() {
       </div>
 
       <div className="over-sectie">
-        <h2>Versiegeschiedenis</h2>
+        <h2>{t('about_changelog')}</h2>
         <div className="over-changelog">
           {CHANGELOG.map(entry => (
             <div key={entry.versie} className="over-changelog-entry">

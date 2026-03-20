@@ -5,5 +5,20 @@
   "quota_exceeded": "Apparaat heeft onvoldoende opslagruimte. Verwijder oude vangsten of maak ruimte vrij op je apparaat.",
   "sync_partial_failure": "Synchronisatie gedeeltelijk mislukt. Wordt opnieuw geprobeerd.",
   "record_save_failed": "Wijziging kon niet worden opgeslagen. Probeer het opnieuw.",
-  "register_success": "Account aangemaakt. Controleer je e-mail om te bevestigen, log daarna in."
+  "register_success": "Account aangemaakt. Controleer je e-mail om te bevestigen, log daarna in.",
+  "export_no_euring": "Export geblokkeerd: geen EURING-code voor {{count}} record(s) — soorten: {{names}}. Corrigeer de vogelnaam zodat deze overeenkomt met een bekende soort.",
+  "export_no_date": "Export geblokkeerd: {{count}} record(s) zonder vangstdatum. Corrigeer deze vangsten voor het exporteren.",
+  "export_short_ring": "Export geblokkeerd: {{count}} record(s) met leeg of te kort ringnummer (minimaal 4 tekens). Corrigeer deze vangsten voor het exporteren.",
+  "export_no_aupi": "ActingUserProjectID (AUPI) ontbreekt voor: {{projects}}. Ga naar Projecten → open het project → klik op \"Leden\" → voer het AUPI-nummer in naast jouw naam. Je vindt dit nummer in GRIEL via: Mijn administratie → Mijn projecten → klik op het + naast het project.",
+  "import_no_records": "Geen records gevonden in bestand.",
+  "import_missing_fields": "{{count}} record(s) missen verplichte velden (vogelnaam, ringnummer, vangstdatum).",
+  "import_success": "{{count}} records geïmporteerd.",
+  "import_failed": "Fout bij importeren: {{msg}}",
+  "admin_load_error": "Kon gebruikers niet laden. Voer eerst supabase-phase3.sql uit in het Supabase SQL-editor.",
+  "project_number_exists": "Projectnummer {{number}} bestaat al (ook bij inactieve projecten).",
+  "project_user_not_found": "Geen account gevonden voor dit e-mailadres.",
+  "project_cannot_add_self": "Je kunt jezelf niet toevoegen.",
+  "project_already_member": "Deze gebruiker is al lid van het project.",
+  "project_aupi_save_failed": "AUPI opslaan mislukt: {{errors}}",
+  "migration_failed": "Migratie mislukt: {{msg}}"
 }

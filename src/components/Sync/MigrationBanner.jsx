@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { loadFromStorage } from '../../utils/storage';
@@ -17,6 +18,7 @@ function chunkArray(arr, size) {
 
 export default function MigrationBanner({ onComplete }) {
   const { user } = useAuth();
+  const { t } = useTranslation(['common', 'errors']);
   const [status, setStatus] = useState('checking'); // checking | needed | migrating | done | dismissed
   const [counts, setCounts] = useState({ records: 0, projects: 0, ringstrengen: 0 });
   const [progress, setProgress] = useState('');
@@ -42,18 +44,14 @@ export default function MigrationBanner({ onComplete }) {
       .eq('user_id', user.id);
 
     if (count > 0) {
-      // Supabase heeft al data, geen migratie nodig
       localStorage.setItem(migratedKey, 'true');
       setStatus('done');
       return;
     }
 
-    // Check of localStorage zinvolle data bevat
     const records = loadFromStorage('vrs-records', []);
     const projects = loadFromStorage('vrs-projects', []);
     const ringStrengen = loadFromStorage('vrs-ringstreng', []);
-
-    const localRecords = records.filter(r => r.bron !== 'griel_import' || records.length < 10);
 
     if (records.length === 0 && projects.length === 0) {
       localStorage.setItem(migratedKey, 'true');
@@ -77,7 +75,7 @@ export default function MigrationBanner({ onComplete }) {
 
       // 1. Vangsten (in chunks van 100)
       if (records.length > 0) {
-        setProgress(`Vangsten uploaden (${records.length})...`);
+        setProgress(t('migration_uploading_catches', { count: records.length }));
         const rows = records.map(r => toVangstRow(r, user.id));
         for (const chunk of chunkArray(rows, CHUNK_SIZE)) {
           const { error: err } = await supabase.from('vangsten').upsert(chunk);
@@ -87,7 +85,7 @@ export default function MigrationBanner({ onComplete }) {
 
       // 2. Projecten
       if (projects.length > 0) {
-        setProgress(`Projecten uploaden (${projects.length})...`);
+        setProgress(t('migration_uploading_projects', { count: projects.length }));
         const rows = projects.map(p => ({
           id: p.id,
           user_id: user.id,
@@ -103,7 +101,7 @@ export default function MigrationBanner({ onComplete }) {
 
       // 3. Ringstrengen
       if (ringStrengen.length > 0) {
-        setProgress(`Ringstrengen uploaden (${ringStrengen.length})...`);
+        setProgress(t('migration_uploading_ringstrings', { count: ringStrengen.length }));
         const rows = ringStrengen.map(r => ({
           id: r.id,
           user_id: user.id,
@@ -117,7 +115,7 @@ export default function MigrationBanner({ onComplete }) {
       // 4. Soortenoverschrijvingen
       const overrideEntries = Object.entries(overrides);
       if (overrideEntries.length > 0) {
-        setProgress(`Soortenoverschrijvingen uploaden...`);
+        setProgress(t('migration_uploading_overrides'));
         const rows = overrideEntries.map(([soort_naam, data]) => ({
           user_id: user.id,
           soort_naam,
@@ -132,7 +130,7 @@ export default function MigrationBanner({ onComplete }) {
 
       // 5. Profielinstellingen
       if (settings.ringerNaam || settings.ringerNummer) {
-        setProgress('Profielinstellingen opslaan...');
+        setProgress(t('migration_uploading_profile'));
         await supabase.from('profiles').update({
           ringer_naam: settings.ringerNaam || '',
           ringer_initiaal: settings.ringerInitiaal || '',
@@ -142,15 +140,13 @@ export default function MigrationBanner({ onComplete }) {
         }).eq('id', user.id);
       }
 
-      // Markeer als gemigreerd
       localStorage.setItem(`vrs-migrated-${user.id}`, 'true');
       setStatus('success');
       setProgress('');
       onComplete?.();
-      // Verberg succesmelding na 5 seconden
       setTimeout(() => setStatus('done'), 5000);
     } catch (err) {
-      setError(`Migratie mislukt: ${err.message}`);
+      setError(t('errors:migration_failed', { msg: err.message }));
       setStatus('needed');
       setProgress('');
     }
@@ -176,7 +172,7 @@ export default function MigrationBanner({ onComplete }) {
       {status === 'needed' && (
         <>
           <div className="migration-banner__info">
-            <strong>Lokale data gevonden</strong>
+            <strong>{t('migration_found_title')}</strong>
             <span>
               {counts.records} vangsten, {counts.projects} projecten
               {counts.ringstrengen > 0 ? `, ${counts.ringstrengen} ringstrengen` : ''}
@@ -185,13 +181,13 @@ export default function MigrationBanner({ onComplete }) {
           </div>
           <div className="migration-banner__actions">
             <button className="migration-banner__btn-primary" onClick={startMigration}>
-              Migreer naar cloud
+              {t('migration_migrate')}
             </button>
             <button
               className="migration-banner__btn-dismiss"
               onClick={() => setStatus('dismissed')}
             >
-              Later
+              {t('migration_later')}
             </button>
           </div>
         </>
@@ -200,7 +196,7 @@ export default function MigrationBanner({ onComplete }) {
       {status === 'migrating' && (
         <div className="migration-banner__progress">
           <div className="migration-spinner" />
-          <span>{progress || 'Bezig met migreren...'}</span>
+          <span>{progress || t('migration_busy')}</span>
         </div>
       )}
 

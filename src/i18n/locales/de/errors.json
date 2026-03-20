@@ -5,5 +5,20 @@
   "quota_exceeded": "Der Gerätespeicher ist voll. Lösche alte Fänge oder gib Speicherplatz auf deinem Gerät frei.",
   "sync_partial_failure": "Synchronisation teilweise fehlgeschlagen. Wird erneut versucht.",
   "record_save_failed": "Änderung konnte nicht gespeichert werden. Bitte erneut versuchen.",
-  "register_success": "Konto erstellt. Prüfe deine E-Mail zur Bestätigung und melde dich dann an."
+  "register_success": "Konto erstellt. Prüfe deine E-Mail zur Bestätigung und melde dich dann an.",
+  "export_no_euring": "Export blockiert: kein EURING-Code für {{count}} Datensatz(-sätze) — Arten: {{names}}. Artname korrigieren, damit er einer bekannten Art entspricht.",
+  "export_no_date": "Export blockiert: {{count}} Datensatz(-sätze) ohne Fangdatum. Fänge vor dem Exportieren korrigieren.",
+  "export_short_ring": "Export blockiert: {{count}} Datensatz(-sätze) mit leerer oder zu kurzer Ringnummer (mindestens 4 Zeichen). Fänge vor dem Exportieren korrigieren.",
+  "export_no_aupi": "ActingUserProjectID (AUPI) fehlt für: {{projects}}. Gehe zu Projekte → öffne das Projekt → klicke auf \"Mitglieder\" → gib deine AUPI-Nummer neben deinem Namen ein. Diese Nummer findest du in GRIEL unter: Meine Verwaltung → Meine Projekte → klicke das + neben dem Projekt.",
+  "import_no_records": "Keine Datensätze in Datei gefunden.",
+  "import_missing_fields": "{{count}} Datensatz(-sätze) fehlen Pflichtfelder (Artname, Ringnummer, Fangdatum).",
+  "import_success": "{{count}} Datensätze importiert.",
+  "import_failed": "Importfehler: {{msg}}",
+  "admin_load_error": "Benutzer konnten nicht geladen werden. Führe zuerst supabase-phase3.sql im Supabase SQL-Editor aus.",
+  "project_number_exists": "Projektnummer {{number}} existiert bereits (auch bei inaktiven Projekten).",
+  "project_user_not_found": "Kein Konto für diese E-Mail-Adresse gefunden.",
+  "project_cannot_add_self": "Du kannst dich nicht selbst hinzufügen.",
+  "project_already_member": "Dieser Benutzer ist bereits Mitglied des Projekts.",
+  "project_aupi_save_failed": "AUPI-Speichern fehlgeschlagen: {{errors}}",
+  "migration_failed": "Migration fehlgeschlagen: {{msg}}"
 }

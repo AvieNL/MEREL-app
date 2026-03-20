@@ -1,16 +1,13 @@
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useRole } from '../../hooks/useRole';
 import './RingstrengenPage.css';
 
-// Ringnummer normaliseren: verwijder punten en zet naar lowercase
 function normalizeRing(s) {
   return s ? s.replace(/\./g, '').trim().toLowerCase() : '';
 }
 
-// Parse ringnummer: prefix (letters) + cijfers + suffix (letters)
-// Voorbeelden: "BU73001" → {prefix:"bu", num:73001, suffix:"", len:5}
-//              "62301A"  → {prefix:"",   num:62301, suffix:"a", len:5}
 function parseRing(s) {
   const norm = normalizeRing(s);
   const m = norm.match(/^([a-z]*)(\d+)([a-z]*)$/);
@@ -18,12 +15,10 @@ function parseRing(s) {
   return { prefix: m[1], num: parseInt(m[2], 10), suffix: m[3], len: m[2].length };
 }
 
-// Twee geparsede ringen hebben hetzelfde schema (zelfde prefix + suffix)
 function sameScheme(a, b) {
   return a && b && a.prefix === b.prefix && a.suffix === b.suffix;
 }
 
-// Reconstrueer een ringnummer vanuit een schema + nieuw getal
 function reconstructRing(parsed, num) {
   return (parsed.prefix + String(num).padStart(parsed.len, '0') + parsed.suffix).toUpperCase();
 }
@@ -40,6 +35,7 @@ const LEEG = { ringmaat: '', beschrijving: '', van: '', tot: '', huidige: '', pr
 
 export default function RingstrengenPage({ ringStrengen, records = [], onAdd, onUpdate, onDelete }) {
   const { canAdd, canEdit, canDelete } = useRole();
+  const { t } = useTranslation();
   const speciesRef = useSpeciesRef();
   const RINGMATEN = useMemo(() => {
     const numeriek = [...new Set(
@@ -69,7 +65,6 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
     });
   }
 
-  // Bereken stats per streng vanuit de records
   const statsPerStreng = useMemo(() => {
     return ringStrengen.map(streng => {
       const v = parseRing(streng.van);
@@ -81,7 +76,6 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
       const vol = h.num > t.num;
       const beschikbaar = vol ? 0 : t.num - h.num + 1;
 
-      // Welke ringnummers (als getal) zitten in de database?
       const inDatabase = new Set(
         records
           .map(r => r.ringnummer ? parseRing(r.ringnummer) : null)
@@ -89,7 +83,6 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
           .map(r => r.num)
       );
 
-      // Gaten: ringen die aangewezen zijn (< huidige) maar niet in de database staan
       const gaten = [];
       for (let n = v.num; n < h.num && n <= t.num; n++) {
         if (!inDatabase.has(n)) {
@@ -141,49 +134,49 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
           <h3 className="ringstreng-form-titel">{titel}</h3>
           <div className="form-row">
             <div className="form-group">
-              <label>Ringmaat *</label>
+              <label>{t('rstrings_size')}</label>
               <select value={form.ringmaat} onChange={e => update('ringmaat', e.target.value)}>
-                <option value="">-- Kies --</option>
+                <option value="">{t('rstrings_size_choose')}</option>
                 {RINGMATEN.map(m => <option key={m} value={m}>{m}</option>)}
               </select>
             </div>
             <div className="form-group">
-              <label>Beschrijving</label>
+              <label>{t('rstrings_description')}</label>
               <input type="text" value={form.beschrijving}
                 onChange={e => update('beschrijving', e.target.value)}
-                placeholder="bijv. NK027 2024" />
+                placeholder={t('rstrings_description_placeholder')} />
             </div>
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>Eerste ringnummer *</label>
+              <label>{t('rstrings_first')}</label>
               <input type="text" value={form.van}
                 onChange={e => update('van', e.target.value)}
-                placeholder="bijv. BU73001" />
+                placeholder={t('rstrings_first_placeholder')} />
             </div>
             <div className="form-group">
-              <label>Laatste ringnummer *</label>
+              <label>{t('rstrings_last')}</label>
               <input type="text" value={form.tot}
                 onChange={e => update('tot', e.target.value)}
-                placeholder="bijv. BU74000" />
+                placeholder={t('rstrings_last_placeholder')} />
             </div>
           </div>
           <div className="form-group">
-            <label>Huidige (volgende te gebruiken)</label>
+            <label>{t('rstrings_current')}</label>
             <input type="text" value={form.huidige}
               onChange={e => update('huidige', e.target.value)}
-              placeholder="Vult automatisch in bij eerste ringnummer" />
-            <span className="field-hint">Past automatisch aan na elke opgeslagen vangst</span>
+              placeholder={t('rstrings_current_placeholder')} />
+            <span className="field-hint">{t('rstrings_current_hint')}</span>
           </div>
           <div className="form-group">
-            <label>Prijs per ring (€)</label>
+            <label>{t('rstrings_price')}</label>
             <input type="text" inputMode="decimal" value={form.prijsPerRing}
               onChange={e => update('prijsPerRing', e.target.value)}
               placeholder="bijv. 0,08" />
           </div>
           <div className="ringstreng-form-acties">
-            <button className="btn-primary" onClick={opslaan}>Opslaan</button>
-            <button className="btn-secondary" onClick={annuleer}>Annuleren</button>
+            <button className="btn-primary" onClick={opslaan}>{t('rstrings_save')}</button>
+            <button className="btn-secondary" onClick={annuleer}>{t('rstrings_cancel')}</button>
           </div>
         </div>
       </div>
@@ -192,10 +185,10 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
 
   return (
     <div className="page ringstreng-page">
-      <h2>Ringstrengen</h2>
+      <h2>{t('rstrings_title')}</h2>
 
       {ringStrengen.length === 0 && !toonForm && (
-        <p className="ringstreng-leeg">Nog geen ringstrengen toegevoegd.</p>
+        <p className="ringstreng-leeg">{t('rstrings_empty')}</p>
       )}
 
       <div className="ringstreng-lijst">
@@ -211,18 +204,18 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
           const actieBtnns = (
             <div className="ringstreng-iconen">
               {canEdit && confirmDeleteId !== streng.id && (
-                <button className="ringstreng-icoon" onClick={e => { e.stopPropagation(); startBewerken(streng); }} title="Bewerken">✎</button>
+                <button className="ringstreng-icoon" onClick={e => { e.stopPropagation(); startBewerken(streng); }} title={t('rstrings_form_edit')}>✎</button>
               )}
               {canDelete && (
                 confirmDeleteId === streng.id ? (
                   <>
                     <button className="ringstreng-icoon ringstreng-icoon--delete" style={{ opacity: 1, fontSize: '0.82rem', padding: '2px 8px' }}
-                      onClick={e => { e.stopPropagation(); onDelete(streng.id); setConfirmDeleteId(null); }}>Ja</button>
+                      onClick={e => { e.stopPropagation(); onDelete(streng.id); setConfirmDeleteId(null); }}>{t('rstrings_confirm_yes')}</button>
                     <button className="ringstreng-icoon" style={{ opacity: 1, fontSize: '0.82rem', padding: '2px 8px' }}
-                      onClick={e => { e.stopPropagation(); setConfirmDeleteId(null); }}>Nee</button>
+                      onClick={e => { e.stopPropagation(); setConfirmDeleteId(null); }}>{t('rstrings_confirm_no')}</button>
                   </>
                 ) : (
-                  <button className="ringstreng-icoon ringstreng-icoon--delete" onClick={e => { e.stopPropagation(); setConfirmDeleteId(streng.id); }} title="Verwijderen" aria-label="Ringstreng verwijderen">✕</button>
+                  <button className="ringstreng-icoon ringstreng-icoon--delete" onClick={e => { e.stopPropagation(); setConfirmDeleteId(streng.id); }} title={t('rstrings_delete_aria')} aria-label={t('rstrings_delete_aria')}>✕</button>
                 )
               )}
             </div>
@@ -240,7 +233,7 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
                   {streng.beschrijving && (
                     <span className="ringstreng-beschrijving">{streng.beschrijving}</span>
                   )}
-                  {isVol && <span className="ringstreng-vol-badge">Vol</span>}
+                  {isVol && <span className="ringstreng-vol-badge">{t('rstrings_full')}</span>}
                   {isVol
                     ? <span className="ringstreng-toggle">{isOpen ? '▾' : '▸'}</span>
                     : actieBtnns
@@ -257,22 +250,22 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
                         <div className="ringstreng-balk-fill" style={{ width: `${pct}%` }} />
                       </div>
                       <span className="ringstreng-stats">
-                        {inDb} in database · <strong>{stats.beschikbaar} beschikbaar</strong> · volgende: <code>{streng.huidige}</code>
+                        {inDb} {t('rstrings_in_db')} · <strong>{stats.beschikbaar} {t('rstrings_available')}</strong> · {t('rstrings_next')} <code>{streng.huidige}</code>
                       </span>
                       {streng.prijsPerRing && !isNaN(parsePrijs(streng.prijsPerRing)) && (
                         <span className="ringstreng-prijs">
-                          {formatBedrag(parsePrijs(streng.prijsPerRing))} p/st · betaald: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.totaal)}</strong> · voorraad: <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.beschikbaar)}</strong>
+                          {formatBedrag(parsePrijs(streng.prijsPerRing))} {t('rstrings_per_unit')} · {t('rstrings_paid_label')} <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.totaal)}</strong> · {t('rstrings_stock_label')} <strong>{formatBedrag(parsePrijs(streng.prijsPerRing) * stats.beschikbaar)}</strong>
                         </span>
                       )}
                     </div>
                     {stats.gaten.length > 0 && (
                       <div className="ringstreng-gaten">
                         <span className="ringstreng-gaten-label">
-                          {stats.gaten.length} {stats.gaten.length === 1 ? 'ring ontbreekt' : 'ringen ontbreken'} in database
+                          {t('rstrings_missing', { count: stats.gaten.length })}
                         </span>
                         <span className="ringstreng-gaten-lijst">
                           {stats.gaten.slice(0, 8).join(', ')}
-                          {stats.gaten.length > 8 && ` en ${stats.gaten.length - 8} meer`}
+                          {stats.gaten.length > 8 && ` ${t('rstrings_and_more', { count: stats.gaten.length - 8 })}`}
                         </span>
                       </div>
                     )}
@@ -280,7 +273,7 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
                   </>
                 )}
               </div>
-              {bewerkId === streng.id && renderForm('Ringstreng bewerken')}
+              {bewerkId === streng.id && renderForm(t('rstrings_form_edit'))}
             </div>
           );
         })}
@@ -302,21 +295,21 @@ export default function RingstrengenPage({ ringStrengen, records = [], onAdd, on
         return (
           <div className="ringstreng-totaal">
             <div className="ringstreng-totaal-rij">
-              <span className="ringstreng-totaal-label">Totaal betaald</span>
+              <span className="ringstreng-totaal-label">{t('rstrings_total_paid')}</span>
               <span className="ringstreng-totaal-waarde">{formatBedrag(totaalWaarde)}</span>
             </div>
             <div className="ringstreng-totaal-rij">
-              <span className="ringstreng-totaal-label">Huidige voorraadwaarde</span>
+              <span className="ringstreng-totaal-label">{t('rstrings_stock_value')}</span>
               <span className="ringstreng-totaal-waarde ringstreng-totaal-waarde--beschikbaar">{formatBedrag(totaalBeschikbaar)}</span>
             </div>
           </div>
         );
       })()}
 
-      {toonForm && !bewerkId && renderForm('Nieuwe ringstreng')}
+      {toonForm && !bewerkId && renderForm(t('rstrings_form_new'))}
       {!toonForm && canAdd && (
         <button className="btn-primary ringstreng-add-btn" onClick={() => setToonForm(true)}>
-          + Nieuwe ringstreng
+          {t('rstrings_add')}
         </button>
       )}
     </div>

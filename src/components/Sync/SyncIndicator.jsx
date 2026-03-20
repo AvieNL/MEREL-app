@@ -1,25 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSync } from '../../context/SyncContext';
 import { MAX_ATTEMPTS } from '../../context/SyncContext';
 import './SyncIndicator.css';
-
-const OP_LABELS = {
-  upsert:                   'Opslaan',
-  delete:                   'Verwijderen',
-  soft_delete:              'Verwijderen',
-  restore:                  'Herstellen',
-  batch_upsert:             'Batch opslaan',
-  mark_uploaded:            'Upload markeren',
-  species_override_upsert:  'Soortwijziging',
-  species_override_delete:  'Soortwijziging verw.',
-  profile_update:           'Profiel bijwerken',
-};
-
-const TABLE_LABELS = {
-  vangsten:         'vangst',
-  species_overrides:'soortoverride',
-  profiles:         'profiel',
-};
 
 function formatTime(iso) {
   if (!iso) return '—';
@@ -29,10 +12,29 @@ function formatTime(iso) {
 
 export default function SyncIndicator() {
   const { pendingCount, pendingItems, syncing, isOnline, syncError, lastSynced, processQueue, clearQueue } = useSync();
+  const { t } = useTranslation();
   const failedItems = pendingItems.filter(i => (i.attempts ?? 0) >= MAX_ATTEMPTS);
   const retryableItems = pendingItems.filter(i => (i.attempts ?? 0) < MAX_ATTEMPTS);
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+
+  const OP_LABELS = {
+    upsert:                   t('op_upsert'),
+    delete:                   t('op_delete'),
+    soft_delete:              t('op_soft_delete'),
+    restore:                  t('op_restore'),
+    batch_upsert:             t('op_batch_upsert'),
+    mark_uploaded:            t('op_mark_uploaded'),
+    species_override_upsert:  t('op_species_override_upsert'),
+    species_override_delete:  t('op_species_override_delete'),
+    profile_update:           t('op_profile_update'),
+  };
+
+  const TABLE_LABELS = {
+    vangsten:         t('table_vangsten'),
+    species_overrides: t('table_species_overrides'),
+    profiles:         t('table_profiles'),
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -45,18 +47,18 @@ export default function SyncIndicator() {
 
   if (!isOnline) {
     return (
-      <div className="sync-indicator sync-indicator--offline" title="Geen internetverbinding — wijzigingen worden lokaal opgeslagen">
+      <div className="sync-indicator sync-indicator--offline" title={t('sync_offline_title')}>
         <span className="sync-icon">⊘</span>
-        <span className="sync-label">Offline</span>
+        <span className="sync-label">{t('sync_offline')}</span>
       </div>
     );
   }
 
   if (syncing) {
     return (
-      <div className="sync-indicator sync-indicator--syncing" title="Bezig met synchroniseren...">
+      <div className="sync-indicator sync-indicator--syncing" title={t('sync_syncing_title')}>
         <span className="sync-spinner" />
-        <span className="sync-label">Bezig…</span>
+        <span className="sync-label">{t('sync_syncing_label')}</span>
       </div>
     );
   }
@@ -66,27 +68,33 @@ export default function SyncIndicator() {
       <div className="sync-indicator sync-indicator--pending sync-indicator--clickable" ref={ref} onClick={() => setOpen(o => !o)}>
         <span className="sync-icon">↑</span>
         <span className="sync-badge">{pendingCount > 9 ? '9+' : pendingCount}</span>
-        <span className="sync-label">wacht</span>
+        <span className="sync-label">{t('sync_waiting')}</span>
         {open && (
           <div className="sync-popover">
             <div className="sync-popover-header">
-              <strong>{pendingCount} item{pendingCount !== 1 ? 's' : ''} in wachtrij</strong>
+              <strong>{t('sync_queue_count', { count: pendingCount })}</strong>
               <div className="sync-popover-actions">
                 {retryableItems.length > 0 && (
                   <button className="sync-force-btn" onClick={e => { e.stopPropagation(); processQueue(); setOpen(false); }}>
-                    ↑ Nu synchroniseren
+                    {t('sync_force_sync')}
                   </button>
                 )}
                 {failedItems.length > 0 && (
-                  <button className="sync-clear-btn" onClick={e => { e.stopPropagation(); if (window.confirm(`${failedItems.length} definitief mislukt item(s) verwijderen uit de wachtrij?`)) { clearQueue(); setOpen(false); } }}>
-                    ✕ Wis wachtrij
+                  <button className="sync-clear-btn" onClick={e => {
+                    e.stopPropagation();
+                    if (window.confirm(t('sync_confirm_clear', { count: failedItems.length }))) {
+                      clearQueue();
+                      setOpen(false);
+                    }
+                  }}>
+                    {t('sync_clear_queue')}
                   </button>
                 )}
               </div>
             </div>
             {failedItems.length > 0 && (
               <div className="sync-popover-failed-note">
-                ⚠ {failedItems.length} item{failedItems.length !== 1 ? 's' : ''} definitief mislukt (na {MAX_ATTEMPTS}×) — zie foutmelding hieronder
+                {t('sync_failed_note', { count: failedItems.length, max: MAX_ATTEMPTS })}
               </div>
             )}
             <ul className="sync-popover-list">
@@ -99,7 +107,10 @@ export default function SyncIndicator() {
                     <span className="sync-popover-time">{formatTime(item.createdAt)}</span>
                     {item.attempts > 0 && (
                       <span className="sync-popover-attempts" title={item.lastError}>
-                        {failed ? '✕ definitief mislukt' : `${item.attempts}× geprobeerd`}{item.lastError ? ` — ${item.lastError}` : ''}
+                        {failed
+                          ? t('sync_failed_mark')
+                          : t('sync_attempts', { count: item.attempts })
+                        }{item.lastError ? ` — ${item.lastError}` : ''}
                       </span>
                     )}
                   </li>
@@ -107,7 +118,7 @@ export default function SyncIndicator() {
               })}
             </ul>
             {lastSynced && (
-              <div className="sync-popover-footer">Laatste sync: {formatTime(lastSynced.toISOString())}</div>
+              <div className="sync-popover-footer">{t('sync_last_synced', { time: formatTime(lastSynced.toISOString()) })}</div>
             )}
           </div>
         )}
@@ -119,16 +130,16 @@ export default function SyncIndicator() {
     return (
       <div className="sync-indicator sync-indicator--error" title={syncError}>
         <span className="sync-icon">!</span>
-        <span className="sync-label">Fout</span>
+        <span className="sync-label">{t('sync_error_label')}</span>
       </div>
     );
   }
 
   // Online en volledig gesynchroniseerd
   return (
-    <div className="sync-indicator sync-indicator--online" title={lastSynced ? `Gesynchroniseerd om ${formatTime(lastSynced.toISOString())}` : 'Online — data gesynchroniseerd met server'}>
+    <div className="sync-indicator sync-indicator--online" title={lastSynced ? t('sync_synced_title', { time: formatTime(lastSynced.toISOString()) }) : t('sync_online_title')}>
       <span className="sync-icon">●</span>
-      <span className="sync-label">Online</span>
+      <span className="sync-label">{t('sync_online')}</span>
     </div>
   );
 }

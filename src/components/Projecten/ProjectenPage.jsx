@@ -1,19 +1,26 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRole } from '../../hooks/useRole';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import LocatiePicker from '../Nieuw/LocatiePicker';
 import './ProjectenPage.css';
 
-const ROL_LABELS = { viewer: 'Kijker', ringer: 'Ringer', admin: 'Admin' };
 const FORM_DEFAULT = { naam: '', locatie: '', nummer: '', vasteLocatie: false, plaatscode: 'NL--', googlePlaats: '', lat: '', lon: '', nauwkCoord: '0' };
 const AUPI_TITLE = 'ActingUserProjectID: jouw persoonlijk lidnummer voor dit project in GRIEL. Te vinden via: Mijn administratie → Mijn projecten → klik op het + naast het project.';
 
 // Read-only ledenlijst op de projectkaart
 function ProjectMembers({ project }) {
   const { user } = useAuth();
+  const { t } = useTranslation(['common', 'errors']);
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState([]);
+
+  const ROL_LABELS = {
+    viewer: t('role_viewer_label'),
+    ringer: t('role_ringer_label'),
+    admin: t('role_admin_label'),
+  };
 
   const isOwner = project.user_id === user?.id;
   if (!isOwner && !project.shared) return null;
@@ -39,12 +46,12 @@ function ProjectMembers({ project }) {
   return (
     <div className="project-members">
       <button className="project-members-toggle" onClick={() => setOpen(o => !o)}>
-        {open ? '▾' : '▸'} {open ? 'Leden' : `Leden${members.length > 0 ? ` (${members.length})` : ''}`}
+        {open ? '▾' : '▸'} {open ? t('project_members_label') : `${t('project_members_label')}${members.length > 0 ? ` (${members.length})` : ''}`}
       </button>
       {open && (
         <div className="project-members-panel">
           {members.length === 0 ? (
-            <p className="project-members-empty">Nog geen leden toegevoegd.</p>
+            <p className="project-members-empty">{t('project_no_members_added')}</p>
           ) : (
             members.map(m => (
               <div key={m.user_id} className="project-member-row">
@@ -59,7 +66,7 @@ function ProjectMembers({ project }) {
                   <span className="project-member-aupi-value">{m.aupi || '—'}</span>
                 </span>
                 <span className="project-member-badge">
-                  {m.is_owner ? 'Eigenaar' : (ROL_LABELS[m.rol] || m.rol)}
+                  {m.is_owner ? t('project_owner') : (ROL_LABELS[m.rol] || m.rol)}
                 </span>
               </div>
             ))
@@ -73,10 +80,17 @@ function ProjectMembers({ project }) {
 export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onRenameProject, onAupiSaved }) {
   const { canAdd, canEdit, canDelete } = useRole();
   const { user } = useAuth();
+  const { t } = useTranslation(['common', 'errors']);
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [formError, setFormError] = useState('');
+
+  const ROL_LABELS = {
+    viewer: t('role_viewer_label'),
+    ringer: t('role_ringer_label'),
+    admin: t('role_admin_label'),
+  };
 
   const [addForm, setAddForm] = useState(FORM_DEFAULT);
   const setAdd = (field, value) => setAddForm(f => ({ ...f, [field]: value }));
@@ -84,8 +98,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
   const [editForm, setEditForm] = useState(FORM_DEFAULT);
   const setEdit = (field, value) => setEditForm(f => ({ ...f, [field]: value }));
 
-  // Leden + AUPIs in bewerkingsmodus
-  const [editMembers, setEditMembers] = useState([]);   // { user_id, ringer_naam, email, rol, is_owner, aupi }
+  const [editMembers, setEditMembers] = useState([]);
   const [newMemberEmail, setNewMemberEmail] = useState('');
   const [newMemberAupi, setNewMemberAupi] = useState('');
   const [newMemberLoading, setNewMemberLoading] = useState(false);
@@ -101,7 +114,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     e.preventDefault();
     if (!addForm.naam.trim()) return;
     if (nummerExists(addForm.nummer)) {
-      setFormError(`Projectnummer ${addForm.nummer.trim()} bestaat al (ook bij inactieve projecten).`);
+      setFormError(t('errors:project_number_exists', { number: addForm.nummer.trim() }));
       return;
     }
     setFormError('');
@@ -136,7 +149,6 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     setNewMemberError('');
     setFormError('');
 
-    // Laad leden + AUPIs
     const { data: memberData } = await supabase.rpc('get_project_members', { p_project_id: p.id });
     const { data: aupiData } = await supabase
       .from('project_members')
@@ -146,7 +158,6 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     (aupiData || []).forEach(r => { aupiMap[r.user_id] = r.aupi || ''; });
     setEditMembers((memberData || []).map(m => ({
       ...m,
-      // Eigenaar-AUPI komt uit projecten.aupi, leden-AUPI uit project_members.aupi
       aupi: m.is_owner ? (p.aupi || '') : (aupiMap[m.user_id] || ''),
     })));
   }
@@ -161,7 +172,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     const newNaam = editForm.naam.trim();
     if (!newNaam) return;
     if (nummerExists(editForm.nummer, p.id)) {
-      setFormError(`Projectnummer ${editForm.nummer.trim()} bestaat al (ook bij inactieve projecten).`);
+      setFormError(t('errors:project_number_exists', { number: editForm.nummer.trim() }));
       return;
     }
     setFormError('');
@@ -178,7 +189,6 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       aupi: ownerAupi,
     });
 
-    // Sla leden-AUPIs op via RPC (niet de eigenaar)
     const aupiErrors = [];
     for (const m of editMembers.filter(m => !m.is_owner)) {
       const { error: aupiErr } = await supabase.rpc('update_member_aupi', {
@@ -192,7 +202,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       }
     }
     if (aupiErrors.length > 0) {
-      setFormError(`AUPI opslaan mislukt: ${aupiErrors.join('; ')}`);
+      setFormError(t('errors:project_aupi_save_failed', { errors: aupiErrors.join('; ') }));
       return;
     }
     if (onAupiSaved) onAupiSaved();
@@ -207,19 +217,18 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     setNewMemberError('');
     try {
       const { data: userId, error: lookupErr } = await supabase.rpc('lookup_user_id', { p_email: trimmed });
-      if (lookupErr || !userId) throw new Error('Geen account gevonden voor dit e-mailadres.');
-      if (userId === user.id) throw new Error('Je kunt jezelf niet toevoegen.');
-      if (editMembers.some(m => m.user_id === userId)) throw new Error('Deze gebruiker is al lid van het project.');
+      if (lookupErr || !userId) throw new Error(t('errors:project_user_not_found'));
+      if (userId === user.id) throw new Error(t('errors:project_cannot_add_self'));
+      if (editMembers.some(m => m.user_id === userId)) throw new Error(t('errors:project_already_member'));
 
       const { error: insertErr } = await supabase
         .from('project_members')
         .insert({ project_id: projectId, user_id: userId, rol: 'viewer' });
       if (insertErr) {
-        if (insertErr.code === '23505') throw new Error('Deze gebruiker is al lid van het project.');
+        if (insertErr.code === '23505') throw new Error(t('errors:project_already_member'));
         throw insertErr;
       }
 
-      // Reload members fresh
       const { data: memberData } = await supabase.rpc('get_project_members', { p_project_id: projectId });
       const newMember = memberData?.find(m => m.user_id === userId);
       if (newMember) {
@@ -257,10 +266,10 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
   return (
     <div className="page projecten-page">
       <div className="page-top">
-        <h2>Projecten</h2>
+        <h2>{t('projects_title')}</h2>
         {canAdd && (
           <button className="btn-primary" onClick={() => setShowForm(!showForm)}>
-            {showForm ? 'Annuleer' : '+ Nieuw'}
+            {showForm ? t('projects_cancel') : t('projects_add')}
           </button>
         )}
       </div>
@@ -268,46 +277,46 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       {showForm && (
         <form className="section" onSubmit={handleAdd}>
           <div className="form-group">
-            <label>Projectnaam *</label>
-            <input type="text" value={addForm.naam} onChange={e => setAdd('naam', e.target.value)} placeholder="bijv. CES Breedenbroek 2025" />
+            <label>{t('project_name_label')}</label>
+            <input type="text" value={addForm.naam} onChange={e => setAdd('naam', e.target.value)} placeholder={t('project_name_placeholder')} />
           </div>
           <div className="form-group">
-            <label>Locatie</label>
-            <input type="text" value={addForm.locatie} onChange={e => setAdd('locatie', e.target.value)} placeholder="bijv. Breedenbroek" />
+            <label>{t('project_location_label')}</label>
+            <input type="text" value={addForm.locatie} onChange={e => setAdd('locatie', e.target.value)} placeholder={t('project_location_placeholder')} />
           </div>
           <div className="form-group">
-            <label>Projectnummer</label>
-            <input type="text" value={addForm.nummer} onChange={e => setAdd('nummer', e.target.value)} placeholder="bijv. 1925" />
+            <label>{t('project_number_label')}</label>
+            <input type="text" value={addForm.nummer} onChange={e => setAdd('nummer', e.target.value)} placeholder={t('project_number_placeholder')} />
           </div>
           <div className="form-group">
             <label className="checkbox-label">
               <input type="checkbox" checked={addForm.vasteLocatie} onChange={e => setAdd('vasteLocatie', e.target.checked)} />
-              Vaste locatie (coördinaten opslaan bij project)
+              {t('project_fixed_location')}
             </label>
           </div>
           {addForm.vasteLocatie && (
             <div className="project-locatie-velden">
               <div className="form-group">
-                <label>Plaatscode</label>
+                <label>{t('project_place_code')}</label>
                 <input type="text" value={addForm.plaatscode} onChange={e => setAdd('plaatscode', e.target.value)} placeholder="bijv. NL--" />
               </div>
               <div className="form-group">
-                <label>Plaatsnaam</label>
-                <input type="text" value={addForm.googlePlaats} onChange={e => setAdd('googlePlaats', e.target.value)} placeholder="bijv. Breedenbroek" />
+                <label>{t('project_place_name')}</label>
+                <input type="text" value={addForm.googlePlaats} onChange={e => setAdd('googlePlaats', e.target.value)} placeholder={t('project_location_placeholder')} />
               </div>
               <LocatiePicker lat={addForm.lat} lon={addForm.lon} onChange={(newLat, newLon) => setAddForm(f => ({ ...f, lat: newLat, lon: newLon }))} />
             </div>
           )}
           {formError && <p className="project-members-error">{formError}</p>}
           <button type="submit" className="btn-success" style={{ width: '100%' }}>
-            Project Toevoegen
+            {t('project_add_btn')}
           </button>
         </form>
       )}
 
       <div className="project-list">
         {projects.length === 0 ? (
-          <div className="empty-state">Nog geen projecten</div>
+          <div className="empty-state">{t('projects_empty')}</div>
         ) : (
           projects.map(p => {
             const isOwn = p.user_id === user?.id;
@@ -317,34 +326,34 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                 {editId === p.id ? (
                   <div className="project-edit">
                     <div className="form-group">
-                      <label>Naam</label>
+                      <label>{t('project_edit_name')}</label>
                       <input type="text" value={editForm.naam} onChange={e => setEdit('naam', e.target.value)} />
                     </div>
                     <div className="form-row">
                       <div className="form-group">
-                        <label>Locatie</label>
+                        <label>{t('project_edit_location')}</label>
                         <input type="text" value={editForm.locatie} onChange={e => setEdit('locatie', e.target.value)} />
                       </div>
                       <div className="form-group">
-                        <label>Nummer</label>
+                        <label>{t('project_edit_number')}</label>
                         <input type="text" value={editForm.nummer} onChange={e => setEdit('nummer', e.target.value)} />
                       </div>
                     </div>
                     <div className="form-group">
                       <label className="checkbox-label">
                         <input type="checkbox" checked={editForm.vasteLocatie} onChange={e => setEdit('vasteLocatie', e.target.checked)} />
-                        Vaste locatie
+                        {t('project_fixed_location_short')}
                       </label>
                     </div>
                     {editForm.vasteLocatie && (
                       <div className="project-locatie-velden">
                         <div className="form-row">
                           <div className="form-group">
-                            <label>Plaatscode</label>
+                            <label>{t('project_place_code')}</label>
                             <input type="text" value={editForm.plaatscode} onChange={e => setEdit('plaatscode', e.target.value)} />
                           </div>
                           <div className="form-group">
-                            <label>Plaatsnaam</label>
+                            <label>{t('project_place_name')}</label>
                             <input type="text" value={editForm.googlePlaats} onChange={e => setEdit('googlePlaats', e.target.value)} />
                           </div>
                         </div>
@@ -357,10 +366,10 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
 
                     {/* Leden & AUPIs */}
                     <div className="edit-members-section">
-                      <label className="edit-members-label">Leden</label>
+                      <label className="edit-members-label">{t('project_members_label')}</label>
                       <div className="project-members-panel">
                         {editMembers.length === 0 ? (
-                          <p className="project-members-empty">Nog geen leden.</p>
+                          <p className="project-members-empty">{t('project_no_members')}</p>
                         ) : (
                           editMembers.map(m => (
                             <div key={m.user_id} className="project-member-row">
@@ -383,7 +392,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                                 />
                               </span>
                               {m.is_owner ? (
-                                <span className="project-member-badge">Eigenaar</span>
+                                <span className="project-member-badge">{t('project_owner')}</span>
                               ) : (
                                 <span className="project-member-actions">
                                   <select
@@ -391,15 +400,15 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                                     value={m.rol || 'viewer'}
                                     onChange={e => changeEditRole(p.id, m.user_id, e.target.value)}
                                   >
-                                    <option value="viewer">Kijker</option>
-                                    <option value="ringer">Ringer</option>
-                                    <option value="admin">Admin</option>
+                                    <option value="viewer">{t('role_viewer_label')}</option>
+                                    <option value="ringer">{t('role_ringer_label')}</option>
+                                    <option value="admin">{t('role_admin_label')}</option>
                                   </select>
                                   <button
                                     className="project-member-remove"
                                     onClick={() => removeEditMember(p.id, m.user_id)}
-                                    title="Verwijderen"
-                                    aria-label="Lid verwijderen"
+                                    title={t('project_remove_member_aria')}
+                                    aria-label={t('project_remove_member_aria')}
                                   >✕</button>
                                 </span>
                               )}
@@ -412,7 +421,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                             value={newMemberEmail}
                             onChange={e => setNewMemberEmail(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && addEditMember(p.id)}
-                            placeholder="e-mailadres nieuw lid"
+                            placeholder={t('project_email_placeholder')}
                           />
                           <input
                             className="project-member-aupi-input"
@@ -430,7 +439,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                             onClick={() => addEditMember(p.id)}
                             disabled={newMemberLoading || !newMemberEmail.trim()}
                           >
-                            {newMemberLoading ? '...' : 'Toevoegen'}
+                            {newMemberLoading ? t('project_member_loading') : t('project_add_member')}
                           </button>
                         </div>
                         {newMemberError && <p className="project-members-error">{newMemberError}</p>}
@@ -442,10 +451,10 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                     )}
                     <div className="project-edit-actions">
                       <button type="button" className="btn-success btn-sm" onClick={() => saveEdit(p)}>
-                        Opslaan
+                        {t('project_save')}
                       </button>
                       <button type="button" className="btn-secondary btn-sm" onClick={cancelEdit}>
-                        Annuleer
+                        {t('project_cancel_edit')}
                       </button>
                     </div>
                   </div>
@@ -460,29 +469,29 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                           {p.vaste_locatie && p.lat && p.lon && (
                             <span className="project-loc project-loc--coords">📍 {parseFloat(p.lat).toFixed(4)}, {parseFloat(p.lon).toFixed(4)}</span>
                           )}
-                          {isShared && <span className="project-shared-badge">Gedeeld</span>}
+                          {isShared && <span className="project-shared-badge">{t('project_shared')}</span>}
                           <button
                             className={`btn-secondary btn-sm badge ${p.actief ? 'badge-success' : ''}`}
                             onClick={() => canEdit && isOwn && onUpdate(p.id, { actief: !p.actief })}
                             disabled={!canEdit || !isOwn}
                           >
-                            {p.actief ? 'Actief' : 'Inactief'}
+                            {p.actief ? t('project_active') : t('project_inactive')}
                           </button>
                         </span>
                       </div>
                       {confirmDeleteId === p.id ? (
                         <div className="project-confirm">
-                          Verwijderen?
-                          <button className="btn-danger btn-sm" onClick={() => { onDelete(p.id); setConfirmDeleteId(null); }}>Ja</button>
-                          <button className="btn-secondary btn-sm" onClick={() => setConfirmDeleteId(null)}>Nee</button>
+                          {t('project_delete')}
+                          <button className="btn-danger btn-sm" onClick={() => { onDelete(p.id); setConfirmDeleteId(null); }}>{t('project_yes')}</button>
+                          <button className="btn-secondary btn-sm" onClick={() => setConfirmDeleteId(null)}>{t('project_no')}</button>
                         </div>
                       ) : (
                         <div className="project-actions">
                           {canEdit && isOwn && (
-                            <button className="project-icoon" onClick={() => startEdit(p)} title="Bewerken">✎</button>
+                            <button className="project-icoon" onClick={() => startEdit(p)} title={t('project_edit_aria')}>✎</button>
                           )}
                           {canDelete && isOwn && (
-                            <button className="project-icoon project-icoon--delete" onClick={() => setConfirmDeleteId(p.id)} title="Verwijderen" aria-label="Project verwijderen">✕</button>
+                            <button className="project-icoon project-icoon--delete" onClick={() => setConfirmDeleteId(p.id)} title={t('project_delete_aria')} aria-label={t('project_delete_aria')}>✕</button>
                           )}
                         </div>
                       )}

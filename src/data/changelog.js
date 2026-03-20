@@ -1,6 +1,15 @@
-export const VERSIE = '1.2.6';
+export const VERSIE = '1.3.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.3.0',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'i18n: volledige vertaling van alle resterende pagina\'s — Header, ErrorBoundary, MigrationBanner, SyncIndicator, Vangstlijst, Statistieken, Admin, Soorten, Ringstrengen, Projecten en Over-pagina',
+      'i18n: ~150 nieuwe vertalingssleutels per taal (NL/EN/DE) in common en errors namespace',
+      'i18n: foutmeldingen voor export, import, admin en projecten vertaald in errors namespace',
+    ],
+  },
   {
     versie: '1.2.6',
     datum: '2026-03-21',

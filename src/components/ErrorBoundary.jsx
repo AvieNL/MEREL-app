@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import i18n from '../i18n/index.js';
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -30,7 +31,7 @@ export default class ErrorBoundary extends Component {
           textAlign: 'center',
         }}>
           <div style={{ fontSize: '2rem' }}>⚠️</div>
-          <h2 style={{ margin: 0 }}>Er is iets fout gegaan</h2>
+          <h2 style={{ margin: 0 }}>{i18n.t('error_something_wrong')}</h2>
           <p style={{ color: 'var(--text-secondary)', margin: 0, maxWidth: 400 }}>
             {this.state.error.message}
           </p>
@@ -38,7 +39,7 @@ export default class ErrorBoundary extends Component {
             onClick={() => window.location.reload()}
             style={{ marginTop: '0.5rem' }}
           >
-            Pagina herladen
+            {i18n.t('btn_reload_page')}
           </button>
         </div>
       );
