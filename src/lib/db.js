@@ -23,7 +23,7 @@ db.version(2).stores({
   vangsten: 'id, user_id, [user_id+timestamp], vogelnaam, vangstdatum, project, uploaded, bron, deleted_at',
 });
 
-// Versie 3: offline-cache voor soortbasisdata (580 soorten, gevuld vanuit Supabase)
+// Versie 3: offline-cache voor soortbasisdata (gevuld vanuit Supabase, incl. EURING-codes)
 db.version(3).stores({
   species: 'naam_nl',
 });
