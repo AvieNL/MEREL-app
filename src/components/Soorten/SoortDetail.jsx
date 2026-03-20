@@ -7,17 +7,8 @@ import { supabase } from '../../lib/supabase';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuitypeInfo from './RuitypeInfo';
 import { VangstKaart } from '../Stats/Charts';
+import { renderMarkdown } from '../../utils/textHelper';
 import './SoortDetail.css';
-
-// Eenvoudige markdown-renderer: **bold**, *italic*, _underline_
-function renderMarkdown(text) {
-  if (!text) return '';
-  return text
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/\*\*(.*?)\*\*/gs, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/gs, '<em>$1</em>')
-    .replace(/_(.*?)_/gs, '<u>$1</u>');
-}
 
 // Textarea met B/I/U-opmaakbalk die automatisch meegroeit
 function FormattedTextarea({ value, onChange, placeholder }) {

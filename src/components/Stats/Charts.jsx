@@ -1,14 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
+import { parseDate } from '../../utils/statsHelper';
 
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
-
-function parseDate(d) {
-  if (!d) return null;
-  const parts = d.split('-');
-  if (parts[0].length === 4) return new Date(+parts[0], +parts[1] - 1, +parts[2]);
-  if (parts[2] && parts[2].length === 4) return new Date(+parts[2], +parts[1] - 1, +parts[0]);
-  return null;
-}
 
 function useContainerWidth(ref) {
   const [width, setWidth] = useState(0);
