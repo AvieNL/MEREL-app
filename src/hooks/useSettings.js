@@ -10,14 +10,19 @@ const DEFAULT_SETTINGS = {
   ringerInitiaal: '',
   ringerNummer: '',
   hulpModus: 'uitgebreid',
+  ringstationLat: '',
+  ringstationLon: '',
 };
 
 function profileToSettings(profile) {
+  const stored = loadFromStorage(STORAGE_KEY, DEFAULT_SETTINGS);
   return {
     ringerNaam: profile.ringer_naam || '',
     ringerInitiaal: profile.ringer_initiaal || '',
     ringerNummer: profile.ringer_nummer || '',
     hulpModus: profile.hulp_modus || 'uitgebreid',
+    ringstationLat: stored.ringstationLat || '',
+    ringstationLon: stored.ringstationLon || '',
   };
 }
 

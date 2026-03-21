@@ -199,7 +199,7 @@ export function LineChart({ data, title, xKey, yKey, onPointClick }) {
   );
 }
 
-export function VangstKaart({ targetRecords, allRecords }) {
+export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLon }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const displayNaam = useDisplayNaam();
@@ -229,8 +229,8 @@ export function VangstKaart({ targetRecords, allRecords }) {
       if (!isNieuw && r.ringnummer) {
         const orig = eersteVangst[r.ringnummer];
         if (orig) {
-          const oLat = parseFloat(orig.lat);
-          const oLon = parseFloat(orig.lon);
+          const oLat = parseFloat(orig.lat) || fallbackLat;
+          const oLon = parseFloat(orig.lon) || fallbackLon;
           if (oLat && oLon && !isNaN(oLat) && !isNaN(oLon)) {
             lijnen.push({ from: [oLat, oLon], to: [lat, lon] });
           }

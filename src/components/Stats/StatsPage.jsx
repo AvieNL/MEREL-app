@@ -11,6 +11,7 @@ import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from 
 import { formatDatum, toYMD, todayISO, yesterdayISO } from '../../utils/dateHelper';
 import { buildEersteVangstMap } from '../../utils/catchHelper';
 import { STATS_UITGESLOTEN } from '../../data/constants';
+import { useSettings } from '../../hooks/useSettings';
 import './StatsPage.css';
 
 function capitalize(s) {
@@ -81,7 +82,7 @@ function computeStats(records) {
   return { total: records.length, soorten: soorten.size, nieuw, terugvangst, topSoorten, perMaand, perProject, soortenTabel, projectTabel };
 }
 
-function computeTerugvangsten(records) {
+function computeTerugvangsten(records, fallbackLat, fallbackLon) {
   const eersteVangst = buildEersteVangstMap(records);
 
   const lijst = [];
@@ -96,8 +97,8 @@ function computeTerugvangsten(records) {
 
     let afstandKm = null;
     if (origineel) {
-      const lat1 = parseFloat(origineel.lat);
-      const lon1 = parseFloat(origineel.lon);
+      const lat1 = parseFloat(origineel.lat) || fallbackLat || null;
+      const lon1 = parseFloat(origineel.lon) || fallbackLon || null;
       const lat2 = parseFloat(r.lat);
       const lon2 = parseFloat(r.lon);
       afstandKm = haversineKm(lat1, lon1, lat2, lon2);
@@ -191,6 +192,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
   const displayNaam = useDisplayNaam();
+  const { settings } = useSettings();
 
   const statsRecords = useMemo(
     () => records.filter(r =>
@@ -238,7 +240,11 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   );
   const huidigeStats = useMemo(() => computeStats(huidigeRecords), [huidigeRecords]);
   const totaalStats = useMemo(() => computeStats(gefilterdRecords), [gefilterdRecords]);
-  const alleTerugvangsten = useMemo(() => computeTerugvangsten(gefilterdRecords), [gefilterdRecords]);
+  const alleTerugvangsten = useMemo(() => {
+    const fbLat = parseFloat(settings.ringstationLat) || null;
+    const fbLon = parseFloat(settings.ringstationLon) || null;
+    return computeTerugvangsten(gefilterdRecords, fbLat, fbLon);
+  }, [gefilterdRecords, settings.ringstationLat, settings.ringstationLon]);
   const { perJaar, perMaand, soortenPerJaar } = useChartData(gefilterdRecords);
 
   const terugvangsten = useMemo(() => {
@@ -620,7 +626,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
         )}
 
         {/* Kaart */}
-        <VangstKaart targetRecords={kaartRecords} allRecords={kaartRecords} />
+        <VangstKaart targetRecords={kaartRecords} allRecords={kaartRecords} fallbackLat={parseFloat(settings.ringstationLat) || null} fallbackLon={parseFloat(settings.ringstationLon) || null} />
 
         {/* Per project */}
         {totaalStats.projectTabel.length > 0 && (

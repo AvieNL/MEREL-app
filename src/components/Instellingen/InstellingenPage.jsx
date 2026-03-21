@@ -66,6 +66,35 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
       </div>
 
       <div className="section">
+        <h3>{t('section_ringstation')}</h3>
+        <div className="section-content">
+          <p className="admin-hint">{t('ringstation_description')}</p>
+          <div className="form-row">
+            <div className="form-group">
+              <label>{t('ringstation_lat')}</label>
+              <input
+                type="text"
+                inputMode="decimal"
+                value={settings.ringstationLat}
+                onChange={e => onUpdateSettings({ ringstationLat: e.target.value })}
+                placeholder="51.8903"
+              />
+            </div>
+            <div className="form-group">
+              <label>{t('ringstation_lon')}</label>
+              <input
+                type="text"
+                inputMode="decimal"
+                value={settings.ringstationLon}
+                onChange={e => onUpdateSettings({ ringstationLon: e.target.value })}
+                placeholder="6.4657"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="section">
         <h3>{t('section_help_display')}</h3>
         <div className="section-content">
           <p className="admin-hint">{t('help_display_description')}</p>

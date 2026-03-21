@@ -7,12 +7,14 @@ import { buildEersteVangstMap } from '../../utils/catchHelper';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
 import { formatDatum } from '../../utils/dateHelper';
 import { STATS_UITGESLOTEN } from '../../data/constants';
+import { useSettings } from '../../hooks/useSettings';
 import './StatsPage.css';
 
 export default function TerugvangstDetail({ records, projects = [] }) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const { settings } = useSettings();
   const displayNaam = useDisplayNaam();
   const [sorteer, setSorteer] = useState('tijd');
   const [soortSort, setSoortSort] = useState({ col: 'tv', asc: false });
@@ -51,8 +53,10 @@ export default function TerugvangstDetail({ records, projects = [] }) {
       const tvDatum = parseDate(r.vangstdatum);
       const origDatum = orig ? parseDate(orig.vangstdatum) : null;
       const dagen = dagenTussen(origDatum, tvDatum);
+      const fbLat = parseFloat(settings.ringstationLat) || null;
+      const fbLon = parseFloat(settings.ringstationLon) || null;
       const afstandKm = orig
-        ? haversineKm(parseFloat(orig.lat), parseFloat(orig.lon), parseFloat(r.lat), parseFloat(r.lon))
+        ? haversineKm(parseFloat(orig.lat) || fbLat, parseFloat(orig.lon) || fbLon, parseFloat(r.lat), parseFloat(r.lon))
         : null;
 
       list.push({
@@ -302,7 +306,7 @@ export default function TerugvangstDetail({ records, projects = [] }) {
       </div>
 
       {/* Kaart */}
-      <VangstKaart targetRecords={tvRecords} allRecords={gefilterd} />
+      <VangstKaart targetRecords={tvRecords} allRecords={gefilterd} fallbackLat={parseFloat(settings.ringstationLat) || null} fallbackLon={parseFloat(settings.ringstationLon) || null} />
 
       {/* Alle terugvangsten */}
       <div className="section">

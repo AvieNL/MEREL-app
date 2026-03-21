@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.18';
+export const VERSIE = '1.5.19';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.19',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Feat: Ringstation-locatie in instellingen — coördinaten als fallback voor vangsten zonder GPS bij afstandsberekeningen en kaartlijnen',
+      'Fix: Zoeken op ringnummer negeert nu puntjes (S611104 vindt ook S.611104)',
+    ],
+    wijzigingen_en: [
+      'Feat: Ringing station location in settings — coordinates as fallback for catches without GPS in distance calculations and map lines',
+      'Fix: Ring number search now ignores dots (S611104 also finds S.611104)',
+    ],
+    wijzigingen_de: [
+      'Feat: Beringungsstation-Standort in Einstellungen — Koordinaten als Fallback für Fänge ohne GPS bei Abstandsberechnungen und Kartenlinien',
+      'Fix: Ringnummernsuche ignoriert jetzt Punkte (S611104 findet auch S.611104)',
+    ],
+  },
   {
     versie: '1.5.18',
     datum: '2026-03-21',

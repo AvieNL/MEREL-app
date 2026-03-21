@@ -112,13 +112,14 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   const filtered = useMemo(() => {
     const base = !zoek ? records : (() => {
       const lower = zoek.toLowerCase();
+      const lowerNorm = normalizeRing(zoek);
       return records.filter(r => {
         const speciesNames = r.vogelnaam ? speciesNaamIndex.get(r.vogelnaam.toLowerCase()) : null;
         const matchesSpecies = speciesNames
           ? speciesNames.some(n => n.includes(lower))
           : (r.vogelnaam && r.vogelnaam.toLowerCase().includes(lower));
         return matchesSpecies ||
-          (r.ringnummer && r.ringnummer.toLowerCase().includes(lower)) ||
+          (r.ringnummer && normalizeRing(r.ringnummer).includes(lowerNorm)) ||
           (r.vangstdatum && r.vangstdatum.includes(lower)) ||
           (r.project && r.project.toLowerCase().includes(lower));
       });
