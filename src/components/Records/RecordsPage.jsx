@@ -26,6 +26,10 @@ function stripDots(ring) {
   return ring ? ring.replace(/\./g, '') : '';
 }
 
+function normalizeRing(ring) {
+  return ring ? ring.replace(/\./g, '').replace(/\s/g, '').toLowerCase() : '';
+}
+
 function leeftijdLabel(code) {
   if (!code) return '';
   return LEEFTIJD_LABEL[code] || code;
@@ -46,7 +50,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
     const map = new Map();
     records.forEach(r => {
       if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4' && r.ringnummer) {
-        map.set(r.ringnummer.toLowerCase(), r);
+        map.set(normalizeRing(r.ringnummer), r);
       }
     });
     return map;
@@ -55,7 +59,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   function getRecordType(r) {
     if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') return 'nw';
     if (!r.ringnummer) return 'tvx';
-    const original = nvByRing.get(r.ringnummer.toLowerCase());
+    const original = nvByRing.get(normalizeRing(r.ringnummer));
     if (!original) return 'tvx';
     return original.project === r.project ? 'tv' : 'tvo';
   }
@@ -146,7 +150,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
             const type = getRecordType(r);
             const cfg = TYPE_CFG[type];
             const original = (type === 'tv' || type === 'tvo') && r.ringnummer
-              ? nvByRing.get(r.ringnummer.toLowerCase()) ?? null
+              ? nvByRing.get(normalizeRing(r.ringnummer)) ?? null
               : null;
             return (
             <div
