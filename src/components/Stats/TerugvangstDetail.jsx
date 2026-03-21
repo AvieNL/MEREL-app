@@ -195,7 +195,7 @@ export default function TerugvangstDetail({ records }) {
             <span
               className="tv-record-ring ring-link"
               onClick={() => navigate('/records', { state: { openId: oudste.id } })}
-            >{oudste.ringnummer}</span>
+            >{oudste.ringnummer?.replace(/\./g, '')}</span>
             <div className="tv-record-dates">
               {formatDatum(oudste.origDatum)} → {formatDatum(oudste.datum)}
             </div>
@@ -210,7 +210,7 @@ export default function TerugvangstDetail({ records }) {
             <span
               className="tv-record-ring ring-link"
               onClick={() => navigate('/records', { state: { openId: verste.id } })}
-            >{verste.ringnummer}</span>
+            >{verste.ringnummer?.replace(/\./g, '')}</span>
             <div className="tv-record-dates">
               {formatDatum(verste.origDatum)} → {formatDatum(verste.datum)}
             </div>
@@ -281,7 +281,6 @@ export default function TerugvangstDetail({ records }) {
               <tr>
                 <th className="tt-col-soort">{t('stats_col_species')}</th>
                 <th>{t('stats_col_ring')}</th>
-                <th>{t('tv_col_orig_date')}</th>
                 <th>{t('stats_col_date')}</th>
                 <th className="tt-col-num">{t('stats_col_time')}</th>
                 <th className="tt-col-num">{t('stats_col_distance')}</th>
@@ -295,9 +294,8 @@ export default function TerugvangstDetail({ records }) {
                     <span
                       className="ring-link"
                       onClick={() => navigate('/records', { state: { openId: tv.id } })}
-                    >{tv.ringnummer}</span>
+                    >{tv.ringnummer?.replace(/\./g, '')}</span>
                   </td>
-                  <td className="tv-datum">{formatDatum(tv.origDatum) || '—'}</td>
                   <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
                   <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>
                   <td className="tt-col-num tv-afstand">{formatAfstand(tv.afstandKm)}</td>
