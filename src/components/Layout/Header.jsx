@@ -10,9 +10,11 @@ import './Header.css';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [prefOpen, setPrefOpen] = useState(false);
+  const [taalOpen, setTaalOpen] = useState(false);
+  const [themaOpen, setThemaOpen] = useState(false);
   const menuRef = useRef(null);
-  const prefRef = useRef(null);
+  const taalRef = useRef(null);
+  const themaRef = useRef(null);
   const navigate = useNavigate();
   const { logout, profile, simulatedRole, setSimulatedRole } = useAuth();
   const { isSimulating, rol } = useRole();
@@ -39,17 +41,29 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [menuOpen]);
 
-  // Pref: sluit bij klik buiten (mobiel)
+  // Taal: sluit bij klik buiten (mobiel)
   useEffect(() => {
-    if (!prefOpen) return;
+    if (!taalOpen) return;
     function handleClick(e) {
-      if (prefRef.current && !prefRef.current.contains(e.target)) {
-        setPrefOpen(false);
+      if (taalRef.current && !taalRef.current.contains(e.target)) {
+        setTaalOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
-  }, [prefOpen]);
+  }, [taalOpen]);
+
+  // Thema: sluit bij klik buiten (mobiel)
+  useEffect(() => {
+    if (!themaOpen) return;
+    function handleClick(e) {
+      if (themaRef.current && !themaRef.current.contains(e.target)) {
+        setThemaOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [themaOpen]);
 
   function goTo(path) {
     setMenuOpen(false);
@@ -80,6 +94,7 @@ export default function Header() {
   ];
 
   const activeTaal = TALEN.find(tl => tl.code === i18n.language) || TALEN[0];
+  const activeThema = THEMAS.find(th => th.mode === mode) || THEMAS[0];
 
   return (
     <header className="app-header">
@@ -96,21 +111,21 @@ export default function Header() {
           <SyncIndicator />
         </div>
         <div className="header-menu">
-          {/* Pref-menu: taal + thema */}
+          {/* Taalkiezer */}
           <div
             className="pref-menu"
-            ref={prefRef}
-            onMouseEnter={() => { setMenuOpen(false); setPrefOpen(true); }}
-            onMouseLeave={() => setPrefOpen(false)}
+            ref={taalRef}
+            onMouseEnter={() => { setMenuOpen(false); setThemaOpen(false); setTaalOpen(true); }}
+            onMouseLeave={() => setTaalOpen(false)}
           >
             <button
               className="pref-btn"
-              onClick={() => { setMenuOpen(false); setPrefOpen(o => !o); }}
-              aria-label={`${activeTaal.naam} / ${THEMAS.find(th => th.mode === mode)?.label}`}
+              onClick={() => { setMenuOpen(false); setThemaOpen(false); setTaalOpen(o => !o); }}
+              aria-label={activeTaal.naam}
             >
               {activeTaal.vlag}
             </button>
-            {prefOpen && (
+            {taalOpen && (
               <div className="pref-dropdown">
                 {TALEN.map(taal => (
                   <button
@@ -122,7 +137,26 @@ export default function Header() {
                     {taal.naam}
                   </button>
                 ))}
-                <div className="pref-divider" />
+              </div>
+            )}
+          </div>
+
+          {/* Themakiezer */}
+          <div
+            className="pref-menu"
+            ref={themaRef}
+            onMouseEnter={() => { setMenuOpen(false); setTaalOpen(false); setThemaOpen(true); }}
+            onMouseLeave={() => setThemaOpen(false)}
+          >
+            <button
+              className="pref-btn"
+              onClick={() => { setMenuOpen(false); setTaalOpen(false); setThemaOpen(o => !o); }}
+              aria-label={activeThema.label}
+            >
+              {activeThema.icon}
+            </button>
+            {themaOpen && (
+              <div className="pref-dropdown">
                 {THEMAS.map(thema => (
                   <button
                     key={thema.mode}
@@ -141,7 +175,7 @@ export default function Header() {
           <div className="hamburger-wrapper" ref={menuRef}>
             <button
               className={`hamburger-btn${isSimulating ? ' hamburger-btn--simulating' : ''}`}
-              onClick={() => { setPrefOpen(false); setMenuOpen(o => !o); }}
+              onClick={() => { setTaalOpen(false); setThemaOpen(false); setMenuOpen(o => !o); }}
               aria-label="Menu"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

@@ -1,6 +1,13 @@
-export const VERSIE = '1.3.5';
+export const VERSIE = '1.3.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.3.6',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'UX: taal- en themakiezer gesplitst in twee aparte dropdowns — vlagicoon (taal) en thema-icoon elk met eigen hover/klik dropdown',
+    ],
+  },
   {
     versie: '1.3.5',
     datum: '2026-03-21',
