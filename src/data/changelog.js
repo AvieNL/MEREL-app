@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.7';
+export const VERSIE = '1.5.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.8',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'i18n: SectieProject en LocatiePicker volledig vertaald (EN/DE)',
+      'i18n: omstandigheden dropdown vertaald (61 codes voorzien van EN/DE beschrijvingen)',
+    ],
+    wijzigingen_en: [
+      'i18n: SectieProject and LocatiePicker fully translated (EN/DE)',
+      'i18n: Circumstances dropdown translated (61 codes now have EN/DE descriptions)',
+    ],
+    wijzigingen_de: [
+      'i18n: SectieProject und LocatiePicker vollständig übersetzt (EN/DE)',
+      'i18n: Umstände-Dropdown übersetzt (61 Codes mit EN/DE-Beschreibungen versehen)',
+    ],
+  },
   {
     versie: '1.5.7',
     datum: '2026-03-21',

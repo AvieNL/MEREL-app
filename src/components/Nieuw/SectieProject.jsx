@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import './NieuwPage.css';
 
 export default function SectieProject() {
+  const { t } = useTranslation();
   const {
     form,
     update,
@@ -22,7 +24,7 @@ export default function SectieProject() {
           <div className={`form-group${errCls('project')}`}>
             <label>Project *</label>
             <select value={form.project} onChange={e => update('project', e.target.value)}>
-              <option value="">-- Kies --</option>
+              <option value="">{t('form_choose')}</option>
               {projects.map(p => (
                 <option key={p.id} value={p.naam}>
                   {p.nummer ? `${p.nummer} - ${p.naam}` : p.naam}
@@ -32,16 +34,16 @@ export default function SectieProject() {
           </div>
           <div className="form-row-3">
             <div className={`form-group${errCls('ringer_nummer')}`}>
-              <label>Ringernr *</label>
+              <label>{t('form_ringer_nr')}</label>
               <input type="text" value={form.ringer_nummer}
                 onChange={e => update('ringer_nummer', e.target.value)}
-                placeholder="bijv. 3254" />
+                placeholder={t('form_ringer_nr_placeholder')} />
             </div>
             <div className="form-group">
-              <label>Initiaal</label>
+              <label>{t('form_ringer_initial')}</label>
               <input type="text" value={form.ringer_initiaal}
                 onChange={e => update('ringer_initiaal', e.target.value)}
-                placeholder="bijv. TtA" />
+                placeholder={t('form_ringer_initial_placeholder')} />
             </div>
           </div>
         </div>

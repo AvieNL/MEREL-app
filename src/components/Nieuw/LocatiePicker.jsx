@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import 'leaflet/dist/leaflet.css';
 import './LocatiePicker.css';
 
@@ -15,6 +16,7 @@ async function getLeaflet() {
 }
 
 export default function LocatiePicker({ lat, lon, onChange, latError, lonError }) {
+  const { t } = useTranslation();
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
@@ -120,37 +122,37 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
       <div ref={mapRef} className="locatie-map" />
       <div className="locatie-coords">
         <div className={`form-group${latError ? ' form-group--error' : ''}`}>
-          <label>Breedtegraad (lat) *</label>
+          <label>{t('loc_lat')}</label>
           <input
             type="text"
             inputMode="decimal"
             value={lat}
             onChange={e => onChange(e.target.value, lon)}
-            placeholder="bijv. 51.9273"
+            placeholder={t('loc_lat_placeholder')}
           />
         </div>
         <div className={`form-group${lonError ? ' form-group--error' : ''}`}>
-          <label>Lengtegraad (lon) *</label>
+          <label>{t('loc_lon')}</label>
           <input
             type="text"
             inputMode="decimal"
             value={lon}
             onChange={e => onChange(lat, e.target.value)}
-            placeholder="bijv. 6.2345"
+            placeholder={t('loc_lon_placeholder')}
           />
         </div>
       </div>
       <button type="button" className="btn-secondary gps-btn" onClick={useGPS} disabled={gpsStatus === 'loading'}>
-        {gpsStatus === 'loading' ? 'Locatie ophalen…' : 'Gebruik GPS'}
+        {gpsStatus === 'loading' ? t('loc_loading') : t('loc_gps_btn')}
       </button>
       {gpsStatus === 'denied' && (
-        <span className="field-warning">Locatietoegang geweigerd — sta locatie toe via de app-instellingen van je telefoon</span>
+        <span className="field-warning">{t('loc_gps_denied')}</span>
       )}
       {(gpsStatus === 'error' || gpsStatus === 'unavailable') && (
-        <span className="field-warning">GPS niet beschikbaar — klik op de kaart om een locatie in te stellen</span>
+        <span className="field-warning">{t('loc_gps_error')}</span>
       )}
       {!hasCoords && gpsStatus !== 'loading' && (
-        <span className="field-hint">Klik op de kaart of gebruik GPS om de locatie in te stellen</span>
+        <span className="field-hint">{t('loc_hint')}</span>
       )}
     </div>
   );
