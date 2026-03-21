@@ -133,12 +133,12 @@ function ReferentieKaart({ r, t, onEdit, onDelete }) {
 
 function ReferentieEditForm({ r, t, lang, species, onSave, onCancel, addFotos, verwijderFoto }) {
   const [form, setForm] = useState({
-    soort: r.soort,
-    datum: r.datum && r.datum.length === 10 ? r.datum : '',
-    leeftijd: r.leeftijd,
-    geslacht: r.geslacht,
-    type: r.type,
-    toelichting: r.toelichting,
+    soort:      r.soort        ?? '',
+    datum:      r.datum?.slice(0, 10) ?? '',
+    leeftijd:   r.leeftijd     ?? '',
+    geslacht:   r.geslacht     ?? 'U',
+    type:       r.type         ?? 'handmatig',
+    toelichting: r.toelichting ?? '',
   });
   const [saving, setSaving] = useState(false);
 
@@ -146,12 +146,12 @@ function ReferentieEditForm({ r, t, lang, species, onSave, onCancel, addFotos, v
     setSaving(true);
     try {
       await onSave(r.id, {
-        soort: form.soort.trim(),
-        datum: form.datum || null,
-        maand: maandUitDatum(form.datum) || r.maand,
-        leeftijd: form.leeftijd,
-        geslacht: form.geslacht,
-        type: form.type,
+        soort:       form.soort.trim(),
+        datum:       form.datum || r.datum || null,
+        maand:       maandUitDatum(form.datum) || r.maand,
+        leeftijd:    form.leeftijd,
+        geslacht:    form.geslacht,
+        type:        form.type,
         toelichting: form.toelichting,
       });
     } finally {
@@ -223,7 +223,7 @@ function ReferentieEditForm({ r, t, lang, species, onSave, onCancel, addFotos, v
       </div>
       <div className="ref-form-acties">
         <button className="btn-primary" onClick={handleOpslaan}
-          disabled={saving || !form.soort || !form.datum}>
+          disabled={saving || !form.soort || (!form.datum && !r.datum)}>
           {saving ? t('loading') : t('ref_save')}
         </button>
         <button className="btn-secondary" onClick={onCancel}>{t('form_cancel')}</button>
