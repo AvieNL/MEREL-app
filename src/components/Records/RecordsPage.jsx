@@ -225,7 +225,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
                       </div>
                     </div>
                   )}
-                  {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && r.bron !== 'externe_tv_melding' && r.bron !== 'externe_ring_info' && (
+                  {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
                     <div className="record-actions">
                       <button
                         className="record-action-btn record-edit-btn"
