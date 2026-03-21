@@ -1,5 +1,3 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
-
 const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY') ?? '';
 const MODEL = 'claude-sonnet-4-6';
 const MAX_TOKENS = 512;
@@ -10,39 +8,31 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-function ok(body: unknown) {
+function json(body: unknown) {
   return new Response(JSON.stringify(body), {
     status: 200,
     headers: { ...CORS_HEADERS, 'content-type': 'application/json' },
   });
 }
 
-serve(async (req: Request) => {
+Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
   }
 
-  if (req.method !== 'POST') {
-    return ok({ error: 'Method Not Allowed' });
-  }
-
   try {
     if (!ANTHROPIC_API_KEY) {
-      return ok({ error: 'ANTHROPIC_API_KEY niet geconfigureerd in Supabase secrets' });
+      return json({ error: 'ANTHROPIC_API_KEY niet geconfigureerd in Supabase secrets' });
     }
 
-    const { fotos, prompt } = await req.json() as {
-      soort: string;
-      fotos: Array<{ mediaType: string; data: string }>;
-      prompt: string;
-    };
+    const { fotos, prompt } = await req.json();
 
     if (!fotos?.length) {
-      return ok({ error: 'Geen foto\'s meegestuurd' });
+      return json({ error: 'Geen fotos meegestuurd' });
     }
 
-    const content: unknown[] = [
-      ...fotos.map(f => ({
+    const content = [
+      ...fotos.map((f: { mediaType: string; data: string }) => ({
         type: 'image',
         source: { type: 'base64', media_type: f.mediaType, data: f.data },
       })),
@@ -65,21 +55,19 @@ serve(async (req: Request) => {
 
     if (!anthropicResponse.ok) {
       const err = await anthropicResponse.text();
-      return ok({ error: `Anthropic API fout (${anthropicResponse.status}): ${err}` });
+      return json({ error: `Anthropic API fout (${anthropicResponse.status}): ${err}` });
     }
 
     const result = await anthropicResponse.json();
-    const tekst = result?.content?.[0]?.text ?? '{}';
+    const tekst: string = result?.content?.[0]?.text ?? '{}';
 
-    // Valideer dat het geldige JSON is
     try {
-      const parsed = JSON.parse(tekst);
-      return ok(parsed);
+      return json(JSON.parse(tekst));
     } catch {
-      return ok({ error: `Ongeldig JSON van AI: ${tekst}` });
+      return json({ error: `Ongeldig JSON van AI: ${tekst}` });
     }
 
   } catch (err) {
-    return ok({ error: `Interne fout: ${String(err)}` });
+    return json({ error: `Interne fout: ${String(err)}` });
   }
 });
