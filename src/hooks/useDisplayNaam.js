@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSpeciesRef } from './useSpeciesRef';
 
-const LANG_FIELD = { nl: 'naam_nl', en: 'naam_en', de: 'naam_de' };
+const LANG_FIELD = { nl: 'naam_nl', en: 'naam_en', de: 'naam_de', fr: 'naam_fr', es: 'naam_es' };
 
 /**
  * Retourneert een lookup-functie (naam_nl) => displayNaam op basis van de huidige taal.

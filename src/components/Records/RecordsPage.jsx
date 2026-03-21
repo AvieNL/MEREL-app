@@ -40,6 +40,17 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   const { canDelete } = useRole();
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
+
+  // Index: naam_nl (lowercase) → alle taalnamen (lowercase) voor meertalig zoeken
+  const speciesNaamIndex = useMemo(() => {
+    const map = new Map();
+    speciesRef.forEach(s => {
+      if (!s.naam_nl) return;
+      map.set(s.naam_nl.toLowerCase(), [s.naam_nl, s.naam_lat, s.naam_en, s.naam_de, s.naam_fr, s.naam_es]
+        .filter(Boolean).map(n => n.toLowerCase()));
+    });
+    return map;
+  }, [speciesRef]);
   const { t } = useTranslation();
   const displayNaam = useDisplayNaam();
 
@@ -65,12 +76,16 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   const filtered = useMemo(() => {
     const base = !zoek ? records : (() => {
       const lower = zoek.toLowerCase();
-      return records.filter(r =>
-        (r.vogelnaam && r.vogelnaam.toLowerCase().includes(lower)) ||
-        (r.ringnummer && r.ringnummer.toLowerCase().includes(lower)) ||
-        (r.vangstdatum && r.vangstdatum.includes(lower)) ||
-        (r.project && r.project.toLowerCase().includes(lower))
-      );
+      return records.filter(r => {
+        const speciesNames = r.vogelnaam ? speciesNaamIndex.get(r.vogelnaam.toLowerCase()) : null;
+        const matchesSpecies = speciesNames
+          ? speciesNames.some(n => n.includes(lower))
+          : (r.vogelnaam && r.vogelnaam.toLowerCase().includes(lower));
+        return matchesSpecies ||
+          (r.ringnummer && r.ringnummer.toLowerCase().includes(lower)) ||
+          (r.vangstdatum && r.vangstdatum.includes(lower)) ||
+          (r.project && r.project.toLowerCase().includes(lower));
+      });
     })();
     const toSortKey = d => {
       if (!d) return '';

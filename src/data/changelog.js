@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.10';
+export const VERSIE = '1.5.11';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.11',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Zoeken op vogelsoort werkt nu in alle talen: NL, Latijn, EN, DE, FR en ES (records- en soortenpagina)',
+      'useDisplayNaam ondersteunt nu ook FR en ES als weergavetaal',
+    ],
+    wijzigingen_en: [
+      'Species search now works in all languages: NL, Latin, EN, DE, FR and ES (records and species pages)',
+      'useDisplayNaam now also supports FR and ES as display languages',
+    ],
+    wijzigingen_de: [
+      'Artsuche funktioniert jetzt in allen Sprachen: NL, Latein, EN, DE, FR und ES (Einträge- und Artenseite)',
+      'useDisplayNaam unterstützt jetzt auch FR und ES als Anzeigesprache',
+    ],
+  },
   {
     versie: '1.5.10',
     datum: '2026-03-21',
