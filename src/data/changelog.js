@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.8';
+export const VERSIE = '1.5.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.9',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Fix: getCodesForSelect gebruikt euringReference vertalingen als fallback wanneer veld_config geen EN/DE beschrijvingen heeft',
+    ],
+    wijzigingen_en: [
+      'Fix: getCodesForSelect uses euringReference translations as fallback when veld_config lacks EN/DE descriptions',
+    ],
+    wijzigingen_de: [
+      'Fix: getCodesForSelect verwendet euringReference-Übersetzungen als Fallback, wenn veld_config keine EN/DE-Beschreibungen hat',
+    ],
+  },
   {
     versie: '1.5.8',
     datum: '2026-03-21',

@@ -58,7 +58,8 @@ export default function NieuwPage() {
   );
 
   // Codes voor een select: gebruik configMap als beschikbaar (met zichtbaar-filter), anders euringReference
-  // Vertaalt beschrijving op basis van huidige taal
+  // Vertaalt beschrijving op basis van huidige taal; gebruikt euringReference als fallback voor vertalingen
+  // wanneer configMap-codes geen beschrijving_en/beschrijving_de hebben (Supabase slaat alleen NL op)
   function getCodesForSelect(veldKey) {
     const cfg = configMap[veldKey];
     const lang = i18n.language;
@@ -66,7 +67,15 @@ export default function NieuwPage() {
       ? cfg.codes.filter(c => c.zichtbaar !== false)
       : (euringReference[veldKey]?.codes ?? []);
     if (lang === 'nl') return codes;
-    return codes.map(c => ({ ...c, beschrijving: getBeschrijving(c, lang) }));
+    const refByCode = Object.fromEntries(
+      (euringReference[veldKey]?.codes ?? []).map(c => [c.code, c])
+    );
+    return codes.map(c => {
+      const beschrijving = c['beschrijving_' + lang]
+        || refByCode[c.code]?.['beschrijving_' + lang]
+        || c.beschrijving;
+      return { ...c, beschrijving };
+    });
   }
 
   // Is een veld zichtbaar (niet verborgen door admin)?
