@@ -1,6 +1,15 @@
-export const VERSIE = '1.3.3';
+export const VERSIE = '1.3.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.3.4',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'i18n: invoerformulier volledig vertaald — alle secties, labels, validatieberichten en hints (NL/EN/DE)',
+      'i18n: Stats/SoortenOverzicht en Stats/ProjectDetail vertaald (tabellen, grafieken, knoppen)',
+      'i18n: ~120 nieuwe vertalingssleutels per taal (form_*, so_*, pd_*)',
+    ],
+  },
   {
     versie: '1.3.3',
     datum: '2026-03-21',

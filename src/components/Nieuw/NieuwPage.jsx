@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useVeldConfig } from '../../hooks/useVeldConfig';
 import { euringReference } from '../../data/euring-reference.js';
@@ -30,6 +31,7 @@ import './NieuwPage.css';
 
 export default function NieuwPage() {
   const location = useLocation();
+  const { t } = useTranslation();
   const { records, addRecord, updateRecord } = useRecords();
   const { projects: allProjects } = useProjects();
   const projects = allProjects.filter(p => p.actief);
@@ -376,7 +378,7 @@ export default function NieuwPage() {
     if (!euringCode && form.vogelnaam) {
       errors.push({
         key: 'vogelnaam',
-        label: `"${form.vogelnaam}" heeft geen EURING-code — kies een soort uit de lijst`,
+        label: t('form_no_euring', { naam: form.vogelnaam }),
         section: 'nieuweVangst',
       });
     }
@@ -454,20 +456,20 @@ export default function NieuwPage() {
         )}
         {range && range.source === 'soortendata' && bioRangesFromRecords[key] && (
           <span className="field-hint field-hint--vangsten">
-            {bioRangesFromRecords[key].min}–{bioRangesFromRecords[key].max} <em>(vangsten, n={bioRangesFromRecords[key].n})</em>
+            {t('form_bio_catch_range', { min: bioRangesFromRecords[key].min, max: bioRangesFromRecords[key].max, n: bioRangesFromRecords[key].n })}
           </span>
         )}
         {warning && (
           <span className="field-warning">
-            {warning.value} buiten bereik ({warning.min}–{warning.max})
+            {t('form_bio_out_of_range', { value: warning.value, min: warning.min, max: warning.max })}
           </span>
         )}
         {fieldGenderHint && (
           <span className={`field-hint field-gender-hint${genderMismatch ? ' field-hint--warn' : ''}`}>
             {fieldGenderHint === 'M'
-              ? <><span className="gender-m">{'\u2642\uFE0E'}</span> wijst op man</>
-              : <><span className="gender-f">{'\u2640\uFE0E'}</span> wijst op vrouw</>}
-            {genderMismatch && ' — controleer geslacht'}
+              ? <><span className="gender-m">{'\u2642\uFE0E'}</span> {t('form_bio_indicates_male')}</>
+              : <><span className="gender-f">{'\u2640\uFE0E'}</span> {t('form_bio_indicates_female')}</>}
+            {genderMismatch && ` ${t('form_bio_check_sex')}`}
           </span>
         )}
       </div>
@@ -495,10 +497,10 @@ export default function NieuwPage() {
     const c = form.cloaca;
     const g = form.geslacht;
     if (!c || !g || c === '0' || c === '1') return null;
-    if (c === '5' && g === 'F') return 'Cloacale protuberans (code 5) wijst op een man, maar het ingevoerde geslacht is vrouw';
-    if (['3', '4'].includes(c) && g === 'F') return 'Sterke zwelling wijst mogelijk op een man, maar het ingevoerde geslacht is vrouw';
-    if (['5', '6'].includes(c) && g === 'M') return 'Cloaca wijst op vrouw, maar het ingevoerde geslacht is man';
-    if (c === '7' && g === 'M') return 'Cloaca wijst mogelijk op vrouw, maar het ingevoerde geslacht is man';
+    if (c === '5' && g === 'F') return t('form_cloaca_warn_cp_female');
+    if (['3', '4'].includes(c) && g === 'F') return t('form_cloaca_warn_swelling_female');
+    if (['5', '6'].includes(c) && g === 'M') return t('form_cloaca_warn_female_male');
+    if (c === '7' && g === 'M') return t('form_cloaca_warn_female_maybe_male');
     return null;
   }, [form.cloaca, form.geslacht]);
 
@@ -621,21 +623,21 @@ export default function NieuwPage() {
           <div className="nieuw-sticky-header">
             <div className="nieuw-topbar">
               <span className="nieuw-topbar-titel">
-                {editRecord ? `✏️ ${editRecord.vogelnaam || 'Vangst'}` : 'Nieuwe vangst'}
+                {editRecord ? t('form_edit_catch', { naam: editRecord.vogelnaam || '?' }) : t('form_new_catch')}
               </span>
               {editRecord && (
                 <button type="button" className="btn-secondary nieuw-topbar-btn" onClick={() => navigate('/records')}>
-                  Annuleren
+                  {t('form_cancel')}
                 </button>
               )}
               <button type="submit" className="btn-primary nieuw-topbar-btn">
-                {editRecord ? 'Opslaan' : 'Opslaan'}
+                {t('form_save')}
               </button>
             </div>
 
             {formErrors.length > 0 && (
               <div className="form-error-bar">
-                <strong>Vul eerst alle verplichte velden in:</strong>
+                <strong>{t('form_required_intro')}</strong>
                 <div className="form-error-list">
                   {formErrors.map(f => <span key={f.key} className="form-error-item">{f.label}</span>)}
                 </div>
@@ -644,7 +646,7 @@ export default function NieuwPage() {
           </div>
 
           {saved && (
-            <div className="save-toast">Vangst opgeslagen!</div>
+            <div className="save-toast">{t('form_saved')}</div>
           )}
 
           <SectieSoort />

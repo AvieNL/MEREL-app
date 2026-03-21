@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import './StatsPage.css';
 
 export default function SoortenOverzicht() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { soortenTabel = [], titel = 'Soorten', backTo = '/stats' } = location.state || {};
 
   const [sortKey, setSortKey] = useState('totaal');
@@ -37,9 +39,9 @@ export default function SoortenOverzicht() {
 
   return (
     <div className="page stats-page">
-      <button className="project-back" onClick={() => navigate(-1)}>&larr; Terug</button>
+      <button className="project-back" onClick={() => navigate(-1)}>{t('so_back')}</button>
       <h2 className="stats-section-title" style={{ marginTop: 8 }}>
-        {titel} — {soortenTabel.length} soorten
+        {titel} — {t('so_species_in_title', { count: soortenTabel.length })}
       </h2>
 
       <div className="trektellen-table-wrap">
@@ -47,16 +49,16 @@ export default function SoortenOverzicht() {
           <thead>
             <tr>
               <th className="tt-col-soort" style={{ cursor: 'pointer' }} onClick={() => toggleSort('naam')}>
-                Soort{sortIcon('naam')}
+                {t('so_col_species')}{sortIcon('naam')}
               </th>
               <th className="tt-col-num" style={{ cursor: 'pointer' }} onClick={() => toggleSort('nieuw')}>
-                Nieuw{sortIcon('nieuw')}
+                {t('so_col_new')}{sortIcon('nieuw')}
               </th>
               <th className="tt-col-num" style={{ cursor: 'pointer' }} onClick={() => toggleSort('terugvangst')}>
-                Terugv.{sortIcon('terugvangst')}
+                {t('so_col_recap')}{sortIcon('terugvangst')}
               </th>
               <th className="tt-col-num" style={{ cursor: 'pointer' }} onClick={() => toggleSort('totaal')}>
-                Totaal{sortIcon('totaal')}
+                {t('so_col_total')}{sortIcon('totaal')}
               </th>
             </tr>
           </thead>
@@ -72,7 +74,7 @@ export default function SoortenOverzicht() {
           </tbody>
           <tfoot>
             <tr className="tt-totaal-row">
-              <td className="tt-col-soort">Totaal ({soortenTabel.length} soorten)</td>
+              <td className="tt-col-soort">{t('so_total_row', { count: soortenTabel.length })}</td>
               <td className="tt-col-num">{totaalNieuw}</td>
               <td className="tt-col-num">{totaalTv}</td>
               <td className="tt-col-num tt-col-total">{totaalTotaal}</td>

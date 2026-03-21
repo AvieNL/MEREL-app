@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import {
   VET_OPTIONS, VLIEGSPIER_OPTIONS, BROEDVLEK_OPTIONS, HANDICAP_OPTIONS, CLOACA_OPTIONS,
@@ -9,6 +10,7 @@ import LocatiePicker from './LocatiePicker';
 import './NieuwPage.css';
 
 export default function SectieBiometrieEnRui() {
+  const { t } = useTranslation();
   const {
     form,
     update,
@@ -32,19 +34,19 @@ export default function SectieBiometrieEnRui() {
       {/* Sectie: Biometrie basis */}
       <div className="section">
         <div className="section-header" onClick={() => toggleSection('biometrieBasis')}>
-          <h3>Biometrie</h3>
+          <h3>{t('form_section_biometry')}</h3>
           {warnings.some(w => ['vleugel', 'gewicht', 'handpenlengte'].includes(w.key)) && <span className="section-badge-warn">!</span>}
           <span className={`toggle ${sections.biometrieBasis ? 'open' : ''}`}>▾</span>
         </div>
         {sections.biometrieBasis && (
           <div className="section-content">
             <div className="form-row">
-              {renderBioField('vleugel', 'Vleugel (0,5 mm)')}
-              {renderBioField('handpenlengte', 'P8 (0,5 mm)')}
+              {renderBioField('vleugel', t('form_wing'))}
+              {renderBioField('handpenlengte', t('form_p8'))}
             </div>
             <div className="form-row-3">
               <div className="form-group">
-                <label>Ruiscore</label>
+                <label>{t('form_moult_score')}</label>
                 <select value={form.rui_lichaam} onChange={e => update('rui_lichaam', e.target.value)}>
                   {RUI_LICHAAM_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -52,7 +54,7 @@ export default function SectieBiometrieEnRui() {
                 </select>
               </div>
               <div className="form-group">
-                <label>Vet (Busse 0-5)</label>
+                <label>{t('form_fat')}</label>
                 <select value={form.vet} onChange={e => update('vet', e.target.value)}>
                   {VET_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -60,7 +62,7 @@ export default function SectieBiometrieEnRui() {
                 </select>
               </div>
               <div className="form-group">
-                <label>Vliegspier</label>
+                <label>{t('form_flight_muscle')}</label>
                 <select value={form.borstspier} onChange={e => update('borstspier', e.target.value)}>
                   {VLIEGSPIER_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -69,13 +71,13 @@ export default function SectieBiometrieEnRui() {
               </div>
             </div>
             <div className="form-row">
-              {renderBioField('gewicht', 'Gewicht (0,1 g)')}
+              {renderBioField('gewicht', t('form_weight'))}
               <div className="form-group">
-                <label>Weegtijd</label>
+                <label>{t('form_weigh_time')}</label>
                 <input
                   type="text"
                   inputMode="numeric"
-                  placeholder="bijv. 0845"
+                  placeholder={t('form_time_placeholder')}
                   value={form.weegtijd}
                   onChange={e => update('weegtijd', e.target.value)}
                 />
@@ -83,7 +85,7 @@ export default function SectieBiometrieEnRui() {
             </div>
             <div className="form-row-3">
               <div className="form-group">
-                <label>Cloaca</label>
+                <label>{t('form_cloaca')}</label>
                 <select value={form.cloaca} onChange={e => update('cloaca', e.target.value)}>
                   {CLOACA_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -94,7 +96,7 @@ export default function SectieBiometrieEnRui() {
                 )}
               </div>
               <div className="form-group">
-                <label>Broedvlek</label>
+                <label>{t('form_brood_patch')}</label>
                 <select value={form.broedvlek} onChange={e => update('broedvlek', e.target.value)}>
                   {BROEDVLEK_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -102,7 +104,7 @@ export default function SectieBiometrieEnRui() {
                 </select>
               </div>
               <div className="form-group">
-                <label>Handicap</label>
+                <label>{t('form_handicap')}</label>
                 <select value={form.handicap} onChange={e => update('handicap', e.target.value)}>
                   {HANDICAP_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -112,9 +114,9 @@ export default function SectieBiometrieEnRui() {
             </div>
             {speciesInfo && (speciesInfo.nest_eileg || speciesInfo.broed) && (
               <div className="broed-info-hint">
-                {speciesInfo.broed && <span>Broedt: <strong>{renderGeslachtTekst(speciesInfo.broed)}</strong></span>}
-                {speciesInfo.nest_eileg && <span>Eileg: <strong>{renderGeslachtTekst(speciesInfo.nest_eileg)}</strong></span>}
-                {speciesInfo.nest_broedels && <span>Broedels: <strong>{renderGeslachtTekst(speciesInfo.nest_broedels)}</strong></span>}
+                {speciesInfo.broed && <span>{t('form_breeds')} <strong>{renderGeslachtTekst(speciesInfo.broed)}</strong></span>}
+                {speciesInfo.nest_eileg && <span>{t('form_clutch')} <strong>{renderGeslachtTekst(speciesInfo.nest_eileg)}</strong></span>}
+                {speciesInfo.nest_broedels && <span>{t('form_clutches')} <strong>{renderGeslachtTekst(speciesInfo.nest_broedels)}</strong></span>}
               </div>
             )}
           </div>
@@ -124,7 +126,7 @@ export default function SectieBiometrieEnRui() {
       {/* Sectie: Rui */}
       <div className="section">
         <div className="section-header" onClick={() => toggleSection('rui')}>
-          <h3>Rui</h3>
+          <h3>{t('form_section_moult')}</h3>
           <span className={`toggle ${sections.rui ? 'open' : ''}`}>▾</span>
         </div>
         {sections.rui && (
@@ -159,12 +161,12 @@ export default function SectieBiometrieEnRui() {
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label>Handpenrui (totaal)</label>
+                <label>{t('form_handpen_total')}</label>
                 <input type="text" value={form.handpen_score}
                   onChange={e => update('handpen_score', e.target.value)} />
               </div>
               <div className="form-group">
-                <label>Oude dekveren</label>
+                <label>{t('form_old_coverts')}</label>
                 <input type="text" value={form.oude_dekveren}
                   onChange={e => update('oude_dekveren', e.target.value)} />
               </div>
@@ -176,40 +178,40 @@ export default function SectieBiometrieEnRui() {
       {/* Sectie: Biometrie vervolg */}
       <div className="section">
         <div className="section-header" onClick={() => toggleSection('biometrieVervolg')}>
-          <h3>Biometrie vervolg</h3>
+          <h3>{t('form_section_biometry_cont')}</h3>
           {warnings.some(w => !['vleugel', 'gewicht', 'handpenlengte'].includes(w.key)) && <span className="section-badge-warn">!</span>}
           <span className={`toggle ${sections.biometrieVervolg ? 'open' : ''}`}>▾</span>
         </div>
         {sections.biometrieVervolg && (
           <div className="section-content">
             <div className="form-row">
-              {renderBioField('tarsus_lengte', 'Tarsus (0,1 mm)')}
+              {renderBioField('tarsus_lengte', t('form_tarsus'))}
               <div className="form-group">
-                <label>Tarsus-teen (0,1 mm)</label>
+                <label>{t('form_tarsus_toe')}</label>
                 <input type="text" inputMode="decimal" value={form.tarsus_teen}
                   onChange={e => update('tarsus_teen', e.target.value)} />
               </div>
             </div>
             <div className="form-row">
-              {renderBioField('tarsus_dikte', 'Tarsus dikte (0,1 mm)')}
+              {renderBioField('tarsus_dikte', t('form_tarsus_thickness'))}
               <div className="form-group">
-                <label>Achternagel (0,1 mm)</label>
+                <label>{t('form_hind_claw')}</label>
                 <input type="text" inputMode="decimal" value={form.achternagel}
                   onChange={e => update('achternagel', e.target.value)} />
               </div>
             </div>
             <div className="form-row">
-              {renderBioField('staartlengte', 'Staartlengte (0,1 mm)')}
+              {renderBioField('staartlengte', t('form_tail'))}
               <div className="form-group">
-                <label>Staartverschil (0,1 mm)</label>
+                <label>{t('form_tail_diff')}</label>
                 <input type="text" inputMode="decimal" value={form.staart_verschil}
                   onChange={e => update('staart_verschil', e.target.value)} />
               </div>
             </div>
             <div className="form-row">
-              {renderBioField('snavel_schedel', 'Snavellengte (0,1 mm)')}
+              {renderBioField('snavel_schedel', t('form_bill'))}
               <div className="form-group">
-                <label>Snavelmethode</label>
+                <label>{t('form_bill_method')}</label>
                 <select value={form.snavel_methode} onChange={e => update('snavel_methode', e.target.value)}>
                   {SNAVEL_METHODE_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -218,7 +220,7 @@ export default function SectieBiometrieEnRui() {
               </div>
             </div>
             <div className="form-row">
-              {renderBioField('kop_snavel', 'Totale koplengte (0,1 mm)')}
+              {renderBioField('kop_snavel', t('form_head_bill'))}
             </div>
           </div>
         )}
@@ -227,14 +229,14 @@ export default function SectieBiometrieEnRui() {
       {/* Sectie: Locatie */}
       <div className="section">
         <div className="section-header" onClick={() => toggleSection('locatie')}>
-          <h3>Locatie</h3>
+          <h3>{t('form_section_location')}</h3>
           <span className={`toggle ${sections.locatie ? 'open' : ''}`}>▾</span>
         </div>
         {sections.locatie && (
           <div className="section-content">
             <div className="form-row">
               <div className={`form-group${errCls('plaatscode')}`}>
-                <label>Plaatscode *</label>
+                <label>{t('form_place_code')}</label>
                 <select value={form.plaatscode} onChange={e => update('plaatscode', e.target.value)}>
                   {PLAATSCODE_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -242,10 +244,10 @@ export default function SectieBiometrieEnRui() {
                 </select>
               </div>
               <div className={`form-group${errCls('google_plaats')}`}>
-                <label>Plaatsnaam *</label>
+                <label>{t('form_place_name')}</label>
                 <input type="text" value={form.google_plaats}
                   onChange={e => update('google_plaats', e.target.value)}
-                  placeholder="bijv. Breedenbroek" />
+                  placeholder={t('form_place_placeholder')} />
               </div>
             </div>
             <LocatiePicker
@@ -256,7 +258,7 @@ export default function SectieBiometrieEnRui() {
               lonError={errorKeys.has('lon')}
             />
             <div className={`form-group${errCls('nauwk_coord')}`}>
-              <label>Nauwkeurigheid coördinaten *</label>
+              <label>{t('form_coord_accuracy')}</label>
               <select value={form.nauwk_coord} onChange={e => update('nauwk_coord', e.target.value)}>
                 {NAUWK_COORD_OPTIONS.map(o => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -270,13 +272,13 @@ export default function SectieBiometrieEnRui() {
       {/* Sectie: Overige EURING data */}
       <div className="section">
         <div className="section-header" onClick={() => toggleSection('euringOverig')}>
-          <h3>Overige EURING data</h3>
+          <h3>{t('form_section_euring')}</h3>
           <span className={`toggle ${sections.euringOverig ? 'open' : ''}`}>▾</span>
         </div>
         {sections.euringOverig && (
           <div className="section-content">
             <div className="form-group">
-              <label>Opmerkingen 1</label>
+              <label>{t('form_remarks1')}</label>
               <input type="text" value={form.opmerkingen1}
                 onChange={e => update('opmerkingen1', e.target.value)} />
             </div>

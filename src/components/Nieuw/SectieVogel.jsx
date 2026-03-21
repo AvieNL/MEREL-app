@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import {
   LEEFTIJD_OPTIONS, PULLUS_LEEFTIJD_OPTIONS, NAUWK_LEEFTIJD_OPTIONS,
@@ -9,6 +10,7 @@ import RuiSeizoenTekst from './RuiSeizoenTekst';
 import './NieuwPage.css';
 
 export default function SectieVogel() {
+  const { t } = useTranslation();
   const {
     form,
     update,
@@ -26,14 +28,14 @@ export default function SectieVogel() {
   return (
     <div className="section">
       <div className="section-header" onClick={() => toggleSection('vogel')}>
-        <h3>Vogel</h3>
+        <h3>{t('form_section_bird')}</h3>
         <span className={`toggle ${sections.vogel ? 'open' : ''}`}>▾</span>
       </div>
       {sections.vogel && (
         <div className="section-content">
           <div className="form-row">
             <div className={`form-group${errCls('geslacht')}`}>
-              <label>Geslacht *</label>
+              <label>{t('form_sex')}</label>
               <select value={form.geslacht} onChange={e => update('geslacht', e.target.value)}>
                 {GESLACHT_OPTIONS.map(o => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -45,7 +47,7 @@ export default function SectieVogel() {
               ]} />
             </div>
             <div className="form-group">
-              <label>Bepaling geslacht</label>
+              <label>{t('form_sex_determination')}</label>
               <select value={form.geslachtsbepaling} onChange={e => update('geslachtsbepaling', e.target.value)}>
                 {GESLACHTSBEPALING_OPTIONS.map(o => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -59,34 +61,35 @@ export default function SectieVogel() {
               : <span className="gender-f">{'\u2640\uFE0E'}</span>;
             const ingevuld = form.geslacht === 'M' || form.geslacht === 'F';
             const klopt = form.geslacht === genderHint;
+            const sexLabel = genderHint === 'M' ? t('form_gender_male') : t('form_gender_female');
             return (
               <div className={`gender-bio-hint ${klopt ? 'gender-bio-hint--match' : ingevuld ? 'gender-bio-hint--mismatch' : 'gender-bio-hint--suggest'}`}>
                 {klopt
-                  ? <>Biometrie bevestigt {sym} man</>
+                  ? <>{t('form_bio_confirms')} {sym} {sexLabel}</>
                   : ingevuld
-                    ? <>Biometrie wijst op {sym} {genderHint === 'M' ? 'man' : 'vrouw'} — controleer het ingevoerde geslacht</>
-                    : <>Op basis van biometrie: waarschijnlijk {sym} {genderHint === 'M' ? 'man' : 'vrouw'}</>
+                    ? <>{t('form_bio_suggests')} {sym} {sexLabel} {t('form_bio_check_sex')}</>
+                    : <>{t('form_bio_probably')} {sym} {sexLabel}</>
                 }
               </div>
             );
           })()}
 
           <div className={`form-group${errCls('leeftijd')}`}>
-            <label>Leeftijd *</label>
+            <label>{t('form_age')}</label>
             <select value={form.leeftijd} onChange={e => update('leeftijd', e.target.value)}>
               {LEEFTIJD_OPTIONS.map(o => (
                 <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
             <InfoPanel items={[
-              { label: 'Voorjaar', text: speciesInfo?.leeftijds_notities_vj || soortOverride?.leeftijds_notities_vj },
-              { label: 'Najaar',   text: speciesInfo?.leeftijds_notities_nj || soortOverride?.leeftijds_notities_nj },
+              { label: t('sd_spring'), text: speciesInfo?.leeftijds_notities_vj || soortOverride?.leeftijds_notities_vj },
+              { label: t('sd_autumn'), text: speciesInfo?.leeftijds_notities_nj || soortOverride?.leeftijds_notities_nj },
             ]} />
             {form.leeftijd === '1' && (
               <div className="pullus-velden">
                 <div className="form-row">
                   <div className={`form-group${errCls('pul_leeftijd')}`}>
-                    <label>Pullus leeftijd *</label>
+                    <label>{t('form_pullus_age')}</label>
                     <select value={form.pul_leeftijd} onChange={e => update('pul_leeftijd', e.target.value)}>
                       {PULLUS_LEEFTIJD_OPTIONS.map(o => (
                         <option key={o.value} value={o.value}>{o.label}</option>
@@ -94,7 +97,7 @@ export default function SectieVogel() {
                     </select>
                   </div>
                   <div className={`form-group${errCls('nauwk_pul_leeftijd')}`}>
-                    <label>Nauwkeurigheid *</label>
+                    <label>{t('form_pullus_accuracy')}</label>
                     <select value={form.nauwk_pul_leeftijd} onChange={e => update('nauwk_pul_leeftijd', e.target.value)}>
                       {NAUWK_LEEFTIJD_OPTIONS.map(o => (
                         <option key={o.value} value={o.value}>{o.label}</option>
@@ -103,14 +106,14 @@ export default function SectieVogel() {
                   </div>
                 </div>
                 <div className={`form-group${errCls('broedselgrootte')}`}>
-                  <label>Broedgrootte *</label>
+                  <label>{t('form_brood_size')}</label>
                   <select value={form.broedselgrootte} onChange={e => update('broedselgrootte', e.target.value)}>
                     {BROEDGROOTTE_OPTIONS.map(o => (
                       <option key={o.value} value={o.value}>{o.label}</option>
                     ))}
                   </select>
                   {speciesInfo?.nest_eieren && (
-                    <span className="field-hint">Eieren {speciesInfo.naam_nl}: {speciesInfo.nest_eieren}</span>
+                    <span className="field-hint">{t('form_nest_eggs', { naam: speciesInfo.naam_nl })} {speciesInfo.nest_eieren}</span>
                   )}
                 </div>
               </div>
@@ -295,7 +298,7 @@ export default function SectieVogel() {
           {/* Status, Conditie, Omstandigheden, Gemanipuleerd, Verplaatst */}
           <div className="form-row">
             <div className={`form-group${errCls('status')}`}>
-              <label>Status *</label>
+              <label>{t('form_status')}</label>
               <select value={form.status} onChange={e => update('status', e.target.value)}>
                 {getCodesForSelect('status').map(o => (
                   <option key={o.code} value={o.code}>{o.code} – {o.beschrijving}</option>
@@ -303,7 +306,7 @@ export default function SectieVogel() {
               </select>
             </div>
             <div className={`form-group${errCls('conditie')}`}>
-              <label>Conditie *</label>
+              <label>{t('form_condition')}</label>
               <select value={form.conditie} onChange={e => update('conditie', e.target.value)}>
                 {CONDITIE_OPTIONS.map(o => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -313,7 +316,7 @@ export default function SectieVogel() {
           </div>
           <div className="form-row">
             <div className={`form-group${errCls('omstandigheden')}`}>
-              <label>Omstandigheden *</label>
+              <label>{t('form_circumstances')}</label>
               <select value={form.omstandigheden} onChange={e => update('omstandigheden', e.target.value)}>
                 {getCodesForSelect('omstandigheden').map(o => (
                   <option key={o.code} value={o.code}>{o.code} – {o.beschrijving}</option>
@@ -321,7 +324,7 @@ export default function SectieVogel() {
               </select>
             </div>
             <div className="form-group">
-              <label>Zekerheid omstandigheden</label>
+              <label>{t('form_circumstances_cert')}</label>
               <select value={form.zeker_omstandigheden} onChange={e => update('zeker_omstandigheden', Number(e.target.value))}>
                 {ZEKER_OMSTANDIG_OPTIONS.map(o => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -331,7 +334,7 @@ export default function SectieVogel() {
           </div>
           <div className="form-row">
             <div className={`form-group${errCls('gemanipuleerd')}`}>
-              <label>Gemanipuleerd *</label>
+              <label>{t('form_manipulated')}</label>
               <select value={form.gemanipuleerd} onChange={e => update('gemanipuleerd', e.target.value)}>
                 {getCodesForSelect('gemanipuleerd').map(o => (
                   <option key={o.code} value={o.code}>{o.code} – {o.beschrijving}</option>
@@ -339,7 +342,7 @@ export default function SectieVogel() {
               </select>
             </div>
             <div className="form-group">
-              <label>Verplaatst</label>
+              <label>{t('form_moved')}</label>
               <select value={form.verplaatst} onChange={e => update('verplaatst', Number(e.target.value))}>
                 {VERPLAATST_OPTIONS.map(o => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -349,7 +352,7 @@ export default function SectieVogel() {
           </div>
           {form.gemanipuleerd === 'M' && (
             <div className="form-group">
-              <label>Barcode</label>
+              <label>{t('form_barcode')}</label>
               <input type="text" value={form.barcode}
                 onChange={e => update('barcode', e.target.value)} />
             </div>

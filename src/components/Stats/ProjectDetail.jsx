@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
 import { formatDatum } from '../../utils/dateHelper';
@@ -9,6 +10,7 @@ import './StatsPage.css';
 export default function ProjectDetail({ records }) {
   const navigate = useNavigate();
   const { naam } = useParams();
+  const { t } = useTranslation();
 
   function openSoorten() {
     const tabel = stats.soortenTabel.map(s => ({ naam: s.soort, nieuw: s.nieuw, terugvangst: s.terugvangst, totaal: s.totaal }));
@@ -29,7 +31,7 @@ export default function ProjectDetail({ records }) {
     let terugvangst = 0;
 
     projectRecords.forEach(r => {
-      const rauweNaam = r.vogelnaam || 'Onbekend';
+      const rauweNaam = r.vogelnaam || t('pd_unknown');
       const key = rauweNaam.toLowerCase();
       const display = rauweNaam.charAt(0).toUpperCase() + rauweNaam.slice(1).toLowerCase();
       if (!perSoort[key]) perSoort[key] = { naam: display, nieuw: 0, terugvangst: 0 };
@@ -93,7 +95,7 @@ export default function ProjectDetail({ records }) {
       lijst.push({
         id: r.id,
         ringnummer: r.ringnummer,
-        soort: r.vogelnaam || 'Onbekend',
+        soort: r.vogelnaam || t('pd_unknown'),
         datum: r.vangstdatum,
         origDatum: origineel?.vangstdatum || null,
         dagen,
@@ -117,25 +119,25 @@ export default function ProjectDetail({ records }) {
 
   return (
     <div className="page stats-page">
-      <Link to="/stats" className="project-back">&larr; Stats</Link>
+      <Link to="/stats" className="project-back">{t('pd_back')}</Link>
       <h2 className="stats-section-title" style={{ marginTop: 8 }}>{naam}</h2>
 
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-value">{stats.totaal}</div>
-          <div className="stat-label">Vangsten</div>
+          <div className="stat-label">{t('pd_catches')}</div>
         </div>
         <div className="stat-card stat-card--link" onClick={openSoorten}>
           <div className="stat-value">{stats.soorten}</div>
-          <div className="stat-label">Soorten</div>
+          <div className="stat-label">{t('pd_species')}</div>
         </div>
         <div className="stat-card">
           <div className="stat-value">{stats.nieuw}</div>
-          <div className="stat-label">Nieuw</div>
+          <div className="stat-label">{t('pd_new')}</div>
         </div>
         <div className="stat-card">
           <div className="stat-value">{stats.terugvangst}</div>
-          <div className="stat-label">Terugvangst</div>
+          <div className="stat-label">{t('pd_recap')}</div>
         </div>
       </div>
 
@@ -146,18 +148,18 @@ export default function ProjectDetail({ records }) {
       )}
 
       {perJaar.length > 1 && (
-        <BarChartStacked data={perJaar} title="Vangsten per jaar" />
+        <BarChartStacked data={perJaar} title={t('pd_per_year')} />
       )}
 
       {perMaand.some(m => m.count > 0) && (
-        <BarChartSimple data={perMaand} title="Vangsten per maand" />
+        <BarChartSimple data={perMaand} title={t('pd_per_month')} />
       )}
 
       {soortenPerJaar.length > 1 && (
         <>
           <LineChart
             data={soortenPerJaar}
-            title="Soorten per jaar — klik op een punt voor de soortenlijst"
+            title={t('pd_species_per_year')}
             xKey="jaar"
             yKey="soorten"
             onPointClick={pt => setJaarPopup(prev =>
@@ -170,8 +172,8 @@ export default function ProjectDetail({ records }) {
           {jaarPopup && (
             <div className="jaar-inline">
               <div className="jaar-inline-header">
-                <strong>{jaarPopup.soorten.length} soorten in {jaarPopup.jaar}</strong>
-                <button className="jaar-inline-close" onClick={() => setJaarPopup(null)} aria-label="Sluiten">✕</button>
+                <strong>{t('pd_species_in_year', { count: jaarPopup.soorten.length, jaar: jaarPopup.jaar })}</strong>
+                <button className="jaar-inline-close" onClick={() => setJaarPopup(null)} aria-label={t('pd_close_aria')}>✕</button>
               </div>
               <ul className="jaar-inline-list">
                 {jaarPopup.soorten.map(s => (
@@ -185,7 +187,7 @@ export default function ProjectDetail({ records }) {
 
       {topSoorten.length > 0 && (
         <div className="chart-block">
-          <h3>Top 10 soorten</h3>
+          <h3>{t('pd_top10')}</h3>
           <div className="top-list">
             {topSoorten.map(s => (
               <div className="top-item" key={s.soort}>
@@ -202,15 +204,15 @@ export default function ProjectDetail({ records }) {
 
       {stats.soortenTabel.length > 0 && (
         <div className="section">
-          <h3>Soorten</h3>
+          <h3>{t('pd_species_section')}</h3>
           <div className="trektellen-table-wrap">
             <table className="trektellen-table">
               <thead>
                 <tr>
-                  <th className="tt-col-soort">Soort</th>
-                  <th className="tt-col-num">Nieuw</th>
-                  <th className="tt-col-num">Terugv.</th>
-                  <th className="tt-col-num">Totaal</th>
+                  <th className="tt-col-soort">{t('pd_col_species')}</th>
+                  <th className="tt-col-num">{t('pd_new')}</th>
+                  <th className="tt-col-num">{t('so_col_recap')}</th>
+                  <th className="tt-col-num">{t('so_col_total')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -225,7 +227,7 @@ export default function ProjectDetail({ records }) {
               </tbody>
               <tfoot>
                 <tr className="tt-totaal-row">
-                  <td className="tt-col-soort">Totaal ({stats.soorten} soorten)</td>
+                  <td className="tt-col-soort">{t('so_total_row', { count: stats.soorten })}</td>
                   <td className="tt-col-num">{stats.nieuw}</td>
                   <td className="tt-col-num">{stats.terugvangst}</td>
                   <td className="tt-col-num tt-col-total">{stats.totaal}</td>
@@ -241,21 +243,21 @@ export default function ProjectDetail({ records }) {
       {terugvangsten.length > 0 && (
         <div className="section">
           <div className="tv-header">
-            <h3>Terugvangsten (top 10)</h3>
+            <h3>{t('pd_recap_top10')}</h3>
             <div className="tv-toggle">
-              <button className={`tv-toggle-btn${tvSorteer === 'tijd' ? ' active' : ''}`} onClick={() => setTvSorteer('tijd')}>Langste tijd</button>
-              <button className={`tv-toggle-btn${tvSorteer === 'afstand' ? ' active' : ''}`} onClick={() => setTvSorteer('afstand')}>Verste afstand</button>
+              <button className={`tv-toggle-btn${tvSorteer === 'tijd' ? ' active' : ''}`} onClick={() => setTvSorteer('tijd')}>{t('pd_longest_time')}</button>
+              <button className={`tv-toggle-btn${tvSorteer === 'afstand' ? ' active' : ''}`} onClick={() => setTvSorteer('afstand')}>{t('pd_farthest')}</button>
             </div>
           </div>
           <div className="trektellen-table-wrap">
             <table className="trektellen-table">
               <thead>
                 <tr>
-                  <th className="tt-col-soort">Soort</th>
-                  <th>Ring</th>
-                  <th>Datum</th>
-                  <th className="tt-col-num">Tijd</th>
-                  <th className="tt-col-num">Afstand</th>
+                  <th className="tt-col-soort">{t('pd_col_species')}</th>
+                  <th>{t('pd_col_ring')}</th>
+                  <th>{t('pd_col_date')}</th>
+                  <th className="tt-col-num">{t('pd_col_time')}</th>
+                  <th className="tt-col-num">{t('pd_col_distance')}</th>
                 </tr>
               </thead>
               <tbody>

@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import { TAAL_LABELS } from './NieuwPage.constants';
 import './NieuwPage.css';
 
 export default function SectieSoort() {
+  const { t } = useTranslation();
   const {
     form,
     errCls,
@@ -23,20 +25,20 @@ export default function SectieSoort() {
   return (
     <div className="section">
       <div className="section-header" onClick={() => toggleSection('nieuweVangst')}>
-        <h3>{editRecord ? 'Vangst wijzigen' : 'Nieuwe vangst'}</h3>
+        <h3>{editRecord ? t('form_section_edit_catch') : t('form_section_new_catch')}</h3>
         <span className={`toggle ${sections.nieuweVangst ? 'open' : ''}`}>▾</span>
       </div>
       {sections.nieuweVangst && (
         <div className="section-content">
           <div className={`form-group species-input${errCls('vogelnaam')}`}>
-            <label>Vogelnaam *</label>
+            <label>{t('form_bird_name')}</label>
             <input
               ref={vogelnaamRef}
               type="text"
               value={form.vogelnaam}
               onChange={e => handleSpeciesInput(e.target.value)}
               onFocus={handleSpeciesFocus}
-              placeholder="Begin te typen..."
+              placeholder={t('form_bird_placeholder')}
               autoComplete="off"
             />
             {suggestions.length > 0 && (
@@ -53,7 +55,7 @@ export default function SectieSoort() {
                           <span className="suggestion-sub">{s.matchedName} ({TAAL_LABELS[s.matchedField]})</span>
                         )}
                         {s.isRecent && !s.matchedName && form.vogelnaam.length < 2 && (
-                          <span className="suggestion-sub">Recent gebruikt</span>
+                          <span className="suggestion-sub">{t('form_recently_used')}</span>
                         )}
                       </div>
                     </li>
@@ -68,19 +70,19 @@ export default function SectieSoort() {
             <div className="soort-info-panel">
               <div className="soort-info-grid">
                 <div className="soort-info-item highlight">
-                  <span className="sii-label">Ringmaat</span>
+                  <span className="sii-label">{t('form_ring_size')}</span>
                   <span className="sii-value">{speciesInfo.ringmaat || '—'}</span>
                 </div>
                 {speciesInfo.ruitype && (
                   <div className={`soort-info-item${['A','B','C','D'].includes(speciesInfo.ruitype) ? ' ruitype-highlight' : ''}`}>
-                    <span className="sii-label">Ruitype</span>
+                    <span className="sii-label">{t('form_moult_type')}</span>
                     <span className="sii-value">
                       {speciesInfo.ruitype}
-                      {speciesInfo.ruitype === 'A' && <span className="ruitype-badge">Leeftijd beperkt</span>}
-                      {speciesInfo.ruitype === 'B' && <span className="ruitype-badge">Ruigrens bepalend</span>}
-                      {speciesInfo.ruitype === 'C' && <span className="ruitype-badge">Ruigrens bepalend</span>}
-                      {speciesInfo.ruitype === 'D' && <span className="ruitype-badge">Kleed bepalend</span>}
-                      {speciesInfo.ruitype === 'X' && <span className="ruitype-badge">Leeftijd niet bepaalbaar</span>}
+                      {speciesInfo.ruitype === 'A' && <span className="ruitype-badge">{t('form_moult_age_limited')}</span>}
+                      {speciesInfo.ruitype === 'B' && <span className="ruitype-badge">{t('form_moult_boundary')}</span>}
+                      {speciesInfo.ruitype === 'C' && <span className="ruitype-badge">{t('form_moult_boundary')}</span>}
+                      {speciesInfo.ruitype === 'D' && <span className="ruitype-badge">{t('form_moult_plumage')}</span>}
+                      {speciesInfo.ruitype === 'X' && <span className="ruitype-badge">{t('form_moult_indeterminate')}</span>}
                     </span>
                   </div>
                 )}
@@ -95,7 +97,7 @@ export default function SectieSoort() {
               {/* Boeken */}
               {speciesInfo.boeken && Object.keys(speciesInfo.boeken).length > 0 && (
                 <div className="soort-info-boeken">
-                  <span className="boeken-label">Boeken</span>
+                  <span className="boeken-label">{t('form_books')}</span>
                   <div className="boeken-chips">
                     {Object.entries(speciesInfo.boeken).map(([boek, pagina]) => (
                       <span key={boek} className="boek-chip">
