@@ -655,5 +655,6 @@
   "extern_badge_nv": "External 1st catch ref.",
   "record_type_tva": "External recapture",
   "record_type_nwx": "External 1st catch ref.",
-  "btn_cancel": "Cancel"
+  "btn_cancel": "Cancel",
+  "extern_saved_toast": "External notification saved"
 }

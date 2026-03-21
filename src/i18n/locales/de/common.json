@@ -655,5 +655,6 @@
   "extern_badge_nv": "Externer Erstfang Ref.",
   "record_type_tva": "Externer Wiederfang",
   "record_type_nwx": "Externer Erstfang Ref.",
-  "btn_cancel": "Abbrechen"
+  "btn_cancel": "Abbrechen",
+  "extern_saved_toast": "Externe Meldung gespeichert"
 }

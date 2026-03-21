@@ -655,5 +655,6 @@
   "extern_badge_nv": "Extern NV ref.",
   "record_type_tva": "Externe TV",
   "record_type_nwx": "Externe NV ref.",
-  "btn_cancel": "Annuleren"
+  "btn_cancel": "Annuleren",
+  "extern_saved_toast": "Externe melding opgeslagen"
 }

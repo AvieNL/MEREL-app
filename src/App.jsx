@@ -152,7 +152,7 @@ function AppShell() {
 }
 
 function MainApp() {
-  const { records, recordsLoading, deletedRecords, addRecord, updateRecord, deleteRecord, restoreRecord, permanentDeleteRecord, markAllAsUploaded, importRecords, renameProject, fullResync } = useRecords();
+  const { records, recordsLoading, deletedRecords, addRecord, addExternRecord, updateRecord, deleteRecord, restoreRecord, permanentDeleteRecord, markAllAsUploaded, importRecords, renameProject, fullResync } = useRecords();
   const { projects, addProject, updateProject, deleteProject, myAupis, refreshAupis } = useProjects();
   const speciesOverrides = useSpeciesOverrides();
   const { settings, updateSettings } = useSettings();
@@ -174,7 +174,7 @@ function MainApp() {
               onDelete={deleteRecord}
               onRestore={restoreRecord}
               onPermanentDelete={permanentDeleteRecord}
-              onAddRecord={r => importRecords([r])}
+              onAddRecord={addExternRecord}
             />
           } />
           <Route path="/stats" element={

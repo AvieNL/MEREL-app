@@ -133,6 +133,25 @@ export function useRecords() {
     return newRecord;
   }
 
+  function addExternRecord(record) {
+    if (!user) return null;
+    const newRecord = {
+      ...record,
+      id: generateId(),
+      timestamp: new Date().toISOString(),
+      uploaded: true,
+      user_id: user.id,
+    };
+    db.vangsten.put(newRecord).then(() => {
+      addToast(i18n.t('extern_saved_toast'), 'success');
+    }).catch(err => {
+      console.error('addExternRecord mislukt:', err);
+      addToast(i18n.t('errors:record_save_failed'), 'error');
+    });
+    addToQueue('vangsten', 'upsert', toVangstRow(newRecord, user.id));
+    return newRecord;
+  }
+
   function updateRecord(id, updates) {
     db.vangsten.get(id).then(async existing => {
       if (!existing) return;
@@ -218,6 +237,7 @@ export function useRecords() {
     recordsLoading,
     deletedRecords,
     addRecord,
+    addExternRecord,
     updateRecord,
     deleteRecord,
     restoreRecord,
