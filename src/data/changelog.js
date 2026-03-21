@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.12';
+export const VERSIE = '1.5.13';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.13',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'UX: Bij terugvangsten (Tv/Tvᵒ) toont het uitklapscherm de eerste eigen vangst: datum, leeftijd, project en plaats',
+    ],
+    wijzigingen_en: [
+      'UX: For recaptures (Rc/Rcᵒ) the expanded view shows the original own catch: date, age, project and place',
+    ],
+    wijzigingen_de: [
+      'UX: Bei Wiederfängen (Wf/Wfᵒ) zeigt die Detailansicht den ersten eigenen Fang: Datum, Alter, Projekt und Ort',
+    ],
+  },
   {
     versie: '1.5.12',
     datum: '2026-03-21',

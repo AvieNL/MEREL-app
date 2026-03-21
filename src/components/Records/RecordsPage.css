@@ -136,6 +136,19 @@
   color: var(--text-muted);
 }
 
+.record-original {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.record-original-title {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
 .record-actions {
   display: flex;
   gap: 6px;

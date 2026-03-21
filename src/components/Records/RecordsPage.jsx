@@ -145,6 +145,9 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
           filtered.slice(0, MAX_RECORDS_WEERGAVE).map(r => {
             const type = getRecordType(r);
             const cfg = TYPE_CFG[type];
+            const original = (type === 'tv' || type === 'tvo') && r.ringnummer
+              ? nvByRing.get(r.ringnummer.toLowerCase()) ?? null
+              : null;
             return (
             <div
               key={r.id}
@@ -181,6 +184,17 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
                     {r.project && <div><span className="detail-label">{t('records_label_project')}</span> {r.project}</div>}
                     {r.google_plaats && <div><span className="detail-label">{t('records_label_place')}</span> {r.google_plaats}</div>}
                   </div>
+                  {original && (
+                    <div className="record-original">
+                      <div className="record-original-title">{t('form_first_catch_date')}</div>
+                      <div className="detail-grid">
+                        <div><span className="detail-label">{t('form_catch_date')}</span> {formatDatum(original.vangstdatum)}</div>
+                        {original.leeftijd && <div><span className="detail-label">{t('records_label_age')}</span> {leeftijdLabel(original.leeftijd)}</div>}
+                        {original.project && <div><span className="detail-label">{t('records_label_project')}</span> {original.project}</div>}
+                        {original.google_plaats && <div><span className="detail-label">{t('records_label_place')}</span> {original.google_plaats}</div>}
+                      </div>
+                    </div>
+                  )}
                   {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
                     <div className="record-actions">
                       <button
