@@ -13,15 +13,16 @@ export function useDisplayNaam() {
   const speciesRef = useSpeciesRef();
 
   return useMemo(() => {
+    const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
     const field = LANG_FIELD[i18n.language] || 'naam_nl';
-    if (field === 'naam_nl') return (naam_nl) => naam_nl;
+    if (field === 'naam_nl') return (naam_nl) => cap(naam_nl);
     const map = new Map();
     speciesRef.forEach(s => {
       if (s.naam_nl) map.set(s.naam_nl.toLowerCase(), s[field] || s.naam_nl);
     });
     return (naam_nl) => {
       if (!naam_nl) return naam_nl;
-      return map.get(naam_nl.toLowerCase()) || naam_nl;
+      return cap(map.get(naam_nl.toLowerCase()) || naam_nl);
     };
   }, [speciesRef, i18n.language]);
 }
