@@ -23,7 +23,8 @@ export function useRecords() {
   const pulledRef = useRef(false);
 
   // Actieve vangsten (niet soft-deleted)
-  const records = useLiveQuery(
+  // useLiveQuery retourneert undefined tot de eerste query klaar is — gebruik dat als laad-signaal
+  const rawRecords = useLiveQuery(
     () => {
       if (!user) return [];
       return db.vangsten
@@ -32,9 +33,10 @@ export function useRecords() {
         .filter(r => r.user_id === user.id && !r.deleted_at)
         .toArray();
     },
-    [user?.id],
-    []
-  ) ?? [];
+    [user?.id]
+  );
+  const records = rawRecords ?? [];
+  const recordsLoading = rawRecords === undefined;
 
   // Soft-deleted vangsten (prullenbak)
   const deletedRecords = useLiveQuery(
@@ -213,6 +215,7 @@ export function useRecords() {
 
   return {
     records,
+    recordsLoading,
     deletedRecords,
     addRecord,
     updateRecord,

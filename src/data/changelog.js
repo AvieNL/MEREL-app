@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.1';
+export const VERSIE = '1.5.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.2',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'UX: laadindicator toegevoegd in RecordsPage en StatsPage (toont "Laden..." bij initieel laden)',
+    ],
+    wijzigingen_en: [
+      'UX: loading indicator added to RecordsPage and StatsPage (shows "Loading..." during initial load)',
+    ],
+    wijzigingen_de: [
+      'UX: Ladeindikator in RecordsPage und StatsPage hinzugefügt (zeigt "Laden..." beim ersten Laden)',
+    ],
+  },
   {
     versie: '1.5.1',
     datum: '2026-03-21',

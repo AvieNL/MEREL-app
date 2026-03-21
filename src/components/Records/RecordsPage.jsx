@@ -31,7 +31,7 @@ function leeftijdLabel(code) {
   return LEEFTIJD_LABEL[code] || code;
 }
 
-export default function RecordsPage({ records, deletedRecords = [], onDelete, onRestore, onPermanentDelete }) {
+export default function RecordsPage({ records, recordsLoading = false, deletedRecords = [], onDelete, onRestore, onPermanentDelete }) {
   const [zoek, setZoek] = useState('');
   const [prullenbakOpen, setPrullenbakOpen] = useState(false);
   const [expanded, setExpanded] = useState(null);
@@ -96,7 +96,9 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
       </div>
 
       <div className="records-list">
-        {filtered.length === 0 ? (
+        {recordsLoading ? (
+          <div className="empty-state">{t('loading')}</div>
+        ) : filtered.length === 0 ? (
           <div className="empty-state">{t('records_empty')}</div>
         ) : (
           filtered.slice(0, MAX_RECORDS_WEERGAVE).map(r => {

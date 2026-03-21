@@ -183,7 +183,7 @@ function parseCSV(text) {
 }
 
 
-export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [], myAupis = {} }) {
+export default function StatsPage({ records, recordsLoading = false, markAllAsUploaded, importRecords, projects = [], myAupis = {} }) {
   const navigate = useNavigate();
   const { addToast } = useToast();
   const { t } = useTranslation(['common', 'errors']);
@@ -370,6 +370,14 @@ export default function StatsPage({ records, markAllAsUploaded, importRecords, p
     reader.readAsText(file);
   }
 
+
+  if (recordsLoading) {
+    return (
+      <div className="page stats-page">
+        <div className="empty-state">{t('loading')}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="page stats-page">

@@ -151,7 +151,7 @@ function AppShell() {
 }
 
 function MainApp() {
-  const { records, deletedRecords, addRecord, updateRecord, deleteRecord, restoreRecord, permanentDeleteRecord, markAllAsUploaded, importRecords, renameProject, fullResync } = useRecords();
+  const { records, recordsLoading, deletedRecords, addRecord, updateRecord, deleteRecord, restoreRecord, permanentDeleteRecord, markAllAsUploaded, importRecords, renameProject, fullResync } = useRecords();
   const { projects, addProject, updateProject, deleteProject, myAupis, refreshAupis } = useProjects();
   const speciesOverrides = useSpeciesOverrides();
   const { settings, updateSettings } = useSettings();
@@ -168,6 +168,7 @@ function MainApp() {
           <Route path="/records" element={
             <RecordsPage
               records={records}
+              recordsLoading={recordsLoading}
               deletedRecords={deletedRecords}
               onDelete={deleteRecord}
               onRestore={restoreRecord}
@@ -175,7 +176,7 @@ function MainApp() {
             />
           } />
           <Route path="/stats" element={
-            <StatsPage records={records} markAllAsUploaded={markAllAsUploaded} importRecords={importRecords} projects={projects} myAupis={myAupis} />
+            <StatsPage records={records} recordsLoading={recordsLoading} markAllAsUploaded={markAllAsUploaded} importRecords={importRecords} projects={projects} myAupis={myAupis} />
           } />
           <Route path="/stats/project/:naam" element={
             <ProjectDetail records={records} />
