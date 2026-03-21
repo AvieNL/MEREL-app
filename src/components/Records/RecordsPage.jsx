@@ -160,7 +160,10 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
               onClick={() => setExpanded(expanded === r.id ? null : r.id)}
             >
               <div className="record-header">
-                <span className={`record-type ${cfg.cls}`}>{cfg.icon} {t(cfg.key)}</span>
+                <div className="record-type-col">
+                  <span className={`record-type ${cfg.cls}`}>{cfg.icon} {t(cfg.key)}</span>
+                  {type === 'tvx' && <span className="record-type-ext">⚠</span>}
+                </div>
                 <div className="record-main">
                   <strong>
                     {r.vogelnaam ? displayNaam(r.vogelnaam) : t('records_unknown')}
