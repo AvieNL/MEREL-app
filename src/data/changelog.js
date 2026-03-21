@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.3';
+export const VERSIE = '1.5.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.4',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Docs: merge-volgorde biometriedata gedocumenteerd in useBioRanges.js en SoortDetail.jsx',
+    ],
+    wijzigingen_en: [
+      'Docs: biometry data merge order documented in useBioRanges.js and SoortDetail.jsx',
+    ],
+    wijzigingen_de: [
+      'Docs: Zusammenführungsreihenfolge der Biometriedaten in useBioRanges.js und SoortDetail.jsx dokumentiert',
+    ],
+  },
   {
     versie: '1.5.3',
     datum: '2026-03-21',

@@ -33,7 +33,12 @@ export function useBioRanges(vogelnaam, speciesInfo, soortOverride, records, for
     return computeBioRanges(soortRecords);
   }, [vogelnaam, records]);
 
-  // Samengevoegde bereiken: literatuur (speciesInfo/override) > eigen vangsten
+  // Samengevoegde bereiken per veld.
+  // Merge-prioriteit voor algemene bereiken (hoog → laag):
+  //   1. species-tabel (admin-literatuurdata) — autoritatief
+  //   2. species_overrides (gebruikersaanpassingen) — vult ontbrekende literatuurdata aan
+  //   3. Eigen vangsten (min 3 records, ±10% marge, pullus uitgesloten) — fallback
+  // Geslachtsspecifieke bereiken gebruiken omgekeerde volgorde: overrides > species-tabel.
   const bioRanges = useMemo(() => {
     const merged = {};
     for (const f of BIO_KEYS) {

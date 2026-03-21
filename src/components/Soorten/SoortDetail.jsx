@@ -100,6 +100,9 @@ export default function SoortDetail({ records, speciesOverrides }) {
   );
 
   const defaultSoort = soorten.find(s => s.naam_nl === decodedNaam);
+  // getMerged samenvoegt: defaultSoort (species-tabel) < species_overrides (gebruiker)
+  // Boeken worden samengevoegd uit beide bronnen zodat niets verloren gaat.
+  // Zie useSpeciesOverrides.js → getMerged voor de volledige merge-logica.
   const soort = speciesOverrides
     ? speciesOverrides.getMerged(decodedNaam, defaultSoort || {})
     : defaultSoort;
