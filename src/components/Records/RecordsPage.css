@@ -59,13 +59,13 @@
 }
 
 .record-type--tv {
-  background: rgba(249, 115, 22, 0.20);
-  color: #fb923c;
+  background: rgba(250, 204, 21, 0.18);
+  color: #facc15;
 }
 
 .record-type--tvo {
-  background: rgba(250, 204, 21, 0.18);
-  color: #facc15;
+  background: rgba(249, 115, 22, 0.20);
+  color: #fb923c;
 }
 
 .record-type--tvx {
