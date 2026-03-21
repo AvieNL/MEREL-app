@@ -14,8 +14,10 @@ const LEEG_FORM = { soort: '', datum: '', leeftijd: '', geslacht: 'U', type: 'ha
 // Derives maand (1–12) from a date string, or returns ''
 function maandUitDatum(datum) {
   if (!datum) return '';
-  const d = new Date(datum);
-  return isNaN(d.getTime()) ? '' : d.getMonth() + 1;
+  const parts = datum.split('-');
+  if (parts.length < 2) return '';
+  const m = parseInt(parts[1], 10);
+  return isNaN(m) ? '' : m;
 }
 
 // Simple species autocomplete

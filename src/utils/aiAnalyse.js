@@ -3,9 +3,16 @@ import { blobNaarBase64 } from './imageHelper';
 import { getFotoUrl } from '../hooks/useReferentiebibliotheek';
 
 async function urlNaarBase64(url) {
-  const resp = await fetch(url);
+  let resp;
+  try {
+    resp = await fetch(url);
+  } catch (err) {
+    throw new Error(`Referentiefoto ophalen mislukt: ${err?.message || 'netwerkfout'}`);
+  }
+  if (!resp.ok) throw new Error(`Referentiefoto niet gevonden (HTTP ${resp.status})`);
   const blob = await resp.blob();
-  return blobNaarBase64(blob);
+  const mediaType = resp.headers.get('content-type')?.split(';')[0] || 'image/jpeg';
+  return { data: await blobNaarBase64(blob), mediaType };
 }
 
 export const MAX_REFERENTIES = 10;
@@ -22,7 +29,9 @@ export function selectReferenties(soort, maand, alle) {
       const gA = typeGewicht[a.type] ?? 2;
       const gB = typeGewicht[b.type] ?? 2;
       if (gA !== gB) return gA - gB;
-      return Math.abs(a.maand - maand) - Math.abs(b.maand - maand);
+      const diffA = Math.abs(a.maand - maand);
+      const diffB = Math.abs(b.maand - maand);
+      return Math.min(diffA, 12 - diffA) - Math.min(diffB, 12 - diffB);
     })
     .slice(0, MAX_REFERENTIES);
 }
@@ -45,7 +54,7 @@ export function buildPrompt(soort, referenties, aantalRefFotos = 0) {
   return `Je bent een ervaren vogelringer. Analyseer de vogel en bepaal:
 1. Leeftijd als EURING-leeftijdscode (bijv. "1"=pullus, "3"=eerste jaar, "4"=tweede jaar, "6"=adult)
 2. Geslacht: M (man), F (vrouw), of U (onbekend)
-3. Bepaling geslacht als EURING-code: A=plumage, B=broedvlek, C=cloaca, D=DNA, E=gekleurde ring, L=biometrie, P=niet te bepalen, S=sperma, T=gezang/roep, U=onbekend
+3. Bepaling geslacht als EURING-code: A=activiteit/gedrag/zang, B=broedvlek, C=cloacale protuberans, D=DNA, E=inwendig onderzoek cloaca, L=laparoscopie, P=verenkleed (plumage), S=grootte/kleurintensiteit, T=post-mortem dissectie, U=onbekend
 4. Betrouwbaarheid van de analyse als getal 0–100 (verhoog de betrouwbaarheid als de vogel overeenkomt met een referentie)
 5. Korte Nederlandse toelichting (max 2 zinnen)
 
@@ -82,12 +91,15 @@ export async function analyseVogel(soort, maand, fotos, referenties) {
 
   const refFotoData = await Promise.all(
     refMetFoto.map(async r => {
-      const fotos = await Promise.all(
-        r.foto_paden.slice(0, 3).map(async pad => ({
-          mediaType: 'image/jpeg',
-          data: await urlNaarBase64(getFotoUrl(pad)),
-        }))
+      const resultaten = await Promise.allSettled(
+        r.foto_paden.slice(0, 3).map(async pad => {
+          const { data, mediaType } = await urlNaarBase64(getFotoUrl(pad));
+          return { mediaType, data };
+        })
       );
+      const fotos = resultaten
+        .filter(res => res.status === 'fulfilled')
+        .map(res => res.value);
       return { fotos, leeftijd: r.leeftijd, geslacht: r.geslacht, maand: r.maand, type: r.type };
     })
   );

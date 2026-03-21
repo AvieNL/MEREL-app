@@ -10,10 +10,10 @@ import { ToastProvider } from './context/ToastContext';
 import ToastContainer from './components/Toast/ToastContainer';
 import Header from './components/Layout/Header';
 import Navigation from './components/Layout/Navigation';
-import NieuwPage from './components/Nieuw/NieuwPage';
 import LoginPage from './components/Auth/LoginPage';
 import MigrationBanner from './components/Sync/MigrationBanner';
 
+const NieuwPage       = lazy(() => import('./components/Nieuw/NieuwPage'));
 const RecordsPage     = lazy(() => import('./components/Records/RecordsPage'));
 const StatsPage       = lazy(() => import('./components/Stats/StatsPage'));
 const ProjectDetail   = lazy(() => import('./components/Stats/ProjectDetail'));
@@ -94,6 +94,14 @@ function LoadingText() {
   return <>{t('loading')}</>;
 }
 
+function PageSpinner() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', padding: '48px 16px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+      <LoadingText />
+    </div>
+  );
+}
+
 function AppShell() {
   const { user, loading } = useAuth();
 
@@ -141,7 +149,7 @@ function MainApp() {
       <Header />
       <MigrationBanner onComplete={() => {}} />
       <main className="app-content">
-        <Suspense fallback={null}>
+        <Suspense fallback={<PageSpinner />}>
         <Routes>
           <Route path="/" element={<NieuwPage />} />
           <Route path="/records" element={

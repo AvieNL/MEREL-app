@@ -1,16 +1,32 @@
 import heic2any from 'heic2any';
 
+const MAX_BESTANDSGROOTTE = 20 * 1024 * 1024; // 20 MB
+
 /**
- * Verwerk een foto-bestand: converteer HEIC→JPEG indien nodig, resize naar max 800px, 70% kwaliteit.
+ * Verwerk een foto-bestand: converteer HEIC/HEIF→JPEG indien nodig, resize naar max 800px, 70% kwaliteit.
  * Retourneert een Blob (image/jpeg) en een preview-URL (data URL).
+ * Gooit een Error met een leesbare melding als het bestand te groot is of de conversie mislukt.
  */
 export async function verwerkFoto(file) {
+  if (file.size > MAX_BESTANDSGROOTTE) {
+    throw new Error(`Bestand te groot (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum is 20 MB.`);
+  }
+
   let blob = file;
 
-  // Converteer HEIC naar JPEG
-  if (file.type === 'image/heic' || file.name?.toLowerCase().endsWith('.heic')) {
-    const converted = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.8 });
-    blob = Array.isArray(converted) ? converted[0] : converted;
+  const isHeic =
+    file.type === 'image/heic' ||
+    file.type === 'image/heif' ||
+    file.name?.toLowerCase().endsWith('.heic') ||
+    file.name?.toLowerCase().endsWith('.heif');
+
+  if (isHeic) {
+    try {
+      const converted = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.8 });
+      blob = Array.isArray(converted) ? converted[0] : converted;
+    } catch (err) {
+      throw new Error(`HEIC/HEIF-conversie mislukt: ${err?.message || 'onbekende fout'}. Sla de foto op als JPEG en probeer opnieuw.`);
+    }
   }
 
   // Resize naar max 800px, 70% JPEG kwaliteit

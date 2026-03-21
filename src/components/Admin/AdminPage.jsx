@@ -87,14 +87,18 @@ export default function AdminPage() {
     }
 
     const userIds = data.map(p => p.id);
-    const { data: vangstRows } = await supabase
-      .from('vangsten')
-      .select('user_id')
-      .in('user_id', userIds);
 
     const countByUser = {};
-    for (const v of vangstRows || []) {
-      countByUser[v.user_id] = (countByUser[v.user_id] || 0) + 1;
+    if (userIds.length > 0) {
+      const { data: vangstRows } = await supabase
+        .from('vangsten')
+        .select('user_id')
+        .in('user_id', userIds)
+        .is('deleted_at', null);
+
+      for (const v of vangstRows || []) {
+        countByUser[v.user_id] = (countByUser[v.user_id] || 0) + 1;
+      }
     }
 
     const metCounts = data.map(p => ({ ...p, vangsten_count: countByUser[p.id] ?? 0 }));
@@ -126,8 +130,8 @@ export default function AdminPage() {
       {loading && <div className="admin-status">{t('admin_loading_users')}</div>}
 
       {error && (
-        <div className="admin-error">
-          <strong>Fout:</strong> {error}
+        <div className="admin-error" role="alert">
+          {error}
         </div>
       )}
 

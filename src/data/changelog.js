@@ -1,6 +1,88 @@
-export const VERSIE = '1.4.1';
+export const VERSIE = '1.4.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.4.5',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Perf: invoerformulier wordt nu pas ingeladen bij navigatie (lazy loading), snellere initiële start',
+      'Fix: biometrie-berekening gebruikt geen spread-operator meer (veilig bij grote datasets)',
+      'Improve: laadindicator zichtbaar bij navigeren tussen pagina\'s',
+    ],
+    wijzigingen_en: [
+      'Perf: entry form is now loaded on demand (lazy loading), faster initial startup',
+      'Fix: biometrics calculation no longer uses spread operator (safe with large datasets)',
+      'Improve: loading indicator visible when navigating between pages',
+    ],
+    wijzigingen_de: [
+      'Perf: Eingabeformular wird jetzt erst bei Navigation geladen (Lazy Loading), schnellerer Start',
+      'Fix: Biometrie-Berechnung verwendet keinen Spread-Operator mehr (sicher bei großen Datensätzen)',
+      'Improve: Ladeindikator beim Navigieren zwischen Seiten sichtbar',
+    ],
+  },
+  {
+    versie: '1.4.4',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Fix: adminpagina laadt geen vangsten op als er geen gebruikers zijn (lege array guard)',
+      'Fix: vangstenteller op adminpagina telt geen verwijderde vangsten meer mee',
+      'Fix: foutmelding op adminpagina is nu toegankelijk voor screenreaders (role="alert")',
+    ],
+    wijzigingen_en: [
+      'Fix: admin page no longer queries catches when there are no users (empty array guard)',
+      'Fix: catch counter on admin page no longer counts deleted catches',
+      'Fix: error message on admin page is now accessible to screen readers (role="alert")',
+    ],
+    wijzigingen_de: [
+      'Fix: Admin-Seite fragt keine Fänge ab, wenn keine Benutzer vorhanden sind (leeres Array Guard)',
+      'Fix: Fangzähler auf Admin-Seite zählt keine gelöschten Fänge mehr',
+      'Fix: Fehlermeldung auf der Admin-Seite ist jetzt für Screenreader zugänglich (role="alert")',
+    ],
+  },
+  {
+    versie: '1.4.3',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Fix: fotobestand te groot (>20 MB) geeft nu een leesbare foutmelding',
+      'Fix: HEIF-bestanden (.heif) worden nu ook herkend en geconverteerd naar JPEG',
+      'Fix: HEIC/HEIF-conversiefout geeft nu een duidelijke melding i.p.v. een crash',
+      'Fix: ophalen van referentiefoto\'s voor AI-analyse heeft nu foutafhandeling; één falende foto breekt de analyse niet meer af',
+      'Fix: mediatype van referentiefoto\'s wordt nu bepaald vanuit de HTTP Content-Type header',
+    ],
+    wijzigingen_en: [
+      'Fix: file too large (>20 MB) now shows a readable error message',
+      'Fix: HEIF files (.heif) are now also detected and converted to JPEG',
+      'Fix: HEIC/HEIF conversion error now shows a clear message instead of crashing',
+      'Fix: fetching reference photos for AI analysis now has error handling; one failing photo no longer aborts the analysis',
+      'Fix: media type of reference photos is now determined from the HTTP Content-Type header',
+    ],
+    wijzigingen_de: [
+      'Fix: Datei zu groß (>20 MB) zeigt jetzt eine lesbare Fehlermeldung',
+      'Fix: HEIF-Dateien (.heif) werden jetzt auch erkannt und in JPEG konvertiert',
+      'Fix: HEIC/HEIF-Konvertierungsfehler zeigt jetzt eine klare Meldung statt eines Absturzes',
+      'Fix: Abrufen von Referenzfotos für die KI-Analyse hat jetzt eine Fehlerbehandlung; ein fehlschlagendes Foto bricht die Analyse nicht mehr ab',
+      'Fix: Medientyp von Referenzfotos wird jetzt aus dem HTTP Content-Type-Header ermittelt',
+    ],
+  },
+  {
+    versie: '1.4.2',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Fix: maandafleiding uit datum gebruikt nu correcte tijdzone (geen UTC-verschuiving meer)',
+      'Fix: AI-referentieselectie — seizoensafstand is nu circulair (december en januari liggen dicht bij elkaar)',
+      'Fix: AI-prompt geslachtsbepalingcodes gecorrigeerd naar officiële EURING-waarden',
+    ],
+    wijzigingen_en: [
+      'Fix: month derivation from date now uses correct timezone (no more UTC offset)',
+      'Fix: AI reference selection — seasonal distance is now circular (December and January are close)',
+      'Fix: AI prompt sex determination codes corrected to official EURING values',
+    ],
+    wijzigingen_de: [
+      'Fix: Monatsableitung aus Datum verwendet jetzt korrekte Zeitzone (kein UTC-Versatz mehr)',
+      'Fix: KI-Referenzauswahl — saisonaler Abstand ist jetzt zirkulär (Dezember und Januar liegen nah beieinander)',
+      'Fix: KI-Prompt Geschlechtsbestimmungscodes auf offizielle EURING-Werte korrigiert',
+    ],
+  },
   {
     versie: '1.4.1',
     datum: '2026-03-21',

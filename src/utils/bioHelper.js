@@ -22,8 +22,8 @@ export function computeBioRanges(records) {
       .map(r => parseVal(r[f.key]))
       .filter(v => !isNaN(v) && v > 0);
     if (vals.length >= 3) {
-      const min = Math.min(...vals);
-      const max = Math.max(...vals);
+      const min = vals.reduce((a, b) => a < b ? a : b);
+      const max = vals.reduce((a, b) => a > b ? a : b);
       const margin = (max - min) * 0.1 || min * 0.1;
       ranges[f.key] = {
         label: f.label,
