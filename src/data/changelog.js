@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.9';
+export const VERSIE = '1.5.10';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.10',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'UX: Recorddetail vereenvoudigd — toont alleen leeftijd, project en plaats',
+    ],
+    wijzigingen_en: [
+      'UX: Record detail simplified — shows only age, project and place',
+    ],
+    wijzigingen_de: [
+      'UX: Fangdetail vereinfacht — zeigt nur Alter, Projekt und Ort',
+    ],
+  },
   {
     versie: '1.5.9',
     datum: '2026-03-21',

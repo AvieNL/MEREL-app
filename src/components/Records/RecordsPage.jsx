@@ -5,7 +5,7 @@ import { useRole } from '../../hooks/useRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { buildEuringLookup } from '../../utils/euring-lookup';
-import { formatDatum, formatDatumTijd } from '../../utils/dateHelper';
+import { formatDatum } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL, MAX_RECORDS_WEERGAVE } from '../../data/constants';
 import './RecordsPage.css';
 
@@ -136,23 +136,8 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
                 <div className="record-details">
                   <div className="detail-grid">
                     {r.leeftijd && <div><span className="detail-label">{t('records_label_age')}</span> {leeftijdLabel(r.leeftijd)}</div>}
-                    {r.geslacht && r.geslacht !== 'U' && <div><span className="detail-label">{t('records_label_sex')}</span> {geslachtIcoon(r.geslacht)}</div>}
-                    {r.vangstmethode && <div><span className="detail-label">{t('records_label_method')}</span> {r.vangstmethode}</div>}
                     {r.project && <div><span className="detail-label">{t('records_label_project')}</span> {r.project}</div>}
-                    {r.vleugel && <div><span className="detail-label">{t('records_label_wing')}</span> {r.vleugel} mm</div>}
-                    {r.gewicht && <div><span className="detail-label">{t('records_label_weight')}</span> {r.gewicht} g</div>}
-                    {r.handpenlengte && <div><span className="detail-label">{t('records_label_p8')}</span> {r.handpenlengte} mm</div>}
-                    {r.staartlengte && <div><span className="detail-label">{t('records_label_tail')}</span> {r.staartlengte} mm</div>}
-                    {r.tarsus_lengte && <div><span className="detail-label">{t('records_label_tarsus')}</span> {r.tarsus_lengte} mm</div>}
-                    {r.vet && <div><span className="detail-label">{t('records_label_fat')}</span> {r.vet}</div>}
-                    {r.tijd && <div><span className="detail-label">{t('records_label_time')}</span> {fmtTijd(r.tijd)}</div>}
                     {r.google_plaats && <div><span className="detail-label">{t('records_label_place')}</span> {r.google_plaats}</div>}
-                    {r.opmerkingen && <div><span className="detail-label">{t('records_label_remarks')}</span> {r.opmerkingen}</div>}
-                  </div>
-                  <div className="record-datums">
-                    <div><span className="detail-label">{t('records_label_created')}</span> {formatDatum(r.vangstdatum)}</div>
-                    {r.exported_at && <div><span className="detail-label">{t('records_label_exported')}</span> {formatDatumTijd(r.exported_at)}</div>}
-                    {r.handmatig_gewijzigd_at && <div><span className="detail-label">{t('records_label_modified')}</span> {formatDatumTijd(r.handmatig_gewijzigd_at)}</div>}
                   </div>
                   {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
                     <div className="record-actions">
