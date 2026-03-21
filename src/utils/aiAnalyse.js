@@ -32,14 +32,14 @@ export function buildPrompt(soort, referenties, aantalRefFotos = 0) {
     : 'Geen referenties beschikbaar.';
 
   const refIntro = aantalRefFotos > 0
-    ? `De eerste ${aantalRefFotos} foto('s) zijn bevestigde referentievangsten met bekende leeftijd en geslacht. De laatste foto('s) zijn de te analyseren vogel.`
+    ? `BELANGRIJK: De eerste foto('s) zijn bevestigde referentievangsten van dezelfde soort, met een door een expert vastgestelde leeftijd en geslacht. Gebruik deze referenties als primaire basis voor je analyse — als de te analyseren vogel sterk lijkt op een referentie, volg dan dat oordeel.`
     : '';
 
   return `Je bent een ervaren vogelringer. Analyseer de vogel en bepaal:
 1. Leeftijd als EURING-leeftijdscode (bijv. "1"=pullus, "3"=eerste jaar, "4"=tweede jaar, "6"=adult)
 2. Geslacht: M (man), F (vrouw), of U (onbekend)
 3. Bepaling geslacht als EURING-code: A=plumage, B=broedvlek, C=cloaca, D=DNA, E=gekleurde ring, L=biometrie, P=niet te bepalen, S=sperma, T=gezang/roep, U=onbekend
-4. Betrouwbaarheid van de analyse als getal 0–100
+4. Betrouwbaarheid van de analyse als getal 0–100 (verhoog de betrouwbaarheid als de vogel overeenkomt met een referentie)
 5. Korte Nederlandse toelichting (max 2 zinnen)
 
 Soort: ${soort}
