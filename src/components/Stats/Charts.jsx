@@ -239,7 +239,7 @@ export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLo
     });
 
     return { markers, lijnen };
-  }, [targetRecords, allRecords, displayNaam]);
+  }, [targetRecords, allRecords, displayNaam, fallbackLat, fallbackLon]);
 
   useEffect(() => {
     if (!mapRef.current || kaartData.markers.length === 0) return;
