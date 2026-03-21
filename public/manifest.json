@@ -2,6 +2,7 @@
   "name": "VRS Breedenbroek",
   "short_name": "VRS",
   "description": "Vogelringregistratie App - VRS Breedenbroek",
+  "id": "/",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",

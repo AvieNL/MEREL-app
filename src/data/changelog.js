@@ -1,6 +1,22 @@
-export const VERSIE = '1.4.5';
+export const VERSIE = '1.4.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.4.6',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'PWA: manifest.json heeft nu een id-veld voor betrouwbare PWA-identiteit bij updates',
+      'PWA: apple-touch-icon toegevoegd voor correct icoon bij "Voeg toe aan beginscherm" op iOS',
+    ],
+    wijzigingen_en: [
+      'PWA: manifest.json now has an id field for reliable PWA identity on updates',
+      'PWA: apple-touch-icon added for correct icon when using "Add to Home Screen" on iOS',
+    ],
+    wijzigingen_de: [
+      'PWA: manifest.json hat jetzt ein id-Feld für zuverlässige PWA-Identität bei Updates',
+      'PWA: apple-touch-icon für korrektes Symbol bei "Zum Startbildschirm hinzufügen" auf iOS hinzugefügt',
+    ],
+  },
   {
     versie: '1.4.5',
     datum: '2026-03-21',
