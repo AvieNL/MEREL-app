@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './SoortDetail.css';
 
 // Textarea met B/I/U-opmaakbalk die automatisch meegroeit
@@ -38,61 +39,12 @@ function FormattedTextarea({ value, onChange, placeholder }) {
   );
 }
 
-const BIO_FIELDS = [
-  { key: 'vleugel',       label: 'Vleugel',        unit: 'mm' },
-  { key: 'handpenlengte', label: 'P8 / Handpen',   unit: 'mm' },
-  { key: 'staartlengte',  label: 'Staart',          unit: 'mm' },
-  { key: 'kop_snavel',    label: 'Snavel-veer',     unit: 'mm' },
-  { key: 'snavel_schedel',label: 'Snavel-schedel',  unit: 'mm' },
-  { key: 'tarsus_lengte', label: 'Tarsus',          unit: 'mm' },
-  { key: 'tarsus_dikte',  label: 'Tarsus dikte',    unit: 'mm' },
-  { key: 'gewicht',       label: 'Gewicht',         unit: 'g'  },
+const ALL_BOEKEN_KEYS = [
+  'svensson_2023', 'svensson_2016', 'demongin_2020', 'blasco_zumeta_2023',
+  'jenni_winkler_2020', 'baker_2016', 'klaassen_voorjaar', 'klaassen_najaar',
+  'conings_1999', 'speek_1994',
 ];
-
-const ALL_BOEKEN = [
-  { key: 'svensson_2023',        label: 'Svensson (2023)' },
-  { key: 'svensson_2016',        label: 'Svensson (2016)' },
-  { key: 'demongin_2020',        label: 'Demongin (2020)' },
-  { key: 'blasco_zumeta_2023',   label: 'Blasco-Zumeta (2023)' },
-  { key: 'jenni_winkler_2020',   label: 'Jenni & Winkler (2020)' },
-  { key: 'baker_2016',           label: 'Baker (2016)' },
-  { key: 'klaassen_voorjaar',    label: 'Klaassen voorjaar (2023)' },
-  { key: 'klaassen_najaar',      label: 'Klaassen najaar (2023)' },
-  { key: 'conings_1999',         label: 'Conings (1999)' },
-  { key: 'speek_1994',           label: 'Speek (1994)' },
-];
-
-const EDITABLE_FIELDS = {
-  namen: [
-    { key: 'naam_lat', label: '🌐 Latijn' },
-    { key: 'naam_nl',  label: '🇳🇱 Nederlands' },
-    { key: 'naam_en',  label: '🇬🇧 Engels' },
-    { key: 'naam_de',  label: '🇩🇪 Duits' },
-    { key: 'naam_fr',  label: '🇫🇷 Frans' },
-    { key: 'naam_es',  label: '🇪🇸 Spaans' },
-  ],
-  taxonomie: [
-    { key: 'familie', label: 'Familie' },
-    { key: 'orde',    label: 'Orde' },
-  ],
-  ring: [
-    { key: 'ringmaat',   label: 'Ringmaat' },
-    { key: 'ruitype',    label: 'Ruitype' },
-    { key: 'euring_code',label: 'EURING-code' },
-  ],
-  nest: [
-    { key: 'nest_eileg',     label: 'Eileg' },
-    { key: 'nest_broedels',  label: 'Broedels' },
-    { key: 'nest_eieren',    label: 'Eieren' },
-    { key: 'nest_ei_dagen',  label: 'Broedtijd (dagen)' },
-    { key: 'nest_jong_dagen',label: 'Nestjong (dagen)' },
-    { key: 'broed',          label: 'Broed', gender: true },
-    { key: 'zorg',           label: 'Zorg',  gender: true },
-  ],
-  boeken: ALL_BOEKEN,
-};
-
-const boekKeys = new Set(ALL_BOEKEN.map(b => b.key));
+const boekKeys = new Set(ALL_BOEKEN_KEYS);
 function isBoekKey(key) { return boekKeys.has(key); }
 
 function resizeImage(file, maxWidth = 400) {
@@ -136,7 +88,62 @@ export default function SoortDetailEditor({
   isNieuweSoort,
   bioRangesFromCatches,
 }) {
+  const { t } = useTranslation();
   const fileInputRef = useRef(null);
+
+  const BIO_FIELDS = [
+    { key: 'vleugel',        label: t('sd_bio_vleugel'),         unit: 'mm' },
+    { key: 'handpenlengte',  label: t('sd_bio_handpen'),         unit: 'mm' },
+    { key: 'staartlengte',   label: t('sd_bio_staart'),          unit: 'mm' },
+    { key: 'kop_snavel',     label: t('sd_bio_kop_snavel'),      unit: 'mm' },
+    { key: 'snavel_schedel', label: t('sd_bio_snavel_schedel'),  unit: 'mm' },
+    { key: 'tarsus_lengte',  label: t('sd_bio_tarsus'),          unit: 'mm' },
+    { key: 'tarsus_dikte',   label: t('sd_bio_tarsus_dikte'),    unit: 'mm' },
+    { key: 'gewicht',        label: t('sd_bio_gewicht'),         unit: 'g'  },
+  ];
+
+  const ALL_BOEKEN = [
+    { key: 'svensson_2023',      label: 'Svensson (2023)' },
+    { key: 'svensson_2016',      label: 'Svensson (2016)' },
+    { key: 'demongin_2020',      label: 'Demongin (2020)' },
+    { key: 'blasco_zumeta_2023', label: 'Blasco-Zumeta (2023)' },
+    { key: 'jenni_winkler_2020', label: 'Jenni & Winkler (2020)' },
+    { key: 'baker_2016',         label: 'Baker (2016)' },
+    { key: 'klaassen_voorjaar',  label: t('sd_book_klaassen_vj') },
+    { key: 'klaassen_najaar',    label: t('sd_book_klaassen_nj') },
+    { key: 'conings_1999',       label: 'Conings (1999)' },
+    { key: 'speek_1994',         label: 'Speek (1994)' },
+  ];
+
+  const EDITABLE_FIELDS = {
+    namen: [
+      { key: 'naam_lat', label: t('sd_namen_lat') },
+      { key: 'naam_nl',  label: t('sd_namen_nl') },
+      { key: 'naam_en',  label: t('sd_namen_en') },
+      { key: 'naam_de',  label: t('sd_namen_de') },
+      { key: 'naam_fr',  label: t('sd_namen_fr') },
+      { key: 'naam_es',  label: t('sd_namen_es') },
+    ],
+    taxonomie: [
+      { key: 'familie', label: t('sd_tax_familie') },
+      { key: 'orde',    label: t('sd_tax_orde') },
+    ],
+    ring: [
+      { key: 'ringmaat',    label: t('sd_ring_ringmaat') },
+      { key: 'ruitype',     label: t('sd_ring_ruitype') },
+      { key: 'euring_code', label: t('sd_ring_euring') },
+    ],
+    nest: [
+      { key: 'nest_eileg',      label: t('sd_nest_eileg') },
+      { key: 'nest_broedels',   label: t('sd_nest_broedels') },
+      { key: 'nest_eieren',     label: t('sd_nest_eieren') },
+      { key: 'nest_ei_dagen',   label: t('sd_nest_ei_dagen') },
+      { key: 'nest_jong_dagen', label: t('sd_nest_jong_dagen') },
+      { key: 'broed',           label: t('sd_nest_broed'), gender: true },
+      { key: 'zorg',            label: t('sd_nest_zorg'),  gender: true },
+    ],
+    boeken: ALL_BOEKEN,
+  };
   const cropRef = useRef(null);
   const dragStartRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -317,22 +324,22 @@ export default function SoortDetailEditor({
 
       {/* Geslachtsbepaling */}
       <div className="sd-card">
-        <h3 className="sd-card-title">Geslachtsbepaling</h3>
+        <h3 className="sd-card-title">{t('sd_gender_det')}</h3>
         <div className="sd-det-fields">
           <div className="sd-det-block sd-det-block--m">
-            <span className="sd-det-label sd-det-label--m">{'\u2642\uFE0E'} Man</span>
+            <span className="sd-det-label sd-det-label--m">{'\u2642\uFE0E'} {t('sd_male')}</span>
             <FormattedTextarea
               value={editData.geslachts_notities_m || ''}
               onChange={e => handleField('geslachts_notities_m', e.target.value)}
-              placeholder="Kenmerken voor man..."
+              placeholder={t('sd_edit_gender_m_placeholder')}
             />
           </div>
           <div className="sd-det-block sd-det-block--f">
-            <span className="sd-det-label sd-det-label--f">{'\u2640\uFE0E'} Vrouw</span>
+            <span className="sd-det-label sd-det-label--f">{'\u2640\uFE0E'} {t('sd_female')}</span>
             <FormattedTextarea
               value={editData.geslachts_notities_f || ''}
               onChange={e => handleField('geslachts_notities_f', e.target.value)}
-              placeholder="Kenmerken voor vrouw..."
+              placeholder={t('sd_edit_gender_f_placeholder')}
             />
           </div>
         </div>
@@ -340,22 +347,22 @@ export default function SoortDetailEditor({
 
       {/* Leeftijdsbepaling */}
       <div className="sd-card">
-        <h3 className="sd-card-title">Leeftijdsbepaling</h3>
+        <h3 className="sd-card-title">{t('sd_age_det')}</h3>
         <div className="sd-det-fields">
           <div className="sd-det-block sd-det-block--vj">
-            <span className="sd-det-label sd-det-label--vj">Voorjaar</span>
+            <span className="sd-det-label sd-det-label--vj">{t('sd_spring')}</span>
             <FormattedTextarea
               value={editData.leeftijds_notities_vj || ''}
               onChange={e => handleField('leeftijds_notities_vj', e.target.value)}
-              placeholder="Leeftijdsbepaling in voorjaar..."
+              placeholder={t('sd_edit_age_vj_placeholder')}
             />
           </div>
           <div className="sd-det-block sd-det-block--nj">
-            <span className="sd-det-label sd-det-label--nj">Najaar</span>
+            <span className="sd-det-label sd-det-label--nj">{t('sd_autumn')}</span>
             <FormattedTextarea
               value={editData.leeftijds_notities_nj || ''}
               onChange={e => handleField('leeftijds_notities_nj', e.target.value)}
-              placeholder="Leeftijdsbepaling in najaar..."
+              placeholder={t('sd_edit_age_nj_placeholder')}
             />
           </div>
         </div>
@@ -363,24 +370,24 @@ export default function SoortDetailEditor({
 
       {/* Ring & Rui */}
       <div className="sd-card">
-        <h3 className="sd-card-title">Ring & Rui</h3>
+        <h3 className="sd-card-title">{t('sd_ring_rui')}</h3>
         {EDITABLE_FIELDS.ring.map(f => renderEditField(f.key, f.label))}
       </div>
 
       {/* Namen + Biometrie naast elkaar */}
       <div className="sd-two-cards">
         <div className="sd-card">
-          <h3 className="sd-card-title">Namen</h3>
+          <h3 className="sd-card-title">{t('sd_names')}</h3>
           {EDITABLE_FIELDS.namen
             .filter(f => !(isNieuweSoort && f.key === 'naam_nl'))
             .map(f => renderEditField(f.key, f.label))}
           <div className="sd-section-divider" />
-          <span className="sd-section-label">Taxonomie</span>
+          <span className="sd-section-label">{t('sd_taxonomy')}</span>
           {EDITABLE_FIELDS.taxonomie.map(f => renderEditField(f.key, f.label))}
         </div>
 
         <div className="sd-card">
-          <h3 className="sd-card-title">Biometrie</h3>
+          <h3 className="sd-card-title">{t('sd_biometrics')}</h3>
           {BIO_FIELDS.map(f => (
             <div key={f.key} className="sd-bio-edit-group">
               <div className="sd-bio-edit-field-label">
@@ -393,7 +400,7 @@ export default function SoortDetailEditor({
                 )}
               </div>
               {[
-                { prefix: null, label: 'Alg.', cls: '' },
+                { prefix: null, label: t('sd_general_abbr'), cls: '' },
                 { prefix: 'M',  label: '\u2642\uFE0E', cls: ' sd-bio-edit-subrow--m' },
                 { prefix: 'F',  label: '\u2640\uFE0E', cls: ' sd-bio-edit-subrow--f' },
               ].map(({ prefix, label, cls }) => (
@@ -427,11 +434,11 @@ export default function SoortDetailEditor({
       {/* Nestgegevens + Determinatieboeken naast elkaar */}
       <div className="sd-two-cards">
         <div className="sd-card">
-          <h3 className="sd-card-title">Nestgegevens</h3>
+          <h3 className="sd-card-title">{t('sd_nest_data')}</h3>
           {EDITABLE_FIELDS.nest.map(f => renderEditField(f.key, f.label, { gender: f.gender }))}
         </div>
         <div className="sd-card">
-          <h3 className="sd-card-title">Determinatieboeken</h3>
+          <h3 className="sd-card-title">{t('sd_det_books')}</h3>
           {EDITABLE_FIELDS.boeken.map(f => renderEditField(f.key, f.label))}
         </div>
       </div>

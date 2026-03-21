@@ -1,6 +1,13 @@
-export const VERSIE = '1.3.7';
+export const VERSIE = '1.3.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.3.8',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'i18n: soortdetailpagina volledig vertaald — biometrie-velden (Vleugel/Wing/Flügel etc.), namen-sectie (Latijn/Latin/Latein), taxonomie (Familie/Orde), nestgegevens (Eileg/Clutch size/Gelegegröße etc.) en determinatieboeken (Klaassen voorjaar/spring/Frühjahr)',
+    ],
+  },
   {
     versie: '1.3.7',
     datum: '2026-03-21',

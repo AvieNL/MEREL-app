@@ -17,61 +17,13 @@ import './SoortDetail.css';
 
 function leeftijdLabel(code) { return LEEFTIJD_LABEL[code] || code; }
 
-const BIO_FIELDS = [
-  { key: 'vleugel',       label: 'Vleugel',        unit: 'mm' },
-  { key: 'handpenlengte', label: 'P8 / Handpen',   unit: 'mm' },
-  { key: 'staartlengte',  label: 'Staart',          unit: 'mm' },
-  { key: 'kop_snavel',    label: 'Snavel-veer',     unit: 'mm' },
-  { key: 'snavel_schedel',label: 'Snavel-schedel',  unit: 'mm' },
-  { key: 'tarsus_lengte', label: 'Tarsus',          unit: 'mm' },
-  { key: 'tarsus_dikte',  label: 'Tarsus dikte',    unit: 'mm' },
-  { key: 'gewicht',       label: 'Gewicht',         unit: 'g'  },
+const ALL_BOEKEN_KEYS = [
+  'svensson_2023', 'svensson_2016', 'demongin_2020', 'blasco_zumeta_2023',
+  'jenni_winkler_2020', 'baker_2016', 'klaassen_voorjaar', 'klaassen_najaar',
+  'conings_1999', 'speek_1994',
 ];
 
-const ALL_BOEKEN = [
-  { key: 'svensson_2023',        label: 'Svensson (2023)' },
-  { key: 'svensson_2016',        label: 'Svensson (2016)' },
-  { key: 'demongin_2020',        label: 'Demongin (2020)' },
-  { key: 'blasco_zumeta_2023',   label: 'Blasco-Zumeta (2023)' },
-  { key: 'jenni_winkler_2020',   label: 'Jenni & Winkler (2020)' },
-  { key: 'baker_2016',           label: 'Baker (2016)' },
-  { key: 'klaassen_voorjaar',    label: 'Klaassen voorjaar (2023)' },
-  { key: 'klaassen_najaar',      label: 'Klaassen najaar (2023)' },
-  { key: 'conings_1999',         label: 'Conings (1999)' },
-  { key: 'speek_1994',           label: 'Speek (1994)' },
-];
-
-const EDITABLE_FIELDS = {
-  namen: [
-    { key: 'naam_lat', label: '🌐 Latijn' },
-    { key: 'naam_nl',  label: '🇳🇱 Nederlands' },
-    { key: 'naam_en',  label: '🇬🇧 Engels' },
-    { key: 'naam_de',  label: '🇩🇪 Duits' },
-    { key: 'naam_fr',  label: '🇫🇷 Frans' },
-    { key: 'naam_es',  label: '🇪🇸 Spaans' },
-  ],
-  taxonomie: [
-    { key: 'familie', label: 'Familie' },
-    { key: 'orde',    label: 'Orde' },
-  ],
-  ring: [
-    { key: 'ringmaat',    label: 'Ringmaat' },
-    { key: 'ruitype',     label: 'Ruitype' },
-    { key: 'euring_code', label: 'EURING-code' },
-  ],
-  nest: [
-    { key: 'nest_eileg',      label: 'Eileg' },
-    { key: 'nest_broedels',   label: 'Broedels' },
-    { key: 'nest_eieren',     label: 'Eieren' },
-    { key: 'nest_ei_dagen',   label: 'Broedtijd (dagen)' },
-    { key: 'nest_jong_dagen', label: 'Nestjong (dagen)' },
-    { key: 'broed',           label: 'Broed', gender: true },
-    { key: 'zorg',            label: 'Zorg',  gender: true },
-  ],
-  boeken: ALL_BOEKEN,
-};
-
-const boekKeys = new Set(ALL_BOEKEN.map(b => b.key));
+const boekKeys = new Set(ALL_BOEKEN_KEYS);
 
 function isBoekKey(key) {
   return boekKeys.has(key);
@@ -85,6 +37,61 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const decodedNaam = decodeURIComponent(naam);
   const { isAdmin, isViewer } = useRole();
   const { t, i18n } = useTranslation();
+
+  const BIO_FIELDS = [
+    { key: 'vleugel',        label: t('sd_bio_vleugel'),         unit: 'mm' },
+    { key: 'handpenlengte',  label: t('sd_bio_handpen'),         unit: 'mm' },
+    { key: 'staartlengte',   label: t('sd_bio_staart'),          unit: 'mm' },
+    { key: 'kop_snavel',     label: t('sd_bio_kop_snavel'),      unit: 'mm' },
+    { key: 'snavel_schedel', label: t('sd_bio_snavel_schedel'),  unit: 'mm' },
+    { key: 'tarsus_lengte',  label: t('sd_bio_tarsus'),          unit: 'mm' },
+    { key: 'tarsus_dikte',   label: t('sd_bio_tarsus_dikte'),    unit: 'mm' },
+    { key: 'gewicht',        label: t('sd_bio_gewicht'),         unit: 'g'  },
+  ];
+
+  const ALL_BOEKEN = [
+    { key: 'svensson_2023',      label: 'Svensson (2023)' },
+    { key: 'svensson_2016',      label: 'Svensson (2016)' },
+    { key: 'demongin_2020',      label: 'Demongin (2020)' },
+    { key: 'blasco_zumeta_2023', label: 'Blasco-Zumeta (2023)' },
+    { key: 'jenni_winkler_2020', label: 'Jenni & Winkler (2020)' },
+    { key: 'baker_2016',         label: 'Baker (2016)' },
+    { key: 'klaassen_voorjaar',  label: t('sd_book_klaassen_vj') },
+    { key: 'klaassen_najaar',    label: t('sd_book_klaassen_nj') },
+    { key: 'conings_1999',       label: 'Conings (1999)' },
+    { key: 'speek_1994',         label: 'Speek (1994)' },
+  ];
+
+  const EDITABLE_FIELDS = {
+    namen: [
+      { key: 'naam_lat', label: t('sd_namen_lat') },
+      { key: 'naam_nl',  label: t('sd_namen_nl') },
+      { key: 'naam_en',  label: t('sd_namen_en') },
+      { key: 'naam_de',  label: t('sd_namen_de') },
+      { key: 'naam_fr',  label: t('sd_namen_fr') },
+      { key: 'naam_es',  label: t('sd_namen_es') },
+    ],
+    taxonomie: [
+      { key: 'familie', label: t('sd_tax_familie') },
+      { key: 'orde',    label: t('sd_tax_orde') },
+    ],
+    ring: [
+      { key: 'ringmaat',    label: t('sd_ring_ringmaat') },
+      { key: 'ruitype',     label: t('sd_ring_ruitype') },
+      { key: 'euring_code', label: t('sd_ring_euring') },
+    ],
+    nest: [
+      { key: 'nest_eileg',      label: t('sd_nest_eileg') },
+      { key: 'nest_broedels',   label: t('sd_nest_broedels') },
+      { key: 'nest_eieren',     label: t('sd_nest_eieren') },
+      { key: 'nest_ei_dagen',   label: t('sd_nest_ei_dagen') },
+      { key: 'nest_jong_dagen', label: t('sd_nest_jong_dagen') },
+      { key: 'broed',           label: t('sd_nest_broed'), gender: true },
+      { key: 'zorg',            label: t('sd_nest_zorg'),  gender: true },
+    ],
+    boeken: ALL_BOEKEN,
+  };
+
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
   const soorten = useMemo(
