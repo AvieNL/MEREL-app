@@ -5,7 +5,7 @@ import { db } from '../lib/db';
 import i18n from '../i18n/index.js';
 import { pullSpeciesIfNeeded } from '../hooks/useSpeciesRef';
 import { pullSpeciesOverrides } from '../hooks/useSpeciesOverrides';
-import { pullVeldConfigIfNeeded } from '../hooks/useVeldConfig';
+import { useSyncPulls } from '../hooks/useSyncPulls';
 import { executeQueueItem } from '../utils/syncQueue';
 
 function getLabelForQueueItem(tableName, data) {
@@ -92,29 +92,23 @@ export function SyncProvider({ children }) {
     };
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Bij (her)inloggen: pending count ophalen, wachtrij verwerken en referentiedata refreshen
+  // Pull-orchestratie: wanneer referentiedata wordt opgehaald (login + heractivering)
+  useSyncPulls(user);
+
+  // Bij (her)inloggen: pending count ophalen en wachtrij verwerken
   useEffect(() => {
     if (!user) {
       setPendingCount(0);
       return;
     }
     refreshPendingCount();
-    if (navigator.onLine) {
-      processQueue();
-      pullSpeciesIfNeeded(false).catch(e => console.warn('Species pull mislukt:', e.message));
-      pullVeldConfigIfNeeded(false).catch(e => console.warn('VeldConfig pull mislukt:', e.message));
-    }
+    if (navigator.onLine) processQueue();
   }, [user]);  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // App wordt weer actief (bijv. terugkomen van achtergrond): sync uitvoeren
+  // App wordt weer actief (bijv. terugkomen van achtergrond): wachtrij verwerken
   useEffect(() => {
     function handleVisibility() {
-      if (!document.hidden && navigator.onLine && user) {
-        processQueue();
-        pullSpeciesOverrides(user.id).catch(e => console.warn('Override pull mislukt:', e.message));
-        pullSpeciesIfNeeded(false).catch(e => console.warn('Species pull mislukt:', e.message));
-        pullVeldConfigIfNeeded(false).catch(e => console.warn('VeldConfig pull mislukt:', e.message));
-      }
+      if (!document.hidden && navigator.onLine && user) processQueue();
     }
     document.addEventListener('visibilitychange', handleVisibility);
     return () => document.removeEventListener('visibilitychange', handleVisibility);

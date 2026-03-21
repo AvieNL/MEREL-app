@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.6';
+export const VERSIE = '1.5.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.7',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Refactor: pull-orchestratie geëxtraheerd naar useSyncPulls hook (scheiding van concerns)',
+      'SyncContext beheert nu alleen nog de mutatie-wachtrij; pulls staan in useSyncPulls.js',
+    ],
+    wijzigingen_en: [
+      'Refactor: pull orchestration extracted to useSyncPulls hook (separation of concerns)',
+      'SyncContext now only manages the mutation queue; pulls are in useSyncPulls.js',
+    ],
+    wijzigingen_de: [
+      'Refactor: Pull-Orchestrierung in useSyncPulls-Hook extrahiert (Trennung der Verantwortlichkeiten)',
+      'SyncContext verwaltet jetzt nur noch die Mutations-Warteschlange; Pulls sind in useSyncPulls.js',
+    ],
+  },
   {
     versie: '1.5.6',
     datum: '2026-03-21',
