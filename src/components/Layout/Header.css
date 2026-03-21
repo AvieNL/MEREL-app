@@ -61,6 +61,7 @@
 .pref-btn {
   background: none;
   border: none;
+  color: var(--text-secondary, #94a3b8);
   padding: 2px 4px;
   cursor: pointer;
   font-size: 1.15rem;
@@ -76,6 +77,17 @@
 
 .pref-btn:hover {
   opacity: 1;
+  color: var(--text-primary, #f1f5f9);
+}
+
+/* Onzichtbare brug zodat de muis van de knop naar het dropdown-menu kan bewegen */
+.pref-menu::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 8px;
 }
 
 .pref-dropdown {

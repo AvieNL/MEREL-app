@@ -24,6 +24,10 @@
   transition: color 0.2s;
 }
 
+.nav-tab:hover {
+  text-decoration: none;
+}
+
 .nav-tab.active {
   color: var(--accent);
 }
