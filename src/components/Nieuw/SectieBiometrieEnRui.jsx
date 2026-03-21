@@ -3,6 +3,7 @@ import { useNieuwForm } from './NieuwFormContext';
 import {
   VET_OPTIONS, VLIEGSPIER_OPTIONS, BROEDVLEK_OPTIONS, HANDICAP_OPTIONS, CLOACA_OPTIONS,
   PLAATSCODE_OPTIONS, SNAVEL_METHODE_OPTIONS, NAUWK_COORD_OPTIONS, RUI_LICHAAM_OPTIONS,
+  getOptLabel,
 } from './NieuwPage.constants';
 import { renderGeslachtTekst } from './NieuwPage.utils';
 import RuiscoreDiagram from './RuiscoreDiagram';
@@ -10,7 +11,8 @@ import LocatiePicker from './LocatiePicker';
 import './NieuwPage.css';
 
 export default function SectieBiometrieEnRui() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const {
     form,
     update,
@@ -49,7 +51,7 @@ export default function SectieBiometrieEnRui() {
                 <label>{t('form_moult_score')}</label>
                 <select value={form.rui_lichaam} onChange={e => update('rui_lichaam', e.target.value)}>
                   {RUI_LICHAAM_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                   ))}
                 </select>
               </div>
@@ -57,7 +59,7 @@ export default function SectieBiometrieEnRui() {
                 <label>{t('form_fat')}</label>
                 <select value={form.vet} onChange={e => update('vet', e.target.value)}>
                   {VET_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                   ))}
                 </select>
               </div>
@@ -65,7 +67,7 @@ export default function SectieBiometrieEnRui() {
                 <label>{t('form_flight_muscle')}</label>
                 <select value={form.borstspier} onChange={e => update('borstspier', e.target.value)}>
                   {VLIEGSPIER_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                   ))}
                 </select>
               </div>
@@ -88,7 +90,7 @@ export default function SectieBiometrieEnRui() {
                 <label>{t('form_cloaca')}</label>
                 <select value={form.cloaca} onChange={e => update('cloaca', e.target.value)}>
                   {CLOACA_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                   ))}
                 </select>
                 {cloacaWarning && (
@@ -99,7 +101,7 @@ export default function SectieBiometrieEnRui() {
                 <label>{t('form_brood_patch')}</label>
                 <select value={form.broedvlek} onChange={e => update('broedvlek', e.target.value)}>
                   {BROEDVLEK_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                   ))}
                 </select>
               </div>
@@ -107,7 +109,7 @@ export default function SectieBiometrieEnRui() {
                 <label>{t('form_handicap')}</label>
                 <select value={form.handicap} onChange={e => update('handicap', e.target.value)}>
                   {HANDICAP_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                   ))}
                 </select>
               </div>
@@ -214,7 +216,7 @@ export default function SectieBiometrieEnRui() {
                 <label>{t('form_bill_method')}</label>
                 <select value={form.snavel_methode} onChange={e => update('snavel_methode', e.target.value)}>
                   {SNAVEL_METHODE_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                   ))}
                 </select>
               </div>
@@ -239,7 +241,7 @@ export default function SectieBiometrieEnRui() {
                 <label>{t('form_place_code')}</label>
                 <select value={form.plaatscode} onChange={e => update('plaatscode', e.target.value)}>
                   {PLAATSCODE_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                   ))}
                 </select>
               </div>
@@ -261,7 +263,7 @@ export default function SectieBiometrieEnRui() {
               <label>{t('form_coord_accuracy')}</label>
               <select value={form.nauwk_coord} onChange={e => update('nauwk_coord', e.target.value)}>
                 {NAUWK_COORD_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
             </div>

@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
-import { NAUWK_DATUM_OPTIONS } from './NieuwPage.constants';
+import { NAUWK_DATUM_OPTIONS, getOptLabel } from './NieuwPage.constants';
 import './NieuwPage.css';
 
 export default function SectieVangst() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const {
     form,
     update,
@@ -56,7 +57,7 @@ export default function SectieVangst() {
               <label>{t('form_date_accuracy')}</label>
               <select value={form.nauwk_vangstdatum} onChange={e => update('nauwk_vangstdatum', Number(e.target.value))}>
                 {NAUWK_DATUM_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
             </div>

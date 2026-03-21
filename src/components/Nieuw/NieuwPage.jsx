@@ -3,8 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useVeldConfig } from '../../hooks/useVeldConfig';
-import { euringReference } from '../../data/euring-reference.js';
+import { euringReference, getBeschrijving } from '../../data/euring-reference.js';
 import { buildEuringLookup } from '../../utils/euring-lookup';
+import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { useRuitypen } from '../../hooks/useRuitypen';
 import { toYMD } from '../../utils/dateHelper';
 import { parseVal } from '../../utils/bioHelper';
@@ -31,7 +32,8 @@ import './NieuwPage.css';
 
 export default function NieuwPage() {
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const displayNaam = useDisplayNaam();
   const { records, addRecord, updateRecord } = useRecords();
   const { projects: allProjects } = useProjects();
   const projects = allProjects.filter(p => p.actief);
@@ -55,12 +57,15 @@ export default function NieuwPage() {
   );
 
   // Codes voor een select: gebruik configMap als beschikbaar (met zichtbaar-filter), anders euringReference
+  // Vertaalt beschrijving op basis van huidige taal
   function getCodesForSelect(veldKey) {
     const cfg = configMap[veldKey];
-    if (cfg?.codes && cfg.codes.length > 0) {
-      return cfg.codes.filter(c => c.zichtbaar !== false);
-    }
-    return euringReference[veldKey]?.codes ?? [];
+    const lang = i18n.language;
+    const codes = cfg?.codes?.length > 0
+      ? cfg.codes.filter(c => c.zichtbaar !== false)
+      : (euringReference[veldKey]?.codes ?? []);
+    if (lang === 'nl') return codes;
+    return codes.map(c => ({ ...c, beschrijving: getBeschrijving(c, lang) }));
   }
 
   // Is een veld zichtbaar (niet verborgen door admin)?
@@ -148,6 +153,7 @@ export default function NieuwPage() {
   });
   const [suggestions, setSuggestions] = useState([]);
   const [saved, setSaved] = useState(false);
+  const [vogelnaamDisplay, setVogelnaamDisplay] = useState(editRecord?.vogelnaam || '');
   const [ruikaart, setRuikaart] = useState(Array(RUIKAART_SLAGEN).fill(''));
 
   const update = useCallback((field, value) => {
@@ -258,8 +264,19 @@ export default function NieuwPage() {
 
   const recentSet = useMemo(() => new Set(recentSpecies), [recentSpecies]);
 
+  // Update weergave-naam als soort geselecteerd is (bij taalwissel of na laden soortendata)
+  useEffect(() => {
+    if (speciesInfo) {
+      setVogelnaamDisplay(displayNaam(speciesInfo.naam_nl) || speciesInfo.naam_nl);
+    }
+  }, [speciesInfo?.naam_nl, displayNaam]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const searchSpecies = useCallback((query) => {
-    const fields = ['naam_nl', 'naam_lat', 'naam_en', 'naam_de'];
+    // Huidige taal eerst doorzoeken
+    const lang = i18n.language;
+    const langField = lang === 'en' ? 'naam_en' : lang === 'de' ? 'naam_de' : 'naam_nl';
+    const allFields = ['naam_nl', 'naam_lat', 'naam_en', 'naam_de'];
+    const fields = [langField, ...allFields.filter(f => f !== langField)];
     const results = [];
 
     for (const sp of speciesData) {
@@ -308,9 +325,10 @@ export default function NieuwPage() {
     });
 
     return results.slice(0, 10);
-  }, [recentSet, speciesData]);
+  }, [recentSet, speciesData, i18n.language]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSpeciesInput = useCallback((value) => {
+    setVogelnaamDisplay(value);
     update('vogelnaam', value);
     clearTimeout(searchDebounceRef.current);
     if (value.length >= 2) {
@@ -419,6 +437,7 @@ export default function NieuwPage() {
       ringer_nummer: settings?.ringerNummer || '',
     });
     resetRuikaart();
+    setVogelnaamDisplay('');
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
     setTimeout(() => {
@@ -571,6 +590,8 @@ export default function NieuwPage() {
 
   const contextValue = {
     form,
+    vogelnaamDisplay,
+    setVogelnaamDisplay,
     update,
     setForm,
     setFormErrors,

@@ -62,6 +62,7 @@ export default function SoortenPage({ records }) {
         s.naam_nl.toLowerCase().includes(lower) ||
         (s.naam_lat && s.naam_lat.toLowerCase().includes(lower)) ||
         (s.naam_en && s.naam_en.toLowerCase().includes(lower)) ||
+        (s.naam_de && s.naam_de.toLowerCase().includes(lower)) ||
         (euringLookup[s.naam_nl?.toLowerCase()] && euringLookup[s.naam_nl.toLowerCase()].includes(lower))
       );
     }

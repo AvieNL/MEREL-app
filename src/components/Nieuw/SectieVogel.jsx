@@ -4,13 +4,15 @@ import {
   LEEFTIJD_OPTIONS, PULLUS_LEEFTIJD_OPTIONS, NAUWK_LEEFTIJD_OPTIONS,
   BROEDGROOTTE_OPTIONS, GESLACHT_OPTIONS, GESLACHTSBEPALING_OPTIONS,
   ZEKER_OMSTANDIG_OPTIONS, CONDITIE_OPTIONS, VERPLAATST_OPTIONS,
+  getOptLabel,
 } from './NieuwPage.constants';
 import InfoPanel from './InfoPanel';
 import RuiSeizoenTekst from './RuiSeizoenTekst';
 import './NieuwPage.css';
 
 export default function SectieVogel() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const {
     form,
     update,
@@ -38,7 +40,7 @@ export default function SectieVogel() {
               <label>{t('form_sex')}</label>
               <select value={form.geslacht} onChange={e => update('geslacht', e.target.value)}>
                 {GESLACHT_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
               <InfoPanel items={[
@@ -50,7 +52,7 @@ export default function SectieVogel() {
               <label>{t('form_sex_determination')}</label>
               <select value={form.geslachtsbepaling} onChange={e => update('geslachtsbepaling', e.target.value)}>
                 {GESLACHTSBEPALING_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
             </div>
@@ -78,7 +80,7 @@ export default function SectieVogel() {
             <label>{t('form_age')}</label>
             <select value={form.leeftijd} onChange={e => update('leeftijd', e.target.value)}>
               {LEEFTIJD_OPTIONS.map(o => (
-                <option key={o.value} value={o.value}>{o.label}</option>
+                <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
               ))}
             </select>
             <InfoPanel items={[
@@ -92,7 +94,7 @@ export default function SectieVogel() {
                     <label>{t('form_pullus_age')}</label>
                     <select value={form.pul_leeftijd} onChange={e => update('pul_leeftijd', e.target.value)}>
                       {PULLUS_LEEFTIJD_OPTIONS.map(o => (
-                        <option key={o.value} value={o.value}>{o.label}</option>
+                        <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                       ))}
                     </select>
                   </div>
@@ -100,7 +102,7 @@ export default function SectieVogel() {
                     <label>{t('form_pullus_accuracy')}</label>
                     <select value={form.nauwk_pul_leeftijd} onChange={e => update('nauwk_pul_leeftijd', e.target.value)}>
                       {NAUWK_LEEFTIJD_OPTIONS.map(o => (
-                        <option key={o.value} value={o.value}>{o.label}</option>
+                        <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                       ))}
                     </select>
                   </div>
@@ -109,7 +111,7 @@ export default function SectieVogel() {
                   <label>{t('form_brood_size')}</label>
                   <select value={form.broedselgrootte} onChange={e => update('broedselgrootte', e.target.value)}>
                     {BROEDGROOTTE_OPTIONS.map(o => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
+                      <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                     ))}
                   </select>
                   {speciesInfo?.nest_eieren && (
@@ -309,7 +311,7 @@ export default function SectieVogel() {
               <label>{t('form_condition')}</label>
               <select value={form.conditie} onChange={e => update('conditie', e.target.value)}>
                 {CONDITIE_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
             </div>
@@ -327,7 +329,7 @@ export default function SectieVogel() {
               <label>{t('form_circumstances_cert')}</label>
               <select value={form.zeker_omstandigheden} onChange={e => update('zeker_omstandigheden', Number(e.target.value))}>
                 {ZEKER_OMSTANDIG_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
             </div>
@@ -345,7 +347,7 @@ export default function SectieVogel() {
               <label>{t('form_moved')}</label>
               <select value={form.verplaatst} onChange={e => update('verplaatst', Number(e.target.value))}>
                 {VERPLAATST_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
             </div>

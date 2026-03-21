@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import {
-  ANDERE_MERKTEKENS_OPTIONS, VERIFICATIE_OPTIONS, LEEFTIJD_LABELS,
+  ANDERE_MERKTEKENS_OPTIONS, VERIFICATIE_OPTIONS, LEEFTIJD_LABELS, getOptLabel,
 } from './NieuwPage.constants';
 import './NieuwPage.css';
 
 export default function SectieRinggegevens() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const {
     form,
     update,
@@ -44,7 +45,7 @@ export default function SectieRinggegevens() {
               <label>{t('form_ring_central')}</label>
               <select value={form.centrale} onChange={e => update('centrale', e.target.value)}>
                 {ringcentraleOptions.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
             </div>
@@ -87,7 +88,7 @@ export default function SectieRinggegevens() {
               <label>{t('form_verification')}</label>
               <select value={form.verificatie} onChange={e => update('verificatie', Number(e.target.value))}>
                 {VERIFICATIE_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
             </div>
@@ -106,7 +107,7 @@ export default function SectieRinggegevens() {
               <label>{t('form_other_marks')}</label>
               <select value={form.andere_merktekens} onChange={e => update('andere_merktekens', e.target.value)}>
                 {ANDERE_MERKTEKENS_OPTIONS.map(o => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
             </div>

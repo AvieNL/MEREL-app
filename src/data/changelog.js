@@ -1,6 +1,17 @@
-export const VERSIE = '1.3.6';
+export const VERSIE = '1.3.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.3.7',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'i18n: soortzoekactie zoekt nu eerst in de actieve taal (NL/EN/DE) — Duits zoeken vindt direct de juiste soort',
+      'i18n: soortnamen in zoeksuggesties en invoerveld worden getoond in de actieve taal',
+      'i18n: alle dropdownkeuzes in het invoerformulier volledig vertaald (NL/EN/DE): leeftijd, geslacht, vet, borstspier, broedvlek, cloaca, conditie, handicap, rui, coördinaatnauwkeurigheid, datumnauwkeurigheid, en meer',
+      'i18n: EURING-codes voor vangstmethode, lokmiddelen, status, omstandighedenzekerheid, gemanipuleerd, metalenringinfo en identificatiemethode vertaald',
+      'i18n: soortenbrowser zoekt nu ook op Duitse naam',
+    ],
+  },
   {
     versie: '1.3.6',
     datum: '2026-03-21',

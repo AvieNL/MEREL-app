@@ -1,12 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
-import { TAAL_LABELS } from './NieuwPage.constants';
+import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import './NieuwPage.css';
 
 export default function SectieSoort() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const displayNaam = useDisplayNaam();
   const {
     form,
+    vogelnaamDisplay,
+    setVogelnaamDisplay,
     errCls,
     sections,
     toggleSection,
@@ -22,6 +25,13 @@ export default function SectieSoort() {
     editRecord,
   } = useNieuwForm();
 
+  const TAAL_DISPLAY = {
+    naam_nl: t('lang_nl'),
+    naam_lat: t('lang_lat'),
+    naam_en: t('lang_en'),
+    naam_de: t('lang_de'),
+  };
+
   return (
     <div className="section">
       <div className="section-header" onClick={() => toggleSection('nieuweVangst')}>
@@ -35,7 +45,7 @@ export default function SectieSoort() {
             <input
               ref={vogelnaamRef}
               type="text"
-              value={form.vogelnaam}
+              value={vogelnaamDisplay}
               onChange={e => handleSpeciesInput(e.target.value)}
               onFocus={handleSpeciesFocus}
               placeholder={t('form_bird_placeholder')}
@@ -45,16 +55,19 @@ export default function SectieSoort() {
               <ul className="suggestions">
                 {suggestions.map(s => {
                   const code = euringLookup[s.naam_nl?.toLowerCase()] || '';
+                  const primNaam = displayNaam(s.naam_nl) || s.naam_nl;
+                  // Toon matchedName alleen als de overeenkomst in een andere taal was dan de weergavetaal
+                  const showSub = s.matchedName && s.matchedField !== 'naam_' + i18n.language;
                   return (
                     <li key={s.naam_nl + (s.matchedField || '')} onClick={() => selectSpecies(s.naam_nl)}>
                       <div className="suggestion-content">
                         <span className="suggestion-name">
-                          {s.naam_nl}{code && <span className="suggestion-euring"> ({code})</span>}
+                          {primNaam}{code && <span className="suggestion-euring"> ({code})</span>}
                         </span>
-                        {s.matchedName && (
-                          <span className="suggestion-sub">{s.matchedName} ({TAAL_LABELS[s.matchedField]})</span>
+                        {showSub && (
+                          <span className="suggestion-sub">{s.matchedName} ({TAAL_DISPLAY[s.matchedField]})</span>
                         )}
-                        {s.isRecent && !s.matchedName && form.vogelnaam.length < 2 && (
+                        {s.isRecent && !showSub && form.vogelnaam.length < 2 && (
                           <span className="suggestion-sub">{t('form_recently_used')}</span>
                         )}
                       </div>
