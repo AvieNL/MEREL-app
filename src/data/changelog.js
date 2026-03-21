@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.11';
+export const VERSIE = '1.5.12';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.12',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'UX: Recordbadge toont icoon + vertaalde afkorting in 4 categorieën met kleurcodering',
+      '○ Nw (groen) · ⟳ Tv zelfde project (oranje) · ⟲ Tvᵒ ander eigen project (geel) · ⊕ Tvˣ extern (rood)',
+    ],
+    wijzigingen_en: [
+      'UX: Record badge shows icon + translated abbreviation in 4 categories with colour coding',
+      '○ Nc (green) · ⟳ Rc same project (orange) · ⟲ Rcᵒ other own project (yellow) · ⊕ Rcˣ external (red)',
+    ],
+    wijzigingen_de: [
+      'UX: Fang-Badge zeigt Symbol + übersetzte Abkürzung in 4 Kategorien mit Farbkodierung',
+      '○ Nf (grün) · ⟳ Wf gleiches Projekt (orange) · ⟲ Wfᵒ anderes eigenes Projekt (gelb) · ⊕ Wfˣ extern (rot)',
+    ],
+  },
   {
     versie: '1.5.11',
     datum: '2026-03-21',

@@ -41,6 +41,32 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
 
+  // Index: ringnummer → originele NV-record (voor TV-categorisatie)
+  const nvByRing = useMemo(() => {
+    const map = new Map();
+    records.forEach(r => {
+      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4' && r.ringnummer) {
+        map.set(r.ringnummer.toLowerCase(), r);
+      }
+    });
+    return map;
+  }, [records]);
+
+  function getRecordType(r) {
+    if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') return 'nw';
+    if (!r.ringnummer) return 'tvx';
+    const original = nvByRing.get(r.ringnummer.toLowerCase());
+    if (!original) return 'tvx';
+    return original.project === r.project ? 'tv' : 'tvo';
+  }
+
+  const TYPE_CFG = {
+    nw:  { icon: '○', cls: 'record-type--nw',  key: 'record_type_nw' },
+    tv:  { icon: '⟳', cls: 'record-type--tv',  key: 'record_type_tv' },
+    tvo: { icon: '⟲', cls: 'record-type--tvo', key: 'record_type_tvo' },
+    tvx: { icon: '⊕', cls: 'record-type--tvx', key: 'record_type_tvx' },
+  };
+
   // Index: naam_nl (lowercase) → alle taalnamen (lowercase) voor meertalig zoeken
   const speciesNaamIndex = useMemo(() => {
     const map = new Map();
@@ -117,7 +143,8 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
           <div className="empty-state">{t('records_empty')}</div>
         ) : (
           filtered.slice(0, MAX_RECORDS_WEERGAVE).map(r => {
-            const isTerugvangst = r.metalenringinfo === 4 || r.metalenringinfo === '4';
+            const type = getRecordType(r);
+            const cfg = TYPE_CFG[type];
             return (
             <div
               key={r.id}
@@ -126,7 +153,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
               onClick={() => setExpanded(expanded === r.id ? null : r.id)}
             >
               <div className="record-header">
-                <span className={`record-type${isTerugvangst ? ' record-type--tv' : ''}`}>{isTerugvangst ? 'TV' : 'NV'}</span>
+                <span className={`record-type ${cfg.cls}`}>{cfg.icon} {t(cfg.key)}</span>
                 <div className="record-main">
                   <strong>
                     {r.vogelnaam ? displayNaam(r.vogelnaam) : t('records_unknown')}

@@ -47,16 +47,30 @@
   padding: 1px 5px;
   border-radius: 4px;
   flex-shrink: 0;
-  background: rgba(56, 189, 248, 0.12);
-  color: var(--accent);
   letter-spacing: 0.3px;
   align-self: flex-start;
   margin-top: 2px;
+  font-variant-numeric: normal;
+}
+
+.record-type--nw {
+  background: var(--success-bg);
+  color: var(--success);
 }
 
 .record-type--tv {
-  background: rgba(234, 179, 8, 0.12);
+  background: rgba(249, 115, 22, 0.15);
+  color: #f97316;
+}
+
+.record-type--tvo {
+  background: var(--warning-bg);
   color: var(--warning);
+}
+
+.record-type--tvx {
+  background: var(--danger-bg);
+  color: var(--danger);
 }
 
 .record-main {
