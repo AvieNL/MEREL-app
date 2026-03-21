@@ -7,6 +7,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [profileError, setProfileError] = useState(false);
   const [simulatedRole, setSimulatedRoleState] = useState(
     () => sessionStorage.getItem('vrs-simulated-role') || null
   );
@@ -57,16 +58,21 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function loadProfile(userId) {
+    setProfileError(false);
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
-      if (error) console.error('Profiel laden mislukt:', error.message);
+      if (error) {
+        console.error('Profiel laden mislukt:', error.message);
+        setProfileError(true);
+      }
       setProfile(data ?? null);
     } catch (err) {
       console.error('Profiel laden mislukt:', err.message);
+      setProfileError(true);
     } finally {
       setLoading(false);
     }
@@ -104,7 +110,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, login, register, logout, updateProfile, simulatedRole, setSimulatedRole }}>
+    <AuthContext.Provider value={{ user, profile, loading, profileError, login, register, logout, updateProfile, simulatedRole, setSimulatedRole }}>
       {children}
     </AuthContext.Provider>
   );

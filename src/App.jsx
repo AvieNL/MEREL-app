@@ -103,7 +103,8 @@ function PageSpinner() {
 }
 
 function AppShell() {
-  const { user, loading } = useAuth();
+  const { user, loading, profileError } = useAuth();
+  const { t } = useTranslation();
 
   if (loading) {
     return (
@@ -134,7 +135,19 @@ function AppShell() {
     return <LoginPage />;
   }
 
-  return <MainApp />;
+  return (
+    <>
+      {profileError && (
+        <div role="alert" style={{
+          background: 'var(--warning-bg)', borderBottom: '2px solid var(--warning)',
+          color: 'var(--warning)', padding: '10px 16px', textAlign: 'center', fontSize: '0.85rem',
+        }}>
+          {t('profile_load_error')}
+        </div>
+      )}
+      <MainApp />
+    </>
+  );
 }
 
 function MainApp() {

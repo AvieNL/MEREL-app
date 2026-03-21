@@ -1,6 +1,28 @@
-export const VERSIE = '1.4.6';
+export const VERSIE = '1.4.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.4.7',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Fix: profiellaad-fout wordt nu zichtbaar getoond als waarschuwingsbanner',
+      'Fix: AI-analyse time-out na 30 seconden met duidelijke melding',
+      'Fix: AI-resultaat EURING-codes worden gevalideerd vóór invullen in formulier',
+      'Fix: maandberekening in AI-sectie gebruikt nu correcte tijdzone (geen UTC-verschuiving)',
+    ],
+    wijzigingen_en: [
+      'Fix: profile load error is now visibly shown as a warning banner',
+      'Fix: AI analysis times out after 30 seconds with a clear message',
+      'Fix: AI result EURING codes are validated before filling in the form',
+      'Fix: month calculation in AI section now uses correct timezone (no UTC offset)',
+    ],
+    wijzigingen_de: [
+      'Fix: Profilladefehler wird jetzt als Warnungsbanner angezeigt',
+      'Fix: KI-Analyse läuft nach 30 Sekunden mit einer klaren Meldung ab',
+      'Fix: KI-Ergebnis EURING-Codes werden vor dem Ausfüllen des Formulars validiert',
+      'Fix: Monatsberechnung im KI-Bereich verwendet jetzt korrekte Zeitzone (kein UTC-Versatz)',
+    ],
+  },
   {
     versie: '1.4.6',
     datum: '2026-03-21',

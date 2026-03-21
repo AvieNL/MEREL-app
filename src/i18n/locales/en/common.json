@@ -2,6 +2,7 @@
   "app_name": "VRS Breedenbroek",
   "app_subtitle": "Bird ringing registration",
   "loading": "Loading...",
+  "profile_load_error": "Profile could not be loaded. Some features may be limited.",
   "update_available": "New version available",
   "btn_refresh": "Refresh",
   "nav_login": "Log in",

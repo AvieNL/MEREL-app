@@ -106,9 +106,15 @@ export async function analyseVogel(soort, maand, fotos, referenties) {
 
   const prompt = buildPrompt(soort, referenties, refFotoData.length);
 
-  const { data, error } = await supabase.functions.invoke('ai-analyse', {
+  const TIMEOUT_MS = 30_000;
+  const invokePromise = supabase.functions.invoke('ai-analyse', {
     body: { soort, fotos: fotoData, refFotos: refFotoData, prompt },
   });
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('AI-analyse time-out (30 seconden). Probeer opnieuw.')), TIMEOUT_MS)
+  );
+
+  const { data, error } = await Promise.race([invokePromise, timeoutPromise]);
 
   if (error) throw new Error(error.message || String(error));
 

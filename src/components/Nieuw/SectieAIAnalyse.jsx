@@ -44,6 +44,16 @@ export default function SectieAIAnalyse() {
     setOpgeslagen(false);
   }
 
+  const VALID_GESLACHT = new Set(['M', 'F', 'V', 'U']);
+  const VALID_GESLACHTSBEPALING = new Set(['A', 'B', 'C', 'D', 'E', 'L', 'P', 'S', 'T', 'U']);
+
+  function maandUitDatum(datum) {
+    if (!datum) return new Date().getMonth() + 1;
+    const parts = datum.split('-');
+    const m = parseInt(parts[1], 10);
+    return isNaN(m) ? new Date().getMonth() + 1 : m;
+  }
+
   async function handleAnalyseer() {
     if (!form.vogelnaam || !aiFotos.length || !isOnline) return;
     setError('');
@@ -51,9 +61,7 @@ export default function SectieAIAnalyse() {
     setAiResultaat(null);
     setOpgeslagen(false);
     try {
-      const maand = form.vangstdatum
-        ? new Date(form.vangstdatum).getMonth() + 1
-        : new Date().getMonth() + 1;
+      const maand = maandUitDatum(form.vangstdatum);
       const gekozenRef = selectReferenties(form.vogelnaam, maand, referenties);
       const resultaat = await analyseVogel(form.vogelnaam, maand, aiFotos, gekozenRef);
       setAiResultaat(resultaat);
@@ -66,24 +74,27 @@ export default function SectieAIAnalyse() {
 
   function handleToepassen() {
     if (!aiResultaat) return;
-    if (aiResultaat.leeftijd)         update('leeftijd', aiResultaat.leeftijd);
-    if (aiResultaat.geslacht)         update('geslacht', aiResultaat.geslacht);
-    if (aiResultaat.geslachtsbepaling) update('geslachtsbepaling', aiResultaat.geslachtsbepaling);
+    if (aiResultaat.leeftijd && /^[1-9A-Za-z]{1,2}$/.test(aiResultaat.leeftijd))
+      update('leeftijd', aiResultaat.leeftijd);
+    if (aiResultaat.geslacht && VALID_GESLACHT.has(aiResultaat.geslacht))
+      update('geslacht', aiResultaat.geslacht);
+    if (aiResultaat.geslachtsbepaling && VALID_GESLACHTSBEPALING.has(aiResultaat.geslachtsbepaling))
+      update('geslachtsbepaling', aiResultaat.geslachtsbepaling);
   }
 
   async function handleOpslaanAlsReferentie() {
     if (!aiResultaat || !aiFotos.length) return;
-    const maand = form.vangstdatum
-      ? new Date(form.vangstdatum).getMonth() + 1
-      : new Date().getMonth() + 1;
+    const maand = maandUitDatum(form.vangstdatum);
+    const datum = form.vangstdatum || new Date().toISOString().split('T')[0];
     await addReferentie({
       soort:             form.vogelnaam,
       maand,
+      datum,
       leeftijd:          aiResultaat.leeftijd  || '',
       geslacht:          aiResultaat.geslacht  || 'U',
       type:              'bevestigd',
       fotos:             aiFotos,
-      datum:             form.vangstdatum || new Date().toISOString().split('T')[0],
+      datum,
       toelichting:       aiResultaat.toelichting || '',
     });
     setOpgeslagen(true);

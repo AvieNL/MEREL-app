@@ -2,6 +2,7 @@
   "app_name": "VRS Breedenbroek",
   "app_subtitle": "Vogelberingungsregistrierung",
   "loading": "Laden...",
+  "profile_load_error": "Profil konnte nicht geladen werden. Einige Funktionen sind möglicherweise eingeschränkt.",
   "update_available": "Neue Version verfügbar",
   "btn_refresh": "Aktualisieren",
   "nav_login": "Anmelden",

@@ -2,6 +2,7 @@
   "app_name": "VRS Breedenbroek",
   "app_subtitle": "Vogelringregistratie",
   "loading": "Laden...",
+  "profile_load_error": "Profiel kon niet worden geladen. Sommige functies zijn mogelijk beperkt.",
   "update_available": "Nieuwe versie beschikbaar",
   "btn_refresh": "Vernieuwen",
   "nav_login": "Inloggen",
