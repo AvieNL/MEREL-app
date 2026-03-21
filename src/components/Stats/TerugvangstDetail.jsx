@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { BarChartSimple, VangstKaart } from './Charts';
@@ -9,16 +9,23 @@ import { formatDatum } from '../../utils/dateHelper';
 import { STATS_UITGESLOTEN } from '../../data/constants';
 import './StatsPage.css';
 
-export default function TerugvangstDetail({ records }) {
+export default function TerugvangstDetail({ records, projects = [] }) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const displayNaam = useDisplayNaam();
   const [sorteer, setSorteer] = useState('tijd');
   const [soortSort, setSoortSort] = useState({ col: 'tv', asc: false });
+  const [eigenFilter, setEigenFilter] = useState(location.state?.eigenFilter ?? true);
+
+  const eigenProjectNamen = useMemo(() => new Set(projects.map(p => p.naam)), [projects]);
 
   const gefilterd = useMemo(
-    () => records.filter(r => !STATS_UITGESLOTEN.includes(r.vogelnaam?.toLowerCase())),
-    [records]
+    () => records.filter(r =>
+      !STATS_UITGESLOTEN.includes(r.vogelnaam?.toLowerCase()) &&
+      (!eigenFilter || !r.project || eigenProjectNamen.has(r.project))
+    ),
+    [records, eigenFilter, eigenProjectNamen]
   );
 
   const { list, nvPerSoort, tvRecords } = useMemo(() => {
@@ -162,7 +169,13 @@ export default function TerugvangstDetail({ records }) {
   if (list.length === 0) {
     return (
       <div className="page stats-page">
-        <Link to="/stats" className="project-back">{t('pd_back')}</Link>
+        <div className="stats-section-header">
+          <Link to="/stats" className="project-back" style={{ marginTop: 8 }}>{t('pd_back')}</Link>
+          <div className="tv-toggle">
+            <button className={`tv-toggle-btn${eigenFilter ? ' active' : ''}`} onClick={() => setEigenFilter(true)}>{t('stats_own_projects')}</button>
+            <button className={`tv-toggle-btn${!eigenFilter ? ' active' : ''}`} onClick={() => setEigenFilter(false)}>{t('stats_all_catches')}</button>
+          </div>
+        </div>
         <h2 className="stats-section-title" style={{ marginTop: 8 }}>{t('tv_title')}</h2>
         <p className="stats-empty">{t('tv_no_data')}</p>
       </div>
@@ -171,7 +184,13 @@ export default function TerugvangstDetail({ records }) {
 
   return (
     <div className="page stats-page">
-      <Link to="/stats" className="project-back">{t('pd_back')}</Link>
+      <div className="stats-section-header">
+        <Link to="/stats" className="project-back" style={{ marginTop: 8 }}>{t('pd_back')}</Link>
+        <div className="tv-toggle">
+          <button className={`tv-toggle-btn${eigenFilter ? ' active' : ''}`} onClick={() => setEigenFilter(true)}>{t('stats_own_projects')}</button>
+          <button className={`tv-toggle-btn${!eigenFilter ? ' active' : ''}`} onClick={() => setEigenFilter(false)}>{t('stats_all_catches')}</button>
+        </div>
+      </div>
       <h2 className="stats-section-title" style={{ marginTop: 8 }}>{t('tv_title')}</h2>
 
       {/* Samenvattende statistieken */}

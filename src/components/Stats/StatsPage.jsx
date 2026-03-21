@@ -509,7 +509,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             <div className="stat-value">{totaalStats.nieuw}</div>
             <div className="stat-label">{t('stats_new_rings')}</div>
           </div>
-          <div className="stat-card stat-card--link" onClick={() => navigate('/stats/terugvangsten')}>
+          <div className="stat-card stat-card--link" onClick={() => navigate('/stats/terugvangsten', { state: { eigenFilter } })}>
             <div className="stat-value">{totaalStats.terugvangst}</div>
             <div className="stat-label">{t('stats_recatches')}</div>
           </div>

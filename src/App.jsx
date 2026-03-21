@@ -184,7 +184,7 @@ function MainApp() {
           } />
           <Route path="/stats/soorten" element={<SoortenOverzicht />} />
           <Route path="/stats/terugvangsten" element={
-            <TerugvangstDetail records={records} />
+            <TerugvangstDetail records={records} projects={projects} />
           } />
           <Route path="/soorten" element={
             <SoortenPage records={records} />
