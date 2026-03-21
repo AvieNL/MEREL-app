@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
 import { formatDatum } from '../../utils/dateHelper';
@@ -11,9 +12,10 @@ export default function ProjectDetail({ records }) {
   const navigate = useNavigate();
   const { naam } = useParams();
   const { t } = useTranslation();
+  const displayNaam = useDisplayNaam();
 
   function openSoorten() {
-    const tabel = stats.soortenTabel.map(s => ({ naam: s.soort, nieuw: s.nieuw, terugvangst: s.terugvangst, totaal: s.totaal }));
+    const tabel = stats.soortenTabel.map(s => ({ naam: displayNaam(s.soort), nieuw: s.nieuw, terugvangst: s.terugvangst, totaal: s.totaal }));
     navigate('/stats/soorten', { state: { soortenTabel: tabel, titel: naam } });
   }
 
@@ -177,7 +179,7 @@ export default function ProjectDetail({ records }) {
               </div>
               <ul className="jaar-inline-list">
                 {jaarPopup.soorten.map(s => (
-                  <li key={s}>{s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()}</li>
+                  <li key={s}>{displayNaam(s)}</li>
                 ))}
               </ul>
             </div>
@@ -191,7 +193,7 @@ export default function ProjectDetail({ records }) {
           <div className="top-list">
             {topSoorten.map(s => (
               <div className="top-item" key={s.soort}>
-                <span className="top-name">{s.soort}</span>
+                <span className="top-name">{displayNaam(s.soort)}</span>
                 <div className="top-bar-wrap">
                   <div className="top-bar" style={{ width: `${(s.totaal / topMax) * 100}%` }} />
                 </div>
@@ -218,7 +220,7 @@ export default function ProjectDetail({ records }) {
               <tbody>
                 {stats.soortenTabel.map(s => (
                   <tr key={s.soort}>
-                    <td className="tt-col-soort">{s.soort}</td>
+                    <td className="tt-col-soort">{displayNaam(s.soort)}</td>
                     <td className="tt-col-num">{s.nieuw || ''}</td>
                     <td className="tt-col-num">{s.terugvangst || ''}</td>
                     <td className="tt-col-num tt-col-total">{s.totaal}</td>
@@ -263,7 +265,7 @@ export default function ProjectDetail({ records }) {
               <tbody>
                 {terugvangsten.map((tv, i) => (
                   <tr key={`${tv.ringnummer}-${tv.datum}-${i}`}>
-                    <td className="tt-col-soort">{tv.soort}</td>
+                    <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
                     <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
                     <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
                     <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>

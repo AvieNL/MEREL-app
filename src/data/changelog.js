@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.13';
+export const VERSIE = '1.5.14';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.14',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'I18n: Alle vogelnamen op de statspagina worden getoond in de gekozen taal (soortentabel, top, terugvangsten, kaart, projectdetail)',
+    ],
+    wijzigingen_en: [
+      'I18n: All bird names on the stats page are now shown in the chosen language (species table, top, recaptures, map, project detail)',
+    ],
+    wijzigingen_de: [
+      'I18n: Alle Vogelnamen auf der Statistikseite werden in der gewählten Sprache angezeigt (Artentabelle, Top, Wiederfänge, Karte, Projektdetail)',
+    ],
+  },
   {
     versie: '1.5.13',
     datum: '2026-03-21',

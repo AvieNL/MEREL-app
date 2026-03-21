@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
 import { parseDate } from '../../utils/statsHelper';
 import { buildEersteVangstMap } from '../../utils/catchHelper';
+import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import 'leaflet/dist/leaflet.css';
 
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
@@ -198,6 +199,7 @@ export function LineChart({ data, title, xKey, yKey, onPointClick }) {
 export function VangstKaart({ targetRecords, allRecords }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const displayNaam = useDisplayNaam();
 
   const kaartData = useMemo(() => {
     const eersteVangst = buildEersteVangstMap(allRecords);
@@ -213,7 +215,7 @@ export function VangstKaart({ targetRecords, allRecords }) {
       const isNieuw = r.metalenringinfo !== 4 && r.metalenringinfo !== '4';
       markers.push({
         lat, lon,
-        soort: r.vogelnaam || 'Onbekend',
+        soort: r.vogelnaam ? displayNaam(r.vogelnaam) : '',
         ring: r.ringnummer || '',
         datum: r.vangstdatum || '',
         isNieuw,
@@ -232,7 +234,7 @@ export function VangstKaart({ targetRecords, allRecords }) {
     });
 
     return { markers, lijnen };
-  }, [targetRecords, allRecords]);
+  }, [targetRecords, allRecords, displayNaam]);
 
   useEffect(() => {
     if (!mapRef.current || kaartData.markers.length === 0) return;

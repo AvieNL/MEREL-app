@@ -4,6 +4,7 @@ import { useToast } from '../../context/ToastContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { exportCSV, exportJSON, exportGrielXML, downloadFile } from '../../utils/export';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
@@ -189,6 +190,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   const { t } = useTranslation(['common', 'errors']);
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
+  const displayNaam = useDisplayNaam();
 
   const statsRecords = useMemo(
     () => records.filter(r => !STATS_UITGESLOTEN.includes(r.vogelnaam?.toLowerCase())),
@@ -199,7 +201,8 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   const [exportFout, setExportFout] = useState('');
 
   function openSoorten(soortenTabel, titel) {
-    navigate('/stats/soorten', { state: { soortenTabel, titel } });
+    const translated = soortenTabel.map(s => ({ ...s, naam: displayNaam(s.naam) }));
+    navigate('/stats/soorten', { state: { soortenTabel: translated, titel } });
   }
   const [tvSorteer, setTvSorteer] = useState('tijd');
   const [jaarPopup, setJaarPopup] = useState(null);
@@ -419,7 +422,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
               <tbody>
                 {huidigeStats.soortenTabel.map(s => (
                   <tr key={s.naam}>
-                    <td className="tt-col-soort">{capitalize(s.naam)}</td>
+                    <td className="tt-col-soort">{displayNaam(s.naam)}</td>
                     <td className="tt-col-num">{s.nieuw || ''}</td>
                     <td className="tt-col-num">{s.terugvangst || ''}</td>
                     <td className="tt-col-num tt-col-total">{s.totaal}</td>
@@ -543,7 +546,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 </div>
                 <ul className="jaar-inline-list">
                   {jaarPopup.soorten.map(s => (
-                    <li key={s}>{capitalize(s)}</li>
+                    <li key={s}>{displayNaam(s)}</li>
                   ))}
                 </ul>
               </div>
@@ -557,7 +560,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
           <div className="top-list">
             {totaalStats.topSoorten.map(([naam, count]) => (
               <div key={naam} className="top-item">
-                <span className="top-name">{capitalize(naam)}</span>
+                <span className="top-name">{displayNaam(naam)}</span>
                 <div className="top-bar-wrap">
                   <div
                     className="top-bar"
@@ -594,7 +597,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 <tbody>
                   {terugvangsten.map((tv, i) => (
                     <tr key={`${tv.ringnummer}-${tv.datum}-${i}`}>
-                      <td className="tt-col-soort">{tv.soort}</td>
+                      <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
                       <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
                       <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
                       <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>
