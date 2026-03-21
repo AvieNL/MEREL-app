@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
@@ -200,9 +200,9 @@ export default function AdminPage() {
             <h3>{t('admin_referentiebibliotheek')}</h3>
             <div className="section-content">
               <p className="admin-hint">{t('admin_referentiebibliotheek_desc')}</p>
-              <Link to="/referentiebibliotheek" className="btn-primary" style={{ display: 'inline-block', textDecoration: 'none' }}>
+              <button className="btn-primary" onClick={() => navigate('/referentiebibliotheek')}>
                 {t('admin_referentiebibliotheek_link')}
-              </Link>
+              </button>
             </div>
           </div>
 
