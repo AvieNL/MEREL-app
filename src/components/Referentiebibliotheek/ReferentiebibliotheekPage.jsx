@@ -9,8 +9,7 @@ import { LEEFTIJD_OPTIONS, GESLACHT_OPTIONS, getOptLabel } from '../Nieuw/NieuwP
 import './ReferentiebibliotheekPage.css';
 
 const MAX_FOTOS = 10;
-const MAANDEN = Array.from({ length: 12 }, (_, i) => i + 1);
-const LEEG_FORM = { soort: '', datum: '', maand: '', leeftijd: '', geslacht: 'U', type: 'handmatig', toelichting: '' };
+const LEEG_FORM = { soort: '', datum: '', leeftijd: '', geslacht: 'U', type: 'handmatig', toelichting: '' };
 
 // Derives maand (1–12) from a date string, or returns ''
 function maandUitDatum(datum) {
@@ -136,7 +135,6 @@ function ReferentieEditForm({ r, t, lang, species, onSave, onCancel, addFotos, v
   const [form, setForm] = useState({
     soort: r.soort,
     datum: r.datum && r.datum.length === 10 ? r.datum : '',
-    maand: String(r.maand),
     leeftijd: r.leeftijd,
     geslacht: r.geslacht,
     type: r.type,
@@ -144,22 +142,13 @@ function ReferentieEditForm({ r, t, lang, species, onSave, onCancel, addFotos, v
   });
   const [saving, setSaving] = useState(false);
 
-  // Auto-derive maand from datum
-  function handleDatumChange(datum) {
-    const afgeleid = maandUitDatum(datum);
-    setForm(p => ({ ...p, datum, maand: afgeleid ? String(afgeleid) : p.maand }));
-  }
-
   async function handleOpslaan() {
     setSaving(true);
     try {
-      const maand = form.datum
-        ? maandUitDatum(form.datum)
-        : parseInt(form.maand, 10);
       await onSave(r.id, {
         soort: form.soort.trim(),
         datum: form.datum || null,
-        maand,
+        maand: maandUitDatum(form.datum) || r.maand,
         leeftijd: form.leeftijd,
         geslacht: form.geslacht,
         type: form.type,
@@ -175,8 +164,6 @@ function ReferentieEditForm({ r, t, lang, species, onSave, onCancel, addFotos, v
     await addFotos(r.id, verwerkt);
   }
 
-  const datumIsSet = !!form.datum;
-
   return (
     <div className="ref-edit-form">
       <div className="form-row">
@@ -189,19 +176,10 @@ function ReferentieEditForm({ r, t, lang, species, onSave, onCancel, addFotos, v
           />
         </div>
         <div className="form-group">
-          <label>{t('ref_datum')}</label>
+          <label>{t('ref_datum')} *</label>
           <input type="date" value={form.datum}
-            onChange={e => handleDatumChange(e.target.value)} />
+            onChange={e => setForm(p => ({ ...p, datum: e.target.value }))} />
         </div>
-        {!datumIsSet && (
-          <div className="form-group">
-            <label>{t('ref_maand')} *</label>
-            <select value={form.maand} onChange={e => setForm(p => ({ ...p, maand: e.target.value }))}>
-              <option value="">—</option>
-              {MAANDEN.map(m => <option key={m} value={m}>{m}</option>)}
-            </select>
-          </div>
-        )}
       </div>
       <div className="form-row">
         <div className="form-group">
@@ -245,7 +223,7 @@ function ReferentieEditForm({ r, t, lang, species, onSave, onCancel, addFotos, v
       </div>
       <div className="ref-form-acties">
         <button className="btn-primary" onClick={handleOpslaan}
-          disabled={saving || !form.soort || (!form.datum && !form.maand)}>
+          disabled={saving || !form.soort || !form.datum}>
           {saving ? t('loading') : t('ref_save')}
         </button>
         <button className="btn-secondary" onClick={onCancel}>{t('form_cancel')}</button>
@@ -277,12 +255,6 @@ export default function ReferentiebibliotheekPage() {
   useEffect(() => { if (!isRealAdmin) navigate('/'); }, [isRealAdmin, navigate]);
   if (!isRealAdmin) return null;
 
-  // Auto-derive maand from datum in nieuwForm
-  function handleNieuwDatum(datum) {
-    const afgeleid = maandUitDatum(datum);
-    setNieuwForm(p => ({ ...p, datum, maand: afgeleid ? String(afgeleid) : p.maand }));
-  }
-
   async function handleNieuweFotos(files) {
     const verwerkt = await Promise.all(
       Array.from(files).slice(0, MAX_FOTOS - nieuwFotos.length).map(verwerkFoto)
@@ -291,16 +263,13 @@ export default function ReferentiebibliotheekPage() {
   }
 
   async function handleOpslaan() {
-    if (!nieuwForm.soort || (!nieuwForm.datum && !nieuwForm.maand) || !nieuwFotos.length) return;
+    if (!nieuwForm.soort || !nieuwForm.datum || !nieuwFotos.length) return;
     setOpslaan(true);
     try {
-      const maand = nieuwForm.datum
-        ? maandUitDatum(nieuwForm.datum)
-        : parseInt(nieuwForm.maand, 10);
       await addReferentie({
         soort:       nieuwForm.soort.trim(),
-        datum:       nieuwForm.datum || null,
-        maand,
+        datum:       nieuwForm.datum,
+        maand:       maandUitDatum(nieuwForm.datum),
         leeftijd:    nieuwForm.leeftijd,
         geslacht:    nieuwForm.geslacht,
         type:        nieuwForm.type,
@@ -324,8 +293,6 @@ export default function ReferentiebibliotheekPage() {
     if (!window.confirm(t('ref_delete_confirm'))) return;
     await deleteReferentie(id);
   }
-
-  const nieuwDatumIsSet = !!nieuwForm.datum;
 
   return (
     <div className="page ref-page">
@@ -355,19 +322,10 @@ export default function ReferentiebibliotheekPage() {
               />
             </div>
             <div className="form-group">
-              <label>{t('ref_datum')}</label>
+              <label>{t('ref_datum')} *</label>
               <input type="date" value={nieuwForm.datum}
-                onChange={e => handleNieuwDatum(e.target.value)} />
+                onChange={e => setNieuwForm(p => ({ ...p, datum: e.target.value }))} />
             </div>
-            {!nieuwDatumIsSet && (
-              <div className="form-group">
-                <label>{t('ref_maand')} *</label>
-                <select value={nieuwForm.maand} onChange={e => setNieuwForm(p => ({ ...p, maand: e.target.value }))}>
-                  <option value="">—</option>
-                  {MAANDEN.map(m => <option key={m} value={m}>{m}</option>)}
-                </select>
-              </div>
-            )}
           </div>
           <div className="form-row">
             <div className="form-group">
@@ -421,7 +379,7 @@ export default function ReferentiebibliotheekPage() {
           </div>
           <div className="ref-form-acties">
             <button className="btn-primary" onClick={handleOpslaan}
-              disabled={opslaan || !nieuwForm.soort || (!nieuwForm.datum && !nieuwForm.maand) || !nieuwFotos.length}>
+              disabled={opslaan || !nieuwForm.soort || !nieuwForm.datum || !nieuwFotos.length}>
               {opslaan ? t('loading') : t('ref_save')}
             </button>
             <button className="btn-secondary" onClick={() => { setIsToevoegen(false); setNieuwFotos([]); }}>
