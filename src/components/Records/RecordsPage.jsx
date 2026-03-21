@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRole } from '../../hooks/useRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import { formatDatum, formatDatumTijd } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL, MAX_RECORDS_WEERGAVE } from '../../data/constants';
@@ -40,6 +41,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
   const { t } = useTranslation();
+  const displayNaam = useDisplayNaam();
 
   useEffect(() => {
     const openId = location.state?.openId;
@@ -110,7 +112,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
                 <span className={`record-type${isTerugvangst ? ' record-type--tv' : ''}`}>{isTerugvangst ? 'TV' : 'NV'}</span>
                 <div className="record-main">
                   <strong>
-                    {r.vogelnaam || t('records_unknown')}
+                    {r.vogelnaam ? displayNaam(r.vogelnaam) : t('records_unknown')}
                     {r.vogelnaam && euringLookup[r.vogelnaam.toLowerCase()] && (
                       <span className="euring-hint">({euringLookup[r.vogelnaam.toLowerCase()]})</span>
                     )}
@@ -195,7 +197,7 @@ export default function RecordsPage({ records, deletedRecords = [], onDelete, on
               {deletedRecords.map(r => (
                 <div key={r.id} className="prullenbak-item">
                   <div className="prullenbak-info">
-                    <strong>{r.vogelnaam || t('records_unknown')}</strong>
+                    <strong>{r.vogelnaam ? displayNaam(r.vogelnaam) : t('records_unknown')}</strong>
                     {r.ringnummer && <span className="prullenbak-ring">{stripDots(r.ringnummer)}</span>}
                     {r.vangstdatum && <span className="prullenbak-datum">{formatDatum(r.vangstdatum)}</span>}
                   </div>

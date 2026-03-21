@@ -12,14 +12,7 @@ export default function OverPage() {
 
       <div className="over-sectie">
         <h2>{t('about_title')}</h2>
-        <p>
-          VRS App is een digitaal veldregistratiesysteem voor vogelringers.
-          De app vervangt papieren formulieren en maakt het mogelijk om vangsten
-          direct in het veld te registreren — ook zonder internetverbinding.
-          Gegevens worden automatisch gesynchroniseerd met de cloud en kunnen
-          worden geëxporteerd naar Griel XML-formaat voor aanlevering bij het
-          Vogeltrekstation.
-        </p>
+        <p>{t('about_app_description')}</p>
       </div>
 
       <div className="over-sectie">

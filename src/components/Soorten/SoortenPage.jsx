@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
 import { useRole } from '../../hooks/useRole';
+import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import './SoortenPage.css';
 
@@ -22,6 +23,7 @@ export default function SoortenPage({ records }) {
   const { isAdmin } = useRole();
   const { t } = useTranslation();
   const speciesRef = useSpeciesRef();
+  const displayNaam = useDisplayNaam();
 
   const FILTER_DEFS = [
     { key: 'gevangen',   label: t('species_filter_caught') },
@@ -167,7 +169,7 @@ export default function SoortenPage({ records }) {
             >
               <div className="soort-info">
                 <strong>
-                  {s.naam_nl}
+                  {displayNaam(s.naam_nl)}
                   {euringLookup[s.naam_nl?.toLowerCase()] && (
                     <span className="euring-hint">({euringLookup[s.naam_nl.toLowerCase()]})</span>
                   )}

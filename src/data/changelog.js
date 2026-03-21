@@ -1,6 +1,17 @@
-export const VERSIE = '1.3.2';
+export const VERSIE = '1.3.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.3.3',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'i18n: taalkiezer (🇳🇱 🇬🇧 🇩🇪) toegevoegd aan header — taalvoorkeur wordt meteen opgeslagen',
+      'i18n: vogelnaam weergegeven in geselecteerde taal (EN/DE) op soortenpagina, vangstlijst en soortdetail',
+      'i18n: SoortDetail volledig vertaald (alle secties, alerts, bevestigingsdialogen)',
+      'i18n: DatabasesPage, RecordsPage en SoortenPage vertaald',
+      'i18n: OverPage "over deze app" tekst vertaald',
+    ],
+  },
   {
     versie: '1.3.2',
     datum: '2026-03-21',

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useTranslation } from 'react-i18next';
 import { db } from '../../lib/db';
 import './DatabasesPage.css';
 
@@ -221,19 +222,18 @@ function SupabaseCard({ table }) {
 }
 
 export default function DatabasesPage() {
+  const { t } = useTranslation();
   return (
     <div className="page databases-page">
-      <h2 className="db-page-title">Databases</h2>
+      <h2 className="db-page-title">{t('db_title')}</h2>
 
       <section className="db-section">
         <h3 className="db-section-title">
           <span className="db-section-icon">⊡</span>
-          Lokaal — IndexedDB (Dexie)
+          {t('db_local_title')}
           <span className="db-section-version">v3</span>
         </h3>
-        <p className="db-section-desc">
-          Offline-first cache. Werkt zonder internet. Wordt gesynchroniseerd met Supabase via de sync-wachtrij.
-        </p>
+        <p className="db-section-desc">{t('db_local_desc')}</p>
         <div className="db-cards">
           {DEXIE_STORES.map(store => (
             <DexieCard key={store.name} store={store} />
@@ -244,11 +244,9 @@ export default function DatabasesPage() {
       <section className="db-section">
         <h3 className="db-section-title">
           <span className="db-section-icon">☁</span>
-          Remote — Supabase (PostgreSQL)
+          {t('db_remote_title')}
         </h3>
-        <p className="db-section-desc">
-          Cloud-database met Row Level Security. Alleen de eigen data is zichtbaar per gebruiker, behalve gedeelde tabellen (species, gedeelde projecten).
-        </p>
+        <p className="db-section-desc">{t('db_remote_desc')}</p>
         <div className="db-cards">
           {SUPABASE_TABLES.map(table => (
             <SupabaseCard key={table.name} table={table} />

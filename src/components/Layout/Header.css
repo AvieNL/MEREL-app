@@ -230,6 +230,30 @@
   font-weight: 700 !important;
 }
 
+.lang-btn {
+  background: none;
+  border: none;
+  padding: 2px 3px;
+  cursor: pointer;
+  font-size: 1.05rem;
+  line-height: 1;
+  min-width: 30px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.35;
+  transition: opacity 0.15s;
+}
+
+.lang-btn--active {
+  opacity: 1;
+}
+
+.lang-btn:hover {
+  opacity: 0.75;
+}
+
 .header-staging-badge {
   display: inline-block;
   margin-left: 6px;

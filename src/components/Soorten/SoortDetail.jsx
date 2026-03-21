@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
 import { useRole } from '../../hooks/useRole';
 import { db } from '../../lib/db';
@@ -76,11 +77,14 @@ function isBoekKey(key) {
   return boekKeys.has(key);
 }
 
+const LANG_FIELD = { nl: 'naam_nl', en: 'naam_en', de: 'naam_de' };
+
 export default function SoortDetail({ records, speciesOverrides }) {
   const { naam } = useParams();
   const navigate = useNavigate();
   const decodedNaam = decodeURIComponent(naam);
   const { isAdmin, isViewer } = useRole();
+  const { t, i18n } = useTranslation();
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
   const soorten = useMemo(
@@ -169,7 +173,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
   };
 
   const deleteSoort = async () => {
-    if (!window.confirm(`Weet je zeker dat je "${decodedNaam}" wilt verwijderen? Dit kan niet ongedaan gemaakt worden.`)) return;
+    if (!window.confirm(t('sd_delete_confirm', { naam: decodedNaam }))) return;
     await supabase.from('species').delete().eq('naam_nl', decodedNaam);
     await db.species.delete(decodedNaam);
     navigate('/soorten');
@@ -177,7 +181,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
   const saveEdit = async () => {
     if (isNieuweSoort && !editData.naam_nl?.trim()) {
-      alert('Vul een Nederlandse naam in voor de nieuwe soort.');
+      alert(t('sd_name_required'));
       return;
     }
 
@@ -233,7 +237,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
       .upsert({ naam_nl: newNaamNl, data: newData });
 
     if (error) {
-      alert('Opslaan mislukt: ' + error.message);
+      alert(t('sd_save_error', { msg: error.message }));
       return;
     }
 
@@ -273,8 +277,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
   if (speciesRef.length === 0) {
     return (
       <div className="page">
-        <button className="btn-secondary" onClick={() => navigate('/soorten')}>← Terug</button>
-        <div className="empty-state">Laden...</div>
+        <button className="btn-secondary" onClick={() => navigate('/soorten')}>{t('sd_back')}</button>
+        <div className="empty-state">{t('sd_loading')}</div>
       </div>
     );
   }
@@ -282,11 +286,13 @@ export default function SoortDetail({ records, speciesOverrides }) {
   if (!defaultSoort && !isNieuweSoort) {
     return (
       <div className="page">
-        <button className="btn-secondary" onClick={() => navigate('/soorten')}>← Terug</button>
-        <div className="empty-state">Soort niet gevonden</div>
+        <button className="btn-secondary" onClick={() => navigate('/soorten')}>{t('sd_back')}</button>
+        <div className="empty-state">{t('sd_not_found')}</div>
       </div>
     );
   }
+
+  const displayNaam = soort[LANG_FIELD[i18n.language] || 'naam_nl'] || soort.naam_nl;
 
   const foto = soort.foto;
   // Geslachtsbepaling per geslacht (migratie: oud veld → ♂)
@@ -372,7 +378,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
   return (
     <div className="page soort-detail">
       <button className="btn-secondary sd-back" onClick={() => navigate('/soorten')}>
-        ← Terug
+        {t('sd_back')}
       </button>
 
       {/* Hero */}
@@ -399,7 +405,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
         </div>
         <div className="sd-hero-info">
           <h2 className="sd-title">
-            {soort.naam_nl}
+            {displayNaam}
             {euringLookup[soort.naam_nl?.toLowerCase()] && (
               <span className="euring-hint">({euringLookup[soort.naam_nl.toLowerCase()]})</span>
             )}
@@ -417,7 +423,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
         <div className="sd-hero-actions">
           <button
             className={`sd-refresh-btn${refreshing ? ' sd-refresh-btn--busy' : ''}`}
-            title="Soortdata verversen"
+            title={t('sd_refresh_title')}
             disabled={refreshing}
             onClick={async () => {
               setRefreshing(true);
@@ -436,17 +442,17 @@ export default function SoortDetail({ records, speciesOverrides }) {
       {/* Geslachtsbepaling */}
       {(geslachtsM || geslachtsF) && (
         <div className="sd-card">
-          <h3 className="sd-card-title">Geslachtsbepaling</h3>
+          <h3 className="sd-card-title">{t('sd_gender_det')}</h3>
           <div className="sd-det-view">
             {geslachtsM && (
               <div className="sd-det-block">
-                <span className="sd-det-label sd-det-label--m">{'\u2642\uFE0E'} Man</span>
+                <span className="sd-det-label sd-det-label--m">{'\u2642\uFE0E'} {t('sd_male')}</span>
                 <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(geslachtsM) }} />
               </div>
             )}
             {geslachtsF && (
               <div className="sd-det-block">
-                <span className="sd-det-label sd-det-label--f">{'\u2640\uFE0E'} Vrouw</span>
+                <span className="sd-det-label sd-det-label--f">{'\u2640\uFE0E'} {t('sd_female')}</span>
                 <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(geslachtsF) }} />
               </div>
             )}
@@ -457,17 +463,17 @@ export default function SoortDetail({ records, speciesOverrides }) {
       {/* Leeftijdsbepaling */}
       {(leeftijdsVj || leeftijdsNj) && (
         <div className="sd-card">
-          <h3 className="sd-card-title">Leeftijdsbepaling</h3>
+          <h3 className="sd-card-title">{t('sd_age_det')}</h3>
           <div className="sd-det-view">
             {leeftijdsVj && (
               <div className="sd-det-block">
-                <span className="sd-det-label sd-det-label--vj">Voorjaar</span>
+                <span className="sd-det-label sd-det-label--vj">{t('sd_spring')}</span>
                 <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(leeftijdsVj) }} />
               </div>
             )}
             {leeftijdsNj && (
               <div className="sd-det-block">
-                <span className="sd-det-label sd-det-label--nj">Najaar</span>
+                <span className="sd-det-label sd-det-label--nj">{t('sd_autumn')}</span>
                 <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(leeftijdsNj) }} />
               </div>
             )}
@@ -477,7 +483,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
       {/* Ring & Rui */}
       <div className="sd-card">
-        <h3 className="sd-card-title">Ring & Rui</h3>
+        <h3 className="sd-card-title">{t('sd_ring_rui')}</h3>
         {EDITABLE_FIELDS.ring.map(f =>
           renderField(f.key, f.label, {
             fallback: f.key === 'euring_code' ? (euringLookup[decodedNaam.toLowerCase()] || '') : undefined,
@@ -491,19 +497,19 @@ export default function SoortDetail({ records, speciesOverrides }) {
       {/* Namen + Biometrie naast elkaar */}
       <div className="sd-two-cards">
         <div className="sd-card">
-          <h3 className="sd-card-title">Namen</h3>
+          <h3 className="sd-card-title">{t('sd_names')}</h3>
           {EDITABLE_FIELDS.namen.map(f =>
             renderField(f.key, f.label, { italic: f.key === 'naam_lat' })
           )}
           <div className="sd-section-divider" />
-          <span className="sd-section-label">Taxonomie</span>
+          <span className="sd-section-label">{t('sd_taxonomy')}</span>
           {EDITABLE_FIELDS.taxonomie.map(f =>
             renderField(f.key, f.label, { muted: true })
           )}
         </div>
         {hasBioData && (
           <div className="sd-card">
-            <h3 className="sd-card-title">Biometrie</h3>
+            <h3 className="sd-card-title">{t('sd_biometrics')}</h3>
             <div className="sd-bio-list">
               {BIO_FIELDS.map(b => {
                 const minVal = getBioValue(b.key, 'min');
@@ -523,7 +529,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
                     </div>
                     {(minVal || maxVal) && (
                       <div className="sd-bio-subrow">
-                        <span className="sd-bio-subrow-cat">Alg.</span>
+                        <span className="sd-bio-subrow-cat">{t('sd_general_abbr')}</span>
                         <span className={bioCellCls(`bio_${b.key}_min`)}>
                           {fmtBio(minVal) || '—'} – {fmtBio(maxVal) || '—'}
                         </span>
@@ -555,19 +561,19 @@ export default function SoortDetail({ records, speciesOverrides }) {
                 {hasAdminBio && (
                   <span className="sd-bio-legend-item">
                     <span className="sd-bio-legend-dot sd-bio-legend-dot--lit" />
-                    Literatuurdata
+                    {t('sd_lit_data')}
                   </span>
                 )}
                 {hasUserBio && (
                   <span className="sd-bio-legend-item">
                     <span className="sd-bio-legend-dot sd-bio-legend-dot--user" />
-                    Door jou ingevoerd
+                    {t('sd_user_data')}
                   </span>
                 )}
                 {BIO_FIELDS.some(b => bioRangesFromCatches[b.key]) && (
                   <span className="sd-bio-legend-item">
                     <span className="sd-bio-legend-dot sd-bio-legend-dot--rec" />
-                    Eigen vangsten
+                    {t('sd_own_catches')}
                   </span>
                 )}
               </div>
@@ -580,7 +586,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
       <div className="sd-two-cards">
         {(soort.nest_eileg && soort.nest_eileg !== 'maanden') && (
           <div className="sd-card">
-            <h3 className="sd-card-title">Nestgegevens</h3>
+            <h3 className="sd-card-title">{t('sd_nest_data')}</h3>
             {EDITABLE_FIELDS.nest.map(f =>
               renderField(f.key, f.label, { gender: f.gender })
             )}
@@ -588,7 +594,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
         )}
         {(soort.boeken && Object.keys(soort.boeken).length > 0) && (
           <div className="sd-card">
-            <h3 className="sd-card-title">Determinatieboeken</h3>
+            <h3 className="sd-card-title">{t('sd_det_books')}</h3>
             {EDITABLE_FIELDS.boeken.map(f =>
               renderField(f.key, f.label)
             )}
@@ -600,7 +606,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
       <div className="sd-card">
         <div className="sd-vangsten-header" onClick={() => setVangstenOpen(o => !o)}>
           <h3 className="sd-card-title sd-card-title--toggle">
-            Mijn vangsten
+            {t('sd_my_catches')}
             {soortRecords.length > 0 && (
               <span className="sd-vangsten-count">{soortRecords.length}</span>
             )}
@@ -608,27 +614,27 @@ export default function SoortDetail({ records, speciesOverrides }) {
           <span className={`sd-vangsten-toggle${vangstenOpen ? ' sd-vangsten-toggle--open' : ''}`}>▼</span>
         </div>
         {vangstenOpen && (soortRecords.length === 0 ? (
-          <p className="sd-empty" style={{ marginTop: 10 }}>Nog geen vangsten van deze soort</p>
+          <p className="sd-empty" style={{ marginTop: 10 }}>{t('sd_no_catches')}</p>
         ) : (
           <div className="sd-vangsten-content">
             <div className="sd-stats-row">
               <div className="sd-stat">
                 <div className="sd-stat-value">{soortRecords.length}</div>
-                <div className="sd-stat-label">Totaal</div>
+                <div className="sd-stat-label">{t('sd_total')}</div>
               </div>
               {tvCount > 0 && (
                 <div className="sd-stat">
                   <div className="sd-stat-value sd-stat-value--tv">{tvCount}</div>
-                  <div className="sd-stat-label">Terugv.</div>
+                  <div className="sd-stat-label">{t('sd_recap_abbr')}</div>
                 </div>
               )}
               {Object.entries(genderStats).map(([g, count]) => (
                 <div key={g} className="sd-stat">
                   <div className="sd-stat-value">{count}</div>
                   <div className="sd-stat-label">
-                    {g === 'M' ? <><span className="sd-gender-icon--m">{'\u2642\uFE0E'}</span> Man</> :
-                     g === 'F' ? <><span className="sd-gender-icon--f">{'\u2640\uFE0E'}</span> Vrouw</> :
-                     'Onbekend'}
+                    {g === 'M' ? <><span className="sd-gender-icon--m">{'\u2642\uFE0E'}</span> {t('sd_male')}</> :
+                     g === 'F' ? <><span className="sd-gender-icon--f">{'\u2640\uFE0E'}</span> {t('sd_female')}</> :
+                     t('sd_unknown')}
                   </div>
                 </div>
               ))}
@@ -636,7 +642,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
             {Object.keys(ageStats).length > 0 && (
               <div className="sd-age-section">
-                <span className="sd-sub-title">Leeftijdsverdeling</span>
+                <span className="sd-sub-title">{t('sd_age_dist')}</span>
                 {(() => {
                   const AGE_ORDER = ['1', '3', '4', '5', '6', '7', '8', '9', 'A', '2', '0'];
                   const sorted = AGE_ORDER.filter(c => ageStats[c]).map(c => [c, ageStats[c]]);
@@ -661,7 +667,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
             <VangstKaart targetRecords={soortRecords} allRecords={records} />
 
             <div className="sd-recent-section">
-              <span className="sd-sub-title">Recente vangsten</span>
+              <span className="sd-sub-title">{t('sd_recent_catches')}</span>
               {[...soortRecords]
                 .sort((a, b) => {
                   const dateA = a.vangstdatum || '';
@@ -701,7 +707,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
                 className="sd-all-records-link"
                 onClick={() => navigate('/records', { state: { filterSoort: decodedNaam } })}
               >
-                Alle {soortRecords.length} vangsten van {soort.naam_nl} →
+                {t('sd_all_catches', { count: soortRecords.length, naam: soort.naam_nl })}
               </button>
             </div>
           </div>

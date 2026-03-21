@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n/index.js';
 import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
 import { useTheme } from '../../hooks/useTheme';
@@ -64,6 +65,12 @@ export default function Header() {
   };
   const THEME_ICON = { donker: '☀', licht: '◑', systeem: '☾' };
 
+  const TALEN = [
+    { code: 'nl', vlag: '🇳🇱' },
+    { code: 'en', vlag: '🇬🇧' },
+    { code: 'de', vlag: '🇩🇪' },
+  ];
+
   return (
     <header className="app-header">
       {/* Hoofd-rij */}
@@ -79,6 +86,17 @@ export default function Header() {
           <SyncIndicator />
         </div>
         <div className="header-menu" ref={menuRef}>
+          {TALEN.map(taal => (
+            <button
+              key={taal.code}
+              className={`lang-btn${i18n.language === taal.code ? ' lang-btn--active' : ''}`}
+              onClick={() => i18n.changeLanguage(taal.code)}
+              aria-label={taal.code.toUpperCase()}
+              title={taal.code.toUpperCase()}
+            >
+              {taal.vlag}
+            </button>
+          ))}
           <button
             className="theme-toggle-btn"
             onClick={() => setMode(THEME_NEXT[mode] || 'donker')}
