@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
@@ -7,7 +7,7 @@ import { supabase } from '../../lib/supabase';
 import { getRuitypenConfig, saveRuitypenConfig, RUITYPE_TYPES, DEFAULT_RUITYPE_CONFIG } from '../../hooks/useRuitypen';
 import './AdminPage.css';
 
-const ROLLEN = ['ringer', 'viewer', 'admin'];
+const ROLLEN = ['ringer', 'ringer+', 'viewer', 'admin'];
 
 export default function AdminPage() {
   const { user } = useAuth();
@@ -22,9 +22,10 @@ export default function AdminPage() {
   const [ruiSaved, setRuiSaved] = useState(false);
 
   const ROL_LABEL = {
-    admin: t('role_admin'),
-    ringer: t('role_ringer'),
-    viewer: t('role_viewer'),
+    admin:    t('role_admin'),
+    'ringer+': t('role_ringer_plus'),
+    ringer:   t('role_ringer'),
+    viewer:   t('role_viewer'),
   };
 
   function updateRuiEntry(type, seizoen, index, field, value) {
@@ -191,6 +192,17 @@ export default function AdminPage() {
                 <strong>{t('role_viewer')}</strong> — {t('admin_role_viewer_desc').replace(/^Viewer — |^Betrachter — /, '')}<br />
                 <strong>{t('role_admin')}</strong> — {t('admin_role_admin_desc').replace(/^Admin — /, '')}
               </p>
+            </div>
+          </div>
+
+          {/* ── Referentiebibliotheek ── */}
+          <div className="section">
+            <h3>{t('admin_referentiebibliotheek')}</h3>
+            <div className="section-content">
+              <p className="admin-hint">{t('admin_referentiebibliotheek_desc')}</p>
+              <Link to="/referentiebibliotheek" className="btn-primary" style={{ display: 'inline-block', textDecoration: 'none' }}>
+                {t('admin_referentiebibliotheek_link')}
+              </Link>
             </div>
           </div>
 

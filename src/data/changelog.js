@@ -1,6 +1,28 @@
-export const VERSIE = '1.3.9';
+export const VERSIE = '1.4.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.4.0',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Feat: AI-gestuurde leeftijd/geslacht analyse via foto — gebruik Claude AI om de vogel te analyseren en het formulier automatisch in te vullen',
+      'Feat: referentiebibliotheek (admin) — sla bevestigde vangstfoto\'s op als referentie voor toekomstige AI-analyses',
+      'Feat: nieuwe rol ringer+ met toegang tot AI-analyse',
+      'Feat: automatische HEIC→JPEG conversie en afbeeldingsverkleining voor opslag',
+    ],
+    wijzigingen_en: [
+      'Feat: AI-powered age/sex analysis via photo — use Claude AI to analyse the bird and auto-fill the form',
+      'Feat: reference library (admin) — save confirmed catch photos as references for future AI analyses',
+      'Feat: new role ringer+ with access to AI analysis',
+      'Feat: automatic HEIC→JPEG conversion and image resizing for storage',
+    ],
+    wijzigingen_de: [
+      'Feat: KI-gestützte Alters-/Geschlechtsanalyse per Foto — Claude KI analysiert den Vogel und füllt das Formular automatisch aus',
+      'Feat: Referenzbibliothek (Admin) — bestätigte Fangfotos als Referenz für zukünftige KI-Analysen speichern',
+      'Feat: neue Rolle Beringer+ mit Zugang zur KI-Analyse',
+      'Feat: automatische HEIC→JPEG-Konvertierung und Bildverkleinerung für die Speicherung',
+    ],
+  },
   {
     versie: '1.3.9',
     datum: '2026-03-21',

@@ -32,3 +32,8 @@ db.version(3).stores({
 db.version(4).stores({
   veld_config: 'veld_key',
 });
+
+// Versie 5: referentiebibliotheek voor AI-analyse (foto's + metadata, lokaal opgeslagen)
+db.version(5).stores({
+  referentiebibliotheek: '++id, soort, maand, type',
+});

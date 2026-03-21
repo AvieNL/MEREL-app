@@ -26,6 +26,7 @@ import SectieSoort from './SectieSoort';
 import SectieProject from './SectieProject';
 import SectieRinggegevens from './SectieRinggegevens';
 import SectieVogel from './SectieVogel';
+import SectieAIAnalyse from './SectieAIAnalyse';
 import SectieVangst from './SectieVangst';
 import SectieBiometrieEnRui from './SectieBiometrieEnRui';
 import './NieuwPage.css';
@@ -143,6 +144,7 @@ export default function NieuwPage() {
     nieuweVangst: true,
     project: true,
     ringgegevens: true,
+    aiAnalyse: false,
     vogel: true,
     vangst: true,
     locatie: true,
@@ -151,6 +153,9 @@ export default function NieuwPage() {
     rui: false,
     euringOverig: false,
   });
+
+  const [aiFotos, setAiFotos] = useState([]);
+  const [aiResultaat, setAiResultaat] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [saved, setSaved] = useState(false);
   const [vogelnaamDisplay, setVogelnaamDisplay] = useState(editRecord?.vogelnaam || '');
@@ -437,6 +442,8 @@ export default function NieuwPage() {
       ringer_nummer: settings?.ringerNummer || '',
     });
     resetRuikaart();
+    setAiFotos([]);
+    setAiResultaat(null);
     setVogelnaamDisplay('');
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -634,6 +641,10 @@ export default function NieuwPage() {
     euringLookup,
     editRecord,
     projects,
+    aiFotos,
+    setAiFotos,
+    aiResultaat,
+    setAiResultaat,
   };
 
   return (
@@ -673,6 +684,7 @@ export default function NieuwPage() {
           <SectieSoort />
           <SectieProject />
           <SectieRinggegevens />
+          <SectieAIAnalyse />
           <SectieVogel />
           <SectieVangst />
           <SectieBiometrieEnRui />

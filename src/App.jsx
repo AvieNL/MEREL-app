@@ -26,6 +26,7 @@ const InstellingenPage = lazy(() => import('./components/Instellingen/Instelling
 const ProjectenPage   = lazy(() => import('./components/Projecten/ProjectenPage'));
 const RingstrengenPage = lazy(() => import('./components/Ringstreng/RingstrengenPage'));
 const AdminPage       = lazy(() => import('./components/Admin/AdminPage'));
+const ReferentiebibliotheekPage = lazy(() => import('./components/Referentiebibliotheek/ReferentiebibliotheekPage'));
 import { useRecords } from './hooks/useRecords';
 import { useProjects } from './hooks/useProjects';
 import { useSpeciesOverrides } from './hooks/useSpeciesOverrides';
@@ -183,6 +184,7 @@ function MainApp() {
             />
           } />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/referentiebibliotheek" element={<ReferentiebibliotheekPage />} />
         </Routes>
         </Suspense>
       </main>
