@@ -59,7 +59,10 @@ Deno.serve(async (req: Request) => {
     }
 
     const result = await anthropicResponse.json();
-    const tekst: string = result?.content?.[0]?.text ?? '{}';
+    let tekst: string = result?.content?.[0]?.text ?? '{}';
+
+    // Strip markdown code blocks indien aanwezig: ```json ... ``` of ``` ... ```
+    tekst = tekst.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
 
     try {
       return json(JSON.parse(tekst));
