@@ -59,7 +59,7 @@ export function useRecords() {
     }
     if (pulledRef.current) return;
     pulledRef.current = true;
-    pullFromSupabase();
+    fixExternBron().then(() => pullFromSupabase());
     normalizeVangstdatums();
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -100,6 +100,20 @@ export function useRecords() {
       key: `last_pull_vangsten_${user.id}`,
       value: new Date().toISOString(),
     });
+  }
+
+  // Eenmalige migratie: reset lastPull als er TV-records zijn met bron=null (na Supabase-sync bug)
+  async function fixExternBron() {
+    const meta = await db.meta.get(`fix_extern_bron_v1_${user.id}`);
+    if (meta?.value) return;
+    const kapot = await db.vangsten
+      .where('user_id').equals(user.id)
+      .filter(r => !r.bron && (r.metalenringinfo === 4 || r.metalenringinfo === '4'))
+      .count();
+    if (kapot > 0) {
+      await db.meta.delete(`last_pull_vangsten_${user.id}`);
+    }
+    await db.meta.put({ key: `fix_extern_bron_v1_${user.id}`, value: true });
   }
 
   // Eenmalige migratie: normaliseer vangstdatums naar yyyy-mm-dd
