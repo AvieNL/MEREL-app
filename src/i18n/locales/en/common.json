@@ -164,6 +164,7 @@
   "stats_species": "Species",
   "stats_new": "New",
   "stats_recatch": "Recapture",
+  "stats_extern": "External report",
   "stats_catch_locations": "Catch locations",
     "tv_title": "Recaptures",
     "tv_no_data": "No recaptures found",

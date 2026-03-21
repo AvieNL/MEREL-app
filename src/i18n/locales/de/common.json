@@ -164,6 +164,7 @@
   "stats_species": "Arten",
   "stats_new": "Neu",
   "stats_recatch": "Wiederfang",
+  "stats_extern": "Externe Meldung",
   "stats_catch_locations": "Fangstandorte",
     "tv_title": "Wiederfänge",
     "tv_no_data": "Keine Wiederfänge gefunden",

@@ -26,7 +26,7 @@ export function fromVangstRow(row) {
   return {
     ...row.data,
     id: row.id,
-    bron: row.bron,
+    bron: row.bron || row.data?.bron,
     uploaded: row.uploaded,
     deleted_at: row.deleted_at || null,
   };

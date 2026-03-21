@@ -226,6 +226,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     [statsRecords, eigenFilter, eigenProjectNamen]
   );
 
+  // Kaart toont ook externe_ring_info (als rode stip), maar telt niet mee in stats
+  const kaartRecords = useMemo(() => {
+    const externRingInfo = records.filter(r => r.bron === 'externe_ring_info' && r.lat && r.lon);
+    return [...gefilterdRecords, ...externRingInfo];
+  }, [gefilterdRecords, records]);
+
   const huidigeRecords = useMemo(
     () => statsRecords.filter(r => !r.uploaded && r.bron !== 'griel_import' && r.bron !== 'externe_tv_melding'),
     [statsRecords]
@@ -614,7 +620,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
         )}
 
         {/* Kaart */}
-        <VangstKaart targetRecords={gefilterdRecords} allRecords={gefilterdRecords} />
+        <VangstKaart targetRecords={kaartRecords} allRecords={kaartRecords} />
 
         {/* Per project */}
         {totaalStats.projectTabel.length > 0 && (

@@ -11,6 +11,7 @@ const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','no
 // (Leaflet accepteert geen CSS variables, vandaar hex-waarden hier)
 const KAART_KLEUR_NIEUW       = '#38bdf8'; // --accent
 const KAART_KLEUR_TERUGVANGST = '#22c55e'; // --success
+const KAART_KLEUR_EXTERN      = '#ef4444'; // rood — externe meldingen
 const KAART_KLEUR_LIJN        = '#f97316'; // --warning-orange
 
 function useContainerWidth(ref) {
@@ -215,12 +216,14 @@ export function VangstKaart({ targetRecords, allRecords }) {
       if (!lat || !lon || isNaN(lat) || isNaN(lon)) return;
 
       const isNieuw = r.metalenringinfo !== 4 && r.metalenringinfo !== '4';
+      const isExtern = r.bron === 'externe_tv_melding' || r.bron === 'externe_ring_info';
       markers.push({
         lat, lon,
         soort: r.vogelnaam ? displayNaam(r.vogelnaam) : '',
         ring: r.ringnummer || '',
         datum: r.vangstdatum || '',
         isNieuw,
+        isExtern,
       });
 
       if (!isNieuw && r.ringnummer) {
@@ -261,7 +264,7 @@ export function VangstKaart({ targetRecords, allRecords }) {
       const bounds = [];
 
       kaartData.markers.forEach(m => {
-        const color = m.isNieuw ? KAART_KLEUR_NIEUW : KAART_KLEUR_TERUGVANGST;
+        const color = m.isExtern ? KAART_KLEUR_EXTERN : m.isNieuw ? KAART_KLEUR_NIEUW : KAART_KLEUR_TERUGVANGST;
         const marker = L.circleMarker([m.lat, m.lon], {
           radius: 6,
           fillColor: color,
@@ -307,6 +310,9 @@ export function VangstKaart({ targetRecords, allRecords }) {
       <div className="chart-legend">
         <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_NIEUW }} /> {t('stats_new')}</span>
         <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_TERUGVANGST }} /> {t('stats_recatch')}</span>
+        {kaartData.markers.some(m => m.isExtern) && (
+          <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_EXTERN }} /> {t('stats_extern')}</span>
+        )}
       </div>
     </div>
   );

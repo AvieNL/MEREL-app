@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.17';
+export const VERSIE = '1.5.18';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.18',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Fix: Externe meldingen zichtbaar op de kaart als rode stip (herkenbaar als externe melding)',
+      'Fix: externe_ring_info-records (scenario B) nu ook getoond op kaart in statistieken',
+    ],
+    wijzigingen_en: [
+      'Fix: External reports now shown on map as red dots (recognizable as external)',
+      'Fix: externe_ring_info records (scenario B) now also shown on stats map',
+    ],
+    wijzigingen_de: [
+      'Fix: Externe Meldungen jetzt als rote Punkte auf der Karte sichtbar',
+      'Fix: externe_ring_info-Datensätze (Szenario B) jetzt auch auf der Statistikkarte',
+    ],
+  },
   {
     versie: '1.5.17',
     datum: '2026-03-21',
