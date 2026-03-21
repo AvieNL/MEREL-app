@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.2';
+export const VERSIE = '1.5.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.3',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'UX: exportfouten worden nu inline getoond met sluitknop (prominenter dan toast)',
+    ],
+    wijzigingen_en: [
+      'UX: export errors are now shown inline with a close button (more prominent than toast)',
+    ],
+    wijzigingen_de: [
+      'UX: Exportfehler werden jetzt inline mit Schaltfläche zum Schließen angezeigt',
+    ],
+  },
   {
     versie: '1.5.2',
     datum: '2026-03-21',

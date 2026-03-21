@@ -196,6 +196,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   );
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [exportFout, setExportFout] = useState('');
 
   function openSoorten(soortenTabel, titel) {
     navigate('/stats/soorten', { state: { soortenTabel, titel } });
@@ -258,6 +259,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
   function handleExport(type, subset) {
     setExporting(type);
+    setExportFout('');
     const base = subset === 'huidig' ? huidigeRecords : records;
     const data = filterByDatum(base);
     const datum = new Date().toISOString().split('T')[0];
@@ -283,21 +285,21 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
         const geenCode = teExporteren.filter(r => !euringLookup[r.vogelnaam?.toLowerCase()]);
         if (geenCode.length > 0) {
           const namen = [...new Set(geenCode.map(r => r.vogelnaam || '(leeg)'))].slice(0, 5).join(', ');
-          addToast(t('errors:export_no_euring', { count: geenCode.length, names: namen }), 'error', 0);
+          setExportFout(t('errors:export_no_euring', { count: geenCode.length, names: namen }));
           setExporting(false);
           return;
         }
 
         const geenDatum = teExporteren.filter(r => !r.vangstdatum);
         if (geenDatum.length > 0) {
-          addToast(t('errors:export_no_date', { count: geenDatum.length }), 'error', 0);
+          setExportFout(t('errors:export_no_date', { count: geenDatum.length }));
           setExporting(false);
           return;
         }
 
         const kortRing = teExporteren.filter(r => !r.ringnummer || String(r.ringnummer).trim().length < 4);
         if (kortRing.length > 0) {
-          addToast(t('errors:export_short_ring', { count: kortRing.length }), 'error', 0);
+          setExportFout(t('errors:export_short_ring', { count: kortRing.length }));
           setExporting(false);
           return;
         }
@@ -306,7 +308,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
         const ontbrekend = projectenInExport.filter(naam => !projectAupis[naam]);
 
         if (ontbrekend.length > 0) {
-          addToast(t('errors:export_no_aupi', { projects: ontbrekend.join(', ') }), 'error', 0);
+          setExportFout(t('errors:export_no_aupi', { projects: ontbrekend.join(', ') }));
           setExporting(false);
           return;
         }
@@ -452,6 +454,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             <button className="btn-primary" onClick={() => handleExport('griel', 'huidig')} disabled={!!exporting}>
               {exporting === 'griel' ? t('stats_exporting') : t('stats_export_griel_current')}
             </button>
+            {exportFout && (
+              <div className="export-fout" role="alert">
+                {exportFout}
+                <button className="export-fout-sluiten" onClick={() => setExportFout('')} aria-label={t('pd_close_aria')}>✕</button>
+              </div>
+            )}
           </div>
         )}
 
@@ -720,6 +728,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
               {exporting === 'json' ? t('stats_exporting') : 'JSON'}
             </button>
           </div>
+          {exportFout && (
+            <div className="export-fout" role="alert">
+              {exportFout}
+              <button className="export-fout-sluiten" onClick={() => setExportFout('')} aria-label={t('pd_close_aria')}>✕</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
