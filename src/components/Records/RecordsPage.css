@@ -59,18 +59,18 @@
 }
 
 .record-type--tv {
-  background: rgba(249, 115, 22, 0.15);
-  color: #f97316;
+  background: rgba(249, 115, 22, 0.20);
+  color: #fb923c;
 }
 
 .record-type--tvo {
-  background: var(--warning-bg);
-  color: var(--warning);
+  background: rgba(250, 204, 21, 0.18);
+  color: #facc15;
 }
 
 .record-type--tvx {
-  background: var(--danger-bg);
-  color: var(--danger);
+  background: rgba(220, 38, 38, 0.20);
+  color: #f87171;
 }
 
 .record-main {
