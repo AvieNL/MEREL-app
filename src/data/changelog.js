@@ -1,6 +1,15 @@
-export const VERSIE = '1.3.4';
+export const VERSIE = '1.3.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.3.5',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'UX: taal- en themakiezer samengevoegd tot één vlagicoon in de header — hover/klik opent dropdown met talen (vlag + naam) en thema\'s (icoon + label)',
+      'UX: pref-dropdown sluit automatisch bij klik buiten op mobiel',
+      'UX: pref-menu en hamburgermenu sluiten elkaar uit',
+    ],
+  },
   {
     versie: '1.3.4',
     datum: '2026-03-21',

@@ -10,7 +10,9 @@ import './Header.css';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [prefOpen, setPrefOpen] = useState(false);
   const menuRef = useRef(null);
+  const prefRef = useRef(null);
   const navigate = useNavigate();
   const { logout, profile, simulatedRole, setSimulatedRole } = useAuth();
   const { isSimulating, rol } = useRole();
@@ -25,6 +27,7 @@ export default function Header() {
     viewer: t('role_viewer'),
   };
 
+  // Hamburger: sluit bij klik buiten
   useEffect(() => {
     if (!menuOpen) return;
     function handleClick(e) {
@@ -35,6 +38,18 @@ export default function Header() {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [menuOpen]);
+
+  // Pref: sluit bij klik buiten (mobiel)
+  useEffect(() => {
+    if (!prefOpen) return;
+    function handleClick(e) {
+      if (prefRef.current && !prefRef.current.contains(e.target)) {
+        setPrefOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [prefOpen]);
 
   function goTo(path) {
     setMenuOpen(false);
@@ -52,24 +67,19 @@ export default function Header() {
 
   const isStaging = import.meta.env.VITE_STAGING === 'true';
 
-  const THEME_NEXT = { donker: 'licht', licht: 'systeem', systeem: 'donker' };
-  const THEME_ARIA = {
-    donker: t('theme_to_light'),
-    licht: t('theme_to_system'),
-    systeem: t('theme_to_dark'),
-  };
-  const THEME_TITLE = {
-    donker: t('theme_light'),
-    licht: t('theme_system'),
-    systeem: t('theme_dark'),
-  };
-  const THEME_ICON = { donker: '☀', licht: '◑', systeem: '☾' };
-
   const TALEN = [
-    { code: 'nl', vlag: '🇳🇱' },
-    { code: 'en', vlag: '🇬🇧' },
-    { code: 'de', vlag: '🇩🇪' },
+    { code: 'nl', vlag: '🇳🇱', naam: 'Nederlands' },
+    { code: 'en', vlag: '🇬🇧', naam: 'English' },
+    { code: 'de', vlag: '🇩🇪', naam: 'Deutsch' },
   ];
+
+  const THEMAS = [
+    { mode: 'donker', icon: '☾', label: t('theme_dark') },
+    { mode: 'licht',  icon: '☀', label: t('theme_light') },
+    { mode: 'systeem', icon: '◑', label: t('theme_system') },
+  ];
+
+  const activeTaal = TALEN.find(tl => tl.code === i18n.language) || TALEN[0];
 
   return (
     <header className="app-header">
@@ -85,71 +95,96 @@ export default function Header() {
         <div className="header-sync">
           <SyncIndicator />
         </div>
-        <div className="header-menu" ref={menuRef}>
-          {TALEN.map(taal => (
+        <div className="header-menu">
+          {/* Pref-menu: taal + thema */}
+          <div
+            className="pref-menu"
+            ref={prefRef}
+            onMouseEnter={() => { setMenuOpen(false); setPrefOpen(true); }}
+            onMouseLeave={() => setPrefOpen(false)}
+          >
             <button
-              key={taal.code}
-              className={`lang-btn${i18n.language === taal.code ? ' lang-btn--active' : ''}`}
-              onClick={() => i18n.changeLanguage(taal.code)}
-              aria-label={taal.code.toUpperCase()}
-              title={taal.code.toUpperCase()}
+              className="pref-btn"
+              onClick={() => { setMenuOpen(false); setPrefOpen(o => !o); }}
+              aria-label={`${activeTaal.naam} / ${THEMAS.find(th => th.mode === mode)?.label}`}
             >
-              {taal.vlag}
+              {activeTaal.vlag}
             </button>
-          ))}
-          <button
-            className="theme-toggle-btn"
-            onClick={() => setMode(THEME_NEXT[mode] || 'donker')}
-            aria-label={THEME_ARIA[mode]}
-            title={THEME_TITLE[mode]}
-          >
-            {THEME_ICON[mode] || '☾'}
-          </button>
-          <button
-            className={`hamburger-btn${isSimulating ? ' hamburger-btn--simulating' : ''}`}
-            onClick={() => setMenuOpen(o => !o)}
-            aria-label="Menu"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <rect x="2" y="4" width="16" height="2" rx="1"/>
-              <rect x="2" y="9" width="16" height="2" rx="1"/>
-              <rect x="2" y="14" width="16" height="2" rx="1"/>
-            </svg>
-            {isSimulating && <span className="hamburger-sim-dot" />}
-          </button>
-          {menuOpen && (
-            <div className="header-dropdown">
-              {isRealAdmin && (
-                <button onClick={() => goTo('/admin')} className="header-admin-btn">
-                  ⚙ {t('nav_admin')}
-                </button>
-              )}
-              <button onClick={() => goTo('/projecten')}>{t('nav_projects')}</button>
-              <button onClick={() => goTo('/ringstrengen')}>{t('nav_ring_strings')}</button>
-              <button onClick={() => goTo('/instellingen')}>{t('nav_settings')}</button>
-              <button onClick={() => goTo('/over')}>{t('nav_about')}</button>
+            {prefOpen && (
+              <div className="pref-dropdown">
+                {TALEN.map(taal => (
+                  <button
+                    key={taal.code}
+                    className={`pref-item${i18n.language === taal.code ? ' pref-item--active' : ''}`}
+                    onClick={() => i18n.changeLanguage(taal.code)}
+                  >
+                    <span className="pref-item-icon">{taal.vlag}</span>
+                    {taal.naam}
+                  </button>
+                ))}
+                <div className="pref-divider" />
+                {THEMAS.map(thema => (
+                  <button
+                    key={thema.mode}
+                    className={`pref-item${mode === thema.mode ? ' pref-item--active' : ''}`}
+                    onClick={() => setMode(thema.mode)}
+                  >
+                    <span className="pref-item-icon">{thema.icon}</span>
+                    {thema.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-              {isRealAdmin && (
-                <div className="header-role-section">
-                  <span className="header-role-label">{t('nav_simulate_role')}</span>
-                  <div className="header-role-btns">
-                    {['admin', 'ringer', 'viewer'].map(r => (
-                      <button
-                        key={r}
-                        className={`header-role-btn${rol === r ? ' header-role-btn--active' : ''}`}
-                        onClick={() => switchRole(r)}
-                      >
-                        {ROL_LABELS[r]}
-                      </button>
-                    ))}
+          {/* Hamburger */}
+          <div className="hamburger-wrapper" ref={menuRef}>
+            <button
+              className={`hamburger-btn${isSimulating ? ' hamburger-btn--simulating' : ''}`}
+              onClick={() => { setPrefOpen(false); setMenuOpen(o => !o); }}
+              aria-label="Menu"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <rect x="2" y="4" width="16" height="2" rx="1"/>
+                <rect x="2" y="9" width="16" height="2" rx="1"/>
+                <rect x="2" y="14" width="16" height="2" rx="1"/>
+              </svg>
+              {isSimulating && <span className="hamburger-sim-dot" />}
+            </button>
+            {menuOpen && (
+              <div className="header-dropdown">
+                {isRealAdmin && (
+                  <button onClick={() => goTo('/admin')} className="header-admin-btn">
+                    ⚙ {t('nav_admin')}
+                  </button>
+                )}
+                <button onClick={() => goTo('/projecten')}>{t('nav_projects')}</button>
+                <button onClick={() => goTo('/ringstrengen')}>{t('nav_ring_strings')}</button>
+                <button onClick={() => goTo('/instellingen')}>{t('nav_settings')}</button>
+                <button onClick={() => goTo('/over')}>{t('nav_about')}</button>
+
+                {isRealAdmin && (
+                  <div className="header-role-section">
+                    <span className="header-role-label">{t('nav_simulate_role')}</span>
+                    <div className="header-role-btns">
+                      {['admin', 'ringer', 'viewer'].map(r => (
+                        <button
+                          key={r}
+                          className={`header-role-btn${rol === r ? ' header-role-btn--active' : ''}`}
+                          onClick={() => switchRole(r)}
+                        >
+                          {ROL_LABELS[r]}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              <div className="header-dropdown-divider" />
-              <button onClick={handleLogout} className="header-logout-btn">{t('nav_logout')}</button>
-            </div>
-          )}
+                <div className="header-dropdown-divider" />
+                <button onClick={handleLogout} className="header-logout-btn">{t('nav_logout')}</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
