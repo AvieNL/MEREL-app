@@ -394,7 +394,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             <div className="stat-value">{huidigeStats.total}</div>
             <div className="stat-label">{t('stats_total')}</div>
           </div>
-          <div className="stat-card stat-card--link" onClick={() => openSoorten(huidigeStats.soortenTabel, t('stats_current_catch'))}>
+          <div className="stat-card">
             <div className="stat-value">{huidigeStats.soorten}</div>
             <div className="stat-label">{t('stats_species')}</div>
           </div>
@@ -509,7 +509,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             <div className="stat-value">{totaalStats.nieuw}</div>
             <div className="stat-label">{t('stats_new_rings')}</div>
           </div>
-          <div className="stat-card">
+          <div className="stat-card stat-card--link" onClick={() => navigate('/stats/terugvangsten')}>
             <div className="stat-value">{totaalStats.terugvangst}</div>
             <div className="stat-label">{t('stats_recatches')}</div>
           </div>

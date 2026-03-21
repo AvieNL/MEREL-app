@@ -18,6 +18,7 @@ const RecordsPage     = lazy(() => import('./components/Records/RecordsPage'));
 const StatsPage       = lazy(() => import('./components/Stats/StatsPage'));
 const ProjectDetail   = lazy(() => import('./components/Stats/ProjectDetail'));
 const SoortenOverzicht = lazy(() => import('./components/Stats/SoortenOverzicht'));
+const TerugvangstDetail = lazy(() => import('./components/Stats/TerugvangstDetail'));
 const SoortenPage     = lazy(() => import('./components/Soorten/SoortenPage'));
 const SoortDetail     = lazy(() => import('./components/Soorten/SoortDetail'));
 const DatabasesPage   = lazy(() => import('./components/Databases/DatabasesPage'));
@@ -182,6 +183,9 @@ function MainApp() {
             <ProjectDetail records={records} />
           } />
           <Route path="/stats/soorten" element={<SoortenOverzicht />} />
+          <Route path="/stats/terugvangsten" element={
+            <TerugvangstDetail records={records} />
+          } />
           <Route path="/soorten" element={
             <SoortenPage records={records} />
           } />

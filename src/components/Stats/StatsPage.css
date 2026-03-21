@@ -594,3 +594,59 @@
 .export-fout-sluiten:hover {
   opacity: 1;
 }
+
+/* TerugvangstDetail — record-kaarten */
+.tv-records-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.tv-record-card {
+  flex: 1;
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tv-record-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 2px;
+}
+
+.tv-record-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.tv-record-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.2;
+  margin: 2px 0;
+}
+
+.tv-record-ring {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.tv-record-dates {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.tv-record-plaats {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}

@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.15';
+export const VERSIE = '1.5.16';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.16',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Feat: Terugvangsten-detailpagina — record oudste/verste, grafieken (vrije tijd, seizoen, afstand), soortentabel met %TV, kaart en sorteerbare volledige lijst',
+      'UX: Actuele vangsten — soorten niet meer klikbaar (staan al in de tabel); Totaal — terugvangsten klikbaar naar detailpagina',
+    ],
+    wijzigingen_en: [
+      'Feat: Recaptures detail page — oldest/furthest records, charts (time free, season, distance), species table with %RC, map and sortable full list',
+      'UX: Current catch — species no longer clickable; Total — recaptures clickable to detail page',
+    ],
+    wijzigingen_de: [
+      'Feat: Wiederfang-Detailseite — ältester/weitester Rekord, Diagramme (Freizeit, Saison, Entfernung), Artentabelle mit %WF, Karte und sortierbare Gesamtliste',
+      'UX: Aktuelle Fänge — Arten nicht mehr klickbar; Gesamt — Wiederfänge führen zur Detailseite',
+    ],
+  },
   {
     versie: '1.5.15',
     datum: '2026-03-21',
