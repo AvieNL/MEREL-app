@@ -150,11 +150,13 @@ export default function TerugvangstDetail({ records }) {
   }, [soortenTabel, soortSort, displayNaam]);
 
   const gesorteerd = useMemo(() => {
-    return [...list].sort((a, b) => {
-      if (sorteer === 'afstand') return (b.afstandKm || 0) - (a.afstandKm || 0);
-      if (sorteer === 'soort') return (a.soort || '').localeCompare(b.soort || '', 'nl');
-      return (b.dagen || 0) - (a.dagen || 0);
-    });
+    return [...list]
+      .sort((a, b) =>
+        sorteer === 'afstand'
+          ? (b.afstandKm || 0) - (a.afstandKm || 0)
+          : (b.dagen || 0) - (a.dagen || 0)
+      )
+      .slice(0, 25);
   }, [list, sorteer]);
 
   if (list.length === 0) {
@@ -292,10 +294,6 @@ export default function TerugvangstDetail({ records }) {
               className={`tv-toggle-btn${sorteer === 'afstand' ? ' active' : ''}`}
               onClick={() => setSorteer('afstand')}
             >{t('stats_furthest_distance')}</button>
-            <button
-              className={`tv-toggle-btn${sorteer === 'soort' ? ' active' : ''}`}
-              onClick={() => setSorteer('soort')}
-            >{t('tv_sort_species')}</button>
           </div>
         </div>
         <div className="trektellen-table-wrap">
