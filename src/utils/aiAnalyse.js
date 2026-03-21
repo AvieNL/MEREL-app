@@ -2,7 +2,11 @@ import { supabase } from '../lib/supabase';
 import { blobNaarBase64 } from './imageHelper';
 import { getFotoUrl } from '../hooks/useReferentiebibliotheek';
 
+// In-memory cache voor referentiefoto's (per sessie, voorkomt dubbele fetches)
+const fotoUrlCache = new Map();
+
 async function urlNaarBase64(url) {
+  if (fotoUrlCache.has(url)) return fotoUrlCache.get(url);
   let resp;
   try {
     resp = await fetch(url);
@@ -12,7 +16,9 @@ async function urlNaarBase64(url) {
   if (!resp.ok) throw new Error(`Referentiefoto niet gevonden (HTTP ${resp.status})`);
   const blob = await resp.blob();
   const mediaType = resp.headers.get('content-type')?.split(';')[0] || 'image/jpeg';
-  return { data: await blobNaarBase64(blob), mediaType };
+  const result = { data: await blobNaarBase64(blob), mediaType };
+  fotoUrlCache.set(url, result);
+  return result;
 }
 
 export const MAX_REFERENTIES = 10;
@@ -56,7 +62,7 @@ export function buildPrompt(soort, referenties, aantalRefFotos = 0) {
 2. Geslacht: M (man), F (vrouw), of U (onbekend)
 3. Bepaling geslacht als EURING-code: A=activiteit/gedrag/zang, B=broedvlek, C=cloacale protuberans, D=DNA, E=inwendig onderzoek cloaca, L=laparoscopie, P=verenkleed (plumage), S=grootte/kleurintensiteit, T=post-mortem dissectie, U=onbekend
 4. Betrouwbaarheid van de analyse als getal 0–100 (verhoog de betrouwbaarheid als de vogel overeenkomt met een referentie)
-5. Korte Nederlandse toelichting (max 2 zinnen)
+5. Korte Nederlandse toelichting (max 2 zinnen) — beschrijf welke visuele kenmerken de doorslag gaven: ruipatroon (actieve bloedspolen, nieuwe vs. oude pennen), groeiplaten/streaks in slagpennen, mate van veerslijtage, en seizoenskleed (zomer/winter/tussen)
 
 Soort: ${soort}
 ${refIntro}

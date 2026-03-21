@@ -1,6 +1,31 @@
-export const VERSIE = '1.4.8';
+export const VERSIE = '1.4.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.4.9',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Refactor: syncQueue.js herschreven als dispatch-tabel (leesbaarder, uitbreidbaar)',
+      'Feat: in-memory cache voor referentiefoto-URLs (voorkomt dubbele fetches per sessie)',
+      'Feat: AI-prompt uitgebreid met instructies voor visuele ruikenmerken',
+      'Feat: OpenGraph meta-tags toegevoegd aan index.html',
+      'Tests: unit tests toegevoegd voor aiAnalyse (selectReferenties, buildPrompt)',
+    ],
+    wijzigingen_en: [
+      'Refactor: syncQueue.js rewritten as dispatch table (more readable, extensible)',
+      'Feat: in-memory cache for reference photo URLs (prevents duplicate fetches per session)',
+      'Feat: AI prompt extended with instructions for visual moult feature analysis',
+      'Feat: OpenGraph meta tags added to index.html',
+      'Tests: unit tests added for aiAnalyse (selectReferenties, buildPrompt)',
+    ],
+    wijzigingen_de: [
+      'Refactor: syncQueue.js als Dispatch-Tabelle neu geschrieben (lesbarer, erweiterbar)',
+      'Feat: In-Memory-Cache für Referenzfoto-URLs (verhindert doppelte Abrufe pro Sitzung)',
+      'Feat: KI-Prompt um Anweisungen zur visuellen Mauser-Merkmalsanalyse erweitert',
+      'Feat: OpenGraph-Meta-Tags zu index.html hinzugefügt',
+      'Tests: Unit-Tests für aiAnalyse hinzugefügt (selectReferenties, buildPrompt)',
+    ],
+  },
   {
     versie: '1.4.8',
     datum: '2026-03-21',
