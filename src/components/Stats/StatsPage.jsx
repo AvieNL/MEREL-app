@@ -9,6 +9,7 @@ import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData }
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
 import { formatDatum, toYMD } from '../../utils/dateHelper';
 import { buildEersteVangstMap } from '../../utils/catchHelper';
+import { STATS_UITGESLOTEN } from '../../data/constants';
 import './StatsPage.css';
 
 function capitalize(s) {
@@ -181,7 +182,6 @@ function parseCSV(text) {
   return records;
 }
 
-const STATS_UITGESLOTEN = ['ring vernietigd of verloren'];
 
 export default function StatsPage({ records, markAllAsUploaded, importRecords, projects = [], myAupis = {} }) {
   const navigate = useNavigate();

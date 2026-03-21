@@ -1,6 +1,22 @@
-export const VERSIE = '1.4.9';
+export const VERSIE = '1.5.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.0',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Refactor: magic number 60*60*1000 vervangen door PULL_INTERVAL_MS constante',
+      'Refactor: STATS_UITGESLOTEN verplaatst van StatsPage naar data/constants.js',
+    ],
+    wijzigingen_en: [
+      'Refactor: magic number 60*60*1000 replaced by PULL_INTERVAL_MS constant',
+      'Refactor: STATS_UITGESLOTEN moved from StatsPage to data/constants.js',
+    ],
+    wijzigingen_de: [
+      'Refactor: Magic Number 60*60*1000 durch PULL_INTERVAL_MS Konstante ersetzt',
+      'Refactor: STATS_UITGESLOTEN von StatsPage nach data/constants.js verschoben',
+    ],
+  },
   {
     versie: '1.4.9',
     datum: '2026-03-21',

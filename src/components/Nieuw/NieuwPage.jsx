@@ -14,7 +14,7 @@ import {
   EMPTY_FORM, REQUIRED_FIELDS,
 } from './NieuwPage.constants';
 import { fuzzyMatch } from './NieuwPage.utils';
-import { RUIKAART_SLAGEN } from '../../data/constants';
+import { RUIKAART_SLAGEN, PULL_INTERVAL_MS } from '../../data/constants';
 import { useRecords } from '../../hooks/useRecords';
 import { useProjects } from '../../hooks/useProjects';
 import { useSpeciesOverrides } from '../../hooks/useSpeciesOverrides';
@@ -125,7 +125,7 @@ export default function NieuwPage() {
     const now = Date.now();
     const today = new Date().toISOString().split('T')[0];
     const recent = [...(records || [])]
-      .filter(r => r.vangstdatum === today && r.timestamp && (now - new Date(r.timestamp).getTime()) <= 60 * 60 * 1000)
+      .filter(r => r.vangstdatum === today && r.timestamp && (now - new Date(r.timestamp).getTime()) <= PULL_INTERVAL_MS)
       .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
     if (recent) {
       base.project        = recent.project        ?? base.project;

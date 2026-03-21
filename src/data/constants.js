@@ -10,6 +10,9 @@ export const MAX_GRIEL_TEKST = 100;
 // Maximaal aantal vangsten zichtbaar in de recordslijst
 export const MAX_RECORDS_WEERGAVE = 100;
 
+// Vogelnamen die worden uitgesloten van statistieken (niet-biologische registraties)
+export const STATS_UITGESLOTEN = ['ring vernietigd of verloren'];
+
 // Korte weergavelabels voor leeftijdcodes (EURING)
 export const LEEFTIJD_LABEL = {
   '0': '?',
