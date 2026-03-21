@@ -25,19 +25,40 @@ Deno.serve(async (req: Request) => {
       return json({ error: 'ANTHROPIC_API_KEY niet geconfigureerd in Supabase secrets' });
     }
 
-    const { fotos, prompt } = await req.json();
+    const { fotos, refFotos, prompt } = await req.json();
 
     if (!fotos?.length) {
       return json({ error: 'Geen fotos meegestuurd' });
     }
 
-    const content = [
-      ...fotos.map((f: { mediaType: string; data: string }) => ({
+    type Foto = { mediaType: string; data: string };
+    type RefFoto = Foto & { leeftijd: string; geslacht: string; maand: number; type: string };
+
+    // Bouw de content op: eerst referentiefoto's met label, dan te analyseren foto's
+    const content: unknown[] = [];
+
+    if (refFotos?.length) {
+      (refFotos as RefFoto[]).forEach((r, i) => {
+        content.push({
+          type: 'text',
+          text: `Referentie ${i + 1} (bevestigd: leeftijd=${r.leeftijd}, geslacht=${r.geslacht}, maand=${r.maand}):`,
+        });
+        content.push({
+          type: 'image',
+          source: { type: 'base64', media_type: r.mediaType, data: r.data },
+        });
+      });
+      content.push({ type: 'text', text: 'Te analyseren vogel:' });
+    }
+
+    (fotos as Foto[]).forEach(f => {
+      content.push({
         type: 'image',
         source: { type: 'base64', media_type: f.mediaType, data: f.data },
-      })),
-      { type: 'text', text: prompt },
-    ];
+      });
+    });
+
+    content.push({ type: 'text', text: prompt });
 
     const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

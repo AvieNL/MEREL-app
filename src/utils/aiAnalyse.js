@@ -22,24 +22,30 @@ export function selectReferenties(soort, maand, alle) {
 
 /**
  * Bouw het Nederlandstalige analyse-prompt op.
+ * @param {number} aantalRefFotos - Aantal referentiefoto's die visueel zijn meegestuurd
  */
-export function buildPrompt(soort, referenties) {
+export function buildPrompt(soort, referenties, aantalRefFotos = 0) {
   const refTekst = referenties.length > 0
     ? referenties.map((r, i) =>
         `Ref ${i + 1}: leeftijd=${r.leeftijd}, geslacht=${r.geslacht}, maand=${r.maand}, type=${r.type}`
       ).join('\n')
     : 'Geen referenties beschikbaar.';
 
-  return `Je bent een ervaren vogelringer. Analyseer de vogel op de bijgevoegde foto('s) en bepaal:
-1. Leeftijd als EURING-leeftijdscode (bijv. "1"=pullus, "3"=eerste jaar, "4"=tweede jaar, "6"=adult, "5"=adult/subadult)
+  const refIntro = aantalRefFotos > 0
+    ? `De eerste ${aantalRefFotos} foto('s) zijn bevestigde referentievangsten met bekende leeftijd en geslacht. De laatste foto('s) zijn de te analyseren vogel.`
+    : '';
+
+  return `Je bent een ervaren vogelringer. Analyseer de vogel en bepaal:
+1. Leeftijd als EURING-leeftijdscode (bijv. "1"=pullus, "3"=eerste jaar, "4"=tweede jaar, "6"=adult)
 2. Geslacht: M (man), F (vrouw), of U (onbekend)
 3. Bepaling geslacht als EURING-code: A=plumage, B=broedvlek, C=cloaca, D=DNA, E=gekleurde ring, L=biometrie, P=niet te bepalen, S=sperma, T=gezang/roep, U=onbekend
 4. Betrouwbaarheid van de analyse als getal 0–100
 5. Korte Nederlandse toelichting (max 2 zinnen)
 
 Soort: ${soort}
+${refIntro}
 
-Referentiedata uit eerdere vangsten:
+Referentiedata:
 ${refTekst}
 
 Antwoord UITSLUITEND als geldige JSON, zonder uitleg of markdown:
@@ -62,10 +68,23 @@ export async function analyseVogel(soort, maand, fotos, referenties) {
     }))
   );
 
-  const prompt = buildPrompt(soort, referenties);
+  // Stuur referentiefoto's mee als visuele context (max 3, alleen als fotoBlob aanwezig)
+  const refMetFoto = referenties.filter(r => r.fotoBlob).slice(0, 3);
+  const refFotoData = await Promise.all(
+    refMetFoto.map(async r => ({
+      mediaType: 'image/jpeg',
+      data: await blobNaarBase64(r.fotoBlob),
+      leeftijd: r.leeftijd,
+      geslacht: r.geslacht,
+      maand: r.maand,
+      type: r.type,
+    }))
+  );
+
+  const prompt = buildPrompt(soort, referenties, refFotoData.length);
 
   const { data, error } = await supabase.functions.invoke('ai-analyse', {
-    body: { soort, fotos: fotoData, prompt },
+    body: { soort, fotos: fotoData, refFotos: refFotoData, prompt },
   });
 
   if (error) throw new Error(error.message || String(error));
