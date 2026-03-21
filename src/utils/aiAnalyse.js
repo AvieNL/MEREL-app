@@ -68,20 +68,10 @@ export async function analyseVogel(soort, maand, fotos, referenties) {
     body: { soort, fotos: fotoData, prompt },
   });
 
-  if (error) {
-    // Probeer de echte foutmelding uit de response body te halen
-    let msg = error.message || String(error);
-    try {
-      const body = await error.context?.json?.();
-      if (body?.error) msg = body.error;
-    } catch { /* response body niet leesbaar */ }
-    throw new Error(msg);
-  }
+  if (error) throw new Error(error.message || String(error));
 
-  // Edge Function geeft JSON-string terug als text
-  if (typeof data === 'string') {
-    try { return JSON.parse(data); }
-    catch { throw new Error('Ongeldig JSON-antwoord van AI-service'); }
-  }
+  // Edge Function geeft altijd 200 terug; fout staat in data.error
+  if (data?.error) throw new Error(data.error);
+
   return data;
 }

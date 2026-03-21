@@ -10,46 +10,41 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
+function ok(body: unknown) {
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: { ...CORS_HEADERS, 'content-type': 'application/json' },
+  });
+}
+
 serve(async (req: Request) => {
-  // Preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
   }
 
   if (req.method !== 'POST') {
-    return new Response('Method Not Allowed', { status: 405, headers: CORS_HEADERS });
+    return ok({ error: 'Method Not Allowed' });
   }
 
   try {
+    if (!ANTHROPIC_API_KEY) {
+      return ok({ error: 'ANTHROPIC_API_KEY niet geconfigureerd in Supabase secrets' });
+    }
+
     const { fotos, prompt } = await req.json() as {
       soort: string;
       fotos: Array<{ mediaType: string; data: string }>;
       prompt: string;
     };
 
-    if (!ANTHROPIC_API_KEY) {
-      return new Response(
-        JSON.stringify({ error: 'ANTHROPIC_API_KEY niet geconfigureerd' }),
-        { status: 500, headers: { ...CORS_HEADERS, 'content-type': 'application/json' } }
-      );
-    }
-
     if (!fotos?.length) {
-      return new Response(
-        JSON.stringify({ error: 'Geen foto\'s meegestuurd' }),
-        { status: 400, headers: { ...CORS_HEADERS, 'content-type': 'application/json' } }
-      );
+      return ok({ error: 'Geen foto\'s meegestuurd' });
     }
 
-    // Bouw de message op: eerst de foto's, dan de tekst-prompt
     const content: unknown[] = [
       ...fotos.map(f => ({
         type: 'image',
-        source: {
-          type: 'base64',
-          media_type: f.mediaType,
-          data: f.data,
-        },
+        source: { type: 'base64', media_type: f.mediaType, data: f.data },
       })),
       { type: 'text', text: prompt },
     ];
@@ -70,24 +65,21 @@ serve(async (req: Request) => {
 
     if (!anthropicResponse.ok) {
       const err = await anthropicResponse.text();
-      return new Response(
-        JSON.stringify({ error: `Anthropic API fout: ${err}` }),
-        { status: 502, headers: { ...CORS_HEADERS, 'content-type': 'application/json' } }
-      );
+      return ok({ error: `Anthropic API fout (${anthropicResponse.status}): ${err}` });
     }
 
     const result = await anthropicResponse.json();
     const tekst = result?.content?.[0]?.text ?? '{}';
 
-    return new Response(tekst, {
-      status: 200,
-      headers: { ...CORS_HEADERS, 'content-type': 'application/json' },
-    });
+    // Valideer dat het geldige JSON is
+    try {
+      const parsed = JSON.parse(tekst);
+      return ok(parsed);
+    } catch {
+      return ok({ error: `Ongeldig JSON van AI: ${tekst}` });
+    }
 
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: String(err) }),
-      { status: 500, headers: { ...CORS_HEADERS, 'content-type': 'application/json' } }
-    );
+    return ok({ error: `Interne fout: ${String(err)}` });
   }
 });
