@@ -193,7 +193,10 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   const displayNaam = useDisplayNaam();
 
   const statsRecords = useMemo(
-    () => records.filter(r => !STATS_UITGESLOTEN.includes(r.vogelnaam?.toLowerCase())),
+    () => records.filter(r =>
+      !STATS_UITGESLOTEN.includes(r.vogelnaam?.toLowerCase()) &&
+      r.bron !== 'externe_ring_info'
+    ),
     [records]
   );
   const [showUploadConfirm, setShowUploadConfirm] = useState(false);
@@ -224,7 +227,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   );
 
   const huidigeRecords = useMemo(
-    () => statsRecords.filter(r => !r.uploaded && r.bron !== 'griel_import'),
+    () => statsRecords.filter(r => !r.uploaded && r.bron !== 'griel_import' && r.bron !== 'externe_tv_melding'),
     [statsRecords]
   );
   const huidigeStats = useMemo(() => computeStats(huidigeRecords), [huidigeRecords]);
@@ -282,7 +285,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
           if (myAupis[p.id]) projectAupis[p.naam] = myAupis[p.id];
         });
 
-        const teExporteren = data.filter(r => r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && r.bron !== 'griel_import');
+        const teExporteren = data.filter(r => r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && r.bron !== 'griel_import' && r.bron !== 'externe_tv_melding' && r.bron !== 'externe_ring_info');
 
         const geenCode = teExporteren.filter(r => !euringLookup[r.vogelnaam?.toLowerCase()]);
         if (geenCode.length > 0) {

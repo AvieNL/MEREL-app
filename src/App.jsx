@@ -174,6 +174,7 @@ function MainApp() {
               onDelete={deleteRecord}
               onRestore={restoreRecord}
               onPermanentDelete={permanentDeleteRecord}
+              onAddRecord={r => importRecords([r])}
             />
           } />
           <Route path="/stats" element={

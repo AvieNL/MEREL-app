@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.16';
+export const VERSIE = '1.5.17';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.17',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Feat: Externe EURING-meldingen — plak een EURING Exchange Code (pijpjes) om een terugvangstmelding (scenario A) of eerste-vangstreferentie (scenario B) op te slaan',
+      'Feat: Scenario A telt mee in terugvangststatistieken; scenario B vergroot afstand/dagberekening; geen van beide in Griel-export',
+    ],
+    wijzigingen_en: [
+      'Feat: External EURING notifications — paste an EURING Exchange Code (pipe-delimited) to save a recapture notification (scenario A) or first-catch reference (scenario B)',
+      'Feat: Scenario A counts in recapture statistics; scenario B enables distance/day calculation; neither exported to Griel',
+    ],
+    wijzigingen_de: [
+      'Feat: Externe EURING-Meldungen — EURING Exchange Code (Pipe-getrennt) einfügen, um eine Wiederfangmeldung (Szenario A) oder Erstfangreferenz (Szenario B) zu speichern',
+      'Feat: Szenario A zählt in Wiederfangstatistiken; Szenario B aktiviert Abstands-/Tagesberechnung; keines davon wird an Griel exportiert',
+    ],
+  },
   {
     versie: '1.5.16',
     datum: '2026-03-21',

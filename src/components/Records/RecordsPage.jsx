@@ -7,6 +7,7 @@ import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import { formatDatum } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL, MAX_RECORDS_WEERGAVE } from '../../data/constants';
+import ExternMeldingModal from './ExternMeldingModal';
 import './RecordsPage.css';
 
 function geslachtIcoon(g) {
@@ -35,10 +36,11 @@ function leeftijdLabel(code) {
   return LEEFTIJD_LABEL[code] || code;
 }
 
-export default function RecordsPage({ records, recordsLoading = false, deletedRecords = [], onDelete, onRestore, onPermanentDelete }) {
+export default function RecordsPage({ records, recordsLoading = false, deletedRecords = [], onDelete, onRestore, onPermanentDelete, onAddRecord }) {
   const [zoek, setZoek] = useState('');
   const [prullenbakOpen, setPrullenbakOpen] = useState(false);
   const [expanded, setExpanded] = useState(null);
+  const [externModalOpen, setExternModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { canDelete } = useRole();
@@ -57,6 +59,8 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   }, [records]);
 
   function getRecordType(r) {
+    if (r.bron === 'externe_tv_melding') return 'tva';
+    if (r.bron === 'externe_ring_info') return 'nwx';
     if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') return 'nw';
     if (!r.ringnummer) return 'tvx';
     const original = nvByRing.get(normalizeRing(r.ringnummer));
@@ -69,6 +73,8 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
     tv:  { icon: '⟳', cls: 'record-type--tv',  key: 'record_type_tv' },
     tvo: { icon: '⟲', cls: 'record-type--tvo', key: 'record_type_tvo' },
     tvx: { icon: '⊕', cls: 'record-type--tvx', key: 'record_type_tvx' },
+    tva: { icon: '⟳', cls: 'record-type--tva', key: 'record_type_tva' },
+    nwx: { icon: '○', cls: 'record-type--nwx', key: 'record_type_nwx' },
   };
 
   // Index: naam_nl (lowercase) → alle taalnamen (lowercase) voor meertalig zoeken
@@ -130,6 +136,12 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
 
   return (
     <div className="page records-page">
+      {externModalOpen && (
+        <ExternMeldingModal
+          onClose={() => setExternModalOpen(false)}
+          onSave={record => onAddRecord?.(record)}
+        />
+      )}
       <div className="search-bar">
         <input
           type="search"
@@ -139,6 +151,15 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
         />
         <span className="result-count">{t('records_count', { count: filtered.length })}</span>
       </div>
+      {onAddRecord && (
+        <div style={{ padding: '0 16px 8px', display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            className="btn-secondary"
+            style={{ fontSize: '0.8rem', padding: '6px 12px' }}
+            onClick={() => setExternModalOpen(true)}
+          >+ {t('extern_btn')}</button>
+        </div>
+      )}
 
       <div className="records-list">
         {recordsLoading ? (
@@ -181,6 +202,8 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
                   {r.bron === 'griel_import' && <span className="badge badge-accent">Griel</span>}
                   {r.bron === 'buitenland_import' && <span className="badge badge-accent">Buitenland</span>}
                   {r.bron === 'andere_banen_import' && <span className="badge badge-accent">Extern</span>}
+                  {r.bron === 'externe_tv_melding' && <span className="badge badge-warning">{t('extern_badge_tv')}</span>}
+                  {r.bron === 'externe_ring_info' && <span className="badge badge-success">{t('extern_badge_nv')}</span>}
                 </div>
               </div>
 
@@ -202,7 +225,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
                       </div>
                     </div>
                   )}
-                  {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
+                  {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && r.bron !== 'externe_tv_melding' && r.bron !== 'externe_ring_info' && (
                     <div className="record-actions">
                       <button
                         className="record-action-btn record-edit-btn"

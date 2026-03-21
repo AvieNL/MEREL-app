@@ -29,12 +29,16 @@ export default function TerugvangstDetail({ records, projects = [] }) {
   );
 
   const { list, nvPerSoort, tvRecords } = useMemo(() => {
+    // externe_ring_info meedoen in eersteVangstMap (voor afstand/dagen berekening),
+    // maar niet meetellen als eigen vangst
     const eersteVangst = buildEersteVangstMap(gefilterd);
     const nvPerSoort = {};
     const list = [];
     const tvRecords = [];
 
     gefilterd.forEach(r => {
+      // Referentierecords van externe ringers niet meetellen als vangst
+      if (r.bron === 'externe_ring_info') return;
       const key = (r.vogelnaam || '').toLowerCase();
       if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
         nvPerSoort[key] = (nvPerSoort[key] || 0) + 1;

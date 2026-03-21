@@ -305,6 +305,11 @@ label {
   color: var(--success);
 }
 
+.badge-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
 .empty-state {
   text-align: center;
   padding: 40px 20px;
