@@ -22,6 +22,8 @@
   --warning-bg: rgba(245, 158, 11, 0.15);
   --danger: #ef4444;
   --danger-bg: rgba(239, 68, 68, 0.15);
+  --error: #ef4444;
+  --error-bg: rgba(239, 68, 68, 0.15);
   --radius: 8px;
   --radius-sm: 4px;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -47,6 +49,8 @@
   --warning-bg: rgba(217, 119, 6, 0.12);
   --danger: #dc2626;
   --danger-bg: rgba(220, 38, 38, 0.12);
+  --error: #dc2626;
+  --error-bg: rgba(220, 38, 38, 0.12);
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 

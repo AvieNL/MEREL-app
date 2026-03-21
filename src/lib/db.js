@@ -34,6 +34,12 @@ db.version(4).stores({
 });
 
 // Versie 5: referentiebibliotheek voor AI-analyse (foto's + metadata, lokaal opgeslagen)
+// Tabel later gemigreerd naar Supabase; zie versie 6.
 db.version(5).stores({
   referentiebibliotheek: '++id, soort, maand, type',
+});
+
+// Versie 6: referentiebibliotheek-tabel verwijderd uit Dexie (data staat nu in Supabase)
+db.version(6).stores({
+  referentiebibliotheek: null,
 });

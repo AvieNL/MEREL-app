@@ -1,6 +1,22 @@
-export const VERSIE = '1.4.7';
+export const VERSIE = '1.4.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.4.8',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Fix: CSS --error variabele toegevoegd als alias voor --danger (voorkomt onzichtbare fout-styling)',
+      'Cleanup: verouderde Dexie referentiebibliotheek-tabel verwijderd (data staat nu in Supabase)',
+    ],
+    wijzigingen_en: [
+      'Fix: CSS --error variable added as alias for --danger (prevents invisible error styling)',
+      'Cleanup: obsolete Dexie reference library table removed (data is now in Supabase)',
+    ],
+    wijzigingen_de: [
+      'Fix: CSS --error Variable als Alias für --danger hinzugefügt (verhindert unsichtbares Fehler-Styling)',
+      'Cleanup: veraltete Dexie Referenzbibliothek-Tabelle entfernt (Daten sind jetzt in Supabase)',
+    ],
+  },
   {
     versie: '1.4.7',
     datum: '2026-03-21',
