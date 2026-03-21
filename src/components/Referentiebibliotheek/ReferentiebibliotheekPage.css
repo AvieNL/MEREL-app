@@ -58,14 +58,47 @@
   gap: 10px;
 }
 
+.ref-kaart-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .ref-kaart {
   display: flex;
-  gap: 12px;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
   background: var(--bg-secondary);
   border-radius: var(--radius);
   padding: 12px;
-  position: relative;
+}
+
+.ref-kaart-acties {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ref-kaart-btn {
+  font-size: 0.82rem;
+  padding: 4px 10px;
+  min-height: unset;
+}
+
+.ref-verwijder-knop {
+  background: none;
+  border: none;
+  color: var(--error);
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 4px 6px;
+  min-height: unset;
+  min-width: unset;
+}
+
+.ref-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* Foto-strip in kaart */

@@ -587,5 +587,6 @@
   "ref_delete_confirm": "Delete reference?",
   "admin_referentiebibliotheek": "Reference Library",
   "admin_referentiebibliotheek_desc": "Manage reference photos for AI age/sex analysis.",
-  "admin_referentiebibliotheek_link": "Go to reference library →"
+  "admin_referentiebibliotheek_link": "Go to reference library →",
+  "ref_edit": "Edit"
 }

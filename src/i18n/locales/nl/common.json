@@ -587,5 +587,6 @@
   "ref_delete_confirm": "Referentie verwijderen?",
   "admin_referentiebibliotheek": "Referentiebibliotheek",
   "admin_referentiebibliotheek_desc": "Beheer referentiefoto's voor de AI leeftijd/geslacht analyse.",
-  "admin_referentiebibliotheek_link": "Ga naar referentiebibliotheek →"
+  "admin_referentiebibliotheek_link": "Ga naar referentiebibliotheek →",
+  "ref_edit": "Bewerken"
 }

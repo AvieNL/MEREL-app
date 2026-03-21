@@ -82,7 +82,7 @@ export default function SectieAIAnalyse() {
       leeftijd:          aiResultaat.leeftijd  || '',
       geslacht:          aiResultaat.geslacht  || 'U',
       type:              'bevestigd',
-      fotos:             aiFotos.map(f => ({ blob: f.blob, preview: f.preview })),
+      fotos:             aiFotos,
       datum:             form.vangstdatum || new Date().toISOString().split('T')[0],
       toelichting:       aiResultaat.toelichting || '',
     });

@@ -587,5 +587,6 @@
   "ref_delete_confirm": "Referenz löschen?",
   "admin_referentiebibliotheek": "Referenzbibliothek",
   "admin_referentiebibliotheek_desc": "Referenzfotos für die KI Alter/Geschlecht-Analyse verwalten.",
-  "admin_referentiebibliotheek_link": "Zur Referenzbibliothek →"
+  "admin_referentiebibliotheek_link": "Zur Referenzbibliothek →",
+  "ref_edit": "Bearbeiten"
 }

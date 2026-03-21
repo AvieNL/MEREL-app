@@ -1,5 +1,12 @@
 import { supabase } from '../lib/supabase';
 import { blobNaarBase64 } from './imageHelper';
+import { getFotoUrl } from '../hooks/useReferentiebibliotheek';
+
+async function urlNaarBase64(url) {
+  const resp = await fetch(url);
+  const blob = await resp.blob();
+  return blobNaarBase64(blob);
+}
 
 export const MAX_REFERENTIES = 10;
 
@@ -69,20 +76,16 @@ export async function analyseVogel(soort, maand, fotos, referenties) {
   );
 
   // Stuur referentiefoto's mee als visuele context (max 3 referenties, max 3 foto's elk)
-  // Ondersteunt zowel nieuw formaat {fotos:[]} als oud formaat {fotoBlob}
   const refMetFoto = referenties
-    .filter(r => r.fotos?.length || r.fotoBlob)
+    .filter(r => r.foto_paden?.length)
     .slice(0, 3);
 
   const refFotoData = await Promise.all(
     refMetFoto.map(async r => {
-      const fotoArray = r.fotos?.length
-        ? r.fotos.slice(0, 3)
-        : [{ blob: r.fotoBlob }];
       const fotos = await Promise.all(
-        fotoArray.map(async f => ({
+        r.foto_paden.slice(0, 3).map(async pad => ({
           mediaType: 'image/jpeg',
-          data: await blobNaarBase64(f.blob),
+          data: await urlNaarBase64(getFotoUrl(pad)),
         }))
       );
       return { fotos, leeftijd: r.leeftijd, geslacht: r.geslacht, maand: r.maand, type: r.type };
