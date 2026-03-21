@@ -99,10 +99,9 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
   const setEdit = (field, value) => setEditForm(f => ({ ...f, [field]: value }));
 
   const [editMembers, setEditMembers] = useState([]);
-  const [newMemberEmail, setNewMemberEmail] = useState('');
-  const [newMemberAupi, setNewMemberAupi] = useState('');
-  const [newMemberLoading, setNewMemberLoading] = useState(false);
-  const [newMemberError, setNewMemberError] = useState('');
+  const MEMBER_FORM_DEFAULT = { email: '', aupi: '', loading: false, error: '' };
+  const [memberForm, setMemberForm] = useState(MEMBER_FORM_DEFAULT);
+  const setMember = (field, value) => setMemberForm(f => ({ ...f, [field]: value }));
 
   function nummerExists(nummer, excludeId = null) {
     const n = nummer.trim();
@@ -208,13 +207,14 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
     if (onAupiSaved) onAupiSaved();
     setEditId(null);
     setEditMembers([]);
+    setMemberForm(MEMBER_FORM_DEFAULT);
   }
 
   async function addEditMember(projectId) {
-    const trimmed = newMemberEmail.trim().toLowerCase();
+    const trimmed = memberForm.email.trim().toLowerCase();
     if (!trimmed) return;
-    setNewMemberLoading(true);
-    setNewMemberError('');
+    setMember('loading', true);
+    setMember('error', '');
     try {
       const { data: userId, error: lookupErr } = await supabase.rpc('lookup_user_id', { p_email: trimmed });
       if (lookupErr || !userId) throw new Error(t('errors:project_user_not_found'));
@@ -232,14 +232,13 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       const { data: memberData } = await supabase.rpc('get_project_members', { p_project_id: projectId });
       const newMember = memberData?.find(m => m.user_id === userId);
       if (newMember) {
-        setEditMembers(prev => [...prev, { ...newMember, aupi: newMemberAupi.trim() }]);
+        setEditMembers(prev => [...prev, { ...newMember, aupi: memberForm.aupi.trim() }]);
       }
-      setNewMemberEmail('');
-      setNewMemberAupi('');
+      setMemberForm(MEMBER_FORM_DEFAULT);
     } catch (e) {
-      setNewMemberError(e.message);
+      setMember('error', e.message);
     } finally {
-      setNewMemberLoading(false);
+      setMember('loading', false);
     }
   }
 
@@ -418,8 +417,8 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                         <div className="project-members-add">
                           <input
                             type="email"
-                            value={newMemberEmail}
-                            onChange={e => setNewMemberEmail(e.target.value)}
+                            value={memberForm.email}
+                            onChange={e => setMember('email', e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && addEditMember(p.id)}
                             placeholder={t('project_email_placeholder')}
                           />
@@ -429,20 +428,20 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                             inputMode="numeric"
                             maxLength={6}
                             placeholder="AUPI"
-                            value={newMemberAupi}
-                            onChange={e => setNewMemberAupi(e.target.value)}
+                            value={memberForm.aupi}
+                            onChange={e => setMember('aupi', e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && addEditMember(p.id)}
                             title={AUPI_TITLE}
                           />
                           <button
                             className="btn-success btn-sm"
                             onClick={() => addEditMember(p.id)}
-                            disabled={newMemberLoading || !newMemberEmail.trim()}
+                            disabled={memberForm.loading || !memberForm.email.trim()}
                           >
-                            {newMemberLoading ? t('project_member_loading') : t('project_add_member')}
+                            {memberForm.loading ? t('project_member_loading') : t('project_add_member')}
                           </button>
                         </div>
-                        {newMemberError && <p className="project-members-error">{newMemberError}</p>}
+                        {memberForm.error && <p className="project-members-error">{memberForm.error}</p>}
                       </div>
                     </div>
 

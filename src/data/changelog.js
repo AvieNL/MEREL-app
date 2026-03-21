@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.5';
+export const VERSIE = '1.5.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.6',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Refactor: ProjectenPage ledenformulier-state geconsolideerd (4 losse states → memberForm object)',
+    ],
+    wijzigingen_en: [
+      'Refactor: ProjectenPage member form state consolidated (4 separate states → memberForm object)',
+    ],
+    wijzigingen_de: [
+      'Refactor: ProjectenPage Mitgliederformular-State konsolidiert (4 einzelne States → memberForm-Objekt)',
+    ],
+  },
   {
     versie: '1.5.5',
     datum: '2026-03-21',
