@@ -26,23 +26,23 @@ export default function CloudStatus() {
   const [lastPull, setLastPull] = useState(null);
   const [storageInfo, setStorageInfo] = useState(null);
 
-  // Lokale tellingen — reactief via Dexie
-  const lokaalVangsten = useLiveQuery(
-    () => user ? db.vangsten.where('user_id').equals(user.id).filter(r => !r.deleted_at).count() : 0,
-    [user?.id], 0
-  ) ?? 0;
-  const lokaalVerwijderd = useLiveQuery(
-    () => user ? db.vangsten.where('user_id').equals(user.id).filter(r => !!r.deleted_at).count() : 0,
-    [user?.id], 0
-  ) ?? 0;
-  const lokaalProjecten = useLiveQuery(
-    () => user ? db.projecten.where('user_id').equals(user.id).count() : 0,
-    [user?.id], 0
-  ) ?? 0;
-  const lokaalRingstrengen = useLiveQuery(
-    () => user ? db.ringstrengen.where('user_id').equals(user.id).count() : 0,
-    [user?.id], 0
-  ) ?? 0;
+  // Lokale tellingen — één gecombineerde reactieve query
+  const lokaalCounts = useLiveQuery(
+    async () => {
+      if (!user) return { vangsten: 0, verwijderd: 0, projecten: 0, ringstrengen: 0 };
+      const [vangsten, verwijderd, projecten, ringstrengen] = await Promise.all([
+        db.vangsten.where('user_id').equals(user.id).filter(r => !r.deleted_at).count(),
+        db.vangsten.where('user_id').equals(user.id).filter(r => !!r.deleted_at).count(),
+        db.projecten.where('user_id').equals(user.id).count(),
+        db.ringstrengen.where('user_id').equals(user.id).count(),
+      ]);
+      return { vangsten, verwijderd, projecten, ringstrengen };
+    },
+    [user?.id],
+    { vangsten: 0, verwijderd: 0, projecten: 0, ringstrengen: 0 }
+  ) ?? { vangsten: 0, verwijderd: 0, projecten: 0, ringstrengen: 0 };
+
+  const { vangsten: lokaalVangsten, verwijderd: lokaalVerwijderd, projecten: lokaalProjecten, ringstrengen: lokaalRingstrengen } = lokaalCounts;
 
   useEffect(() => {
     if (!user) return;

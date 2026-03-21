@@ -200,16 +200,24 @@ export function SyncProvider({ children }) {
     let hasErrors = false;
     const now = Date.now();
 
-    for (const item of pending) {
-      if (item.attempts >= MAX_ATTEMPTS) continue;
-      // Backoff: sla items over die nog in de wachttijd zitten
-      if (item.nextRetryAt && item.nextRetryAt > now) continue;
+    // Filter items die klaar zijn om te verwerken (geen backoff, niet uitgeput)
+    const eligible = pending.filter(item =>
+      item.attempts < MAX_ATTEMPTS &&
+      !(item.nextRetryAt && item.nextRetryAt > now)
+    );
 
-      try {
-        await executeQueueItem(item, user.id);
+    // Verwerk alle in-aanmerking-komende items parallel
+    const results = await Promise.allSettled(
+      eligible.map(item => executeQueueItem(item, user.id))
+    );
+
+    for (let i = 0; i < eligible.length; i++) {
+      const item = eligible[i];
+      if (results[i].status === 'fulfilled') {
         await db.sync_queue.delete(item.id);
-      } catch (err) {
+      } else {
         hasErrors = true;
+        const err = results[i].reason;
         const attempts = (item.attempts || 0) + 1;
         // Exponentiële backoff: 30s → 60s → 120s → 240s → 480s (max ~8 min)
         const backoffMs = Math.min(30_000 * Math.pow(2, attempts - 1), 8 * 60_000);

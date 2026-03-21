@@ -1,6 +1,16 @@
-export const VERSIE = '1.3.1';
+export const VERSIE = '1.3.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.3.2',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Performance: useProjects — allProjects in useMemo, herberekening alleen bij wijziging van projects/sharedProjects',
+      'Performance: useProjects.pullMyAupis — twee Supabase-queries parallel via Promise.all (was: sequentieel)',
+      'Performance: SyncContext.processQueue — wachtrij-items parallel verwerkt via Promise.allSettled (was: sequentieel)',
+      'Performance: CloudStatus — vier lokale Dexie-tellingen samengevoegd tot één gecombineerde query',
+    ],
+  },
   {
     versie: '1.3.1',
     datum: '2026-03-21',

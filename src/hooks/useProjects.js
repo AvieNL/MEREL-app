@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { generateId } from '../utils/storage';
 import { db } from '../lib/db';
@@ -143,23 +143,14 @@ export function useProjects() {
 
   async function pullMyAupis() {
     if (!user) return;
+    // Beide queries parallel ophalen
+    const [ownResult, memberResult] = await Promise.all([
+      supabase.from('projecten').select('id, aupi').eq('user_id', user.id),
+      supabase.from('project_members').select('project_id, aupi').eq('user_id', user.id),
+    ]);
     const map = {};
-    // Eigen projecten: AUPI staat op projecten.aupi
-    const { data: ownData } = await supabase
-      .from('projecten')
-      .select('id, aupi')
-      .eq('user_id', user.id);
-    (ownData || []).forEach(({ id, aupi }) => {
-      if (aupi) map[id] = aupi;
-    });
-    // Gedeelde projecten (als lid): AUPI staat op project_members.aupi
-    const { data: memberData } = await supabase
-      .from('project_members')
-      .select('project_id, aupi')
-      .eq('user_id', user.id);
-    (memberData || []).forEach(({ project_id, aupi }) => {
-      if (aupi) map[project_id] = aupi;
-    });
+    (ownResult.data || []).forEach(({ id, aupi }) => { if (aupi) map[id] = aupi; });
+    (memberResult.data || []).forEach(({ project_id, aupi }) => { if (aupi) map[project_id] = aupi; });
     setMyAupis(map);
   }
 
@@ -214,12 +205,14 @@ export function useProjects() {
   // Eigen projecten gaan voor. Verberg gedeelde projecten waarvan de naam
   // al voorkomt in eigen projecten (bijv. admin auto-lid van identieke projecten
   // van een andere gebruiker).
-  const ownIds   = new Set(projects.map(p => p.id));
-  const ownNames = new Set(projects.map(p => p.naam));
-  const uniqueShared = sharedProjects.filter(
-    p => !ownIds.has(p.id) && !ownNames.has(p.naam)
-  );
-  const allProjects = [...projects, ...uniqueShared];
+  const { uniqueShared, allProjects } = useMemo(() => {
+    const ownIds   = new Set(projects.map(p => p.id));
+    const ownNames = new Set(projects.map(p => p.naam));
+    const uniqueShared = sharedProjects.filter(
+      p => !ownIds.has(p.id) && !ownNames.has(p.naam)
+    );
+    return { uniqueShared, allProjects: [...projects, ...uniqueShared] };
+  }, [projects, sharedProjects]);
 
   return { projects: allProjects, addProject, updateProject, deleteProject, refreshShared: pullSharedProjects, myAupis, refreshAupis: pullMyAupis };
 }
