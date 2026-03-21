@@ -4,7 +4,8 @@ import { formatDatum } from '../../utils/dateHelper';
 import './OverPage.css';
 
 export default function OverPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   return (
     <div className="over-page">
@@ -45,7 +46,7 @@ export default function OverPage() {
                 <span className="over-changelog-datum">{formatDatum(entry.datum)}</span>
               </div>
               <ul>
-                {entry.wijzigingen.map((w, i) => <li key={i}>{w}</li>)}
+                {(entry[`wijzigingen_${lang}`] || entry.wijzigingen).map((w, i) => <li key={i}>{w}</li>)}
               </ul>
             </div>
           ))}
