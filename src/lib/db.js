@@ -43,3 +43,8 @@ db.version(5).stores({
 db.version(6).stores({
   referentiebibliotheek: null,
 });
+
+// Versie 7: volgorde-index op veld_config voor directe Dexie-sortering
+db.version(7).stores({
+  veld_config: 'veld_key, volgorde',
+});

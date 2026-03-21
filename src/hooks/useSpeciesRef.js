@@ -79,8 +79,7 @@ async function _doSpeciesPull(force) {
 
   // Verwijder lokale soorten die op een ander apparaat zijn gewist
   const supabaseNames = new Set(allData.map(r => r.data?.naam_nl).filter(Boolean));
-  const localAll = await db.species.toArray();
-  const toDelete = localAll.filter(r => !supabaseNames.has(r.naam_nl)).map(r => r.naam_nl);
+  const toDelete = await db.species.filter(r => !supabaseNames.has(r.naam_nl)).primaryKeys();
   if (toDelete.length > 0) await db.species.bulkDelete(toDelete);
 
   await db.meta.put({ key: 'species_last_pull', value: new Date().toISOString() });

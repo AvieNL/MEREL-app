@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.0';
+export const VERSIE = '1.5.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.1',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Perf: db.species verwijdering via gefilterde query i.p.v. toArray() (minder geheugengebruik)',
+      'Perf: db.veld_config gesorteerd via Dexie orderBy i.p.v. JS sort (Dexie v7 schema)',
+    ],
+    wijzigingen_en: [
+      'Perf: db.species deletion via filtered query instead of toArray() (less memory usage)',
+      'Perf: db.veld_config sorted via Dexie orderBy instead of JS sort (Dexie v7 schema)',
+    ],
+    wijzigingen_de: [
+      'Perf: db.species Löschung über gefilterte Abfrage statt toArray() (weniger Speicherverbrauch)',
+      'Perf: db.veld_config per Dexie orderBy sortiert statt JS sort (Dexie v7 Schema)',
+    ],
+  },
   {
     versie: '1.5.0',
     datum: '2026-03-21',
