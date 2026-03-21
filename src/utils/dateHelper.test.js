@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatDatum, formatDatumTijd, toYMD } from './dateHelper';
+import { formatDatum, formatDatumTijd, toYMD, todayISO, yesterdayISO } from './dateHelper';
 
 describe('formatDatum', () => {
   it('converteert yyyy-mm-dd naar dd-mm-yyyy', () => {
@@ -45,6 +45,25 @@ describe('toYMD', () => {
 
   it('retourneert invoer ongewijzigd bij ongeldig formaat', () => {
     expect(toYMD('20240315')).toBe('20240315');
+  });
+});
+
+describe('todayISO', () => {
+  it('retourneert vandaag als yyyy-mm-dd', () => {
+    const result = todayISO();
+    expect(result).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    const d = new Date();
+    expect(result).toBe(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
+  });
+});
+
+describe('yesterdayISO', () => {
+  it('retourneert gisteren als yyyy-mm-dd', () => {
+    const result = yesterdayISO();
+    expect(result).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    expect(result).toBe(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
   });
 });
 

@@ -1,6 +1,22 @@
-export const VERSIE = '1.5.4';
+export const VERSIE = '1.5.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.5',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Refactor: todayISO/yesterdayISO helpers toegevoegd aan dateHelper (tijdzone-veilig)',
+      'Refactor: inline .toISOString().slice(0,10) patronen in StatsPage vervangen',
+    ],
+    wijzigingen_en: [
+      'Refactor: todayISO/yesterdayISO helpers added to dateHelper (timezone-safe)',
+      'Refactor: inline .toISOString().slice(0,10) patterns in StatsPage replaced',
+    ],
+    wijzigingen_de: [
+      'Refactor: todayISO/yesterdayISO-Hilfsfunktionen zu dateHelper hinzugefügt (zeitzonensicher)',
+      'Refactor: Inline .toISOString().slice(0,10)-Muster in StatsPage ersetzt',
+    ],
+  },
   {
     versie: '1.5.4',
     datum: '2026-03-21',

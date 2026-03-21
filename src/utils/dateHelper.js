@@ -20,6 +20,19 @@ export function formatDatumTijd(ts) {
   return `${dd}-${mm}-${yyyy} ${hh}:${min}`;
 }
 
+// Vandaag als yyyy-mm-dd (tijdzone-veilig: lokale datum, geen UTC-verschuiving)
+export function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// Gisteren als yyyy-mm-dd
+export function yesterdayISO() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 // Datum normaliseren naar yyyy-mm-dd (voor opslag en sortering)
 export function toYMD(d) {
   if (!d) return d;

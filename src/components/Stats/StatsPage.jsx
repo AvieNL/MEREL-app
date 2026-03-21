@@ -7,7 +7,7 @@ import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
-import { formatDatum, toYMD } from '../../utils/dateHelper';
+import { formatDatum, toYMD, todayISO, yesterdayISO } from '../../utils/dateHelper';
 import { buildEersteVangstMap } from '../../utils/catchHelper';
 import { STATS_UITGESLOTEN } from '../../data/constants';
 import './StatsPage.css';
@@ -249,9 +249,8 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   }, [exportVan, exportTot]);
 
   function setSnelfilter(type) {
-    const nu = new Date();
-    const vandaag = nu.toISOString().slice(0, 10);
-    const gisteren = new Date(nu - 86400000).toISOString().slice(0, 10);
+    const vandaag = todayISO();
+    const gisteren = yesterdayISO();
     if (type === 'vandaag')   { setExportVan(vandaag);   setExportTot(vandaag); }
     if (type === 'gisteren')  { setExportVan(gisteren);  setExportTot(gisteren); }
     if (type === 'alles')     { setExportVan('');         setExportTot(''); }
@@ -689,11 +688,11 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 onClick={() => setSnelfilter('alles')}
               >{t('stats_filter_all')}</button>
               <button
-                className={`btn-secondary btn-sm${exportVan === new Date().toISOString().slice(0,10) && exportVan === exportTot ? ' active' : ''}`}
+                className={`btn-secondary btn-sm${exportVan === todayISO() && exportVan === exportTot ? ' active' : ''}`}
                 onClick={() => setSnelfilter('vandaag')}
               >{t('stats_filter_today')}</button>
               <button
-                className={`btn-secondary btn-sm${exportVan === new Date(Date.now()-86400000).toISOString().slice(0,10) && exportVan === exportTot ? ' active' : ''}`}
+                className={`btn-secondary btn-sm${exportVan === yesterdayISO() && exportVan === exportTot ? ' active' : ''}`}
                 onClick={() => setSnelfilter('gisteren')}
               >{t('stats_filter_yesterday')}</button>
             </div>
