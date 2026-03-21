@@ -571,6 +571,7 @@
   "ref_empty": "Keine Referenzen gespeichert",
   "ref_add_manual": "Manuell hinzufügen",
   "ref_soort": "Art",
+  "ref_datum": "Datum",
   "ref_maand": "Monat",
   "ref_maand_short": "Monat {{maand}}",
   "ref_leeftijd": "Alter",

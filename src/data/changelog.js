@@ -1,6 +1,19 @@
-export const VERSIE = '1.4.0';
+export const VERSIE = '1.4.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.4.1',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'Improve: referentiebibliotheek — soort via soortendatabase autocomplete, leeftijd als EURING dropdown, geslacht als dropdown, ondersteuning volledige datum (maand wordt automatisch afgeleid)',
+    ],
+    wijzigingen_en: [
+      'Improve: reference library — species via database autocomplete, age as EURING dropdown, sex as dropdown, full date support (month derived automatically)',
+    ],
+    wijzigingen_de: [
+      'Improve: Referenzbibliothek — Art per Datenbank-Autocomplete, Alter als EURING-Dropdown, Geschlecht als Dropdown, volles Datum (Monat wird automatisch abgeleitet)',
+    ],
+  },
   {
     versie: '1.4.0',
     datum: '2026-03-21',

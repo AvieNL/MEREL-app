@@ -1,3 +1,33 @@
+.soort-autocomplete {
+  position: relative;
+}
+
+.soort-autocomplete .suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.soort-autocomplete .suggestions li {
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.soort-autocomplete .suggestions li:hover {
+  background: var(--bg-tertiary);
+}
+
 .ref-page {
   display: flex;
   flex-direction: column;

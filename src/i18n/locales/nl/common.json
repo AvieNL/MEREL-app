@@ -571,6 +571,7 @@
   "ref_empty": "Geen referenties opgeslagen",
   "ref_add_manual": "Handmatig toevoegen",
   "ref_soort": "Soort",
+  "ref_datum": "Datum",
   "ref_maand": "Maand",
   "ref_maand_short": "Maand {{maand}}",
   "ref_leeftijd": "Leeftijd",

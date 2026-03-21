@@ -571,6 +571,7 @@
   "ref_empty": "No references saved",
   "ref_add_manual": "Add manually",
   "ref_soort": "Species",
+  "ref_datum": "Date",
   "ref_maand": "Month",
   "ref_maand_short": "Month {{maand}}",
   "ref_leeftijd": "Age",

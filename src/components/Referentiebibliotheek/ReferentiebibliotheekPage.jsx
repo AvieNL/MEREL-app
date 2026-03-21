@@ -1,14 +1,87 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRole } from '../../hooks/useRole';
 import { useReferentiebibliotheek, getFotoUrl } from '../../hooks/useReferentiebibliotheek';
+import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { verwerkFoto } from '../../utils/imageHelper';
+import { LEEFTIJD_OPTIONS, GESLACHT_OPTIONS, getOptLabel } from '../Nieuw/NieuwPage.constants';
 import './ReferentiebibliotheekPage.css';
 
 const MAX_FOTOS = 10;
-const LEEG_FORM = { soort: '', maand: '', leeftijd: '', geslacht: 'U', type: 'handmatig', toelichting: '' };
 const MAANDEN = Array.from({ length: 12 }, (_, i) => i + 1);
+const LEEG_FORM = { soort: '', datum: '', maand: '', leeftijd: '', geslacht: 'U', type: 'handmatig', toelichting: '' };
+
+// Derives maand (1–12) from a date string, or returns ''
+function maandUitDatum(datum) {
+  if (!datum) return '';
+  const d = new Date(datum);
+  return isNaN(d.getTime()) ? '' : d.getMonth() + 1;
+}
+
+// Simple species autocomplete
+function SoortAutocomplete({ value, onChange, species, placeholder }) {
+  const [query, setQuery] = useState(value);
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  // Sync external value changes (e.g. reset)
+  useEffect(() => { setQuery(value); }, [value]);
+
+  const suggestions = useMemo(() => {
+    if (!query || query.length < 2) return [];
+    const q = query.toLowerCase();
+    return species
+      .filter(s => s.naam_nl?.toLowerCase().includes(q))
+      .slice(0, 10);
+  }, [query, species]);
+
+  function handleChange(e) {
+    setQuery(e.target.value);
+    setOpen(true);
+    if (!e.target.value) onChange('');
+  }
+
+  function handleSelect(naam) {
+    setQuery(naam);
+    setOpen(false);
+    onChange(naam);
+  }
+
+  function handleBlur(e) {
+    // Delay so click on suggestion registers first
+    setTimeout(() => setOpen(false), 150);
+    // If user typed an exact match, accept it
+    if (!e.target.value) {
+      onChange('');
+    } else {
+      onChange(query);
+    }
+  }
+
+  return (
+    <div className="soort-autocomplete" ref={ref}>
+      <input
+        type="text"
+        value={query}
+        onChange={handleChange}
+        onFocus={() => setOpen(true)}
+        onBlur={handleBlur}
+        placeholder={placeholder || 'bijv. Goudhaan'}
+        autoComplete="off"
+      />
+      {open && suggestions.length > 0 && (
+        <ul className="suggestions">
+          {suggestions.map(s => (
+            <li key={s.naam_nl} onMouseDown={() => handleSelect(s.naam_nl)}>
+              {s.naam_nl}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 function FotoStrip({ paden, onVerwijder, onToevoegen, maxFotos = MAX_FOTOS }) {
   const fileRef = useRef(null);
@@ -44,7 +117,7 @@ function ReferentieKaart({ r, t, onEdit, onDelete }) {
         <div className="ref-kaart-meta">
           <span className={`ref-type-badge ref-type-badge--${r.type}`}>{t(`ref_type_${r.type}`)}</span>
           <span>{t('ref_maand_short', { maand: r.maand })}</span>
-          {r.leeftijd && <span>{t('ref_leeftijd_short', { leeftijd: r.leeftijd })}</span>}
+          {r.leeftijd && <span>{r.leeftijd}</span>}
           {r.geslacht && r.geslacht !== 'U' && <span>{r.geslacht}</span>}
           <span className="ref-foto-teller">{r.foto_paden?.length ?? 0} foto{(r.foto_paden?.length ?? 0) !== 1 ? "'s" : ''}</span>
         </div>
@@ -59,9 +132,10 @@ function ReferentieKaart({ r, t, onEdit, onDelete }) {
   );
 }
 
-function ReferentieEditForm({ r, t, onSave, onCancel, addFotos, verwijderFoto }) {
+function ReferentieEditForm({ r, t, lang, species, onSave, onCancel, addFotos, verwijderFoto }) {
   const [form, setForm] = useState({
     soort: r.soort,
+    datum: r.datum && r.datum.length === 10 ? r.datum : '',
     maand: String(r.maand),
     leeftijd: r.leeftijd,
     geslacht: r.geslacht,
@@ -70,12 +144,22 @@ function ReferentieEditForm({ r, t, onSave, onCancel, addFotos, verwijderFoto })
   });
   const [saving, setSaving] = useState(false);
 
+  // Auto-derive maand from datum
+  function handleDatumChange(datum) {
+    const afgeleid = maandUitDatum(datum);
+    setForm(p => ({ ...p, datum, maand: afgeleid ? String(afgeleid) : p.maand }));
+  }
+
   async function handleOpslaan() {
     setSaving(true);
     try {
+      const maand = form.datum
+        ? maandUitDatum(form.datum)
+        : parseInt(form.maand, 10);
       await onSave(r.id, {
         soort: form.soort.trim(),
-        maand: parseInt(form.maand, 10),
+        datum: form.datum || null,
+        maand,
         leeftijd: form.leeftijd,
         geslacht: form.geslacht,
         type: form.type,
@@ -91,33 +175,49 @@ function ReferentieEditForm({ r, t, onSave, onCancel, addFotos, verwijderFoto })
     await addFotos(r.id, verwerkt);
   }
 
+  const datumIsSet = !!form.datum;
+
   return (
     <div className="ref-edit-form">
       <div className="form-row">
         <div className="form-group">
           <label>{t('ref_soort')} *</label>
-          <input type="text" value={form.soort} onChange={e => setForm(p => ({ ...p, soort: e.target.value }))} />
+          <SoortAutocomplete
+            value={form.soort}
+            onChange={v => setForm(p => ({ ...p, soort: v }))}
+            species={species}
+          />
         </div>
         <div className="form-group">
-          <label>{t('ref_maand')} *</label>
-          <select value={form.maand} onChange={e => setForm(p => ({ ...p, maand: e.target.value }))}>
-            <option value="">—</option>
-            {MAANDEN.map(m => <option key={m} value={m}>{m}</option>)}
-          </select>
+          <label>{t('ref_datum')}</label>
+          <input type="date" value={form.datum}
+            onChange={e => handleDatumChange(e.target.value)} />
         </div>
+        {!datumIsSet && (
+          <div className="form-group">
+            <label>{t('ref_maand')} *</label>
+            <select value={form.maand} onChange={e => setForm(p => ({ ...p, maand: e.target.value }))}>
+              <option value="">—</option>
+              {MAANDEN.map(m => <option key={m} value={m}>{m}</option>)}
+            </select>
+          </div>
+        )}
       </div>
       <div className="form-row">
         <div className="form-group">
           <label>{t('ref_leeftijd')}</label>
-          <input type="text" value={form.leeftijd} placeholder="EURING code"
-            onChange={e => setForm(p => ({ ...p, leeftijd: e.target.value }))} />
+          <select value={form.leeftijd} onChange={e => setForm(p => ({ ...p, leeftijd: e.target.value }))}>
+            {LEEFTIJD_OPTIONS.map(o => (
+              <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
+            ))}
+          </select>
         </div>
         <div className="form-group">
           <label>{t('ref_geslacht')}</label>
           <select value={form.geslacht} onChange={e => setForm(p => ({ ...p, geslacht: e.target.value }))}>
-            <option value="M">M</option>
-            <option value="F">F</option>
-            <option value="U">U</option>
+            {GESLACHT_OPTIONS.filter(o => o.value !== '').map(o => (
+              <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
+            ))}
           </select>
         </div>
         <div className="form-group">
@@ -145,7 +245,7 @@ function ReferentieEditForm({ r, t, onSave, onCancel, addFotos, verwijderFoto })
       </div>
       <div className="ref-form-acties">
         <button className="btn-primary" onClick={handleOpslaan}
-          disabled={saving || !form.soort || !form.maand}>
+          disabled={saving || !form.soort || (!form.datum && !form.maand)}>
           {saving ? t('loading') : t('ref_save')}
         </button>
         <button className="btn-secondary" onClick={onCancel}>{t('form_cancel')}</button>
@@ -155,9 +255,11 @@ function ReferentieEditForm({ r, t, onSave, onCancel, addFotos, verwijderFoto })
 }
 
 export default function ReferentiebibliotheekPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language?.slice(0, 2);
   const navigate = useNavigate();
   const { isRealAdmin } = useRole();
+  const species = useSpeciesRef();
   const {
     referenties, loading,
     addReferentie, updateReferentie,
@@ -175,6 +277,12 @@ export default function ReferentiebibliotheekPage() {
   useEffect(() => { if (!isRealAdmin) navigate('/'); }, [isRealAdmin, navigate]);
   if (!isRealAdmin) return null;
 
+  // Auto-derive maand from datum in nieuwForm
+  function handleNieuwDatum(datum) {
+    const afgeleid = maandUitDatum(datum);
+    setNieuwForm(p => ({ ...p, datum, maand: afgeleid ? String(afgeleid) : p.maand }));
+  }
+
   async function handleNieuweFotos(files) {
     const verwerkt = await Promise.all(
       Array.from(files).slice(0, MAX_FOTOS - nieuwFotos.length).map(verwerkFoto)
@@ -183,18 +291,21 @@ export default function ReferentiebibliotheekPage() {
   }
 
   async function handleOpslaan() {
-    if (!nieuwForm.soort || !nieuwForm.maand || !nieuwFotos.length) return;
+    if (!nieuwForm.soort || (!nieuwForm.datum && !nieuwForm.maand) || !nieuwFotos.length) return;
     setOpslaan(true);
     try {
+      const maand = nieuwForm.datum
+        ? maandUitDatum(nieuwForm.datum)
+        : parseInt(nieuwForm.maand, 10);
       await addReferentie({
-        soort:      nieuwForm.soort.trim(),
-        maand:      parseInt(nieuwForm.maand, 10),
-        leeftijd:   nieuwForm.leeftijd,
-        geslacht:   nieuwForm.geslacht,
-        type:       nieuwForm.type,
+        soort:       nieuwForm.soort.trim(),
+        datum:       nieuwForm.datum || null,
+        maand,
+        leeftijd:    nieuwForm.leeftijd,
+        geslacht:    nieuwForm.geslacht,
+        type:        nieuwForm.type,
         toelichting: nieuwForm.toelichting,
-        datum:      new Date().toISOString().split('T')[0],
-        fotos:      nieuwFotos,
+        fotos:       nieuwFotos,
       });
       setNieuwForm(LEEG_FORM);
       setNieuwFotos([]);
@@ -213,6 +324,8 @@ export default function ReferentiebibliotheekPage() {
     if (!window.confirm(t('ref_delete_confirm'))) return;
     await deleteReferentie(id);
   }
+
+  const nieuwDatumIsSet = !!nieuwForm.datum;
 
   return (
     <div className="page ref-page">
@@ -235,27 +348,42 @@ export default function ReferentiebibliotheekPage() {
           <div className="form-row">
             <div className="form-group">
               <label>{t('ref_soort')} *</label>
-              <input type="text" value={nieuwForm.soort} placeholder="bijv. Goudhaan"
-                onChange={e => setNieuwForm(p => ({ ...p, soort: e.target.value }))} />
+              <SoortAutocomplete
+                value={nieuwForm.soort}
+                onChange={v => setNieuwForm(p => ({ ...p, soort: v }))}
+                species={species}
+              />
             </div>
             <div className="form-group">
-              <label>{t('ref_maand')} *</label>
-              <select value={nieuwForm.maand} onChange={e => setNieuwForm(p => ({ ...p, maand: e.target.value }))}>
-                <option value="">—</option>
-                {MAANDEN.map(m => <option key={m} value={m}>{m}</option>)}
-              </select>
+              <label>{t('ref_datum')}</label>
+              <input type="date" value={nieuwForm.datum}
+                onChange={e => handleNieuwDatum(e.target.value)} />
             </div>
+            {!nieuwDatumIsSet && (
+              <div className="form-group">
+                <label>{t('ref_maand')} *</label>
+                <select value={nieuwForm.maand} onChange={e => setNieuwForm(p => ({ ...p, maand: e.target.value }))}>
+                  <option value="">—</option>
+                  {MAANDEN.map(m => <option key={m} value={m}>{m}</option>)}
+                </select>
+              </div>
+            )}
           </div>
           <div className="form-row">
             <div className="form-group">
               <label>{t('ref_leeftijd')}</label>
-              <input type="text" value={nieuwForm.leeftijd} placeholder="EURING code"
-                onChange={e => setNieuwForm(p => ({ ...p, leeftijd: e.target.value }))} />
+              <select value={nieuwForm.leeftijd} onChange={e => setNieuwForm(p => ({ ...p, leeftijd: e.target.value }))}>
+                {LEEFTIJD_OPTIONS.map(o => (
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
+                ))}
+              </select>
             </div>
             <div className="form-group">
               <label>{t('ref_geslacht')}</label>
               <select value={nieuwForm.geslacht} onChange={e => setNieuwForm(p => ({ ...p, geslacht: e.target.value }))}>
-                <option value="M">M</option><option value="F">F</option><option value="U">U</option>
+                {GESLACHT_OPTIONS.filter(o => o.value !== '').map(o => (
+                  <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
+                ))}
               </select>
             </div>
             <div className="form-group">
@@ -293,7 +421,7 @@ export default function ReferentiebibliotheekPage() {
           </div>
           <div className="ref-form-acties">
             <button className="btn-primary" onClick={handleOpslaan}
-              disabled={opslaan || !nieuwForm.soort || !nieuwForm.maand || !nieuwFotos.length}>
+              disabled={opslaan || !nieuwForm.soort || (!nieuwForm.datum && !nieuwForm.maand) || !nieuwFotos.length}>
               {opslaan ? t('loading') : t('ref_save')}
             </button>
             <button className="btn-secondary" onClick={() => { setIsToevoegen(false); setNieuwFotos([]); }}>
@@ -316,6 +444,8 @@ export default function ReferentiebibliotheekPage() {
                   <ReferentieEditForm
                     r={r}
                     t={t}
+                    lang={lang}
+                    species={species}
                     onSave={handleBewerk}
                     onCancel={() => setBewerkId(null)}
                     addFotos={addFotosAanReferentie}
