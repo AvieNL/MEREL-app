@@ -1,4 +1,5 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { parseDate } from '../../utils/statsHelper';
 import { buildEersteVangstMap } from '../../utils/catchHelper';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
@@ -31,6 +32,7 @@ function useContainerWidth(ref) {
 export function BarChartStacked({ data, title }) {
   const containerRef = useRef(null);
   const containerW = useContainerWidth(containerRef);
+  const { t } = useTranslation();
   if (!data.length) return <div ref={containerRef} />;
 
   const maxVal = Math.max(...data.map(d => d.nieuw + d.terugvangst), 1);
@@ -84,8 +86,8 @@ export function BarChartStacked({ data, title }) {
         </svg>
       )}
       <div className="chart-legend">
-        <span className="chart-legend-item"><span className="chart-dot" style={{ background: 'var(--accent, #38bdf8)' }} /> Nieuw</span>
-        <span className="chart-legend-item"><span className="chart-dot" style={{ background: 'var(--success, #22c55e)' }} /> Terugvangst</span>
+        <span className="chart-legend-item"><span className="chart-dot" style={{ background: 'var(--accent, #38bdf8)' }} /> {t('stats_new')}</span>
+        <span className="chart-legend-item"><span className="chart-dot" style={{ background: 'var(--success, #22c55e)' }} /> {t('stats_recatch')}</span>
       </div>
     </div>
   );
@@ -296,13 +298,15 @@ export function VangstKaart({ targetRecords, allRecords }) {
 
   if (kaartData.markers.length === 0) return null;
 
+  const { t } = useTranslation();
+
   return (
     <div className="chart-block">
-      <h3>Vangstlocaties</h3>
+      <h3>{t('stats_catch_locations')}</h3>
       <div ref={mapRef} className="kaart-container" />
       <div className="chart-legend">
-        <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_NIEUW }} /> Nieuw</span>
-        <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_TERUGVANGST }} /> Terugvangst</span>
+        <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_NIEUW }} /> {t('stats_new')}</span>
+        <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_TERUGVANGST }} /> {t('stats_recatch')}</span>
       </div>
     </div>
   );

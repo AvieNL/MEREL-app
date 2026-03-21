@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.14';
+export const VERSIE = '1.5.15';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.15',
+    datum: '2026-03-21',
+    wijzigingen: [
+      'I18n: Grafiekteksten vertaald — legenda (Nieuw/Terugvangst) en kaarttitel (Vangstlocaties)',
+    ],
+    wijzigingen_en: [
+      'I18n: Chart labels translated — legend (New/Recapture) and map title (Catch locations)',
+    ],
+    wijzigingen_de: [
+      'I18n: Diagrammbeschriftungen übersetzt — Legende (Neu/Wiederfang) und Kartentitel (Fangstandorte)',
+    ],
+  },
   {
     versie: '1.5.14',
     datum: '2026-03-21',
