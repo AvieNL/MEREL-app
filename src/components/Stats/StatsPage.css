@@ -650,3 +650,12 @@
   font-size: 0.75rem;
   color: var(--text-muted);
 }
+
+/* Sorteerbare kolomkoppen */
+.tt-col-sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.tt-col-sortable:hover { color: var(--accent); }
+.tt-col-sorted { color: var(--accent); }

@@ -14,6 +14,7 @@ export default function TerugvangstDetail({ records }) {
   const navigate = useNavigate();
   const displayNaam = useDisplayNaam();
   const [sorteer, setSorteer] = useState('tijd');
+  const [soortSort, setSoortSort] = useState({ col: 'tv', asc: false });
 
   const gefilterd = useMemo(
     () => records.filter(r => !STATS_UITGESLOTEN.includes(r.vogelnaam?.toLowerCase())),
@@ -129,14 +130,24 @@ export default function TerugvangstDetail({ records }) {
       if (!map[key]) map[key] = { soort: tv.soort, tv: 0 };
       map[key].tv++;
     });
-    return Object.values(map)
-      .map(s => {
-        const nv = nvPerSoort[s.soort.toLowerCase()] || 0;
-        const totaal = nv + s.tv;
-        return { ...s, nv, totaal, pct: totaal > 0 ? Math.round((s.tv / totaal) * 100) : 0 };
-      })
-      .sort((a, b) => b.tv - a.tv);
+    return Object.values(map).map(s => {
+      const nv = nvPerSoort[s.soort.toLowerCase()] || 0;
+      const totaal = nv + s.tv;
+      return { ...s, nv, totaal, pct: totaal > 0 ? Math.round((s.tv / totaal) * 100) : 0 };
+    });
   }, [list, nvPerSoort]);
+
+  const gesorteerdeSOorten = useMemo(() => {
+    const { col, asc } = soortSort;
+    return [...soortenTabel].sort((a, b) => {
+      let cmp;
+      if (col === 'soort') cmp = displayNaam(a.soort).localeCompare(displayNaam(b.soort), 'nl');
+      else if (col === 'nv') cmp = a.nv - b.nv;
+      else if (col === 'tv') cmp = a.tv - b.tv;
+      else cmp = a.pct - b.pct;
+      return asc ? cmp : -cmp;
+    });
+  }, [soortenTabel, soortSort, displayNaam]);
 
   const gesorteerd = useMemo(() => {
     return [...list].sort((a, b) => {
@@ -233,14 +244,26 @@ export default function TerugvangstDetail({ records }) {
           <table className="trektellen-table">
             <thead>
               <tr>
-                <th className="tt-col-soort">{t('stats_col_species')}</th>
-                <th className="tt-col-num">{t('stats_col_new')}</th>
-                <th className="tt-col-num">{t('stats_col_recatch')}</th>
-                <th className="tt-col-num">{t('tv_col_pct')}</th>
+                {[
+                  { col: 'soort', label: t('stats_col_species'), cls: 'tt-col-soort' },
+                  { col: 'nv',    label: t('stats_col_new'),     cls: 'tt-col-num' },
+                  { col: 'tv',    label: t('stats_col_recatch'),  cls: 'tt-col-num' },
+                  { col: 'pct',   label: t('tv_col_pct'),         cls: 'tt-col-num' },
+                ].map(({ col, label, cls }) => (
+                  <th
+                    key={col}
+                    className={`${cls} tt-col-sortable${soortSort.col === col ? ' tt-col-sorted' : ''}`}
+                    onClick={() => setSoortSort(prev =>
+                      prev.col === col ? { col, asc: !prev.asc } : { col, asc: col === 'soort' }
+                    )}
+                  >
+                    {label}{soortSort.col === col ? (soortSort.asc ? ' ↑' : ' ↓') : ''}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {soortenTabel.map(s => (
+              {gesorteerdeSOorten.map(s => (
                 <tr key={s.soort}>
                   <td className="tt-col-soort">{displayNaam(s.soort)}</td>
                   <td className="tt-col-num">{s.nv || ''}</td>
