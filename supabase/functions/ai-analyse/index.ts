@@ -32,20 +32,22 @@ Deno.serve(async (req: Request) => {
     }
 
     type Foto = { mediaType: string; data: string };
-    type RefFoto = Foto & { leeftijd: string; geslacht: string; maand: number; type: string };
+    type RefEntry = { fotos: Foto[]; leeftijd: string; geslacht: string; maand: number; type: string };
 
     // Bouw de content op: eerst referentiefoto's met label, dan te analyseren foto's
     const content: unknown[] = [];
 
     if (refFotos?.length) {
-      (refFotos as RefFoto[]).forEach((r, i) => {
+      (refFotos as RefEntry[]).forEach((r, i) => {
         content.push({
           type: 'text',
-          text: `Referentie ${i + 1} (bevestigd: leeftijd=${r.leeftijd}, geslacht=${r.geslacht}, maand=${r.maand}):`,
+          text: `Referentie ${i + 1} (leeftijd=${r.leeftijd}, geslacht=${r.geslacht}, maand=${r.maand}, ${r.fotos.length} foto(s)):`,
         });
-        content.push({
-          type: 'image',
-          source: { type: 'base64', media_type: r.mediaType, data: r.data },
+        r.fotos.forEach(f => {
+          content.push({
+            type: 'image',
+            source: { type: 'base64', media_type: f.mediaType, data: f.data },
+          });
         });
       });
       content.push({ type: 'text', text: 'Te analyseren vogel:' });

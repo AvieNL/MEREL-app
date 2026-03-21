@@ -68,17 +68,25 @@ export async function analyseVogel(soort, maand, fotos, referenties) {
     }))
   );
 
-  // Stuur referentiefoto's mee als visuele context (max 3, alleen als fotoBlob aanwezig)
-  const refMetFoto = referenties.filter(r => r.fotoBlob).slice(0, 3);
+  // Stuur referentiefoto's mee als visuele context (max 3 referenties, max 3 foto's elk)
+  // Ondersteunt zowel nieuw formaat {fotos:[]} als oud formaat {fotoBlob}
+  const refMetFoto = referenties
+    .filter(r => r.fotos?.length || r.fotoBlob)
+    .slice(0, 3);
+
   const refFotoData = await Promise.all(
-    refMetFoto.map(async r => ({
-      mediaType: 'image/jpeg',
-      data: await blobNaarBase64(r.fotoBlob),
-      leeftijd: r.leeftijd,
-      geslacht: r.geslacht,
-      maand: r.maand,
-      type: r.type,
-    }))
+    refMetFoto.map(async r => {
+      const fotoArray = r.fotos?.length
+        ? r.fotos.slice(0, 3)
+        : [{ blob: r.fotoBlob }];
+      const fotos = await Promise.all(
+        fotoArray.map(async f => ({
+          mediaType: 'image/jpeg',
+          data: await blobNaarBase64(f.blob),
+        }))
+      );
+      return { fotos, leeftijd: r.leeftijd, geslacht: r.geslacht, maand: r.maand, type: r.type };
+    })
   );
 
   const prompt = buildPrompt(soort, referenties, refFotoData.length);
