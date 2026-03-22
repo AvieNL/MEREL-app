@@ -40,7 +40,7 @@
   "nestonderzoek_sovon_hint_unlock": "Gib deine SOVON-Registrierungsnummer ein, um automatisch Nestforscher zu werden und Zugang zum Nestforschungsmodul zu erhalten.",
   "nestonderzoek_sovon_activated": "✓ Gespeichert — du bist jetzt Nestforscher",
   "nestonderzoek_rol_label": "Aktueller Nestzugang",
-  "nestonderzoek_rol_admin": "Admin (voller Zugang)",
+  "nestonderzoek_rol_admin": "Admin",
   "nestonderzoek_sovon_nr": "SOVON-Registrierungsnummer",
   "nestonderzoek_sovon_nr_placeholder": "z.B. 12345",
   "btn_saved": "Gespeichert",
