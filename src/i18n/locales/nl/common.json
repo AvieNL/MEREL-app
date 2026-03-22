@@ -91,9 +91,9 @@
   "cloud_lost_other": "{{count}} wijzigingen konden niet worden gesynchroniseerd en zijn verwijderd uit de wachtrij.",
   "role_admin": "Admin",
   "role_ringer": "Ringer",
-  "role_viewer": "Viewer",
+  "role_viewer": "Kijker",
   "role_nestonderzoeker": "Nestonderzoeker",
-  "role_nest_kijker": "Viewer",
+  "role_nest_kijker": "Kijker",
   "role_nest_none": "Geen nestonderzoek",
   "language_nl": "Nederlands",
   "language_en": "English",
@@ -769,6 +769,6 @@
   "nav_sim_ring_role": "Ring-rol",
   "nav_sim_nest_role": "Nest-rol",
   "role_nestonderzoeker": "Nestonderzoeker",
-  "role_nest_kijker": "Viewer",
+  "role_nest_kijker": "Kijker",
   "role_nest_geen": "Geen toegang"
 }
