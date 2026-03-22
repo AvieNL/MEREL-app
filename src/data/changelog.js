@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.21';
+export const VERSIE = '1.5.22';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.22',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: indicatoren bij soorten in "huidige vangsten" — * = nieuwe baansoort of dagrecord, † = nieuwe jaarsoort',
+    ],
+    wijzigingen_en: [
+      'Feat: indicators next to species in "current catches" — * = new site species or day record, † = new year species',
+    ],
+    wijzigingen_de: [
+      'Feat: Indikatoren bei Arten in "aktuelle Fänge" — * = neue Stationsart oder Tagesrekord, † = neue Jahresart',
+    ],
+  },
   {
     versie: '1.5.21',
     datum: '2026-03-22',

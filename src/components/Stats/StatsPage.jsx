@@ -239,6 +239,51 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     [statsRecords]
   );
   const huidigeStats = useMemo(() => computeStats(huidigeRecords), [huidigeRecords]);
+
+  const historischeRecords = useMemo(
+    () => gefilterdRecords.filter(r => r.uploaded || r.bron === 'griel_import'),
+    [gefilterdRecords]
+  );
+
+  const soortenIndicatoren = useMemo(() => {
+    if (huidigeRecords.length === 0) return {};
+    const huidigJaar = new Date().getFullYear();
+
+    const historisch = {};
+    historischeRecords.forEach(r => {
+      const key = (r.vogelnaam || 'onbekend').toLowerCase();
+      if (!historisch[key]) historisch[key] = { dagCounts: {}, jaren: new Set() };
+      const d = parseDate(r.vangstdatum);
+      if (d) {
+        const dagKey = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+        historisch[key].dagCounts[dagKey] = (historisch[key].dagCounts[dagKey] || 0) + 1;
+        historisch[key].jaren.add(d.getFullYear());
+      }
+    });
+
+    const vandaagCounts = {};
+    huidigeRecords.forEach(r => {
+      const key = (r.vogelnaam || 'onbekend').toLowerCase();
+      vandaagCounts[key] = (vandaagCounts[key] || 0) + 1;
+    });
+
+    const result = {};
+    for (const [key, vandaagCount] of Object.entries(vandaagCounts)) {
+      const hist = historisch[key];
+      const maxDagCount = hist ? Math.max(...Object.values(hist.dagCounts), 0) : 0;
+      const isBaansoort = !hist;
+      const isDagrecord = vandaagCount > maxDagCount;
+      const isJaarsoort = !hist || !hist.jaren.has(huidigJaar);
+
+      if (isBaansoort || isDagrecord) {
+        result[key] = '*';
+      } else if (isJaarsoort) {
+        result[key] = '†';
+      }
+    }
+    return result;
+  }, [huidigeRecords, historischeRecords]);
+
   const totaalStats = useMemo(() => computeStats(gefilterdRecords), [gefilterdRecords]);
   const alleTerugvangsten = useMemo(() => {
     const fbLat = parseFloat(settings.ringstationLat) || null;
@@ -435,14 +480,20 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 </tr>
               </thead>
               <tbody>
-                {huidigeStats.soortenTabel.map(s => (
-                  <tr key={s.naam}>
-                    <td className="tt-col-soort">{displayNaam(s.naam)}</td>
-                    <td className="tt-col-num">{s.nieuw || ''}</td>
-                    <td className="tt-col-num">{s.terugvangst || ''}</td>
-                    <td className="tt-col-num tt-col-total">{s.totaal}</td>
-                  </tr>
-                ))}
+                {huidigeStats.soortenTabel.map(s => {
+                  const indicator = soortenIndicatoren[s.naam.toLowerCase()];
+                  return (
+                    <tr key={s.naam}>
+                      <td className="tt-col-soort">
+                        {displayNaam(s.naam)}
+                        {indicator && <span className={`soort-indicator soort-indicator--${indicator === '*' ? 'record' : 'jaar'}`}>{indicator}</span>}
+                      </td>
+                      <td className="tt-col-num">{s.nieuw || ''}</td>
+                      <td className="tt-col-num">{s.terugvangst || ''}</td>
+                      <td className="tt-col-num tt-col-total">{s.totaal}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
               <tfoot>
                 <tr className="tt-totaal-row">
@@ -456,6 +507,17 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
           </div>
         ) : (
           <p className="stats-empty">{t('stats_no_new_catches')}</p>
+        )}
+
+        {Object.keys(soortenIndicatoren).length > 0 && (
+          <div className="soort-indicator-legenda">
+            {Object.values(soortenIndicatoren).includes('*') && (
+              <span><span className="soort-indicator soort-indicator--record">*</span> {t('stats_indicator_record')}</span>
+            )}
+            {Object.values(soortenIndicatoren).includes('†') && (
+              <span><span className="soort-indicator soort-indicator--jaar">†</span> {t('stats_indicator_jaar')}</span>
+            )}
+          </div>
         )}
 
         {huidigeStats.total > 1 && (

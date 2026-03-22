@@ -165,6 +165,33 @@
   font-weight: 700;
 }
 
+.soort-indicator {
+  margin-left: 4px;
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
+.soort-indicator--record {
+  color: var(--accent, #38bdf8);
+}
+
+.soort-indicator--jaar {
+  color: var(--success, #22c55e);
+}
+
+.soort-indicator-legenda {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  padding: 0 2px;
+}
+
+.soort-indicator-legenda .soort-indicator {
+  font-size: 0.85em;
+}
+
 .tt-totaal-row td {
   border-top: 2px solid var(--accent);
   border-bottom: none;

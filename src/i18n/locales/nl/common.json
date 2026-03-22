@@ -169,6 +169,8 @@
   "stats_new": "Nieuw",
   "stats_recatch": "Terugvangst",
   "stats_extern": "Externe melding",
+  "stats_indicator_record": "nieuwe baansoort of dagrecord",
+  "stats_indicator_jaar": "nieuwe jaarsoort",
   "stats_catch_locations": "Vangstlocaties",
     "tv_title": "Terugvangsten",
     "tv_no_data": "Geen terugvangsten gevonden",

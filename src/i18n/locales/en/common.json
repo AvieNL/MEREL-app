@@ -169,6 +169,8 @@
   "stats_new": "New",
   "stats_recatch": "Recapture",
   "stats_extern": "External report",
+  "stats_indicator_record": "new site species or day record",
+  "stats_indicator_jaar": "new year species",
   "stats_catch_locations": "Catch locations",
     "tv_title": "Recaptures",
     "tv_no_data": "No recaptures found",
