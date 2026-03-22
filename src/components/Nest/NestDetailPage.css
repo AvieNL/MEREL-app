@@ -100,7 +100,7 @@
 
 /* ── Legsel ── */
 .legsel-blok {
-  background: var(--bg-tertiary);
+  background: color-mix(in srgb, var(--bg-tertiary) 50%, var(--bg-secondary));
   border-radius: var(--radius-sm);
   padding: 10px 12px;
   margin-bottom: 8px;
@@ -154,13 +154,16 @@
 .bezoek-timeline {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
   margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .bezoek-item {
   font-size: 0.82rem;
-  padding: 4px 0;
+  padding: 6px 8px;
   border-bottom: 1px solid var(--border);
 }
 
