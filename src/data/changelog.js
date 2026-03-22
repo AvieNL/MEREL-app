@@ -1,6 +1,19 @@
-export const VERSIE = '1.29.3';
+export const VERSIE = '1.29.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.4',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: stadiumcodes E1–E7 tonen nu broedstatus (koud/warm/bebroed/etc.) i.p.v. foutief aantal eieren',
+    ],
+    wijzigingen_en: [
+      'Fix: stadium codes E1–E7 now show breeding status (cold/warm/incubated/etc.) instead of incorrect egg count',
+    ],
+    wijzigingen_de: [
+      'Fix: Stadiumcodes E1–E7 zeigen jetzt Brutstatus statt fehlerhafter Eieranzahl',
+    ],
+  },
   {
     versie: '1.29.3',
     datum: '2026-03-22',

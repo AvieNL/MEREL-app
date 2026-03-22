@@ -11,8 +11,11 @@ import './NestDetailPage.css';
 
 const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
 
-function stadiumLabel(code) {
-  return STADIUM_CODES.find(s => s.code === code)?.nl || code;
+function stadiumLabel(code, t) {
+  const entry = STADIUM_CODES.find(s => s.code === code);
+  if (!entry) return code;
+  if (t && entry.tKey) return `${code} — ${t(entry.tKey)}`;
+  return entry.nl;
 }
 
 export default function NestDetailPage() {
@@ -183,8 +186,8 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                 <div className="bezoek-item__row">
                   <span className="bezoek-item__datum">{formatDatum(bezoek.datum)}{bezoek.tijd ? ` ${bezoek.tijd.slice(0,5)}` : ''}</span>
                   <span className="bezoek-item__stadium">
-                    {stadiumLabel(bezoek.stadium)}
-                    {bezoek.stadium2 && <> + {stadiumLabel(bezoek.stadium2)}</>}
+                    {stadiumLabel(bezoek.stadium, t)}
+                    {bezoek.stadium2 && <> + {stadiumLabel(bezoek.stadium2, t)}</>}
                   </span>
                   {bezoek.soort_euring && bezoek.soort_euring !== legsel.soort_euring && (
                     <span className="bezoek-item__soort-afwijking">
