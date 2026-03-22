@@ -1,6 +1,19 @@
-export const VERSIE = '1.21.0';
+export const VERSIE = '1.22.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.22.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Style: nestenoverzicht opgeschoond — jaarfilter en exportknoppen verwijderd, toggle gestyled als de rest van de app',
+    ],
+    wijzigingen_en: [
+      'Style: nest overview cleaned up — year filter and export buttons removed, toggle styled consistently',
+    ],
+    wijzigingen_de: [
+      'Style: Nestübersicht bereinigt — Jahresfilter und Exportschaltflächen entfernt, Umschalter einheitlich gestaltet',
+    ],
+  },
   {
     versie: '1.21.0',
     datum: '2026-03-22',

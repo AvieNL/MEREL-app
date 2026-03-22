@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
 import { useNestRole } from '../../hooks/useNestRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
-import { buildNestExportData, exportNestJSON, exportNestCSV } from '../../utils/nestExport';
 import 'leaflet/dist/leaflet.css';
 import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
 import './NestOverzichtPage.css';
@@ -37,7 +36,7 @@ export default function NestOverzichtPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd } = useNestRole();
-  const { nesten, seizoenen, legsels, bezoeken, ringen } = useNestData();
+  const { nesten, seizoenen, legsels, bezoeken } = useNestData();
   const species = useSpeciesRef();
   const speciesByEuring = useMemo(() => {
     const map = {};
@@ -45,18 +44,10 @@ export default function NestOverzichtPage() {
     return map;
   }, [species]);
   const [tab, setTab] = useState('lijst');
-  const [seizoenFilter, setSeizoenFilter] = useState(String(HUIDIG_JAAR));
 
-  // Beschikbare seizoenen op basis van nest_seizoen data
-  const beschikbareJaren = useMemo(() => {
-    const jaren = new Set(seizoenen.map(s => String(s.jaar)));
-    jaren.add(String(HUIDIG_JAAR));
-    return [...jaren].sort((a, b) => b - a);
-  }, [seizoenen]);
-
-  // Verrijkte nestenlijst: voeg seizoen + laatste bezoek toe
+  // Verrijkte nestenlijst: voeg seizoen + laatste bezoek toe (altijd huidig jaar)
   const verrijkteNesten = useMemo(() => {
-    const jaar = parseInt(seizoenFilter, 10);
+    const jaar = HUIDIG_JAAR;
     return nesten.map(nest => {
       const seizoen = seizoenen.find(s => s.nest_id === nest.id && s.jaar === jaar);
       const legselsInSeizoen = seizoen
@@ -90,54 +81,18 @@ export default function NestOverzichtPage() {
           )}
         </div>
 
-        <div className="nest-overzicht-controls">
-          <div className="mode-toggle">
-            <button className={`mode-btn${tab === 'lijst' ? ' active' : ''}`} onClick={() => setTab('lijst')}>
-              {t('nest_tab_list')}
-            </button>
-            <button className={`mode-btn${tab === 'kaart' ? ' active' : ''}`} onClick={() => setTab('kaart')}>
-              {t('nest_tab_map')}
-            </button>
-          </div>
-
-          <select
-            className="nest-seizoen-select"
-            value={seizoenFilter}
-            onChange={e => setSeizoenFilter(e.target.value)}
-            aria-label={t('nest_season_filter')}
-          >
-            {beschikbareJaren.map(j => (
-              <option key={j} value={j}>{j}</option>
-            ))}
-          </select>
-
-          <div className="nest-export-knoppen">
-            <button
-              className="btn-secondary nest-export-btn"
-              onClick={() => {
-                const data = buildNestExportData({ nesten, seizoenen, legsels, bezoeken, ringen, jaar: seizoenFilter, speciesByEuring });
-                exportNestCSV(data, seizoenFilter);
-              }}
-              title={t('nest_export_csv_title')}
-            >
-              CSV
-            </button>
-            <button
-              className="btn-secondary nest-export-btn"
-              onClick={() => {
-                const data = buildNestExportData({ nesten, seizoenen, legsels, bezoeken, ringen, jaar: seizoenFilter, speciesByEuring });
-                exportNestJSON(data, seizoenFilter);
-              }}
-              title={t('nest_export_json_title')}
-            >
-              JSON
-            </button>
-          </div>
+        <div className="mode-toggle">
+          <button className={`mode-btn${tab === 'lijst' ? ' active' : ''}`} onClick={() => setTab('lijst')}>
+            {t('nest_tab_list')}
+          </button>
+          <button className={`mode-btn${tab === 'kaart' ? ' active' : ''}`} onClick={() => setTab('kaart')}>
+            {t('nest_tab_map')}
+          </button>
         </div>
       </div>
 
       {tab === 'lijst' && (
-        <NestenLijst nesten={verrijkteNesten} seizoenFilter={seizoenFilter} navigate={navigate} t={t} />
+        <NestenLijst nesten={verrijkteNesten} navigate={navigate} t={t} />
       )}
       {tab === 'kaart' && (
         <NestenKaart nesten={verrijkteNesten} navigate={navigate} />
@@ -146,7 +101,7 @@ export default function NestOverzichtPage() {
   );
 }
 
-function NestenLijst({ nesten, seizoenFilter, navigate, t }) {
+function NestenLijst({ nesten, navigate, t }) {
   if (nesten.length === 0) {
     return (
       <div className="nest-leeg">
@@ -179,7 +134,7 @@ function NestenLijst({ nesten, seizoenFilter, navigate, t }) {
                 <span className="nest-kaart__datum">{nest.laatsteBezoek.datum}</span>
               </>
             ) : (
-              <span className="nest-kaart__geen-bezoek">{t('nest_no_visits_season', { jaar: seizoenFilter })}</span>
+              <span className="nest-kaart__geen-bezoek">{t('nest_no_visits_season', { jaar: HUIDIG_JAAR })}</span>
             )}
             {nest.aantalBezoeken > 0 && (
               <span className="nest-kaart__tel">{t('nest_visit_count', { count: nest.aantalBezoeken })}</span>

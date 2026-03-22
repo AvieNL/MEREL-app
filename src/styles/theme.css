@@ -457,6 +457,39 @@ button, a, label, select {
   color: var(--success);
 }
 
+/* Segmented mode toggle (lijst/kaart, etc.) */
+.mode-toggle {
+  display: inline-flex;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius);
+  padding: 3px;
+  gap: 2px;
+}
+
+.mode-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  padding: 7px 22px;
+  border-radius: calc(var(--radius) - 2px);
+  font-size: 0.875rem;
+  font-weight: 600;
+  min-height: 36px;
+  min-width: 0;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+}
+
+.mode-btn:hover {
+  color: var(--text-primary);
+}
+
+.mode-btn.active {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
 /* Tile toggle button — floats top-right over Leaflet maps */
 .kaart-tile-toggle {
   position: absolute;

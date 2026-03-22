@@ -32,14 +32,6 @@
   flex-wrap: wrap;
 }
 
-.nest-seizoen-select {
-  background: var(--bg-input);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 6px 10px;
-  font-size: 0.9rem;
-}
 
 /* ── Lijst ── */
 .nest-lijst {
@@ -143,15 +135,3 @@
   border: 1px solid var(--border);
 }
 
-/* ── Export knoppen ── */
-.nest-export-knoppen {
-  display: flex;
-  gap: 6px;
-  margin-left: auto;
-}
-
-.nest-export-btn {
-  font-size: 0.78rem;
-  padding: 4px 10px;
-  min-height: unset;
-}
