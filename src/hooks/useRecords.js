@@ -8,6 +8,7 @@ import { toVangstRow, fromVangstRow } from '../utils/supabase-helpers';
 import { toYMD } from '../utils/dateHelper';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
+import { pullNestData } from './useNestSync';
 import { useToast } from '../context/ToastContext';
 import i18n from '../i18n/index.js';
 
@@ -243,7 +244,10 @@ export function useRecords() {
 
   async function fullResync() {
     await db.meta.delete(`last_pull_vangsten_${user.id}`);
-    await pullFromSupabase();
+    await Promise.all([
+      pullFromSupabase(),
+      pullNestData(),
+    ]);
   }
 
   return {

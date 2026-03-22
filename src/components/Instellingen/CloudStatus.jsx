@@ -29,20 +29,22 @@ export default function CloudStatus() {
   // Lokale tellingen — één gecombineerde reactieve query
   const lokaalCounts = useLiveQuery(
     async () => {
-      if (!user) return { vangsten: 0, verwijderd: 0, projecten: 0, ringstrengen: 0 };
-      const [vangsten, verwijderd, projecten, ringstrengen] = await Promise.all([
+      if (!user) return { vangsten: 0, verwijderd: 0, projecten: 0, ringstrengen: 0, nesten: 0, nestbezoeken: 0 };
+      const [vangsten, verwijderd, projecten, ringstrengen, nesten, nestbezoeken] = await Promise.all([
         db.vangsten.where('user_id').equals(user.id).filter(r => !r.deleted_at).count(),
         db.vangsten.where('user_id').equals(user.id).filter(r => !!r.deleted_at).count(),
         db.projecten.where('user_id').equals(user.id).count(),
         db.ringstrengen.where('user_id').equals(user.id).count(),
+        db.nest.where('aangemaakt_door').equals(user.id).count(),
+        db.nestbezoek.where('aangemaakt_door').equals(user.id).count(),
       ]);
-      return { vangsten, verwijderd, projecten, ringstrengen };
+      return { vangsten, verwijderd, projecten, ringstrengen, nesten, nestbezoeken };
     },
     [user?.id],
-    { vangsten: 0, verwijderd: 0, projecten: 0, ringstrengen: 0 }
-  ) ?? { vangsten: 0, verwijderd: 0, projecten: 0, ringstrengen: 0 };
+    { vangsten: 0, verwijderd: 0, projecten: 0, ringstrengen: 0, nesten: 0, nestbezoeken: 0 }
+  ) ?? { vangsten: 0, verwijderd: 0, projecten: 0, ringstrengen: 0, nesten: 0, nestbezoeken: 0 };
 
-  const { vangsten: lokaalVangsten, verwijderd: lokaalVerwijderd, projecten: lokaalProjecten, ringstrengen: lokaalRingstrengen } = lokaalCounts;
+  const { vangsten: lokaalVangsten, verwijderd: lokaalVerwijderd, projecten: lokaalProjecten, ringstrengen: lokaalRingstrengen, nesten: lokaalNesten, nestbezoeken: lokaalNestbezoeken } = lokaalCounts;
 
   useEffect(() => {
     if (!user) return;
@@ -55,17 +57,21 @@ export default function CloudStatus() {
     setLoadingOnline(true);
     setOnlineError('');
     try {
-      const [vangsten, projecten, ringstrengen] = await Promise.all([
+      const [vangsten, projecten, ringstrengen, nesten, nestbezoeken] = await Promise.all([
         supabase.from('vangsten').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
         supabase.from('projecten').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
         supabase.from('ringstrengen').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+        supabase.from('nest').select('id', { count: 'exact', head: true }).eq('aangemaakt_door', user.id),
+        supabase.from('nestbezoek').select('id', { count: 'exact', head: true }).eq('aangemaakt_door', user.id),
       ]);
-      const firstError = [vangsten, projecten, ringstrengen].find(r => r.error);
+      const firstError = [vangsten, projecten, ringstrengen, nesten, nestbezoeken].find(r => r.error);
       if (firstError) throw firstError.error;
       setOnline({
         vangsten: vangsten.count ?? 0,
         projecten: projecten.count ?? 0,
         ringstrengen: ringstrengen.count ?? 0,
+        nesten: nesten.count ?? 0,
+        nestbezoeken: nestbezoeken.count ?? 0,
       });
     } catch {
       setOnlineError(t('cloud_error'));
@@ -96,10 +102,12 @@ export default function CloudStatus() {
   }
 
   const tabelRijen = [
-    { label: t('cloud_catches'),     lokaal: lokaalVangsten,    online: online?.vangsten },
-    { label: t('cloud_trash'),       lokaal: lokaalVerwijderd,  online: null, sub: true },
-    { label: t('cloud_projects'),    lokaal: lokaalProjecten,   online: online?.projecten },
-    { label: t('cloud_ring_strings'),lokaal: lokaalRingstrengen,online: online?.ringstrengen },
+    { label: t('cloud_catches'),      lokaal: lokaalVangsten,     online: online?.vangsten },
+    { label: t('cloud_trash'),        lokaal: lokaalVerwijderd,   online: null, sub: true },
+    { label: t('cloud_projects'),     lokaal: lokaalProjecten,    online: online?.projecten },
+    { label: t('cloud_ring_strings'), lokaal: lokaalRingstrengen, online: online?.ringstrengen },
+    { label: t('cloud_nests'),        lokaal: lokaalNesten,       online: online?.nesten },
+    { label: t('cloud_nestvisits'),   lokaal: lokaalNestbezoeken, online: online?.nestbezoeken },
   ];
 
   const fout = syncError || onlineError || speciesError;

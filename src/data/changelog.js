@@ -1,6 +1,22 @@
-export const VERSIE = '1.16.0';
+export const VERSIE = '1.16.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.16.1',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: synchronisatiestatus toont nesten en nestbezoeken (lokaal + online)',
+      'Feat: "Alles opnieuw ophalen" haalt nu ook nestdata op',
+    ],
+    wijzigingen_en: [
+      'Feat: sync status shows nests and nest visits (local + online)',
+      'Feat: "Reload all data" now also pulls nest data',
+    ],
+    wijzigingen_de: [
+      'Feat: Synchronisationsstatus zeigt Nester und Nestbesuche (lokal + online)',
+      'Feat: "Alle Daten neu laden" ruft jetzt auch Nestdaten ab',
+    ],
+  },
   {
     versie: '1.16.0',
     datum: '2026-03-22',

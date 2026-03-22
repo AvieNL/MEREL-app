@@ -79,6 +79,8 @@
   "cloud_trash": "In trash",
   "cloud_projects": "Projects",
   "cloud_ring_strings": "Ring strings",
+  "cloud_nests": "Nests",
+  "cloud_nestvisits": "Nest visits",
   "cloud_last_pull": "Last pull",
   "cloud_last_sync": "Last sync",
   "cloud_pending": "Pending upload",
