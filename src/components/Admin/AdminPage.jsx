@@ -262,6 +262,7 @@ export default function AdminPage() {
               <p className="admin-hint" style={{ marginTop: '1rem' }}><strong>{t('admin_nest_role_explanation')}</strong></p>
               <div className="admin-role-list">
                 {[
+                  ['role_admin',          'admin_nest_role_admin_desc'],
                   ['role_nestonderzoeker', 'admin_nest_role_nestonderzoeker_desc'],
                   ['role_nest_kijker',     'admin_nest_role_kijker_desc'],
                   ['role_nest_none',       'admin_nest_role_none_desc'],
