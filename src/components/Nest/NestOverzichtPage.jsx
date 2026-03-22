@@ -173,7 +173,7 @@ function NestenLijst({ nesten, navigate, t, zoekterm }) {
             onClick={() => navigate(`/nest/${nest.id}`)}
           >
             <div className="nest-kaart__hoofd">
-              <span className="nest-kaart__nr">🪺 {nest.kastnummer}</span>
+              <span className="nest-kaart__nr">⌂ {nest.kastnummer}</span>
               {nest.omschrijving && <span className="nest-kaart__naam">{nest.omschrijving}</span>}
               {nest.vogelNaam && <span className="nest-kaart__soort">{nest.vogelNaam}</span>}
             </div>
