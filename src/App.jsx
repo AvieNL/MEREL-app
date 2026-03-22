@@ -37,6 +37,7 @@ const NestDetailPage    = lazy(() => import('./components/Nest/NestDetailPage'))
 const NieuwBezoekPage   = lazy(() => import('./components/Nest/NieuwBezoekPage'));
 const NieuwLegselPage   = lazy(() => import('./components/Nest/NieuwLegselPage'));
 const WijzigNestPage    = lazy(() => import('./components/Nest/WijzigNestPage'));
+const WijzigBezoekPage  = lazy(() => import('./components/Nest/WijzigBezoekPage'));
 const NestStatsPage     = lazy(() => import('./components/Nest/NestStatsPage'));
 const NestPlanningPage  = lazy(() => import('./components/Nest/NestPlanningPage'));
 import { useRecords } from './hooks/useRecords';
@@ -168,6 +169,7 @@ function NestApp({ onSwitchModule, activeModule }) {
             <Route path="/nest/nieuw" element={<NieuwNestPage />} />
             <Route path="/nest/:id" element={<NestDetailPage />} />
             <Route path="/nest/:id/wijzigen" element={<WijzigNestPage />} />
+            <Route path="/nest/bezoek/:bezoekId/wijzigen" element={<WijzigBezoekPage />} />
             <Route path="/nest/bezoek/nieuw" element={<NieuwBezoekPage />} />
             <Route path="/nest/legsel/:legselId/bezoek/nieuw" element={<NieuwBezoekPage />} />
             <Route path="/nest/:nestId/legsel/nieuw" element={<NieuwLegselPage />} />

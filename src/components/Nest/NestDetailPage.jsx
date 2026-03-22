@@ -114,6 +114,7 @@ export default function NestDetailPage() {
             soort={speciesByEuring[legsel.soort_euring] || null}
             speciesByEuring={speciesByEuring}
             canNestAdd={canNestAdd}
+            canNestEdit={canNestEdit}
             navigate={navigate}
             switchModule={switchModule}
             t={t}
@@ -134,7 +135,7 @@ export default function NestDetailPage() {
 }
 
 
-function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, navigate, switchModule, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, navigate, switchModule, t }) {
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
@@ -185,6 +186,14 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
               <div key={bezoek.id} className="bezoek-item">
                 <div className="bezoek-item__row">
                   <span className="bezoek-item__datum">{formatDatum(bezoek.datum)}{bezoek.tijd ? ` ${bezoek.tijd.slice(0,5)}` : ''}</span>
+                  {canNestEdit && (
+                    <button
+                      className="icon-edit-btn bezoek-edit-btn"
+                      type="button"
+                      onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
+                      title={t('btn_edit')}
+                    >✏️</button>
+                  )}
                   <span className="bezoek-item__stadium">
                     {stadiumLabel(bezoek.stadium, t)}
                     {bezoek.stadium2 && <> + {stadiumLabel(bezoek.stadium2, t)}</>}

@@ -1,6 +1,19 @@
-export const VERSIE = '1.29.4';
+export const VERSIE = '1.29.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.5',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: bezoek aan nest wijzigen — nieuw bewerkscherm per nestbezoek (✏️ knop in tijdlijn)',
+    ],
+    wijzigingen_en: [
+      'Feat: edit nest visit — new edit page per nest visit (✏️ button in timeline)',
+    ],
+    wijzigingen_de: [
+      'Feat: Nestbesuch bearbeiten — neue Bearbeitungsseite pro Nestbesuch (✏️-Schaltfläche in Zeitachse)',
+    ],
+  },
   {
     versie: '1.29.4',
     datum: '2026-03-22',
