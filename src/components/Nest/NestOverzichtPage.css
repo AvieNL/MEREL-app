@@ -137,22 +137,30 @@
 
 .nest-kaart-legenda {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  padding: 10px 2px 4px;
+  flex-wrap: nowrap;
+  gap: 0 12px;
+  padding: 8px 2px 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nest-kaart-legenda::-webkit-scrollbar {
+  display: none;
 }
 
 .nest-kaart-legenda__item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
+  gap: 5px;
+  font-size: 0.72rem;
   color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .nest-kaart-legenda__stip {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   flex-shrink: 0;
 }
