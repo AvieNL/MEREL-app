@@ -135,3 +135,25 @@
   border: 1px solid var(--border);
 }
 
+.nest-kaart-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 10px 2px 4px;
+}
+
+.nest-kaart-legenda__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.nest-kaart-legenda__stip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+

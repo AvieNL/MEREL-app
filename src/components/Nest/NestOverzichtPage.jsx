@@ -149,6 +149,15 @@ function NestenLijst({ nesten, navigate, t }) {
   );
 }
 
+const LEGENDA = [
+  { kleur: '#64748b', labelKey: 'nest_legend_geen' },
+  { kleur: '#f59e0b', labelKey: 'nest_legend_bouw' },
+  { kleur: '#a78bfa', labelKey: 'nest_legend_eieren' },
+  { kleur: '#38bdf8', labelKey: 'nest_legend_pulli' },
+  { kleur: '#fb923c', labelKey: 'nest_legend_ouder' },
+  { kleur: '#22c55e', labelKey: 'nest_legend_nacontrole' },
+];
+
 function NestenKaart({ nesten, navigate }) {
   const { t } = useTranslation();
   const mapRef = useRef(null);
@@ -238,11 +247,21 @@ function NestenKaart({ nesten, navigate }) {
   }
 
   return (
-    <div style={{ position: 'relative' }}>
-      <div ref={mapRef} className="nest-kaart-map" />
-      <button type="button" className="kaart-tile-toggle" onClick={toggleTile} title={tileType === 'osm' ? t('map_switch_satellite') : t('map_switch_osm')}>
-        {tileType === 'osm' ? '🛰️' : '🗺️'}
-      </button>
+    <div>
+      <div style={{ position: 'relative' }}>
+        <div ref={mapRef} className="nest-kaart-map" />
+        <button type="button" className="kaart-tile-toggle" onClick={toggleTile} title={tileType === 'osm' ? t('map_switch_satellite') : t('map_switch_osm')}>
+          {tileType === 'osm' ? '🛰️' : '🗺️'}
+        </button>
+      </div>
+      <div className="nest-kaart-legenda">
+        {LEGENDA.map(item => (
+          <span key={item.kleur} className="nest-kaart-legenda__item">
+            <span className="nest-kaart-legenda__stip" style={{ background: item.kleur }} />
+            {t(item.labelKey)}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
