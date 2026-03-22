@@ -1,6 +1,25 @@
-export const VERSIE = '1.15.6';
+export const VERSIE = '1.15.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.15.7',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: admin kan ring-rol "Geen ringmodule" toewijzen aan gebruikers',
+      'Feat: admin kan nest-rol "Admin" toewijzen aan gebruikers',
+      'Fix: nestkast_rol "admin" geeft volledige toegang tot nestmodule',
+    ],
+    wijzigingen_en: [
+      'Feat: admin can assign ring role "No ring module" to users',
+      'Feat: admin can assign nest role "Admin" to users',
+      'Fix: nestkast_rol "admin" grants full access to nest module',
+    ],
+    wijzigingen_de: [
+      'Feat: Admin kann Ringmodul-Rolle "Kein Ringmodul" zuweisen',
+      'Feat: Admin kann Nestmodul-Rolle "Admin" zuweisen',
+      'Fix: nestkast_rol "admin" gewährt vollen Zugang zum Nestmodul',
+    ],
+  },
   {
     versie: '1.15.6',
     datum: '2026-03-22',
