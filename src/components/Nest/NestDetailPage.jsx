@@ -201,6 +201,14 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                       {bezoek.aantal_pulli != null && ` ${bezoek.aantal_pulli}×🐣`}
                     </span>
                   )}
+                  {canNestEdit && (
+                    <button
+                      className="icon-edit-btn bezoek-edit-btn"
+                      type="button"
+                      onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
+                      title={t('btn_edit')}
+                    >✏️</button>
+                  )}
                   {bezoek.volgende_bezoek_suggestie && (
                     <span className="bezoek-item__suggestie">→ {bezoek.volgende_bezoek_suggestie}</span>
                   )}
@@ -213,14 +221,6 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                     >
                       🔖 {t('nest_btn_ring_bird')}
                     </button>
-                  )}
-                  {canNestEdit && (
-                    <button
-                      className="icon-edit-btn bezoek-edit-btn"
-                      type="button"
-                      onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
-                      title={t('btn_edit')}
-                    >✏️</button>
                   )}
                 </div>
                 {bezoekRingen.length > 0 && (
