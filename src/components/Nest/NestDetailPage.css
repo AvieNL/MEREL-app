@@ -167,8 +167,16 @@
 .bezoek-item__row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+}
+
+.bezoek-item__info {
+  display: flex;
+  align-items: center;
   flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
 .bezoek-item:last-child {
@@ -197,7 +205,6 @@
 }
 
 .bezoek-edit-btn {
-  margin-left: auto;
   flex-shrink: 0;
 }
 
