@@ -1,11 +1,11 @@
-export const VERSIE = '1.9.3';
+export const VERSIE = '1.9.4';
 
 export const CHANGELOG = [
   {
-    versie: '1.9.3',
+    versie: '1.9.4',
     datum: '2026-03-22',
     wijzigingen: [
-      'UX: terugvangst-info toont nu ook het geslacht van de eerste eigen vangst',
+      'UX: geslacht (♂/♀) inline achter de soortnaam in terugvangst-info',
       'Fix: soortnaam in terugvangst-info begint nu met een hoofdletter',
     ],
     wijzigingen_en: [
