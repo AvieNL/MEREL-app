@@ -4,12 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useNestRole } from '../../hooks/useNestRole';
-import { useModuleSwitch } from '../../App';
 import { HABITAT_CODES, NESTPLAATS_CODES, STADIUM_CODES } from '../../data/sovon-codes';
 import { formatDatum, URGENTIE_KLEUR } from '../../utils/nestPlanning';
 import './NestDetailPage.css';
-
-const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
 
 function stadiumLabel(code, t) {
   const entry = STADIUM_CODES.find(s => s.code === code);
@@ -26,7 +23,6 @@ export default function NestDetailPage() {
   const { nesten, legsels, bezoeken, ringen, deleteNest, deleteBezoek } = useNestData();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
   const species = useSpeciesRef();
-  const switchModule = useModuleSwitch();
 
   const speciesByEuring = useMemo(() => {
     const map = {};
@@ -120,7 +116,6 @@ export default function NestDetailPage() {
             canNestEdit={canNestEdit}
             deleteBezoek={deleteBezoek}
             navigate={navigate}
-            switchModule={switchModule}
             t={t}
           />
         ))
@@ -139,25 +134,11 @@ export default function NestDetailPage() {
 }
 
 
-function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, navigate, switchModule, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, navigate, t }) {
   const [deleteBezoekId, setDeleteBezoekId] = useState(null);
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
-
-  function handleVogelRingen(bezoek) {
-    sessionStorage.setItem(NEST_RING_CONTEXT_KEY, JSON.stringify({
-      bezoekId: bezoek.id,
-      nestId: nest?.id || '',
-      soortNaam: effectieveSoort?.naam_nl || '',
-      soortEuring: soortEuring,
-      datum: bezoek.datum,
-      lat: nest?.lat || '',
-      lon: nest?.lon || '',
-    }));
-    navigate('/');
-    if (switchModule) switchModule('ring');
-  }
 
   // Soort: meest recente bezoek met soort_euring → legsel → nest
   const soortEuring =
@@ -248,7 +229,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                     <button
                       className="btn-ring-uit-nest"
                       type="button"
-                      onClick={() => handleVogelRingen(bezoek)}
+                      onClick={() => navigate(`/nest/bezoek/${bezoek.id}/ringen`)}
                       title={t('nest_btn_ring_bird')}
                     >
                       🔖 {t('nest_btn_ring_bird')}

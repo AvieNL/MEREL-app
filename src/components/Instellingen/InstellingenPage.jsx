@@ -4,6 +4,7 @@ import i18n from '../../i18n/index.js';
 import { useAuth } from '../../context/AuthContext';
 import { useSync } from '../../context/SyncContext';
 import { useNestRole } from '../../hooks/useNestRole';
+import { useProjects } from '../../hooks/useProjects';
 import CloudStatus from './CloudStatus';
 import './InstellingenPage.css';
 
@@ -17,6 +18,7 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
   const { user, profile, updateProfile } = useAuth();
   const { processQueue, syncing, pendingCount, isOnline, lastSynced } = useSync();
   const { hasNestAccess } = useNestRole();
+  const { projects } = useProjects();
   const { t } = useTranslation(['common', 'forms']);
   const [resyncing, setResyncing] = useState(false);
   const [sovonNr, setSovonNr] = useState(profile?.sovon_registratienummer || '');
@@ -136,13 +138,28 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
             )}
           </div>
           {hasNestAccess && (
-            <p className="admin-hint" style={{ marginTop: 6 }}>
-              {t('nestonderzoek_rol_label')}: <strong>
-                {profile?.rol === 'admin'
-                  ? t('nestonderzoek_rol_admin')
-                  : (profile?.nestkast_rol || '—')}
-              </strong>
-            </p>
+            <>
+              <p className="admin-hint" style={{ marginTop: 6 }}>
+                {t('nestonderzoek_rol_label')}: <strong>
+                  {profile?.rol === 'admin'
+                    ? t('nestonderzoek_rol_admin')
+                    : (profile?.nestkast_rol || '—')}
+                </strong>
+              </p>
+              <div className="form-group" style={{ marginTop: 12 }}>
+                <label>{t('nestonderzoek_project_label')}</label>
+                <select
+                  value={settings.nestProject || ''}
+                  onChange={e => onUpdateSettings({ nestProject: e.target.value })}
+                >
+                  <option value="">— {t('nestonderzoek_project_geen')} —</option>
+                  {projects.filter(p => p.actief !== false).map(p => (
+                    <option key={p.id} value={p.naam}>{p.naam}</option>
+                  ))}
+                </select>
+                <span className="form-hint">{t('nestonderzoek_project_hint')}</span>
+              </div>
+            </>
           )}
         </div>
       </div>

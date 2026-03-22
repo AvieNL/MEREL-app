@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS = {
   hulpModus: 'uitgebreid',
   ringstationLat: '',
   ringstationLon: '',
+  nestProject: '',
 };
 
 function profileToSettings(profile) {
@@ -23,6 +24,7 @@ function profileToSettings(profile) {
     hulpModus: profile.hulp_modus || 'uitgebreid',
     ringstationLat: stored.ringstationLat || '',
     ringstationLon: stored.ringstationLon || '',
+    nestProject: stored.nestProject || '',
   };
 }
 

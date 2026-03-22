@@ -1,6 +1,28 @@
-export const VERSIE = '1.29.11';
+export const VERSIE = '1.30.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.30.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: pulli ringen vanuit nestbezoek — batch-invoer per nestjong met Griel-koppeling',
+      'Feat: elke pullus opgeslagen als vangst (Griel-export) én gekoppeld aan nestbezoek',
+      'Feat: locatie nestkast als ringlocatie, nestnummer+naam in Griel-opmerking',
+      'Feat: Griel-project voor nestkastonderzoek instelbaar in instellingen',
+    ],
+    wijzigingen_en: [
+      'Feat: ring pulli from nest visit — batch entry per nestling with Griel link',
+      'Feat: each pullus saved as catch record (Griel export) and linked to nest visit',
+      'Feat: nest box location as ringing location, nest number+name in Griel remarks',
+      'Feat: Griel project for nest box research configurable in settings',
+    ],
+    wijzigingen_de: [
+      'Feat: Pulli vom Nestbesuch beringen — Stapeleingabe mit Griel-Verknüpfung',
+      'Feat: jeder Pullus als Fangdatensatz gespeichert und mit Nestbesuch verknüpft',
+      'Feat: Nistkastenstandort als Beringungsort, Kastnummer+Name in Griel-Bemerkung',
+      'Feat: Griel-Projekt für Nistkastenforschung in Einstellungen konfigurierbar',
+    ],
+  },
   {
     versie: '1.29.11',
     datum: '2026-03-22',
