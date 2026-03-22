@@ -183,6 +183,12 @@ export function useRecords() {
     const deletedAt = new Date().toISOString();
     db.vangsten.update(id, { deleted_at: deletedAt });
     addToQueue('vangsten', 'soft_delete', { id, deleted_at: deletedAt, user_id: user.id });
+    db.nestring.where('vangst_id').equals(id).toArray().then(nesterings => {
+      nesterings.forEach(n => {
+        db.nestring.delete(n.id);
+        addToQueue('nestring', 'nest_delete', { id: n.id });
+      });
+    }).catch(() => {});
   }
 
   function restoreRecord(id) {
@@ -193,6 +199,12 @@ export function useRecords() {
   function permanentDeleteRecord(id) {
     db.vangsten.delete(id);
     addToQueue('vangsten', 'delete', { id, user_id: user.id });
+    db.nestring.where('vangst_id').equals(id).toArray().then(nesterings => {
+      nesterings.forEach(n => {
+        db.nestring.delete(n.id);
+        addToQueue('nestring', 'nest_delete', { id: n.id });
+      });
+    }).catch(() => {});
   }
 
   function markAsUploaded(ids) {

@@ -43,6 +43,7 @@ function huidigTijd() {
 const LEEG_FORM = {
   ringnummer: '',
   geslacht: 'U',
+  leeftijd: '',
   vleugel: '',
   gewicht: '',
   tarsus: '',
@@ -122,8 +123,9 @@ export default function PulliRingenPage() {
 
     const opmerkingen = `Nestkastonderzoek — kast ${nest.kastnummer}${nest.omschrijving ? ` ${nest.omschrijving}` : ''}`;
     const plaatsnaam = nest.adres || `Nestkast ${nest.kastnummer}${nest.omschrijving ? ` ${nest.omschrijving}` : ''}`;
-    const leeftijdStr = pullusLeeftijd !== null ? String(pullusLeeftijd).padStart(2, '0') : '99';
-    const nauwkStr = pullusLeeftijd !== null ? 'D' : 'U';
+    const leeftijdBron = form.leeftijd !== '' ? parseInt(form.leeftijd, 10) : pullusLeeftijd;
+    const nauwkStr = form.leeftijd !== '' ? 'E' : pullusLeeftijd !== null ? 'D' : 'U';
+    const leeftijdStr = leeftijdBron !== null && !isNaN(leeftijdBron) ? String(leeftijdBron).padStart(2, '0') : '99';
     const broedStr = form.broedselgrootte
       ? String(parseInt(form.broedselgrootte, 10)).padStart(2, '0')
       : '--';
@@ -139,7 +141,7 @@ export default function PulliRingenPage() {
       leeftijd:          '1',
       geslacht:          form.geslacht || 'U',
       status:            '-',
-      conditie:          '0',
+      conditie:          '8',
       omstandigheden:    '21',
       vangstmethode:     'N',
       project:           settings.nestProject || '',
@@ -290,6 +292,19 @@ export default function PulliRingenPage() {
               <option value="F">{t('pulli_geslacht_f')}</option>
             </select>
           </div>
+          <div className="form-group">
+            <label>{t('pulli_leeftijd_invoer')}</label>
+            <input
+              type="number"
+              min="0" max="99"
+              value={form.leeftijd}
+              onChange={e => update('leeftijd', e.target.value)}
+              placeholder={pullusLeeftijd !== null ? `~${pullusLeeftijd}` : '—'}
+            />
+          </div>
+        </div>
+
+        <div className="pulli-form__rij">
           <div className="form-group">
             <label>{t('pulli_broedselgrootte')}</label>
             <input

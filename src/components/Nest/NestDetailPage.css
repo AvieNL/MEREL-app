@@ -268,10 +268,26 @@
 }
 
 .nestring-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 0.75rem;
   background: var(--bg-secondary);
   border: 1px solid var(--accent);
   color: var(--accent);
   border-radius: 12px;
   padding: 2px 8px;
+}
+
+.nestring-badge__delete {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0 0 0 2px;
+}
+.nestring-badge__delete:hover {
+  color: var(--danger);
 }

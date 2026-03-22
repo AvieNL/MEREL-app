@@ -1,6 +1,48 @@
-export const VERSIE = '1.30.1';
+export const VERSIE = '1.30.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.30.4',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: pullus leeftijd (dagen) handmatig invulbaar in ringbatch, overschrijft berekende waarde',
+      'Fix: conditie standaard op 8 (nestjong) bij pullusringen',
+    ],
+    wijzigingen_en: [
+      'Feat: pullus age (days) can be entered manually in ring batch, overrides calculated value',
+      'Fix: condition defaults to 8 (nestling) when ringing pulli',
+    ],
+    wijzigingen_de: [
+      'Feat: Pullus-Alter (Tage) im Beringungsformular manuell eintragbar, überschreibt Berechnung',
+      'Fix: Kondition standardmäßig 8 (Nestling) beim Pulli-Beringen',
+    ],
+  },
+  {
+    versie: '1.30.3',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: ringkoppeling (nestring-badge) verwijderbaar via × knopje in nestbezoek',
+    ],
+    wijzigingen_en: [
+      'Feat: ring link (nestring badge) can be removed via × button in nest visit',
+    ],
+    wijzigingen_de: [
+      'Feat: Ringverknüpfung (Nestring-Badge) über × Schaltfläche im Nestbesuch entfernbar',
+    ],
+  },
+  {
+    versie: '1.30.2',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: verwijderen vangst in ringmodule verwijdert nu ook gekoppeld nestring-record in nestmodule',
+    ],
+    wijzigingen_en: [
+      'Fix: deleting a catch in the ring module now also removes the linked nestring record in the nest module',
+    ],
+    wijzigingen_de: [
+      'Fix: Löschen eines Fangs im Ringmodul entfernt jetzt auch den verknüpften Nestberingungseintrag',
+    ],
+  },
   {
     versie: '1.30.1',
     datum: '2026-03-22',
