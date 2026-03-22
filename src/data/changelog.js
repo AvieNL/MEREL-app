@@ -1,6 +1,28 @@
-export const VERSIE = '1.29.7';
+export const VERSIE = '1.29.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.8',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: bezoekregels opgesplitst — datum+volgende datum (r1), soort+status+aantallen (r2)',
+      'Fix: emoji vervangen door tekst bij eieren/jongen',
+      'Fix: vertalingen btn_edit en btn_delete toegevoegd',
+      'Fix: bewerkknop bezoek rechts uitgelijnd',
+    ],
+    wijzigingen_en: [
+      'Feat: visit rows split — date+next date (r1), species+status+counts (r2)',
+      'Fix: emoji replaced by text for eggs/chicks',
+      'Fix: translations added for btn_edit and btn_delete',
+      'Fix: edit button aligned to the right in visit row',
+    ],
+    wijzigingen_de: [
+      'Feat: Besuchszeilen aufgeteilt — Datum+nächstes Datum (Z1), Art+Status+Anzahl (Z2)',
+      'Fix: Emoji durch Text für Eier/Junge ersetzt',
+      'Fix: Übersetzungen für btn_edit und btn_delete hinzugefügt',
+      'Fix: Bearbeitungsschaltfläche rechts ausgerichtet',
+    ],
+  },
   {
     versie: '1.29.7',
     datum: '2026-03-22',
