@@ -1,6 +1,19 @@
-export const VERSIE = '1.15.8';
+export const VERSIE = '1.15.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.15.9',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: rol-simulatie pills hoogte 20px — min-height override toegevoegd',
+    ],
+    wijzigingen_en: [
+      'Fix: role simulation pills height 20px — min-height override added',
+    ],
+    wijzigingen_de: [
+      'Fix: Rollen-Simulations-Pills Höhe 20px — min-height Override hinzugefügt',
+    ],
+  },
   {
     versie: '1.15.8',
     datum: '2026-03-22',

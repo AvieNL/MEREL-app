@@ -316,8 +316,8 @@
   width: 100%;
   text-align: left !important;
   padding: 0 10px !important;
-  height: 18px !important;
-  line-height: 18px !important;
+  height: 20px !important;
+  line-height: 20px !important;
   border-radius: var(--radius-sm, 4px) !important;
   font-size: 0.72rem !important;
   font-weight: 500 !important;
@@ -327,6 +327,7 @@
   cursor: pointer;
   white-space: nowrap;
   box-sizing: border-box !important;
+  min-height: 0 !important;
 }
 
 .header-role-pill--ring.header-role-pill--active-ring {
