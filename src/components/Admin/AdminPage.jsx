@@ -203,7 +203,9 @@ export default function AdminPage() {
                     </div>
                     <div className="admin-user-rol">
                       <span className="admin-rol-label">{t('admin_col_nest_rol')}</span>
-                      {g.id === user.id ? (
+                      {g.rol === 'admin' ? (
+                        <span className="rol-badge rol-badge--admin">{t('nestonderzoek_rol_admin')}</span>
+                      ) : g.id === user.id ? (
                         <span className="rol-badge">{NEST_ROL_LABEL[g.nestkast_rol || ''] || '–'}</span>
                       ) : (
                         <select

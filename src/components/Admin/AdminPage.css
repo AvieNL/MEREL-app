@@ -164,6 +164,11 @@
   white-space: nowrap;
 }
 
+.rol-badge--admin {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+
 .admin-saving {
   font-size: 0.75rem;
   color: var(--text-muted);
