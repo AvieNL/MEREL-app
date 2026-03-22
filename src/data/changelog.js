@@ -1,6 +1,19 @@
-export const VERSIE = '1.31.0';
+export const VERSIE = '1.31.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.1',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'UX: "Geringd" label boven ringnummers in nestbezoek, onderstreping verwijderd',
+    ],
+    wijzigingen_en: [
+      'UX: "Ringed" label above ring numbers in nest visit, underline removed',
+    ],
+    wijzigingen_de: [
+      'UX: "Beringt" Label über Ringnummern im Nestbesuch, Unterstreichung entfernt',
+    ],
+  },
   {
     versie: '1.31.0',
     datum: '2026-03-22',

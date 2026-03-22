@@ -473,6 +473,7 @@
   "btn_delete": "Löschen",
   "nest_bezoek_delete_confirm": "Besuch vom {{datum}} löschen?",
   "nest_ring_delete_confirm": "Ringverknüpfung entfernen?",
+  "nest_geringd_label": "Beringt",
   "nestonderzoek_project_label": "Griel-Projekt für Nistkastenforschung",
   "nestonderzoek_project_geen": "keines",
   "nestonderzoek_project_hint": "Wird beim Beringen von Pulli aus einem Nestbesuch automatisch ausgefüllt.",

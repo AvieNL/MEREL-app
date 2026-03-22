@@ -231,6 +231,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                 </div>
                 {bezoekRingen.length > 0 && (
                   <div className="bezoek-ringen">
+                    <span className="bezoek-ringen__label">{t('nest_geringd_label')}</span>
                     {bezoekRingen.map(r => {
                       const vangst = records?.find(v => v.id === r.vangst_id);
                       const label = r.ringnummer?.replace(/\./g, '') || t('nest_ring_no_number');

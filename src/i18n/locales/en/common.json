@@ -473,6 +473,7 @@
   "btn_delete": "Delete",
   "nest_bezoek_delete_confirm": "Delete visit of {{datum}}?",
   "nest_ring_delete_confirm": "Remove ring link?",
+  "nest_geringd_label": "Ringed",
   "nestonderzoek_project_label": "Griel project for nest box research",
   "nestonderzoek_project_geen": "none",
   "nestonderzoek_project_hint": "Automatically filled in when ringing pulli from a nest visit.",

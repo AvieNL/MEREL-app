@@ -257,6 +257,13 @@
   padding: 1px 0;
 }
 
+.bezoek-ringen__label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
 .bezoek-ring-link {
   background: none;
   border: none;
@@ -264,8 +271,7 @@
   font-size: 0.82rem;
   color: var(--accent);
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration: none;
 }
 
 .bezoek-ring-link--orphan {
