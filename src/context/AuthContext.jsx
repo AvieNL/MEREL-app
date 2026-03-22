@@ -11,6 +11,9 @@ export function AuthProvider({ children }) {
   const [simulatedRole, setSimulatedRoleState] = useState(
     () => sessionStorage.getItem('vrs-simulated-role') || null
   );
+  const [simulatedNestRole, setSimulatedNestRoleState] = useState(
+    () => sessionStorage.getItem('vrs-simulated-nest-role') || null
+  );
 
   function setSimulatedRole(role) {
     if (role) {
@@ -19,6 +22,15 @@ export function AuthProvider({ children }) {
       sessionStorage.removeItem('vrs-simulated-role');
     }
     setSimulatedRoleState(role);
+  }
+
+  function setSimulatedNestRole(role) {
+    if (role) {
+      sessionStorage.setItem('vrs-simulated-nest-role', role);
+    } else {
+      sessionStorage.removeItem('vrs-simulated-nest-role');
+    }
+    setSimulatedNestRoleState(role);
   }
 
   useEffect(() => {
@@ -49,11 +61,18 @@ export function AuthProvider({ children }) {
         setSimulatedRoleState(e.newValue || null);
       }
     }
+    function onNestStorage(e) {
+      if (e.key === 'vrs-simulated-nest-role') {
+        setSimulatedNestRoleState(e.newValue || null);
+      }
+    }
+    window.addEventListener('storage', onNestStorage);
     window.addEventListener('storage', onStorage);
 
     return () => {
       subscription.unsubscribe();
       window.removeEventListener('storage', onStorage);
+      window.removeEventListener('storage', onNestStorage);
     };
   }, []);
 
@@ -92,6 +111,7 @@ export function AuthProvider({ children }) {
 
   async function logout() {
     setSimulatedRole(null);
+    setSimulatedNestRole(null);
     await supabase.auth.signOut();
     // Wis lokale data om cross-user lekken te voorkomen
     const keysToRemove = ['vrs-records', 'vrs-projects', 'vrs-ringstreng', 'vrs-species-overrides', 'vrs-settings'];
@@ -110,7 +130,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, profileError, login, register, logout, updateProfile, simulatedRole, setSimulatedRole }}>
+    <AuthContext.Provider value={{ user, profile, loading, profileError, login, register, logout, updateProfile, simulatedRole, setSimulatedRole, simulatedNestRole, setSimulatedNestRole }}>
       {children}
     </AuthContext.Provider>
   );

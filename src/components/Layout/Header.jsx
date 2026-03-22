@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/index.js';
 import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
+import { useNestRole } from '../../hooks/useNestRole';
 import { useTheme } from '../../hooks/useTheme';
 import SyncIndicator from '../Sync/SyncIndicator';
 import './Header.css';
@@ -16,8 +17,9 @@ export default function Header({ onSwitchModule, activeModule }) {
   const taalRef = useRef(null);
   const themaRef = useRef(null);
   const navigate = useNavigate();
-  const { logout, profile, simulatedRole, setSimulatedRole } = useAuth();
+  const { logout, profile, simulatedRole, setSimulatedRole, simulatedNestRole, setSimulatedNestRole } = useAuth();
   const { isSimulating, rol } = useRole();
+  const { nestRol, isSimulatingNest } = useNestRole();
   const { mode, setMode } = useTheme();
   const { t } = useTranslation();
 
@@ -27,6 +29,12 @@ export default function Header({ onSwitchModule, activeModule }) {
     admin: t('role_admin'),
     ringer: t('role_ringer'),
     viewer: t('role_viewer'),
+  };
+
+  const NEST_ROL_LABELS = {
+    nestonderzoeker: t('role_nestonderzoeker'),
+    kijker: t('role_nest_kijker'),
+    geen: t('role_nest_geen'),
   };
 
   // Hamburger: sluit bij klik buiten
@@ -76,7 +84,19 @@ export default function Header({ onSwitchModule, activeModule }) {
   }
 
   function switchRole(newRol) {
-    setSimulatedRole(newRol === profile?.rol ? null : newRol);
+    // Klik op huidige gesimuleerde rol → zet simulatie uit
+    setSimulatedRole(newRol === (simulatedRole || profile?.rol) ? null : newRol);
+  }
+
+  function switchNestRole(newRol) {
+    // 'geen' simuleren heeft aparte waarde; null = simulatie uit
+    const current = simulatedNestRole ?? (profile?.nestkast_rol || 'geen');
+    setSimulatedNestRole(newRol === current ? null : newRol);
+  }
+
+  function stopAllSimulatie() {
+    setSimulatedRole(null);
+    setSimulatedNestRole(null);
   }
 
   const isStaging = import.meta.env.VITE_STAGING === 'true';
@@ -211,19 +231,34 @@ export default function Header({ onSwitchModule, activeModule }) {
             </button>
             {menuOpen && (
               <div className="header-dropdown">
-                {isRealAdmin && (
-                  <button onClick={() => goTo('/admin')} className="header-admin-btn">
-                    ⚙ {t('nav_admin')}
-                  </button>
-                )}
-                <button onClick={() => goTo('/projecten')}>{t('nav_projects')}</button>
-                <button onClick={() => goTo('/ringstrengen')}>{t('nav_ring_strings')}</button>
-                <button onClick={() => goTo('/instellingen')}>{t('nav_settings')}</button>
-                <button onClick={() => goTo('/over')}>{t('nav_about')}</button>
 
+                {/* ── Module-specifieke items ── */}
+                {activeModule !== 'nest' && (
+                  <div className="header-dropdown-section">
+                    <span className="header-dropdown-section-label">🐦 {t('module_ring')}</span>
+                    <button onClick={() => goTo('/projecten')}>{t('nav_projects')}</button>
+                    <button onClick={() => goTo('/ringstrengen')}>{t('nav_ring_strings')}</button>
+                  </div>
+                )}
+
+                {/* ── App-breed ── */}
+                <div className="header-dropdown-section">
+                  <span className="header-dropdown-section-label">{t('nav_section_app')}</span>
+                  {isRealAdmin && (
+                    <button onClick={() => goTo('/admin')} className="header-admin-btn">
+                      ⚙ {t('nav_admin')}
+                    </button>
+                  )}
+                  <button onClick={() => goTo('/instellingen')}>{t('nav_settings')}</button>
+                  <button onClick={() => goTo('/over')}>{t('nav_about')}</button>
+                </div>
+
+                {/* ── Rol simuleren (admin only) ── */}
                 {isRealAdmin && (
-                  <div className="header-role-section">
-                    <span className="header-role-label">{t('nav_simulate_role')}</span>
+                  <div className="header-dropdown-section header-role-section">
+                    <span className="header-dropdown-section-label">{t('nav_simulate_role')}</span>
+
+                    <span className="header-role-sublabel">{t('nav_sim_ring_role')}</span>
                     <div className="header-role-btns">
                       {['admin', 'ringer', 'viewer'].map(r => (
                         <button
@@ -235,11 +270,29 @@ export default function Header({ onSwitchModule, activeModule }) {
                         </button>
                       ))}
                     </div>
+
+                    <span className="header-role-sublabel">{t('nav_sim_nest_role')}</span>
+                    <div className="header-role-btns">
+                      {['nestonderzoeker', 'kijker', 'geen'].map(r => {
+                        const effectief = simulatedNestRole ?? (profile?.nestkast_rol || 'geen');
+                        return (
+                          <button
+                            key={r}
+                            className={`header-role-btn${effectief === r ? ' header-role-btn--active' : ''}`}
+                            onClick={() => switchNestRole(r)}
+                          >
+                            {NEST_ROL_LABELS[r]}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
 
-                <div className="header-dropdown-divider" />
-                <button onClick={handleLogout} className="header-logout-btn">{t('nav_logout')}</button>
+                {/* ── Uitloggen ── */}
+                <div className="header-dropdown-section header-dropdown-section--last">
+                  <button onClick={handleLogout} className="header-logout-btn">{t('nav_logout')}</button>
+                </div>
               </div>
             )}
           </div>
@@ -247,10 +300,13 @@ export default function Header({ onSwitchModule, activeModule }) {
       </div>
 
       {/* Simulatiebanner */}
-      {isSimulating && (
+      {(isSimulating || isSimulatingNest) && (
         <div className="header-sim-banner">
-          {t('nav_simulating')} <strong>{ROL_LABELS[simulatedRole]}</strong>
-          <button onClick={() => setSimulatedRole(null)}>{t('nav_back_to_admin')}</button>
+          {t('nav_simulating')}
+          {isSimulating && <strong> {ROL_LABELS[simulatedRole]}</strong>}
+          {isSimulating && isSimulatingNest && <span> · </span>}
+          {isSimulatingNest && <strong>{NEST_ROL_LABELS[simulatedNestRole] ?? simulatedNestRole}</strong>}
+          <button onClick={stopAllSimulatie}>{t('nav_back_to_admin')}</button>
         </div>
       )}
     </header>

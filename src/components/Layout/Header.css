@@ -179,8 +179,8 @@
   background: none;
   border: none;
   color: var(--text-primary, #f1f5f9);
-  padding: 12px 16px;
-  font-size: 0.9rem;
+  padding: 10px 16px;
+  font-size: 0.875rem;
   cursor: pointer;
 }
 
@@ -188,8 +188,24 @@
   background: var(--surface-hover, rgba(56, 189, 248, 0.1));
 }
 
-.header-dropdown button + button {
-  border-top: 1px solid var(--border, #334155);
+/* Secties in het dropdown menu */
+.header-dropdown-section {
+  border-bottom: 1px solid var(--border, #334155);
+  padding: 4px 0;
+}
+
+.header-dropdown-section--last {
+  border-bottom: none;
+}
+
+.header-dropdown-section-label {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 6px 16px 2px;
+  font-weight: 700;
 }
 
 .header-dropdown-divider {
@@ -280,17 +296,14 @@
 }
 
 .header-role-section {
-  padding: 10px 16px;
-  border-top: 1px solid var(--border);
+  padding: 4px 16px 10px;
 }
 
-.header-role-label {
+.header-role-sublabel {
   display: block;
   font-size: 0.68rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 7px;
+  color: var(--text-secondary);
+  margin: 8px 0 5px;
 }
 
 .header-role-btns {

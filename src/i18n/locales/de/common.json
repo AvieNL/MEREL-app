@@ -750,5 +750,11 @@
   "nest_ring_context_banner": "Vogel beringen aus Nestbesuch — {{soort}}, {{datum}}",
   "nest_ring_no_number": "keine Ringnummer",
   "nest_export_csv_title": "Nestbesuche als CSV exportieren (Excel-kompatibel)",
-  "nest_export_json_title": "Vollständige Nestdaten als JSON exportieren"
+  "nest_export_json_title": "Vollständige Nestdaten als JSON exportieren",
+  "nav_section_app": "App",
+  "nav_sim_ring_role": "Ring-Rolle",
+  "nav_sim_nest_role": "Nest-Rolle",
+  "role_nestonderzoeker": "Nestforscher",
+  "role_nest_kijker": "Betrachter",
+  "role_nest_geen": "Kein Zugang"
 }

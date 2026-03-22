@@ -12,18 +12,26 @@ import { useAuth } from '../context/AuthContext';
  *   (geen)          — geen toegang tot nestonderzoek
  */
 export function useNestRole() {
-  const { profile } = useAuth();
-  const nestRol  = profile?.nestkast_rol || null;
-  const ringRol  = profile?.rol || 'ringer';
-  const isAdmin  = ringRol === 'admin';
+  const { profile, simulatedRole, simulatedNestRole } = useAuth();
+
+  // Wanneer een nest-rol gesimuleerd wordt, bypass de admin-volledige-toegang check
+  const effectiveNestRol = simulatedNestRole !== null
+    ? (simulatedNestRole === 'geen' ? null : simulatedNestRole)
+    : (profile?.nestkast_rol || null);
+
+  const effectiveRingRol = simulatedRole || profile?.rol || 'ringer';
+
+  // Admin heeft volledige toegang, tenzij nest-rol expliciet gesimuleerd wordt
+  const isAdmin = effectiveRingRol === 'admin' && simulatedNestRole === null;
 
   return {
-    nestRol,
-    hasNestAccess:       isAdmin || !!nestRol,
-    canNestAdd:          isAdmin || nestRol === 'nestonderzoeker',
-    canNestEdit:         isAdmin || nestRol === 'nestonderzoeker',
-    canNestDelete:       isAdmin || nestRol === 'nestonderzoeker',
-    isNestonderzoeker:   nestRol === 'nestonderzoeker' || isAdmin,
-    isNestKijker:        nestRol === 'kijker',
+    nestRol:             effectiveNestRol,
+    isSimulatingNest:    simulatedNestRole !== null,
+    hasNestAccess:       isAdmin || !!effectiveNestRol,
+    canNestAdd:          isAdmin || effectiveNestRol === 'nestonderzoeker',
+    canNestEdit:         isAdmin || effectiveNestRol === 'nestonderzoeker',
+    canNestDelete:       isAdmin || effectiveNestRol === 'nestonderzoeker',
+    isNestonderzoeker:   effectiveNestRol === 'nestonderzoeker' || isAdmin,
+    isNestKijker:        effectiveNestRol === 'kijker',
   };
 }
