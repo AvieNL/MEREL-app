@@ -309,6 +309,8 @@
   "nest_visit_count_one": "{{count}} Besuch",
   "nest_visit_count_other": "{{count}} Besuche",
   "nest_new_title": "Neues Nest",
+  "nest_edit_title": "Nest #{{nr}} bearbeiten",
+  "nest_delete_confirm": "Möchtest du Nest #{{nr}} wirklich löschen? Alle Saisons, Gelege und Besuche werden ebenfalls gelöscht.",
   "nest_section_location": "Standort",
   "nest_section_season": "Nestdaten {{jaar}}",
   "nest_kastnummer": "Kastnummer / Nestnummer",

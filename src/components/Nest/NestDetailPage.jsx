@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
@@ -20,8 +20,9 @@ export default function NestDetailPage() {
   const { id } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { canNestAdd } = useNestRole();
-  const { nesten, seizoenen, legsels, bezoeken, ringen } = useNestData();
+  const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
+  const { nesten, seizoenen, legsels, bezoeken, ringen, deleteNest } = useNestData();
+  const [deleteBevestig, setDeleteBevestig] = useState(false);
   const species = useSpeciesRef();
   const switchModule = useModuleSwitch();
 
@@ -60,7 +61,37 @@ export default function NestDetailPage() {
             <p className="nest-detail-coords">{parseFloat(nest.lat).toFixed(5)}, {parseFloat(nest.lon).toFixed(5)}</p>
           )}
         </div>
+        <div className="nest-detail-acties">
+          {canNestEdit && (
+            <button
+              className="btn-secondary nest-actie-btn"
+              onClick={() => navigate(`/nest/${id}/wijzigen`)}
+              title={t('btn_edit')}
+            >✏️</button>
+          )}
+          {canNestDelete && (
+            <button
+              className="btn-danger nest-actie-btn"
+              onClick={() => setDeleteBevestig(true)}
+              title={t('btn_delete')}
+            >🗑️</button>
+          )}
+        </div>
       </div>
+
+      {/* ── Verwijder-bevestiging ── */}
+      {deleteBevestig && (
+        <div className="nest-delete-confirm">
+          <p>{t('nest_delete_confirm', { nr: nest.kastnummer })}</p>
+          <div className="nest-delete-confirm__acties">
+            <button className="btn-secondary" onClick={() => setDeleteBevestig(false)}>{t('btn_cancel')}</button>
+            <button
+              className="btn-danger"
+              onClick={async () => { await deleteNest(id); navigate('/nest'); }}
+            >{t('btn_delete')}</button>
+          </div>
+        </div>
+      )}
 
       {/* ── Seizoenen ── */}
       {nestSeizoenGesorteerd.length === 0 ? (

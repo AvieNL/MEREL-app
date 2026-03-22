@@ -1,6 +1,19 @@
-export const VERSIE = '1.16.5';
+export const VERSIE = '1.17.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.17.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: nesten wijzigen en verwijderen in nestmodule (✏️/🗑️ knoppen op nestdetailpagina)',
+    ],
+    wijzigingen_en: [
+      'Feat: edit and delete nests in nest module (✏️/🗑️ buttons on nest detail page)',
+    ],
+    wijzigingen_de: [
+      'Feat: Nester bearbeiten und löschen im Nestmodul (✏️/🗑️ Schaltflächen auf Nest-Detailseite)',
+    ],
+  },
   {
     versie: '1.16.5',
     datum: '2026-03-22',

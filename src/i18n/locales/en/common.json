@@ -309,6 +309,8 @@
   "nest_visit_count_one": "{{count}} visit",
   "nest_visit_count_other": "{{count}} visits",
   "nest_new_title": "New nest",
+  "nest_edit_title": "Edit nest #{{nr}}",
+  "nest_delete_confirm": "Are you sure you want to delete nest #{{nr}}? All seasons, clutches and visits will also be deleted.",
   "nest_section_location": "Location",
   "nest_section_season": "Nest data {{jaar}}",
   "nest_kastnummer": "Box / nest number",
