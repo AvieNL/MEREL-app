@@ -42,6 +42,13 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   const [expanded, setExpanded] = useState(null);
   const [externModalOpen, setExternModalOpen] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    if (new URLSearchParams(location.search).get('prullenbak') === '1') {
+      setPrullenbakOpen(true);
+      setTimeout(() => document.querySelector('.prullenbak-section')?.scrollIntoView({ behavior: 'smooth' }), 100);
+    }
+  }, [location.search]);
   const navigate = useNavigate();
   const { canDelete } = useRole();
   const speciesRef = useSpeciesRef();

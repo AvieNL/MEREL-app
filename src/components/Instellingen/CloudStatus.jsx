@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useAuth } from '../../context/AuthContext';
@@ -17,6 +18,7 @@ function fmtTijd(date, t) {
 
 export default function CloudStatus() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { pendingCount, syncError, lastSynced, isOnline, syncLost, syncLostItems, clearSyncLost } = useSync();
   const speciesError = useSpeciesError();
   const { t } = useTranslation();
@@ -103,7 +105,7 @@ export default function CloudStatus() {
 
   const tabelRijen = [
     { label: t('cloud_catches'),      lokaal: lokaalVangsten,     online: online?.vangsten },
-    { label: t('cloud_trash'),        lokaal: lokaalVerwijderd,   online: null, sub: true },
+    { label: t('cloud_trash'),        lokaal: lokaalVerwijderd,   online: null, sub: true, link: '/records?prullenbak=1' },
     { label: t('cloud_projects'),     lokaal: lokaalProjecten,    online: online?.projecten },
     { label: t('cloud_ring_strings'), lokaal: lokaalRingstrengen, online: online?.ringstrengen },
     { label: t('cloud_nests'),        lokaal: lokaalNesten,       online: online?.nesten },
@@ -141,7 +143,11 @@ export default function CloudStatus() {
         <tbody>
           {tabelRijen.map(rij => (
             <tr key={rij.label} className={rij.sub ? 'cloud-status__row--sub' : ''}>
-              <td>{rij.label}</td>
+              <td>
+                {rij.link
+                  ? <button className="cloud-status__link" onClick={() => navigate(rij.link)}>{rij.label}</button>
+                  : rij.label}
+              </td>
               <td>{rij.lokaal}</td>
               <td>
                 {rij.online !== null && rij.online !== undefined

@@ -1,6 +1,19 @@
-export const VERSIE = '1.16.1';
+export const VERSIE = '1.16.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.16.2',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: klikken op "In prullenbak" in synchronisatiestatus opent prullenbak in vangstlijst',
+    ],
+    wijzigingen_en: [
+      'Feat: clicking "In trash" in sync status opens trash in catch list',
+    ],
+    wijzigingen_de: [
+      'Feat: Klick auf "Im Papierkorb" in Synchronisationsstatus öffnet Papierkorb in der Fangliste',
+    ],
+  },
   {
     versie: '1.16.1',
     datum: '2026-03-22',

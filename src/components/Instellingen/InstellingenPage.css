@@ -254,6 +254,19 @@
   padding-left: 12px;
 }
 
+.cloud-status__link {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  color: var(--accent) !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* Tijden + pending */
 .cloud-status__tijden {
   display: flex;
