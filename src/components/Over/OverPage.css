@@ -67,9 +67,9 @@
   margin-top: 0;
 }
 
-.over-sources-subtitle--ring { color: var(--accent); }
-.over-sources-subtitle--nest { color: var(--success); }
-.over-sources-subtitle--tech { color: var(--text-muted); }
+.over-sectie .over-sources-subtitle--ring { color: var(--accent); }
+.over-sectie .over-sources-subtitle--nest { color: var(--success); }
+.over-sectie .over-sources-subtitle--tech { color: var(--text-muted); }
 
 .over-changelog {
   display: flex;
