@@ -94,7 +94,6 @@ export default function SectieAIAnalyse() {
       geslacht:          aiResultaat.geslacht  || 'U',
       type:              'bevestigd',
       fotos:             aiFotos,
-      datum,
       toelichting:       aiResultaat.toelichting || '',
     });
     setOpgeslagen(true);
