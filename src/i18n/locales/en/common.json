@@ -469,6 +469,8 @@
   "nest_suggestie_label": "Recommended follow-up visit:",
   "nest_suggestie_basis": "based on {{soort}}, incubation {{ei}}d, nestling {{jong}}d",
   "btn_back": "Back",
+  "btn_edit": "Edit",
+  "btn_delete": "Delete",
   "nest_suggestie_ringen": "Ring on",
   "nest_suggestie_nacontrole": "Follow-up on",
   "nest_suggestie_eileg": "Egg-laying expected",
