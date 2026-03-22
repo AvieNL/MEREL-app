@@ -246,7 +246,7 @@ function NestenKaart({ nesten, navigate }) {
 
         const marker = L.marker([parseFloat(nest.lat), parseFloat(nest.lon)], { icon })
           .addTo(map)
-          .bindTooltip(`<strong>#${nest.kastnummer}</strong>${nest.vogelNaam ? ` — ${nest.vogelNaam}` : ''}${nest.omschrijving ? `<br><em>${nest.omschrijving}</em>` : ''}<br>${t(BROEDSTATUS[getBroedStatus(nest.laatsteBezoek?.stadium)].labelKey)}${nest.laatsteBezoek ? ` · ${formatDatum(nest.laatsteBezoek.datum)}` : ''}`, { direction: 'top', offset: [0, -8] })
+          .bindTooltip(`<strong>⌂ ${nest.kastnummer}</strong>${nest.vogelNaam ? ` — ${nest.vogelNaam}` : ''}${nest.omschrijving ? `<br><em>${nest.omschrijving}</em>` : ''}<br>${t(BROEDSTATUS[getBroedStatus(nest.laatsteBezoek?.stadium)].labelKey)}${nest.laatsteBezoek ? ` · ${formatDatum(nest.laatsteBezoek.datum)}` : ''}`, { direction: 'top', offset: [0, -8] })
           .on('click', () => navigate(`/nest/${nest.id}`));
 
         markersRef.current.push(marker);

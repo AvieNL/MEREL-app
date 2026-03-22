@@ -280,7 +280,7 @@ export default function NieuwBezoekPage() {
                     {gefilterdeNesten.map(n => (
                       <button key={n.id} type="button" className="soort-zoeker__item"
                         onClick={() => { setGeselecteerdNestId(n.id); setNestZoek(''); }}>
-                        <span>#{n.kastnummer}{n.omschrijving ? ` — ${n.omschrijving}` : ''}</span>
+                        <span>⌂ {n.kastnummer}{n.omschrijving ? ` — ${n.omschrijving}` : ''}</span>
                         {n.soort_euring && (
                           <span className="soort-zoeker__latin">
                             {speciesByEuring[n.soort_euring]?.naam_nl || n.soort_euring}

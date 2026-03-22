@@ -1,6 +1,19 @@
-export const VERSIE = '1.31.7';
+export const VERSIE = '1.31.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.8',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: nestsymbool ⌂ consequent doorgevoerd in zoekresultaten, planningspagina en kaarttooltip',
+    ],
+    wijzigingen_en: [
+      'Fix: nest symbol ⌂ consistently applied in search results, planning page and map tooltip',
+    ],
+    wijzigingen_de: [
+      'Fix: Nestsymbol ⌂ konsequent in Suchergebnissen, Planungsseite und Karten-Tooltip',
+    ],
+  },
   {
     versie: '1.31.7',
     datum: '2026-03-22',

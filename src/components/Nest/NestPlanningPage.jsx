@@ -69,7 +69,7 @@ export default function NestPlanningPage() {
                   onClick={() => navigate(`/nest/legsel/${item.legselId}/bezoek/nieuw`)}
                 >
                   <div className="nest-planning-item__links">
-                    <span className="nest-planning-item__nr">#{item.kastnummer}</span>
+                    <span className="nest-planning-item__nr">⌂ {item.kastnummer}</span>
                     {item.omschrijving && (
                       <span className="nest-planning-item__naam">{item.omschrijving}</span>
                     )}
