@@ -196,7 +196,7 @@ export default function AdminPage() {
                     <div className="admin-user-rol">
                       <span className="admin-rol-label">{t('admin_col_ring_rol')}</span>
                       {g.id === user.id ? (
-                        <span className="rol-badge">{ROL_LABEL[g.rol] || g.rol}</span>
+                        <span className="rol-badge rol-badge--ring">{ROL_LABEL[g.rol] || g.rol}</span>
                       ) : (
                         <select
                           value={g.rol || 'ringer'}
@@ -215,9 +215,9 @@ export default function AdminPage() {
                     <div className="admin-user-rol">
                       <span className="admin-rol-label">{t('admin_col_nest_rol')}</span>
                       {g.rol === 'admin' ? (
-                        <span className="rol-badge rol-badge--admin">{t('nestonderzoek_rol_admin')}</span>
+                        <span className="rol-badge rol-badge--nest">{t('nestonderzoek_rol_admin')}</span>
                       ) : g.id === user.id ? (
-                        <span className="rol-badge">{NEST_ROL_LABEL[g.nestkast_rol || ''] || '–'}</span>
+                        <span className="rol-badge rol-badge--nest">{NEST_ROL_LABEL[g.nestkast_rol || ''] || '–'}</span>
                       ) : (
                         <select
                           value={g.nestkast_rol || ''}

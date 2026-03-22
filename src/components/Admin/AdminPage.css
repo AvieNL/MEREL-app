@@ -164,9 +164,14 @@
   white-space: nowrap;
 }
 
-.rol-badge--admin {
-  background: rgba(245, 158, 11, 0.12);
-  color: #f59e0b;
+.rol-badge--ring {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.rol-badge--nest {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--success, #22c55e);
 }
 
 .admin-saving {
@@ -196,26 +201,30 @@
 .admin-role-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   margin-bottom: 0.25rem;
 }
 
 .admin-role-row {
   display: grid;
-  grid-template-columns: 6rem 1fr;
+  grid-template-columns: 8.5rem 1fr;
   gap: 0.5rem;
   font-size: 0.82rem;
   line-height: 1.5;
+  align-items: baseline;
 }
 
 .admin-role-name {
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .admin-role-desc {
   color: var(--text-secondary);
+  min-width: 0;
 }
 
 .admin-btn {

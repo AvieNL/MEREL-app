@@ -259,11 +259,11 @@ export default function Header({ onSwitchModule, activeModule }) {
                     <span className="header-dropdown-section-label">{t('nav_simulate_role')}</span>
 
                     <span className="header-role-sublabel">{t('nav_sim_ring_role')}</span>
-                    <div className="header-role-btns">
+                    <div className="header-role-pills">
                       {['admin', 'ringer', 'viewer'].map(r => (
                         <button
                           key={r}
-                          className={`header-role-btn${rol === r ? ' header-role-btn--active' : ''}`}
+                          className={`header-role-pill header-role-pill--ring${rol === r ? ' header-role-pill--active-ring' : ''}`}
                           onClick={() => switchRole(r)}
                         >
                           {ROL_LABELS[r]}
@@ -272,16 +272,16 @@ export default function Header({ onSwitchModule, activeModule }) {
                     </div>
 
                     <span className="header-role-sublabel">{t('nav_sim_nest_role')}</span>
-                    <div className="header-role-btns">
+                    <div className="header-role-pills">
                       {['nestonderzoeker', 'kijker', 'geen'].map(r => {
                         const effectief = simulatedNestRole ?? (profile?.nestkast_rol || 'geen');
                         return (
                           <button
                             key={r}
-                            className={`header-role-btn${effectief === r ? ' header-role-btn--active' : ''}`}
+                            className={`header-role-pill header-role-pill--nest${effectief === r ? ' header-role-pill--active-nest' : ''}`}
                             onClick={() => switchNestRole(r)}
                           >
-                            {r === 'nestonderzoeker' ? <>Nest-<br/>onderzoeker</> : NEST_ROL_LABELS[r]}
+                            {NEST_ROL_LABELS[r]}
                           </button>
                         );
                       })}
