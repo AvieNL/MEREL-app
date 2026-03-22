@@ -204,20 +204,20 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                     );
                   })()}
                   {canNestEdit && (
-                    <button
-                      className="icon-edit-btn bezoek-edit-btn"
-                      type="button"
-                      onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
-                      title={t('btn_edit')}
-                    >✏️</button>
-                  )}
-                  {canNestEdit && (
-                    <button
-                      className="icon-delete-btn bezoek-delete-btn"
-                      type="button"
-                      onClick={() => setDeleteBezoekId(bezoek.id)}
-                      title={t('btn_delete')}
-                    >🗑️</button>
+                    <div className="bezoek-item__acties">
+                      <button
+                        className="icon-edit-btn"
+                        type="button"
+                        onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
+                        title={t('btn_edit')}
+                      >✏️</button>
+                      <button
+                        className="icon-delete-btn"
+                        type="button"
+                        onClick={() => setDeleteBezoekId(bezoek.id)}
+                        title={t('btn_delete')}
+                      >🗑️</button>
+                    </div>
                   )}
                 </div>
                 {deleteBezoekId === bezoek.id && (

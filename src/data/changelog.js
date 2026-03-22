@@ -1,6 +1,19 @@
-export const VERSIE = '1.29.10';
+export const VERSIE = '1.29.11';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.11',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: bewerk- en verwijderknop bezoek rechts uitgelijnd in één blok',
+    ],
+    wijzigingen_en: [
+      'Fix: edit and delete buttons right-aligned as a group in visit row',
+    ],
+    wijzigingen_de: [
+      'Fix: Bearbeiten- und Löschen-Schaltfläche rechts ausgerichtet als Gruppe',
+    ],
+  },
   {
     versie: '1.29.10',
     datum: '2026-03-22',
