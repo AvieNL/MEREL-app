@@ -56,6 +56,33 @@ export default function NieuwNestPage() {
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [soortZoek, setSoortZoek] = useState('');
+  const [eigenaarDropdown, setEigenaarDropdown] = useState(false);
+
+  // Unieke eigenaren uit bestaande nesten (met naam)
+  const bekende_eigenaren = useMemo(() => {
+    const map = new Map();
+    nesten.forEach(n => {
+      if (!n.eigenaar_naam?.trim()) return;
+      const key = n.eigenaar_naam.trim().toLowerCase();
+      if (!map.has(key)) map.set(key, {
+        naam:     n.eigenaar_naam.trim(),
+        email:    n.eigenaar_email    || '',
+        telefoon: n.eigenaar_telefoon || '',
+      });
+    });
+    return [...map.values()];
+  }, [nesten]);
+
+  const eigenaarSuggesties = useMemo(() => {
+    const term = form.eigenaar_naam.trim().toLowerCase();
+    if (!term) return [];
+    return bekende_eigenaren.filter(e => e.naam.toLowerCase().includes(term)).slice(0, 8);
+  }, [form.eigenaar_naam, bekende_eigenaren]);
+
+  function kiesEigenaar(e) {
+    setForm(prev => ({ ...prev, eigenaar_naam: e.naam, eigenaar_email: e.email, eigenaar_telefoon: e.telefoon }));
+    setEigenaarDropdown(false);
+  }
 
   const gefilterdeSoorten = useMemo(() => {
     if (!soortZoek || soortZoek.length < 2) return [];
@@ -146,12 +173,30 @@ export default function NieuwNestPage() {
           </div>
           <div className="form-group">
             <label>{t('nest_eigenaar_naam')}</label>
-            <input
-              type="text"
-              value={form.eigenaar_naam}
-              onChange={e => update('eigenaar_naam', e.target.value)}
-              placeholder={t('nest_eigenaar_naam_placeholder')}
-            />
+            <div className="soort-zoeker">
+              <input
+                type="text"
+                value={form.eigenaar_naam}
+                onChange={e => { update('eigenaar_naam', e.target.value); setEigenaarDropdown(true); }}
+                onFocus={() => setEigenaarDropdown(true)}
+                onBlur={() => setTimeout(() => setEigenaarDropdown(false), 150)}
+                placeholder={t('nest_eigenaar_naam_placeholder')}
+                autoComplete="off"
+              />
+              {eigenaarDropdown && eigenaarSuggesties.length > 0 && (
+                <div className="soort-zoeker__dropdown">
+                  {eigenaarSuggesties.map(e => (
+                    <button key={e.naam} type="button" className="soort-zoeker__item"
+                      onMouseDown={() => kiesEigenaar(e)}>
+                      <span>{e.naam}</span>
+                      {(e.email || e.telefoon) && (
+                        <span className="soort-zoeker__latin">{[e.email, e.telefoon].filter(Boolean).join(' · ')}</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <div className="nest-eigenaar-contact">
             <div className="form-group">
