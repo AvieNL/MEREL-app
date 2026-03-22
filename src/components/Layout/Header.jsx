@@ -8,7 +8,7 @@ import { useTheme } from '../../hooks/useTheme';
 import SyncIndicator from '../Sync/SyncIndicator';
 import './Header.css';
 
-export default function Header() {
+export default function Header({ onSwitchModule, activeModule }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [taalOpen, setTaalOpen] = useState(false);
   const [themaOpen, setThemaOpen] = useState(false);
@@ -100,7 +100,19 @@ export default function Header() {
     <header className="app-header">
       {/* Hoofd-rij */}
       <div className="header-inner">
-        <h1 onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>VRS App{isStaging && <span className="header-staging-badge">STAGING</span>}</h1>
+        <div className="header-title-group">
+          {onSwitchModule && (
+            <button className="header-module-back" onClick={onSwitchModule} aria-label={t('module_switch')}>
+              ‹
+            </button>
+          )}
+          <h1 onClick={() => navigate(activeModule === 'nest' ? '/nest' : '/')} style={{ cursor: 'pointer' }}>
+            VRS App{isStaging && <span className="header-staging-badge">STAGING</span>}
+          </h1>
+          {activeModule === 'nest' && (
+            <span className="header-module-badge">{t('module_nest')}</span>
+          )}
+        </div>
         {profile?.ringer_naam && (
           <span className="header-ringer">
             {profile.ringer_naam}

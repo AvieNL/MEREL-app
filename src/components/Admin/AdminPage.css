@@ -112,12 +112,25 @@
   color: var(--accent);
 }
 
-/* Rol selectie */
+/* Rol selecties (ring + nest) */
+.admin-user-rollen {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.admin-rol-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
 .admin-user-rol {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-shrink: 0;
 }
 
 .rol-select {

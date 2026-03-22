@@ -348,6 +348,41 @@
   opacity: 0.75;
 }
 
+.header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-module-back {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  min-width: auto;
+  min-height: auto;
+  display: flex;
+  align-items: center;
+}
+
+.header-module-back:hover {
+  color: var(--text-primary);
+}
+
+.header-module-badge {
+  font-size: 0.65rem;
+  background: var(--success);
+  color: #000;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
 .header-staging-badge {
   display: inline-block;
   margin-left: 6px;

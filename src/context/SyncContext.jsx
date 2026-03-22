@@ -16,6 +16,9 @@ function getLabelForQueueItem(tableName, data) {
     const parts = [naam, ring, datum].filter(Boolean);
     if (parts.length > 0) return parts.join(' · ');
   }
+  if (tableName === 'nest') return `Nest ${data?.kastnummer ?? ''}`.trim();
+  if (tableName === 'nestbezoek') return `Nestbezoek ${data?.datum ?? ''}`.trim();
+  if (tableName === 'legsel') return `Legsel ${data?.volgnummer ?? ''}`.trim();
   return tableName;
 }
 

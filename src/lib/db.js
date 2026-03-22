@@ -48,3 +48,12 @@ db.version(6).stores({
 db.version(7).stores({
   veld_config: 'veld_key, volgorde',
 });
+
+// Versie 8: offline-cache voor nestkastonderzoek module
+db.version(8).stores({
+  nest:         'id, aangemaakt_door',
+  nest_seizoen: 'id, nest_id, [nest_id+jaar]',
+  legsel:       'id, nest_seizoen_id',
+  nestbezoek:   'id, legsel_id, datum, aangemaakt_door',
+  nestring:     'id, nestbezoek_id, vangst_id',
+});

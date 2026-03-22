@@ -1,6 +1,25 @@
-export const VERSIE = '1.9.4';
+export const VERSIE = '1.10.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.10.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: nestkastonderzoek module — fundament (database, offline sync, rollen)',
+      'Feat: modulekeuzescherm bij opstarten (ringonderzoek / nestonderzoek)',
+      'Feat: nestonderzoeker en kijker rollen beheerbaar via admin panel',
+    ],
+    wijzigingen_en: [
+      'Feat: nest box research module — foundation (database, offline sync, roles)',
+      'Feat: module selection screen on startup (ring research / nest research)',
+      'Feat: nest researcher and viewer roles manageable via admin panel',
+    ],
+    wijzigingen_de: [
+      'Feat: Nistkastenforschungsmodul — Grundlage (Datenbank, Offline-Sync, Rollen)',
+      'Feat: Modulauswahlbildschirm beim Start (Ringforschung / Nestforschung)',
+      'Feat: Nestforscher- und Betrachtungsrollen im Admin-Panel verwaltbar',
+    ],
+  },
   {
     versie: '1.9.4',
     datum: '2026-03-22',

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { pullSpeciesIfNeeded } from './useSpeciesRef';
 import { pullSpeciesOverrides } from './useSpeciesOverrides';
 import { pullVeldConfigIfNeeded } from './useVeldConfig';
+import { pullNestData } from './useNestSync';
 
 /**
  * Beheert de pull-triggers voor gedeelde referentiedata.
@@ -18,6 +19,7 @@ export function useSyncPulls(user) {
     if (!user || !navigator.onLine) return;
     pullSpeciesIfNeeded(false).catch(e => console.warn('Species pull mislukt:', e.message));
     pullVeldConfigIfNeeded(false).catch(e => console.warn('VeldConfig pull mislukt:', e.message));
+    pullNestData().catch(e => console.warn('Nest pull mislukt:', e.message));
   }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // App wordt weer actief (bijv. terugkomen van achtergrond): alle referentiedata refreshen
@@ -27,6 +29,7 @@ export function useSyncPulls(user) {
         pullSpeciesOverrides(user.id).catch(e => console.warn('Override pull mislukt:', e.message));
         pullSpeciesIfNeeded(false).catch(e => console.warn('Species pull mislukt:', e.message));
         pullVeldConfigIfNeeded(false).catch(e => console.warn('VeldConfig pull mislukt:', e.message));
+        pullNestData().catch(e => console.warn('Nest pull mislukt:', e.message));
       }
     }
     document.addEventListener('visibilitychange', handleVisibility);

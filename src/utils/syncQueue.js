@@ -72,6 +72,15 @@ const HANDLERS = {
       .eq('user_id', userId);
     if (error) throw error;
   },
+
+  // Nestkastonderzoek: delete via aangemaakt_door (RLS handelt autorisatie af)
+  async nest_delete({ table_name, data }) {
+    const { error } = await supabase
+      .from(table_name)
+      .delete()
+      .eq('id', data.id);
+    if (error) throw error;
+  },
 };
 
 /**

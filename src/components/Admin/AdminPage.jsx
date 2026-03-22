@@ -8,6 +8,7 @@ import { getRuitypenConfig, saveRuitypenConfig, RUITYPE_TYPES, DEFAULT_RUITYPE_C
 import './AdminPage.css';
 
 const ROLLEN = ['ringer', 'ringer+', 'viewer', 'admin'];
+const NEST_ROLLEN = ['', 'nestonderzoeker', 'kijker'];
 
 export default function AdminPage() {
   const { user } = useAuth();
@@ -26,6 +27,12 @@ export default function AdminPage() {
     'ringer+': t('role_ringer_plus'),
     ringer:   t('role_ringer'),
     viewer:   t('role_viewer'),
+  };
+
+  const NEST_ROL_LABEL = {
+    '':               t('role_nest_none'),
+    nestonderzoeker:  t('role_nestonderzoeker'),
+    kijker:           t('role_nest_kijker'),
   };
 
   function updateRuiEntry(type, seizoen, index, field, value) {
@@ -121,6 +128,21 @@ export default function AdminPage() {
     setSavingId(null);
   }
 
+  async function changeNestRol(profileId, newNestRol) {
+    if (profileId === user.id) return;
+    setSavingId(profileId + '-nest');
+    const { error: err } = await supabase
+      .from('profiles')
+      .update({ nestkast_rol: newNestRol || null, updated_at: new Date().toISOString() })
+      .eq('id', profileId);
+    if (!err) {
+      setGebruikers(prev =>
+        prev.map(g => g.id === profileId ? { ...g, nestkast_rol: newNestRol || null } : g)
+      );
+    }
+    setSavingId(null);
+  }
+
   if (!isRealAdmin) return null;
 
   return (
@@ -159,27 +181,45 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  <div className="admin-user-rol">
-                    {g.id === user.id ? (
-                      <span className="rol-badge">
-                        {ROL_LABEL[g.rol] || g.rol}
-                      </span>
-                    ) : (
-                      <select
-                        value={g.rol || 'ringer'}
-                        onChange={e => changeRol(g.id, e.target.value)}
-                        disabled={savingId === g.id}
-                        className="rol-select"
-                        aria-label={t('admin_aria_role', { name: g.ringer_naam || g.email })}
-                      >
-                        {ROLLEN.map(r => (
-                          <option key={r} value={r}>{ROL_LABEL[r]}</option>
-                        ))}
-                      </select>
-                    )}
-                    {savingId === g.id && (
-                      <span className="admin-saving">{t('admin_saving')}</span>
-                    )}
+                  <div className="admin-user-rollen">
+                    <div className="admin-user-rol">
+                      <span className="admin-rol-label">{t('admin_col_ring_rol')}</span>
+                      {g.id === user.id ? (
+                        <span className="rol-badge">{ROL_LABEL[g.rol] || g.rol}</span>
+                      ) : (
+                        <select
+                          value={g.rol || 'ringer'}
+                          onChange={e => changeRol(g.id, e.target.value)}
+                          disabled={savingId === g.id}
+                          className="rol-select"
+                          aria-label={t('admin_aria_role', { name: g.ringer_naam || g.email })}
+                        >
+                          {ROLLEN.map(r => (
+                            <option key={r} value={r}>{ROL_LABEL[r]}</option>
+                          ))}
+                        </select>
+                      )}
+                      {savingId === g.id && <span className="admin-saving">{t('admin_saving')}</span>}
+                    </div>
+                    <div className="admin-user-rol">
+                      <span className="admin-rol-label">{t('admin_col_nest_rol')}</span>
+                      {g.id === user.id ? (
+                        <span className="rol-badge">{NEST_ROL_LABEL[g.nestkast_rol || ''] || '–'}</span>
+                      ) : (
+                        <select
+                          value={g.nestkast_rol || ''}
+                          onChange={e => changeNestRol(g.id, e.target.value)}
+                          disabled={savingId === g.id + '-nest'}
+                          className="rol-select"
+                          aria-label={t('admin_aria_nest_role', { name: g.ringer_naam || g.email })}
+                        >
+                          {NEST_ROLLEN.map(r => (
+                            <option key={r} value={r}>{NEST_ROL_LABEL[r]}</option>
+                          ))}
+                        </select>
+                      )}
+                      {savingId === g.id + '-nest' && <span className="admin-saving">{t('admin_saving')}</span>}
+                    </div>
                   </div>
                 </div>
               ))}

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState, useCallback } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from './i18n/index.js';
@@ -10,8 +10,11 @@ import { ToastProvider } from './context/ToastContext';
 import ToastContainer from './components/Toast/ToastContainer';
 import Header from './components/Layout/Header';
 import Navigation from './components/Layout/Navigation';
+import NestNavigation from './components/Layout/NestNavigation';
 import LoginPage from './components/Auth/LoginPage';
 import MigrationBanner from './components/Sync/MigrationBanner';
+import ModuleSelector from './components/ModuleSelector/ModuleSelector';
+import { useNestRole } from './hooks/useNestRole';
 
 const NieuwPage       = lazy(() => import('./components/Nieuw/NieuwPage'));
 const RecordsPage     = lazy(() => import('./components/Records/RecordsPage'));
@@ -28,6 +31,7 @@ const ProjectenPage   = lazy(() => import('./components/Projecten/ProjectenPage'
 const RingstrengenPage = lazy(() => import('./components/Ringstreng/RingstrengenPage'));
 const AdminPage       = lazy(() => import('./components/Admin/AdminPage'));
 const ReferentiebibliotheekPage = lazy(() => import('./components/Referentiebibliotheek/ReferentiebibliotheekPage'));
+const NestOverzichtPage = lazy(() => import('./components/Nest/NestOverzichtPage'));
 import { useRecords } from './hooks/useRecords';
 import { useProjects } from './hooks/useProjects';
 import { useSpeciesOverrides } from './hooks/useSpeciesOverrides';
@@ -103,9 +107,20 @@ function PageSpinner() {
   );
 }
 
+const MODULE_KEY = 'vrs-module';
+
 function AppShell() {
-  const { user, loading, profileError } = useAuth();
+  const { user, loading, profile, profileError } = useAuth();
+  const { hasNestAccess } = useNestRole();
   const { t } = useTranslation();
+
+  // Module opgeslagen in sessionStorage; null = nog niet gekozen
+  const [module, setModuleState] = useState(() => sessionStorage.getItem(MODULE_KEY));
+
+  const selectModule = useCallback((mod) => {
+    sessionStorage.setItem(MODULE_KEY, mod);
+    setModuleState(mod);
+  }, []);
 
   if (loading) {
     return (
@@ -136,6 +151,13 @@ function AppShell() {
     return <LoginPage />;
   }
 
+  // Gebruikers zonder nestonderzoek-toegang gaan altijd naar ring
+  const effectiveModule = !hasNestAccess ? 'ring' : module;
+
+  if (!effectiveModule) {
+    return <ModuleSelector onSelect={selectModule} />;
+  }
+
   return (
     <>
       {profileError && (
@@ -146,12 +168,33 @@ function AppShell() {
           {t('profile_load_error')}
         </div>
       )}
-      <MainApp />
+      {effectiveModule === 'ring'
+        ? <MainApp onSwitchModule={hasNestAccess ? () => { sessionStorage.removeItem(MODULE_KEY); setModuleState(null); } : null} activeModule="ring" />
+        : <NestApp onSwitchModule={() => { sessionStorage.removeItem(MODULE_KEY); setModuleState(null); }} activeModule="nest" />
+      }
     </>
   );
 }
 
-function MainApp() {
+function NestApp({ onSwitchModule, activeModule }) {
+  return (
+    <div className="app-shell">
+      <Header onSwitchModule={onSwitchModule} activeModule={activeModule} />
+      <main className="app-content">
+        <Suspense fallback={<PageSpinner />}>
+          <Routes>
+            <Route path="/nest" element={<NestOverzichtPage />} />
+            <Route path="/nest/*" element={<NestOverzichtPage />} />
+            <Route path="*" element={<NestOverzichtPage />} />
+          </Routes>
+        </Suspense>
+      </main>
+      <NestNavigation />
+    </div>
+  );
+}
+
+function MainApp({ onSwitchModule, activeModule }) {
   const { records, recordsLoading, deletedRecords, addRecord, addExternRecord, updateRecord, deleteRecord, restoreRecord, permanentDeleteRecord, markAllAsUploaded, importRecords, renameProject, fullResync } = useRecords();
   const { projects, addProject, updateProject, deleteProject, myAupis, refreshAupis } = useProjects();
   const speciesOverrides = useSpeciesOverrides();
@@ -160,7 +203,7 @@ function MainApp() {
 
   return (
     <div className="app-shell">
-      <Header />
+      <Header onSwitchModule={onSwitchModule} activeModule={activeModule} />
       <MigrationBanner onComplete={() => {}} />
       <main className="app-content">
         <Suspense fallback={<PageSpinner />}>
