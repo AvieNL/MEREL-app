@@ -1,6 +1,19 @@
-export const VERSIE = '1.29.8';
+export const VERSIE = '1.29.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.9',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: vogelsoort bij bezoek alleen getoond als afwijkend van legselsoort',
+    ],
+    wijzigingen_en: [
+      'Fix: species shown on visit row only when different from clutch species',
+    ],
+    wijzigingen_de: [
+      'Fix: Vogelart bei Besuch nur angezeigt wenn abweichend von Gelegart',
+    ],
+  },
   {
     versie: '1.29.8',
     datum: '2026-03-22',
