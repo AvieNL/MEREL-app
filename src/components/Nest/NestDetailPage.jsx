@@ -161,8 +161,8 @@ function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, speciesByE
     sessionStorage.setItem(NEST_RING_CONTEXT_KEY, JSON.stringify({
       bezoekId: bezoek.id,
       nestId: nest?.id || '',
-      soortNaam: soort?.naam_nl || '',
-      soortEuring: seizoen?.soort_euring || '',
+      soortNaam: effectieveSoort?.naam_nl || '',
+      soortEuring: soortEuring,
       datum: bezoek.datum,
       lat: nest?.lat || '',
       lon: nest?.lon || '',
@@ -171,7 +171,13 @@ function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, speciesByE
     if (switchModule) switchModule('ring');
   }
 
-  const vogelNaam = soort?.naam_nl || seizoen?.soort_euring || '';
+  // Soort: meest recente bezoek met soort_euring → seizoen → nest
+  const soortEuring =
+    [...legselBezoeken].reverse().find(b => b.soort_euring)?.soort_euring ||
+    seizoen?.soort_euring ||
+    nest?.soort_euring || '';
+  const effectieveSoort = speciesByEuring[soortEuring] || soort || null;
+  const vogelNaam = effectieveSoort?.naam_nl || soortEuring || '';
 
   return (
     <div className="legsel-blok">
