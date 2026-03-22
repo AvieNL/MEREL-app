@@ -60,11 +60,14 @@ export default function NestDetailPage() {
       {/* ── Header ── */}
       <div className="nest-detail-header">
         <button className="btn-secondary page-back" onClick={() => navigate('/nest')}>{t('btn_back')}</button>
+        <div className="nest-detail-nummer">{nest.kastnummer}</div>
         <div className="nest-detail-titel">
           {nest.omschrijving && <p className="nest-detail-omschrijving">{nest.omschrijving}</p>}
-          {nest.lat && nest.lon && (
+          {nest.adres ? (
+            <p className="nest-detail-coords">{nest.adres}</p>
+          ) : nest.lat && nest.lon ? (
             <p className="nest-detail-coords">{parseFloat(nest.lat).toFixed(5)}, {parseFloat(nest.lon).toFixed(5)}</p>
-          )}
+          ) : null}
         </div>
         <div className="nest-detail-acties">
           {canNestEdit && (

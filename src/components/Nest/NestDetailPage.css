@@ -42,6 +42,14 @@
   gap: 8px;
 }
 
+.nest-detail-nummer {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .nest-detail-titel h2 {
   margin: 0 0 4px;
 }
