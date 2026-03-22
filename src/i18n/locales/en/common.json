@@ -748,5 +748,7 @@
   "extern_saved_toast": "External notification saved",
   "nest_btn_ring_bird": "Ring bird",
   "nest_ring_context_banner": "Ring bird from nest visit — {{soort}}, {{datum}}",
-  "nest_ring_no_number": "no ring number"
+  "nest_ring_no_number": "no ring number",
+  "nest_export_csv_title": "Export nest visits as CSV (suitable for Excel)",
+  "nest_export_json_title": "Export full nest data as JSON"
 }

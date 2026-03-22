@@ -748,5 +748,7 @@
   "extern_saved_toast": "Externe Meldung gespeichert",
   "nest_btn_ring_bird": "Vogel beringen",
   "nest_ring_context_banner": "Vogel beringen aus Nestbesuch — {{soort}}, {{datum}}",
-  "nest_ring_no_number": "keine Ringnummer"
+  "nest_ring_no_number": "keine Ringnummer",
+  "nest_export_csv_title": "Nestbesuche als CSV exportieren (Excel-kompatibel)",
+  "nest_export_json_title": "Vollständige Nestdaten als JSON exportieren"
 }

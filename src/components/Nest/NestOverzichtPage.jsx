@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
 import { useNestRole } from '../../hooks/useNestRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { buildNestExportData, exportNestJSON, exportNestCSV } from '../../utils/nestExport';
 import 'leaflet/dist/leaflet.css';
 import './NestOverzichtPage.css';
 
@@ -35,7 +36,7 @@ export default function NestOverzichtPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd } = useNestRole();
-  const { nesten, seizoenen, legsels, bezoeken } = useNestData();
+  const { nesten, seizoenen, legsels, bezoeken, ringen } = useNestData();
   const species = useSpeciesRef();
   const speciesByEuring = useMemo(() => {
     const map = {};
@@ -108,6 +109,29 @@ export default function NestOverzichtPage() {
               <option key={j} value={j}>{j}</option>
             ))}
           </select>
+
+          <div className="nest-export-knoppen">
+            <button
+              className="btn-secondary nest-export-btn"
+              onClick={() => {
+                const data = buildNestExportData({ nesten, seizoenen, legsels, bezoeken, ringen, jaar: seizoenFilter, speciesByEuring });
+                exportNestCSV(data, seizoenFilter);
+              }}
+              title={t('nest_export_csv_title')}
+            >
+              CSV
+            </button>
+            <button
+              className="btn-secondary nest-export-btn"
+              onClick={() => {
+                const data = buildNestExportData({ nesten, seizoenen, legsels, bezoeken, ringen, jaar: seizoenFilter, speciesByEuring });
+                exportNestJSON(data, seizoenFilter);
+              }}
+              title={t('nest_export_json_title')}
+            >
+              JSON
+            </button>
+          </div>
         </div>
       </div>
 

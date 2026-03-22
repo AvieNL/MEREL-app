@@ -142,3 +142,16 @@
   overflow: hidden;
   border: 1px solid var(--border);
 }
+
+/* ── Export knoppen ── */
+.nest-export-knoppen {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.nest-export-btn {
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  min-height: unset;
+}

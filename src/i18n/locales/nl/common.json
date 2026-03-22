@@ -748,5 +748,7 @@
   "extern_saved_toast": "Externe melding opgeslagen",
   "nest_btn_ring_bird": "Vogel ringen",
   "nest_ring_context_banner": "Ring vogel vanuit nestbezoek — {{soort}}, {{datum}}",
-  "nest_ring_no_number": "geen ringnummer"
+  "nest_ring_no_number": "geen ringnummer",
+  "nest_export_csv_title": "Exporteer nestbezoeken als CSV (geschikt voor Excel)",
+  "nest_export_json_title": "Exporteer volledige nestdata als JSON"
 }

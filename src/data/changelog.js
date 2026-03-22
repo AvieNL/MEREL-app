@@ -1,6 +1,25 @@
-export const VERSIE = '1.13.0';
+export const VERSIE = '1.14.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.14.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: CSV-export van nestbezoeken per seizoen (Excel-compatibel)',
+      'Feat: JSON-export van volledige nestdata per seizoen',
+      'Feat: export-knoppen op nestoverzichtpagina naast seizoenfilter',
+    ],
+    wijzigingen_en: [
+      'Feat: CSV export of nest visits per season (Excel-compatible)',
+      'Feat: JSON export of full nest data per season',
+      'Feat: export buttons on nest overview page next to season filter',
+    ],
+    wijzigingen_de: [
+      'Feat: CSV-Export der Nestbesuche pro Saison (Excel-kompatibel)',
+      'Feat: JSON-Export vollständiger Nestdaten pro Saison',
+      'Feat: Export-Schaltflächen auf Nestübersichtsseite neben Saisonfilter',
+    ],
+  },
   {
     versie: '1.13.0',
     datum: '2026-03-22',
