@@ -196,11 +196,16 @@
   font-style: italic;
 }
 
-.bezoek-item__suggestie {
-  margin-left: auto;
-  font-size: 0.75rem;
-  color: var(--success);
+.bezoek-item__suggestie-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--pill-kleur, var(--success));
+  background: color-mix(in srgb, var(--pill-kleur, var(--success)) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pill-kleur, var(--success)) 40%, transparent);
+  border-radius: 10px;
+  padding: 2px 8px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ── Ring-knop vanuit bezoek ── */

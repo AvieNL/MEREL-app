@@ -6,7 +6,7 @@ import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useNestRole } from '../../hooks/useNestRole';
 import { useModuleSwitch } from '../../App';
 import { HABITAT_CODES, NESTPLAATS_CODES, STADIUM_CODES } from '../../data/sovon-codes';
-import { formatDatum } from '../../utils/nestPlanning';
+import { formatDatum, URGENTIE_KLEUR } from '../../utils/nestPlanning';
 import './NestDetailPage.css';
 
 const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
@@ -212,9 +212,15 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                       title={t('btn_edit')}
                     >✏️</button>
                   )}
-                  {bezoek.volgende_bezoek_suggestie && (
-                    <span className="bezoek-item__suggestie">→ {formatDatum(bezoek.volgende_bezoek_suggestie)}</span>
-                  )}
+                  {bezoek.volgende_bezoek_suggestie && (() => {
+                    const dagenAf = Math.round((new Date(bezoek.volgende_bezoek_suggestie) - new Date()) / 86400000);
+                    const urgentie = dagenAf < 0 ? 'verlopen' : dagenAf <= 2 ? 'dringend' : dagenAf <= 5 ? 'binnenkort' : 'gepland';
+                    return (
+                      <span className="bezoek-item__suggestie-pill" style={{ '--pill-kleur': URGENTIE_KLEUR[urgentie] }}>
+                        → {formatDatum(bezoek.volgende_bezoek_suggestie)}
+                      </span>
+                    );
+                  })()}
                   {canNestAdd && isNGroep && (
                     <button
                       className="btn-ring-uit-nest"
