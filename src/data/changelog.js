@@ -1,6 +1,22 @@
-export const VERSIE = '1.29.1';
+export const VERSIE = '1.29.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.2',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: service worker bijgewerkt naar autoUpdate — app vernieuwt zichzelf automatisch na nieuwe versie',
+      'Fix: dist/ uit git-tracking verwijderd zodat Vercel altijd vers bouwt vanuit broncode',
+    ],
+    wijzigingen_en: [
+      'Fix: service worker switched to autoUpdate — app updates itself automatically after new release',
+      'Fix: dist/ removed from git tracking so Vercel always builds fresh from source',
+    ],
+    wijzigingen_de: [
+      'Fix: Service Worker auf autoUpdate umgestellt — App aktualisiert sich nach neuer Version automatisch',
+      'Fix: dist/ aus Git-Tracking entfernt, sodass Vercel immer neu aus dem Quellcode baut',
+    ],
+  },
   {
     versie: '1.29.1',
     datum: '2026-03-22',

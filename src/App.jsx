@@ -2,7 +2,6 @@ import { lazy, Suspense, useState, useCallback, createContext, useContext } from
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from './i18n/index.js';
-import { useRegisterSW } from 'virtual:pwa-register/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SyncProvider } from './context/SyncContext';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -47,40 +46,6 @@ import { useSettings } from './hooks/useSettings';
 import { useRingStrengen } from './hooks/useRingStrengen';
 import './styles/theme.css';
 
-function UpdateBanner() {
-  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW();
-  const { t } = useTranslation();
-  if (!needRefresh) return null;
-  return (
-    <div style={{
-      position: 'fixed', bottom: 72, left: 0, right: 0, zIndex: 9999,
-      display: 'flex', justifyContent: 'center', padding: '0 16px',
-      pointerEvents: 'none',
-    }}>
-      <div style={{
-        background: 'var(--accent)', color: 'var(--bg-primary)',
-        borderRadius: 'var(--radius)', padding: '10px 16px',
-        display: 'flex', alignItems: 'center', gap: 12,
-        boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-        pointerEvents: 'all', fontSize: '0.9rem', fontWeight: 600,
-      }}>
-        {t('update_available')}
-        <button
-          onClick={() => updateServiceWorker(true)}
-          style={{
-            background: 'var(--bg-primary)', color: 'var(--accent)',
-            border: 'none', borderRadius: 'var(--radius-sm)',
-            padding: '4px 12px', cursor: 'pointer',
-            fontWeight: 700, fontSize: '0.85rem',
-            minWidth: 'auto', minHeight: 'auto',
-          }}
-        >
-          {t('btn_refresh')}
-        </button>
-      </div>
-    </div>
-  );
-}
 
 export default function App() {
   return (
@@ -90,7 +55,6 @@ export default function App() {
           <AuthProvider>
             <SyncProvider>
               <BrowserRouter>
-                <UpdateBanner />
                 <AppShell />
                 <ToastContainer />
               </BrowserRouter>
