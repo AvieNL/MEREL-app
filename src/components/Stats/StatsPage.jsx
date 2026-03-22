@@ -275,10 +275,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       const isDagrecord = vandaagCount > maxDagCount;
       const isJaarsoort = !hist || !hist.jaren.has(huidigJaar);
 
-      if (isBaansoort || isDagrecord) {
-        result[key] = '*';
+      if (isBaansoort) {
+        result[key] = 'baansoort';
+      } else if (isDagrecord) {
+        result[key] = 'dagrecord';
       } else if (isJaarsoort) {
-        result[key] = '†';
+        result[key] = 'jaar';
       }
     }
     return result;
@@ -485,8 +487,8 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                   return (
                     <tr key={s.naam}>
                       <td className="tt-col-soort">
-                        {displayNaam(s.naam)}
-                        {indicator && <span className={`soort-indicator soort-indicator--${indicator === '*' ? 'record' : 'jaar'}`}>{indicator}</span>}
+                        <span className={indicator === 'baansoort' ? 'soort-naam--baansoort' : undefined}>{displayNaam(s.naam)}</span>
+                        {indicator && <span className={`soort-indicator soort-indicator--${indicator}`}>*</span>}
                       </td>
                       <td className="tt-col-num">{s.nieuw || ''}</td>
                       <td className="tt-col-num">{s.terugvangst || ''}</td>
@@ -511,11 +513,14 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
         {Object.keys(soortenIndicatoren).length > 0 && (
           <div className="soort-indicator-legenda">
-            {Object.values(soortenIndicatoren).includes('*') && (
-              <span><span className="soort-indicator soort-indicator--record">*</span> {t('stats_indicator_record')}</span>
+            {Object.values(soortenIndicatoren).includes('baansoort') && (
+              <span><span className="soort-indicator soort-indicator--baansoort">*</span> {t('stats_indicator_baansoort')}</span>
             )}
-            {Object.values(soortenIndicatoren).includes('†') && (
-              <span><span className="soort-indicator soort-indicator--jaar">†</span> {t('stats_indicator_jaar')}</span>
+            {Object.values(soortenIndicatoren).includes('dagrecord') && (
+              <span><span className="soort-indicator soort-indicator--dagrecord">*</span> {t('stats_indicator_record')}</span>
+            )}
+            {Object.values(soortenIndicatoren).includes('jaar') && (
+              <span><span className="soort-indicator soort-indicator--jaar">*</span> {t('stats_indicator_jaar')}</span>
             )}
           </div>
         )}

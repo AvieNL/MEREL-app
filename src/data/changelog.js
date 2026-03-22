@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.22';
+export const VERSIE = '1.5.23';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.23',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'UX: baansoort-indicator rood en vetgedrukt; dagrecord blauw *; jaarsoort groen * (was †)',
+    ],
+    wijzigingen_en: [
+      'UX: site species indicator red bold; day record blue *; year species green * (was †)',
+    ],
+    wijzigingen_de: [
+      'UX: Stationsart-Indikator rot fett; Tagesrekord blau *; Jahresart grün * (war †)',
+    ],
+  },
   {
     versie: '1.5.22',
     datum: '2026-03-22',

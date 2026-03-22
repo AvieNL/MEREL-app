@@ -171,12 +171,20 @@
   font-weight: 700;
 }
 
-.soort-indicator--record {
+.soort-indicator--baansoort {
+  color: var(--danger, #ef4444);
+}
+
+.soort-indicator--dagrecord {
   color: var(--accent, #38bdf8);
 }
 
 .soort-indicator--jaar {
   color: var(--success, #22c55e);
+}
+
+.soort-naam--baansoort {
+  font-weight: 700;
 }
 
 .soort-indicator-legenda {
