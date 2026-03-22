@@ -1,6 +1,19 @@
-export const VERSIE = '1.30.8';
+export const VERSIE = '1.30.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.30.9',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'UX: ringnummers in nestbezoek als klikbare tekst (geen badge), navigeert naar vangst in ringmodule',
+    ],
+    wijzigingen_en: [
+      'UX: ring numbers in nest visit as clickable text (no badge), navigates to catch in ring module',
+    ],
+    wijzigingen_de: [
+      'UX: Ringnummern im Nestbesuch als klickbarer Text (kein Badge), navigiert zum Fang im Ringmodul',
+    ],
+  },
   {
     versie: '1.30.8',
     datum: '2026-03-22',

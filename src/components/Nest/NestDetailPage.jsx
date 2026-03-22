@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useNestRole } from '../../hooks/useNestRole';
+import { useRecords } from '../../hooks/useRecords';
 import { HABITAT_CODES, NESTPLAATS_CODES, STADIUM_CODES } from '../../data/sovon-codes';
 import { formatDatum, URGENTIE_KLEUR } from '../../utils/nestPlanning';
 import './NestDetailPage.css';
@@ -21,6 +22,7 @@ export default function NestDetailPage() {
   const navigate = useNavigate();
   const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
   const { nesten, legsels, bezoeken, ringen, deleteNest, deleteBezoek, deleteNestring } = useNestData();
+  const { records } = useRecords();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
   const species = useSpeciesRef();
 
@@ -116,6 +118,7 @@ export default function NestDetailPage() {
             canNestEdit={canNestEdit}
             deleteBezoek={deleteBezoek}
             deleteNestring={deleteNestring}
+            records={records}
             navigate={navigate}
             t={t}
           />
@@ -135,7 +138,7 @@ export default function NestDetailPage() {
 }
 
 
-function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, deleteNestring, navigate, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, deleteNestring, records, navigate, t }) {
   const [deleteBezoekId, setDeleteBezoekId] = useState(null);
   const [deleteNestringId, setDeleteNestringId] = useState(null);
   const legselBezoeken = bezoeken
@@ -230,19 +233,31 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                 </div>
                 {bezoekRingen.length > 0 && (
                   <div className="bezoek-ringen">
-                    {bezoekRingen.map(r => (
-                      <span key={r.id} className="nestring-badge">
-                        🔖 {r.ringnummer?.replace(/\./g, '') || t('nest_ring_no_number')}
-                        {canNestEdit && (
-                          <button
-                            className="nestring-badge__delete"
-                            type="button"
-                            onClick={() => setDeleteNestringId(r.id)}
-                            title={t('btn_delete')}
-                          >×</button>
-                        )}
-                      </span>
-                    ))}
+                    {bezoekRingen.map(r => {
+                      const vangst = records?.find(v => v.id === r.vangst_id);
+                      const label = r.ringnummer?.replace(/\./g, '') || t('nest_ring_no_number');
+                      return (
+                        <div key={r.id} className="bezoek-ring-rij">
+                          {vangst ? (
+                            <button
+                              className="bezoek-ring-link"
+                              type="button"
+                              onClick={() => navigate('/', { state: { editRecord: vangst } })}
+                            >{label}</button>
+                          ) : (
+                            <span className="bezoek-ring-link bezoek-ring-link--orphan">{label}</span>
+                          )}
+                          {canNestEdit && (
+                            <button
+                              className="nestring-badge__delete"
+                              type="button"
+                              onClick={() => setDeleteNestringId(r.id)}
+                              title={t('btn_delete')}
+                            >×</button>
+                          )}
+                        </div>
+                      );
+                    })}
                     {deleteNestringId && bezoekRingen.some(r => r.id === deleteNestringId) && (
                       <div className="bezoek-delete-confirm">
                         <span>{t('nest_ring_delete_confirm')}</span>
