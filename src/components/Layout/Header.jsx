@@ -277,7 +277,7 @@ export default function Header({ onSwitchModule, activeModule }) {
                     <span className="header-role-sublabel">{t('nav_sim_nest_role')}</span>
                     <div className="header-role-pills">
                       {['admin', 'nestonderzoeker', 'kijker', 'geen'].map(r => {
-                        const effectief = simulatedNestRole ?? (profile?.nestkast_rol || 'geen');
+                        const effectief = simulatedNestRole ?? (isRealAdmin ? 'admin' : (profile?.nestkast_rol || 'geen'));
                         return (
                           <button
                             key={r}

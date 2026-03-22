@@ -1,6 +1,22 @@
-export const VERSIE = '1.15.7';
+export const VERSIE = '1.15.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.15.8',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: admin ziet standaard "Admin" geselecteerd bij nest-rol simulatie',
+      'Fix: simulatie-pills hebben vaste hoogte van 24px (was niet zichtbaar verlaagd)',
+    ],
+    wijzigingen_en: [
+      'Fix: admin sees "Admin" selected by default for nest role simulation',
+      'Fix: simulation pills have fixed height of 24px (reduction was not visible)',
+    ],
+    wijzigingen_de: [
+      'Fix: Admin sieht standardmäßig "Admin" bei der Nest-Rollen-Simulation',
+      'Fix: Simulations-Pills haben feste Höhe von 24px (Reduzierung war nicht sichtbar)',
+    ],
+  },
   {
     versie: '1.15.7',
     datum: '2026-03-22',
