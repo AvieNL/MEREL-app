@@ -1,6 +1,25 @@
-export const VERSIE = '1.5.19';
+export const VERSIE = '1.5.20';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.20',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: biometrie-prioriteit literatuur > gebruikerdata > vangsten consistent doorgevoerd',
+      'Fix: geslachtsspecifieke bereiken hadden omgekeerde prioriteit (override > literatuur) — nu literatuur > override',
+      'UX: eigen override toont als "(gebruikerdata)" in oranje i.p.v. "(soortendata)"',
+    ],
+    wijzigingen_en: [
+      'Fix: biometry priority literature > user data > catches consistently applied',
+      'Fix: gender-specific ranges had reversed priority (override > literature) — now literature > override',
+      'UX: own override now shown as "(gebruikerdata)" in orange instead of "(soortendata)"',
+    ],
+    wijzigingen_de: [
+      'Fix: Biometrie-Priorität Literatur > Nutzerdaten > Fänge konsistent umgesetzt',
+      'Fix: Geschlechtsspezifische Bereiche hatten umgekehrte Priorität — jetzt Literatur > Override',
+      'UX: Eigene Overrides werden jetzt als "(gebruikerdata)" in Orange angezeigt',
+    ],
+  },
   {
     versie: '1.5.19',
     datum: '2026-03-21',
