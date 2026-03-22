@@ -1,36 +1,66 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
+import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import LocatiePicker from '../Nieuw/LocatiePicker';
+import {
+  HABITAT_CODES, NESTPLAATS_CODES, NESTTYPE_CODES,
+  VONDST_CODES, VERSTOPT_CODES, BESCHERM_CODES,
+} from '../../data/sovon-codes';
 import './NieuwNestPage.css';
+
+function codeLabel(c, lang) { return c[lang] || c.nl; }
 
 export default function WijzigNestPage() {
   const { id } = useParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language?.slice(0, 2) || 'nl';
   const navigate = useNavigate();
   const { nesten, updateNest } = useNestData();
+  const species = useSpeciesRef();
 
   const nest = nesten.find(n => n.id === id);
 
   const [form, setForm] = useState(null);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const [soortZoek, setSoortZoek] = useState('');
 
-  // Initialiseer form zodra nest geladen is (Dexie is reactief)
+  const gefilterdeSoorten = useMemo(() => {
+    if (!soortZoek || soortZoek.length < 2) return [];
+    const term = soortZoek.toLowerCase();
+    return species
+      .filter(s => s.naam_nl?.toLowerCase().includes(term) || s.naam_la?.toLowerCase().includes(term) || s[`naam_${lang}`]?.toLowerCase().includes(term))
+      .slice(0, 20);
+  }, [soortZoek, species, lang]);
+
+  // Initialiseer form zodra nest geladen is
   if (nest && form === null) {
     setForm({
-      kastnummer: nest.kastnummer || '',
-      omschrijving: nest.omschrijving || '',
-      lat: nest.lat != null ? String(nest.lat) : '',
-      lon: nest.lon != null ? String(nest.lon) : '',
+      kastnummer:        nest.kastnummer || '',
+      omschrijving:      nest.omschrijving || '',
+      eigenaar_naam:     nest.eigenaar_naam || '',
+      eigenaar_email:    nest.eigenaar_email || '',
+      eigenaar_telefoon: nest.eigenaar_telefoon || '',
+      toelichting:       nest.toelichting || '',
+      soort_euring:      nest.soort_euring || '',
+      nesttype:          nest.nesttype || '',
+      habitat:           nest.habitat != null ? String(nest.habitat) : '',
+      nestplaats:        nest.nestplaats != null ? String(nest.nestplaats) : '',
+      vondst:            nest.vondst != null ? String(nest.vondst) : '',
+      verstopt:          nest.verstopt != null ? String(nest.verstopt) : '',
+      bescherm:          nest.bescherm != null ? String(nest.bescherm) : '',
+      lat:               nest.lat != null ? String(nest.lat) : '',
+      lon:               nest.lon != null ? String(nest.lon) : '',
+      adres:             nest.adres || '',
     });
   }
 
   if (!nest || form === null) {
     return (
       <div className="page">
-        <button className="btn-back" onClick={() => navigate(-1)}>‹ {t('btn_back')}</button>
+        <button className="project-back" onClick={() => navigate(-1)}>‹ {t('btn_back')}</button>
       </div>
     );
   }
@@ -52,10 +82,22 @@ export default function WijzigNestPage() {
     setSaving(true);
     try {
       await updateNest(id, {
-        kastnummer: form.kastnummer.trim(),
-        omschrijving: form.omschrijving.trim(),
-        lat: form.lat ? parseFloat(form.lat) : null,
-        lon: form.lon ? parseFloat(form.lon) : null,
+        kastnummer:        form.kastnummer.trim(),
+        omschrijving:      form.omschrijving.trim(),
+        eigenaar_naam:     form.eigenaar_naam.trim(),
+        eigenaar_email:    form.eigenaar_email.trim(),
+        eigenaar_telefoon: form.eigenaar_telefoon.trim(),
+        toelichting:       form.toelichting.trim(),
+        soort_euring:      form.soort_euring || '',
+        nesttype:          form.nesttype || null,
+        habitat:           form.habitat !== '' ? parseInt(form.habitat, 10) : null,
+        nestplaats:        form.nestplaats !== '' ? parseInt(form.nestplaats, 10) : null,
+        vondst:            form.vondst !== '' ? parseInt(form.vondst, 10) : null,
+        verstopt:          form.verstopt !== '' ? parseInt(form.verstopt, 10) : null,
+        bescherm:          form.bescherm !== '' ? parseInt(form.bescherm, 10) : null,
+        lat:               form.lat ? parseFloat(form.lat) : null,
+        lon:               form.lon ? parseFloat(form.lon) : null,
+        adres:             form.adres.trim(),
       });
       navigate(`/nest/${id}`);
     } finally {
@@ -65,31 +107,177 @@ export default function WijzigNestPage() {
 
   return (
     <div className="page nieuw-nest-page">
-      <div className="nieuw-nest-header">
-        <button className="btn-back" onClick={() => navigate(`/nest/${id}`)}>‹ {t('btn_back')}</button>
-        <h2>{t('nest_edit_title', { nr: nest.kastnummer })}</h2>
+      <div className="nieuw-sticky-header">
+        <div className="nieuw-topbar">
+          <span className="nieuw-topbar-titel">{t('nest_edit_title', { nr: nest.kastnummer })}</span>
+          <button type="button" className="btn-secondary nieuw-topbar-btn" onClick={() => navigate(`/nest/${id}`)} disabled={saving}>
+            {t('btn_cancel')}
+          </button>
+          <button type="button" className="btn-primary nieuw-topbar-btn" onClick={handleSave} disabled={saving}>
+            {saving ? t('btn_saving') : t('btn_save')}
+          </button>
+        </div>
       </div>
 
+      {/* ── Nestinfo ── */}
+      <div className="section">
+        <div className="section-header"><h3>{t('nest_section_info')}</h3></div>
+        <div className="section-content">
+          <div className="form-row">
+            <div className={`form-group${errors.kastnummer ? ' form-group--error' : ''}`}>
+              <label>{t('nest_kastnummer')} *</label>
+              <input
+                type="text"
+                value={form.kastnummer}
+                onChange={e => update('kastnummer', e.target.value)}
+                placeholder={t('nest_kastnummer_placeholder')}
+                autoFocus
+              />
+            </div>
+            <div className="form-group">
+              <label>{t('nest_omschrijving')}</label>
+              <input
+                type="text"
+                value={form.omschrijving}
+                onChange={e => update('omschrijving', e.target.value)}
+                placeholder={t('nest_omschrijving_placeholder')}
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label>{t('nest_eigenaar_naam')}</label>
+            <input
+              type="text"
+              value={form.eigenaar_naam}
+              onChange={e => update('eigenaar_naam', e.target.value)}
+              placeholder={t('nest_eigenaar_naam_placeholder')}
+            />
+          </div>
+          <div className="nest-eigenaar-contact">
+            <div className="form-group">
+              <label>{t('nest_eigenaar_email')}</label>
+              <input
+                type="email"
+                value={form.eigenaar_email}
+                onChange={e => update('eigenaar_email', e.target.value)}
+                placeholder={t('nest_eigenaar_email_placeholder')}
+              />
+            </div>
+            <div className="form-group">
+              <label>{t('nest_eigenaar_telefoon')}</label>
+              <input
+                type="tel"
+                value={form.eigenaar_telefoon}
+                onChange={e => update('eigenaar_telefoon', e.target.value)}
+                placeholder={t('nest_eigenaar_telefoon_placeholder')}
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label>{t('nest_toelichting')}</label>
+            <textarea
+              rows={3}
+              value={form.toelichting}
+              onChange={e => update('toelichting', e.target.value)}
+              placeholder={t('nest_toelichting_placeholder')}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ── Soort & type ── */}
+      <div className="section">
+        <div className="section-header"><h3>{t('nest_section_type')}</h3></div>
+        <div className="section-content">
+          <div className="form-group">
+            <label>{t('nest_soort')}</label>
+            <div className="soort-zoeker">
+              <input
+                type="text"
+                value={soortZoek || (form.soort_euring
+                  ? (species.find(s => s.euring_code === form.soort_euring)?.[`naam_${lang}`]
+                    || species.find(s => s.euring_code === form.soort_euring)?.naam_nl
+                    || form.soort_euring)
+                  : '')}
+                onChange={e => { setSoortZoek(e.target.value); if (!e.target.value) update('soort_euring', ''); }}
+                placeholder={t('nest_soort_placeholder')}
+              />
+              {gefilterdeSoorten.length > 0 && (
+                <div className="soort-zoeker__dropdown">
+                  {gefilterdeSoorten.map(s => (
+                    <button key={s.naam_nl} className="soort-zoeker__item"
+                      onClick={() => { update('soort_euring', s.euring_code || ''); setSoortZoek(''); }}
+                    >
+                      <span>{s[`naam_${lang}`] || s.naam_nl}</span>
+                      <span className="soort-zoeker__latin">{s.naam_la}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>{t('nest_nesttype')}</label>
+              <select value={form.nesttype} onChange={e => update('nesttype', e.target.value)}>
+                <option value="">{t('nest_code_optional')}</option>
+                {NESTTYPE_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>{t('nest_habitat')}</label>
+              <select value={form.habitat} onChange={e => update('habitat', e.target.value)}>
+                <option value="">{t('nest_code_optional')}</option>
+                {HABITAT_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>{t('nest_nestplaats')}</label>
+              <select value={form.nestplaats} onChange={e => update('nestplaats', e.target.value)}>
+                <option value="">{t('nest_code_optional')}</option>
+                {NESTPLAATS_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>{t('nest_vondst')}</label>
+              <select value={form.vondst} onChange={e => update('vondst', e.target.value)}>
+                <option value="">{t('nest_code_optional')}</option>
+                {VONDST_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>{t('nest_verstopt')}</label>
+              <select value={form.verstopt} onChange={e => update('verstopt', e.target.value)}>
+                <option value="">{t('nest_code_optional')}</option>
+                {VERSTOPT_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>{t('nest_bescherm')}</label>
+              <select value={form.bescherm} onChange={e => update('bescherm', e.target.value)}>
+                <option value="">{t('nest_code_optional')}</option>
+                {BESCHERM_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Locatie ── */}
       <div className="section">
         <div className="section-header"><h3>{t('nest_section_location')}</h3></div>
         <div className="section-content">
-          <div className={`form-group${errors.kastnummer ? ' form-group--error' : ''}`}>
-            <label>{t('nest_kastnummer')} *</label>
-            <input
-              type="text"
-              value={form.kastnummer}
-              onChange={e => update('kastnummer', e.target.value)}
-              placeholder={t('nest_kastnummer_placeholder')}
-              autoFocus
-            />
-          </div>
           <div className="form-group">
-            <label>{t('nest_omschrijving')}</label>
+            <label>{t('nest_adres')}</label>
             <input
               type="text"
-              value={form.omschrijving}
-              onChange={e => update('omschrijving', e.target.value)}
-              placeholder={t('nest_omschrijving_placeholder')}
+              value={form.adres}
+              onChange={e => update('adres', e.target.value)}
+              placeholder={t('nest_adres_placeholder')}
             />
           </div>
           <LocatiePicker
@@ -98,15 +286,6 @@ export default function WijzigNestPage() {
             onChange={(lat, lon) => { update('lat', lat); update('lon', lon); }}
           />
         </div>
-      </div>
-
-      <div className="nieuw-nest-acties">
-        <button className="btn-secondary" onClick={() => navigate(`/nest/${id}`)} disabled={saving}>
-          {t('btn_cancel')}
-        </button>
-        <button className="btn-primary" onClick={handleSave} disabled={saving}>
-          {saving ? t('btn_saving') : t('btn_save')}
-        </button>
       </div>
     </div>
   );

@@ -43,10 +43,9 @@ export default function NieuwLegselPage() {
   return (
     <div className="page nieuw-nest-page">
       <div className="nieuw-nest-header">
-        <button className="btn-back" onClick={() => navigate(`/nest/${nestId}`)}>
+        <button className="project-back" onClick={() => navigate(`/nest/${nestId}`)}>
           ‹ {t('btn_back')}
         </button>
-        <h2>{t('nest_new_legsel_title', { nr: volgendVolgnummer })}</h2>
       </div>
 
       <div className="section">

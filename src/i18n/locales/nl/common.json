@@ -468,6 +468,7 @@
   "nest_opmerkingen_placeholder": "Bijzonderheden, waarnemingen...",
   "nest_suggestie_label": "Aanbevolen vervolgbezoek:",
   "nest_suggestie_basis": "op basis van {{soort}}, broedduur {{ei}}d, nestjong {{jong}}d",
+  "btn_back": "Terug",
   "nest_suggestie_ringen": "Ringen op",
   "nest_suggestie_nacontrole": "Nacontrole op",
   "nest_suggestie_eileg": "Eileg verwacht",

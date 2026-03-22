@@ -468,6 +468,7 @@
   "nest_opmerkingen_placeholder": "Besonderheiten, Beobachtungen...",
   "nest_suggestie_label": "Empfohlener Folgebesuch:",
   "nest_suggestie_basis": "basierend auf {{soort}}, Brutdauer {{ei}}d, Nestling {{jong}}d",
+  "btn_back": "Zurück",
   "nest_suggestie_ringen": "Beringen am",
   "nest_suggestie_nacontrole": "Nachkontrolle am",
   "nest_suggestie_eileg": "Eilage erwartet",

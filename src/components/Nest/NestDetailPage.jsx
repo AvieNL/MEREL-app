@@ -43,7 +43,7 @@ export default function NestDetailPage() {
   if (!nest) {
     return (
       <div className="page">
-        <button className="btn-back" onClick={() => navigate('/nest')}>‹ {t('btn_back')}</button>
+        <button className="project-back" onClick={() => navigate('/nest')}>‹ {t('btn_back')}</button>
         <p style={{ color: 'var(--text-secondary)', marginTop: 16 }}>{t('nest_not_found')}</p>
       </div>
     );
@@ -53,9 +53,8 @@ export default function NestDetailPage() {
     <div className="page nest-detail-page">
       {/* ── Header ── */}
       <div className="nest-detail-header">
-        <button className="btn-back" onClick={() => navigate('/nest')}>‹ {t('btn_back')}</button>
+        <button className="project-back" onClick={() => navigate('/nest')}>‹ {t('btn_back')}</button>
         <div className="nest-detail-titel">
-          <h2>#{nest.kastnummer}</h2>
           {nest.omschrijving && <p className="nest-detail-omschrijving">{nest.omschrijving}</p>}
           {nest.lat && nest.lon && (
             <p className="nest-detail-coords">{parseFloat(nest.lat).toFixed(5)}, {parseFloat(nest.lon).toFixed(5)}</p>
@@ -157,6 +156,7 @@ function SeizoenBlok({ seizoen, nest, legsels, bezoeken, ringen, speciesByEuring
           bezoeken={bezoeken}
           ringen={ringen}
           soort={speciesByEuring[seizoen.soort_euring] || null}
+          speciesByEuring={speciesByEuring}
           canNestAdd={canNestAdd}
           navigate={navigate}
           switchModule={switchModule}
@@ -176,7 +176,7 @@ function SeizoenBlok({ seizoen, nest, legsels, bezoeken, ringen, speciesByEuring
   );
 }
 
-function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, canNestAdd, navigate, switchModule, t }) {
+function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, speciesByEuring, canNestAdd, navigate, switchModule, t }) {
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
@@ -217,7 +217,15 @@ function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, canNestAdd
               <div key={bezoek.id} className="bezoek-item">
                 <div className="bezoek-item__row">
                   <span className="bezoek-item__datum">{bezoek.datum}{bezoek.tijd ? ` ${bezoek.tijd.slice(0,5)}` : ''}</span>
-                  <span className="bezoek-item__stadium">{stadiumLabel(bezoek.stadium)}</span>
+                  <span className="bezoek-item__stadium">
+                    {stadiumLabel(bezoek.stadium)}
+                    {bezoek.stadium2 && <> + {stadiumLabel(bezoek.stadium2)}</>}
+                  </span>
+                  {bezoek.soort_euring && bezoek.soort_euring !== seizoen.soort_euring && (
+                    <span className="bezoek-item__soort-afwijking">
+                      {speciesByEuring[bezoek.soort_euring]?.naam_nl || bezoek.soort_euring}
+                    </span>
+                  )}
                   {(bezoek.aantal_eieren != null || bezoek.aantal_pulli != null) && (
                     <span className="bezoek-item__aantallen">
                       {bezoek.aantal_eieren != null && `${bezoek.aantal_eieren}×🥚`}
