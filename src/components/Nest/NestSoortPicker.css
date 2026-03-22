@@ -1,0 +1,132 @@
+.nest-soort-picker {
+  position: relative;
+}
+
+/* Geselecteerde soort weergave */
+.nest-soort-picker__geselecteerd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  min-height: 44px;
+}
+
+.nest-soort-picker__naam {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.nest-soort-picker__euring {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.nest-soort-picker__wijzig {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+
+.nest-soort-picker__wijzig:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.nest-soort-picker__wis {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.nest-soort-picker__wis:hover {
+  color: var(--danger);
+}
+
+/* Zoekveld */
+.nest-soort-picker__zoek {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.nest-soort-picker__zoek input {
+  flex: 1;
+}
+
+.nest-soort-picker__annuleer {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Dropdown lijst */
+.nest-soort-picker__lijst {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.nest-soort-picker__lijst li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+
+.nest-soort-picker__lijst li:last-child {
+  border-bottom: none;
+}
+
+.nest-soort-picker__lijst li:hover {
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-secondary));
+}
+
+.nest-soort-picker__item-naam {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  flex: 1;
+}
+
+.nest-soort-picker__item-lat {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.nest-soort-picker__item-code {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
