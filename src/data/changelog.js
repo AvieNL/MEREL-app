@@ -1,6 +1,25 @@
-export const VERSIE = '1.15.1';
+export const VERSIE = '1.15.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.15.2',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: admin toont "Admin" in nesttoegang-kolom (niet langer "nestonderzoeker" of leeg)',
+      'Fix: admin wordt niet auto-gepromoot naar nestonderzoeker bij invullen SOVON-nummer',
+      'Feat: SOVON-nummer invullen geeft niet-admins automatisch nestonderzoeker-toegang',
+    ],
+    wijzigingen_en: [
+      'Fix: admin shows "Admin" in nest access column (no longer "nestonderzoeker" or blank)',
+      'Fix: admin is not auto-promoted to nestonderzoeker when entering SOVON number',
+      'Feat: entering SOVON number automatically grants non-admins nest researcher access',
+    ],
+    wijzigingen_de: [
+      'Fix: Admin zeigt "Admin" in Nestzugang-Spalte (nicht mehr "nestonderzoeker" oder leer)',
+      'Fix: Admin wird beim Eingeben der SOVON-Nummer nicht zum Nestforscher befördert',
+      'Feat: SOVON-Nummer eingeben gibt Nicht-Admins automatisch Nestforscherzugang',
+    ],
+  },
   {
     versie: '1.15.0',
     datum: '2026-03-22',
