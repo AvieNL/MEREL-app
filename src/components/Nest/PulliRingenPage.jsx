@@ -299,7 +299,7 @@ export default function PulliRingenPage() {
               min="0" max="99"
               value={form.leeftijd}
               onChange={e => update('leeftijd', e.target.value)}
-              placeholder={pullusLeeftijd !== null ? `~${pullusLeeftijd}` : '—'}
+              placeholder={pullusLeeftijd !== null ? `ca. ${pullusLeeftijd}` : '—'}
             />
           </div>
         </div>

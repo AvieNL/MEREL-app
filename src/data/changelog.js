@@ -1,6 +1,19 @@
-export const VERSIE = '1.30.4';
+export const VERSIE = '1.30.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.30.5',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: placeholder leeftijdveld toont nu "ca. X" in plaats van "~X"',
+    ],
+    wijzigingen_en: [
+      'Fix: age field placeholder now shows "ca. X" instead of "~X"',
+    ],
+    wijzigingen_de: [
+      'Fix: Platzhalter Altersfeld zeigt jetzt "ca. X" statt "~X"',
+    ],
+  },
   {
     versie: '1.30.4',
     datum: '2026-03-22',
