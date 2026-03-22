@@ -31,6 +31,7 @@ const ProjectenPage   = lazy(() => import('./components/Projecten/ProjectenPage'
 const RingstrengenPage = lazy(() => import('./components/Ringstreng/RingstrengenPage'));
 const AdminPage       = lazy(() => import('./components/Admin/AdminPage'));
 const ReferentiebibliotheekPage = lazy(() => import('./components/Referentiebibliotheek/ReferentiebibliotheekPage'));
+const RuitypenPage      = lazy(() => import('./components/Ruitypen/RuitypenPage'));
 const NestOverzichtPage = lazy(() => import('./components/Nest/NestOverzichtPage'));
 const NieuwNestPage     = lazy(() => import('./components/Nest/NieuwNestPage'));
 const NestDetailPage    = lazy(() => import('./components/Nest/NestDetailPage'));
@@ -200,6 +201,7 @@ function NestApp({ onSwitchModule, activeModule }) {
             <Route path="/instellingen" element={<InstellingenPage />} />
             <Route path="/over" element={<OverPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/ruitypen" element={<RuitypenPage />} />
             <Route path="*" element={<NestOverzichtPage />} />
           </Routes>
         </Suspense>
@@ -270,6 +272,7 @@ function MainApp({ onSwitchModule, activeModule }) {
           } />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/referentiebibliotheek" element={<ReferentiebibliotheekPage />} />
+          <Route path="/ruitypen" element={<RuitypenPage />} />
         </Routes>
         </Suspense>
       </main>

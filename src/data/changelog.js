@@ -1,6 +1,19 @@
-export const VERSIE = '1.15.9';
+export const VERSIE = '1.16.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.16.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: ruitypen-editor verplaatst naar eigen pagina (/ruitypen)',
+    ],
+    wijzigingen_en: [
+      'Feat: moult type editor moved to its own page (/ruitypen)',
+    ],
+    wijzigingen_de: [
+      'Feat: Mauser-Typen-Editor auf eigene Seite verschoben (/ruitypen)',
+    ],
+  },
   {
     versie: '1.15.9',
     datum: '2026-03-22',
