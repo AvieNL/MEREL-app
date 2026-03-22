@@ -7,6 +7,7 @@ import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import { formatDatum } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL, MAX_RECORDS_WEERGAVE } from '../../data/constants';
+import { TYPE_CFG, buildNvByRing, getVangstType } from '../../utils/vangstType';
 import ExternMeldingModal from './ExternMeldingModal';
 import './RecordsPage.css';
 
@@ -55,34 +56,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
 
   // Index: ringnummer → originele NV-record (voor TV-categorisatie)
-  const nvByRing = useMemo(() => {
-    const map = new Map();
-    records.forEach(r => {
-      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4' && r.ringnummer) {
-        map.set(normalizeRing(r.ringnummer), r);
-      }
-    });
-    return map;
-  }, [records]);
-
-  function getRecordType(r) {
-    if (r.bron === 'externe_tv_melding') return 'tva';
-    if (r.bron === 'externe_ring_info') return 'nwx';
-    if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') return 'nw';
-    if (!r.ringnummer) return 'tvx';
-    const original = nvByRing.get(normalizeRing(r.ringnummer));
-    if (!original) return 'tvx';
-    return original.project === r.project ? 'tv' : 'tvo';
-  }
-
-  const TYPE_CFG = {
-    nw:  { icon: '○', cls: 'record-type--nw',  key: 'record_type_nw' },
-    tv:  { icon: '⟳', cls: 'record-type--tv',  key: 'record_type_tv' },
-    tvo: { icon: '⟲', cls: 'record-type--tvo', key: 'record_type_tvo' },
-    tvx: { icon: '⊕', cls: 'record-type--tvx', key: 'record_type_tvx' },
-    tva: { icon: '⟳', cls: 'record-type--tva', key: 'record_type_tva' },
-    nwx: { icon: '○', cls: 'record-type--nwx', key: 'record_type_nwx' },
-  };
+  const nvByRing = useMemo(() => buildNvByRing(records), [records]);
 
   // Index: naam_nl (lowercase) → alle taalnamen (lowercase) voor meertalig zoeken
   const speciesNaamIndex = useMemo(() => {
@@ -176,7 +150,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
           <div className="empty-state">{t('records_empty')}</div>
         ) : (
           filtered.slice(0, MAX_RECORDS_WEERGAVE).map(r => {
-            const type = getRecordType(r);
+            const type = getVangstType(r, nvByRing);
             const cfg = TYPE_CFG[type];
             const original = (type === 'tv' || type === 'tvo') && r.ringnummer
               ? nvByRing.get(normalizeRing(r.ringnummer)) ?? null

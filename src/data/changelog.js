@@ -1,6 +1,19 @@
-export const VERSIE = '1.16.2';
+export const VERSIE = '1.16.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.16.3',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Refactor: vangsttype-badges (○ NW / ⟳ TV / ⟲ TVo etc.) consistent doorgevoerd op soortpagina',
+    ],
+    wijzigingen_en: [
+      'Refactor: catch type badges (○ NC / ⟳ RC / ⟲ RCo etc.) consistently applied on species page',
+    ],
+    wijzigingen_de: [
+      'Refactor: Fangtyp-Badges (○ NF / ⟳ WF / ⟲ WFo usw.) konsistent auf Artseite übernommen',
+    ],
+  },
   {
     versie: '1.16.2',
     datum: '2026-03-22',

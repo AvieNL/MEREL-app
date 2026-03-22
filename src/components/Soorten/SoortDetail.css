@@ -881,21 +881,6 @@
   font-size: 0.78rem;
 }
 
-.sd-recent-type {
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 4px;
-  flex-shrink: 0;
-  background: rgba(56, 189, 248, 0.12);
-  color: var(--accent);
-  letter-spacing: 0.3px;
-}
-
-.sd-recent-item--tv .sd-recent-type {
-  background: rgba(234, 179, 8, 0.12);
-  color: var(--warning);
-}
 
 /* Age section */
 .sd-age-section {

@@ -12,6 +12,7 @@ import { renderMarkdown } from '../../utils/textHelper';
 import { formatDatum } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL } from '../../data/constants';
 import { computeBioRanges } from '../../utils/bioHelper';
+import { TYPE_CFG, buildNvByRing, getVangstType } from '../../utils/vangstType';
 import SoortDetailEditor from './SoortDetailEditor';
 import './SoortDetail.css';
 
@@ -123,6 +124,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
     const lower = decodedNaam.toLowerCase();
     return records.filter(r => r.vogelnaam && r.vogelnaam.toLowerCase() === lower);
   }, [records, decodedNaam]);
+
+  const nvByRing = useMemo(() => buildNvByRing(records), [records]);
 
   // Biometriebereiken berekend uit eigen vangsten (min 3 records, geen pullus)
   const bioRangesFromCatches = useMemo(
@@ -697,10 +700,11 @@ export default function SoortDetail({ records, speciesOverrides }) {
                 })
                 .slice(0, 10)
                 .map(r => {
-                  const isTerugvangst = r.metalenringinfo === 4 || r.metalenringinfo === '4';
+                  const type = getVangstType(r, nvByRing);
+                  const cfg = TYPE_CFG[type];
                   return (
-                    <div key={r.id} className={`sd-recent-item${isTerugvangst ? ' sd-recent-item--tv' : ''}`}>
-                      <span className="sd-recent-type">{isTerugvangst ? 'TV' : 'NV'}</span>
+                    <div key={r.id} className="sd-recent-item">
+                      <span className={`record-type ${cfg.cls}`}>{cfg.icon} {t(cfg.key)}</span>
                       <span
                         className="sd-recent-ring ring-link"
                         onClick={() => navigate('/records', { state: { openId: r.id } })}
