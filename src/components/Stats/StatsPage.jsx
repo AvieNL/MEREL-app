@@ -276,11 +276,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       const isJaarsoort = !hist || !hist.jaren.has(huidigJaar);
 
       if (isBaansoort) {
-        result[key] = 'baansoort';
-      } else if (isDagrecord) {
-        result[key] = 'dagrecord';
-      } else if (isJaarsoort) {
-        result[key] = 'jaar';
+        result[key] = new Set(['baansoort']);
+      } else {
+        const tags = new Set();
+        if (isDagrecord) tags.add('dagrecord');
+        if (isJaarsoort) tags.add('jaar');
+        if (tags.size > 0) result[key] = tags;
       }
     }
     return result;
@@ -483,12 +484,14 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
               </thead>
               <tbody>
                 {huidigeStats.soortenTabel.map(s => {
-                  const indicator = soortenIndicatoren[s.naam.toLowerCase()];
+                  const indicatoren = soortenIndicatoren[s.naam.toLowerCase()];
                   return (
                     <tr key={s.naam}>
                       <td className="tt-col-soort">
-                        <span className={indicator === 'baansoort' ? 'soort-naam--baansoort' : undefined}>{displayNaam(s.naam)}</span>
-                        {indicator && <span className={`soort-indicator soort-indicator--${indicator}`}>*</span>}
+                        <span className={indicatoren?.has('baansoort') ? 'soort-naam--baansoort' : undefined}>{displayNaam(s.naam)}</span>
+                        {indicatoren && [...indicatoren].map(ind => (
+                          <span key={ind} className={`soort-indicator soort-indicator--${ind}`}>*</span>
+                        ))}
                       </td>
                       <td className="tt-col-num">{s.nieuw || ''}</td>
                       <td className="tt-col-num">{s.terugvangst || ''}</td>
@@ -513,13 +516,13 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
         {Object.keys(soortenIndicatoren).length > 0 && (
           <div className="soort-indicator-legenda">
-            {Object.values(soortenIndicatoren).includes('baansoort') && (
+            {Object.values(soortenIndicatoren).some(s => s.has('baansoort')) && (
               <span><span className="soort-indicator soort-indicator--baansoort">*</span> {t('stats_indicator_baansoort')}</span>
             )}
-            {Object.values(soortenIndicatoren).includes('dagrecord') && (
+            {Object.values(soortenIndicatoren).some(s => s.has('dagrecord')) && (
               <span><span className="soort-indicator soort-indicator--dagrecord">*</span> {t('stats_indicator_record')}</span>
             )}
-            {Object.values(soortenIndicatoren).includes('jaar') && (
+            {Object.values(soortenIndicatoren).some(s => s.has('jaar')) && (
               <span><span className="soort-indicator soort-indicator--jaar">*</span> {t('stats_indicator_jaar')}</span>
             )}
           </div>

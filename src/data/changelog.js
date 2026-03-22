@@ -1,6 +1,32 @@
-export const VERSIE = '1.22.0';
+export const VERSIE = '1.24.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.24.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: statspagina toont dagrecord én jaarsoort tegelijk als beide van toepassing zijn',
+    ],
+    wijzigingen_en: [
+      'Feat: stats page shows day record and year species badges simultaneously when both apply',
+    ],
+    wijzigingen_de: [
+      'Feat: Statistikseite zeigt Tagesrekord und Jahresart gleichzeitig an, wenn beides zutrifft',
+    ],
+  },
+  {
+    versie: '1.23.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: neststatusbadge toont broedcode-categorie (leeg, bouw, eieren, nestjongen, succesvol, mislukt)',
+    ],
+    wijzigingen_en: [
+      'Feat: nest status badge shows breeding code category (empty, building, eggs, nestlings, successful, failed)',
+    ],
+    wijzigingen_de: [
+      'Feat: Neststatusbadge zeigt Brutcode-Kategorie (leer, Nestbau, Eier, Nestlinge, erfolgreich, gescheitert)',
+    ],
+  },
   {
     versie: '1.22.0',
     datum: '2026-03-22',
