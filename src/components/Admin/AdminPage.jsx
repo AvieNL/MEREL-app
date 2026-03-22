@@ -244,7 +244,7 @@ export default function AdminPage() {
             <div className="section-content">
               <p className="admin-hint">{t('admin_invite_hint')}</p>
 
-              <p className="admin-hint"><strong>{t('admin_role_explanation')}</strong></p>
+              <p className="admin-hint"><strong className="admin-module-label admin-module-label--ring">{t('admin_role_explanation')}</strong></p>
               <div className="admin-role-list">
                 {[
                   ['role_ringer',      'admin_role_ringer_desc'],
@@ -259,7 +259,7 @@ export default function AdminPage() {
                 ))}
               </div>
 
-              <p className="admin-hint" style={{ marginTop: '1rem' }}><strong>{t('admin_nest_role_explanation')}</strong></p>
+              <p className="admin-hint" style={{ marginTop: '1rem' }}><strong className="admin-module-label admin-module-label--nest">{t('admin_nest_role_explanation')}</strong></p>
               <div className="admin-role-list">
                 {[
                   ['role_admin',          'admin_nest_role_admin_desc'],

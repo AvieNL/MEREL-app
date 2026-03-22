@@ -190,6 +190,9 @@
   color: var(--text-primary);
 }
 
+.admin-module-label--ring { color: var(--accent); }
+.admin-module-label--nest { color: var(--success, #22c55e); }
+
 .admin-role-list {
   display: flex;
   flex-direction: column;
