@@ -96,22 +96,34 @@ export default function Header({ onSwitchModule, activeModule }) {
   const activeTaal = TALEN.find(tl => tl.code === i18n.language) || TALEN[0];
   const activeThema = THEMAS.find(th => th.mode === mode) || THEMAS[0];
 
+  const handleTitleClick = () => {
+    if (onSwitchModule) {
+      onSwitchModule();
+    } else {
+      navigate('/');
+    }
+  };
+
+  const handleModuleClick = () => {
+    navigate(activeModule === 'nest' ? '/nest' : '/');
+  };
+
   return (
     <header className="app-header">
       {/* Hoofd-rij */}
       <div className="header-inner">
         <div className="header-title-group">
-          {onSwitchModule && (
-            <button className="header-module-back" onClick={onSwitchModule} aria-label={t('module_switch')}>
-              ‹
-            </button>
-          )}
-          <h1 onClick={() => navigate(activeModule === 'nest' ? '/nest' : '/')} style={{ cursor: 'pointer' }}>
+          <button className="header-app-title" onClick={handleTitleClick} aria-label={t('app_name')}>
             VRS App{isStaging && <span className="header-staging-badge">STAGING</span>}
-          </h1>
-          {activeModule === 'nest' && (
-            <span className="header-module-badge">{t('module_nest')}</span>
-          )}
+          </button>
+          <button
+            className={`header-module-pill header-module-pill--${activeModule || 'ring'}`}
+            onClick={handleModuleClick}
+            aria-label={activeModule === 'nest' ? t('module_nest') : t('module_ring')}
+          >
+            {activeModule === 'nest' ? '🥚' : '🐦'}
+            <span>{activeModule === 'nest' ? t('module_nest') : t('module_ring')}</span>
+          </button>
         </div>
         {profile?.ringer_naam && (
           <span className="header-ringer">
