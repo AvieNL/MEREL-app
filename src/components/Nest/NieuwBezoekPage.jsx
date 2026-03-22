@@ -33,7 +33,7 @@ export default function NieuwBezoekPage() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.slice(0, 2) || 'nl';
   const navigate = useNavigate();
-  const { nesten, seizoenen, legsels, bezoeken, addNestSeizoen, addLegsel, addBezoek, updateLegsel } = useNestData();
+  const { nesten, legsels, bezoeken, addLegsel, addBezoek, updateLegsel } = useNestData();
   const species = useSpeciesRef();
 
   // ── Nest- en legsel-context ───────────────────────────────────────────────
@@ -76,9 +76,8 @@ export default function NieuwBezoekPage() {
   }, [species]);
 
   // ── Legsel uit URL (bekend pad) ───────────────────────────────────────────
-  const legselFromUrl  = legselIdParam ? legsels.find(l => l.id === legselIdParam) : null;
-  const seizoenFromUrl = legselFromUrl ? seizoenen.find(s => s.id === legselFromUrl.nest_seizoen_id) : null;
-  const nestFromUrl    = seizoenFromUrl ? nesten.find(n => n.id === seizoenFromUrl.nest_id) : null;
+  const legselFromUrl = legselIdParam ? legsels.find(l => l.id === legselIdParam) : null;
+  const nestFromUrl   = legselFromUrl ? nesten.find(n => n.id === legselFromUrl.nest_id) : null;
 
   // Pre-vul nest en legsel als legselId bekend is via URL
   useEffect(() => {
@@ -112,18 +111,13 @@ export default function NieuwBezoekPage() {
     }).slice(0, 15);
   }, [nestZoek, nesten, speciesByEuring, lang, legselIdParam]);
 
-  // ── Huidig seizoen + legsels ──────────────────────────────────────────────
-  const huidigSeizoen = useMemo(() => {
-    if (!geselecteerdNest) return null;
-    return seizoenen.find(s => s.nest_id === geselecteerdNest.id && s.jaar === HUIDIG_JAAR) || null;
-  }, [geselecteerdNest, seizoenen]);
-
+  // ── Legsels voor huidig jaar ──────────────────────────────────────────────
   const seizoenLegsels = useMemo(() => {
-    if (!huidigSeizoen) return [];
+    if (!geselecteerdNest) return [];
     return legsels
-      .filter(l => l.nest_seizoen_id === huidigSeizoen.id)
+      .filter(l => l.nest_id === geselecteerdNest.id && l.jaar === HUIDIG_JAAR)
       .sort((a, b) => a.volgnummer - b.volgnummer);
-  }, [huidigSeizoen, legsels]);
+  }, [geselecteerdNest, legsels]);
 
   // Auto-selecteer enkel legsel (alleen in het vrije pad)
   useEffect(() => {
@@ -148,8 +142,8 @@ export default function NieuwBezoekPage() {
         .sort((a, b) => b.datum.localeCompare(a.datum))[0]?.soort_euring;
       if (eerdereSoort) { setSoortEuring(eerdereSoort); return; }
     }
-    setSoortEuring(huidigSeizoen?.soort_euring || geselecteerdNest?.soort_euring || '');
-  }, [geselecteerdNestId, actiefLegselId, bezoeken.length, huidigSeizoen?.id]);
+    setSoortEuring(seizoenLegsels[0]?.soort_euring || geselecteerdNest?.soort_euring || '');
+  }, [geselecteerdNestId, actiefLegselId, bezoeken.length, seizoenLegsels]);
 
   const soort = useMemo(
     () => (soortEuring ? speciesByEuring[soortEuring] || null : null),
@@ -193,18 +187,13 @@ export default function NieuwBezoekPage() {
         // Legsel was al bekend via de URL
         doelLegselId = legselIdParam;
       } else {
-        // Seizoen zoeken of aanmaken
-        let seizoenId = huidigSeizoen?.id;
-        if (!seizoenId) {
-          seizoenId = await addNestSeizoen({ nest_id: geselecteerdNestId, jaar: HUIDIG_JAAR });
-        }
         // Legsel zoeken of aanmaken
         doelLegselId = (geselecteerdLegsel && geselecteerdLegsel !== 'nieuw') ? geselecteerdLegsel : null;
         if (!doelLegselId) {
-          const bestaande = legsels.filter(l => l.nest_seizoen_id === seizoenId);
+          const bestaande = legsels.filter(l => l.nest_id === geselecteerdNestId && l.jaar === HUIDIG_JAAR);
           const volgnummer = bestaande.length > 0 ? Math.max(...bestaande.map(l => l.volgnummer)) + 1 : 1;
           const link_type  = bestaande.length > 0 ? 1 : 0;
-          doelLegselId = await addLegsel({ nest_seizoen_id: seizoenId, volgnummer, link_type });
+          doelLegselId = await addLegsel({ nest_id: geselecteerdNestId, jaar: HUIDIG_JAAR, volgnummer, link_type });
         }
       }
 
@@ -244,7 +233,7 @@ export default function NieuwBezoekPage() {
   }
 
   // ── Nestsoort-afwijking check ─────────────────────────────────────────────
-  const nestStandaardEuring = huidigSeizoen?.soort_euring || geselecteerdNest?.soort_euring;
+  const nestStandaardEuring = seizoenLegsels[0]?.soort_euring || geselecteerdNest?.soort_euring;
   const soortWijktAf = nestStandaardEuring && soortEuring && soortEuring !== nestStandaardEuring;
 
   return (

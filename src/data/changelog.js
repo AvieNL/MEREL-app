@@ -1,6 +1,34 @@
-export const VERSIE = '1.28.0';
+export const VERSIE = '1.29.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Refactor: nest_seizoen tussenlaag verwijderd — legsel heeft nu direct nest_id en jaar',
+      'Refactor: nestdetailpagina toont platte legsellijst gesorteerd op meest recente bezoek',
+      'Fix: soortnaam legsel afgeleid van bezoeken → legsel → nest (correcte prioriteit)',
+      'Fix: bezoekdatum in nestoverzicht weergegeven als dd-mm-yyyy',
+      'Fix: uniforme terugknop op alle nestpagina\'s (btn-secondary page-back)',
+      'Fix: uniforme wijzig/verwijder icoongnoppen op alle pagina\'s (icon-edit-btn / icon-delete-btn)',
+    ],
+    wijzigingen_en: [
+      'Refactor: nest_seizoen intermediate layer removed — legsel now directly has nest_id and jaar',
+      'Refactor: nest detail page shows flat clutch list sorted by most recent visit',
+      'Fix: species name on clutch derived from visits → clutch → nest (correct priority)',
+      'Fix: visit date in nest overview displayed as dd-mm-yyyy',
+      'Fix: uniform back button on all nest pages (btn-secondary page-back)',
+      'Fix: uniform edit/delete icon buttons on all pages (icon-edit-btn / icon-delete-btn)',
+    ],
+    wijzigingen_de: [
+      'Refactor: nest_seizoen-Zwischenschicht entfernt — Legsel hat jetzt direkt nest_id und jaar',
+      'Refactor: Nest-Detailseite zeigt flache Gelegeliste sortiert nach jüngstem Besuch',
+      'Fix: Artname des Geleges aus Besuchen → Gelege → Nest abgeleitet (korrekte Priorität)',
+      'Fix: Besuchsdatum in der Nestübersicht als dd-mm-yyyy angezeigt',
+      'Fix: Einheitliche Zurück-Schaltfläche auf allen Nestseiten',
+      'Fix: Einheitliche Bearbeiten/Löschen-Icon-Schaltflächen auf allen Seiten',
+    ],
+  },
   {
     versie: '1.28.0',
     datum: '2026-03-22',

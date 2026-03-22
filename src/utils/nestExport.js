@@ -2,23 +2,17 @@ import { downloadFile } from './export';
 
 /**
  * Bouw een genesteld data-object op voor export.
- * nesten → seizoenen → legsels → bezoeken (+ ringen per bezoek)
+ * nesten → legsels → bezoeken (+ ringen per bezoek)
  */
-export function buildNestExportData({ nesten, seizoenen, legsels, bezoeken, ringen, jaar, speciesByEuring }) {
+export function buildNestExportData({ nesten, legsels, bezoeken, ringen, jaar, speciesByEuring }) {
   const jaarInt = parseInt(jaar, 10);
 
   return nesten.map(nest => {
-    const nestSeizoen = seizoenen.find(s => s.nest_id === nest.id && s.jaar === jaarInt);
-    if (!nestSeizoen) return null;
-
-    const soort = nestSeizoen.soort_euring
-      ? (speciesByEuring[nestSeizoen.soort_euring] || null)
-      : null;
-
     const nestLegsels = legsels
-      .filter(l => l.nest_seizoen_id === nestSeizoen.id)
+      .filter(l => l.nest_id === nest.id && l.jaar === jaarInt)
       .sort((a, b) => a.volgnummer - b.volgnummer)
       .map(legsel => {
+        const soort = legsel.soort_euring ? (speciesByEuring[legsel.soort_euring] || null) : null;
         const legselBezoeken = bezoeken
           .filter(b => b.legsel_id === legsel.id)
           .sort((a, b) => a.datum.localeCompare(b.datum))
@@ -26,18 +20,12 @@ export function buildNestExportData({ nesten, seizoenen, legsels, bezoeken, ring
             const bezoekRingen = ringen.filter(r => r.nestbezoek_id === bezoek.id);
             return { ...bezoek, ringen: bezoekRingen };
           });
-        return { ...legsel, bezoeken: legselBezoeken };
+        return { ...legsel, soort_naam: soort?.naam_nl || null, bezoeken: legselBezoeken };
       });
 
-    return {
-      ...nest,
-      seizoen: {
-        ...nestSeizoen,
-        soort_naam: soort?.naam_nl || null,
-        soort_latijn: soort?.naam_latijn || null,
-        legsels: nestLegsels,
-      },
-    };
+    if (nestLegsels.length === 0) return null;
+
+    return { ...nest, legsels: nestLegsels };
   }).filter(Boolean);
 }
 
@@ -72,18 +60,17 @@ export function exportNestCSV(data, jaar) {
   const rows = [];
 
   for (const nest of data) {
-    const s = nest.seizoen;
-    for (const legsel of s.legsels) {
+    for (const legsel of nest.legsels) {
       for (const bezoek of legsel.bezoeken) {
         rows.push([
           nest.kastnummer,
           nest.omschrijving || '',
           nest.lat || '',
           nest.lon || '',
-          s.soort_naam || s.soort_euring || '',
-          s.habitat ?? '',
-          s.nestplaats ?? '',
-          s.nesttype ?? '',
+          legsel.soort_naam || legsel.soort_euring || '',
+          nest.habitat ?? '',
+          nest.nestplaats ?? '',
+          nest.nesttype ?? '',
           legsel.volgnummer,
           legsel.link_type ?? '',
           legsel.nestsucces ?? '',

@@ -5,40 +5,40 @@ import { useNestData } from '../../hooks/useNestData';
 import { LINK_TYPE_CODES } from '../../data/sovon-codes';
 import './NieuwNestPage.css';
 
+const HUIDIG_JAAR = new Date().getFullYear();
+
 export default function NieuwLegselPage() {
-  const { seizoenId } = useParams();
+  const { nestId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { seizoenen, legsels, nesten, addLegsel } = useNestData();
+  const { legsels, nesten, addLegsel } = useNestData();
   const [linkType, setLinkType] = useState(1); // standaard: vervolglegsel
   const [saving, setSaving] = useState(false);
 
-  const seizoen = seizoenen.find(s => s.id === seizoenId);
-  const nest = seizoen ? nesten.find(n => n.id === seizoen.nest_id) : null;
+  const nest = nesten.find(n => n.id === nestId);
 
-  // Hoogste bestaande volgnummer voor dit seizoen
+  // Hoogste bestaande volgnummer voor dit nest + huidig jaar
   const volgendVolgnummer = useMemo(() => {
-    const bestaande = legsels.filter(l => l.nest_seizoen_id === seizoenId);
+    const bestaande = legsels.filter(l => l.nest_id === nestId && l.jaar === HUIDIG_JAAR);
     return bestaande.length > 0
       ? Math.max(...bestaande.map(l => l.volgnummer)) + 1
       : 1;
-  }, [legsels, seizoenId]);
+  }, [legsels, nestId]);
 
   async function handleSave() {
     setSaving(true);
     try {
       await addLegsel({
-        nest_seizoen_id: seizoenId,
+        nest_id: nestId,
+        jaar: HUIDIG_JAAR,
         volgnummer: volgendVolgnummer,
         link_type: linkType,
       });
-      navigate(`/nest/${nest?.id || ''}`);
+      navigate(`/nest/${nestId}`);
     } finally {
       setSaving(false);
     }
   }
-
-  const nestId = nest?.id;
 
   return (
     <div className="page nieuw-nest-page">

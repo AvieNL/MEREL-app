@@ -7,7 +7,7 @@ const HUIDIG_JAAR = new Date().getFullYear();
 
 export default function NestStatsPage() {
   const { t } = useTranslation();
-  const { nesten, seizoenen, legsels, bezoeken } = useNestData();
+  const { nesten, legsels, bezoeken } = useNestData();
   const species = useSpeciesRef();
 
   const speciesByEuring = useMemo(() => {
@@ -17,36 +17,30 @@ export default function NestStatsPage() {
   }, [species]);
 
   const beschikbareJaren = useMemo(() => {
-    const jaren = new Set(seizoenen.map(s => String(s.jaar)));
+    const jaren = new Set(legsels.map(l => l.jaar).filter(Boolean).map(String));
     jaren.add(String(HUIDIG_JAAR));
     return [...jaren].sort((a, b) => b - a);
-  }, [seizoenen]);
+  }, [legsels]);
 
   const [seizoenFilter, setSeizoenFilter] = useState(String(HUIDIG_JAAR));
 
   const stats = useMemo(() => {
     const jaar = parseInt(seizoenFilter, 10);
-    const seizoenenInJaar = seizoenen.filter(s => s.jaar === jaar);
-    const seizoenIds = new Set(seizoenenInJaar.map(s => s.id));
-    const legselsInJaar = legsels.filter(l => seizoenIds.has(l.nest_seizoen_id));
+    const legselsInJaar = legsels.filter(l => l.jaar === jaar);
     const legselIds = new Set(legselsInJaar.map(l => l.id));
     const bezoeken_jaar = bezoeken.filter(b => legselIds.has(b.legsel_id));
 
-    // Nesten met bezoek dit seizoen
-    const nestenMetSeizoen = new Set(seizoenenInJaar.map(s => s.nest_id));
+    // Nesten met legsel dit jaar
+    const nestenMetLegsel = new Set(legselsInJaar.map(l => l.nest_id));
     const nestenMetBezoek = new Set(
-      bezoeken_jaar.map(b => {
-        const legsel = legsels.find(l => l.id === b.legsel_id);
-        const seizoen = legsel ? seizoenen.find(s => s.id === legsel.nest_seizoen_id) : null;
-        return seizoen?.nest_id;
-      }).filter(Boolean)
+      bezoeken_jaar.map(b => legsels.find(l => l.id === b.legsel_id)?.nest_id).filter(Boolean)
     );
 
     // Soorten verdeling
     const soortTelling = {};
-    seizoenenInJaar.forEach(s => {
-      if (!s.soort_euring) return;
-      soortTelling[s.soort_euring] = (soortTelling[s.soort_euring] || 0) + 1;
+    legselsInJaar.forEach(l => {
+      if (!l.soort_euring) return;
+      soortTelling[l.soort_euring] = (soortTelling[l.soort_euring] || 0) + 1;
     });
 
     // Stadium verdeling (laatste bezoek per legsel)
@@ -70,7 +64,7 @@ export default function NestStatsPage() {
 
     return {
       aantalNesten: nesten.length,
-      nestenMetSeizoen: nestenMetSeizoen.size,
+      nestenMetSeizoen: nestenMetLegsel.size,
       nestenMetBezoek: nestenMetBezoek.size,
       aantalLegsels: legselsInJaar.length,
       aantalBezoeken: bezoeken_jaar.length,
@@ -78,14 +72,13 @@ export default function NestStatsPage() {
       stadiumTelling,
       maandTelling,
     };
-  }, [seizoenFilter, seizoenen, legsels, bezoeken, nesten]);
+  }, [seizoenFilter, legsels, bezoeken, nesten]);
 
   const stadiumVolgorde = ['B1','B2','B3','E1','E2','E3','E4','N1','N2','N3','N4','C','P','L1','L2'];
 
   return (
     <div className="page">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <h2 style={{ margin: 0 }}>{t('nest_stats_title')}</h2>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
         <select
           className="nest-seizoen-select"
           value={seizoenFilter}

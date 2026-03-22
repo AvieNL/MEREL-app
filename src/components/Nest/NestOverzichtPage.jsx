@@ -50,7 +50,7 @@ export default function NestOverzichtPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd } = useNestRole();
-  const { nesten, seizoenen, legsels, bezoeken } = useNestData();
+  const { nesten, legsels, bezoeken } = useNestData();
   const species = useSpeciesRef();
   const speciesByEuring = useMemo(() => {
     const map = {};
@@ -62,37 +62,33 @@ export default function NestOverzichtPage() {
 
   // Planningsitems per nest (meest urgent item per nest)
   const planningPerNest = useMemo(() => {
-    const items = berekenPlanningItems({ nesten, seizoenen, legsels, bezoeken, speciesByEuring, jaar: HUIDIG_JAAR });
+    const items = berekenPlanningItems({ nesten, legsels, bezoeken, speciesByEuring, jaar: HUIDIG_JAAR });
     const map = {};
     for (const item of items) {
       if (!map[item.nestId]) map[item.nestId] = item; // eerste = urgentst
     }
     return map;
-  }, [nesten, seizoenen, legsels, bezoeken, speciesByEuring]);
+  }, [nesten, legsels, bezoeken, speciesByEuring]);
 
-  // Verrijkte nestenlijst: voeg seizoen + laatste bezoek toe (altijd huidig jaar)
+  // Verrijkte nestenlijst: voeg laatste bezoek toe (altijd huidig jaar)
   const verrijkteNesten = useMemo(() => {
     const jaar = HUIDIG_JAAR;
     return nesten.map(nest => {
-      const seizoen = seizoenen.find(s => s.nest_id === nest.id && s.jaar === jaar);
-      const legselsInSeizoen = seizoen
-        ? legsels.filter(l => l.nest_seizoen_id === seizoen.id)
-        : [];
+      const legselsInSeizoen = legsels.filter(l => l.nest_id === nest.id && l.jaar === jaar);
       const alleBezoeken = legselsInSeizoen.flatMap(l =>
         bezoeken.filter(b => b.legsel_id === l.id)
       );
       const sortedBezoeken = [...alleBezoeken].sort((a, b) => b.datum.localeCompare(a.datum));
       const laatsteBezoek = sortedBezoeken[0] || null;
 
-      let vogelNaam = '';
-      if (seizoen?.soort_euring) {
-        const soort = speciesByEuring[seizoen.soort_euring];
-        vogelNaam = soort?.naam_nl || seizoen.soort_euring;
-      }
+      const soortEuring = sortedBezoeken.find(b => b.soort_euring)?.soort_euring
+        || legselsInSeizoen.find(l => l.soort_euring)?.soort_euring
+        || nest.soort_euring;
+      const vogelNaam = soortEuring ? (speciesByEuring[soortEuring]?.naam_nl || soortEuring) : '';
 
-      return { ...nest, seizoen, legselsInSeizoen, laatsteBezoek, vogelNaam, aantalBezoeken: alleBezoeken.length, planning: planningPerNest[nest.id] || null };
+      return { ...nest, legselsInSeizoen, laatsteBezoek, vogelNaam, aantalBezoeken: alleBezoeken.length, planning: planningPerNest[nest.id] || null };
     });
-  }, [nesten, seizoenen, legsels, bezoeken, speciesByEuring, planningPerNest]);
+  }, [nesten, legsels, bezoeken, speciesByEuring, planningPerNest]);
 
   const gefilterdeNesten = useMemo(() => {
     const q = zoekterm.trim().toLowerCase();

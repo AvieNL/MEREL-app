@@ -20,7 +20,7 @@ const TYPE_LABEL = {
 export default function NestPlanningPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { nesten, seizoenen, legsels, bezoeken } = useNestData();
+  const { nesten, legsels, bezoeken } = useNestData();
   const species = useSpeciesRef();
 
   const speciesByEuring = useMemo(() => {
@@ -30,8 +30,8 @@ export default function NestPlanningPage() {
   }, [species]);
 
   const items = useMemo(() => berekenPlanningItems({
-    nesten, seizoenen, legsels, bezoeken, speciesByEuring, jaar: HUIDIG_JAAR,
-  }), [nesten, seizoenen, legsels, bezoeken, speciesByEuring]);
+    nesten, legsels, bezoeken, speciesByEuring, jaar: HUIDIG_JAAR,
+  }), [nesten, legsels, bezoeken, speciesByEuring]);
 
   const verlopen   = items.filter(i => i.urgentie === 'verlopen');
   const dringend   = items.filter(i => i.urgentie === 'dringend');

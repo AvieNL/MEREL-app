@@ -62,3 +62,9 @@ db.version(8).stores({
 db.version(9).stores({
   nest: 'id, aangemaakt_door, kastnummer',
 });
+
+// Versie 10: nest_seizoen tussenlaag verwijderd; legsel heeft nu nest_id + jaar direct
+db.version(10).stores({
+  nest_seizoen: null,
+  legsel: 'id, nest_id, [nest_id+jaar]',
+});

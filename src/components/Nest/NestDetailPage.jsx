@@ -11,8 +11,6 @@ import './NestDetailPage.css';
 
 const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
 
-const HUIDIG_JAAR = new Date().getFullYear();
-
 function stadiumLabel(code) {
   return STADIUM_CODES.find(s => s.code === code)?.nl || code;
 }
@@ -22,7 +20,7 @@ export default function NestDetailPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
-  const { nesten, seizoenen, legsels, bezoeken, ringen, deleteNest } = useNestData();
+  const { nesten, legsels, bezoeken, ringen, deleteNest } = useNestData();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
   const species = useSpeciesRef();
   const switchModule = useModuleSwitch();
@@ -35,33 +33,15 @@ export default function NestDetailPage() {
 
   const nest = nesten.find(n => n.id === id);
 
-  const nestSeizoenen = useMemo(
-    () => seizoenen.filter(s => s.nest_id === id),
-    [seizoenen, id],
-  );
-
-  const seizoenById = useMemo(() => {
-    const map = {};
-    nestSeizoenen.forEach(s => { map[s.id] = s; });
-    return map;
-  }, [nestSeizoenen]);
-
   // Platte lijst van legsels, gesorteerd op datum van meest recente bezoek (nieuwste eerst)
   const gesorteerdeLegsels = useMemo(() => {
-    const nestLegselIds = new Set(nestSeizoenen.map(s => s.id));
-    const nestLegsels = legsels.filter(l => nestLegselIds.has(l.nest_seizoen_id));
+    const nestLegsels = legsels.filter(l => l.nest_id === id);
     return [...nestLegsels].sort((a, b) => {
       const latestA = bezoeken.filter(bz => bz.legsel_id === a.id).map(bz => bz.datum).sort().at(-1) || '';
       const latestB = bezoeken.filter(bz => bz.legsel_id === b.id).map(bz => bz.datum).sort().at(-1) || '';
       return latestB.localeCompare(latestA);
     });
-  }, [nestSeizoenen, legsels, bezoeken]);
-
-  // Huidig seizoen (voor "+ Nieuw legsel" knop)
-  const huidigSeizoen = useMemo(
-    () => nestSeizoenen.find(s => s.jaar === HUIDIG_JAAR) || null,
-    [nestSeizoenen],
-  );
+  }, [id, legsels, bezoeken]);
 
   if (!nest) {
     return (
@@ -126,10 +106,9 @@ export default function NestDetailPage() {
             key={legsel.id}
             legsel={legsel}
             nest={nest}
-            seizoen={seizoenById[legsel.nest_seizoen_id]}
             bezoeken={bezoeken}
             ringen={ringen}
-            soort={speciesByEuring[seizoenById[legsel.nest_seizoen_id]?.soort_euring] || null}
+            soort={speciesByEuring[legsel.soort_euring] || null}
             speciesByEuring={speciesByEuring}
             canNestAdd={canNestAdd}
             navigate={navigate}
@@ -139,10 +118,10 @@ export default function NestDetailPage() {
         ))
       )}
 
-      {canNestAdd && huidigSeizoen && (
+      {canNestAdd && (
         <button
           className="btn-secondary nest-add-legsel-btn"
-          onClick={() => navigate(`/nest/seizoen/${huidigSeizoen.id}/legsel/nieuw`)}
+          onClick={() => navigate(`/nest/${id}/legsel/nieuw`)}
         >
           + {t('nest_btn_add_legsel')}
         </button>
@@ -152,7 +131,7 @@ export default function NestDetailPage() {
 }
 
 
-function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, speciesByEuring, canNestAdd, navigate, switchModule, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, navigate, switchModule, t }) {
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
@@ -171,10 +150,10 @@ function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, speciesByE
     if (switchModule) switchModule('ring');
   }
 
-  // Soort: meest recente bezoek met soort_euring → seizoen → nest
+  // Soort: meest recente bezoek met soort_euring → legsel → nest
   const soortEuring =
     [...legselBezoeken].reverse().find(b => b.soort_euring)?.soort_euring ||
-    seizoen?.soort_euring ||
+    legsel?.soort_euring ||
     nest?.soort_euring || '';
   const effectieveSoort = speciesByEuring[soortEuring] || soort || null;
   const vogelNaam = effectieveSoort?.naam_nl || soortEuring || '';
@@ -183,7 +162,7 @@ function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, speciesByE
     <div className="legsel-blok">
       <div className="legsel-blok__header">
         <span className="legsel-blok__nr">{t('nest_legsel_nr', { nr: legsel.volgnummer })}</span>
-        {seizoen?.jaar && <span className="legsel-blok__jaar">{seizoen.jaar}</span>}
+        {legsel.jaar && <span className="legsel-blok__jaar">{legsel.jaar}</span>}
         {vogelNaam && <span className="legsel-blok__soort">{vogelNaam}</span>}
         {legsel.nestsucces != null && (
           <span className="legsel-blok__succes">
@@ -207,7 +186,7 @@ function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, speciesByE
                     {stadiumLabel(bezoek.stadium)}
                     {bezoek.stadium2 && <> + {stadiumLabel(bezoek.stadium2)}</>}
                   </span>
-                  {bezoek.soort_euring && bezoek.soort_euring !== seizoen.soort_euring && (
+                  {bezoek.soort_euring && bezoek.soort_euring !== legsel.soort_euring && (
                     <span className="bezoek-item__soort-afwijking">
                       {speciesByEuring[bezoek.soort_euring]?.naam_nl || bezoek.soort_euring}
                     </span>

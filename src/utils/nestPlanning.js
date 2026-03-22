@@ -6,15 +6,12 @@
  *
  * @returns Array van planningsitems, gesorteerd op datum (urgentst eerst).
  */
-export function berekenPlanningItems({ nesten, seizoenen, legsels, bezoeken, speciesByEuring, jaar }) {
+export function berekenPlanningItems({ nesten, legsels, bezoeken, speciesByEuring, jaar }) {
   const vandaag = new Date().toISOString().slice(0, 10);
   const items = [];
 
   for (const nest of nesten) {
-    const seizoen = seizoenen.find(s => s.nest_id === nest.id && s.jaar === jaar);
-    if (!seizoen) continue;
-
-    const nestLegsels = legsels.filter(l => l.nest_seizoen_id === seizoen.id);
+    const nestLegsels = legsels.filter(l => l.nest_id === nest.id && l.jaar === jaar);
 
     for (const legsel of nestLegsels) {
       const legselBezoeken = bezoeken
@@ -29,8 +26,8 @@ export function berekenPlanningItems({ nesten, seizoenen, legsels, bezoeken, spe
         (new Date(suggestieDatum + 'T12:00:00') - new Date(vandaag + 'T12:00:00')) / 86400000
       );
 
-      // Soort: bezoek-soort heeft prioriteit, dan seizoen
-      const soortEuring = laatste.soort_euring || seizoen.soort_euring;
+      // Soort: bezoek-soort heeft prioriteit, dan legsel
+      const soortEuring = laatste.soort_euring || legsel.soort_euring;
       const soort = soortEuring ? speciesByEuring[soortEuring] : null;
 
       items.push({

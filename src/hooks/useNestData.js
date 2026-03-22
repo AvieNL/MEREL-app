@@ -13,7 +13,6 @@ export function useNestData() {
   const { addToQueue } = useSync();
 
   const nesten    = useLiveQuery(() => db.nest.orderBy('kastnummer').toArray(), [], []);
-  const seizoenen = useLiveQuery(() => db.nest_seizoen.toArray(), [], []);
   const legsels   = useLiveQuery(() => db.legsel.toArray(), [], []);
   const bezoeken  = useLiveQuery(() => db.nestbezoek.orderBy('datum').toArray(), [], []);
   const ringen    = useLiveQuery(() => db.nestring.toArray(), [], []);
@@ -42,29 +41,6 @@ export function useNestData() {
     const record = { ...existing, ...updates, updated_at: new Date().toISOString() };
     await db.nest.put(record);
     await addToQueue('nest', 'upsert', record);
-  }, [addToQueue]);
-
-  const addNestSeizoen = useCallback(async (seizoenData) => {
-    if (!user) return null;
-    const id = crypto.randomUUID();
-    const now = new Date().toISOString();
-    const record = {
-      ...seizoenData,
-      id,
-      aangemaakt_door: user.id,
-      updated_at: now,
-    };
-    await db.nest_seizoen.put(record);
-    await addToQueue('nest_seizoen', 'upsert', record);
-    return id;
-  }, [user, addToQueue]);
-
-  const updateNestSeizoen = useCallback(async (id, updates) => {
-    const existing = await db.nest_seizoen.get(id);
-    if (!existing) return;
-    const record = { ...existing, ...updates, updated_at: new Date().toISOString() };
-    await db.nest_seizoen.put(record);
-    await addToQueue('nest_seizoen', 'upsert', record);
   }, [addToQueue]);
 
   const addLegsel = useCallback(async (legselData) => {
@@ -135,14 +111,11 @@ export function useNestData() {
 
   return {
     nesten,
-    seizoenen,
     legsels,
     bezoeken,
     ringen,
     addNest,
     updateNest,
-    addNestSeizoen,
-    updateNestSeizoen,
     addLegsel,
     updateLegsel,
     addBezoek,
