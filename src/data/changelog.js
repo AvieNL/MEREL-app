@@ -1,6 +1,22 @@
-export const VERSIE = '1.31.3';
+export const VERSIE = '1.31.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.4',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: gekleurde status-pill (Eieren/Nestjongen/etc.) in legsel-header op nestdetailpagina',
+      'Refactor: BROEDSTATUS en getBroedStatus naar gedeelde utility nestPlanning.js',
+    ],
+    wijzigingen_en: [
+      'Feat: colored status pill (Eggs/Nestlings/etc.) in clutch header on nest detail page',
+      'Refactor: BROEDSTATUS and getBroedStatus moved to shared utility nestPlanning.js',
+    ],
+    wijzigingen_de: [
+      'Feat: farbige Status-Pille (Eier/Nestjunge/etc.) in Gelege-Header auf Nestdetailseite',
+      'Refactor: BROEDSTATUS und getBroedStatus in gemeinsame Utility nestPlanning.js verschoben',
+    ],
+  },
   {
     versie: '1.31.3',
     datum: '2026-03-22',

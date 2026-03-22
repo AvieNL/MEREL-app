@@ -6,7 +6,7 @@ import { useNestRole } from '../../hooks/useNestRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import 'leaflet/dist/leaflet.css';
 import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
-import { berekenPlanningItems, URGENTIE_KLEUR, formatDatum } from '../../utils/nestPlanning';
+import { berekenPlanningItems, URGENTIE_KLEUR, BROEDSTATUS, getBroedStatus, formatDatum } from '../../utils/nestPlanning';
 import './NestOverzichtPage.css';
 
 const HUIDIG_JAAR = new Date().getFullYear();
@@ -22,29 +22,6 @@ async function getLeaflet() {
   return L.default;
 }
 
-const BROEDSTATUS = {
-  leeg:       { kleur: '#64748b', labelKey: 'nest_status_leeg' },
-  bouw:       { kleur: '#f59e0b', labelKey: 'nest_status_bouw' },
-  eieren:     { kleur: '#a78bfa', labelKey: 'nest_status_eieren' },
-  nestjongen: { kleur: '#38bdf8', labelKey: 'nest_status_nestjongen' },
-  succesvol:  { kleur: '#22c55e', labelKey: 'nest_status_succesvol' },
-  mislukt:    { kleur: '#ef4444', labelKey: 'nest_status_mislukt' },
-};
-
-function getBroedStatus(stadium) {
-  if (!stadium) return 'leeg';
-  if (stadium.startsWith('L')) return 'leeg';
-  if (stadium.startsWith('B')) return 'bouw';
-  if (stadium.startsWith('E')) return 'eieren';
-  if (stadium === 'P1') return 'eieren';
-  if (stadium === 'P2' || stadium === 'P3') return 'nestjongen';
-  if (stadium.startsWith('P')) return 'eieren';
-  if (stadium.startsWith('N')) return 'nestjongen';
-  if (stadium === 'C1' || stadium === 'C4') return 'succesvol';
-  if (stadium === 'C2' || stadium === 'C3') return 'mislukt';
-  if (stadium === 'C5') return 'nestjongen';
-  return 'leeg';
-}
 
 export default function NestOverzichtPage() {
   const { t } = useTranslation();

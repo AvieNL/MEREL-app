@@ -6,7 +6,7 @@ import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useNestRole } from '../../hooks/useNestRole';
 import { useRecords } from '../../hooks/useRecords';
 import { HABITAT_CODES, NESTPLAATS_CODES, STADIUM_CODES } from '../../data/sovon-codes';
-import { formatDatum, URGENTIE_KLEUR } from '../../utils/nestPlanning';
+import { formatDatum, URGENTIE_KLEUR, BROEDSTATUS, getBroedStatus } from '../../utils/nestPlanning';
 import './NestDetailPage.css';
 
 function stadiumLabel(code, t) {
@@ -151,12 +151,20 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
   const effectieveSoort = speciesByEuring[soortEuring] || soort || null;
   const vogelNaam = effectieveSoort?.naam_nl || soortEuring || '';
 
+  // Status op basis van meest recente bezoek
+  const laatsteStadium = [...legselBezoeken].at(-1)?.stadium || null;
+  const status = getBroedStatus(laatsteStadium);
+  const { kleur: statusKleur, labelKey: statusLabelKey } = BROEDSTATUS[status];
+
   return (
     <div className="legsel-blok">
       <div className="legsel-blok__header">
         <span className="legsel-blok__nr">{t('nest_legsel_nr', { nr: legsel.volgnummer })}</span>
         {legsel.jaar && <span className="legsel-blok__jaar">{legsel.jaar}</span>}
         {vogelNaam && <span className="legsel-blok__soort">{vogelNaam}</span>}
+        <span className="legsel-blok__status" style={{ '--status-kleur': statusKleur }}>
+          {t(statusLabelKey)}
+        </span>
         {legsel.nestsucces != null && (
           <span className="legsel-blok__succes">
             {legsel.nestsucces === -1 ? t('nest_succes_unknown') : t('nest_succes_count', { count: legsel.nestsucces })}

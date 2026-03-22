@@ -47,6 +47,31 @@ export function berekenPlanningItems({ nesten, legsels, bezoeken, speciesByEurin
   return items.sort((a, b) => a.datum.localeCompare(b.datum));
 }
 
+/** Broedstatus per stadium-code */
+export const BROEDSTATUS = {
+  leeg:       { kleur: '#64748b', labelKey: 'nest_status_leeg' },
+  bouw:       { kleur: '#f59e0b', labelKey: 'nest_status_bouw' },
+  eieren:     { kleur: '#a78bfa', labelKey: 'nest_status_eieren' },
+  nestjongen: { kleur: '#38bdf8', labelKey: 'nest_status_nestjongen' },
+  succesvol:  { kleur: '#22c55e', labelKey: 'nest_status_succesvol' },
+  mislukt:    { kleur: '#ef4444', labelKey: 'nest_status_mislukt' },
+};
+
+export function getBroedStatus(stadium) {
+  if (!stadium) return 'leeg';
+  if (stadium.startsWith('L')) return 'leeg';
+  if (stadium.startsWith('B')) return 'bouw';
+  if (stadium.startsWith('E')) return 'eieren';
+  if (stadium === 'P1') return 'eieren';
+  if (stadium === 'P2' || stadium === 'P3') return 'nestjongen';
+  if (stadium.startsWith('P')) return 'eieren';
+  if (stadium.startsWith('N')) return 'nestjongen';
+  if (stadium === 'C1' || stadium === 'C4') return 'succesvol';
+  if (stadium === 'C2' || stadium === 'C3') return 'mislukt';
+  if (stadium === 'C5') return 'nestjongen';
+  return 'leeg';
+}
+
 /** Kleur per urgentie */
 export const URGENTIE_KLEUR = {
   verlopen:   '#ef4444',

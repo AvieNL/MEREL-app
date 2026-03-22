@@ -132,6 +132,17 @@
   font-style: italic;
 }
 
+.legsel-blok__status {
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--status-kleur);
+  background: color-mix(in srgb, var(--status-kleur) 15%, transparent);
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
 .legsel-blok__succes {
   font-size: 0.8rem;
   color: var(--success);
