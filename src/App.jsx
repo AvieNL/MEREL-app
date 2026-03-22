@@ -197,6 +197,9 @@ function NestApp({ onSwitchModule, activeModule }) {
             <Route path="/nest/:id" element={<NestDetailPage />} />
             <Route path="/nest/legsel/:legselId/bezoek/nieuw" element={<NieuwBezoekPage />} />
             <Route path="/nest/seizoen/:seizoenId/legsel/nieuw" element={<NieuwLegselPage />} />
+            <Route path="/instellingen" element={<InstellingenPage />} />
+            <Route path="/over" element={<OverPage />} />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<NestOverzichtPage />} />
           </Routes>
         </Suspense>
