@@ -1,6 +1,28 @@
-export const VERSIE = '1.15.5';
+export const VERSIE = '1.15.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.15.6',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: rol "Geen ringmodule" toegevoegd voor gebruikers die alleen nestonderzoek doen',
+      'Feat: ring-simulatie uitgebreid met Ringer+ en Geen ringmodule',
+      'Feat: nest-simulatie uitgebreid met Admin',
+      'Fix: simulatie-pills minder hoog en beter leesbaar',
+    ],
+    wijzigingen_en: [
+      'Feat: role "No ring module" added for users who only do nest research',
+      'Feat: ring simulation extended with Ringer+ and No ring module',
+      'Feat: nest simulation extended with Admin',
+      'Fix: simulation pills less tall and more readable',
+    ],
+    wijzigingen_de: [
+      'Feat: Rolle "Kein Ringmodul" für Benutzer hinzugefügt, die nur Nestforschung betreiben',
+      'Feat: Ringsimulation um Beringer+ und Kein Ringmodul erweitert',
+      'Feat: Nestsimulation um Admin erweitert',
+      'Fix: Simulations-Pills weniger hoch und besser lesbar',
+    ],
+  },
   {
     versie: '1.15.5',
     datum: '2026-03-22',
