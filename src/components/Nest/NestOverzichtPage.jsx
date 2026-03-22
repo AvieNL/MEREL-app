@@ -6,6 +6,7 @@ import { useNestRole } from '../../hooks/useNestRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import 'leaflet/dist/leaflet.css';
 import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
+import { berekenPlanningItems, URGENTIE_KLEUR, formatDatum } from '../../utils/nestPlanning';
 import './NestOverzichtPage.css';
 
 const HUIDIG_JAAR = new Date().getFullYear();
@@ -21,15 +22,28 @@ async function getLeaflet() {
   return L.default;
 }
 
-function stadiumKleur(stadium) {
-  if (!stadium) return '#64748b';
-  if (stadium.startsWith('L')) return '#64748b';
-  if (stadium.startsWith('B')) return '#f59e0b';
-  if (stadium.startsWith('E')) return '#a78bfa';
-  if (stadium.startsWith('N')) return '#38bdf8';
-  if (stadium.startsWith('C')) return '#22c55e';
-  if (stadium.startsWith('P')) return '#fb923c';
-  return '#64748b';
+const BROEDSTATUS = {
+  leeg:       { kleur: '#64748b', labelKey: 'nest_status_leeg' },
+  bouw:       { kleur: '#f59e0b', labelKey: 'nest_status_bouw' },
+  eieren:     { kleur: '#a78bfa', labelKey: 'nest_status_eieren' },
+  nestjongen: { kleur: '#38bdf8', labelKey: 'nest_status_nestjongen' },
+  succesvol:  { kleur: '#22c55e', labelKey: 'nest_status_succesvol' },
+  mislukt:    { kleur: '#ef4444', labelKey: 'nest_status_mislukt' },
+};
+
+function getBroedStatus(stadium) {
+  if (!stadium) return 'leeg';
+  if (stadium.startsWith('L')) return 'leeg';
+  if (stadium.startsWith('B')) return 'bouw';
+  if (stadium.startsWith('E')) return 'eieren';
+  if (stadium === 'P1') return 'eieren';
+  if (stadium === 'P2' || stadium === 'P3') return 'nestjongen';
+  if (stadium.startsWith('P')) return 'eieren';
+  if (stadium.startsWith('N')) return 'nestjongen';
+  if (stadium === 'C1' || stadium === 'C4') return 'succesvol';
+  if (stadium === 'C2' || stadium === 'C3') return 'mislukt';
+  if (stadium === 'C5') return 'nestjongen';
+  return 'leeg';
 }
 
 export default function NestOverzichtPage() {
@@ -44,6 +58,17 @@ export default function NestOverzichtPage() {
     return map;
   }, [species]);
   const [tab, setTab] = useState('lijst');
+  const [zoekterm, setZoekterm] = useState('');
+
+  // Planningsitems per nest (meest urgent item per nest)
+  const planningPerNest = useMemo(() => {
+    const items = berekenPlanningItems({ nesten, seizoenen, legsels, bezoeken, speciesByEuring, jaar: HUIDIG_JAAR });
+    const map = {};
+    for (const item of items) {
+      if (!map[item.nestId]) map[item.nestId] = item; // eerste = urgentst
+    }
+    return map;
+  }, [nesten, seizoenen, legsels, bezoeken, speciesByEuring]);
 
   // Verrijkte nestenlijst: voeg seizoen + laatste bezoek toe (altijd huidig jaar)
   const verrijkteNesten = useMemo(() => {
@@ -65,34 +90,52 @@ export default function NestOverzichtPage() {
         vogelNaam = soort?.naam_nl || seizoen.soort_euring;
       }
 
-      return { ...nest, seizoen, legselsInSeizoen, laatsteBezoek, vogelNaam, aantalBezoeken: alleBezoeken.length };
+      return { ...nest, seizoen, legselsInSeizoen, laatsteBezoek, vogelNaam, aantalBezoeken: alleBezoeken.length, planning: planningPerNest[nest.id] || null };
     });
-  }, [nesten, seizoenen, legsels, bezoeken, speciesByEuring]);
+  }, [nesten, seizoenen, legsels, bezoeken, speciesByEuring, planningPerNest]);
+
+  const gefilterdeNesten = useMemo(() => {
+    const q = zoekterm.trim().toLowerCase();
+    if (!q) return verrijkteNesten;
+    return verrijkteNesten.filter(n =>
+      String(n.kastnummer).toLowerCase().includes(q) ||
+      (n.omschrijving && n.omschrijving.toLowerCase().includes(q)) ||
+      (n.vogelNaam && n.vogelNaam.toLowerCase().includes(q)) ||
+      (n.locatie && n.locatie.toLowerCase().includes(q))
+    );
+  }, [verrijkteNesten, zoekterm]);
 
   return (
     <div className="page nest-overzicht-page">
       <div className="nest-overzicht-header">
-        <div className="nest-overzicht-header__top">
-          <h2>{t('nest_overview_title')}</h2>
+        <div className="nest-overzicht-controls">
+          <div className="mode-toggle">
+            <button className={`mode-btn${tab === 'lijst' ? ' active' : ''}`} onClick={() => setTab('lijst')}>
+              {t('nest_tab_list')}
+            </button>
+            <button className={`mode-btn${tab === 'kaart' ? ' active' : ''}`} onClick={() => setTab('kaart')}>
+              {t('nest_tab_map')}
+            </button>
+          </div>
+          {tab === 'lijst' && (
+            <input
+              className="nest-zoek-input"
+              type="search"
+              placeholder={t('nest_search_placeholder')}
+              value={zoekterm}
+              onChange={e => setZoekterm(e.target.value)}
+            />
+          )}
           {canNestAdd && (
             <button className="btn-primary nest-nieuw-btn" onClick={() => navigate('/nest/nieuw')}>
               + {t('nest_btn_new')}
             </button>
           )}
         </div>
-
-        <div className="mode-toggle">
-          <button className={`mode-btn${tab === 'lijst' ? ' active' : ''}`} onClick={() => setTab('lijst')}>
-            {t('nest_tab_list')}
-          </button>
-          <button className={`mode-btn${tab === 'kaart' ? ' active' : ''}`} onClick={() => setTab('kaart')}>
-            {t('nest_tab_map')}
-          </button>
-        </div>
       </div>
 
       {tab === 'lijst' && (
-        <NestenLijst nesten={verrijkteNesten} navigate={navigate} t={t} />
+        <NestenLijst nesten={gefilterdeNesten} navigate={navigate} t={t} zoekterm={zoekterm} />
       )}
       {tab === 'kaart' && (
         <NestenKaart nesten={verrijkteNesten} navigate={navigate} />
@@ -101,62 +144,71 @@ export default function NestOverzichtPage() {
   );
 }
 
-function NestenLijst({ nesten, navigate, t }) {
+const TYPE_LABEL_KORT = {
+  ringen:     'Ringen',
+  nacontrole: 'Nacontrole',
+  eileg:      'Eileg',
+  jongen:     'Jongen',
+  bouw:       'Nestbouw',
+  check:      'Bezoek',
+};
+
+function NestenLijst({ nesten, navigate, t, zoekterm }) {
   if (nesten.length === 0) {
     return (
       <div className="nest-leeg">
-        <p>{t('nest_no_nests')}</p>
+        <p>{zoekterm ? t('nest_search_no_results') : t('nest_no_nests')}</p>
       </div>
     );
   }
 
   return (
     <div className="nest-lijst">
-      {nesten.map(nest => (
-        <button
-          key={nest.id}
-          className="nest-kaart"
-          onClick={() => navigate(`/nest/${nest.id}`)}
-        >
-          <div className="nest-kaart__hoofd">
-            <span className="nest-kaart__nr">#{nest.kastnummer}</span>
-            {nest.vogelNaam && <span className="nest-kaart__soort">{nest.vogelNaam}</span>}
-          </div>
-          <div className="nest-kaart__status">
-            {nest.laatsteBezoek ? (
-              <>
-                <span
-                  className="nest-kaart__stadium"
-                  style={{ '--stadium-kleur': stadiumKleur(nest.laatsteBezoek.stadium) }}
-                >
-                  {nest.laatsteBezoek.stadium}
+      {nesten.map(nest => {
+        const status = getBroedStatus(nest.laatsteBezoek?.stadium);
+        const statusKleur = BROEDSTATUS[status].kleur;
+        const plan = nest.planning;
+        const planKleur = plan ? URGENTIE_KLEUR[plan.urgentie] : null;
+        return (
+          <button
+            key={nest.id}
+            className="nest-kaart"
+            style={{ '--status-kleur': statusKleur }}
+            onClick={() => navigate(`/nest/${nest.id}`)}
+          >
+            <div className="nest-kaart__hoofd">
+              <span className="nest-kaart__nr">#{nest.kastnummer}</span>
+              {nest.omschrijving && <span className="nest-kaart__naam">{nest.omschrijving}</span>}
+              {nest.vogelNaam && <span className="nest-kaart__soort">{nest.vogelNaam}</span>}
+            </div>
+            <div className="nest-kaart__status">
+              {nest.laatsteBezoek ? (
+                <>
+                  <span className="nest-kaart__stadium" style={{ '--stadium-kleur': statusKleur }}>
+                    {t(BROEDSTATUS[status].labelKey)}
+                  </span>
+                  <span className="nest-kaart__datum">{formatDatum(nest.laatsteBezoek.datum)}</span>
+                </>
+              ) : (
+                <span className="nest-kaart__geen-bezoek">{t('nest_no_visits_season', { jaar: HUIDIG_JAAR })}</span>
+              )}
+              {nest.aantalBezoeken > 0 && (
+                <span className="nest-kaart__tel">{t('nest_visit_count', { count: nest.aantalBezoeken })}</span>
+              )}
+              {plan && (
+                <span className="nest-kaart__planning-pill" style={{ '--pill-kleur': planKleur }}>
+                  {plan.type ? (TYPE_LABEL_KORT[plan.type] ?? plan.type) + ' · ' : ''}{formatDatum(plan.datum)}
                 </span>
-                <span className="nest-kaart__datum">{nest.laatsteBezoek.datum}</span>
-              </>
-            ) : (
-              <span className="nest-kaart__geen-bezoek">{t('nest_no_visits_season', { jaar: HUIDIG_JAAR })}</span>
-            )}
-            {nest.aantalBezoeken > 0 && (
-              <span className="nest-kaart__tel">{t('nest_visit_count', { count: nest.aantalBezoeken })}</span>
-            )}
-          </div>
-          {nest.omschrijving && (
-            <div className="nest-kaart__omschrijving">{nest.omschrijving}</div>
-          )}
-        </button>
-      ))}
+              )}
+            </div>
+          </button>
+        );
+      })}
     </div>
   );
 }
 
-const LEGENDA = [
-  { kleur: '#64748b', labelKey: 'nest_legend_geen' },
-  { kleur: '#f59e0b', labelKey: 'nest_legend_bouw' },
-  { kleur: '#a78bfa', labelKey: 'nest_legend_eieren' },
-  { kleur: '#38bdf8', labelKey: 'nest_legend_pulli' },
-  { kleur: '#fb923c', labelKey: 'nest_legend_ouder' },
-  { kleur: '#22c55e', labelKey: 'nest_legend_nacontrole' },
-];
+const LEGENDA = Object.entries(BROEDSTATUS).map(([, v]) => v);
 
 function NestenKaart({ nesten, navigate }) {
   const { t } = useTranslation();
@@ -178,6 +230,7 @@ function NestenKaart({ nesten, navigate }) {
         center: [52.05, 6.2],
         zoom: 12,
         zoomControl: true,
+        maxZoom: 19,
       });
 
       tileLayerRef.current = addTileLayer(L, map, getTileType());
@@ -204,7 +257,7 @@ function NestenKaart({ nesten, navigate }) {
       const nestenMetCoords = nesten.filter(n => n.lat && n.lon);
 
       nestenMetCoords.forEach(nest => {
-        const kleur = stadiumKleur(nest.laatsteBezoek?.stadium);
+        const kleur = BROEDSTATUS[getBroedStatus(nest.laatsteBezoek?.stadium)].kleur;
         const icon = L.divIcon({
           className: '',
           html: `<div style="
@@ -220,7 +273,7 @@ function NestenKaart({ nesten, navigate }) {
 
         const marker = L.marker([parseFloat(nest.lat), parseFloat(nest.lon)], { icon })
           .addTo(map)
-          .bindTooltip(`<strong>#${nest.kastnummer}</strong>${nest.vogelNaam ? ` — ${nest.vogelNaam}` : ''}${nest.laatsteBezoek ? `<br>${nest.laatsteBezoek.stadium}` : ''}`, { direction: 'top', offset: [0, -8] })
+          .bindTooltip(`<strong>#${nest.kastnummer}</strong>${nest.vogelNaam ? ` — ${nest.vogelNaam}` : ''}${nest.omschrijving ? `<br><em>${nest.omschrijving}</em>` : ''}<br>${t(BROEDSTATUS[getBroedStatus(nest.laatsteBezoek?.stadium)].labelKey)}${nest.laatsteBezoek ? ` · ${formatDatum(nest.laatsteBezoek.datum)}` : ''}`, { direction: 'top', offset: [0, -8] })
           .on('click', () => navigate(`/nest/${nest.id}`));
 
         markersRef.current.push(marker);
