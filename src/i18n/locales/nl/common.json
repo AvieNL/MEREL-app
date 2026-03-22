@@ -745,5 +745,8 @@
   "record_type_tva": "Externe TV",
   "record_type_nwx": "Externe NV ref.",
   "btn_cancel": "Annuleren",
-  "extern_saved_toast": "Externe melding opgeslagen"
+  "extern_saved_toast": "Externe melding opgeslagen",
+  "nest_btn_ring_bird": "Vogel ringen",
+  "nest_ring_context_banner": "Ring vogel vanuit nestbezoek — {{soort}}, {{datum}}",
+  "nest_ring_no_number": "geen ringnummer"
 }

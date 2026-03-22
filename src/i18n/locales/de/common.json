@@ -745,5 +745,8 @@
   "record_type_tva": "Externer Wiederfang",
   "record_type_nwx": "Externer Erstfang Ref.",
   "btn_cancel": "Abbrechen",
-  "extern_saved_toast": "Externe Meldung gespeichert"
+  "extern_saved_toast": "Externe Meldung gespeichert",
+  "nest_btn_ring_bird": "Vogel beringen",
+  "nest_ring_context_banner": "Vogel beringen aus Nestbesuch — {{soort}}, {{datum}}",
+  "nest_ring_no_number": "keine Ringnummer"
 }

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useCallback } from 'react';
+import { lazy, Suspense, useState, useCallback, createContext, useContext } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from './i18n/index.js';
@@ -113,6 +113,9 @@ function PageSpinner() {
 
 const MODULE_KEY = 'vrs-module';
 
+export const ModuleSwitchContext = createContext(null);
+export function useModuleSwitch() { return useContext(ModuleSwitchContext); }
+
 function AppShell() {
   const { user, loading, profile, profileError } = useAuth();
   const { hasNestAccess } = useNestRole();
@@ -163,6 +166,7 @@ function AppShell() {
   }
 
   return (
+    <ModuleSwitchContext.Provider value={selectModule}>
     <>
       {profileError && (
         <div role="alert" style={{
@@ -177,6 +181,7 @@ function AppShell() {
         : <NestApp onSwitchModule={() => { sessionStorage.removeItem(MODULE_KEY); setModuleState(null); }} activeModule="nest" />
       }
     </>
+    </ModuleSwitchContext.Provider>
   );
 }
 

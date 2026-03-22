@@ -745,5 +745,8 @@
   "record_type_tva": "External recapture",
   "record_type_nwx": "External 1st catch ref.",
   "btn_cancel": "Cancel",
-  "extern_saved_toast": "External notification saved"
+  "extern_saved_toast": "External notification saved",
+  "nest_btn_ring_bird": "Ring bird",
+  "nest_ring_context_banner": "Ring bird from nest visit — {{soort}}, {{datum}}",
+  "nest_ring_no_number": "no ring number"
 }

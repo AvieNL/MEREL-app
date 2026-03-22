@@ -104,12 +104,15 @@
 }
 
 .bezoek-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   font-size: 0.82rem;
   padding: 4px 0;
   border-bottom: 1px solid var(--border);
+}
+
+.bezoek-item__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -137,4 +140,41 @@
   font-size: 0.75rem;
   color: var(--success);
   white-space: nowrap;
+}
+
+/* ── Ring-knop vanuit bezoek ── */
+.btn-ring-uit-nest {
+  margin-left: auto;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  min-height: unset;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.btn-ring-uit-nest:hover {
+  opacity: 0.85;
+}
+
+/* ── Geringde vogels per bezoek ── */
+.bezoek-ringen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+  padding-left: 4px;
+}
+
+.nestring-badge {
+  font-size: 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 12px;
+  padding: 2px 8px;
 }

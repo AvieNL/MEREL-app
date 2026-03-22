@@ -21,7 +21,11 @@ import { useSpeciesOverrides } from '../../hooks/useSpeciesOverrides';
 import { useSettings } from '../../hooks/useSettings';
 import { useRingStrengen } from '../../hooks/useRingStrengen';
 import { useBioRanges } from '../../hooks/useBioRanges';
+import { useAddNestring } from '../../hooks/useAddNestring';
+import { useModuleSwitch } from '../../App';
 import { NieuwFormContext } from './NieuwFormContext';
+
+const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
 import SectieSoort from './SectieSoort';
 import SectieProject from './SectieProject';
 import SectieRinggegevens from './SectieRinggegevens';
@@ -42,7 +46,19 @@ export default function NieuwPage() {
   const { settings } = useSettings();
   const { ringStrengen = [], advanceHuidige: onAdvanceRing } = useRingStrengen();
   const navigate = useNavigate();
+  const addNestring = useAddNestring();
+  const switchModule = useModuleSwitch();
   const editRecord = location.state?.editRecord ?? null;
+
+  // Nestkast context: als de ringer vanuit een nestbezoek werd opgestart
+  const nestContextRef = useRef(null);
+  if (nestContextRef.current === null) {
+    try {
+      const raw = sessionStorage.getItem(NEST_RING_CONTEXT_KEY);
+      nestContextRef.current = raw ? JSON.parse(raw) : false; // false = geen context (vs null = nog niet geladen)
+    } catch { nestContextRef.current = false; }
+  }
+  const nestContext = nestContextRef.current || null;
   const speciesRefData = useSpeciesRef();
   const speciesData = useMemo(
     () => speciesRefData.filter(s => s.naam_nl),
@@ -130,6 +146,17 @@ export default function NieuwPage() {
   const [form, setForm] = useState(() => {
     if (editRecord) return { ...EMPTY_FORM, ...editRecord };
     const base = { ...EMPTY_FORM, ringer_initiaal: settings?.ringerInitiaal || '', ringer_nummer: settings?.ringerNummer || '' };
+
+    // Prefill vanuit nestkast-context (vogel ringen vanuit nestbezoek)
+    const nestCtx = nestContextRef.current || null;
+    if (nestCtx) {
+      if (nestCtx.soortNaam) base.vogelnaam = nestCtx.soortNaam;
+      if (nestCtx.datum) base.vangstdatum = nestCtx.datum;
+      if (nestCtx.lat) base.lat = nestCtx.lat;
+      if (nestCtx.lon) base.lon = nestCtx.lon;
+      return base;
+    }
+
     // Vul project en locatie voor uit de meest recente vangst van vandaag binnen een uur
     const now = Date.now();
     const today = new Date().toISOString().split('T')[0];
@@ -431,7 +458,25 @@ export default function NieuwPage() {
       navigate('/records');
       return;
     }
-    addRecord({ ...form, euring_code: euringCode });
+    const newRecord = addRecord({ ...form, euring_code: euringCode });
+
+    // Koppel ring aan nestbezoek als dit vanuit nestonderzoek werd gestart
+    const nestCtx = nestContext;
+    if (nestCtx && newRecord) {
+      addNestring({
+        nestbezoek_id: nestCtx.bezoekId,
+        vangst_id: newRecord.id,
+        ringnummer: form.ringnummer || null,
+        centrale: form.centrale || null,
+        leeftijd: 2, // jong/pulli
+        sexe: form.geslacht || null,
+      });
+      sessionStorage.removeItem(NEST_RING_CONTEXT_KEY);
+      navigate(`/nest/${nestCtx.nestId}`);
+      if (switchModule) switchModule('nest');
+      return;
+    }
+
     if (!isTerugvangst && autoFilledRingId.current && onAdvanceRing) {
       onAdvanceRing(autoFilledRingId.current);
       autoFilledRingId.current = null;
@@ -661,6 +706,12 @@ export default function NieuwPage() {
   return (
     <div className="page nieuw-page">
       <NieuwFormContext.Provider value={contextValue}>
+        {/* Banner als ringer vanuit nestbezoek werd geopend */}
+        {nestContext && (
+          <div className="nest-ring-context-banner">
+            🥚 {t('nest_ring_context_banner', { soort: nestContext.soortNaam || '?', datum: nestContext.datum || '?' })}
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           {/* Sticky header: topbar + foutmeldingen */}
           <div className="nieuw-sticky-header">

@@ -1,6 +1,28 @@
-export const VERSIE = '1.12.0';
+export const VERSIE = '1.13.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.13.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: "Vogel ringen" knop bij N-stadium nestbezoeken',
+      'Feat: ring formulier opent vanuit nestbezoek met soort, datum en locatie vooringevuld',
+      'Feat: ring automatisch gekoppeld aan nestbezoek via nestring-record na opslaan',
+      'Feat: geringde vogels zichtbaar per nestbezoek in de detailpagina',
+    ],
+    wijzigingen_en: [
+      'Feat: "Ring bird" button on N-stadium nest visits',
+      'Feat: ring form opens from nest visit with species, date and location prefilled',
+      'Feat: ring automatically linked to nest visit via nestring record after saving',
+      'Feat: ringed birds visible per nest visit in the detail page',
+    ],
+    wijzigingen_de: [
+      'Feat: "Vogel beringen"-Schaltfläche bei N-Stadium-Nestbesuchen',
+      'Feat: Beringungsformular öffnet sich aus Nestbesuch mit vorausgefüllter Art, Datum und Standort',
+      'Feat: Ring wird nach dem Speichern automatisch über nestring-Datensatz mit Nestbesuch verknüpft',
+      'Feat: Beringte Vögel pro Nestbesuch auf der Detailseite sichtbar',
+    ],
+  },
   {
     versie: '1.12.0',
     datum: '2026-03-22',

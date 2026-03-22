@@ -4,8 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useNestRole } from '../../hooks/useNestRole';
+import { useModuleSwitch } from '../../App';
 import { HABITAT_CODES, NESTPLAATS_CODES, STADIUM_CODES } from '../../data/sovon-codes';
 import './NestDetailPage.css';
+
+const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
 
 const HUIDIG_JAAR = new Date().getFullYear();
 
@@ -18,8 +21,9 @@ export default function NestDetailPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd } = useNestRole();
-  const { nesten, seizoenen, legsels, bezoeken } = useNestData();
+  const { nesten, seizoenen, legsels, bezoeken, ringen } = useNestData();
   const species = useSpeciesRef();
+  const switchModule = useModuleSwitch();
 
   const speciesByEuring = useMemo(() => {
     const map = {};
@@ -68,11 +72,14 @@ export default function NestDetailPage() {
           <SeizoenBlok
             key={seizoen.id}
             seizoen={seizoen}
+            nest={nest}
             legsels={legsels}
             bezoeken={bezoeken}
+            ringen={ringen}
             speciesByEuring={speciesByEuring}
             canNestAdd={canNestAdd}
             navigate={navigate}
+            switchModule={switchModule}
             t={t}
           />
         ))
@@ -81,7 +88,7 @@ export default function NestDetailPage() {
   );
 }
 
-function SeizoenBlok({ seizoen, legsels, bezoeken, speciesByEuring, canNestAdd, navigate, t }) {
+function SeizoenBlok({ seizoen, nest, legsels, bezoeken, ringen, speciesByEuring, canNestAdd, navigate, switchModule, t }) {
   const vogelNaam = seizoen.soort_euring
     ? (speciesByEuring[seizoen.soort_euring]?.naam_nl || seizoen.soort_euring)
     : t('nest_soort_unknown');
@@ -114,9 +121,14 @@ function SeizoenBlok({ seizoen, legsels, bezoeken, speciesByEuring, canNestAdd, 
         <LegselBlok
           key={legsel.id}
           legsel={legsel}
+          nest={nest}
+          seizoen={seizoen}
           bezoeken={bezoeken}
+          ringen={ringen}
+          soort={speciesByEuring[seizoen.soort_euring] || null}
           canNestAdd={canNestAdd}
           navigate={navigate}
+          switchModule={switchModule}
           t={t}
         />
       ))}
@@ -133,10 +145,24 @@ function SeizoenBlok({ seizoen, legsels, bezoeken, speciesByEuring, canNestAdd, 
   );
 }
 
-function LegselBlok({ legsel, bezoeken, canNestAdd, navigate, t }) {
+function LegselBlok({ legsel, nest, seizoen, bezoeken, ringen, soort, canNestAdd, navigate, switchModule, t }) {
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
+
+  function handleVogelRingen(bezoek) {
+    sessionStorage.setItem(NEST_RING_CONTEXT_KEY, JSON.stringify({
+      bezoekId: bezoek.id,
+      nestId: nest?.id || '',
+      soortNaam: soort?.naam_nl || '',
+      soortEuring: seizoen?.soort_euring || '',
+      datum: bezoek.datum,
+      lat: nest?.lat || '',
+      lon: nest?.lon || '',
+    }));
+    navigate('/');
+    if (switchModule) switchModule('ring');
+  }
 
   return (
     <div className="legsel-blok">
@@ -153,21 +179,46 @@ function LegselBlok({ legsel, bezoeken, canNestAdd, navigate, t }) {
         <p className="legsel-geen-bezoeken">{t('nest_no_visits')}</p>
       ) : (
         <div className="bezoek-timeline">
-          {legselBezoeken.map(bezoek => (
-            <div key={bezoek.id} className="bezoek-item">
-              <span className="bezoek-item__datum">{bezoek.datum}{bezoek.tijd ? ` ${bezoek.tijd.slice(0,5)}` : ''}</span>
-              <span className="bezoek-item__stadium">{stadiumLabel(bezoek.stadium)}</span>
-              {(bezoek.aantal_eieren != null || bezoek.aantal_pulli != null) && (
-                <span className="bezoek-item__aantallen">
-                  {bezoek.aantal_eieren != null && `${bezoek.aantal_eieren}×🥚`}
-                  {bezoek.aantal_pulli != null && ` ${bezoek.aantal_pulli}×🐣`}
-                </span>
-              )}
-              {bezoek.volgende_bezoek_suggestie && (
-                <span className="bezoek-item__suggestie">→ {bezoek.volgende_bezoek_suggestie}</span>
-              )}
-            </div>
-          ))}
+          {legselBezoeken.map(bezoek => {
+            const bezoekRingen = ringen.filter(r => r.nestbezoek_id === bezoek.id);
+            const isNGroep = bezoek.stadium?.startsWith('N');
+            return (
+              <div key={bezoek.id} className="bezoek-item">
+                <div className="bezoek-item__row">
+                  <span className="bezoek-item__datum">{bezoek.datum}{bezoek.tijd ? ` ${bezoek.tijd.slice(0,5)}` : ''}</span>
+                  <span className="bezoek-item__stadium">{stadiumLabel(bezoek.stadium)}</span>
+                  {(bezoek.aantal_eieren != null || bezoek.aantal_pulli != null) && (
+                    <span className="bezoek-item__aantallen">
+                      {bezoek.aantal_eieren != null && `${bezoek.aantal_eieren}×🥚`}
+                      {bezoek.aantal_pulli != null && ` ${bezoek.aantal_pulli}×🐣`}
+                    </span>
+                  )}
+                  {bezoek.volgende_bezoek_suggestie && (
+                    <span className="bezoek-item__suggestie">→ {bezoek.volgende_bezoek_suggestie}</span>
+                  )}
+                  {canNestAdd && isNGroep && (
+                    <button
+                      className="btn-ring-uit-nest"
+                      type="button"
+                      onClick={() => handleVogelRingen(bezoek)}
+                      title={t('nest_btn_ring_bird')}
+                    >
+                      🔖 {t('nest_btn_ring_bird')}
+                    </button>
+                  )}
+                </div>
+                {bezoekRingen.length > 0 && (
+                  <div className="bezoek-ringen">
+                    {bezoekRingen.map(r => (
+                      <span key={r.id} className="nestring-badge">
+                        🔖 {r.ringnummer || t('nest_ring_no_number')}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
