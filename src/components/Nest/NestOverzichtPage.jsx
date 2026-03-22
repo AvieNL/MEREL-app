@@ -67,7 +67,7 @@ export default function NestOverzichtPage() {
 
       return { ...nest, seizoen, legselsInSeizoen, laatsteBezoek, vogelNaam, aantalBezoeken: alleBezoeken.length };
     });
-  }, [nesten, seizoenen, legsels, bezoeken, seizoenFilter, speciesByEuring]);
+  }, [nesten, seizoenen, legsels, bezoeken, speciesByEuring]);
 
   return (
     <div className="page nest-overzicht-page">
