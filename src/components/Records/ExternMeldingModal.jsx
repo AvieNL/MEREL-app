@@ -131,7 +131,7 @@ export default function ExternMeldingModal({ onClose, onSave }) {
                 {scenarioLabel}
               </div>
             )}
-            <PreviewRow label={t('extern_field_ring')} value={parsed.ringnummer} />
+            <PreviewRow label={t('extern_field_ring')} value={parsed.ringnummer?.replace(/\./g, '')} />
             <PreviewRow label={t('extern_field_species')} value={parsed.vogelnaam
               ? parsed.vogelnaam
               : parsed.euringSpeciesCode

@@ -708,7 +708,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
                       <span
                         className="sd-recent-ring ring-link"
                         onClick={() => navigate('/records', { state: { openId: r.id } })}
-                      >{r.ringnummer}</span>
+                      >{r.ringnummer?.replace(/\./g, '')}</span>
                       <span className="sd-recent-date">{formatDatum(r.vangstdatum)}</span>
                       <span className="sd-recent-meta">
                         {r.geslacht && r.geslacht !== 'U' && <>{r.geslacht}</>}

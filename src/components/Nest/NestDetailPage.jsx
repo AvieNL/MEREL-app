@@ -215,7 +215,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                   <div className="bezoek-ringen">
                     {bezoekRingen.map(r => (
                       <span key={r.id} className="nestring-badge">
-                        🔖 {r.ringnummer || t('nest_ring_no_number')}
+                        🔖 {r.ringnummer?.replace(/\./g, '') || t('nest_ring_no_number')}
                       </span>
                     ))}
                   </div>

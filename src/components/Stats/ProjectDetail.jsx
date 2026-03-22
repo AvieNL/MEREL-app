@@ -266,7 +266,7 @@ export default function ProjectDetail({ records }) {
                 {terugvangsten.map((tv, i) => (
                   <tr key={`${tv.ringnummer}-${tv.datum}-${i}`}>
                     <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
-                    <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
+                    <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer?.replace(/\./g, '')}</span></td>
                     <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
                     <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>
                     <td className="tt-col-num tv-afstand">{formatAfstand(tv.afstandKm)}</td>
