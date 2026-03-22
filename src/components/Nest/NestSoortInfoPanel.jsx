@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { berekenRingLeeftijd } from '../../utils/nestSuggestie';
 import '../Nieuw/NieuwPage.css';
 
@@ -10,6 +11,7 @@ import '../Nieuw/NieuwPage.css';
  *   stadium  {string}       Huidig primair stadium (voor highlight)
  */
 export default function NestSoortInfoPanel({ soort, stadium }) {
+  const { t } = useTranslation();
   if (!soort) return null;
 
   const { nest_eieren, nest_ei_dagen, nest_jong_dagen, nest_broedels } = soort;
@@ -18,11 +20,11 @@ export default function NestSoortInfoPanel({ soort, stadium }) {
   const ringDag = nest_jong_dagen ? berekenRingLeeftijd(soort) : null;
 
   const items = [
-    nest_eieren     && { waarde: nest_eieren,              lbl: 'eieren'     },
-    nest_ei_dagen   && { waarde: nest_ei_dagen,            lbl: 'broeddagen' },
-    nest_jong_dagen && { waarde: nest_jong_dagen,          lbl: 'nestdagen'  },
-    ringDag         && { waarde: `dag ${ringDag} (N6)`,   lbl: 'ringen'     },
-    nest_broedels   && { waarde: `${nest_broedels}×`,     lbl: 'broedsel'   },
+    nest_eieren     && { waarde: nest_eieren,              lbl: t('nest_info_eieren')     },
+    nest_ei_dagen   && { waarde: nest_ei_dagen,            lbl: t('nest_info_broeddagen') },
+    nest_jong_dagen && { waarde: nest_jong_dagen,          lbl: t('nest_info_nestdagen')  },
+    ringDag         && { waarde: `dag ${ringDag} (N6)`,   lbl: t('nest_info_ringen')     },
+    nest_broedels   && { waarde: `${nest_broedels}×`,     lbl: t('nest_info_broedsel')   },
   ].filter(Boolean);
 
   return (

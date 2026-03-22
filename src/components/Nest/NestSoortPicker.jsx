@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './NestSoortPicker.css';
 
 /**
@@ -12,6 +13,7 @@ import './NestSoortPicker.css';
  *   lang         {string}  'nl'|'en'|'de' voor naam display
  */
 export default function NestSoortPicker({ species, value, onChange, lang = 'nl' }) {
+  const { t } = useTranslation();
   const [zoek, setZoek] = useState('');
   const [open, setOpen] = useState(false);
   const inputRef = useRef(null);
@@ -32,6 +34,8 @@ export default function NestSoortPicker({ species, value, onChange, lang = 'nl' 
     return species
       .filter(s =>
         s.naam_nl?.toLowerCase().includes(term) ||
+        s.naam_en?.toLowerCase().includes(term) ||
+        s.naam_de?.toLowerCase().includes(term) ||
         s.naam_lat?.toLowerCase().includes(term) ||
         s.euring_code?.startsWith(term),
       )
@@ -78,9 +82,9 @@ export default function NestSoortPicker({ species, value, onChange, lang = 'nl' 
             className="nest-soort-picker__wijzig"
             onClick={() => { setOpen(true); setTimeout(() => inputRef.current?.focus(), 10); }}
           >
-            wijzigen
+            {t('nest_picker_wijzigen')}
           </button>
-          <button type="button" className="nest-soort-picker__wis" onClick={handleClear} title="Wis soort">×</button>
+          <button type="button" className="nest-soort-picker__wis" onClick={handleClear} title={t('nest_picker_wis_title')}>×</button>
         </div>
       ) : (
         <div className="nest-soort-picker__zoek">
@@ -90,12 +94,12 @@ export default function NestSoortPicker({ species, value, onChange, lang = 'nl' 
             value={zoek}
             onChange={handleInputChange}
             onFocus={() => setOpen(true)}
-            placeholder="Zoek op naam of EURING-code…"
+            placeholder={t('nest_picker_zoek_placeholder')}
             autoComplete="off"
           />
           {open && geselecteerdeSoort && (
             <button type="button" className="nest-soort-picker__annuleer" onClick={() => { setOpen(false); setZoek(''); }}>
-              annuleren
+              {t('nest_picker_annuleren')}
             </button>
           )}
         </div>
