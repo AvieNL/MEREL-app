@@ -1,6 +1,31 @@
-export const VERSIE = '1.30.0';
+export const VERSIE = '1.30.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.30.1',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: pulli ringen — ringernummer en initialen worden nu ingevuld vanuit instellingen',
+      'Fix: ringnummer automatisch ingevuld vanuit passende ringstreng (op maat soort), streng schuift door',
+      'Fix: pullus leeftijd (2-cijferig) en nauwkeurigheid (D=geschat) correct opgeslagen',
+      'Fix: broedselgrootte ingevuld vanuit nestbezoek, aanpasbaar in formulier',
+      'Fix: omstandigheid 21, vangstmethode N, conditie 0, vangsttijd en plaatsnaam correct',
+    ],
+    wijzigingen_en: [
+      'Fix: pullus ringing — ringer number and initials now filled from settings',
+      'Fix: ring number auto-filled from matching ring series (by species size), series advances',
+      'Fix: pullus age (2-digit) and accuracy (D=estimated) correctly saved',
+      'Fix: brood size pre-filled from nest visit, editable in form',
+      'Fix: circumstances 21, method N, condition 0, catch time and place name correct',
+    ],
+    wijzigingen_de: [
+      'Fix: Pulli-Beringung — Beringernummer und Initialen aus Einstellungen',
+      'Fix: Ringnummer aus passender Ringserie (nach Artgröße), Serie rückt vor',
+      'Fix: Pullus-Alter (2-stellig) und Genauigkeit (D=geschätzt) korrekt gespeichert',
+      'Fix: Brutgröße aus Nestbesuch vorausgefüllt, im Formular anpassbar',
+      'Fix: Umstände 21, Methode N, Kondition 0, Fangzeit und Ortsname korrekt',
+    ],
+  },
   {
     versie: '1.30.0',
     datum: '2026-03-22',

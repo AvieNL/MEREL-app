@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useRecords } from '../../hooks/useRecords';
 import { useSettings } from '../../hooks/useSettings';
+import { useRingStrengen } from '../../hooks/useRingStrengen';
 import { formatDatum } from '../../utils/nestPlanning';
 import './PulliRingenPage.css';
 
@@ -26,7 +27,28 @@ function berekenPullusLeeftijd(stadium, soort) {
   return Math.round(fractie * nestjong);
 }
 
-const LEEG_FORM = { ringnummer: '', geslacht: 'U', vleugel: '', gewicht: '', tarsus: '' };
+function kandidaatRingmaten(ringmaatStr) {
+  if (!ringmaatStr) return [];
+  return ringmaatStr
+    .split('/')
+    .map(s => s.trim().replace(/[♂♀].*$/, '').replace(/\s.*$/, '').trim())
+    .filter(Boolean);
+}
+
+function huidigTijd() {
+  const now = new Date();
+  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+}
+
+const LEEG_FORM = {
+  ringnummer: '',
+  geslacht: 'U',
+  vleugel: '',
+  gewicht: '',
+  tarsus: '',
+  broedselgrootte: '',
+  tijd: '',
+};
 
 export default function PulliRingenPage() {
   const { bezoekId } = useParams();
@@ -35,9 +57,10 @@ export default function PulliRingenPage() {
   const { bezoeken, legsels, nesten, addNestring } = useNestData();
   const { addRecord } = useRecords();
   const { settings } = useSettings();
+  const { ringStrengen, advanceHuidige } = useRingStrengen();
   const species = useSpeciesRef();
 
-  const [form, setForm] = useState(LEEG_FORM);
+  const [form, setForm] = useState({ ...LEEG_FORM, tijd: huidigTijd() });
   const [fouten, setFouten] = useState({});
   const [opgeslagen, setOpgeslagen] = useState([]);
 
@@ -52,6 +75,30 @@ export default function PulliRingenPage() {
   );
 
   const pullusLeeftijd = bezoek ? berekenPullusLeeftijd(bezoek.stadium, soort) : null;
+
+  // Passende ringstreng op basis van soort ringmaat
+  const passendeRingstreng = useMemo(() => {
+    if (!soort?.ringmaat || !ringStrengen?.length) return null;
+    const maten = kandidaatRingmaten(soort.ringmaat);
+    return ringStrengen.find(r => maten.includes(r.ringmaat)) || null;
+  }, [soort, ringStrengen]);
+
+  // Vul ringnummer in vanuit ringstreng zodra die beschikbaar is (ook na advanceHuidige)
+  useEffect(() => {
+    if (passendeRingstreng?.huidige) {
+      setForm(prev => prev.ringnummer ? prev : { ...prev, ringnummer: passendeRingstreng.huidige });
+    }
+  }, [passendeRingstreng?.huidige]);
+
+  // Vul broedselgrootte in vanuit bezoek
+  useEffect(() => {
+    if (bezoek?.aantal_pulli != null) {
+      setForm(prev => prev.broedselgrootte ? prev : {
+        ...prev,
+        broedselgrootte: String(bezoek.aantal_pulli),
+      });
+    }
+  }, [bezoek?.aantal_pulli]);
 
   if (!bezoek || !legsel || !nest) {
     return (
@@ -74,40 +121,66 @@ export default function PulliRingenPage() {
     }
 
     const opmerkingen = `Nestkastonderzoek — kast ${nest.kastnummer}${nest.omschrijving ? ` ${nest.omschrijving}` : ''}`;
+    const plaatsnaam = nest.adres || `Nestkast ${nest.kastnummer}${nest.omschrijving ? ` ${nest.omschrijving}` : ''}`;
+    const leeftijdStr = pullusLeeftijd !== null ? String(pullusLeeftijd).padStart(2, '0') : '99';
+    const nauwkStr = pullusLeeftijd !== null ? 'D' : 'U';
+    const broedStr = form.broedselgrootte
+      ? String(parseInt(form.broedselgrootte, 10)).padStart(2, '0')
+      : '--';
 
     const vangst = addRecord({
-      vogelnaam: soort?.naam_nl || soortEuring,
-      euring_code: soortEuring,
-      vangstdatum: bezoek.datum,
-      ringnummer: form.ringnummer.trim(),
-      metalenringinfo: '2',
-      leeftijd: '1',
-      geslacht: form.geslacht || 'U',
-      status: '-',
-      conditie: '0',
-      omstandigheden: '27',
-      project: settings.nestProject || '',
-      lat: nest.lat || '',
-      lon: nest.lon || '',
-      pul_leeftijd: pullusLeeftijd !== null ? String(pullusLeeftijd) : '99',
-      nauwk_pul_leeftijd: pullusLeeftijd !== null ? 'E' : 'U',
-      vleugel: form.vleugel || '',
-      gewicht: form.gewicht || '',
-      tarsus: form.tarsus || '',
+      vogelnaam:         soort?.naam_nl || soortEuring,
+      euring_code:       soortEuring,
+      vangstdatum:       bezoek.datum,
+      tijd:              form.tijd || huidigTijd(),
+      ringnummer:        form.ringnummer.trim(),
+      centrale:          'NLA',
+      metalenringinfo:   '2',
+      leeftijd:          '1',
+      geslacht:          form.geslacht || 'U',
+      status:            '-',
+      conditie:          '0',
+      omstandigheden:    '21',
+      vangstmethode:     'N',
+      project:           settings.nestProject || '',
+      lat:               nest.lat || '',
+      lon:               nest.lon || '',
+      nauwk_coord:       '0',
+      google_plaats:     plaatsnaam,
+      ringer_nummer:     settings.ringerNummer || '',
+      ringer_initiaal:   settings.ringerInitiaal || '',
+      pul_leeftijd:      leeftijdStr,
+      nauwk_pul_leeftijd: nauwkStr,
+      broedselgrootte:   broedStr,
+      vleugel:           form.vleugel || '',
+      gewicht:           form.gewicht || '',
+      tarsus_lengte:     form.tarsus || '',
       opmerkingen,
     });
 
     await addNestring({
       nestbezoek_id: bezoekId,
-      vangst_id: vangst.id,
-      ringnummer: form.ringnummer.trim(),
-      centrale: 'NLA',
-      leeftijd: 1,
-      sexe: form.geslacht || 'U',
+      vangst_id:     vangst.id,
+      ringnummer:    form.ringnummer.trim(),
+      centrale:      'NLA',
+      leeftijd:      1,
+      sexe:          form.geslacht || 'U',
     });
 
+    // Ringstreng doorschuiven
+    if (passendeRingstreng) {
+      advanceHuidige(passendeRingstreng.id);
+    }
+
     setOpgeslagen(prev => [...prev, { ...form, id: vangst.id }]);
-    setForm(LEEG_FORM);
+
+    // Reset voor volgende pullus; ringnummer via useEffect zodra ringstreng bijgewerkt is
+    setForm(prev => ({
+      ...LEEG_FORM,
+      ringnummer:       '',
+      broedselgrootte:  prev.broedselgrootte,
+      tijd:             huidigTijd(),
+    }));
   }
 
   function handleKlaar() {
@@ -128,7 +201,7 @@ export default function PulliRingenPage() {
         {soort?.naam_nl && (
           <div className="pulli-context__row">
             <span className="pulli-context__label">{t('pulli_soort')}</span>
-            <span>{soort.naam_nl}</span>
+            <span>{soort.naam_nl}{soort.ringmaat ? ` (maat ${soort.ringmaat})` : ''}</span>
           </div>
         )}
         <div className="pulli-context__row">
@@ -145,10 +218,16 @@ export default function PulliRingenPage() {
             <span>~{pullusLeeftijd} {t('pulli_dagen')}</span>
           </div>
         )}
+        {passendeRingstreng && (
+          <div className="pulli-context__row">
+            <span className="pulli-context__label">{t('pulli_ringstreng')}</span>
+            <span>maat {passendeRingstreng.ringmaat} — {passendeRingstreng.huidige}</span>
+          </div>
+        )}
         {(nest.lat && nest.lon) && (
           <div className="pulli-context__row">
             <span className="pulli-context__label">{t('pulli_locatie')}</span>
-            <span>{parseFloat(nest.lat).toFixed(5)}, {parseFloat(nest.lon).toFixed(5)}</span>
+            <span>{nest.adres || `${parseFloat(nest.lat).toFixed(5)}, ${parseFloat(nest.lon).toFixed(5)}`}</span>
           </div>
         )}
         {settings.nestProject && (
@@ -180,25 +259,47 @@ export default function PulliRingenPage() {
       <div className="pulli-form">
         <h3 className="pulli-form__titel">{t('pulli_nr', { nr: opgeslagen.length + 1 })}</h3>
 
-        <div className={`form-group${fouten.ringnummer ? ' form-group--error' : ''}`}>
-          <label>{t('pulli_ringnummer')} *</label>
-          <input
-            type="text"
-            value={form.ringnummer}
-            onChange={e => update('ringnummer', e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleOpslaan()}
-            placeholder="NLA 1234567"
-            autoFocus
-          />
+        <div className="pulli-form__rij">
+          <div className={`form-group${fouten.ringnummer ? ' form-group--error' : ''}`}>
+            <label>{t('pulli_ringnummer')} *</label>
+            <input
+              type="text"
+              value={form.ringnummer}
+              onChange={e => update('ringnummer', e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleOpslaan()}
+              placeholder="NLA 1234567"
+              autoFocus
+            />
+          </div>
+          <div className="form-group">
+            <label>{t('pulli_tijd')}</label>
+            <input
+              type="time"
+              value={form.tijd}
+              onChange={e => update('tijd', e.target.value)}
+            />
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>{t('pulli_geslacht')}</label>
-          <select value={form.geslacht} onChange={e => update('geslacht', e.target.value)}>
-            <option value="U">{t('pulli_geslacht_u')}</option>
-            <option value="M">{t('pulli_geslacht_m')}</option>
-            <option value="F">{t('pulli_geslacht_f')}</option>
-          </select>
+        <div className="pulli-form__rij">
+          <div className="form-group">
+            <label>{t('pulli_geslacht')}</label>
+            <select value={form.geslacht} onChange={e => update('geslacht', e.target.value)}>
+              <option value="U">{t('pulli_geslacht_u')}</option>
+              <option value="M">{t('pulli_geslacht_m')}</option>
+              <option value="F">{t('pulli_geslacht_f')}</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>{t('pulli_broedselgrootte')}</label>
+            <input
+              type="number"
+              min="1" max="20"
+              value={form.broedselgrootte}
+              onChange={e => update('broedselgrootte', e.target.value)}
+              placeholder="—"
+            />
+          </div>
         </div>
 
         <div className="pulli-biometrie">
