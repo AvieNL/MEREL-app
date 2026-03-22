@@ -9,7 +9,7 @@ export default function ModuleSelector({ onSelect }) {
   return (
     <div className="module-selector">
       <div className="module-selector__inner">
-        <h1 className="module-selector__title">VRS Breedenbroek</h1>
+        <h1 className="module-selector__title">{t('app_name')}</h1>
         <p className="module-selector__subtitle">{t('module_choose')}</p>
 
         <div className="module-selector__cards">
