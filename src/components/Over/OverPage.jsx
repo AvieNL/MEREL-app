@@ -25,7 +25,7 @@ export default function OverPage() {
 
       <div className="over-sectie">
         <h2>{t('about_sources')}</h2>
-        <p className="over-sources-subtitle">{t('about_sources_ringing')}</p>
+        <p className="over-sources-subtitle over-sources-subtitle--ring">{t('about_sources_ringing')}</p>
         <ul>
           <li>EURING Exchange Code 2000+ v1161 — du Feu, Clark, Fiedler, Baillie &amp; Laesser (2016)</li>
           <li>Ringmaten NLA — Speek, Van der Jeugd &amp; Van den Berg (2025)</li>
@@ -34,12 +34,12 @@ export default function OverPage() {
           <li>Handkenmerken voor Dummies (en gevorderen) 2.0 — Klaasen, Sandifort &amp; De Vries</li>
           <li>Identification Guide to Birds in the Hand — Demongin (2016)</li>
         </ul>
-        <p className="over-sources-subtitle">{t('about_sources_nest')}</p>
+        <p className="over-sources-subtitle over-sources-subtitle--nest">{t('about_sources_nest')}</p>
         <ul>
           <li>Handleiding Sovon nestonderzoek. De nestkaart: hoe, wat, waar, waarom — Bijlsma, Majoor &amp; Nienhuis (2020)</li>
           <li>Handleiding AviNest: de invoerapp voor Meetnet Nestkaarten — Goffin (2026)</li>
         </ul>
-        <p className="over-sources-subtitle">{t('about_sources_tech')}</p>
+        <p className="over-sources-subtitle over-sources-subtitle--tech">{t('about_sources_tech')}</p>
         <ul>
           <li>Leaflet — open-source kaartbibliotheek</li>
         </ul>

@@ -56,17 +56,20 @@
 }
 
 .over-sectie .over-sources-subtitle {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0.75rem 0 0.25rem;
+  letter-spacing: 0.06em;
+  margin: 0.9rem 0 0.2rem;
 }
 
 .over-sectie .over-sources-subtitle:first-of-type {
   margin-top: 0;
 }
+
+.over-sources-subtitle--ring { color: var(--accent); }
+.over-sources-subtitle--nest { color: var(--success); }
+.over-sources-subtitle--tech { color: var(--text-muted); }
 
 .over-changelog {
   display: flex;
