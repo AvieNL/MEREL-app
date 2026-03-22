@@ -1,6 +1,37 @@
-export const VERSIE = '1.14.0';
+export const VERSIE = '1.15.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.15.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: hamburgermenu gesecteerd (module-specifiek / app-breed / admin)',
+      'Feat: Projecten en Ringstrengen alleen zichtbaar in ring-module',
+      'Feat: rolsimulatie uitgebreid met nest-rollen (nestonderzoeker / kijker / geen)',
+      'Feat: header app-titel klikbaar naar modulekeuze of startpagina',
+      'Feat: module-pill in header (ring: blauw, nest: groen), klikbaar naar invoerpagina',
+      'Fix: "VRS Breedenbroek" → "VRS App" op modulekeuzescherm',
+      'Fix: kastnummer index toegevoegd aan Dexie nest-tabel (v9)',
+    ],
+    wijzigingen_en: [
+      'Feat: hamburger menu sectioned (module-specific / app-wide / admin)',
+      'Feat: Projects and Ring strings only visible in ring module',
+      'Feat: role simulation extended with nest roles (nest researcher / viewer / none)',
+      'Feat: header app title clickable to module selector or start page',
+      'Feat: module pill in header (ring: blue, nest: green), clickable to entry page',
+      'Fix: "VRS Breedenbroek" → "VRS App" on module selector screen',
+      'Fix: kastnummer index added to Dexie nest table (v9)',
+    ],
+    wijzigingen_de: [
+      'Feat: Hamburgermenü in Abschnitte unterteilt (modulspezifisch / App-weit / Admin)',
+      'Feat: Projekte und Ringschnüre nur im Ring-Modul sichtbar',
+      'Feat: Rollensimulation um Nest-Rollen erweitert (Nestforscher / Betrachter / Kein)',
+      'Feat: App-Titel in Header anklickbar zur Modulauswahl oder Startseite',
+      'Feat: Modul-Pill im Header (Ring: blau, Nest: grün), anklickbar zur Eingabeseite',
+      'Fix: "VRS Breedenbroek" → "VRS App" auf der Modulauswahlseite',
+      'Fix: kastnummer-Index zur Dexie-Nesttabelle hinzugefügt (v9)',
+    ],
+  },
   {
     versie: '1.14.0',
     datum: '2026-03-22',
