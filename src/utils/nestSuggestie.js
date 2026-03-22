@@ -62,9 +62,14 @@ export function berekenVervolgbezoekInfo(stadium, datum, soort) {
     dagen = 5;
     type = 'check';
 
+  } else if (stadium === 'E6' || stadium === 'E7') {
+    // Eieren komen uit / jongen piepend in ei — snel terug
+    dagen = 3;
+    type = 'jongen';
+
   } else if (stadium.startsWith('E')) {
     const broedtijd = parseNestDagen(soort?.nest_ei_dagen, 14);
-    dagen = Math.max(3, broedtijd);
+    dagen = Math.max(4, broedtijd);
     type = 'jongen';
 
   } else if (stadium === 'N+') {

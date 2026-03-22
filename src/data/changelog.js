@@ -1,6 +1,28 @@
-export const VERSIE = '1.29.2';
+export const VERSIE = '1.29.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.3',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: lokale CSS/JS-wijzigingen alsnog gepusht (NestOverzicht, NieuwBezoek, SyncIndicator)',
+      'Fix: sovon-codes uitgebreid met EN/DE vertalingen',
+      'Fix: vervolgbezoeksuggestie verfijnd voor E6/E7 stadia',
+      'Fix: ververs-knop soortenpagina verwijderd (overbodig)',
+    ],
+    wijzigingen_en: [
+      'Fix: local CSS/JS changes finally pushed (NestOverzicht, NieuwBezoek, SyncIndicator)',
+      'Fix: sovon-codes extended with EN/DE translations',
+      'Fix: follow-up visit suggestion refined for E6/E7 stages',
+      'Fix: refresh button removed from species page (redundant)',
+    ],
+    wijzigingen_de: [
+      'Fix: lokale CSS/JS-Änderungen endlich gepusht',
+      'Fix: sovon-codes um EN/DE-Übersetzungen erweitert',
+      'Fix: Folgebesuch-Vorschlag für E6/E7-Stadien verfeinert',
+      'Fix: Aktualisierungsschaltfläche von der Artenseite entfernt',
+    ],
+  },
   {
     versie: '1.29.2',
     datum: '2026-03-22',

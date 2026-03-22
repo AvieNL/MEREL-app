@@ -9,93 +9,116 @@
 // Codes 0-72; alleen de meest voorkomende zijn hier opgenomen.
 // Vul aan uit coderingen.pdf als overige typen nodig zijn.
 export const HABITAT_CODES = [
-  { code: 0,  nl: 'Onbekend' },
-  { code: 1,  nl: 'Akker' },
-  { code: 2,  nl: 'Boomgaard' },
-  { code: 3,  nl: 'Loofbos' },
-  { code: 4,  nl: 'Naaldbos' },
-  { code: 5,  nl: 'Gemengd bos' },
-  { code: 6,  nl: 'Bosrand' },
-  { code: 7,  nl: 'Braakliggend terrein' },
-  { code: 8,  nl: 'Duinen' },
-  { code: 9,  nl: 'Groenstrook/berm' },
-  { code: 10, nl: 'Heide' },
-  { code: 11, nl: 'Houtwal/singel' },
-  { code: 12, nl: 'Moeras/rietland' },
-  { code: 13, nl: 'Park/begraafplaats' },
-  { code: 14, nl: 'Slootkant/oever' },
-  { code: 15, nl: 'Stedelijk gebied/tuin' },
-  { code: 16, nl: 'Weiland' },
-  { code: 17, nl: 'Rivier/beek' },
-  { code: 18, nl: 'Plas/meer/ven' },
-  { code: 19, nl: 'Zandverstuiving' },
-  { code: 43, nl: 'Erf/boerderij' },
+  { code: 0,  nl: 'Onbekend',                          en: 'Unknown',                        de: 'Unbekannt' },
+  // BOS/PARK
+  { code: 10, nl: 'Bos/park (categorie)',               en: 'Forest/park (category)',         de: 'Wald/Park (Kategorie)' },
+  { code: 11, nl: 'Naaldbos',                           en: 'Coniferous forest',              de: 'Nadelwald' },
+  { code: 12, nl: 'Loofbos',                            en: 'Deciduous forest',               de: 'Laubwald' },
+  { code: 13, nl: 'Gemengd bos',                        en: 'Mixed forest',                   de: 'Mischwald' },
+  { code: 14, nl: 'Moerasbos',                          en: 'Swamp forest',                   de: 'Sumpfwald' },
+  { code: 15, nl: 'Kaalkap/aanplant < 1 m',             en: 'Clear-cut/planting < 1 m',       de: 'Kahlschlag/Aufforstung < 1 m' },
+  // HEIDE/STUIFZAND
+  { code: 20, nl: 'Heide/stuifzand (categorie)',        en: 'Heath/sand drift (category)',    de: 'Heide/Flugsand (Kategorie)' },
+  { code: 21, nl: 'Duinheide/-vallei',                  en: 'Dune heath/valley',              de: 'Dünenheide/-tal' },
+  { code: 22, nl: 'Heide binnenland',                   en: 'Inland heathland',               de: 'Binnenlandheide' },
+  { code: 23, nl: 'Stuifzand',                          en: 'Sand drift',                     de: 'Flugsand' },
+  // KUST
+  { code: 30, nl: 'Kust (categorie)',                   en: 'Coast (category)',               de: 'Küste (Kategorie)' },
+  { code: 31, nl: 'Zandbank/spaarzaam begroeide plaat', en: 'Sandbank/sparsely vegetated',   de: 'Sandbank/spärlich bewachsene Platte' },
+  { code: 32, nl: 'Schor/gors/kwelder',                 en: 'Salt marsh',                     de: 'Salzwiese/Watt' },
+  { code: 33, nl: 'Strand',                             en: 'Beach',                          de: 'Strand' },
+  { code: 34, nl: 'Duin',                               en: 'Dune',                           de: 'Düne' },
+  // MOERAS/WATER
+  { code: 40, nl: 'Moeras/water (categorie)',           en: 'Marsh/water (category)',         de: 'Sumpf/Wasser (Kategorie)' },
+  { code: 41, nl: 'Riet',                               en: 'Reedbed',                        de: 'Schilf' },
+  { code: 42, nl: 'Ruigte',                             en: 'Rough vegetation',               de: 'Hochstauden/Brache' },
+  { code: 43, nl: 'Struweel',                           en: 'Scrub',                          de: 'Gebüsch' },
+  { code: 44, nl: 'Oever van open water',               en: 'Bank of open water',             de: 'Ufer von offenem Gewässer' },
+  // CULTUURLAND
+  { code: 50, nl: 'Cultuurland (categorie)',            en: 'Farmland (category)',            de: 'Kulturland (Kategorie)' },
+  { code: 51, nl: 'Grasland',                           en: 'Grassland',                      de: 'Grünland' },
+  { code: 52, nl: 'Akkerland',                          en: 'Arable land',                    de: 'Ackerland' },
+  { code: 53, nl: 'Boomgaard',                          en: 'Orchard',                        de: 'Obstgarten' },
+  { code: 54, nl: 'Boerenerf',                          en: 'Farmyard',                       de: 'Bauernhof' },
+  // BEBOUWING
+  { code: 60, nl: 'Bebouwing (categorie)',              en: 'Urban (category)',               de: 'Bebauung (Kategorie)' },
+  { code: 61, nl: 'Woonwijk, weinig beplanting',        en: 'Residential, sparse planting',  de: 'Wohngebiet, wenig Bepflanzung' },
+  { code: 62, nl: 'Woonwijk, veel beplanting',          en: 'Residential, much planting',    de: 'Wohngebiet, viel Bepflanzung' },
+  { code: 63, nl: 'Industrieterrein',                   en: 'Industrial area',                de: 'Industriegebiet' },
+  { code: 64, nl: 'Plantsoen',                          en: 'Park/garden',                    de: 'Grünanlage' },
+  { code: 65, nl: 'Dijk',                               en: 'Dyke',                           de: 'Deich' },
+  // VEEN
+  { code: 70, nl: 'Veen (categorie)',                   en: 'Peat (category)',                de: 'Moor (Kategorie)' },
+  { code: 71, nl: 'Hoogveen',                           en: 'Raised bog',                     de: 'Hochmoor' },
+  { code: 72, nl: 'Laagveen',                           en: 'Fen/lowland peat',               de: 'Niedermoor' },
 ];
 
 // ── NESTPLAATS ────────────────────────────────────────────────────────────────
 // Exacte plaatsing van het nest. -1 = onbekend.
 export const NESTPLAATS_CODES = [
-  { code: -1, nl: 'Onbekend' },
-  { code: 0,  nl: 'Op de grond' },
-  { code: 1,  nl: 'In gras/kruidlaag (< 30 cm)' },
-  { code: 2,  nl: 'In struik/heg (30–300 cm)' },
-  { code: 3,  nl: 'In boom — lage tak (< 5 m)' },
-  { code: 4,  nl: 'In boom — hoge tak (≥ 5 m)' },
-  { code: 5,  nl: 'In boomholte' },
-  { code: 6,  nl: 'In gebouw/gevel' },
-  { code: 7,  nl: 'In nestkast' },
-  { code: 8,  nl: 'Op gebouw/dak' },
-  { code: 9,  nl: 'In watervegetatie' },
-  { code: 10, nl: 'Drijvend' },
-  { code: 11, nl: 'In rotswand/steilkant' },
-  { code: 12, nl: 'Op paal/mast' },
-  { code: 99, nl: 'Overig' },
+  { code: -1, nl: 'Onbekend',                                en: 'Unknown',                              de: 'Unbekannt' },
+  { code: 0,  nl: 'Drijvend op water',                       en: 'Floating on water',                    de: 'Schwimmend auf Wasser' },
+  { code: 1,  nl: 'Op kale bodem',                           en: 'On bare ground',                       de: 'Auf kahlem Boden' },
+  { code: 2,  nl: 'Bladeren/takken op grond',                en: 'Leaves/branches on ground',            de: 'Blätter/Äste auf dem Boden' },
+  { code: 3,  nl: 'Kruidlaag',                               en: 'Herb layer',                           de: 'Krautschicht' },
+  { code: 4,  nl: 'Ruigtekruiden (geef plantensoort)',       en: 'Rank vegetation (specify plant)',       de: 'Hochstauden (Pflanzenart angeben)' },
+  { code: 5,  nl: 'Landbouwgewas (geef gewas)',              en: 'Agricultural crop (specify crop)',      de: 'Kulturpflanze (Pflanzenart angeben)' },
+  { code: 6,  nl: 'Struiken/houtwal/etc. (geef soort)',      en: 'Shrubs/hedgerow (specify species)',     de: 'Sträucher/Hecke (Art angeben)' },
+  { code: 7,  nl: 'Greppel/slootrand',                       en: 'Ditch/ditch bank',                     de: 'Graben/Grabenrand' },
+  { code: 8,  nl: 'Omgevallen boom of soortgelijke plek',    en: 'Fallen tree or similar',               de: 'Umgefallener Baum oder ähnliches' },
+  { code: 9,  nl: 'Naaldboom (geef boomsoort)',              en: 'Conifer (specify species)',             de: 'Nadelbaum (Art angeben)' },
+  { code: 10, nl: 'Loofboom (geef boomsoort)',               en: 'Deciduous tree (specify species)',      de: 'Laubbaum (Art angeben)' },
+  { code: 11, nl: 'Gebouw',                                  en: 'Building',                             de: 'Gebäude' },
+  { code: 12, nl: 'Hoogspanningsmast',                       en: 'Power line pylon',                     de: 'Hochspannungsmast' },
+  { code: 13, nl: 'Nestkast aan paal',                       en: 'Nest box on pole',                     de: 'Nistkasten an Pfahl' },
+  { code: 99, nl: 'Overig (vul in bij toelichting)',         en: 'Other (add note)',                     de: 'Sonstige (in Erläuterung angeben)' },
 ];
 
 // ── NESTTYPE (NEST) ───────────────────────────────────────────────────────────
 // Type nest of neststructuur
 export const NESTTYPE_CODES = [
-  { code: '0',  nl: 'Zelf gebouwd nest' },
-  { code: '1',  nl: 'Gebruik gemaakt van verlaten nest' },
-  { code: '2',  nl: 'Nestkast (zie kastnummer)' },
-  { code: '3',  nl: 'Holte in gebouw' },
-  { code: '4',  nl: 'Holte in boom (niet kast)' },
-  { code: '5',  nl: 'Platform/kunstmatige nestgelegenheid' },
-  { code: '9',  nl: 'Overig' },
+  { code: -1, nl: 'Onbekend',                                        en: 'Unknown',                                    de: 'Unbekannt' },
+  { code: 0,  nl: 'Zelf gebouwd',                                    en: 'Self-built',                                 de: 'Selbst gebaut' },
+  { code: 1,  nl: 'Van andere soort (geef toelichting)',             en: 'From other species (add note)',              de: 'Von anderer Art (Erläuterung angeben)' },
+  { code: 2,  nl: 'Nestkast (geef kastnummer bij toelichting)',      en: 'Nest box (add box number in notes)',         de: 'Nistkasten (Kastnummer in Erläuterung)' },
+  { code: 3,  nl: 'Holte (stenen, grond, ingerot gat)',             en: 'Hollow (stone, ground, rotted hole)',        de: 'Höhle (Stein, Boden, verfaultes Loch)' },
+  { code: 4,  nl: 'Overig (geef toelichting)',                      en: 'Other (add note)',                           de: 'Sonstige (Erläuterung angeben)' },
+  { code: 5,  nl: 'Nest uit een eerder jaar',                        en: 'Nest from a previous year',                 de: 'Nest aus einem früheren Jahr' },
+  { code: 6,  nl: 'Hergebruikt nest (zelfde jaar; geen nestkast)',   en: 'Reused nest (same year; no nest box)',      de: 'Wiederverwendetes Nest (gleiches Jahr; kein Nistkasten)' },
 ];
 
 // ── VONDST ────────────────────────────────────────────────────────────────────
 // Hoe is het nest gevonden?
 export const VONDST_CODES = [
-  { code: 0, nl: 'Bij toeval' },
-  { code: 1, nl: 'Doelgericht gezocht' },
-  { code: 2, nl: 'Tijdens nestkaartonderzoek' },
-  { code: 3, nl: 'Melding van derden' },
-  { code: 4, nl: 'Via zender/telemetrie' },
-  { code: 5, nl: 'Via kleurringen' },
-  { code: 6, nl: 'Via ander ringonderzoek' },
-  { code: 7, nl: 'Onbekend' },
+  { code: 0, nl: 'Onbekend',                        en: 'Unknown',                            de: 'Unbekannt' },
+  { code: 1, nl: 'Toevallig',                        en: 'By chance',                          de: 'Zufällig' },
+  { code: 2, nl: 'Koud zoeken',                      en: 'Cold search',                        de: 'Gezielte Suche' },
+  { code: 3, nl: 'Ouders gevolgd',                   en: 'Followed parents',                   de: 'Eltern verfolgt' },
+  { code: 4, nl: 'Nest was al bekend',               en: 'Nest already known',                 de: 'Nest war bereits bekannt' },
+  { code: 5, nl: 'Kolonietelling',                   en: 'Colony count',                       de: 'Koloniezählung' },
+  { code: 6, nl: 'Anderszins (geef toelichting)',    en: 'Otherwise (add note)',               de: 'Anderweitig (Erläuterung angeben)' },
+  { code: 7, nl: 'Getipt (melding van derden)',      en: 'Tipped off (report from others)',    de: 'Hinweis von Dritten' },
 ];
 
 // ── VERSTOPT ──────────────────────────────────────────────────────────────────
 // Mate waarin het nest verborgen is
 export const VERSTOPT_CODES = [
-  { code: 0, nl: 'Niet verstopt — zichtbaar van bovenaf' },
-  { code: 1, nl: 'Half verstopt — enigszins bedekt' },
-  { code: 3, nl: 'Goed verstopt — niet zichtbaar van bovenaf' },
-  { code: 5, nl: 'In holte/nestkast' },
+  { code: 0, nl: 'Onbekend',               en: 'Unknown',              de: 'Unbekannt' },
+  { code: 1, nl: 'Nest zeer opvallend',    en: 'Nest very conspicuous', de: 'Nest sehr auffällig' },
+  { code: 3, nl: 'Nest niet goed verstopt', en: 'Nest not well hidden', de: 'Nest nicht gut versteckt' },
+  { code: 5, nl: 'Nest goed verstopt',     en: 'Nest well hidden',     de: 'Nest gut versteckt' },
 ];
 
 // ── BESCHERM ──────────────────────────────────────────────────────────────────
 // Aanwezige bescherming
 export const BESCHERM_CODES = [
-  { code: 1, nl: 'Geen bescherming' },
-  { code: 2, nl: 'Prikkeldraad' },
-  { code: 3, nl: 'Hek/bewaking' },
-  { code: 4, nl: 'Verbodsbord' },
-  { code: 5, nl: 'Nestkast (beschermd)' },
-  { code: 6, nl: 'Onderwaterfundament' },
-  { code: 7, nl: 'Overige bescherming' },
+  { code: 1, nl: 'Geen nestbescherming',                        en: 'No nest protection',                     de: 'Kein Nestschutz' },
+  { code: 2, nl: 'Nesten gemarkeerd met stokjes',               en: 'Nests marked with sticks',               de: 'Nester mit Stäbchen markiert' },
+  { code: 3, nl: 'Nestbeschermer over nest',                    en: 'Nest protector over nest',               de: 'Nestschutz über Nest' },
+  { code: 4, nl: 'Schrikdraad rondom nest',                     en: 'Electric fence around nest',             de: 'Elektrozaun um Nest' },
+  { code: 5, nl: 'Nest beschermd, onbekend hoe',                en: 'Nest protected, method unknown',         de: 'Nest geschützt, Methode unbekannt' },
+  { code: 6, nl: 'Nestkast beschermd tegen predatie',           en: 'Nest box protected against predation',   de: 'Nistkasten gegen Prädation geschützt' },
+  { code: 7, nl: 'Nestkast beschermd tegen andere soorten',     en: 'Nest box protected against other species', de: 'Nistkasten gegen andere Arten geschützt' },
 ];
 
 // ── LINK_TYPE ─────────────────────────────────────────────────────────────────
@@ -234,32 +257,32 @@ export const VERLIES_CODES = [
 
 // ── BETROUWBAARHEID ──────────────────────────────────────────────────────────
 export const BETROUWB_DATUM_CODES = [
-  { code: 1, nl: '1 — Exacte datum' },
-  { code: 2, nl: '2 — ± 1 dag' },
-  { code: 3, nl: '3 — ± 2–3 dagen' },
-  { code: 4, nl: '4 — ± 1 week' },
-  { code: 5, nl: '5 — ± 2 weken' },
-  { code: 6, nl: '6 — Datum onbekend' },
+  { code: 1, nl: '1 — Exacte datum',    en: '1 — Exact date',      de: '1 — Exaktes Datum' },
+  { code: 2, nl: '2 — ± 1 dag',         en: '2 — ± 1 day',         de: '2 — ± 1 Tag' },
+  { code: 3, nl: '3 — ± 2–3 dagen',     en: '3 — ± 2–3 days',      de: '3 — ± 2–3 Tage' },
+  { code: 4, nl: '4 — ± 1 week',        en: '4 — ± 1 week',        de: '4 — ± 1 Woche' },
+  { code: 5, nl: '5 — ± 2 weken',       en: '5 — ± 2 weeks',       de: '5 — ± 2 Wochen' },
+  { code: 6, nl: '6 — Datum onbekend',  en: '6 — Date unknown',    de: '6 — Datum unbekannt' },
 ];
 
 export const BETROUWB_AANTAL_CODES = [
-  { code: 1, nl: '1 — Exact geteld' },
-  { code: 2, nl: '2 — Geschat ± 1' },
-  { code: 3, nl: '3 — Geschat ± 2–3' },
-  { code: 4, nl: '4 — Geschat ± 5' },
-  { code: 5, nl: '5 — Ruwe schatting' },
-  { code: 6, nl: '6 — Minimum bekend' },
-  { code: 7, nl: '7 — Onbekend' },
+  { code: 1, nl: '1 — Exact geteld',     en: '1 — Exact count',         de: '1 — Exakt gezählt' },
+  { code: 2, nl: '2 — Geschat ± 1',      en: '2 — Estimated ± 1',       de: '2 — Geschätzt ± 1' },
+  { code: 3, nl: '3 — Geschat ± 2–3',    en: '3 — Estimated ± 2–3',     de: '3 — Geschätzt ± 2–3' },
+  { code: 4, nl: '4 — Geschat ± 5',      en: '4 — Estimated ± 5',       de: '4 — Geschätzt ± 5' },
+  { code: 5, nl: '5 — Ruwe schatting',   en: '5 — Rough estimate',      de: '5 — Grobe Schätzung' },
+  { code: 6, nl: '6 — Minimum bekend',   en: '6 — Minimum known',       de: '6 — Minimum bekannt' },
+  { code: 7, nl: '7 — Onbekend',         en: '7 — Unknown',             de: '7 — Unbekannt' },
 ];
 
 export const BETROUWB_DAGEN_CODES = [
-  { code: 1, nl: '1 — Exact (gewogen/gemeten)' },
-  { code: 2, nl: '2 — ± 1–2 dagen' },
-  { code: 3, nl: '3 — ± 3–4 dagen' },
-  { code: 4, nl: '4 — ± 5–7 dagen' },
-  { code: 5, nl: '5 — ± 1–2 weken' },
-  { code: 6, nl: '6 — Ruwe schatting' },
-  { code: 7, nl: '7 — Onbekend' },
+  { code: 1, nl: '1 — Exact (gewogen/gemeten)', en: '1 — Exact (weighed/measured)', de: '1 — Exakt (gewogen/gemessen)' },
+  { code: 2, nl: '2 — ± 1–2 dagen',            en: '2 — ± 1–2 days',               de: '2 — ± 1–2 Tage' },
+  { code: 3, nl: '3 — ± 3–4 dagen',            en: '3 — ± 3–4 days',               de: '3 — ± 3–4 Tage' },
+  { code: 4, nl: '4 — ± 5–7 dagen',            en: '4 — ± 5–7 days',               de: '4 — ± 5–7 Tage' },
+  { code: 5, nl: '5 — ± 1–2 weken',            en: '5 — ± 1–2 weeks',              de: '5 — ± 1–2 Wochen' },
+  { code: 6, nl: '6 — Ruwe schatting',         en: '6 — Rough estimate',           de: '6 — Grobe Schätzung' },
+  { code: 7, nl: '7 — Onbekend',               en: '7 — Unknown',                  de: '7 — Unbekannt' },
 ];
 
 // ── EISUCCES ─────────────────────────────────────────────────────────────────

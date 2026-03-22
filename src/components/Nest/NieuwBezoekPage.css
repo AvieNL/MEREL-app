@@ -84,6 +84,20 @@
   color: var(--success);
 }
 
+.vervolgbezoek-suggestie--ringen {
+  background: color-mix(in srgb, #f59e0b 12%, var(--bg-secondary));
+  border-color: #f59e0b;
+}
+
+.vervolgbezoek-suggestie--ringen .vervolgbezoek-suggestie__datum {
+  color: #f59e0b;
+}
+
+.vervolgbezoek-suggestie__dagen {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 .vervolgbezoek-suggestie__basis {
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -92,4 +106,41 @@
 .field-error {
   color: var(--danger, #ef4444);
   font-weight: 700;
+}
+
+/* ── Legselkeuze ── */
+.legsel-keuze {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.legsel-keuze-knop {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+  min-width: auto;
+  min-height: 36px;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.legsel-keuze-knop:hover {
+  border-color: var(--accent);
+}
+
+.legsel-keuze-knop--actief {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg-primary);
+}
+
+.nest-soort-afwijking {
+  font-size: 0.78rem;
+  color: #f59e0b;
+  margin-top: 6px;
 }

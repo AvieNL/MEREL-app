@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
+import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useRole } from '../../hooks/useRole';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { buildEuringLookup } from '../../utils/euring-lookup';
@@ -18,7 +18,6 @@ export default function SoortenPage({ records }) {
   const [zoek, setZoek] = useState('');
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [syncing, setSyncing] = useState(false);
   const navigate = useNavigate();
   const { isAdmin } = useRole();
   const { t } = useTranslation();
@@ -90,11 +89,6 @@ export default function SoortenPage({ records }) {
     setFilters(EMPTY_FILTERS);
   }
 
-  async function handleVervers() {
-    setSyncing(true);
-    await pullSpeciesIfNeeded(true);
-    setSyncing(false);
-  }
 
   return (
     <div className="page soorten-page">
@@ -115,14 +109,6 @@ export default function SoortenPage({ records }) {
         </button>
         {isAdmin && (
           <>
-            <button
-              className="soorten-filter-btn"
-              onClick={handleVervers}
-              disabled={syncing}
-              title={t('species_refresh_title')}
-            >
-              {syncing ? '...' : '↻'}
-            </button>
             <button
               className="btn-primary soorten-nieuw-btn"
               onClick={() => navigate('/soorten/__nieuw__')}
