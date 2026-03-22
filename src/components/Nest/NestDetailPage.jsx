@@ -186,14 +186,6 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
               <div key={bezoek.id} className="bezoek-item">
                 <div className="bezoek-item__row">
                   <span className="bezoek-item__datum">{formatDatum(bezoek.datum)}{bezoek.tijd ? ` ${bezoek.tijd.slice(0,5)}` : ''}</span>
-                  {canNestEdit && (
-                    <button
-                      className="icon-edit-btn bezoek-edit-btn"
-                      type="button"
-                      onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
-                      title={t('btn_edit')}
-                    >✏️</button>
-                  )}
                   <span className="bezoek-item__stadium">
                     {stadiumLabel(bezoek.stadium, t)}
                     {bezoek.stadium2 && <> + {stadiumLabel(bezoek.stadium2, t)}</>}
@@ -221,6 +213,14 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                     >
                       🔖 {t('nest_btn_ring_bird')}
                     </button>
+                  )}
+                  {canNestEdit && (
+                    <button
+                      className="icon-edit-btn bezoek-edit-btn"
+                      type="button"
+                      onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
+                      title={t('btn_edit')}
+                    >✏️</button>
                   )}
                 </div>
                 {bezoekRingen.length > 0 && (
