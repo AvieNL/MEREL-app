@@ -110,6 +110,20 @@
   font-size: 0.9rem;
 }
 
+.legsel-blok__jaar {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.legsel-blok__soort {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
 .legsel-blok__succes {
   font-size: 0.8rem;
   color: var(--success);
@@ -166,6 +180,12 @@
 
 .bezoek-item__aantallen {
   color: var(--text-secondary);
+}
+
+.bezoek-item__soort-afwijking {
+  font-size: 0.75rem;
+  color: #f59e0b;
+  font-style: italic;
 }
 
 .bezoek-item__suggestie {
