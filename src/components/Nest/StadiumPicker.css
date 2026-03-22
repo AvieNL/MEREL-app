@@ -1,0 +1,149 @@
+.stadium-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Categorie-knoppen ── */
+.stadium-cat-rij {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+@media (max-width: 440px) {
+  .stadium-cat-rij {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.stadium-cat-knop {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 10px 6px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+}
+
+.stadium-cat-knop__code {
+  font-size: 0.65rem;
+  font-weight: 400;
+  opacity: 0.6;
+  letter-spacing: 0.02em;
+}
+
+.stadium-cat-knop:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.stadium-cat-knop--actief {
+  background: color-mix(in srgb, var(--cat-kleur, var(--accent)) 18%, var(--bg-secondary));
+  border-color: var(--cat-kleur, var(--accent));
+  color: var(--cat-kleur, var(--accent));
+}
+
+/* ── Sub-opties ── */
+.stadium-sub {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stadium-sub--ouders {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.stadium-sub--pulli-aantal {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.stadium-sub__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stadium-sub__knoppen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stadium-sub__knoppen--compact {
+  gap: 4px;
+}
+
+.stadium-sub__knop {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  min-height: 36px;
+  min-width: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.stadium-sub__code {
+  font-size: 0.65rem;
+  font-weight: 400;
+  opacity: 0.55;
+  letter-spacing: 0.02em;
+}
+
+.stadium-sub__knop--getal {
+  padding: 6px 8px;
+  min-width: 36px;
+  text-align: center;
+}
+
+.stadium-sub__knop:hover {
+  border-color: var(--accent);
+}
+
+.stadium-sub__knop--actief {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg-primary);
+}
+
+/* Pulli-aantal input */
+.stadium-pulli-input {
+  width: 80px !important;
+  min-height: 36px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+/* Fout */
+.stadium-fout {
+  font-size: 0.82rem;
+  color: var(--danger);
+  font-weight: 600;
+  margin-top: -4px;
+}
