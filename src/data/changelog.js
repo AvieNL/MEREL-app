@@ -1,6 +1,19 @@
-export const VERSIE = '1.16.3';
+export const VERSIE = '1.16.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.16.4',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: "Over deze app" en bronnenlijst bijgewerkt voor de nestmodule',
+    ],
+    wijzigingen_en: [
+      'Feat: "About this app" and sources updated to reflect the nest module',
+    ],
+    wijzigingen_de: [
+      'Feat: "Über diese App" und Quellen für das Nestmodul aktualisiert',
+    ],
+  },
   {
     versie: '1.16.3',
     datum: '2026-03-22',

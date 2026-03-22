@@ -55,6 +55,19 @@
   color: var(--accent, #38bdf8);
 }
 
+.over-sources-subtitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.over-sources-subtitle:first-of-type {
+  margin-top: 0;
+}
+
 .over-changelog {
   display: flex;
   flex-direction: column;
