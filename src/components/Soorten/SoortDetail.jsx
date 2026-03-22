@@ -444,10 +444,10 @@ export default function SoortDetail({ records, speciesOverrides }) {
             }}
           >⟳</button>
           {!isViewer && (
-            <button className="sd-edit-btn" onClick={startEdit} title="Bewerken">✏️</button>
+            <button className="icon-edit-btn" onClick={startEdit} title="Bewerken">✏️</button>
           )}
           {isAdmin && (
-            <button className="sd-delete-btn" onClick={deleteSoort} title="Soort verwijderen">🗑️</button>
+            <button className="icon-delete-btn" onClick={deleteSoort} title="Soort verwijderen">🗑️</button>
           )}
         </div>
       </div>

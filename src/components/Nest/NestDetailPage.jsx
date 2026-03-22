@@ -63,14 +63,14 @@ export default function NestDetailPage() {
         <div className="nest-detail-acties">
           {canNestEdit && (
             <button
-              className="btn-secondary nest-actie-btn"
+              className="icon-edit-btn"
               onClick={() => navigate(`/nest/${id}/wijzigen`)}
               title={t('btn_edit')}
             >✏️</button>
           )}
           {canNestDelete && (
             <button
-              className="btn-danger nest-actie-btn"
+              className="icon-delete-btn"
               onClick={() => setDeleteBevestig(true)}
               title={t('btn_delete')}
             >🗑️</button>

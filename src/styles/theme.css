@@ -184,6 +184,34 @@ button:active {
   margin-bottom: 12px;
 }
 
+/* Standaard wijzig/verwijder icoongnoppen */
+.icon-edit-btn,
+.icon-delete-btn {
+  background: var(--bg-tertiary);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  min-height: 36px;
+  min-width: 36px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.icon-edit-btn:hover {
+  opacity: 1;
+}
+
+.icon-delete-btn {
+  background: transparent;
+}
+
+.icon-delete-btn:hover {
+  opacity: 1;
+  background: var(--danger-bg, rgba(239,68,68,0.15));
+}
+
 button:disabled,
 .btn-primary:disabled,
 .btn-secondary:disabled,
