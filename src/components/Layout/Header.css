@@ -321,6 +321,7 @@
   background: var(--bg-tertiary, #0f172a) !important;
   border: 1px solid var(--border) !important;
   color: var(--text-secondary) !important;
+  line-height: 1.3 !important;
 }
 
 .header-role-btn--active {

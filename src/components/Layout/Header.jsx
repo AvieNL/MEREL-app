@@ -281,7 +281,7 @@ export default function Header({ onSwitchModule, activeModule }) {
                             className={`header-role-btn${effectief === r ? ' header-role-btn--active' : ''}`}
                             onClick={() => switchNestRole(r)}
                           >
-                            {NEST_ROL_LABELS[r]}
+                            {r === 'nestonderzoeker' ? <>Nest-<br/>onderzoeker</> : NEST_ROL_LABELS[r]}
                           </button>
                         );
                       })}
