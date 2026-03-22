@@ -172,16 +172,34 @@ export default function Header({ onSwitchModule, activeModule }) {
             </span>
           )}
         </div>
-        {profile?.ringer_naam && (
-          <span className="header-ringer">
-            {profile.ringer_naam}
-            <span className="header-ringer-rol"> ({ROL_LABELS[rol] || rol})</span>
-          </span>
-        )}
-        <div className="header-sync">
-          <SyncIndicator />
+        <div className="header-left">
+          {profile?.ringer_naam && (
+            <span className="header-ringer">
+              {profile.ringer_naam}
+              <span className="header-ringer-rol"> ({ROL_LABELS[rol] || rol})</span>
+            </span>
+          )}
+          <div className="header-sync">
+            <SyncIndicator />
+          </div>
         </div>
-        <div className="header-menu">
+        <div className="header-right">
+          <a
+            href="https://bunq.me/givememoney/5.00"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="header-coffee-link"
+            title={t('coffee_link_label')}
+            aria-label={t('coffee_link_label')}
+          >
+            <svg width="13" height="13" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true">
+              <rect x="1" y="5" width="10" height="8" rx="1.5"/>
+              <path d="M11 7.5 Q14 7.5 14 9.5 Q14 11.5 11 11.5" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+              <path d="M4 3.5 Q4 2 5 2 Q5 1 6 1 Q7 1 7 2 Q8 2 8 3.5" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round"/>
+            </svg>
+            <span className="header-coffee-text">{t('coffee_link_label')}</span>
+          </a>
+          <div className="header-menu">
           {/* Taalkiezer */}
           <div
             className="pref-menu"
@@ -322,6 +340,7 @@ export default function Header({ onSwitchModule, activeModule }) {
                 </div>
               </div>
             )}
+          </div>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ import { euringReference, getBeschrijving } from '../../data/euring-reference.js
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { useRuitypen } from '../../hooks/useRuitypen';
-import { toYMD } from '../../utils/dateHelper';
+import { toYMD, formatDatum } from '../../utils/dateHelper';
 import { parseVal } from '../../utils/bioHelper';
 import {
   ALL_RINGCENTRALES,
@@ -636,8 +636,8 @@ export default function NieuwPage() {
     const naam = eerste.vogelnaam || '';
     return {
       eigen: true,
-      vangstdatum: eerste.vangstdatum,
-      laatste_vangstdatum: gesorteerd.length > 1 ? laatste.vangstdatum : null,
+      vangstdatum: formatDatum(eerste.vangstdatum),
+      laatste_vangstdatum: gesorteerd.length > 1 ? formatDatum(laatste.vangstdatum) : null,
       leeftijd: eerste.leeftijd,
       geslacht: eerste.geslacht || '',
       vogelnaam: naam ? naam.charAt(0).toUpperCase() + naam.slice(1).toLowerCase() : naam,

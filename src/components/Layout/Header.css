@@ -12,16 +12,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 16px 20px;
+  padding: 8px 16px;
   text-align: center;
   position: relative;
 }
 
-.header-menu {
+.header-right {
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.header-menu {
   display: flex;
   align-items: center;
   gap: 2px;
@@ -227,29 +234,36 @@
   background: var(--danger-bg) !important;
 }
 
-.header-ringer {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  bottom: 4px;
-  white-space: nowrap;
-  pointer-events: none;
-  /* Relatief aan .header-inner */
-}
-
-.header-ringer-rol {
-  opacity: 0.6;
-  font-size: 0.65rem;
-}
-
-.header-sync {
+.header-left {
   position: absolute;
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  /* Relatief aan .header-inner */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.header-ringer {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  pointer-events: none;
+  line-height: 1;
+  opacity: 0.45;
+  padding: 2px 4px 0;
+}
+
+.header-ringer-rol {
+  opacity: 0.75;
+  font-size: 0.65rem;
+}
+
+.header-sync {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 /* Rol-simulator */
@@ -467,6 +481,36 @@
 .header-module-segment:not(.active):hover {
   background: var(--bg-tertiary);
   color: var(--text-secondary);
+}
+
+/* Koffie-link */
+.header-coffee-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.65rem;
+  opacity: 0.45;
+  transition: opacity 0.15s, color 0.15s;
+  white-space: nowrap;
+  padding: 2px 4px 0;
+  line-height: 1;
+}
+
+.header-coffee-link:hover {
+  opacity: 1;
+  color: #f59e0b;
+}
+
+.header-coffee-text {
+  display: none;
+}
+
+@media (min-width: 400px) {
+  .header-coffee-text {
+    display: inline;
+  }
 }
 
 .header-staging-badge {

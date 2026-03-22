@@ -1,52 +1,119 @@
+// Parset een bereik-string ("18-31") of getal naar een integer (neemt het minimum).
+function parseNestDagen(waarde, fallback = 18) {
+  const n = parseInt(waarde, 10);
+  return isNaN(n) ? fallback : n;
+}
+
 /**
- * Berekent de datum van het aanbevolen vervolgbezoek op basis van het stadium.
- *
- * @param {string} stadium  - SOVON-stadiumcode (bijv. 'E4', 'N3', 'L0')
- * @param {string} datum    - Datum van het huidige bezoek (YYYY-MM-DD)
- * @param {object|null} soort - Soortobject uit Dexie (bevat nest_ei_dagen, nest_jong_dagen)
- * @returns {string|null}   - Aanbevolen datum (YYYY-MM-DD) of null als geen suggestie
+ * Geschatte fractie van de nestjongenperiode per SOVON-stadiumcode.
+ * N6 (slagpennen half volgroeid) = ringtijdstip (~75%).
  */
-export function berekenVervolgbezoek(stadium, datum, soort) {
+const N_FRACTIE = {
+  'N+': null, // onbekend
+  'N0': 0.00, // net uitgekomen
+  'N1': 0.10, // naakt of in dons
+  'N2': 0.20, // blind
+  'N3': 0.30, // ogen open
+  'N4': 0.45, // slagpennen in pin
+  'N5': 0.60, // slagpennen uit bloedspoel
+  'N6': 0.75, // slagpennen half volgroeid ← RINGEN
+  'N7': 0.90, // klaar om uit te vliegen
+  'N9': 1.00, // uitgevlogen op controledag
+  'N10': 1.00,
+  'N11': 1.00,
+};
+
+const RING_FRACTIE = 0.75; // = N6
+
+/**
+ * Schat de dag in het nest waarop N6 bereikt wordt (~75% van nestjongenperiode).
+ */
+export function berekenRingLeeftijd(soort) {
+  const nestjong = parseNestDagen(soort?.nest_jong_dagen, 18);
+  const optimaal = Math.floor(nestjong * RING_FRACTIE);
+  return Math.max(7, Math.min(optimaal, nestjong - 3));
+}
+
+/**
+ * Berekent het aanbevolen vervolgbezoek met type-aanduiding.
+ *
+ * @param {string}      stadium  - SOVON-stadiumcode
+ * @param {string}      datum    - Datum huidig bezoek (YYYY-MM-DD)
+ * @param {object|null} soort    - Soortobject (nest_ei_dagen, nest_jong_dagen)
+ * @returns {{ datum: string, type: string } | null}
+ *   type: 'eileg' | 'bouw' | 'ringen' | 'nacontrole' | 'check' | null
+ */
+export function berekenVervolgbezoekInfo(stadium, datum, soort) {
   if (!stadium || !datum) return null;
 
   const date = new Date(datum + 'T12:00:00');
   let dagen = null;
+  let type = null;
 
   if (stadium === 'L0') {
-    dagen = 14; // Nestbouw verwacht
+    dagen = 14;
+    type = 'bouw';
 
   } else if (stadium.startsWith('B')) {
-    dagen = 7;  // Eileg verwacht
+    dagen = 7;
+    type = 'eileg';
 
   } else if (stadium.startsWith('P')) {
-    dagen = 5;  // Ouder aanwezig, inhoud onbekend — snel terugkomen
+    dagen = 5;
+    type = 'check';
 
   } else if (stadium.startsWith('E')) {
-    // Broedtijd (aantal incubatiedagen) — conservatief: tel vanaf nu de volle broedduur
-    const broedtijd = soort?.nest_ei_dagen ?? 14;
+    const broedtijd = parseNestDagen(soort?.nest_ei_dagen, 14);
     dagen = Math.max(3, broedtijd);
+    type = 'jongen';
 
   } else if (stadium === 'N+') {
-    // Leeftijd onbekend — gebruik halve nestjongduur als schatting
-    const nestjong = soort?.nest_jong_dagen ?? 18;
-    dagen = Math.round(nestjong / 2) + 7;
+    // Stadium onbekend — snel terug om stadium te schatten
+    dagen = 3;
+    type = 'check';
 
   } else if (stadium.startsWith('N')) {
-    // N0–N11: dag in het nest bekend
-    const dagNr = parseInt(stadium.slice(1), 10);
-    const nestjong = soort?.nest_jong_dagen ?? 18;
-    const resterend = Math.max(0, nestjong - dagNr);
-    // +7 voor nacontrole (1 week nadat verwacht leeg)
-    dagen = resterend + 7;
+    const nestjong = parseNestDagen(soort?.nest_jong_dagen, 18);
+    const fractieNu = N_FRACTIE[stadium] ?? null;
+
+    if (fractieNu === null) {
+      // Onbekend stadium
+      dagen = 3;
+      type = 'check';
+    } else if (fractieNu < RING_FRACTIE) {
+      // Voor N6 — schat dagen tot ringtijdstip (N6)
+      dagen = Math.max(2, Math.round((RING_FRACTIE - fractieNu) * nestjong));
+      type = 'ringen';
+    } else if (fractieNu >= 1.0) {
+      // Al uitgevlogen — nacontrole
+      dagen = 3;
+      type = 'nacontrole';
+    } else {
+      // N6 of later maar nog in nest — nacontrole
+      dagen = Math.max(2, Math.round((1.0 - fractieNu) * nestjong));
+      type = 'nacontrole';
+    }
 
   } else if (stadium.startsWith('C') || stadium === 'X0') {
-    return null; // geen suggestie na nacontrole
+    return null;
   }
 
   if (dagen === null) return null;
 
   date.setDate(date.getDate() + dagen);
-  return date.toISOString().slice(0, 10);
+  return { datum: date.toISOString().slice(0, 10), type };
+}
+
+/**
+ * Berekent de datum van het aanbevolen vervolgbezoek (backwards compatible).
+ *
+ * @param {string}      stadium
+ * @param {string}      datum
+ * @param {object|null} soort
+ * @returns {string|null}  YYYY-MM-DD of null
+ */
+export function berekenVervolgbezoek(stadium, datum, soort) {
+  return berekenVervolgbezoekInfo(stadium, datum, soort)?.datum ?? null;
 }
 
 /**

@@ -1,6 +1,31 @@
-export const VERSIE = '1.24.0';
+export const VERSIE = '1.25.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.25.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: nestbezoek SOVON-coderingen volledig gecorrigeerd op basis van officieel coderingsdocument (B, E, N, C, P)',
+      'Feat: nestbezoek — apart invoerveld voor aantal eieren; gemengd nest (eieren + pulli) mogelijk',
+      'Feat: nestplanning — ringmoment gekoppeld aan stadium N6 (slagpennen half volgroeid)',
+      'Feat: header — naam en statusindicator links, koffie-link rechts boven knoppen',
+      'Fix: terugvangstdatums in ringmodule geformatteerd als dd-mm-jjjj',
+    ],
+    wijzigingen_en: [
+      'Fix: nest visit SOVON codes fully corrected based on official coding document (B, E, N, C, P)',
+      'Feat: nest visit — separate input for number of eggs; mixed nest (eggs + chicks) supported',
+      'Feat: nest planning — ringing moment linked to stage N6 (half-grown flight feathers)',
+      'Feat: header — name and sync indicator on left, coffee link above right buttons',
+      'Fix: recapture dates in ring module formatted as dd-mm-yyyy',
+    ],
+    wijzigingen_de: [
+      'Fix: Nestbesuch SOVON-Codierungen vollständig korrigiert anhand offizielles Codierungsdokument (B, E, N, C, P)',
+      'Feat: Nestbesuch — separates Eingabefeld für Eieranzahl; gemischtes Nest (Eier + Nestlinge) möglich',
+      'Feat: Nestplanung — Beringungszeitpunkt an Stadium N6 (halbgewachsene Schwungfedern) geknüpft',
+      'Feat: Kopfzeile — Name und Statusanzeige links, Kaffee-Link rechts über Schaltflächen',
+      'Fix: Wiederfangdaten im Ringmodul als TT-MM-JJJJ formatiert',
+    ],
+  },
   {
     versie: '1.24.0',
     datum: '2026-03-22',
