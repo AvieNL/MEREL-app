@@ -201,6 +201,7 @@ export function LineChart({ data, title, xKey, yKey, onPointClick }) {
 }
 
 export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLon }) {
+  const { t } = useTranslation();
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const tileLayerRef = useRef(null);
@@ -300,8 +301,6 @@ export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLo
   }, [kaartData]);
 
   if (kaartData.markers.length === 0) return null;
-
-  const { t } = useTranslation();
 
   function toggleTile() {
     const next = tileType === 'osm' ? 'satellite' : 'osm';
