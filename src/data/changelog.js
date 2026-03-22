@@ -1,6 +1,31 @@
-export const VERSIE = '1.29.5';
+export const VERSIE = '1.29.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.6',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: kastnummer groot weergegeven in header nestdetailpagina',
+      'Feat: adres getoond i.p.v. coördinaten in nestdetail als bekend',
+      'Feat: nestsymbool ⌂ voor kastnummer in lijst en detailpagina',
+      'Fix: ✏️-knop bezoek direct na bezoekdata, vóór vervolgbezoek-suggestie',
+      'Fix: vervolgbezoek-suggestiedatum getoond als dd-mm-yyyy',
+    ],
+    wijzigingen_en: [
+      'Feat: nest number displayed prominently in nest detail header',
+      'Feat: address shown instead of coordinates in nest detail when available',
+      'Feat: nest symbol ⌂ before nest number in list and detail page',
+      'Fix: ✏️ edit button placed directly after visit data, before next-visit suggestion',
+      'Fix: next-visit suggestion date shown as dd-mm-yyyy',
+    ],
+    wijzigingen_de: [
+      'Feat: Kastenummer groß im Nestkopf angezeigt',
+      'Feat: Adresse statt Koordinaten im Nestdetail wenn vorhanden',
+      'Feat: Nestsymbol ⌂ vor Kastnummer in Liste und Detailseite',
+      'Fix: ✏️-Schaltfläche direkt nach Besuchsdaten, vor Folgebesuch-Vorschlag',
+      'Fix: Folgebesuch-Datum wird als dd-mm-yyyy angezeigt',
+    ],
+  },
   {
     versie: '1.29.5',
     datum: '2026-03-22',
