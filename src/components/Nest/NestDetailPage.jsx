@@ -212,7 +212,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                 </div>
                 {/* ── Regel 2: soort + stadium + aantallen ── */}
                 <div className="bezoek-item__details">
-                  {bezoek.soort_euring && bezoek.soort_euring !== legsel.soort_euring && (
+                  {bezoek.soort_euring && bezoek.soort_euring !== soortEuring && (
                     <span className="bezoek-item__soort-afwijking">
                       {speciesByEuring[bezoek.soort_euring]?.naam_nl || bezoek.soort_euring}
                     </span>
