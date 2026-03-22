@@ -1,6 +1,19 @@
-export const VERSIE = '1.29.0';
+export const VERSIE = '1.29.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.1',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: ringnummers overal in de app weergegeven zonder puntjes (SoortDetail, Stats, ProjectDetail, ExternMeldingModal, NestDetail)',
+    ],
+    wijzigingen_en: [
+      'Fix: ring numbers displayed without dots throughout the app',
+    ],
+    wijzigingen_de: [
+      'Fix: Ringnummern werden überall in der App ohne Punkte angezeigt',
+    ],
+  },
   {
     versie: '1.29.0',
     datum: '2026-03-22',
