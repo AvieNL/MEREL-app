@@ -95,20 +95,29 @@ export default function AdminPage() {
 
     const userIds = data.map(p => p.id);
 
-    const countByUser = {};
-    if (userIds.length > 0) {
-      const { data: vangstRows } = await supabase
-        .from('vangsten')
-        .select('user_id')
-        .in('user_id', userIds)
-        .is('deleted_at', null);
+    const vangstCountMap = {};
+    const nestCountMap = {};
+    const nestbezoekCountMap = {};
 
-      for (const v of vangstRows || []) {
-        countByUser[v.user_id] = (countByUser[v.user_id] || 0) + 1;
-      }
+    if (userIds.length > 0) {
+      await Promise.all(userIds.map(async uid => {
+        const [{ count: v }, { count: n }, { count: nb }] = await Promise.all([
+          supabase.from('vangsten').select('*', { count: 'exact', head: true }).eq('user_id', uid).is('deleted_at', null),
+          supabase.from('nest').select('*', { count: 'exact', head: true }).eq('aangemaakt_door', uid),
+          supabase.from('nestbezoek').select('*', { count: 'exact', head: true }).eq('aangemaakt_door', uid),
+        ]);
+        vangstCountMap[uid] = v ?? 0;
+        nestCountMap[uid] = n ?? 0;
+        nestbezoekCountMap[uid] = nb ?? 0;
+      }));
     }
 
-    const metCounts = data.map(p => ({ ...p, vangsten_count: countByUser[p.id] ?? 0 }));
+    const metCounts = data.map(p => ({
+      ...p,
+      vangsten_count: vangstCountMap[p.id] ?? 0,
+      nest_count: nestCountMap[p.id] ?? 0,
+      nestbezoek_count: nestbezoekCountMap[p.id] ?? 0,
+    }));
     setGebruikers(metCounts);
     setLoading(false);
   }
@@ -178,6 +187,8 @@ export default function AdminPage() {
                       <span className="admin-user-email-inline">{g.email || '–'}</span>
                       {g.ringer_nummer && <span>· #{g.ringer_nummer}</span>}
                       <span className="admin-count">· {t('admin_catches', { count: g.vangsten_count })}</span>
+                      {g.nest_count > 0 && <span className="admin-count">· {t('admin_nests', { count: g.nest_count })}</span>}
+                      {g.nestbezoek_count > 0 && <span className="admin-count">· {t('admin_nestbezoeken', { count: g.nestbezoek_count })}</span>}
                     </div>
                   </div>
 

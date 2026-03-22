@@ -1,6 +1,22 @@
-export const VERSIE = '1.15.2';
+export const VERSIE = '1.15.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.15.3',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: adminpanel toonde incorrect vangstenaantal door Supabase row-limiet — opgelost met count-query',
+      'Feat: adminpanel toont nu ook aantal nesten en nestbezoeken per gebruiker',
+    ],
+    wijzigingen_en: [
+      'Fix: admin panel showed incorrect catch count due to Supabase row limit — fixed with count query',
+      'Feat: admin panel now also shows nest count and nest visit count per user',
+    ],
+    wijzigingen_de: [
+      'Fix: Admin-Panel zeigte falsche Fanganzahl wegen Supabase-Zeilenlimit — mit Count-Query behoben',
+      'Feat: Admin-Panel zeigt jetzt auch Nest- und Nestbesuchanzahl pro Benutzer',
+    ],
+  },
   {
     versie: '1.15.2',
     datum: '2026-03-22',
