@@ -227,16 +227,6 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                       {bezoek.aantal_pulli != null && ` · ${bezoek.aantal_pulli} ${t('nest_jongen')}`}
                     </span>
                   )}
-                  {canNestAdd && isNGroep && (
-                    <button
-                      className="btn-ring-uit-nest"
-                      type="button"
-                      onClick={() => navigate(`/nest/bezoek/${bezoek.id}/ringen`)}
-                      title={t('nest_btn_ring_bird')}
-                    >
-                      🔖 {t('nest_btn_ring_bird')}
-                    </button>
-                  )}
                 </div>
                 {bezoekRingen.length > 0 && (
                   <div className="bezoek-ringen">

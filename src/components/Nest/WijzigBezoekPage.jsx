@@ -316,6 +316,21 @@ export default function WijzigBezoekPage() {
         )}
       </div>
 
+      {/* ── Pulli ringen ── */}
+      {form.stadiumPrimair?.startsWith('N') && form.stadiumPrimair !== 'N+' && (
+        <div className="section">
+          <div className="section-content">
+            <button
+              type="button"
+              className="btn-pulli-ringen"
+              onClick={() => navigate(`/nest/bezoek/${bezoekId}/ringen`)}
+            >
+              🔖 {t('nest_btn_ring_bird')}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ── Vervolgbezoeksuggestie ── */}
       {suggestie && (() => {
         const [y, m, d] = suggestie.split('-');

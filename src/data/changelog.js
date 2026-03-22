@@ -1,6 +1,19 @@
-export const VERSIE = '1.30.6';
+export const VERSIE = '1.30.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.30.7',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'UX: pulli ringen knop verplaatst van bezoeklijst naar bezoekformulier (zichtbaar bij N-stadium)',
+    ],
+    wijzigingen_en: [
+      'UX: pulli ringing button moved from visit list to visit form (visible for N-stadium)',
+    ],
+    wijzigingen_de: [
+      'UX: Pulli-Beringen Schaltfläche aus Besuchsliste ins Besuchsformular verschoben (bei N-Stadium sichtbar)',
+    ],
+  },
   {
     versie: '1.30.6',
     datum: '2026-03-22',

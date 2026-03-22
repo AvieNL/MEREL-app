@@ -240,23 +240,6 @@
 }
 
 /* ── Ring-knop vanuit bezoek ── */
-.btn-ring-uit-nest {
-  margin-left: auto;
-  font-size: 0.75rem;
-  padding: 3px 8px;
-  min-height: unset;
-  background: var(--accent);
-  color: var(--bg-primary);
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.btn-ring-uit-nest:hover {
-  opacity: 0.85;
-}
 
 /* ── Geringde vogels per bezoek ── */
 .bezoek-ringen {
