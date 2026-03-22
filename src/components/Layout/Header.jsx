@@ -120,14 +120,6 @@ export default function Header({ onSwitchModule, activeModule }) {
   const activeThema = THEMAS.find(th => th.mode === mode) || THEMAS[0];
 
   const handleTitleClick = () => {
-    if (onSwitchModule) {
-      onSwitchModule();
-    } else {
-      navigate('/');
-    }
-  };
-
-  const handleModuleClick = () => {
     navigate(activeModule === 'nest' ? '/nest' : '/');
   };
 
@@ -139,14 +131,29 @@ export default function Header({ onSwitchModule, activeModule }) {
           <button className="header-app-title" onClick={handleTitleClick} aria-label={t('app_name')}>
             VRS App{isStaging && <span className="header-staging-badge">STAGING</span>}
           </button>
-          <button
-            className={`header-module-pill header-module-pill--${activeModule || 'ring'}`}
-            onClick={handleModuleClick}
-            aria-label={activeModule === 'nest' ? t('module_nest') : t('module_ring')}
-          >
-            {activeModule === 'nest' ? '🥚' : '🐦'}
-            <span>{activeModule === 'nest' ? t('module_nest') : t('module_ring')}</span>
-          </button>
+          {onSwitchModule ? (
+            <div className="header-module-toggle">
+              <button
+                className={`header-module-segment header-module-segment--ring${activeModule === 'ring' ? ' active' : ''}`}
+                onClick={() => activeModule !== 'ring' && onSwitchModule('ring')}
+                aria-pressed={activeModule === 'ring'}
+              >
+                🐦 {t('module_ring')}
+              </button>
+              <button
+                className={`header-module-segment header-module-segment--nest${activeModule === 'nest' ? ' active' : ''}`}
+                onClick={() => activeModule !== 'nest' && onSwitchModule('nest')}
+                aria-pressed={activeModule === 'nest'}
+              >
+                ⌂ {t('module_nest')}
+              </button>
+            </div>
+          ) : (
+            <span className={`header-module-pill header-module-pill--${activeModule || 'ring'}`}>
+              {activeModule === 'nest' ? '⌂' : '🐦'}
+              <span>{activeModule === 'nest' ? t('module_nest') : t('module_ring')}</span>
+            </span>
+          )}
         </div>
         {profile?.ringer_naam && (
           <span className="header-ringer">

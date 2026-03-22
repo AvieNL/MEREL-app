@@ -1,6 +1,19 @@
-export const VERSIE = '1.19.0';
+export const VERSIE = '1.20.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.20.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: segmented control in header om snel tussen Ringonderzoek en Nestonderzoek te schakelen',
+    ],
+    wijzigingen_en: [
+      'Feat: segmented control in header to quickly switch between Ringing and Nest research',
+    ],
+    wijzigingen_de: [
+      'Feat: Segmented Control in der Kopfzeile zum schnellen Wechsel zwischen Beringung und Nestforschung',
+    ],
+  },
   {
     versie: '1.19.0',
     datum: '2026-03-22',

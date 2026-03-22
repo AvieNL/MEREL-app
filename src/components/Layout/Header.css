@@ -398,28 +398,18 @@
   opacity: 0.8;
 }
 
-/* Module-pill: klikbare badge die aangeeft in welke module je zit */
+/* Module-pill: statische badge (alleen voor gebruikers zonder nestonderzoek-toegang) */
 .header-module-pill {
   display: flex;
   align-items: center;
   gap: 5px;
-  border: none;
   border-radius: 12px;
   padding: 3px 10px;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  cursor: pointer;
   white-space: nowrap;
-  min-width: auto;
-  min-height: auto;
-  transition: opacity 0.15s, transform 0.1s;
   font-family: inherit;
-}
-
-.header-module-pill:hover {
-  opacity: 0.85;
-  transform: scale(1.03);
 }
 
 .header-module-pill--ring {
@@ -432,6 +422,51 @@
   background: rgba(34, 197, 94, 0.15);
   color: var(--success);
   border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+/* Segmented control: snel schakelen tussen modules */
+.header-module-toggle {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+}
+
+.header-module-segment {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  min-width: auto;
+  min-height: auto;
+  transition: background 0.15s, color 0.15s;
+  line-height: 1.4;
+}
+
+.header-module-segment--ring.active {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent);
+  cursor: default;
+}
+
+.header-module-segment--nest.active {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--success);
+  cursor: default;
+}
+
+.header-module-segment:not(.active):hover {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
 }
 
 .header-staging-badge {
