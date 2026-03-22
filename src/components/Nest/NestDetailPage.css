@@ -170,13 +170,12 @@
   gap: 8px;
 }
 
-.bezoek-item__info {
+.bezoek-item__details {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
+  gap: 6px;
+  margin-top: 3px;
 }
 
 .bezoek-item:last-child {

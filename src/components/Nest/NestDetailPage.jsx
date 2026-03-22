@@ -187,44 +187,20 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
             const isNGroep = bezoek.stadium?.startsWith('N');
             return (
               <div key={bezoek.id} className="bezoek-item">
+                {/* ── Regel 1: datum + pill + potlood ── */}
                 <div className="bezoek-item__row">
-                  <div className="bezoek-item__info">
-                    <span className="bezoek-item__datum">{formatDatum(bezoek.datum)}{bezoek.tijd ? ` ${bezoek.tijd.slice(0,5)}` : ''}</span>
-                    <span className="bezoek-item__stadium">
-                      {stadiumLabel(bezoek.stadium, t)}
-                      {bezoek.stadium2 && <> + {stadiumLabel(bezoek.stadium2, t)}</>}
-                    </span>
-                    {bezoek.soort_euring && bezoek.soort_euring !== legsel.soort_euring && (
-                      <span className="bezoek-item__soort-afwijking">
-                        {speciesByEuring[bezoek.soort_euring]?.naam_nl || bezoek.soort_euring}
+                  <span className="bezoek-item__datum">
+                    {formatDatum(bezoek.datum)}{bezoek.tijd ? ` ${bezoek.tijd.slice(0,5)}` : ''}
+                  </span>
+                  {bezoek.volgende_bezoek_suggestie && (() => {
+                    const dagenAf = Math.round((new Date(bezoek.volgende_bezoek_suggestie) - new Date()) / 86400000);
+                    const urgentie = dagenAf < 0 ? 'verlopen' : dagenAf <= 2 ? 'dringend' : dagenAf <= 5 ? 'binnenkort' : 'gepland';
+                    return (
+                      <span className="bezoek-item__suggestie-pill" style={{ '--pill-kleur': URGENTIE_KLEUR[urgentie] }}>
+                        → {formatDatum(bezoek.volgende_bezoek_suggestie)}
                       </span>
-                    )}
-                    {(bezoek.aantal_eieren != null || bezoek.aantal_pulli != null) && (
-                      <span className="bezoek-item__aantallen">
-                        {bezoek.aantal_eieren != null && `${bezoek.aantal_eieren} ${t('nest_eieren')}`}
-                        {bezoek.aantal_pulli != null && ` · ${bezoek.aantal_pulli} ${t('nest_jongen')}`}
-                      </span>
-                    )}
-                    {bezoek.volgende_bezoek_suggestie && (() => {
-                      const dagenAf = Math.round((new Date(bezoek.volgende_bezoek_suggestie) - new Date()) / 86400000);
-                      const urgentie = dagenAf < 0 ? 'verlopen' : dagenAf <= 2 ? 'dringend' : dagenAf <= 5 ? 'binnenkort' : 'gepland';
-                      return (
-                        <span className="bezoek-item__suggestie-pill" style={{ '--pill-kleur': URGENTIE_KLEUR[urgentie] }}>
-                          → {formatDatum(bezoek.volgende_bezoek_suggestie)}
-                        </span>
-                      );
-                    })()}
-                    {canNestAdd && isNGroep && (
-                      <button
-                        className="btn-ring-uit-nest"
-                        type="button"
-                        onClick={() => handleVogelRingen(bezoek)}
-                        title={t('nest_btn_ring_bird')}
-                      >
-                        🔖 {t('nest_btn_ring_bird')}
-                      </button>
-                    )}
-                  </div>
+                    );
+                  })()}
                   {canNestEdit && (
                     <button
                       className="icon-edit-btn bezoek-edit-btn"
@@ -232,6 +208,34 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                       onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
                       title={t('btn_edit')}
                     >✏️</button>
+                  )}
+                </div>
+                {/* ── Regel 2: soort + stadium + aantallen ── */}
+                <div className="bezoek-item__details">
+                  {bezoek.soort_euring && bezoek.soort_euring !== legsel.soort_euring && (
+                    <span className="bezoek-item__soort-afwijking">
+                      {speciesByEuring[bezoek.soort_euring]?.naam_nl || bezoek.soort_euring}
+                    </span>
+                  )}
+                  <span className="bezoek-item__stadium">
+                    {stadiumLabel(bezoek.stadium, t)}
+                    {bezoek.stadium2 && <> + {stadiumLabel(bezoek.stadium2, t)}</>}
+                  </span>
+                  {(bezoek.aantal_eieren != null || bezoek.aantal_pulli != null) && (
+                    <span className="bezoek-item__aantallen">
+                      {bezoek.aantal_eieren != null && `${bezoek.aantal_eieren} ${t('nest_eieren')}`}
+                      {bezoek.aantal_pulli != null && ` · ${bezoek.aantal_pulli} ${t('nest_jongen')}`}
+                    </span>
+                  )}
+                  {canNestAdd && isNGroep && (
+                    <button
+                      className="btn-ring-uit-nest"
+                      type="button"
+                      onClick={() => handleVogelRingen(bezoek)}
+                      title={t('nest_btn_ring_bird')}
+                    >
+                      🔖 {t('nest_btn_ring_bird')}
+                    </button>
                   )}
                 </div>
                 {bezoekRingen.length > 0 && (
