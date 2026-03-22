@@ -243,12 +243,35 @@ export default function AdminPage() {
             <h3>{t('admin_invite_title')}</h3>
             <div className="section-content">
               <p className="admin-hint">{t('admin_invite_hint')}</p>
-              <p className="admin-hint">
-                <strong>{t('admin_role_explanation')}</strong><br />
-                <strong>{t('role_ringer')}</strong> — {t('admin_role_ringer_desc').replace(/^Ringer — |^Beringer — |^Ringer — /, '')}<br />
-                <strong>{t('role_viewer')}</strong> — {t('admin_role_viewer_desc').replace(/^Viewer — |^Betrachter — /, '')}<br />
-                <strong>{t('role_admin')}</strong> — {t('admin_role_admin_desc').replace(/^Admin — /, '')}
-              </p>
+
+              <p className="admin-hint"><strong>{t('admin_role_explanation')}</strong></p>
+              <div className="admin-role-list">
+                {[
+                  ['role_ringer',      'admin_role_ringer_desc'],
+                  ['role_ringer_plus', 'admin_role_ringer_plus_desc'],
+                  ['role_viewer',      'admin_role_viewer_desc'],
+                  ['role_admin',       'admin_role_admin_desc'],
+                ].map(([roleKey, descKey]) => (
+                  <div key={roleKey} className="admin-role-row">
+                    <span className="admin-role-name">{t(roleKey)}</span>
+                    <span className="admin-role-desc">{t(descKey)}</span>
+                  </div>
+                ))}
+              </div>
+
+              <p className="admin-hint" style={{ marginTop: '1rem' }}><strong>{t('admin_nest_role_explanation')}</strong></p>
+              <div className="admin-role-list">
+                {[
+                  ['role_nestonderzoeker', 'admin_nest_role_nestonderzoeker_desc'],
+                  ['role_nest_kijker',     'admin_nest_role_kijker_desc'],
+                  ['role_nest_none',       'admin_nest_role_none_desc'],
+                ].map(([roleKey, descKey]) => (
+                  <div key={roleKey} className="admin-role-row">
+                    <span className="admin-role-name">{t(roleKey)}</span>
+                    <span className="admin-role-desc">{t(descKey)}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 

@@ -190,6 +190,31 @@
   color: var(--text-primary);
 }
 
+.admin-role-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 0.25rem;
+}
+
+.admin-role-row {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.admin-role-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.admin-role-desc {
+  color: var(--text-secondary);
+}
+
 .admin-btn {
   background: var(--accent);
   color: #fff;
