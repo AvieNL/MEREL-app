@@ -273,16 +273,3 @@
   text-decoration: none;
   cursor: default;
 }
-
-.nestring-badge__delete {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 0.9rem;
-  line-height: 1;
-  padding: 0;
-}
-.nestring-badge__delete:hover {
-  color: var(--danger);
-}

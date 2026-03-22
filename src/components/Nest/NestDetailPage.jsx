@@ -21,7 +21,7 @@ export default function NestDetailPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
-  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteBezoek, deleteNestring } = useNestData();
+  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteBezoek } = useNestData();
   const { records } = useRecords();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
   const species = useSpeciesRef();
@@ -117,7 +117,6 @@ export default function NestDetailPage() {
             canNestAdd={canNestAdd}
             canNestEdit={canNestEdit}
             deleteBezoek={deleteBezoek}
-            deleteNestring={deleteNestring}
             records={records}
             navigate={navigate}
             t={t}
@@ -138,9 +137,8 @@ export default function NestDetailPage() {
 }
 
 
-function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, deleteNestring, records, navigate, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, records, navigate, t }) {
   const [deleteBezoekId, setDeleteBezoekId] = useState(null);
-  const [deleteNestringId, setDeleteNestringId] = useState(null);
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
@@ -247,24 +245,9 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                           ) : (
                             <span className="bezoek-ring-link bezoek-ring-link--orphan">{label}</span>
                           )}
-                          {canNestEdit && (
-                            <button
-                              className="nestring-badge__delete"
-                              type="button"
-                              onClick={() => setDeleteNestringId(r.id)}
-                              title={t('btn_delete')}
-                            >×</button>
-                          )}
                         </div>
                       );
                     })}
-                    {deleteNestringId && bezoekRingen.some(r => r.id === deleteNestringId) && (
-                      <div className="bezoek-delete-confirm">
-                        <span>{t('nest_ring_delete_confirm')}</span>
-                        <button className="btn-secondary" onClick={() => setDeleteNestringId(null)}>{t('btn_cancel')}</button>
-                        <button className="btn-danger" onClick={async () => { await deleteNestring(deleteNestringId); setDeleteNestringId(null); }}>{t('btn_delete')}</button>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>

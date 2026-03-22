@@ -1,6 +1,19 @@
-export const VERSIE = '1.30.9';
+export const VERSIE = '1.31.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Refactor: verwijderknop per ring in nestmodule verwijderd — cascade via ringmodule volstaat',
+    ],
+    wijzigingen_en: [
+      'Refactor: per-ring delete button in nest module removed — cascade via ring module suffices',
+    ],
+    wijzigingen_de: [
+      'Refactor: Löschen-Schaltfläche pro Ring im Nestmodul entfernt — Kaskade über Ringmodul genügt',
+    ],
+  },
   {
     versie: '1.30.9',
     datum: '2026-03-22',
