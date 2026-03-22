@@ -164,7 +164,7 @@ export default function NieuwBezoekPage() {
     const vogelNaam = nest.soort_euring
       ? (speciesByEuring[nest.soort_euring]?.[`naam_${lang}`] || speciesByEuring[nest.soort_euring]?.naam_nl)
       : null;
-    return `#${nest.kastnummer}${nest.omschrijving ? ` — ${nest.omschrijving}` : ''}${vogelNaam ? ` (${vogelNaam})` : ''}`;
+    return `⌂ ${nest.kastnummer}${nest.omschrijving ? ` — ${nest.omschrijving}` : ''}${vogelNaam ? ` (${vogelNaam})` : ''}`;
   }
 
   // ── Validatie ─────────────────────────────────────────────────────────────

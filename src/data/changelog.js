@@ -1,6 +1,19 @@
-export const VERSIE = '1.31.6';
+export const VERSIE = '1.31.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.7',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: nestsymbool ⌂ in bezoekformulieren (was nog #)',
+    ],
+    wijzigingen_en: [
+      'Fix: nest symbol ⌂ in visit forms (was still #)',
+    ],
+    wijzigingen_de: [
+      'Fix: Nestsymbol ⌂ in Besuchsformularen (war noch #)',
+    ],
+  },
   {
     versie: '1.31.6',
     datum: '2026-03-22',

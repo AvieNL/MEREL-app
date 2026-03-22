@@ -134,7 +134,7 @@ export default function WijzigBezoekPage() {
       <div className="nieuw-sticky-header">
         <div className="nieuw-topbar">
           <span className="nieuw-topbar-titel">
-            #{nest.kastnummer}{nest.omschrijving ? ` — ${nest.omschrijving}` : ''}
+            ⌂ {nest.kastnummer}{nest.omschrijving ? ` — ${nest.omschrijving}` : ''}
           </span>
           <button type="button" className="btn-secondary nieuw-topbar-btn"
             onClick={() => navigate(`/nest/${nest.id}`)} disabled={saving}>
