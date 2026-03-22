@@ -5,7 +5,7 @@ import './Navigation.css';
 
 const ALL_TABS = [
   { path: '/nest/nieuw', labelKey: 'nav_new',         icon: '＋', requiresEdit: true  },
-  { path: '/nest',       labelKey: 'nav_nest_nesten', icon: '🥚', requiresEdit: false, end: true },
+  { path: '/nest',       labelKey: 'nav_nest_nesten', icon: '⌂',  requiresEdit: false, end: true },
   { path: '/nest/stats', labelKey: 'nav_stats',       icon: '◔', requiresEdit: false },
   { path: '/soorten',    labelKey: 'nav_species',     icon: '◉', requiresEdit: false },
 ];
