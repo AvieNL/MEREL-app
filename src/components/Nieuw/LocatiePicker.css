@@ -11,6 +11,8 @@
   border: 1px solid var(--border);
   overflow: hidden;
   isolation: isolate;
+  z-index: 1;
+  position: relative;
 }
 
 .locatie-coords {
