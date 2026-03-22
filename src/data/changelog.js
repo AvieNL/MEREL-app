@@ -1,6 +1,22 @@
-export const VERSIE = '1.20.0';
+export const VERSIE = '1.21.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.21.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: slim modulewisselen — navigeert naar de overeenkomende pagina (stats↔stats, nieuw↔nieuw, vogels↔nesten)',
+      'Style: navigatietab "Records" hernoemd naar "Vogels"',
+    ],
+    wijzigingen_en: [
+      'Feat: smart module switching — navigates to the equivalent page (stats↔stats, new↔new, birds↔nests)',
+      'Style: navigation tab "Records" renamed to "Birds"',
+    ],
+    wijzigingen_de: [
+      'Feat: intelligenter Modulwechsel — navigiert zur entsprechenden Seite (Statistik↔Statistik, Neu↔Neu, Vögel↔Nester)',
+      'Style: Navigationsreiter "Einträge" in "Vögel" umbenannt',
+    ],
+  },
   {
     versie: '1.20.0',
     datum: '2026-03-22',

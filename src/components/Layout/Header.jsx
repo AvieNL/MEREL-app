@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/index.js';
 import { useAuth } from '../../context/AuthContext';
@@ -17,6 +17,7 @@ export default function Header({ onSwitchModule, activeModule }) {
   const taalRef = useRef(null);
   const themaRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout, profile, simulatedRole, setSimulatedRole, simulatedNestRole, setSimulatedNestRole } = useAuth();
   const { isSimulating, rol } = useRole();
   const { nestRol, isSimulatingNest } = useNestRole();
@@ -123,6 +124,22 @@ export default function Header({ onSwitchModule, activeModule }) {
     navigate(activeModule === 'nest' ? '/nest' : '/');
   };
 
+  function getEquivalentPath(toModule) {
+    const p = location.pathname;
+    if (toModule === 'nest') {
+      if (p === '/stats') return '/nest/stats';
+      if (p === '/' || p === '/records') return '/nest';
+      if (p.startsWith('/soorten')) return p; // zelfde soortenpagina
+      return '/nest';
+    } else {
+      if (p === '/nest/stats') return '/stats';
+      if (p === '/nest/nieuw') return '/';
+      if (p.startsWith('/nest')) return '/records';
+      if (p.startsWith('/soorten')) return p;
+      return '/';
+    }
+  }
+
   return (
     <header className="app-header">
       {/* Hoofd-rij */}
@@ -135,14 +152,14 @@ export default function Header({ onSwitchModule, activeModule }) {
             <div className="header-module-toggle">
               <button
                 className={`header-module-segment header-module-segment--ring${activeModule === 'ring' ? ' active' : ''}`}
-                onClick={() => activeModule !== 'ring' && onSwitchModule('ring')}
+                onClick={() => { if (activeModule !== 'ring') { onSwitchModule('ring'); navigate(getEquivalentPath('ring')); } }}
                 aria-pressed={activeModule === 'ring'}
               >
                 ◎ {t('module_ring')}
               </button>
               <button
                 className={`header-module-segment header-module-segment--nest${activeModule === 'nest' ? ' active' : ''}`}
-                onClick={() => activeModule !== 'nest' && onSwitchModule('nest')}
+                onClick={() => { if (activeModule !== 'nest') { onSwitchModule('nest'); navigate(getEquivalentPath('nest')); } }}
                 aria-pressed={activeModule === 'nest'}
               >
                 ⌂ {t('module_nest')}
