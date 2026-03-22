@@ -12,6 +12,26 @@ import './NieuwNestPage.css';
 
 function codeLabel(c, lang) { return c[lang] || c.nl; }
 
+const NESTTYPE_TOEL   = new Set([1, 2, 4]);
+const NESTPLAATS_TOEL = new Set([4, 5, 6, 9, 10, 99]);
+const VONDST_TOEL     = new Set([6]);
+
+const NESTTYPE_HINTS = {
+  nl: { 1: 'Van welke soort?', 2: 'Kastnummer', 4: 'Omschrijving' },
+  en: { 1: 'Which species?',   2: 'Box number', 4: 'Description'  },
+  de: { 1: 'Welche Art?',      2: 'Kastnummer', 4: 'Beschreibung' },
+};
+const NESTPLAATS_HINTS = {
+  nl: { 4: 'Plantensoort', 5: 'Gewas', 6: 'Struiksoort', 9: 'Naaldboomsoort', 10: 'Loofboomsoort', 99: 'Omschrijving' },
+  en: { 4: 'Plant species', 5: 'Crop', 6: 'Shrub species', 9: 'Conifer species', 10: 'Deciduous species', 99: 'Description' },
+  de: { 4: 'Pflanzenart', 5: 'Kulturpflanze', 6: 'Strauchart', 9: 'Nadelbaum-Art', 10: 'Laubbaum-Art', 99: 'Beschreibung' },
+};
+const VONDST_HINTS = {
+  nl: { 6: 'Hoe gevonden?' },
+  en: { 6: 'How found?'    },
+  de: { 6: 'Wie gefunden?' },
+};
+
 export default function WijzigNestPage() {
   const { id } = useParams();
   const { t, i18n } = useTranslation();
@@ -45,10 +65,13 @@ export default function WijzigNestPage() {
       eigenaar_telefoon: nest.eigenaar_telefoon || '',
       toelichting:       nest.toelichting || '',
       soort_euring:      nest.soort_euring || '',
-      nesttype:          nest.nesttype || '',
-      habitat:           nest.habitat != null ? String(nest.habitat) : '',
-      nestplaats:        nest.nestplaats != null ? String(nest.nestplaats) : '',
-      vondst:            nest.vondst != null ? String(nest.vondst) : '',
+      nesttype:               nest.nesttype || '',
+      nesttype_toelichting:   nest.nesttype_toelichting || '',
+      habitat:                nest.habitat != null ? String(nest.habitat) : '',
+      nestplaats:             nest.nestplaats != null ? String(nest.nestplaats) : '',
+      nestplaats_toelichting: nest.nestplaats_toelichting || '',
+      vondst:                 nest.vondst != null ? String(nest.vondst) : '',
+      vondst_toelichting:     nest.vondst_toelichting || '',
       verstopt:          nest.verstopt != null ? String(nest.verstopt) : '',
       bescherm:          nest.bescherm != null ? String(nest.bescherm) : '',
       lat:               nest.lat != null ? String(nest.lat) : '',
@@ -89,10 +112,13 @@ export default function WijzigNestPage() {
         eigenaar_telefoon: form.eigenaar_telefoon.trim(),
         toelichting:       form.toelichting.trim(),
         soort_euring:      form.soort_euring || '',
-        nesttype:          form.nesttype || null,
-        habitat:           form.habitat !== '' ? parseInt(form.habitat, 10) : null,
-        nestplaats:        form.nestplaats !== '' ? parseInt(form.nestplaats, 10) : null,
-        vondst:            form.vondst !== '' ? parseInt(form.vondst, 10) : null,
+        nesttype:               form.nesttype || null,
+        nesttype_toelichting:   form.nesttype_toelichting.trim() || null,
+        habitat:                form.habitat !== '' ? parseInt(form.habitat, 10) : null,
+        nestplaats:             form.nestplaats !== '' ? parseInt(form.nestplaats, 10) : null,
+        nestplaats_toelichting: form.nestplaats_toelichting.trim() || null,
+        vondst:                 form.vondst !== '' ? parseInt(form.vondst, 10) : null,
+        vondst_toelichting:     form.vondst_toelichting.trim() || null,
         verstopt:          form.verstopt !== '' ? parseInt(form.verstopt, 10) : null,
         bescherm:          form.bescherm !== '' ? parseInt(form.bescherm, 10) : null,
         lat:               form.lat ? parseFloat(form.lat) : null,
@@ -219,10 +245,17 @@ export default function WijzigNestPage() {
           <div className="form-row">
             <div className="form-group">
               <label>{t('nest_nesttype')}</label>
-              <select value={form.nesttype} onChange={e => update('nesttype', e.target.value)}>
+              <select value={form.nesttype} onChange={e => { update('nesttype', e.target.value); update('nesttype_toelichting', ''); }}>
                 <option value="">{t('nest_code_optional')}</option>
                 {NESTTYPE_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
               </select>
+              {NESTTYPE_TOEL.has(Number(form.nesttype)) && (
+                <input type="text" className="nest-toel-input"
+                  value={form.nesttype_toelichting}
+                  onChange={e => update('nesttype_toelichting', e.target.value)}
+                  placeholder={NESTTYPE_HINTS[lang]?.[Number(form.nesttype)] || 'Toelichting...'}
+                />
+              )}
             </div>
             <div className="form-group">
               <label>{t('nest_habitat')}</label>
@@ -235,17 +268,31 @@ export default function WijzigNestPage() {
           <div className="form-row">
             <div className="form-group">
               <label>{t('nest_nestplaats')}</label>
-              <select value={form.nestplaats} onChange={e => update('nestplaats', e.target.value)}>
+              <select value={form.nestplaats} onChange={e => { update('nestplaats', e.target.value); update('nestplaats_toelichting', ''); }}>
                 <option value="">{t('nest_code_optional')}</option>
                 {NESTPLAATS_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
               </select>
+              {NESTPLAATS_TOEL.has(Number(form.nestplaats)) && (
+                <input type="text" className="nest-toel-input"
+                  value={form.nestplaats_toelichting}
+                  onChange={e => update('nestplaats_toelichting', e.target.value)}
+                  placeholder={NESTPLAATS_HINTS[lang]?.[Number(form.nestplaats)] || 'Toelichting...'}
+                />
+              )}
             </div>
             <div className="form-group">
               <label>{t('nest_vondst')}</label>
-              <select value={form.vondst} onChange={e => update('vondst', e.target.value)}>
+              <select value={form.vondst} onChange={e => { update('vondst', e.target.value); update('vondst_toelichting', ''); }}>
                 <option value="">{t('nest_code_optional')}</option>
                 {VONDST_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
               </select>
+              {VONDST_TOEL.has(Number(form.vondst)) && (
+                <input type="text" className="nest-toel-input"
+                  value={form.vondst_toelichting}
+                  onChange={e => update('vondst_toelichting', e.target.value)}
+                  placeholder={VONDST_HINTS[lang]?.[Number(form.vondst)] || 'Toelichting...'}
+                />
+              )}
             </div>
           </div>
           <div className="form-row">

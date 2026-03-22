@@ -2,38 +2,52 @@
   padding-bottom: 80px;
 }
 
-.nieuw-nest-header {
+.nieuw-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg-primary);
+  margin: 0 -16px 8px;
+}
+
+.nieuw-topbar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 2px solid var(--accent);
 }
 
-.nieuw-nest-header h2 {
-  margin: 0;
-}
-
-.btn-back {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 4px 8px 4px 0;
-  min-width: auto;
-  min-height: auto;
+.nieuw-topbar-titel {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.95rem;
   white-space: nowrap;
-}
-
-.btn-back:hover {
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--text-primary);
 }
 
-.nieuw-nest-acties {
+.nieuw-topbar-btn {
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  min-height: 34px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Eigenaar contactgegevens ── */
+.nest-eigenaar-contact {
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
-  padding-top: 8px;
+  padding-left: 16px;
+  border-left: 2px solid var(--border);
+  margin-top: -4px;
+}
+
+.nest-eigenaar-contact .form-group {
+  flex: 1;
+  min-width: 0;
 }
 
 /* ── Soortzoeker ── */
@@ -46,7 +60,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  background: var(--bg-secondary);
+  background: var(--bg-tertiary);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   z-index: 100;
@@ -67,6 +81,9 @@
   border-bottom: 1px solid var(--border);
   text-align: left;
   cursor: pointer;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
   min-height: 44px;
   min-width: auto;
 }
@@ -76,11 +93,21 @@
 }
 
 .soort-zoeker__item:hover {
-  background: var(--bg-tertiary);
+  background: var(--bg-secondary);
+  color: var(--accent);
 }
 
 .soort-zoeker__latin {
   font-size: 0.75rem;
   color: var(--text-secondary);
   font-style: italic;
+}
+
+/* ── Contextuele toelichting onder select ── */
+.nest-toel-input {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-color: var(--accent);
+  background: var(--bg-secondary);
 }
