@@ -7,6 +7,7 @@ import { useRecords } from '../../hooks/useRecords';
 import { useSettings } from '../../hooks/useSettings';
 import { useRingStrengen } from '../../hooks/useRingStrengen';
 import { formatDatum } from '../../utils/nestPlanning';
+import { NAUWK_LEEFTIJD_OPTIONS } from '../Nieuw/NieuwPage.constants';
 import './PulliRingenPage.css';
 
 const N_FRACTIE = {
@@ -44,6 +45,7 @@ const LEEG_FORM = {
   ringnummer: '',
   geslacht: 'U',
   leeftijd: '',
+  nauwk_pul_leeftijd: '2',
   vleugel: '',
   gewicht: '',
   tarsus: '',
@@ -124,8 +126,8 @@ export default function PulliRingenPage() {
     const opmerkingen = `Nestkastonderzoek — kast ${nest.kastnummer}${nest.omschrijving ? ` ${nest.omschrijving}` : ''}`;
     const plaatsnaam = nest.adres || `Nestkast ${nest.kastnummer}${nest.omschrijving ? ` ${nest.omschrijving}` : ''}`;
     const leeftijdBron = form.leeftijd !== '' ? parseInt(form.leeftijd, 10) : pullusLeeftijd;
-    const nauwkStr = form.leeftijd !== '' ? 'E' : pullusLeeftijd !== null ? 'D' : 'U';
     const leeftijdStr = leeftijdBron !== null && !isNaN(leeftijdBron) ? String(leeftijdBron).padStart(2, '0') : '99';
+    const nauwkStr = form.nauwk_pul_leeftijd || 'U';
     const broedStr = form.broedselgrootte
       ? String(parseInt(form.broedselgrootte, 10)).padStart(2, '0')
       : '--';
@@ -305,6 +307,14 @@ export default function PulliRingenPage() {
         </div>
 
         <div className="pulli-form__rij">
+          <div className="form-group">
+            <label>{t('pulli_nauwk_leeftijd')}</label>
+            <select value={form.nauwk_pul_leeftijd} onChange={e => update('nauwk_pul_leeftijd', e.target.value)}>
+              {NAUWK_LEEFTIJD_OPTIONS.filter(o => o.value !== '--').map(o => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </div>
           <div className="form-group">
             <label>{t('pulli_broedselgrootte')}</label>
             <input

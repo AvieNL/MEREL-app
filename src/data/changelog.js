@@ -1,6 +1,22 @@
-export const VERSIE = '1.30.5';
+export const VERSIE = '1.30.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.30.6',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: nauwkeurigheid pullus leeftijd instelbaar in ringbatch, standaard ±2 dagen',
+      'Fix: nauwkeurigheid gebruikte ongeldige codes D/E — nu correcte EURING waarden (0–9, U)',
+    ],
+    wijzigingen_en: [
+      'Feat: pullus age accuracy selectable in ring batch, default ±2 days',
+      'Fix: accuracy used invalid codes D/E — now correct EURING values (0–9, U)',
+    ],
+    wijzigingen_de: [
+      'Feat: Altersgenauigkeit im Beringungsformular einstellbar, Standard ±2 Tage',
+      'Fix: Genauigkeit verwendete ungültige Codes D/E — jetzt korrekte EURING-Werte (0–9, U)',
+    ],
+  },
   {
     versie: '1.30.5',
     datum: '2026-03-22',
