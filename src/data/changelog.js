@@ -5,15 +5,15 @@ export const CHANGELOG = [
     versie: '1.27.0',
     datum: '2026-03-22',
     wijzigingen: [
-      'Feat: nestbezoekmodule volledig vertaald (nl/en/de) — stadia, knoppen, infopaneel, betrouwbaarheid',
+      'Feat: nestbezoekmodule volledig vertaald (nl/en/de) — stadia, knoppen, infopaneel, planningsbalk, betrouwbaarheid',
       'Feat: soortzoekopdracht in nestmodule zoekt ook in Engelse en Duitse soortnamen',
     ],
     wijzigingen_en: [
-      'Feat: nest visit module fully translated (nl/en/de) — stages, buttons, info panel, reliability',
+      'Feat: nest visit module fully translated (nl/en/de) — stages, buttons, info panel, planning bar, reliability',
       'Feat: species search in nest module now also searches English and German species names',
     ],
     wijzigingen_de: [
-      'Feat: Nestbesuchsmodul vollständig übersetzt (nl/en/de) — Stadien, Schaltflächen, Infopanel, Zuverlässigkeit',
+      'Feat: Nestbesuchsmodul vollständig übersetzt (nl/en/de) — Stadien, Schaltflächen, Infopanel, Planungsleiste, Zuverlässigkeit',
       'Feat: Artsuche im Nestmodul sucht jetzt auch englische und deutsche Artnamen',
     ],
   },

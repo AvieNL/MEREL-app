@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n/index.js';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { berekenVervolgbezoekInfo, isAfsluitendStadium } from '../../utils/nestSuggestie';
@@ -53,7 +54,7 @@ export default function NieuwBezoekPage() {
   const [betrouwbOpen,   setBetrouwbOpen]   = useState(false);
   const [betrouwbDatum,  setBetrouwbDatum]  = useState(1);
   const [betrouwbAantal, setBetrouwbAantal] = useState(1);
-  const [betrouwbDagen,  setBetrouwbDagen]  = useState(1);
+  const [betrouwbDagen,  setBetrouwbDagen]  = useState(2);
 
   const [nestsucces, setNestsucces] = useState('');
   const [succes2,    setSucces2]    = useState('');
@@ -362,7 +363,11 @@ export default function NieuwBezoekPage() {
             />
             {soortWijktAf && (
               <p className="nest-soort-afwijking">
-                Nestkast is ingericht voor {speciesByEuring[nestStandaardEuring]?.naam_nl || nestStandaardEuring} — je wijkt hiervan af.
+                {t('nest_soort_afwijking', {
+                  soort: speciesByEuring[nestStandaardEuring]?.[`naam_${lang}`]
+                    || speciesByEuring[nestStandaardEuring]?.naam_nl
+                    || nestStandaardEuring,
+                })}
               </p>
             )}
             <NestSoortInfoPanel soort={soort} stadium={stadiumPrimair} />
@@ -488,20 +493,20 @@ export default function NieuwBezoekPage() {
             <div className="form-group">
               <label>{t('nest_betrouwb_datum')}</label>
               <select value={betrouwbDatum} onChange={e => setBetrouwbDatum(Number(e.target.value))}>
-                {BETROUWB_DATUM_CODES.map(c => <option key={c.code} value={c.code}>{c.nl}</option>)}
+                {BETROUWB_DATUM_CODES.map(c => <option key={c.code} value={c.code}>{c[i18n.language] ?? c.nl}</option>)}
               </select>
             </div>
             <div className="form-group">
               <label>{t('nest_betrouwb_aantal')}</label>
               <select value={betrouwbAantal} onChange={e => setBetrouwbAantal(Number(e.target.value))}>
-                {BETROUWB_AANTAL_CODES.map(c => <option key={c.code} value={c.code}>{c.nl}</option>)}
+                {BETROUWB_AANTAL_CODES.map(c => <option key={c.code} value={c.code}>{c[i18n.language] ?? c.nl}</option>)}
               </select>
             </div>
             {(stadiumPrimair === 'N+' || stadiumPrimair?.startsWith('N')) && (
               <div className="form-group">
                 <label>{t('nest_betrouwb_dagen')}</label>
                 <select value={betrouwbDagen} onChange={e => setBetrouwbDagen(Number(e.target.value))}>
-                  {BETROUWB_DAGEN_CODES.map(c => <option key={c.code} value={c.code}>{c.nl}</option>)}
+                  {BETROUWB_DAGEN_CODES.map(c => <option key={c.code} value={c.code}>{c[i18n.language] ?? c.nl}</option>)}
                 </select>
               </div>
             )}
@@ -514,20 +519,30 @@ export default function NieuwBezoekPage() {
         const [y, m, d] = suggestie.split('-');
         const datumFormatted = `${d}-${m}-${y}`;
         const dagenAf = Math.round((new Date(suggestie) - new Date(vandaag())) / 86400000);
-        const typeLabels = {
-          ringen:     '🔖 Ringen op',
-          nacontrole: '🗓 Nacontrole op',
-          eileg:      '🗓 Eileg verwacht',
-          jongen:     '🗓 Jongen verwacht',
-          bouw:       '🗓 Nestbouw verwacht',
-          check:      '🗓 Aanbevolen bezoek',
+        const typeIcons = {
+          ringen:     '🔖',
+          nacontrole: '🗓',
+          eileg:      '🗓',
+          jongen:     '🗓',
+          bouw:       '🗓',
+          check:      '🗓',
         };
-        const labelStr = typeLabels[suggestieInfo?.type] ?? '🗓 Aanbevolen bezoek';
+        const typeKeys = {
+          ringen:     'nest_suggestie_ringen',
+          nacontrole: 'nest_suggestie_nacontrole',
+          eileg:      'nest_suggestie_eileg',
+          jongen:     'nest_suggestie_jongen',
+          bouw:       'nest_suggestie_bouw',
+          check:      'nest_suggestie_check',
+        };
+        const type = suggestieInfo?.type ?? 'check';
+        const icon = typeIcons[type] ?? '🗓';
+        const labelStr = `${icon} ${t(typeKeys[type] ?? 'nest_suggestie_check')}`;
         return (
-          <div className={`vervolgbezoek-suggestie${suggestieInfo?.type === 'ringen' ? ' vervolgbezoek-suggestie--ringen' : ''}`}>
+          <div className={`vervolgbezoek-suggestie${type === 'ringen' ? ' vervolgbezoek-suggestie--ringen' : ''}`}>
             <span className="vervolgbezoek-suggestie__label">{labelStr}</span>
             <strong className="vervolgbezoek-suggestie__datum">{datumFormatted}</strong>
-            <span className="vervolgbezoek-suggestie__dagen">(over {dagenAf} dagen)</span>
+            <span className="vervolgbezoek-suggestie__dagen">{t('nest_suggestie_over_dagen', { n: dagenAf })}</span>
           </div>
         );
       })()}
