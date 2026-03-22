@@ -1,6 +1,31 @@
-export const VERSIE = '1.27.0';
+export const VERSIE = '1.28.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.28.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: kastnummer automatisch voorgesteld bij nieuw nest (hoogste + 1)',
+      'Feat: eigenaar autocomplete bij nieuw nest — vult ook email en telefoon in',
+      'Feat: contextuele toelichting bij nesttype/nestplaats/vondst die om nadere omschrijving vragen',
+      'Fix: Leaflet layer-knop niet meer boven de navigatiebalk bij scrollen',
+      'Fix: terugknop nestpagina\'s gebruikt juiste stijl en vertaling',
+    ],
+    wijzigingen_en: [
+      'Feat: nest box number auto-suggested when adding new nest (highest + 1)',
+      'Feat: owner autocomplete when adding new nest — also fills in email and phone',
+      'Feat: contextual note field for nest type/location/discovery codes that require clarification',
+      'Fix: Leaflet layer button no longer appears above navigation bar when scrolling',
+      'Fix: back button on nest pages uses correct style and translation',
+    ],
+    wijzigingen_de: [
+      'Feat: Kastnummer wird beim neuen Nest automatisch vorgeschlagen (höchste + 1)',
+      'Feat: Eigentümer-Autovervollständigung beim neuen Nest — füllt auch E-Mail und Telefon aus',
+      'Feat: Kontextuelle Erläuterung bei Nesttyp/Nestplatz/Fund-Codes die Angaben erfordern',
+      'Fix: Leaflet-Schicht-Schaltfläche erscheint beim Scrollen nicht mehr über der Navigationsleiste',
+      'Fix: Zurück-Schaltfläche auf Nestseiten verwendet korrekten Stil und Übersetzung',
+    ],
+  },
   {
     versie: '1.27.0',
     datum: '2026-03-22',
