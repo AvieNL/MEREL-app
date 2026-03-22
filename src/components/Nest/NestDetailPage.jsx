@@ -157,7 +157,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
   const { kleur: statusKleur, labelKey: statusLabelKey } = BROEDSTATUS[status];
 
   return (
-    <div className="legsel-blok">
+    <div className="legsel-blok" style={{ '--status-kleur': statusKleur }}>
       <div className="legsel-blok__header">
         <span className="legsel-blok__nr">{t('nest_legsel_nr', { nr: legsel.volgnummer })}</span>
         {legsel.jaar && <span className="legsel-blok__jaar">{legsel.jaar}</span>}

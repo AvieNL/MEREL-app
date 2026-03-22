@@ -101,6 +101,7 @@
 /* ── Legsel ── */
 .legsel-blok {
   background: color-mix(in srgb, var(--bg-tertiary) 50%, var(--bg-secondary));
+  border-left: 4px solid var(--status-kleur, var(--border));
   border-radius: var(--radius-sm);
   padding: 10px 12px;
   margin-bottom: 8px;

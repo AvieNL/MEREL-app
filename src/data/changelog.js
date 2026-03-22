@@ -1,6 +1,19 @@
-export const VERSIE = '1.31.4';
+export const VERSIE = '1.31.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.5',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: gekleurde linkerbalk op legselblok (zelfde kleur als nestkaartenlijst)',
+    ],
+    wijzigingen_en: [
+      'Feat: colored left border on clutch block (same color as nest card list)',
+    ],
+    wijzigingen_de: [
+      'Feat: farbiger linker Rand am Gelegeblock (gleiche Farbe wie Nestkartenliste)',
+    ],
+  },
   {
     versie: '1.31.4',
     datum: '2026-03-22',
