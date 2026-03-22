@@ -86,6 +86,8 @@ input[type="number"],
 input[type="date"],
 input[type="time"],
 input[type="search"],
+input[type="email"],
+input[type="tel"],
 select,
 textarea {
   background: var(--bg-input);
@@ -174,6 +176,12 @@ button:active {
   min-height: 36px;
   padding: 5px 12px;
   font-size: 0.82rem;
+}
+
+/* Standaard terugknop linksboven op een pagina */
+.page-back {
+  font-size: 0.85rem;
+  margin-bottom: 12px;
 }
 
 button:disabled,
@@ -377,6 +385,8 @@ button, a, label, select {
   input[type="date"],
   input[type="time"],
   input[type="search"],
+  input[type="email"],
+  input[type="tel"],
   select,
   textarea {
     font-size: max(1rem, 16px);

@@ -39,7 +39,7 @@ export default function SoortenOverzicht() {
 
   return (
     <div className="page stats-page">
-      <button className="project-back" onClick={() => navigate(-1)}>{t('so_back')}</button>
+      <button className="btn-secondary page-back" onClick={() => navigate(-1)}>{t('so_back')}</button>
       <h2 className="stats-section-title" style={{ marginTop: 8 }}>
         {titel} — {t('so_species_in_title', { count: soortenTabel.length })}
       </h2>

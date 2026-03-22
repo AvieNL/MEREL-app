@@ -121,7 +121,7 @@ export default function ProjectDetail({ records }) {
 
   return (
     <div className="page stats-page">
-      <Link to="/stats" className="project-back">{t('pd_back')}</Link>
+      <Link to="/stats" className="btn-secondary page-back">{t('pd_back')}</Link>
       <h2 className="stats-section-title" style={{ marginTop: 8 }}>{naam}</h2>
 
       <div className="stats-grid">

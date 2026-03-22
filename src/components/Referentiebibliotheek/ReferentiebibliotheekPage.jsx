@@ -299,7 +299,7 @@ export default function ReferentiebibliotheekPage() {
   return (
     <div className="page ref-page">
       <div className="ref-header">
-        <button className="btn-secondary ref-back-btn" onClick={() => navigate('/admin')}>
+        <button className="btn-secondary page-back" onClick={() => navigate('/admin')}>
           ← {t('admin_title')}
         </button>
         <h2>{t('ref_title')}</h2>

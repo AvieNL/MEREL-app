@@ -83,7 +83,7 @@ export default function WijzigNestPage() {
   if (!nest || form === null) {
     return (
       <div className="page">
-        <button className="project-back" onClick={() => navigate(-1)}>‹ {t('btn_back')}</button>
+        <button className="btn-secondary page-back" onClick={() => navigate(-1)}>{t('btn_back')}</button>
       </div>
     );
   }

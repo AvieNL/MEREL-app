@@ -43,8 +43,8 @@ export default function NieuwLegselPage() {
   return (
     <div className="page nieuw-nest-page">
       <div className="nieuw-nest-header">
-        <button className="project-back" onClick={() => navigate(`/nest/${nestId}`)}>
-          ‹ {t('btn_back')}
+        <button className="btn-secondary page-back" onClick={() => navigate(`/nest/${nestId}`)}>
+          {t('btn_back')}
         </button>
       </div>
 

@@ -290,7 +290,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
   if (speciesRef.length === 0) {
     return (
       <div className="page">
-        <button className="btn-secondary" onClick={() => navigate('/soorten')}>{t('sd_back')}</button>
+        <button className="btn-secondary page-back" onClick={() => navigate('/soorten')}>{t('sd_back')}</button>
         <div className="empty-state">{t('sd_loading')}</div>
       </div>
     );
@@ -299,7 +299,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
   if (!defaultSoort && !isNieuweSoort) {
     return (
       <div className="page">
-        <button className="btn-secondary" onClick={() => navigate('/soorten')}>{t('sd_back')}</button>
+        <button className="btn-secondary page-back" onClick={() => navigate('/soorten')}>{t('sd_back')}</button>
         <div className="empty-state">{t('sd_not_found')}</div>
       </div>
     );
@@ -390,7 +390,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
   return (
     <div className="page soort-detail">
-      <button className="btn-secondary sd-back" onClick={() => navigate('/soorten')}>
+      <button className="btn-secondary page-back" onClick={() => navigate('/soorten')}>
         {t('sd_back')}
       </button>
 
