@@ -253,7 +253,7 @@ export default function AdminPage() {
                   ['role_admin',       'admin_role_admin_desc'],
                 ].map(([roleKey, descKey]) => (
                   <div key={roleKey} className="admin-role-row">
-                    <span className="admin-role-name">{t(roleKey)}</span>
+                    <span className="admin-role-name admin-role-name--ring">{t(roleKey)}</span>
                     <span className="admin-role-desc">{t(descKey)}</span>
                   </div>
                 ))}
@@ -268,7 +268,7 @@ export default function AdminPage() {
                   ['role_nest_none',       'admin_nest_role_none_desc'],
                 ].map(([roleKey, descKey]) => (
                   <div key={roleKey} className="admin-role-row">
-                    <span className="admin-role-name">{t(roleKey)}</span>
+                    <span className="admin-role-name admin-role-name--nest">{t(roleKey)}</span>
                     <span className="admin-role-desc">{t(descKey)}</span>
                   </div>
                 ))}

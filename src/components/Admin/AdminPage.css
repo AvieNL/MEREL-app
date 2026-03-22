@@ -222,6 +222,9 @@
   text-overflow: ellipsis;
 }
 
+.admin-role-name--ring { color: var(--accent); }
+.admin-role-name--nest { color: var(--success, #22c55e); }
+
 .admin-role-desc {
   color: var(--text-secondary);
   min-width: 0;
