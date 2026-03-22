@@ -38,6 +38,7 @@ const NestDetailPage    = lazy(() => import('./components/Nest/NestDetailPage'))
 const NieuwBezoekPage   = lazy(() => import('./components/Nest/NieuwBezoekPage'));
 const NieuwLegselPage   = lazy(() => import('./components/Nest/NieuwLegselPage'));
 const WijzigNestPage    = lazy(() => import('./components/Nest/WijzigNestPage'));
+const NestStatsPage     = lazy(() => import('./components/Nest/NestStatsPage'));
 import { useRecords } from './hooks/useRecords';
 import { useProjects } from './hooks/useProjects';
 import { useSpeciesOverrides } from './hooks/useSpeciesOverrides';
@@ -189,7 +190,8 @@ function AppShell() {
 
 function NestApp({ onSwitchModule, activeModule }) {
   const { settings, updateSettings } = useSettings();
-  const { fullResync } = useRecords();
+  const { records, fullResync } = useRecords();
+  const speciesOverrides = useSpeciesOverrides();
 
   return (
     <div className="app-shell">
@@ -203,6 +205,9 @@ function NestApp({ onSwitchModule, activeModule }) {
             <Route path="/nest/:id/wijzigen" element={<WijzigNestPage />} />
             <Route path="/nest/legsel/:legselId/bezoek/nieuw" element={<NieuwBezoekPage />} />
             <Route path="/nest/seizoen/:seizoenId/legsel/nieuw" element={<NieuwLegselPage />} />
+            <Route path="/nest/stats" element={<NestStatsPage />} />
+            <Route path="/soorten" element={<SoortenPage records={records} />} />
+            <Route path="/soorten/:naam" element={<SoortDetail records={records} speciesOverrides={speciesOverrides} />} />
             <Route path="/instellingen" element={<InstellingenPage settings={settings} onUpdateSettings={updateSettings} onFullResync={fullResync} />} />
             <Route path="/over" element={<OverPage />} />
             <Route path="/admin" element={<AdminPage />} />

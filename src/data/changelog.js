@@ -1,6 +1,22 @@
-export const VERSIE = '1.18.0';
+export const VERSIE = '1.19.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.19.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: onderste navigatiebalk in nestmodule met knoppen voor nieuw nest, nesten, stats en soorten',
+      'Feat: neststatistiekenpagina met kerngetallen, soorten- en stadiumverdeling, bezoeken per maand',
+    ],
+    wijzigingen_en: [
+      'Feat: bottom navigation bar in nest module with buttons for new nest, nests, stats and species',
+      'Feat: nest statistics page with key figures, species and stage breakdown, visits per month',
+    ],
+    wijzigingen_de: [
+      'Feat: untere Navigationsleiste im Nestmodul mit Schaltflächen für neues Nest, Nester, Statistiken und Arten',
+      'Feat: Neststatistikseite mit Kennzahlen, Arten- und Stadiumverteilung, Besuche pro Monat',
+    ],
+  },
   {
     versie: '1.18.0',
     datum: '2026-03-22',

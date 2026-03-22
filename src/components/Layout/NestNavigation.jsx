@@ -4,7 +4,10 @@ import { useNestRole } from '../../hooks/useNestRole';
 import './Navigation.css';
 
 const ALL_TABS = [
-  { path: '/nest', labelKey: 'nav_nest_nesten', icon: '🥚', requiresEdit: false },
+  { path: '/nest/nieuw', labelKey: 'nav_new',         icon: '＋', requiresEdit: true  },
+  { path: '/nest',       labelKey: 'nav_nest_nesten', icon: '🥚', requiresEdit: false, end: true },
+  { path: '/nest/stats', labelKey: 'nav_stats',       icon: '◔', requiresEdit: false },
+  { path: '/soorten',    labelKey: 'nav_species',     icon: '◉', requiresEdit: false },
 ];
 
 export default function NestNavigation() {
@@ -18,7 +21,7 @@ export default function NestNavigation() {
         <NavLink
           key={tab.path}
           to={tab.path}
-          end={tab.path === '/nest'}
+          end={tab.end ?? false}
           className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
         >
           <span className="nav-icon">{tab.icon}</span>
