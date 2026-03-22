@@ -97,3 +97,24 @@
   margin-top: 14px;
   flex-wrap: wrap;
 }
+
+/* ── Inline variant (in bezoekformulier) ── */
+.pulli-ringen-inline {
+  margin-top: 4px;
+}
+
+.pulli-ringen-inline__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.pulli-ringen-inline__streng {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+}

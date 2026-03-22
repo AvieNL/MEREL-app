@@ -5,6 +5,7 @@ import i18n from '../../i18n/index.js';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { berekenVervolgbezoekInfo, isAfsluitendStadium } from '../../utils/nestSuggestie';
+import PulliRingenForm from './PulliRingenForm';
 import NestSoortInfoPanel from './NestSoortInfoPanel';
 import NestSoortPicker from './NestSoortPicker';
 import {
@@ -320,13 +321,7 @@ export default function WijzigBezoekPage() {
       {form.stadiumPrimair?.startsWith('N') && form.stadiumPrimair !== 'N+' && (
         <div className="section">
           <div className="section-content">
-            <button
-              type="button"
-              className="btn-pulli-ringen"
-              onClick={() => navigate(`/nest/bezoek/${bezoekId}/ringen`)}
-            >
-              🔖 {t('nest_btn_ring_bird')}
-            </button>
+            <PulliRingenForm bezoekId={bezoekId} />
           </div>
         </div>
       )}

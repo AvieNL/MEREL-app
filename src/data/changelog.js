@@ -1,6 +1,19 @@
-export const VERSIE = '1.30.7';
+export const VERSIE = '1.30.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.30.8',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'UX: pulli ringen inline in bezoekformulier — geen aparte pagina meer',
+    ],
+    wijzigingen_en: [
+      'UX: pulli ringing inline in visit form — no separate page anymore',
+    ],
+    wijzigingen_de: [
+      'UX: Pulli-Beringen inline im Besuchsformular — keine separate Seite mehr',
+    ],
+  },
   {
     versie: '1.30.7',
     datum: '2026-03-22',
