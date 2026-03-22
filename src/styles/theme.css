@@ -456,3 +456,22 @@ button, a, label, select {
   background: rgba(34, 197, 94, 0.15);
   color: var(--success);
 }
+
+/* Tile toggle button — floats top-right over Leaflet maps */
+.kaart-tile-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1000;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}

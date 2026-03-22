@@ -1,6 +1,19 @@
-export const VERSIE = '1.17.0';
+export const VERSIE = '1.18.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.18.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: satelietbeelden beschikbaar op alle kaarten (🛰️-knop rechtsboven op de kaart)',
+    ],
+    wijzigingen_en: [
+      'Feat: satellite imagery available on all maps (🛰️ button top-right on each map)',
+    ],
+    wijzigingen_de: [
+      'Feat: Satellitenbilder auf allen Karten verfügbar (🛰️-Schaltfläche oben rechts auf der Karte)',
+    ],
+  },
   {
     versie: '1.17.0',
     datum: '2026-03-22',

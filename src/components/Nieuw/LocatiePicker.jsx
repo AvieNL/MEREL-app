@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import 'leaflet/dist/leaflet.css';
+import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
 import './LocatiePicker.css';
 
 // Fix Leaflet default marker icons (Vite asset handling)
@@ -20,7 +21,9 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
+  const tileLayerRef = useRef(null);
   const [gpsStatus, setGpsStatus] = useState(null); // null | 'loading' | 'error'
+  const [tileType, setTileType] = useState(getTileType);
 
   const hasCoords = lat !== '' && lon !== '' && !isNaN(parseFloat(lat)) && !isNaN(parseFloat(lon));
   const center = hasCoords
@@ -41,10 +44,7 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
         zoomControl: true,
       });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap',
-        maxZoom: 19,
-      }).addTo(map);
+      tileLayerRef.current = addTileLayer(L, map, getTileType());
 
       if (hasCoords) {
         markerRef.current = L.marker(center, { draggable: true }).addTo(map);
@@ -98,6 +98,18 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
     });
   }, [lat, lon]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  function toggleTile() {
+    const next = tileType === 'osm' ? 'satellite' : 'osm';
+    saveTileType(next);
+    setTileType(next);
+    getLeaflet().then(L => {
+      const map = mapInstanceRef.current;
+      if (!map) return;
+      if (tileLayerRef.current) map.removeLayer(tileLayerRef.current);
+      tileLayerRef.current = addTileLayer(L, map, next);
+    });
+  }
+
   function useGPS() {
     if (!navigator.geolocation) {
       setGpsStatus('unavailable');
@@ -119,7 +131,12 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
 
   return (
     <div className="locatie-picker">
-      <div ref={mapRef} className="locatie-map" />
+      <div style={{ position: 'relative' }}>
+        <div ref={mapRef} className="locatie-map" />
+        <button type="button" className="kaart-tile-toggle" onClick={toggleTile} title={tileType === 'osm' ? t('map_switch_satellite') : t('map_switch_osm')}>
+          {tileType === 'osm' ? '🛰️' : '🗺️'}
+        </button>
+      </div>
       <div className="locatie-coords">
         <div className={`form-group${latError ? ' form-group--error' : ''}`}>
           <label>{t('loc_lat')}</label>

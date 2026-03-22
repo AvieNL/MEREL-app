@@ -4,6 +4,7 @@ import { parseDate } from '../../utils/statsHelper';
 import { buildEersteVangstMap } from '../../utils/catchHelper';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import 'leaflet/dist/leaflet.css';
+import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
 
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 
@@ -202,6 +203,8 @@ export function LineChart({ data, title, xKey, yKey, onPointClick }) {
 export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLon }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const tileLayerRef = useRef(null);
+  const [tileType, setTileType] = useState(getTileType);
   const displayNaam = useDisplayNaam();
 
   const kaartData = useMemo(() => {
@@ -256,10 +259,7 @@ export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLo
       const map = L.map(mapRef.current, { scrollWheelZoom: false });
       mapInstanceRef.current = map;
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap',
-        maxZoom: 18,
-      }).addTo(map);
+      tileLayerRef.current = addTileLayer(L, map, getTileType());
 
       const bounds = [];
 
@@ -303,10 +303,27 @@ export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLo
 
   const { t } = useTranslation();
 
+  function toggleTile() {
+    const next = tileType === 'osm' ? 'satellite' : 'osm';
+    saveTileType(next);
+    setTileType(next);
+    import('leaflet').then(({ default: L }) => {
+      const map = mapInstanceRef.current;
+      if (!map) return;
+      if (tileLayerRef.current) map.removeLayer(tileLayerRef.current);
+      tileLayerRef.current = addTileLayer(L, map, next);
+    });
+  }
+
   return (
     <div className="chart-block">
       <h3>{t('stats_catch_locations')}</h3>
-      <div ref={mapRef} className="kaart-container" />
+      <div style={{ position: 'relative' }}>
+        <div ref={mapRef} className="kaart-container" />
+        <button type="button" className="kaart-tile-toggle" onClick={toggleTile} title={tileType === 'osm' ? t('map_switch_satellite') : t('map_switch_osm')}>
+          {tileType === 'osm' ? '🛰️' : '🗺️'}
+        </button>
+      </div>
       <div className="chart-legend">
         <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_NIEUW }} /> {t('stats_new')}</span>
         <span className="chart-legend-item"><span className="chart-dot" style={{ background: KAART_KLEUR_TERUGVANGST }} /> {t('stats_recatch')}</span>

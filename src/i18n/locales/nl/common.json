@@ -701,6 +701,8 @@
   "loc_gps_denied": "Locatietoegang geweigerd — sta locatie toe via de app-instellingen van je telefoon",
   "loc_gps_error": "GPS niet beschikbaar — klik op de kaart om een locatie in te stellen",
   "loc_hint": "Klik op de kaart of gebruik GPS om de locatie in te stellen",
+  "map_switch_satellite": "Schakel naar satellietbeelden",
+  "map_switch_osm": "Schakel naar kaart",
   "role_ringer_plus": "Ringer+",
   "ai_section_title": "AI Analyse",
   "ai_section_no_internet": "AI-analyse niet beschikbaar — verbinding met internet vereist",

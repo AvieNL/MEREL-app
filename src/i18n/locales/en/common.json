@@ -701,6 +701,8 @@
   "loc_gps_denied": "Location access denied — allow location in your phone's app settings",
   "loc_gps_error": "GPS not available — click on the map to set a location",
   "loc_hint": "Click on the map or use GPS to set the location",
+  "map_switch_satellite": "Switch to satellite imagery",
+  "map_switch_osm": "Switch to map",
   "role_ringer_plus": "Ringer+",
   "ai_section_title": "AI Analysis",
   "ai_section_no_internet": "AI analysis not available — internet connection required",

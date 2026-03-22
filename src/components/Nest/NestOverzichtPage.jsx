@@ -6,6 +6,7 @@ import { useNestRole } from '../../hooks/useNestRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { buildNestExportData, exportNestJSON, exportNestCSV } from '../../utils/nestExport';
 import 'leaflet/dist/leaflet.css';
+import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
 import './NestOverzichtPage.css';
 
 const HUIDIG_JAAR = new Date().getFullYear();
@@ -194,9 +195,12 @@ function NestenLijst({ nesten, seizoenFilter, navigate, t }) {
 }
 
 function NestenKaart({ nesten, navigate }) {
+  const { t } = useTranslation();
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markersRef = useRef([]);
+  const tileLayerRef = useRef(null);
+  const [tileType, setTileType] = useState(getTileType);
 
   useEffect(() => {
     if (mapInstanceRef.current) return;
@@ -211,10 +215,7 @@ function NestenKaart({ nesten, navigate }) {
         zoomControl: true,
       });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap',
-        maxZoom: 19,
-      }).addTo(map);
+      tileLayerRef.current = addTileLayer(L, map, getTileType());
 
       mapInstanceRef.current = map;
       setTimeout(() => { if (!cancelled) map.invalidateSize(); }, 100);
@@ -268,5 +269,24 @@ function NestenKaart({ nesten, navigate }) {
     });
   }, [nesten, navigate]);
 
-  return <div ref={mapRef} className="nest-kaart-map" />;
+  function toggleTile() {
+    const next = tileType === 'osm' ? 'satellite' : 'osm';
+    saveTileType(next);
+    setTileType(next);
+    getLeaflet().then(L => {
+      const map = mapInstanceRef.current;
+      if (!map) return;
+      if (tileLayerRef.current) map.removeLayer(tileLayerRef.current);
+      tileLayerRef.current = addTileLayer(L, map, next);
+    });
+  }
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <div ref={mapRef} className="nest-kaart-map" />
+      <button type="button" className="kaart-tile-toggle" onClick={toggleTile} title={tileType === 'osm' ? t('map_switch_satellite') : t('map_switch_osm')}>
+        {tileType === 'osm' ? '🛰️' : '🗺️'}
+      </button>
+    </div>
+  );
 }

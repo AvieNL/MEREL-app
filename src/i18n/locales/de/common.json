@@ -701,6 +701,8 @@
   "loc_gps_denied": "Standortzugriff verweigert — Standort in den App-Einstellungen Ihres Telefons erlauben",
   "loc_gps_error": "GPS nicht verfügbar — klicken Sie auf die Karte, um einen Standort festzulegen",
   "loc_hint": "Klicken Sie auf die Karte oder verwenden Sie GPS, um den Standort festzulegen",
+  "map_switch_satellite": "Zu Satellitenbildern wechseln",
+  "map_switch_osm": "Zu Karte wechseln",
   "role_ringer_plus": "Beringer+",
   "ai_section_title": "KI-Analyse",
   "ai_section_no_internet": "KI-Analyse nicht verfügbar — Internetverbindung erforderlich",
