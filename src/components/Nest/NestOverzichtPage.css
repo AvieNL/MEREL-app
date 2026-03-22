@@ -128,7 +128,7 @@
 
 /* ── Kaart ── */
 .nest-kaart-map {
-  height: calc(100dvh - 260px);
+  height: calc(100dvh - 260px - 56px - env(safe-area-inset-bottom));
   min-height: 300px;
   border-radius: var(--radius);
   overflow: hidden;
