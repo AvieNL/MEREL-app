@@ -25,7 +25,8 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
   async function saveSovonNr() {
     const updates = { sovon_registratienummer: sovonNr.trim() || null };
     // Automatisch nestonderzoeker worden bij invullen SOVON-nummer
-    if (sovonNr.trim() && !profile?.nestkast_rol) {
+    // (niet voor admin — die heeft al volledige toegang via ring-rol)
+    if (sovonNr.trim() && !profile?.nestkast_rol && profile?.rol !== 'admin') {
       updates.nestkast_rol = 'nestonderzoeker';
     }
     await updateProfile(updates);
@@ -136,7 +137,11 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
           </div>
           {hasNestAccess && (
             <p className="admin-hint" style={{ marginTop: 6 }}>
-              {t('nestonderzoek_rol_label')}: <strong>{profile?.nestkast_rol || '—'}</strong>
+              {t('nestonderzoek_rol_label')}: <strong>
+                {profile?.rol === 'admin'
+                  ? t('nestonderzoek_rol_admin')
+                  : (profile?.nestkast_rol || '—')}
+              </strong>
             </p>
           )}
         </div>

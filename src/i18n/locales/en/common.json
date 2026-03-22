@@ -40,6 +40,7 @@
   "nestonderzoek_sovon_hint_unlock": "Enter your SOVON registration number to automatically become a nest researcher and gain access to the nest research module.",
   "nestonderzoek_sovon_activated": "✓ Saved — you are now a nest researcher",
   "nestonderzoek_rol_label": "Current nest access",
+  "nestonderzoek_rol_admin": "Admin (full access)",
   "nestonderzoek_sovon_nr": "SOVON registration number",
   "nestonderzoek_sovon_nr_placeholder": "e.g. 12345",
   "btn_saved": "Saved",

@@ -40,6 +40,7 @@
   "nestonderzoek_sovon_hint_unlock": "Vul je SOVON-registratienummer in om automatisch nestonderzoeker te worden en toegang te krijgen tot het nestonderzoekmodule.",
   "nestonderzoek_sovon_activated": "✓ Opgeslagen — je bent nu nestonderzoeker",
   "nestonderzoek_rol_label": "Huidige nesttoegang",
+  "nestonderzoek_rol_admin": "Admin (volledige toegang)",
   "nestonderzoek_sovon_nr": "SOVON-registratienummer",
   "nestonderzoek_sovon_nr_placeholder": "bijv. 12345",
   "btn_saved": "Opgeslagen",
