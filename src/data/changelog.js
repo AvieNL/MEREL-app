@@ -1,6 +1,19 @@
-export const VERSIE = '1.29.9';
+export const VERSIE = '1.29.10';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.10',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: nestbezoek verwijderen met bevestigingsdialog (🗑️ knop per bezoek)',
+    ],
+    wijzigingen_en: [
+      'Feat: delete nest visit with confirmation dialog (🗑️ button per visit)',
+    ],
+    wijzigingen_de: [
+      'Feat: Nestbesuch löschen mit Bestätigungsdialog (🗑️-Schaltfläche pro Besuch)',
+    ],
+  },
   {
     versie: '1.29.9',
     datum: '2026-03-22',

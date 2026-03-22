@@ -471,6 +471,7 @@
   "btn_back": "Zurück",
   "btn_edit": "Bearbeiten",
   "btn_delete": "Löschen",
+  "nest_bezoek_delete_confirm": "Besuch vom {{datum}} löschen?",
   "nest_eieren": "Eier",
   "nest_jongen": "Junge",
   "nest_suggestie_ringen": "Beringen am",

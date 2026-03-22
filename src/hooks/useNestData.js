@@ -109,6 +109,11 @@ export function useNestData() {
     await addToQueue('nest', 'nest_delete', { id });
   }, [addToQueue]);
 
+  const deleteBezoek = useCallback(async (id) => {
+    await db.nestbezoek.delete(id);
+    await addToQueue('nestbezoek', 'nest_delete', { id });
+  }, [addToQueue]);
+
   return {
     nesten,
     legsels,
@@ -122,5 +127,6 @@ export function useNestData() {
     updateBezoek,
     addNestring,
     deleteNest,
+    deleteBezoek,
   };
 }

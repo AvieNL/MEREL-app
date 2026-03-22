@@ -23,7 +23,7 @@ export default function NestDetailPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
-  const { nesten, legsels, bezoeken, ringen, deleteNest } = useNestData();
+  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteBezoek } = useNestData();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
   const species = useSpeciesRef();
   const switchModule = useModuleSwitch();
@@ -118,6 +118,7 @@ export default function NestDetailPage() {
             speciesByEuring={speciesByEuring}
             canNestAdd={canNestAdd}
             canNestEdit={canNestEdit}
+            deleteBezoek={deleteBezoek}
             navigate={navigate}
             switchModule={switchModule}
             t={t}
@@ -138,7 +139,8 @@ export default function NestDetailPage() {
 }
 
 
-function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, navigate, switchModule, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, navigate, switchModule, t }) {
+  const [deleteBezoekId, setDeleteBezoekId] = useState(null);
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
@@ -209,7 +211,22 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                       title={t('btn_edit')}
                     >✏️</button>
                   )}
+                  {canNestEdit && (
+                    <button
+                      className="icon-delete-btn bezoek-delete-btn"
+                      type="button"
+                      onClick={() => setDeleteBezoekId(bezoek.id)}
+                      title={t('btn_delete')}
+                    >🗑️</button>
+                  )}
                 </div>
+                {deleteBezoekId === bezoek.id && (
+                  <div className="bezoek-delete-confirm">
+                    <span>{t('nest_bezoek_delete_confirm', { datum: formatDatum(bezoek.datum) })}</span>
+                    <button className="btn-secondary" onClick={() => setDeleteBezoekId(null)}>{t('btn_cancel')}</button>
+                    <button className="btn-danger" onClick={async () => { await deleteBezoek(bezoek.id); setDeleteBezoekId(null); }}>{t('btn_delete')}</button>
+                  </div>
+                )}
                 {/* ── Regel 2: soort + stadium + aantallen ── */}
                 <div className="bezoek-item__details">
                   {bezoek.soort_euring && bezoek.soort_euring !== soortEuring && (
