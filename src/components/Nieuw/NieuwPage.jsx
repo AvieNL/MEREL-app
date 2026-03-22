@@ -489,7 +489,7 @@ export default function NieuwPage() {
             {range.min}–{range.max} <em>({range.source})</em>
           </span>
         )}
-        {range && range.source === 'soortendata' && bioRangesFromRecords[key] && (
+        {range && (range.source === 'soortendata' || range.source === 'gebruikerdata') && bioRangesFromRecords[key] && (
           <span className="field-hint field-hint--vangsten">
             {t('form_bio_catch_range', { min: bioRangesFromRecords[key].min, max: bioRangesFromRecords[key].max, n: bioRangesFromRecords[key].n })}
           </span>

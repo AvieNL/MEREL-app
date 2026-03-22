@@ -35,10 +35,9 @@ export function useBioRanges(vogelnaam, speciesInfo, soortOverride, records, for
 
   // Samengevoegde bereiken per veld.
   // Merge-prioriteit voor algemene bereiken (hoog → laag):
-  //   1. species-tabel (admin-literatuurdata) — autoritatief
-  //   2. species_overrides (gebruikersaanpassingen) — vult ontbrekende literatuurdata aan
-  //   3. Eigen vangsten (min 3 records, ±10% marge, pullus uitgesloten) — fallback
-  // Geslachtsspecifieke bereiken gebruiken omgekeerde volgorde: overrides > species-tabel.
+  //   1. species-tabel (admin-literatuurdata) — autoritatief         → source: 'soortendata'
+  //   2. species_overrides (gebruikersaanpassingen) — vult literatuur aan → source: 'gebruikerdata'
+  //   3. Eigen vangsten (min 3 records, ±10% marge, pullus uitgesloten)   → source: 'vangsten'
   const bioRanges = useMemo(() => {
     const merged = {};
     for (const f of BIO_KEYS) {
@@ -48,12 +47,14 @@ export function useBioRanges(vogelnaam, speciesInfo, soortOverride, records, for
       const ovMax   = parseVal(soortOverride[`bio_${f.key}_max`]);
       const fromRec = bioRangesFromRecords[f.key];
 
-      const litMin = !isNaN(baseMin) ? baseMin : ovMin;
-      const litMax = !isNaN(baseMax) ? baseMax : ovMax;
-
-      if (!isNaN(litMin) && !isNaN(litMax)) {
-        merged[f.key] = { label: f.label, min: litMin, max: litMax, rangeMin: litMin, rangeMax: litMax, source: 'soortendata' };
+      if (!isNaN(baseMin) && !isNaN(baseMax)) {
+        // 1. Literatuurdata
+        merged[f.key] = { label: f.label, min: baseMin, max: baseMax, rangeMin: baseMin, rangeMax: baseMax, source: 'soortendata' };
+      } else if (!isNaN(ovMin) && !isNaN(ovMax)) {
+        // 2. Gebruikersoverride (geen literatuur beschikbaar)
+        merged[f.key] = { label: f.label, min: ovMin, max: ovMax, rangeMin: ovMin, rangeMax: ovMax, source: 'gebruikerdata' };
       } else if (fromRec) {
+        // 3. Eigen vangsten
         const margin = (fromRec.max - fromRec.min) * 0.1 || fromRec.min * 0.1;
         merged[f.key] = {
           label: f.label, min: fromRec.min, max: fromRec.max,
@@ -72,12 +73,13 @@ export function useBioRanges(vogelnaam, speciesInfo, soortOverride, records, for
     const result = { M: {}, F: {} };
     for (const gender of ['M', 'F']) {
       for (const key of GENDER_KEYS) {
-        const ovMin   = parseVal(soortOverride[`bio_${key}_${gender}_min`]);
-        const ovMax   = parseVal(soortOverride[`bio_${key}_${gender}_max`]);
         const baseMin = parseVal(speciesInfo?.[`bio_${key}_${gender}_min`]);
         const baseMax = parseVal(speciesInfo?.[`bio_${key}_${gender}_max`]);
-        const min = !isNaN(ovMin) ? ovMin : (!isNaN(baseMin) ? baseMin : NaN);
-        const max = !isNaN(ovMax) ? ovMax : (!isNaN(baseMax) ? baseMax : NaN);
+        const ovMin   = parseVal(soortOverride[`bio_${key}_${gender}_min`]);
+        const ovMax   = parseVal(soortOverride[`bio_${key}_${gender}_max`]);
+        // Prioriteit: literatuur (species-tabel) > gebruikersoverride
+        const min = !isNaN(baseMin) ? baseMin : (!isNaN(ovMin) ? ovMin : NaN);
+        const max = !isNaN(baseMax) ? baseMax : (!isNaN(ovMax) ? ovMax : NaN);
         if (!isNaN(min) && !isNaN(max)) {
           const margin = (max - min) * 0.05 || Math.abs(min) * 0.02;
           result[gender][key] = {
