@@ -138,7 +138,7 @@ export default function Header({ onSwitchModule, activeModule }) {
                 onClick={() => activeModule !== 'ring' && onSwitchModule('ring')}
                 aria-pressed={activeModule === 'ring'}
               >
-                🐦 {t('module_ring')}
+                ◎ {t('module_ring')}
               </button>
               <button
                 className={`header-module-segment header-module-segment--nest${activeModule === 'nest' ? ' active' : ''}`}
@@ -150,7 +150,7 @@ export default function Header({ onSwitchModule, activeModule }) {
             </div>
           ) : (
             <span className={`header-module-pill header-module-pill--${activeModule || 'ring'}`}>
-              {activeModule === 'nest' ? '⌂' : '🐦'}
+              {activeModule === 'nest' ? '⌂' : '◎'}
               <span>{activeModule === 'nest' ? t('module_nest') : t('module_ring')}</span>
             </span>
           )}
@@ -245,7 +245,7 @@ export default function Header({ onSwitchModule, activeModule }) {
                 {/* ── Module-specifieke items ── */}
                 {activeModule !== 'nest' && (
                   <div className="header-dropdown-section">
-                    <span className="header-dropdown-section-label">🐦 {t('module_ring')}</span>
+                    <span className="header-dropdown-section-label">◎ {t('module_ring')}</span>
                     <button onClick={() => goTo('/projecten')}>{t('nav_projects')}</button>
                     <button onClick={() => goTo('/ringstrengen')}>{t('nav_ring_strings')}</button>
                   </div>
