@@ -60,7 +60,7 @@ export default function NestDetailPage() {
       {/* ── Header ── */}
       <div className="nest-detail-header">
         <button className="btn-secondary page-back" onClick={() => navigate('/nest')}>{t('btn_back')}</button>
-        <div className="nest-detail-nummer">{nest.kastnummer}</div>
+        <div className="nest-detail-nummer">🪺 {nest.kastnummer}</div>
         <div className="nest-detail-titel">
           {nest.omschrijving && <p className="nest-detail-omschrijving">{nest.omschrijving}</p>}
           {nest.adres ? (
