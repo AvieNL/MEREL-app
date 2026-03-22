@@ -26,15 +26,18 @@ export default function Header({ onSwitchModule, activeModule }) {
   const isRealAdmin = profile?.rol === 'admin';
 
   const ROL_LABELS = {
-    admin: t('role_admin'),
-    ringer: t('role_ringer'),
-    viewer: t('role_viewer'),
+    admin:    t('role_admin'),
+    'ringer+': t('role_ringer_plus'),
+    ringer:   t('role_ringer'),
+    viewer:   t('role_viewer'),
+    geen:     t('role_ring_none'),
   };
 
   const NEST_ROL_LABELS = {
+    admin:           t('role_admin'),
     nestonderzoeker: t('role_nestonderzoeker'),
-    kijker: t('role_nest_kijker'),
-    geen: t('role_nest_geen'),
+    kijker:          t('role_nest_kijker'),
+    geen:            t('role_nest_geen'),
   };
 
   // Hamburger: sluit bij klik buiten
@@ -260,7 +263,7 @@ export default function Header({ onSwitchModule, activeModule }) {
 
                     <span className="header-role-sublabel">{t('nav_sim_ring_role')}</span>
                     <div className="header-role-pills">
-                      {['admin', 'ringer', 'viewer'].map(r => (
+                      {['admin', 'ringer+', 'ringer', 'viewer', 'geen'].map(r => (
                         <button
                           key={r}
                           className={`header-role-pill header-role-pill--ring${rol === r ? ' header-role-pill--active-ring' : ''}`}
@@ -273,7 +276,7 @@ export default function Header({ onSwitchModule, activeModule }) {
 
                     <span className="header-role-sublabel">{t('nav_sim_nest_role')}</span>
                     <div className="header-role-pills">
-                      {['nestonderzoeker', 'kijker', 'geen'].map(r => {
+                      {['admin', 'nestonderzoeker', 'kijker', 'geen'].map(r => {
                         const effectief = simulatedNestRole ?? (profile?.nestkast_rol || 'geen');
                         return (
                           <button

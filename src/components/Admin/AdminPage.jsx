@@ -247,10 +247,11 @@ export default function AdminPage() {
               <p className="admin-hint"><strong className="admin-module-label admin-module-label--ring">{t('admin_role_explanation')}</strong></p>
               <div className="admin-role-list">
                 {[
-                  ['role_ringer',      'admin_role_ringer_desc'],
-                  ['role_ringer_plus', 'admin_role_ringer_plus_desc'],
-                  ['role_viewer',      'admin_role_viewer_desc'],
                   ['role_admin',       'admin_role_admin_desc'],
+                  ['role_ringer_plus', 'admin_role_ringer_plus_desc'],
+                  ['role_ringer',      'admin_role_ringer_desc'],
+                  ['role_viewer',      'admin_role_viewer_desc'],
+                  ['role_ring_none',   'admin_role_ring_none_desc'],
                 ].map(([roleKey, descKey]) => (
                   <div key={roleKey} className="admin-role-row">
                     <span className="admin-role-name admin-role-name--ring">{t(roleKey)}</span>

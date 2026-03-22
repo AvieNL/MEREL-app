@@ -315,7 +315,7 @@
 .header-role-pill {
   width: 100%;
   text-align: left !important;
-  padding: 6px 10px !important;
+  padding: 3px 10px !important;
   border-radius: var(--radius-sm, 4px) !important;
   font-size: 0.8rem !important;
   font-weight: 500 !important;

@@ -14,6 +14,8 @@ export function useRole() {
   const realRol = profile?.rol || 'ringer';
   const rol = simulatedRole || realRol;
 
+  const hasRingAccess = rol !== 'geen';
+
   return {
     rol,
     realRol,
@@ -23,9 +25,10 @@ export function useRole() {
     isRingerPlus:    rol === 'ringer+',
     isRinger:        rol === 'ringer',
     isViewer:        rol === 'viewer',
-    canAdd:          rol !== 'viewer',
-    canEdit:         rol !== 'viewer',
-    canDelete:       rol !== 'viewer',
+    hasRingAccess,
+    canAdd:          hasRingAccess && rol !== 'viewer',
+    canEdit:         hasRingAccess && rol !== 'viewer',
+    canDelete:       hasRingAccess && rol !== 'viewer',
     canUseAI:        rol === 'admin' || rol === 'ringer+',
     canAddReference: rol === 'admin',
   };
