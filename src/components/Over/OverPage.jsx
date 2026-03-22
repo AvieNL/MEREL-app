@@ -36,8 +36,8 @@ export default function OverPage() {
         </ul>
         <p className="over-sources-subtitle">{t('about_sources_nest')}</p>
         <ul>
-          <li>NestdataBase — Sovon Vogelonderzoek Nederland</li>
-          <li>Broedvogelatlas van Nederland — Sovon Vogelonderzoek Nederland (2002)</li>
+          <li>Handleiding Sovon nestonderzoek. De nestkaart: hoe, wat, waar, waarom — Bijlsma, Majoor &amp; Nienhuis (2020)</li>
+          <li>Handleiding AviNest: de invoerapp voor Meetnet Nestkaarten — Goffin (2026)</li>
         </ul>
         <p className="over-sources-subtitle">{t('about_sources_tech')}</p>
         <ul>

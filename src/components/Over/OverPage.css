@@ -55,7 +55,7 @@
   color: var(--accent, #38bdf8);
 }
 
-.over-sources-subtitle {
+.over-sectie .over-sources-subtitle {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-muted);
@@ -64,7 +64,7 @@
   margin: 0.75rem 0 0.25rem;
 }
 
-.over-sources-subtitle:first-of-type {
+.over-sectie .over-sources-subtitle:first-of-type {
   margin-top: 0;
 }
 
