@@ -1,6 +1,25 @@
-export const VERSIE = '1.16.4';
+export const VERSIE = '1.16.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.16.5',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: instellingenpagina crashte in nestmodule door ontbrekende settings-prop',
+      'Style: prullenbak-link in sync-tabel minder prominent (muted kleur, gestippeld)',
+      'Fix: moduleкleuren (blauw/groen) zichtbaar bij subkopjes bronnen',
+    ],
+    wijzigingen_en: [
+      'Fix: settings page crashed in nest module due to missing settings prop',
+      'Style: trash link in sync table less prominent (muted color, dotted underline)',
+      'Fix: module colors (blue/green) now visible on sources section headings',
+    ],
+    wijzigingen_de: [
+      'Fix: Einstellungsseite stürzte im Nestmodul wegen fehlendem Settings-Prop ab',
+      'Style: Papierkorb-Link in Sync-Tabelle weniger prominent (gedämpfte Farbe, gepunktet)',
+      'Fix: Modulfarben (blau/grün) bei Quellenüberschriften sichtbar',
+    ],
+  },
   {
     versie: '1.16.4',
     datum: '2026-03-22',
