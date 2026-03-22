@@ -1,6 +1,19 @@
-export const VERSIE = '1.29.6';
+export const VERSIE = '1.29.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.29.7',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: vervolgbezoek-suggestiedatum als gekleurde pill in nestdetailpagina (groen/geel/oranje/rood op urgentie)',
+    ],
+    wijzigingen_en: [
+      'Feat: next-visit suggestion date shown as coloured urgency pill in nest detail page',
+    ],
+    wijzigingen_de: [
+      'Feat: Folgebesuch-Datum als farbige Dringlichkeitspille in der Nestdetailseite',
+    ],
+  },
   {
     versie: '1.29.6',
     datum: '2026-03-22',
