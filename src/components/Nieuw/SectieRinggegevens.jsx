@@ -1,8 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import {
-  ANDERE_MERKTEKENS_OPTIONS, VERIFICATIE_OPTIONS, LEEFTIJD_LABELS, getOptLabel,
+  ANDERE_MERKTEKENS_OPTIONS, VERIFICATIE_OPTIONS, LEEFTIJD_LABELS, GESLACHT_OPTIONS, getOptLabel,
 } from './NieuwPage.constants';
+
+const GESLACHT_LABELS = Object.fromEntries(
+  GESLACHT_OPTIONS.filter(o => o.value).map(o => [o.value, o.label])
+);
 import './NieuwPage.css';
 
 export default function SectieRinggegevens() {
@@ -65,6 +69,7 @@ export default function SectieRinggegevens() {
                     {terugvangstInfo.vangstdatum && <span>{t('form_first_catch_date')} <strong>{terugvangstInfo.vangstdatum}</strong></span>}
                     {terugvangstInfo.laatste_vangstdatum && <span>{t('form_last_catch_date')} <strong>{terugvangstInfo.laatste_vangstdatum}</strong></span>}
                     {terugvangstInfo.leeftijd && <span>{t('form_age_first_catch')} <strong>{LEEFTIJD_LABELS[terugvangstInfo.leeftijd] ?? terugvangstInfo.leeftijd}</strong></span>}
+                    {terugvangstInfo.geslacht && <span>{t('form_sex_first_catch')} <strong>{GESLACHT_LABELS[terugvangstInfo.geslacht] ?? terugvangstInfo.geslacht}</strong></span>}
                   </div>
                 ) : (
                   <div className="terugvangst-info terugvangst-info--vreemd">

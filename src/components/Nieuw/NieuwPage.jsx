@@ -588,12 +588,14 @@ export default function NieuwPage() {
     );
     const eerste = gesorteerd[0];
     const laatste = gesorteerd[gesorteerd.length - 1];
+    const naam = eerste.vogelnaam || '';
     return {
       eigen: true,
       vangstdatum: eerste.vangstdatum,
       laatste_vangstdatum: gesorteerd.length > 1 ? laatste.vangstdatum : null,
       leeftijd: eerste.leeftijd,
-      vogelnaam: eerste.vogelnaam,
+      geslacht: eerste.geslacht || '',
+      vogelnaam: naam ? naam.charAt(0).toUpperCase() + naam.slice(1).toLowerCase() : naam,
     };
   }, [isTerugvangst, form.ringnummer, records]);
 

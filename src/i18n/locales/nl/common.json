@@ -520,6 +520,7 @@
   "form_first_catch_date": "Eerste vangst:",
   "form_last_catch_date": "Laatste vangst:",
   "form_age_first_catch": "Leeftijd bij eerste vangst:",
+  "form_sex_first_catch": "Geslacht:",
   "form_section_bird": "Vogel",
   "form_sex": "Geslacht *",
   "form_sex_determination": "Bepaling geslacht",

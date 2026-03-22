@@ -520,6 +520,7 @@
   "form_first_catch_date": "First catch:",
   "form_last_catch_date": "Last catch:",
   "form_age_first_catch": "Age at first catch:",
+  "form_sex_first_catch": "Sex:",
   "form_section_bird": "Bird",
   "form_sex": "Sex *",
   "form_sex_determination": "Sex determination",

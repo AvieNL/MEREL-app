@@ -520,6 +520,7 @@
   "form_first_catch_date": "Erstfang:",
   "form_last_catch_date": "Letzter Fang:",
   "form_age_first_catch": "Alter beim Erstfang:",
+  "form_sex_first_catch": "Geschlecht:",
   "form_section_bird": "Vogel",
   "form_sex": "Geschlecht *",
   "form_sex_determination": "Geschlechtsbestimmung",
