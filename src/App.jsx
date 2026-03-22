@@ -187,6 +187,9 @@ function AppShell() {
 }
 
 function NestApp({ onSwitchModule, activeModule }) {
+  const { settings, updateSettings } = useSettings();
+  const { fullResync } = useRecords();
+
   return (
     <div className="app-shell">
       <Header onSwitchModule={onSwitchModule} activeModule={activeModule} />
@@ -198,7 +201,7 @@ function NestApp({ onSwitchModule, activeModule }) {
             <Route path="/nest/:id" element={<NestDetailPage />} />
             <Route path="/nest/legsel/:legselId/bezoek/nieuw" element={<NieuwBezoekPage />} />
             <Route path="/nest/seizoen/:seizoenId/legsel/nieuw" element={<NieuwLegselPage />} />
-            <Route path="/instellingen" element={<InstellingenPage />} />
+            <Route path="/instellingen" element={<InstellingenPage settings={settings} onUpdateSettings={updateSettings} onFullResync={fullResync} />} />
             <Route path="/over" element={<OverPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/ruitypen" element={<RuitypenPage />} />
