@@ -1,0 +1,144 @@
+.nest-overzicht-page {
+  padding-bottom: 80px;
+}
+
+.nest-overzicht-header {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nest-overzicht-header__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nest-overzicht-header__top h2 {
+  margin: 0;
+}
+
+.nest-nieuw-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.nest-overzicht-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nest-seizoen-select {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+/* ── Lijst ── */
+.nest-lijst {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nest-leeg {
+  padding: 32px 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.nest-kaart {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.15s;
+  min-height: 44px;
+}
+
+.nest-kaart:hover,
+.nest-kaart:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.nest-kaart__hoofd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nest-kaart__nr {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.nest-kaart__soort {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.nest-kaart__status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nest-kaart__stadium {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--stadium-kleur, var(--text-secondary));
+  background: color-mix(in srgb, var(--stadium-kleur, #64748b) 15%, transparent);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.nest-kaart__datum {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.nest-kaart__tel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+
+.nest-kaart__geen-bezoek {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.nest-kaart__omschrijving {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Kaart ── */
+.nest-kaart-map {
+  height: calc(100dvh - 260px);
+  min-height: 300px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}

@@ -1,0 +1,86 @@
+.nieuw-nest-page {
+  padding-bottom: 80px;
+}
+
+.nieuw-nest-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.nieuw-nest-header h2 {
+  margin: 0;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 8px 4px 0;
+  min-width: auto;
+  min-height: auto;
+  white-space: nowrap;
+}
+
+.btn-back:hover {
+  color: var(--text-primary);
+}
+
+.nieuw-nest-acties {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+/* ── Soortzoeker ── */
+.soort-zoeker {
+  position: relative;
+}
+
+.soort-zoeker__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  z-index: 100;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.soort-zoeker__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: auto;
+}
+
+.soort-zoeker__item:last-child {
+  border-bottom: none;
+}
+
+.soort-zoeker__item:hover {
+  background: var(--bg-tertiary);
+}
+
+.soort-zoeker__latin {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}

@@ -1,0 +1,140 @@
+.nest-detail-page {
+  padding-bottom: 80px;
+}
+
+.nest-detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.nest-detail-titel h2 {
+  margin: 0 0 4px;
+}
+
+.nest-detail-omschrijving,
+.nest-detail-coords {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.nest-geen-seizoenen {
+  padding: 24px 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* ── Seizoen ── */
+.seizoen-blok {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.seizoen-blok__header {
+  margin-bottom: 12px;
+}
+
+.seizoen-blok__header h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.seizoen-blok__meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.nest-add-legsel-btn {
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+
+/* ── Legsel ── */
+.legsel-blok {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.legsel-blok__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.legsel-blok__nr {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.legsel-blok__succes {
+  font-size: 0.8rem;
+  color: var(--success);
+  margin-left: auto;
+}
+
+.legsel-geen-bezoeken {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0 0 8px;
+}
+
+.nest-add-bezoek-btn {
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+/* ── Bezoek timeline ── */
+.bezoek-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.bezoek-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.bezoek-item:last-child {
+  border-bottom: none;
+}
+
+.bezoek-item__datum {
+  color: var(--text-secondary);
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.bezoek-item__stadium {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.bezoek-item__aantallen {
+  color: var(--text-secondary);
+}
+
+.bezoek-item__suggestie {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--success);
+  white-space: nowrap;
+}

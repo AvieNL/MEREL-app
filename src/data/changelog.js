@@ -1,6 +1,28 @@
-export const VERSIE = '1.10.1';
+export const VERSIE = '1.11.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.11.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: nestoverzichtpagina met lijst en kaartweergave (seizoenfilter)',
+      'Feat: nieuw nest registreren met locatiepicker en SOVON-velden',
+      'Feat: nestdetailpagina met tijdlijn per seizoen, legsel en bezoek',
+      'Data: SOVON-codelijsten (habitat, stadiums, nestsucces, etc.)',
+    ],
+    wijzigingen_en: [
+      'Feat: nest overview page with list and map view (season filter)',
+      'Feat: register new nest with location picker and SOVON fields',
+      'Feat: nest detail page with timeline per season, clutch and visit',
+      'Data: SOVON code lists (habitat, stadiums, nest success, etc.)',
+    ],
+    wijzigingen_de: [
+      'Feat: Nestübersichtsseite mit Listen- und Kartenansicht (Saisonfilter)',
+      'Feat: Neues Nest registrieren mit Standortauswahl und SOVON-Feldern',
+      'Feat: Nestdetailseite mit Zeitleiste pro Saison, Gelege und Besuch',
+      'Daten: SOVON-Codelisten (Habitat, Stadien, Nestsicherheit, usw.)',
+    ],
+  },
   {
     versie: '1.10.1',
     datum: '2026-03-22',
