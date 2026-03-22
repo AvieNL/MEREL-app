@@ -1,8 +1,8 @@
-export const VERSIE = '1.5.24';
+export const VERSIE = '1.9.2';
 
 export const CHANGELOG = [
   {
-    versie: '1.5.24',
+    versie: '1.9.2',
     datum: '2026-03-22',
     wijzigingen: [
       'Fix: bewerk-project toonde geen leden door aanroep van niet-bestaande setters (setNewMemberEmail etc.)',
@@ -15,7 +15,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.23',
+    versie: '1.9.1',
     datum: '2026-03-22',
     wijzigingen: [
       'UX: baansoort-indicator rood en vetgedrukt; dagrecord blauw *; jaarsoort groen * (was †)',
@@ -28,7 +28,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.22',
+    versie: '1.9.0',
     datum: '2026-03-22',
     wijzigingen: [
       'Feat: indicatoren bij soorten in "huidige vangsten" — * = nieuwe baansoort of dagrecord, † = nieuwe jaarsoort',
@@ -41,7 +41,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.21',
+    versie: '1.8.2',
     datum: '2026-03-22',
     wijzigingen: [
       'Fix: biometrie-bereik in formulier toont nu geslachtsspecifieke data (M/V) als geslacht bekend is',
@@ -60,7 +60,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.20',
+    versie: '1.8.1',
     datum: '2026-03-22',
     wijzigingen: [
       'Fix: biometrie-prioriteit literatuur > gebruikerdata > vangsten consistent doorgevoerd',
@@ -79,7 +79,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.19',
+    versie: '1.8.0',
     datum: '2026-03-21',
     wijzigingen: [
       'Feat: Ringstation-locatie in instellingen — coördinaten als fallback voor vangsten zonder GPS bij afstandsberekeningen en kaartlijnen',
@@ -95,7 +95,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.18',
+    versie: '1.7.1',
     datum: '2026-03-21',
     wijzigingen: [
       'Fix: Externe meldingen zichtbaar op de kaart als rode stip (herkenbaar als externe melding)',
@@ -111,7 +111,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.17',
+    versie: '1.7.0',
     datum: '2026-03-21',
     wijzigingen: [
       'Feat: Externe EURING-meldingen — plak een EURING Exchange Code (pijpjes) om een terugvangstmelding (scenario A) of eerste-vangstreferentie (scenario B) op te slaan',
@@ -127,7 +127,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.16',
+    versie: '1.6.0',
     datum: '2026-03-21',
     wijzigingen: [
       'Feat: Terugvangsten-detailpagina — record oudste/verste, grafieken (vrije tijd, seizoen, afstand), soortentabel met %TV, kaart en sorteerbare volledige lijst',
@@ -143,7 +143,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.15',
+    versie: '1.5.4',
     datum: '2026-03-21',
     wijzigingen: [
       'I18n: Grafiekteksten vertaald — legenda (Nieuw/Terugvangst) en kaarttitel (Vangstlocaties)',
@@ -156,7 +156,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.14',
+    versie: '1.5.3',
     datum: '2026-03-21',
     wijzigingen: [
       'I18n: Alle vogelnamen op de statspagina worden getoond in de gekozen taal (soortentabel, top, terugvangsten, kaart, projectdetail)',
@@ -169,7 +169,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.13',
+    versie: '1.5.2',
     datum: '2026-03-21',
     wijzigingen: [
       'UX: Bij terugvangsten (Tv/Tvᵒ) toont het uitklapscherm de eerste eigen vangst: datum, leeftijd, project en plaats',
@@ -182,7 +182,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.12',
+    versie: '1.5.1',
     datum: '2026-03-21',
     wijzigingen: [
       'UX: Recordbadge toont icoon + vertaalde afkorting in 4 categorieën met kleurcodering',
@@ -198,7 +198,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.11',
+    versie: '1.5.0',
     datum: '2026-03-21',
     wijzigingen: [
       'Zoeken op vogelsoort werkt nu in alle talen: NL, Latijn, EN, DE, FR en ES (records- en soortenpagina)',
@@ -214,7 +214,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.10',
+    versie: '1.4.20',
     datum: '2026-03-21',
     wijzigingen: [
       'UX: Recorddetail vereenvoudigd — toont alleen leeftijd, project en plaats',
@@ -227,7 +227,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.9',
+    versie: '1.4.19',
     datum: '2026-03-21',
     wijzigingen: [
       'Fix: getCodesForSelect gebruikt euringReference vertalingen als fallback wanneer veld_config geen EN/DE beschrijvingen heeft',
@@ -240,7 +240,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.8',
+    versie: '1.4.18',
     datum: '2026-03-21',
     wijzigingen: [
       'i18n: SectieProject en LocatiePicker volledig vertaald (EN/DE)',
@@ -256,7 +256,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.7',
+    versie: '1.4.17',
     datum: '2026-03-21',
     wijzigingen: [
       'Refactor: pull-orchestratie geëxtraheerd naar useSyncPulls hook (scheiding van concerns)',
@@ -272,7 +272,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.6',
+    versie: '1.4.16',
     datum: '2026-03-21',
     wijzigingen: [
       'Refactor: ProjectenPage ledenformulier-state geconsolideerd (4 losse states → memberForm object)',
@@ -285,7 +285,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.5',
+    versie: '1.4.15',
     datum: '2026-03-21',
     wijzigingen: [
       'Refactor: todayISO/yesterdayISO helpers toegevoegd aan dateHelper (tijdzone-veilig)',
@@ -301,7 +301,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.4',
+    versie: '1.4.14',
     datum: '2026-03-21',
     wijzigingen: [
       'Docs: merge-volgorde biometriedata gedocumenteerd in useBioRanges.js en SoortDetail.jsx',
@@ -314,7 +314,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.3',
+    versie: '1.4.13',
     datum: '2026-03-21',
     wijzigingen: [
       'UX: exportfouten worden nu inline getoond met sluitknop (prominenter dan toast)',
@@ -327,7 +327,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.2',
+    versie: '1.4.12',
     datum: '2026-03-21',
     wijzigingen: [
       'UX: laadindicator toegevoegd in RecordsPage en StatsPage (toont "Laden..." bij initieel laden)',
@@ -340,7 +340,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.1',
+    versie: '1.4.11',
     datum: '2026-03-21',
     wijzigingen: [
       'Perf: db.species verwijdering via gefilterde query i.p.v. toArray() (minder geheugengebruik)',
@@ -356,7 +356,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.5.0',
+    versie: '1.4.10',
     datum: '2026-03-21',
     wijzigingen: [
       'Refactor: magic number 60*60*1000 vervangen door PULL_INTERVAL_MS constante',
