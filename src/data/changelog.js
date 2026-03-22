@@ -1,6 +1,28 @@
-export const VERSIE = '1.15.4';
+export const VERSIE = '1.15.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.15.5',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: module-kleuren consistent in adminpanel (ring=blauw, nest=groen)',
+      'Fix: rollijst bij uitnodiging toont geen overlappende tekst meer',
+      'Feat: rolsimulatie in hamburgermenu als verticale pills met modulekleuren',
+      'Fix: rol "Viewer" heet in het Nederlands nu "Kijker"',
+    ],
+    wijzigingen_en: [
+      'Feat: module colours consistent in admin panel (ring=blue, nest=green)',
+      'Fix: role list in invite section no longer overlaps',
+      'Feat: role simulation in hamburger menu as vertical pills with module colours',
+      'Fix: role "Viewer" is now called "Kijker" in Dutch',
+    ],
+    wijzigingen_de: [
+      'Feat: Modulfarben im Adminpanel einheitlich (Ring=Blau, Nest=Grün)',
+      'Fix: Rollenliste in Einladungsbereich überlappt nicht mehr',
+      'Feat: Rollensimulation im Hamburger-Menü als vertikale Pills mit Modulfarben',
+      'Fix: Rolle "Viewer" heißt auf Niederländisch jetzt "Kijker"',
+    ],
+  },
   {
     versie: '1.15.4',
     datum: '2026-03-22',
