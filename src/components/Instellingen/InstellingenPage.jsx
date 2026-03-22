@@ -23,7 +23,12 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
   const [sovonSaved, setSovonSaved] = useState(false);
 
   async function saveSovonNr() {
-    await updateProfile({ sovon_registratienummer: sovonNr || null });
+    const updates = { sovon_registratienummer: sovonNr.trim() || null };
+    // Automatisch nestonderzoeker worden bij invullen SOVON-nummer
+    if (sovonNr.trim() && !profile?.nestkast_rol) {
+      updates.nestkast_rol = 'nestonderzoeker';
+    }
+    await updateProfile(updates);
     setSovonSaved(true);
     setTimeout(() => setSovonSaved(false), 2000);
   }
@@ -104,25 +109,38 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
         </div>
       </div>
 
-      {hasNestAccess && (
-        <div className="section">
-          <h3>{t('section_nestonderzoek')}</h3>
-          <div className="section-content">
-            <p className="admin-hint">{t('nestonderzoek_sovon_hint')}</p>
-            <div className="form-group">
-              <label>{t('nestonderzoek_sovon_nr')}</label>
-              <input
-                type="text"
-                value={sovonNr}
-                onChange={e => setSovonNr(e.target.value)}
-                placeholder={t('nestonderzoek_sovon_nr_placeholder')}
-                onBlur={saveSovonNr}
-              />
-              {sovonSaved && <span className="instellingen-saved">{t('btn_saved')}</span>}
-            </div>
+      <div className="section">
+        <h3>{t('section_nestonderzoek')}</h3>
+        <div className="section-content">
+          <p className="admin-hint">
+            {hasNestAccess
+              ? t('nestonderzoek_sovon_hint')
+              : t('nestonderzoek_sovon_hint_unlock')}
+          </p>
+          <div className="form-group">
+            <label>{t('nestonderzoek_sovon_nr')}</label>
+            <input
+              type="text"
+              value={sovonNr}
+              onChange={e => setSovonNr(e.target.value)}
+              placeholder={t('nestonderzoek_sovon_nr_placeholder')}
+              onBlur={saveSovonNr}
+            />
+            {sovonSaved && (
+              <span className="instellingen-saved">
+                {!hasNestAccess && sovonNr.trim()
+                  ? t('nestonderzoek_sovon_activated')
+                  : t('btn_saved')}
+              </span>
+            )}
           </div>
+          {hasNestAccess && (
+            <p className="admin-hint" style={{ marginTop: 6 }}>
+              {t('nestonderzoek_rol_label')}: <strong>{profile?.nestkast_rol || '—'}</strong>
+            </p>
+          )}
         </div>
-      )}
+      </div>
 
       <div className="section">
         <h3>{t('section_help_display')}</h3>
