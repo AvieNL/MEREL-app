@@ -143,9 +143,7 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
       lon: p.lon || '',
       nauwkCoord: p.nauwk_coord || '0',
     });
-    setNewMemberEmail('');
-    setNewMemberAupi('');
-    setNewMemberError('');
+    setMemberForm(MEMBER_FORM_DEFAULT);
     setFormError('');
 
     const { data: memberData } = await supabase.rpc('get_project_members', { p_project_id: p.id });

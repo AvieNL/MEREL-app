@@ -1,6 +1,19 @@
-export const VERSIE = '1.5.23';
+export const VERSIE = '1.5.24';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.24',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: bewerk-project toonde geen leden door aanroep van niet-bestaande setters (setNewMemberEmail etc.)',
+    ],
+    wijzigingen_en: [
+      'Fix: edit project showed no members due to call to non-existent setters',
+    ],
+    wijzigingen_de: [
+      'Fix: Projekt bearbeiten zeigte keine Mitglieder wegen Aufruf nicht vorhandener Setter',
+    ],
+  },
   {
     versie: '1.5.23',
     datum: '2026-03-22',
