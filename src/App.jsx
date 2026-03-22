@@ -168,11 +168,6 @@ function AppShell() {
     return <ModuleSelector onSelect={selectModule} />;
   }
 
-  const switchToModule = useCallback((mod) => {
-    sessionStorage.setItem(MODULE_KEY, mod);
-    setModuleState(mod);
-  }, []);
-
   return (
     <ModuleSwitchContext.Provider value={selectModule}>
     <>
@@ -185,8 +180,8 @@ function AppShell() {
         </div>
       )}
       {effectiveModule === 'ring'
-        ? <MainApp onSwitchModule={hasNestAccess ? switchToModule : null} activeModule="ring" />
-        : <NestApp onSwitchModule={switchToModule} activeModule="nest" />
+        ? <MainApp onSwitchModule={hasNestAccess ? selectModule : null} activeModule="ring" />
+        : <NestApp onSwitchModule={selectModule} activeModule="nest" />
       }
     </>
     </ModuleSwitchContext.Provider>
