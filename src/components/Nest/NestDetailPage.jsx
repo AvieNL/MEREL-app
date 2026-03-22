@@ -231,12 +231,13 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                 </div>
                 {bezoekRingen.length > 0 && (
                   <div className="bezoek-ringen">
-                    <span className="bezoek-ringen__label">{t('nest_geringd_label')}</span>
-                    {bezoekRingen.map(r => {
+                    <span className="bezoek-ringen__label">{t('nest_geringd_label')}: </span>
+                    {bezoekRingen.map((r, i) => {
                       const vangst = records?.find(v => v.id === r.vangst_id);
                       const label = r.ringnummer?.replace(/\./g, '') || t('nest_ring_no_number');
                       return (
-                        <div key={r.id} className="bezoek-ring-rij">
+                        <span key={r.id}>
+                          {i > 0 && ', '}
                           {vangst ? (
                             <button
                               className="bezoek-ring-link"
@@ -246,7 +247,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                           ) : (
                             <span className="bezoek-ring-link bezoek-ring-link--orphan">{label}</span>
                           )}
-                        </div>
+                        </span>
                       );
                     })}
                   </div>

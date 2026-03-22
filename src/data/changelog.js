@@ -1,6 +1,19 @@
-export const VERSIE = '1.31.1';
+export const VERSIE = '1.31.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.2',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'UX: geringde pullen als inline tekst "Geringd: NLA123, NLA124" in nestbezoek',
+    ],
+    wijzigingen_en: [
+      'UX: ringed chicks shown inline as "Ringed: NLA123, NLA124" in nest visit',
+    ],
+    wijzigingen_de: [
+      'UX: beringte Küken inline als "Beringt: NLA123, NLA124" im Nestbesuch',
+    ],
+  },
   {
     versie: '1.31.1',
     datum: '2026-03-22',
