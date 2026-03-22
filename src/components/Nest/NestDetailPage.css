@@ -196,6 +196,11 @@
   font-style: italic;
 }
 
+.bezoek-edit-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .bezoek-item__suggestie-pill {
   font-size: 0.72rem;
   font-weight: 600;
