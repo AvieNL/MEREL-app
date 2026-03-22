@@ -1,6 +1,25 @@
-export const VERSIE = '1.5.20';
+export const VERSIE = '1.5.21';
 
 export const CHANGELOG = [
+  {
+    versie: '1.5.21',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: biometrie-bereik in formulier toont nu geslachtsspecifieke data (M/V) als geslacht bekend is',
+      'Fix: algemeen bereik wordt afgeleid uit M+F als er geen apart algemeen bereik is (bijv. Koolmees vleugel)',
+      'UX: label "soortendata" hernoemd naar "literatuur"; "gebruikerdata" naar "eigen-invoer" (oranje)',
+    ],
+    wijzigingen_en: [
+      'Fix: biometry range in form now shows gender-specific data (M/F) when sex is known',
+      'Fix: general range derived from M+F when no separate general range exists',
+      'UX: label "soortendata" renamed to "literatuur"; "gebruikerdata" to "eigen-invoer" (orange)',
+    ],
+    wijzigingen_de: [
+      'Fix: Biometriebereich im Formular zeigt jetzt geschlechtsspezifische Daten wenn Geschlecht bekannt',
+      'Fix: Allgemeiner Bereich wird aus M+F abgeleitet wenn kein separater allgemeiner Bereich vorhanden',
+      'UX: Label "soortendata" in "literatuur" umbenannt; "gebruikerdata" in "eigen-invoer" (orange)',
+    ],
+  },
   {
     versie: '1.5.20',
     datum: '2026-03-22',

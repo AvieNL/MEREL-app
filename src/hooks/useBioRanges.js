@@ -15,15 +15,19 @@ const BIO_KEYS = [
 /**
  * Berekent biometrie-bereiken en validatieresultaten voor een geselecteerde soort.
  *
- * @param {string} vogelnaam  - Geselecteerde soort
- * @param {object} speciesInfo - Soortendata uit de species-tabel (null als onbekend)
- * @param {object} soortOverride - Gebruikersoverride voor de soort
- * @param {Array}  records   - Alle vangsten (filtert zelf op soort en leeftijd)
- * @param {object} form      - Huidig formulier (voor warnings en genderHint)
- * @returns {{ bioRangesFromRecords, bioRanges, bioGenderRanges, genderHint, warnings }}
+ * Merge-prioriteit (hoog → laag):
+ *   1. Literatuurdata uit species-tabel  → source: 'literatuur'
+ *   2. Eigen override via species_overrides → source: 'eigen-invoer'
+ *   3. Eigen vangsten (min 3, ±10%, geen pullus) → source: 'vangsten'
+ *
+ * Geslachtslogica voor bioRanges:
+ *   - geslacht M of F: gebruik geslachtsspecifieke range; val terug op algemeen bereik
+ *   - geslacht U / leeg: gebruik algemeen bereik; als dat ontbreekt: afleiden uit M+F
  */
 export function useBioRanges(vogelnaam, speciesInfo, soortOverride, records, form) {
-  // Bereiken berekend uit eigen vangsten van deze soort
+  const geslacht = form?.geslacht || '';
+
+  // Bereiken uit eigen vangsten
   const bioRangesFromRecords = useMemo(() => {
     if (!vogelnaam) return {};
     const lower = vogelnaam.toLowerCase();
@@ -33,51 +37,101 @@ export function useBioRanges(vogelnaam, speciesInfo, soortOverride, records, for
     return computeBioRanges(soortRecords);
   }, [vogelnaam, records]);
 
-  // Samengevoegde bereiken per veld.
-  // Merge-prioriteit voor algemene bereiken (hoog → laag):
-  //   1. species-tabel (admin-literatuurdata) — autoritatief         → source: 'soortendata'
-  //   2. species_overrides (gebruikersaanpassingen) — vult literatuur aan → source: 'gebruikerdata'
-  //   3. Eigen vangsten (min 3 records, ±10% marge, pullus uitgesloten)   → source: 'vangsten'
+  // Helper: haal literatuur- en override-waarden op voor één veld + optioneel geslacht
+  function getFieldVals(key, gender) {
+    const suffix = gender ? `_${gender}` : '';
+    return {
+      baseMin: parseVal(speciesInfo?.[`bio_${key}${suffix}_min`]),
+      baseMax: parseVal(speciesInfo?.[`bio_${key}${suffix}_max`]),
+      ovMin:   parseVal(soortOverride[`bio_${key}${suffix}_min`]),
+      ovMax:   parseVal(soortOverride[`bio_${key}${suffix}_max`]),
+    };
+  }
+
+  // Samengevoegde bereiken, geslachtsbewust
   const bioRanges = useMemo(() => {
     const merged = {};
-    for (const f of BIO_KEYS) {
-      const baseMin = parseVal(speciesInfo?.[`bio_${f.key}_min`]);
-      const baseMax = parseVal(speciesInfo?.[`bio_${f.key}_max`]);
-      const ovMin   = parseVal(soortOverride[`bio_${f.key}_min`]);
-      const ovMax   = parseVal(soortOverride[`bio_${f.key}_max`]);
-      const fromRec = bioRangesFromRecords[f.key];
 
-      if (!isNaN(baseMin) && !isNaN(baseMax)) {
-        // 1. Literatuurdata
-        merged[f.key] = { label: f.label, min: baseMin, max: baseMax, rangeMin: baseMin, rangeMax: baseMax, source: 'soortendata' };
-      } else if (!isNaN(ovMin) && !isNaN(ovMax)) {
-        // 2. Gebruikersoverride (geen literatuur beschikbaar)
-        merged[f.key] = { label: f.label, min: ovMin, max: ovMax, rangeMin: ovMin, rangeMax: ovMax, source: 'gebruikerdata' };
-      } else if (fromRec) {
-        // 3. Eigen vangsten
-        const margin = (fromRec.max - fromRec.min) * 0.1 || fromRec.min * 0.1;
-        merged[f.key] = {
-          label: f.label, min: fromRec.min, max: fromRec.max,
-          rangeMin: +(fromRec.min - margin).toFixed(1),
-          rangeMax: +(fromRec.max + margin).toFixed(1),
-          source: 'vangsten',
-        };
+    for (const f of BIO_KEYS) {
+      let effMin, effMax, source;
+
+      if (geslacht === 'M' || geslacht === 'F') {
+        // 1a. Geslachtsspecifieke literatuur
+        const gs = getFieldVals(f.key, geslacht);
+        if (!isNaN(gs.baseMin) && !isNaN(gs.baseMax)) {
+          effMin = gs.baseMin; effMax = gs.baseMax; source = 'literatuur';
+        }
+        // 1b. Geslachtsspecifieke eigen invoer
+        else if (!isNaN(gs.ovMin) && !isNaN(gs.ovMax)) {
+          effMin = gs.ovMin; effMax = gs.ovMax; source = 'eigen-invoer';
+        }
+        // val terug op algemeen bereik hieronder als nog niet gevonden
+      }
+
+      if (effMin === undefined) {
+        const gen = getFieldVals(f.key, null);
+        const mVals = getFieldVals(f.key, 'M');
+        const fVals = getFieldVals(f.key, 'F');
+
+        // 2. Algemeen literatuurbereik
+        if (!isNaN(gen.baseMin) && !isNaN(gen.baseMax)) {
+          effMin = gen.baseMin; effMax = gen.baseMax; source = 'literatuur';
+        }
+        // 3. Afgeleid uit M+F literatuurbereiken
+        else if (
+          (!isNaN(mVals.baseMin) || !isNaN(fVals.baseMin)) &&
+          (!isNaN(mVals.baseMax) || !isNaN(fVals.baseMax))
+        ) {
+          const mins = [mVals.baseMin, fVals.baseMin].filter(v => !isNaN(v));
+          const maxs = [mVals.baseMax, fVals.baseMax].filter(v => !isNaN(v));
+          effMin = Math.min(...mins); effMax = Math.max(...maxs); source = 'literatuur';
+        }
+        // 4. Algemene eigen invoer
+        else if (!isNaN(gen.ovMin) && !isNaN(gen.ovMax)) {
+          effMin = gen.ovMin; effMax = gen.ovMax; source = 'eigen-invoer';
+        }
+        // 5. Afgeleid uit M+F eigen invoer
+        else if (
+          (!isNaN(mVals.ovMin) || !isNaN(fVals.ovMin)) &&
+          (!isNaN(mVals.ovMax) || !isNaN(fVals.ovMax))
+        ) {
+          const mins = [mVals.ovMin, fVals.ovMin].filter(v => !isNaN(v));
+          const maxs = [mVals.ovMax, fVals.ovMax].filter(v => !isNaN(v));
+          effMin = Math.min(...mins); effMax = Math.max(...maxs); source = 'eigen-invoer';
+        }
+      }
+
+      if (effMin !== undefined) {
+        merged[f.key] = { label: f.label, min: effMin, max: effMax, rangeMin: effMin, rangeMax: effMax, source };
+      } else {
+        // 6. Eigen vangsten als fallback
+        const fromRec = bioRangesFromRecords[f.key];
+        if (fromRec) {
+          const margin = (fromRec.max - fromRec.min) * 0.1 || fromRec.min * 0.1;
+          merged[f.key] = {
+            label: f.label, min: fromRec.min, max: fromRec.max,
+            rangeMin: +(fromRec.min - margin).toFixed(1),
+            rangeMax: +(fromRec.max + margin).toFixed(1),
+            source: 'vangsten',
+          };
+        }
       }
     }
     return merged;
-  }, [bioRangesFromRecords, soortOverride, speciesInfo]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bioRangesFromRecords, soortOverride, speciesInfo, geslacht]);
 
-  // Geslachtsspecifieke bereiken
+  // Geslachtsspecifieke bereiken (voor genderhint en per-veld kleur)
   const bioGenderRanges = useMemo(() => {
     const GENDER_KEYS = ['vleugel', 'gewicht', 'handpenlengte', 'staartlengte', 'kop_snavel', 'tarsus_lengte', 'tarsus_dikte', 'snavel_schedel'];
     const result = { M: {}, F: {} };
     for (const gender of ['M', 'F']) {
       for (const key of GENDER_KEYS) {
+        // Prioriteit: literatuur > eigen invoer
         const baseMin = parseVal(speciesInfo?.[`bio_${key}_${gender}_min`]);
         const baseMax = parseVal(speciesInfo?.[`bio_${key}_${gender}_max`]);
         const ovMin   = parseVal(soortOverride[`bio_${key}_${gender}_min`]);
         const ovMax   = parseVal(soortOverride[`bio_${key}_${gender}_max`]);
-        // Prioriteit: literatuur (species-tabel) > gebruikersoverride
         const min = !isNaN(baseMin) ? baseMin : (!isNaN(ovMin) ? ovMin : NaN);
         const max = !isNaN(baseMax) ? baseMax : (!isNaN(ovMax) ? ovMax : NaN);
         if (!isNaN(min) && !isNaN(max)) {
@@ -100,10 +154,7 @@ export function useBioRanges(vogelnaam, speciesInfo, soortOverride, records, for
     const dualFields = Object.keys(mR).filter(k => fR[k]);
     if (dualFields.length === 0) return null;
 
-    let mScore = 0;
-    let fScore = 0;
-    let checked = 0;
-
+    let mScore = 0, fScore = 0, checked = 0;
     for (const key of dualFields) {
       const val = parseVal(form[key]);
       if (isNaN(val) || val <= 0) continue;
