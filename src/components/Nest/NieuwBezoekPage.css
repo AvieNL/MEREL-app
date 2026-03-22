@@ -1,0 +1,95 @@
+.nieuw-bezoek-page {
+  padding-bottom: 100px;
+}
+
+.nieuw-bezoek-context {
+  margin: 2px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+/* ── Stadium selector ── */
+.stadium-groep {
+  margin-bottom: 10px;
+}
+
+.stadium-groep__label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stadium-knoppen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stadium-knop {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  cursor: pointer;
+  min-width: auto;
+  min-height: 36px;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.stadium-knop:hover {
+  background: var(--bg-secondary);
+  border-color: var(--accent);
+}
+
+.stadium-knop--actief {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg-primary);
+}
+
+.stadium-beschrijving {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ── Vervolgbezoeksuggestie ── */
+.vervolgbezoek-suggestie {
+  background: color-mix(in srgb, var(--success) 12%, var(--bg-secondary));
+  border: 1px solid var(--success);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin: 8px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.vervolgbezoek-suggestie__label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.vervolgbezoek-suggestie__datum {
+  font-size: 1rem;
+  color: var(--success);
+}
+
+.vervolgbezoek-suggestie__basis {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.field-error {
+  color: var(--danger, #ef4444);
+  font-weight: 700;
+}

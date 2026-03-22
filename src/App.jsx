@@ -34,6 +34,8 @@ const ReferentiebibliotheekPage = lazy(() => import('./components/Referentiebibl
 const NestOverzichtPage = lazy(() => import('./components/Nest/NestOverzichtPage'));
 const NieuwNestPage     = lazy(() => import('./components/Nest/NieuwNestPage'));
 const NestDetailPage    = lazy(() => import('./components/Nest/NestDetailPage'));
+const NieuwBezoekPage   = lazy(() => import('./components/Nest/NieuwBezoekPage'));
+const NieuwLegselPage   = lazy(() => import('./components/Nest/NieuwLegselPage'));
 import { useRecords } from './hooks/useRecords';
 import { useProjects } from './hooks/useProjects';
 import { useSpeciesOverrides } from './hooks/useSpeciesOverrides';
@@ -188,6 +190,8 @@ function NestApp({ onSwitchModule, activeModule }) {
             <Route path="/nest" element={<NestOverzichtPage />} />
             <Route path="/nest/nieuw" element={<NieuwNestPage />} />
             <Route path="/nest/:id" element={<NestDetailPage />} />
+            <Route path="/nest/legsel/:legselId/bezoek/nieuw" element={<NieuwBezoekPage />} />
+            <Route path="/nest/seizoen/:seizoenId/legsel/nieuw" element={<NieuwLegselPage />} />
             <Route path="*" element={<NestOverzichtPage />} />
           </Routes>
         </Suspense>

@@ -1,6 +1,34 @@
-export const VERSIE = '1.11.0';
+export const VERSIE = '1.12.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.12.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: nestbezoek invoerformulier met visuele stadiumselectie per groep',
+      'Feat: conditionele velden voor eieren (E) en pulli (N)',
+      'Feat: nestsucces-blok bij afsluitend stadium (verlies, methode, predatie)',
+      'Feat: vervolgbezoeksuggestie op basis van stadium en broedduur soort',
+      'Feat: nieuw legsel aanmaken met SOVON LINK_TYPE',
+      'Feat: betrouwbaarheidsscores uitklapbaar (default 1 = exact)',
+    ],
+    wijzigingen_en: [
+      'Feat: nest visit form with visual stadium selection per group',
+      'Feat: conditional fields for eggs (E) and chicks (N)',
+      'Feat: nest success block for closing stadiums (loss, method, predation)',
+      'Feat: follow-up visit suggestion based on stadium and species incubation',
+      'Feat: new clutch creation with SOVON LINK_TYPE',
+      'Feat: reliability scores collapsible (default 1 = exact)',
+    ],
+    wijzigingen_de: [
+      'Feat: Nestbesuchsformular mit visueller Stadienauswahl pro Gruppe',
+      'Feat: Bedingte Felder für Eier (E) und Küken (N)',
+      'Feat: Bruterfolgsblock bei abschließenden Stadien (Verlust, Methode, Prädation)',
+      'Feat: Folgebesuchsempfehlung basierend auf Stadium und Brutdauer',
+      'Feat: Neues Gelege anlegen mit SOVON LINK_TYPE',
+      'Feat: Zuverlässigkeitsscores aufklappbar (Standard 1 = exakt)',
+    ],
+  },
   {
     versie: '1.11.0',
     datum: '2026-03-22',
