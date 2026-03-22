@@ -7,8 +7,8 @@ import { supabase } from '../../lib/supabase';
 import { getRuitypenConfig, saveRuitypenConfig, RUITYPE_TYPES, DEFAULT_RUITYPE_CONFIG } from '../../hooks/useRuitypen';
 import './AdminPage.css';
 
-const ROLLEN = ['ringer', 'ringer+', 'viewer', 'admin'];
-const NEST_ROLLEN = ['', 'nestonderzoeker', 'kijker'];
+const ROLLEN = ['admin', 'ringer+', 'ringer', 'viewer', 'geen'];
+const NEST_ROLLEN = ['admin', 'nestonderzoeker', 'kijker', ''];
 
 export default function AdminPage() {
   const { user } = useAuth();
@@ -23,16 +23,18 @@ export default function AdminPage() {
   const [ruiSaved, setRuiSaved] = useState(false);
 
   const ROL_LABEL = {
-    admin:    t('role_admin'),
+    admin:     t('role_admin'),
     'ringer+': t('role_ringer_plus'),
-    ringer:   t('role_ringer'),
-    viewer:   t('role_viewer'),
+    ringer:    t('role_ringer'),
+    viewer:    t('role_viewer'),
+    geen:      t('role_ring_none'),
   };
 
   const NEST_ROL_LABEL = {
-    '':               t('role_nest_none'),
-    nestonderzoeker:  t('role_nestonderzoeker'),
-    kijker:           t('role_nest_kijker'),
+    admin:           t('role_admin'),
+    '':              t('role_nest_none'),
+    nestonderzoeker: t('role_nestonderzoeker'),
+    kijker:          t('role_nest_kijker'),
   };
 
   function updateRuiEntry(type, seizoen, index, field, value) {

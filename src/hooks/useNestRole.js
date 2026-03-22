@@ -21,8 +21,8 @@ export function useNestRole() {
 
   const effectiveRingRol = simulatedRole || profile?.rol || 'ringer';
 
-  // Admin heeft volledige toegang, tenzij nest-rol expliciet gesimuleerd wordt
-  const isAdmin = effectiveRingRol === 'admin' && simulatedNestRole === null;
+  // Admin heeft volledige toegang: via ring-rol admin, of via nestkast_rol 'admin'
+  const isAdmin = (effectiveRingRol === 'admin' || effectiveNestRol === 'admin') && simulatedNestRole === null;
 
   return {
     nestRol:             effectiveNestRol,
