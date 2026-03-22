@@ -1,6 +1,28 @@
-export const VERSIE = '1.15.3';
+export const VERSIE = '1.15.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.15.4',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: Ringer+ beschrijving gecorrigeerd (AI-tool, niet beheerdersrechten)',
+      'Fix: nest-viewer heet nu overal "Viewer" (was "Kijker")',
+      'Feat: Admin toegevoegd aan nestmodule rollenlijst in adminpanel',
+      'Fix: instellingen, over en admin bereikbaar vanuit hamburgermenu in nestmodule',
+    ],
+    wijzigingen_en: [
+      'Fix: Ringer+ description corrected (AI tool, not admin rights)',
+      'Fix: nest viewer now consistently named "Viewer" (was "Kijker")',
+      'Feat: Admin added to nest module role list in admin panel',
+      'Fix: settings, about and admin accessible from hamburger menu in nest module',
+    ],
+    wijzigingen_de: [
+      'Fix: Ringer+ Beschreibung korrigiert (KI-Tool, keine Adminrechte)',
+      'Fix: Nest-Betrachter heißt jetzt überall "Viewer" (war "Kijker")',
+      'Feat: Admin zur Nestmodul-Rollenliste im Adminpanel hinzugefügt',
+      'Fix: Einstellungen, Über und Admin im Nestmodul-Hamburgermenü erreichbar',
+    ],
+  },
   {
     versie: '1.15.3',
     datum: '2026-03-22',
