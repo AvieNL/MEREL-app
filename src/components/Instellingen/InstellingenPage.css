@@ -307,3 +307,10 @@
   font-size: 0.78rem;
   color: var(--warning, #f59e0b);
 }
+
+.instellingen-saved {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--success, #22c55e);
+  margin-top: 4px;
+}

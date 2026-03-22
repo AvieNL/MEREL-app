@@ -1,6 +1,19 @@
-export const VERSIE = '1.10.0';
+export const VERSIE = '1.10.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.10.1',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: SOVON-registratienummer instelbaar in instellingen (alleen zichtbaar voor nestonderzoekers)',
+    ],
+    wijzigingen_en: [
+      'Feat: SOVON registration number configurable in settings (only visible for nest researchers)',
+    ],
+    wijzigingen_de: [
+      'Feat: SOVON-Registrierungsnummer in den Einstellungen konfigurierbar (nur für Nestforscher sichtbar)',
+    ],
+  },
   {
     versie: '1.10.0',
     datum: '2026-03-22',

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/index.js';
 import { useAuth } from '../../context/AuthContext';
 import { useSync } from '../../context/SyncContext';
+import { useNestRole } from '../../hooks/useNestRole';
 import CloudStatus from './CloudStatus';
 import './InstellingenPage.css';
 
@@ -13,10 +14,19 @@ const TALEN = [
 ];
 
 export default function InstellingenPage({ settings, onUpdateSettings, onFullResync }) {
-  const { user, profile } = useAuth();
+  const { user, profile, updateProfile } = useAuth();
   const { processQueue, syncing, pendingCount, isOnline, lastSynced } = useSync();
+  const { hasNestAccess } = useNestRole();
   const { t } = useTranslation(['common', 'forms']);
   const [resyncing, setResyncing] = useState(false);
+  const [sovonNr, setSovonNr] = useState(profile?.sovon_registratienummer || '');
+  const [sovonSaved, setSovonSaved] = useState(false);
+
+  async function saveSovonNr() {
+    await updateProfile({ sovon_registratienummer: sovonNr || null });
+    setSovonSaved(true);
+    setTimeout(() => setSovonSaved(false), 2000);
+  }
 
   return (
     <div className="page instellingen-page">
@@ -93,6 +103,26 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
           </div>
         </div>
       </div>
+
+      {hasNestAccess && (
+        <div className="section">
+          <h3>{t('section_nestonderzoek')}</h3>
+          <div className="section-content">
+            <p className="admin-hint">{t('nestonderzoek_sovon_hint')}</p>
+            <div className="form-group">
+              <label>{t('nestonderzoek_sovon_nr')}</label>
+              <input
+                type="text"
+                value={sovonNr}
+                onChange={e => setSovonNr(e.target.value)}
+                placeholder={t('nestonderzoek_sovon_nr_placeholder')}
+                onBlur={saveSovonNr}
+              />
+              {sovonSaved && <span className="instellingen-saved">{t('btn_saved')}</span>}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="section">
         <h3>{t('section_help_display')}</h3>
