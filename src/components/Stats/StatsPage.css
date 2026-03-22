@@ -86,6 +86,20 @@
   text-align: center;
 }
 
+.stat-card--record {
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-secondary));
+}
+
+.stat-record-badge {
+  margin-top: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 .stat-card--link {
   cursor: pointer;
   transition: background 0.15s;

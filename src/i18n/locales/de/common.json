@@ -187,6 +187,8 @@
   "stats_extern": "Externe Meldung",
   "stats_indicator_baansoort": "neue Stationsart (fett, rot)",
   "stats_indicator_record": "neuer Tagesrekord",
+  "stats_record_totaal": "★ Tagesrekord Fänge",
+  "stats_record_soorten": "★ Tagesrekord Arten",
   "stats_indicator_jaar": "neue Jahresart",
   "stats_catch_locations": "Fangstandorte",
     "tv_title": "Wiederfänge",

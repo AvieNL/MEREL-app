@@ -187,6 +187,8 @@
   "stats_extern": "Externe melding",
   "stats_indicator_baansoort": "nieuwe baansoort (vetgedrukt, rood)",
   "stats_indicator_record": "nieuw dagrecord",
+  "stats_record_totaal": "★ dagrecord vangsten",
+  "stats_record_soorten": "★ dagrecord soorten",
   "stats_indicator_jaar": "nieuwe jaarsoort",
   "stats_catch_locations": "Vangstlocaties",
     "tv_title": "Terugvangsten",

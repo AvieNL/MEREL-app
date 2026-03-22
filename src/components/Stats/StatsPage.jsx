@@ -287,6 +287,27 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     return result;
   }, [huidigeRecords, historischeRecords]);
 
+  // Dagrecord totaal vangsten en dagrecord aantal soorten
+  const dagRecordIndicatoren = useMemo(() => {
+    if (huidigeRecords.length === 0) return { totaal: false, soorten: false };
+    const perDag = {};
+    historischeRecords.forEach(r => {
+      const d = parseDate(r.vangstdatum);
+      if (!d) return;
+      const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+      if (!perDag[key]) perDag[key] = { totaal: 0, soorten: new Set() };
+      perDag[key].totaal++;
+      if (r.vogelnaam) perDag[key].soorten.add(r.vogelnaam.toLowerCase());
+    });
+    const dagValues = Object.values(perDag);
+    const maxTotaal  = dagValues.length ? Math.max(...dagValues.map(d => d.totaal))        : 0;
+    const maxSoorten = dagValues.length ? Math.max(...dagValues.map(d => d.soorten.size))  : 0;
+    return {
+      totaal:  huidigeStats.total   > maxTotaal,
+      soorten: huidigeStats.soorten > maxSoorten,
+    };
+  }, [huidigeRecords, historischeRecords, huidigeStats]);
+
   const totaalStats = useMemo(() => computeStats(gefilterdRecords), [gefilterdRecords]);
   const alleTerugvangsten = useMemo(() => {
     const fbLat = parseFloat(settings.ringstationLat) || null;
@@ -453,13 +474,19 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
         <h2 className="stats-section-title">{t('stats_current_catch')}</h2>
 
         <div className="stats-grid">
-          <div className="stat-card">
+          <div className={`stat-card${dagRecordIndicatoren.totaal ? ' stat-card--record' : ''}`}>
             <div className="stat-value">{huidigeStats.total}</div>
             <div className="stat-label">{t('stats_total')}</div>
+            {dagRecordIndicatoren.totaal && (
+              <div className="stat-record-badge">{t('stats_record_totaal')}</div>
+            )}
           </div>
-          <div className="stat-card">
+          <div className={`stat-card${dagRecordIndicatoren.soorten ? ' stat-card--record' : ''}`}>
             <div className="stat-value">{huidigeStats.soorten}</div>
             <div className="stat-label">{t('stats_species')}</div>
+            {dagRecordIndicatoren.soorten && (
+              <div className="stat-record-badge">{t('stats_record_soorten')}</div>
+            )}
           </div>
           <div className="stat-card">
             <div className="stat-value">{huidigeStats.nieuw}</div>

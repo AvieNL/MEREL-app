@@ -1,6 +1,19 @@
-export const VERSIE = '1.25.1';
+export const VERSIE = '1.26.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.26.0',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Feat: statspagina toont dagrecord vangsten en dagrecord soorten als aparte badges op de stat-kaarten',
+    ],
+    wijzigingen_en: [
+      'Feat: stats page shows day record catches and day record species as separate badges on stat cards',
+    ],
+    wijzigingen_de: [
+      'Feat: Statistikseite zeigt Tagesrekord Fänge und Tagesrekord Arten als separate Badges auf den Stat-Karten',
+    ],
+  },
   {
     versie: '1.25.1',
     datum: '2026-03-22',
