@@ -230,20 +230,22 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                   )}
                 </div>
                 {bezoekRingen.length > 0 && (
-                  <div className="bezoek-ringen">
-                    <span className="bezoek-ringen__label">{t('nest_geringd_label')}: </span>
+                  <p className="bezoek-item__ringen">
+                    <span className="bezoek-item__ringen-label">{t('nest_geringd_label')}: </span>
                     {bezoekRingen.map((r, i) => {
                       const vangst = records?.find(v => v.id === r.vangst_id);
-                      const label = (i > 0 ? ', ' : '') + (r.ringnummer?.replace(/\./g, '') || t('nest_ring_no_number'));
-                      return vangst ? (
-                        <button key={r.id} className="bezoek-ring-link" type="button"
-                          onClick={() => navigate('/', { state: { editRecord: vangst } })}
-                        >{label}</button>
-                      ) : (
-                        <span key={r.id} className="bezoek-ring-link bezoek-ring-link--orphan">{label}</span>
+                      const nr = r.ringnummer?.replace(/\./g, '') || t('nest_ring_no_number');
+                      return (
+                        <span key={r.id}>
+                          {i > 0 && <span className="bezoek-item__ringen-sep">, </span>}
+                          {vangst
+                            ? <button className="bezoek-item__ring-link" type="button" onClick={() => navigate('/', { state: { editRecord: vangst } })}>{nr}</button>
+                            : <span className="bezoek-item__ring-orphan">{nr}</span>
+                          }
+                        </span>
                       );
                     })}
-                  </div>
+                  </p>
                 )}
               </div>
             );

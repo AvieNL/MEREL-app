@@ -241,38 +241,32 @@
 
 /* ── Ring-knop vanuit bezoek ── */
 
-/* ── Geringde vogels per bezoek ── */
-.bezoek-ringen {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 4px;
-  padding-left: 4px;
-}
-
-
-.bezoek-ringen {
+/* ── Regel 3: geringde vogels ── */
+.bezoek-item__ringen {
+  margin: 2px 0 0;
   font-size: 0.82rem;
-  margin-top: 3px;
+  line-height: 1.4;
 }
 
-.bezoek-ringen__label {
+.bezoek-item__ringen-label {
   color: var(--text-muted);
 }
 
-.bezoek-ring-link {
+.bezoek-item__ringen-sep {
+  color: var(--text-muted);
+}
+
+.bezoek-item__ring-link {
   display: inline;
   background: none;
   border: none;
   padding: 0;
+  margin: 0;
   font-size: 0.82rem;
   color: var(--accent);
   cursor: pointer;
-  text-decoration: none;
 }
 
-.bezoek-ring-link--orphan {
+.bezoek-item__ring-orphan {
   color: var(--text-secondary);
-  text-decoration: none;
-  cursor: default;
 }

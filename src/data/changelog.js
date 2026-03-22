@@ -1,6 +1,19 @@
-export const VERSIE = '1.31.2';
+export const VERSIE = '1.31.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.3',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: geringde pulli als derde regel in bezoekitem — "Geringd: NLA123, NLA124"',
+    ],
+    wijzigingen_en: [
+      'Fix: ringed chicks as third line in visit item — "Ringed: NLA123, NLA124"',
+    ],
+    wijzigingen_de: [
+      'Fix: beringte Küken als dritte Zeile im Besuchseintrag — "Beringt: NLA123, NLA124"',
+    ],
+  },
   {
     versie: '1.31.2',
     datum: '2026-03-22',
