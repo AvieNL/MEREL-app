@@ -57,3 +57,8 @@ db.version(8).stores({
   nestbezoek:   'id, legsel_id, datum, aangemaakt_door',
   nestring:     'id, nestbezoek_id, vangst_id',
 });
+
+// Versie 9: kastnummer index toegevoegd aan nest (nodig voor orderBy)
+db.version(9).stores({
+  nest: 'id, aangemaakt_door, kastnummer',
+});
