@@ -1,6 +1,19 @@
-export const VERSIE = '1.31.5';
+export const VERSIE = '1.31.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.6',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: status legselblok gebruikt nu datum én tijd als sorteerbasis (was alleen datum)',
+    ],
+    wijzigingen_en: [
+      'Fix: clutch block status now uses date and time as sort basis (was date only)',
+    ],
+    wijzigingen_de: [
+      'Fix: Gelegeblock-Status verwendet jetzt Datum und Uhrzeit als Sortiergrundlage',
+    ],
+  },
   {
     versie: '1.31.5',
     datum: '2026-03-22',

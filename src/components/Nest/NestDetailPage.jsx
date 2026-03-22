@@ -151,8 +151,14 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
   const effectieveSoort = speciesByEuring[soortEuring] || soort || null;
   const vogelNaam = effectieveSoort?.naam_nl || soortEuring || '';
 
-  // Status op basis van meest recente bezoek
-  const laatsteStadium = [...legselBezoeken].at(-1)?.stadium || null;
+  // Status op basis van meest recente bezoek (datum + tijd als tiebreaker)
+  const laatsteBezoek = legselBezoeken.reduce((acc, b) => {
+    if (!acc) return b;
+    if (b.datum > acc.datum) return b;
+    if (b.datum === acc.datum && (b.tijd || '') > (acc.tijd || '')) return b;
+    return acc;
+  }, null);
+  const laatsteStadium = laatsteBezoek?.stadium || null;
   const status = getBroedStatus(laatsteStadium);
   const { kleur: statusKleur, labelKey: statusLabelKey } = BROEDSTATUS[status];
 
