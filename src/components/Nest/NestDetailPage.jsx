@@ -201,8 +201,8 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                     )}
                     {(bezoek.aantal_eieren != null || bezoek.aantal_pulli != null) && (
                       <span className="bezoek-item__aantallen">
-                        {bezoek.aantal_eieren != null && `${bezoek.aantal_eieren}×🥚`}
-                        {bezoek.aantal_pulli != null && ` ${bezoek.aantal_pulli}×🐣`}
+                        {bezoek.aantal_eieren != null && `${bezoek.aantal_eieren} ${t('nest_eieren')}`}
+                        {bezoek.aantal_pulli != null && ` · ${bezoek.aantal_pulli} ${t('nest_jongen')}`}
                       </span>
                     )}
                     {bezoek.volgende_bezoek_suggestie && (() => {
