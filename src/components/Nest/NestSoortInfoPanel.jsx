@@ -16,15 +16,13 @@ export default function NestSoortInfoPanel({ soort, stadium }) {
   if (!nest_eieren && !nest_ei_dagen && !nest_jong_dagen) return null;
 
   const ringDag = nest_jong_dagen ? berekenRingLeeftijd(soort) : null;
-  const isEieren = stadium?.startsWith('E');
-  const isJongen = stadium === 'N+' || stadium?.startsWith('N');
 
   const items = [
-    nest_eieren     && { waarde: nest_eieren,                       lbl: 'eieren',     actief: isEieren },
-    nest_ei_dagen   && { waarde: nest_ei_dagen,                     lbl: 'broeddagen', actief: isEieren },
-    nest_jong_dagen && { waarde: nest_jong_dagen,                   lbl: 'nestdagen',  actief: isJongen },
-    ringDag         && { waarde: `dag ${ringDag} (N6)`,             lbl: 'ringen',     actief: isJongen, ring: true },
-    nest_broedels   && { waarde: `${nest_broedels}×`,               lbl: 'broedsel',   actief: false },
+    nest_eieren     && { waarde: nest_eieren,              lbl: 'eieren'     },
+    nest_ei_dagen   && { waarde: nest_ei_dagen,            lbl: 'broeddagen' },
+    nest_jong_dagen && { waarde: nest_jong_dagen,          lbl: 'nestdagen'  },
+    ringDag         && { waarde: `dag ${ringDag} (N6)`,   lbl: 'ringen'     },
+    nest_broedels   && { waarde: `${nest_broedels}×`,     lbl: 'broedsel'   },
   ].filter(Boolean);
 
   return (
@@ -35,18 +33,9 @@ export default function NestSoortInfoPanel({ soort, stadium }) {
       </div>
       <div className="soort-info-grid">
         {items.map((item, i) => (
-          <div
-            key={i}
-            className={`soort-info-item${item.actief ? ' highlight' : ''}`}
-            style={item.ring && item.actief ? { '--sii-color': '#f59e0b' } : {}}
-          >
+          <div key={i} className="soort-info-item">
             <span className="sii-label">{item.lbl}</span>
-            <span
-              className="sii-value"
-              style={item.ring && item.actief ? { color: '#f59e0b' } : {}}
-            >
-              {item.waarde}
-            </span>
+            <span className="sii-value">{item.waarde}</span>
           </div>
         ))}
       </div>

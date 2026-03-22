@@ -1,6 +1,19 @@
-export const VERSIE = '1.25.0';
+export const VERSIE = '1.25.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.25.1',
+    datum: '2026-03-22',
+    wijzigingen: [
+      'Fix: nestsoort-infopanel toont alle velden altijd in dezelfde stijl (geen highlight bij N-stadium)',
+    ],
+    wijzigingen_en: [
+      'Fix: nest species info panel always shows all fields in consistent style (no highlight on N stage)',
+    ],
+    wijzigingen_de: [
+      'Fix: Nestarten-Infopanel zeigt alle Felder immer einheitlich (kein Highlight bei N-Stadium)',
+    ],
+  },
   {
     versie: '1.25.0',
     datum: '2026-03-22',
