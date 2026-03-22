@@ -210,7 +210,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                     >✏️</button>
                   )}
                   {bezoek.volgende_bezoek_suggestie && (
-                    <span className="bezoek-item__suggestie">→ {bezoek.volgende_bezoek_suggestie}</span>
+                    <span className="bezoek-item__suggestie">→ {formatDatum(bezoek.volgende_bezoek_suggestie)}</span>
                   )}
                   {canNestAdd && isNGroep && (
                     <button
