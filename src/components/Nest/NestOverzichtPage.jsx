@@ -156,6 +156,7 @@ function NestenKaart({ nesten, navigate }) {
   const markersRef = useRef([]);
   const tileLayerRef = useRef(null);
   const [tileType, setTileType] = useState(getTileType);
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     if (mapInstanceRef.current) return;
@@ -173,13 +174,13 @@ function NestenKaart({ nesten, navigate }) {
       tileLayerRef.current = addTileLayer(L, map, getTileType());
 
       mapInstanceRef.current = map;
-      setTimeout(() => { if (!cancelled) map.invalidateSize(); }, 100);
+      setTimeout(() => { if (!cancelled) { map.invalidateSize(); setMapReady(true); } }, 100);
     });
 
     return () => { cancelled = true; };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Markers bijwerken als nestenlijst verandert
+  // Markers bijwerken als nestenlijst verandert of kaart gereed is
   useEffect(() => {
     if (!mapInstanceRef.current) return;
 
@@ -222,7 +223,7 @@ function NestenKaart({ nesten, navigate }) {
         map.fitBounds(bounds, { padding: [40, 40], maxZoom: 16 });
       }
     });
-  }, [nesten, navigate]);
+  }, [nesten, navigate, mapReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function toggleTile() {
     const next = tileType === 'osm' ? 'satellite' : 'osm';
