@@ -1,6 +1,19 @@
-export const VERSIE = '1.31.8';
+export const VERSIE = '1.31.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.31.9',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'UX: gebruikersnaam en buy-me-a-coffee in header beter leesbaar (opacity verhoogd)',
+    ],
+    wijzigingen_en: [
+      'UX: username and buy-me-a-coffee in header more readable (increased opacity)',
+    ],
+    wijzigingen_de: [
+      'UX: Benutzername und Buy-me-a-coffee in Header besser lesbar (Deckkraft erhöht)',
+    ],
+  },
   {
     versie: '1.31.8',
     datum: '2026-03-22',

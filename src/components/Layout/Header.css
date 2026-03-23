@@ -251,7 +251,7 @@
   white-space: nowrap;
   pointer-events: none;
   line-height: 1;
-  opacity: 0.45;
+  opacity: 0.8;
   padding: 2px 4px 0;
 }
 
@@ -491,7 +491,7 @@
   color: var(--text-muted);
   text-decoration: none;
   font-size: 0.65rem;
-  opacity: 0.45;
+  opacity: 0.8;
   transition: opacity 0.15s, color 0.15s;
   white-space: nowrap;
   padding: 2px 4px 0;
