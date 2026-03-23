@@ -256,7 +256,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                         <span key={r.id}>
                           {i > 0 && <span className="bezoek-item__ringen-sep">, </span>}
                           {vangst
-                            ? <button className="bezoek-item__ring-link" type="button" onClick={e => { e.stopPropagation(); switchModule('ring'); navigate('/records', { state: { openId: vangst.id } }); }}>{nr}</button>
+                            ? <button className="bezoek-item__ring-link" type="button" onClick={e => { e.stopPropagation(); switchModule('ring'); navigate('/records', { state: { openId: vangst.id, ringnummer: vangst.ringnummer } }); }}>{nr}</button>
                             : <span className="bezoek-item__ring-orphan">{nr}</span>
                           }
                         </span>

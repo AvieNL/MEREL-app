@@ -75,8 +75,8 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   useEffect(() => {
     const openId = location.state?.openId;
     if (!openId) return;
-    const record = records.find(r => r.id === openId);
-    if (record?.ringnummer) setZoek(record.ringnummer);
+    const ring = location.state?.ringnummer || records.find(r => r.id === openId)?.ringnummer;
+    if (ring) setZoek(ring);
     setExpanded(openId);
     setTimeout(() => {
       const el = document.getElementById(`record-${openId}`);
