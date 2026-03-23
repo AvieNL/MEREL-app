@@ -51,7 +51,8 @@ export function parseAviNestTXT(text) {
     }
 
     // ── Nest ────────────────────────────────────────────────────────────────
-    const nestKey = `${nestnr}|${pidcode}`;
+    const perceelnr = get(row, 'PERCEELNR');
+    const nestKey = `${nestnr}|${pidcode}|${perceelnr}`;
     if (!nestenMap.has(nestKey)) {
       nestenMap.set(nestKey, {
         _key:        nestKey,

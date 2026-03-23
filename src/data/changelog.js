@@ -1,6 +1,19 @@
-export const VERSIE = '1.41.0';
+export const VERSIE = '1.42.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.42.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Fix: AviNest nestsleutel uitgebreid met PERCEELNR zodat nestkastlocaties per perceel uniek zijn',
+    ],
+    wijzigingen_en: [
+      'Fix: AviNest nest key extended with PERCEELNR so nest box locations are unique per property',
+    ],
+    wijzigingen_de: [
+      'Fix: AviNest-Nestschlüssel um PERCEELNR erweitert, sodass Nistkastenstandorte pro Grundstück eindeutig sind',
+    ],
+  },
   {
     versie: '1.41.0',
     datum: '2026-03-23',
