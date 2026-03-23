@@ -230,11 +230,11 @@
   display: flex !important;
   align-items: center;
   gap: 6px;
-  opacity: 0.75;
+  color: rgba(241, 245, 249, 0.35) !important;
 }
 
 .header-prullenbak-btn:hover {
-  opacity: 1;
+  color: var(--text-primary, #f1f5f9) !important;
 }
 
 .header-prullenbak-tel {

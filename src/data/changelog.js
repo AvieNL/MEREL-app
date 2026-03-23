@@ -1,6 +1,19 @@
-export const VERSIE = '1.33.0';
+export const VERSIE = '1.33.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.33.1',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Fix: prullenbak-knop in hamburgermenu nu 25% transparant (SVG + tekst)',
+    ],
+    wijzigingen_en: [
+      'Fix: trash button in hamburger menu now 25% transparent (SVG + text)',
+    ],
+    wijzigingen_de: [
+      'Fix: Papierkorb-Schaltfläche im Hamburger-Menü jetzt 25% transparent (SVG + Text)',
+    ],
+  },
   {
     versie: '1.33.0',
     datum: '2026-03-23',
