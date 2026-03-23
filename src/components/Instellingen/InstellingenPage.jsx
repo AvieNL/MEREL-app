@@ -4,6 +4,7 @@ import i18n from '../../i18n/index.js';
 import { useAuth } from '../../context/AuthContext';
 import { useSync } from '../../context/SyncContext';
 import { useNestRole } from '../../hooks/useNestRole';
+import { pullNestData } from '../../hooks/useNestSync';
 import { useProjects } from '../../hooks/useProjects';
 import { db } from '../../lib/db';
 import { supabase } from '../../lib/supabase';
@@ -272,7 +273,7 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
               <div className="sync-actie-controls">
                 <button
                   className="btn-secondary sync-force-btn"
-                  onClick={async () => { setResyncing(true); await onFullResync(); setResyncing(false); }}
+                  onClick={async () => { setResyncing(true); await Promise.all([onFullResync(), pullNestData()]); setResyncing(false); }}
                   disabled={resyncing || !isOnline}
                 >
                   {resyncing ? t('btn_busy') : t('btn_reload_data')}
