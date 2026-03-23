@@ -18,7 +18,7 @@ const TALEN = [
 
 export default function InstellingenPage({ settings, onUpdateSettings, onFullResync }) {
   const { user, profile, updateProfile } = useAuth();
-  const { processQueue, syncing, pendingCount, isOnline, lastSynced } = useSync();
+  const { processQueue, clearQueue, syncing, pendingCount, isOnline, lastSynced } = useSync();
   const { hasNestAccess } = useNestRole();
   const { projects } = useProjects();
   const { t } = useTranslation(['common', 'forms']);
@@ -301,6 +301,21 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
                 )}
               </div>
             )}
+            <div className="sync-actie">
+              <div className="sync-actie-tekst">
+                <strong>Wachtrij wissen</strong>
+                <span>Verwijdert alle wachtende items uit de sync-wachtrij. Gebruik dit als er vastgelopen items in staan die niet meer verstuurd hoeven te worden.</span>
+              </div>
+              <div className="sync-actie-controls">
+                <button
+                  className="btn-secondary sync-force-btn"
+                  onClick={clearQueue}
+                  disabled={pendingCount === 0}
+                >
+                  {pendingCount > 0 ? `Wis ${pendingCount} items` : 'Wachtrij leeg'}
+                </button>
+              </div>
+            </div>
             {!isOnline && <span className="sync-offline-note">{t('offline_sync_impossible')}</span>}
           </div>
         </div>
