@@ -5,6 +5,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useSync } from '../../context/SyncContext';
 import { useNestRole } from '../../hooks/useNestRole';
 import { useProjects } from '../../hooks/useProjects';
+import { db } from '../../lib/db';
+import { supabase } from '../../lib/supabase';
 import CloudStatus from './CloudStatus';
 import './InstellingenPage.css';
 
@@ -21,8 +23,40 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
   const { projects } = useProjects();
   const { t } = useTranslation(['common', 'forms']);
   const [resyncing, setResyncing] = useState(false);
+  const [nestPushing, setNestPushing] = useState(false);
+  const [nestPushResult, setNestPushResult] = useState(null);
   const [sovonNr, setSovonNr] = useState(profile?.sovon_registratienummer || '');
   const [sovonSaved, setSovonSaved] = useState(false);
+
+  async function pushNestData() {
+    if (!user) return;
+    setNestPushing(true);
+    setNestPushResult(null);
+    try {
+      const [nesten, legsels, bezoeken, ringen] = await Promise.all([
+        db.nest.toArray(),
+        db.legsel.toArray(),
+        db.nestbezoek.toArray(),
+        db.nestring.toArray(),
+      ]);
+      const results = await Promise.all([
+        nesten.length   ? supabase.from('nest').upsert(nesten,      { onConflict: 'id' }) : null,
+        legsels.length  ? supabase.from('legsel').upsert(legsels,   { onConflict: 'id' }) : null,
+        bezoeken.length ? supabase.from('nestbezoek').upsert(bezoeken, { onConflict: 'id' }) : null,
+        ringen.length   ? supabase.from('nestring').upsert(ringen,  { onConflict: 'id' }) : null,
+      ]);
+      const fout = results.find(r => r?.error)?.error;
+      if (fout) {
+        setNestPushResult({ ok: false, bericht: fout.message });
+      } else {
+        setNestPushResult({ ok: true, bericht: `${nesten.length} nesten · ${legsels.length} legsels · ${bezoeken.length} bezoeken gesynchroniseerd` });
+      }
+    } catch (e) {
+      setNestPushResult({ ok: false, bericht: e.message });
+    } finally {
+      setNestPushing(false);
+    }
+  }
 
   async function saveSovonNr() {
     const updates = { sovon_registratienummer: sovonNr.trim() || null };
@@ -245,6 +279,28 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
                 </button>
               </div>
             </div>
+            {hasNestAccess && (
+              <div className="sync-actie">
+                <div className="sync-actie-tekst">
+                  <strong>Nestkastdata forceer-push</strong>
+                  <span>Stuurt alle lokale nestkastdata opnieuw naar Supabase. Gebruik dit als nesten/legsels/bezoeken ontbreken in de cloud.</span>
+                </div>
+                <div className="sync-actie-controls">
+                  <button
+                    className="btn-secondary sync-force-btn"
+                    onClick={pushNestData}
+                    disabled={nestPushing || !isOnline}
+                  >
+                    {nestPushing ? t('btn_busy') : '↑ Push nestkastdata'}
+                  </button>
+                </div>
+                {nestPushResult && (
+                  <span className={nestPushResult.ok ? 'sync-push-ok' : 'sync-push-fout'}>
+                    {nestPushResult.ok ? '✓ ' : '✕ '}{nestPushResult.bericht}
+                  </span>
+                )}
+              </div>
+            )}
             {!isOnline && <span className="sync-offline-note">{t('offline_sync_impossible')}</span>}
           </div>
         </div>

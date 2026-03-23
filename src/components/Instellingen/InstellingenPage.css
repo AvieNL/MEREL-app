@@ -315,6 +315,17 @@
   color: var(--warning, #f59e0b);
 }
 
+.sync-push-ok {
+  font-size: 0.78rem;
+  color: var(--success, #22c55e);
+}
+
+.sync-push-fout {
+  font-size: 0.78rem;
+  color: var(--danger, #ef4444);
+  word-break: break-word;
+}
+
 .instellingen-saved {
   display: block;
   font-size: 0.8rem;
