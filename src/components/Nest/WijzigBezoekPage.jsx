@@ -110,6 +110,7 @@ export default function WijzigBezoekPage() {
         betrouwb_aantal: form.betrouwbAantal,
         betrouwb_dagen:  form.betrouwbDagen,
         volgende_bezoek_suggestie: suggestie || null,
+        volgende_bezoek_type:      suggestieInfo?.type || null,
       });
 
       if (isAfsluitend) {

@@ -1,6 +1,22 @@
-export const VERSIE = '1.33.3';
+export const VERSIE = '1.33.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.33.4',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Fix: nestbezoek-sync faalde door ontbrekende kolommen in Supabase (stadium2, soort_euring, volgende_bezoek_type)',
+      'Fix: volgende_bezoek_type wordt nu opgeslagen bij bezoek (nodig voor iCal-feed)',
+    ],
+    wijzigingen_en: [
+      'Fix: nest visit sync failed due to missing Supabase columns (stadium2, soort_euring, volgende_bezoek_type)',
+      'Fix: volgende_bezoek_type is now saved with each visit (required for iCal feed)',
+    ],
+    wijzigingen_de: [
+      'Fix: Nestbesuch-Sync schlug fehl wegen fehlender Supabase-Spalten (stadium2, soort_euring, volgende_bezoek_type)',
+      'Fix: volgende_bezoek_type wird jetzt beim Besuch gespeichert (für iCal-Feed erforderlich)',
+    ],
+  },
   {
     versie: '1.33.3',
     datum: '2026-03-23',

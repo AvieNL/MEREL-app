@@ -217,6 +217,7 @@ export default function NieuwBezoekPage() {
         opmerkingen,
         soort_euring:    soortEuring || null,
         volgende_bezoek_suggestie: suggestie || null,
+        volgende_bezoek_type:      suggestieInfo?.type || null,
       });
 
       // Datum eerste ei opslaan op het legsel als het nieuw is en datum opgegeven
