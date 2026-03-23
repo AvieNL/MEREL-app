@@ -12,18 +12,20 @@ export default function NieuwLegselPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { legsels, nesten, addLegsel } = useNestData();
-  const [linkType, setLinkType] = useState(1); // standaard: vervolglegsel
   const [saving, setSaving] = useState(false);
 
   const nest = nesten.find(n => n.id === nestId);
 
   // Hoogste bestaande volgnummer voor dit nest + huidig jaar
-  const volgendVolgnummer = useMemo(() => {
+  const { volgendVolgnummer, defaultLinkType } = useMemo(() => {
     const bestaande = legsels.filter(l => l.nest_id === nestId && l.jaar === HUIDIG_JAAR);
-    return bestaande.length > 0
-      ? Math.max(...bestaande.map(l => l.volgnummer)) + 1
-      : 1;
+    return {
+      volgendVolgnummer: bestaande.length > 0 ? Math.max(...bestaande.map(l => l.volgnummer)) + 1 : 1,
+      defaultLinkType: bestaande.length > 0 ? 1 : 0,
+    };
   }, [legsels, nestId]);
+
+  const [linkType, setLinkType] = useState(() => defaultLinkType);
 
   async function handleSave() {
     setSaving(true);
