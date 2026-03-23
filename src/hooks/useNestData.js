@@ -105,6 +105,57 @@ export function useNestData() {
     return id;
   }, [user, addToQueue]);
 
+  const bulkImportNestBackup = useCallback(async (backup) => {
+    if (!user) return null;
+    const now = new Date().toISOString();
+    let counts = { nesten: 0, legsels: 0, bezoeken: 0, ringen: 0 };
+
+    for (const nest of (backup.nesten ?? [])) {
+      const { legsels: nestLegsels, ...nestData } = nest;
+      const existing = await db.nest.get(nestData.id);
+      if (!existing) {
+        const record = { ...nestData, aangemaakt_door: user.id, updated_at: now };
+        await db.nest.put(record);
+        await addToQueue('nest', 'upsert', record);
+        counts.nesten++;
+      }
+
+      for (const legsel of (nestLegsels ?? [])) {
+        const { bezoeken: legselBezoeken, ...legselData } = legsel;
+        const existingL = await db.legsel.get(legselData.id);
+        if (!existingL) {
+          const record = { ...legselData, aangemaakt_door: user.id, updated_at: now };
+          await db.legsel.put(record);
+          await addToQueue('legsel', 'upsert', record);
+          counts.legsels++;
+        }
+
+        for (const bezoek of (legselBezoeken ?? [])) {
+          const { ringen: bezoekRingen, ...bezoekData } = bezoek;
+          const existingB = await db.nestbezoek.get(bezoekData.id);
+          if (!existingB) {
+            const record = { ...bezoekData, aangemaakt_door: user.id, updated_at: now };
+            await db.nestbezoek.put(record);
+            await addToQueue('nestbezoek', 'upsert', record);
+            counts.bezoeken++;
+          }
+
+          for (const ring of (bezoekRingen ?? [])) {
+            const existingR = await db.nestring.get(ring.id);
+            if (!existingR) {
+              const record = { ...ring, aangemaakt_door: user.id, updated_at: now };
+              await db.nestring.put(record);
+              await addToQueue('nestring', 'upsert', record);
+              counts.ringen++;
+            }
+          }
+        }
+      }
+    }
+
+    return counts;
+  }, [user, addToQueue]);
+
   const deleteNest = useCallback(async (id) => {
     const deleted_at = new Date().toISOString();
     await db.nest.update(id, { deleted_at });
@@ -119,6 +170,12 @@ export function useNestData() {
   const permanentDeleteNest = useCallback(async (id) => {
     await db.nest.delete(id);
     await addToQueue('nest', 'nest_delete', { id });
+  }, [addToQueue]);
+
+  const markLegselsExported = useCallback(async (ids) => {
+    const exported_at = new Date().toISOString();
+    await db.legsel.where('id').anyOf(ids).modify({ exported_at });
+    await addToQueue('legsel', 'mark_nest_exported', { ids, exported_at });
   }, [addToQueue]);
 
   const deleteBezoek = useCallback(async (id) => {
@@ -137,6 +194,7 @@ export function useNestData() {
     legsels,
     bezoeken,
     ringen,
+    bulkImportNestBackup,
     addNest,
     updateNest,
     addLegsel,
@@ -144,6 +202,7 @@ export function useNestData() {
     addBezoek,
     updateBezoek,
     addNestring,
+    markLegselsExported,
     deleteNest,
     restoreNest,
     permanentDeleteNest,

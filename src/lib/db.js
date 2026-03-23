@@ -79,3 +79,8 @@ db.version(11).stores({});
 db.version(12).stores({
   nest: 'id, aangemaakt_door, kastnummer, deleted_at',
 });
+
+// Versie 13: exported_at index op legsel voor export-tracking (analoog aan uploaded bij vangsten)
+db.version(13).stores({
+  legsel: 'id, nest_id, [nest_id+jaar], exported_at',
+});

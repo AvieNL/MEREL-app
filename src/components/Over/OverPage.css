@@ -75,6 +75,21 @@
   margin-top: 0;
 }
 
+.over-about-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.over-merel-logo {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.over-about-body p {
+  margin: 0;
+}
+
 .over-sectie .over-sources-subtitle--ring { color: var(--accent); }
 .over-sectie .over-sources-subtitle--nest { color: var(--success); }
 .over-sectie .over-sources-subtitle--tech { color: var(--text-muted); }

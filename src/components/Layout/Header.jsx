@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/index.js';
 import { useAuth } from '../../context/AuthContext';
-import WrenLogo from '../WrenLogo';
+import MerelLogo from '../MerelLogo';
 import { useRole } from '../../hooks/useRole';
 import { useNestRole } from '../../hooks/useNestRole';
 import { useTheme } from '../../hooks/useTheme';
@@ -152,8 +152,8 @@ export default function Header({ onSwitchModule, activeModule }) {
       <div className="header-inner">
         <div className="header-title-group">
           <button className="header-app-title" onClick={handleTitleClick} aria-label={t('app_name')}>
-            <WrenLogo size={26} />
-            WREN{isStaging && <span className="header-staging-badge">STAGING</span>}
+            <MerelLogo size={36} />
+            MEREL<span className="header-app-tld">.app</span>{isStaging && <span className="header-staging-badge">STAGING</span>}
           </button>
           {onSwitchModule ? (
             <div className="header-module-toggle">

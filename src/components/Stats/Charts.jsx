@@ -148,6 +148,60 @@ export function BarChartSimple({ data, title, color }) {
   );
 }
 
+const DONUT_PALETTE = [
+  '#22c55e', '#38bdf8', '#f59e0b', '#a78bfa',
+  '#f472b6', '#34d399', '#60a5fa', '#fb923c',
+];
+
+export function DonutChart({ data, title }) {
+  const total = data.reduce((s, d) => s + d.count, 0);
+  if (total === 0) return null;
+
+  const cx = 56, cy = 56, r = 46, innerR = 28;
+  let angle = -Math.PI / 2;
+
+  const segments = data.map((d, i) => {
+    const sweep = (d.count / total) * 2 * Math.PI;
+    const end = angle + sweep;
+    const large = sweep > Math.PI ? 1 : 0;
+    const cos0 = Math.cos(angle), sin0 = Math.sin(angle);
+    const cos1 = Math.cos(end),   sin1 = Math.sin(end);
+    const path = [
+      `M ${cx + r * cos0} ${cy + r * sin0}`,
+      `A ${r} ${r} 0 ${large} 1 ${cx + r * cos1} ${cy + r * sin1}`,
+      `L ${cx + innerR * cos1} ${cy + innerR * sin1}`,
+      `A ${innerR} ${innerR} 0 ${large} 0 ${cx + innerR * cos0} ${cy + innerR * sin0}`,
+      'Z',
+    ].join(' ');
+    const seg = { ...d, path, color: d.color || DONUT_PALETTE[i % DONUT_PALETTE.length], pct: Math.round((d.count / total) * 100) };
+    angle = end;
+    return seg;
+  });
+
+  return (
+    <div className="chart-block">
+      <h3>{title}</h3>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+        <svg width="112" height="112" viewBox="0 0 112 112" style={{ flexShrink: 0 }}>
+          {segments.map((seg, i) => (
+            <path key={i} d={seg.path} fill={seg.color} />
+          ))}
+          <text x="56" y="60" textAnchor="middle" fill="var(--text-primary)" fontSize="13" fontWeight="700">{total}</text>
+        </svg>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 5, minWidth: 0 }}>
+          {segments.map((seg, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.78rem', minWidth: 0 }}>
+              <span style={{ width: 9, height: 9, borderRadius: '50%', background: seg.color, flexShrink: 0 }} />
+              <span style={{ color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{seg.label}</span>
+              <span style={{ color: 'var(--text-muted)', marginLeft: 'auto', paddingLeft: 8, whiteSpace: 'nowrap' }}>{seg.count} ({seg.pct}%)</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function LineChart({ data, title, xKey, yKey, onPointClick }) {
   const containerRef = useRef(null);
   const containerW = useContainerWidth(containerRef);

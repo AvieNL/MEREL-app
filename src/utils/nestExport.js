@@ -5,11 +5,11 @@ import { downloadFile } from './export';
  * nesten → legsels → bezoeken (+ ringen per bezoek)
  */
 export function buildNestExportData({ nesten, legsels, bezoeken, ringen, jaar, speciesByEuring }) {
-  const jaarInt = parseInt(jaar, 10);
+  const jaarInt = jaar ? parseInt(jaar, 10) : null;
 
   return nesten.map(nest => {
     const nestLegsels = legsels
-      .filter(l => l.nest_id === nest.id && l.jaar === jaarInt)
+      .filter(l => l.nest_id === nest.id && (jaarInt === null || l.jaar === jaarInt))
       .sort((a, b) => a.volgnummer - b.volgnummer)
       .map(legsel => {
         const soort = legsel.soort_euring ? (speciesByEuring[legsel.soort_euring] || null) : null;

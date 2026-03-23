@@ -415,7 +415,7 @@
 .header-app-title {
   background: none;
   border: none;
-  color: var(--accent);
+  color: var(--brand);
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -432,6 +432,13 @@
 
 .header-app-title:hover {
   opacity: 0.8;
+}
+
+.header-app-tld {
+  font-size: 0.7em;
+  font-weight: 400;
+  opacity: 0.5;
+  letter-spacing: 0;
 }
 
 /* Module-pill: statische badge (alleen voor gebruikers zonder nestonderzoek-toegang) */

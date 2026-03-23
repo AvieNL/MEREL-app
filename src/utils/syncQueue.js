@@ -91,6 +91,15 @@ const HANDLERS = {
     if (error) throw error;
   },
 
+  // Nestkastonderzoek: markeer legsels als geëxporteerd
+  async mark_nest_exported({ data }) {
+    const { error } = await supabase
+      .from('legsel')
+      .update({ exported_at: data.exported_at, updated_at: new Date().toISOString() })
+      .in('id', data.ids);
+    if (error) throw error;
+  },
+
   // Nestkastonderzoek: herstel uit prullenbak
   async nest_restore({ table_name, data }) {
     const { error } = await supabase

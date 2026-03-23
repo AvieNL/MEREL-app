@@ -1,12 +1,12 @@
 {
-  "name": "WREN",
-  "short_name": "WREN",
-  "description": "Wing Ringing & Entry for Nesting",
+  "name": "MEREL",
+  "short_name": "MEREL",
+  "description": "MEld.REgistreer.Log.",
   "id": "/",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
+  "background_color": "#0f0f0f",
+  "theme_color": "#0f0f0f",
   "icons": [
     {
       "src": "/icon-192.png",

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { VERSIE, CHANGELOG } from '../../data/changelog';
 import { formatDatum } from '../../utils/dateHelper';
+import MerelLogo from '../MerelLogo';
 import './OverPage.css';
 
 export default function OverPage() {
@@ -9,12 +10,15 @@ export default function OverPage() {
 
   return (
     <div className="over-page">
-      <h1>WREN <span className="over-version">v{VERSIE}</span></h1>
+      <h1>MEREL <span className="over-version">v{VERSIE}</span></h1>
       <p className="over-subtitle">{t('app_subtitle')}</p>
 
       <div className="over-sectie">
         <h2>{t('about_title')}</h2>
-        <p>{t('about_app_description')}</p>
+        <div className="over-about-body">
+          <MerelLogo size={80} className="over-merel-logo" />
+          <p>{t('about_app_description')}</p>
+        </div>
       </div>
 
       <div className="over-sectie">

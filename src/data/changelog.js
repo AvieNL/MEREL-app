@@ -1,6 +1,28 @@
-export const VERSIE = '1.34.0';
+export const VERSIE = '1.36.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.36.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Feat: neststats gesplitst in "Te exporteren" en totaaloverzicht (analoog aan ringstats)',
+      'Feat: export-tracking voor legsels via exported_at vlag',
+      'Feat: soortentabel (alle jaren) uitgebreid met eieren, pulli, succes en sortering',
+      'Fix: jaarselectie volledig verwijderd uit neststats — altijd alle data',
+    ],
+    wijzigingen_en: [
+      'Feat: nest stats split into "To export" and total overview (like ring stats)',
+      'Feat: export tracking for clutches via exported_at flag',
+      'Feat: species table (all years) extended with eggs, chicks, success and sorting',
+      'Fix: year filter fully removed from nest stats — always all data',
+    ],
+    wijzigingen_de: [
+      'Feat: Niststats in "Zu exportieren" und Gesamtübersicht aufgeteilt (wie Ringstats)',
+      'Feat: Export-Tracking für Gelege via exported_at Flag',
+      'Feat: Artentabelle (alle Jahre) um Eier, Küken, Erfolg und Sortierung erweitert',
+      'Fix: Jahresfilter vollständig aus Niststats entfernt — immer alle Daten',
+    ],
+  },
   {
     versie: '1.34.0',
     datum: '2026-03-23',
