@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSync } from '../../context/SyncContext';
 import { MAX_ATTEMPTS } from '../../context/SyncContext';
@@ -106,11 +106,12 @@ export default function SyncIndicator() {
                     <span className="sync-popover-table">{TABLE_LABELS[item.table_name] ?? item.table_name}</span>
                     <span className="sync-popover-time">{formatTime(item.createdAt)}</span>
                     {item.attempts > 0 && (
-                      <span className="sync-popover-attempts" title={item.lastError}>
+                      <span className="sync-popover-attempts">
                         {failed
                           ? t('sync_failed_mark')
                           : t('sync_attempts', { count: item.attempts })
-                        }{item.lastError ? ` — ${item.lastError}` : ''}
+                        }
+                        {item.lastError && <KopieerFout tekst={item.lastError} />}
                       </span>
                     )}
                   </li>
@@ -128,10 +129,7 @@ export default function SyncIndicator() {
 
   if (syncError) {
     return (
-      <div className="sync-indicator sync-indicator--error" title={syncError}>
-        <span className="sync-icon">!</span>
-        <span className="sync-label">{t('sync_error_label')}</span>
-      </div>
+      <SyncFoutIndicator syncError={syncError} label={t('sync_error_label')} />
     );
   }
 
@@ -141,5 +139,62 @@ export default function SyncIndicator() {
       <span className="sync-icon">●</span>
       <span className="sync-label">{t('sync_online')}</span>
     </div>
+  );
+}
+
+function SyncFoutIndicator({ syncError, label }) {
+  const [open, setOpen] = useState(false);
+  const [gekopieerd, setGekopieerd] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
+  const kopieer = useCallback((e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(syncError).then(() => {
+      setGekopieerd(true);
+      setTimeout(() => setGekopieerd(false), 2000);
+    });
+  }, [syncError]);
+
+  return (
+    <div className="sync-indicator sync-indicator--error sync-indicator--clickable" ref={ref} onClick={() => setOpen(o => !o)}>
+      <span className="sync-icon">!</span>
+      <span className="sync-label">{label}</span>
+      {open && (
+        <div className="sync-popover sync-popover--error">
+          <div className="sync-popover-error-tekst">{syncError}</div>
+          <button className="sync-copy-btn" onClick={kopieer}>
+            {gekopieerd ? '✓ Gekopieerd' : '⎘ Kopieer foutmelding'}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function KopieerFout({ tekst }) {
+  const [gekopieerd, setGekopieerd] = useState(false);
+  const kopieer = useCallback((e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(tekst).then(() => {
+      setGekopieerd(true);
+      setTimeout(() => setGekopieerd(false), 2000);
+    });
+  }, [tekst]);
+  return (
+    <>
+      {' '}— <span className="sync-popover-error-inline" title={tekst}>{tekst.length > 60 ? tekst.slice(0, 60) + '…' : tekst}</span>
+      {' '}<button className="sync-copy-inline-btn" onClick={kopieer} title="Kopieer foutmelding">
+        {gekopieerd ? '✓' : '⎘'}
+      </button>
+    </>
   );
 }

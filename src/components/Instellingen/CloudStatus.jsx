@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -195,7 +195,25 @@ export default function CloudStatus() {
           <button className="cloud-status__lost-dismiss" onClick={clearSyncLost} aria-label="Melding sluiten">✕</button>
         </div>
       )}
-      {fout && <div className="cloud-status__error">{fout}</div>}
+      {fout && <KopieerFout tekst={fout} />}
+    </div>
+  );
+}
+
+function KopieerFout({ tekst }) {
+  const [gekopieerd, setGekopieerd] = useState(false);
+  const kopieer = useCallback(() => {
+    navigator.clipboard.writeText(tekst).then(() => {
+      setGekopieerd(true);
+      setTimeout(() => setGekopieerd(false), 2000);
+    });
+  }, [tekst]);
+  return (
+    <div className="cloud-status__error">
+      <span className="cloud-status__error-tekst">{tekst}</span>
+      <button className="cloud-status__error-kopieer" onClick={kopieer} title="Kopieer foutmelding">
+        {gekopieerd ? '✓' : '⎘'}
+      </button>
     </div>
   );
 }

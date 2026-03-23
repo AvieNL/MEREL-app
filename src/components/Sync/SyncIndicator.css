@@ -215,3 +215,62 @@
 @keyframes sync-spin {
   to { transform: rotate(360deg); }
 }
+
+/* Fout-popover (klikbaar fout-indicator) */
+.sync-indicator--error.sync-indicator--clickable {
+  cursor: pointer;
+  position: relative;
+}
+
+.sync-popover--error {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sync-popover-error-tekst {
+  color: var(--danger, #ef4444);
+  font-size: 0.78rem;
+  word-break: break-word;
+}
+
+.sync-copy-btn {
+  align-self: flex-start;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.72rem;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+
+.sync-copy-btn:hover {
+  background: var(--border);
+}
+
+/* Inline kopieer-knopje per queue-item */
+.sync-popover-attempts {
+  white-space: normal;
+}
+
+.sync-popover-error-inline {
+  color: var(--danger, #ef4444);
+  font-size: 0.70rem;
+}
+
+.sync-copy-inline-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.70rem;
+  padding: 0 2px;
+  vertical-align: middle;
+}
+
+.sync-copy-inline-btn:hover {
+  color: var(--text-primary);
+}
