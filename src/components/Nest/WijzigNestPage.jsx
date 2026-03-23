@@ -6,7 +6,7 @@ import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import LocatiePicker from '../Nieuw/LocatiePicker';
 import {
   HABITAT_CODES, NESTPLAATS_CODES, NESTTYPE_CODES,
-  VONDST_CODES, VERSTOPT_CODES, BESCHERM_CODES,
+  VONDST_CODES, VERSTOPT_CODES, BESCHERM_CODES, KASTTYPE_CODES,
 } from '../../data/sovon-codes';
 import './NieuwNestPage.css';
 
@@ -74,6 +74,8 @@ export default function WijzigNestPage() {
       vondst_toelichting:     nest.vondst_toelichting || '',
       verstopt:          nest.verstopt != null ? String(nest.verstopt) : '',
       bescherm:          nest.bescherm != null ? String(nest.bescherm) : '',
+      kasttype:          nest.kasttype != null ? String(nest.kasttype) : '',
+      hoogte:            nest.hoogte != null ? String(nest.hoogte) : '',
       lat:               nest.lat != null ? String(nest.lat) : '',
       lon:               nest.lon != null ? String(nest.lon) : '',
       adres:             nest.adres || '',
@@ -121,6 +123,8 @@ export default function WijzigNestPage() {
         vondst_toelichting:     form.vondst_toelichting.trim() || null,
         verstopt:          form.verstopt !== '' ? parseInt(form.verstopt, 10) : null,
         bescherm:          form.bescherm !== '' ? parseInt(form.bescherm, 10) : null,
+        kasttype:          form.kasttype !== '' ? parseInt(form.kasttype, 10) : null,
+        hoogte:            form.hoogte !== '' ? parseFloat(form.hoogte) : null,
         lat:               form.lat ? parseFloat(form.lat) : null,
         lon:               form.lon ? parseFloat(form.lon) : null,
         adres:             form.adres.trim(),
@@ -309,6 +313,23 @@ export default function WijzigNestPage() {
                 <option value="">{t('nest_code_optional')}</option>
                 {BESCHERM_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
               </select>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>{t('nest_kasttype')}</label>
+              <select value={form.kasttype} onChange={e => update('kasttype', e.target.value)}>
+                <option value="">{t('nest_code_optional')}</option>
+                {KASTTYPE_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>{t('nest_hoogte')}</label>
+              <input
+                type="number" inputMode="decimal" step="0.1" min="0" max="50"
+                value={form.hoogte} onChange={e => update('hoogte', e.target.value)}
+                placeholder={t('nest_hoogte_placeholder')}
+              />
             </div>
           </div>
         </div>

@@ -1,6 +1,31 @@
-export const VERSIE = '1.31.9';
+export const VERSIE = '1.32.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.32.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Feat: nestkastformulier uitgebreid met kasttype en hoogte',
+      'Feat: bezoekformulier registreert nu ook dode eieren en dode pulli',
+      'Feat: datum eerste ei en marge instelbaar bij aanmaken nieuw legsel',
+      'Feat: export nestkastdata als JSON backup, CSV (AviNest-stijl) en XML (nestlocaties)',
+      'Data: KASTTYPE_CODES en EIMETHODE_CODES toegevoegd aan sovon-codes',
+    ],
+    wijzigingen_en: [
+      'Feat: nest box form extended with box type and height',
+      'Feat: visit form now registers dead eggs and dead chicks',
+      'Feat: date of first egg and margin settable when creating new clutch',
+      'Feat: export nest box data as JSON backup, CSV (AviNest-style) and XML (nest locations)',
+      'Data: KASTTYPE_CODES and EIMETHODE_CODES added to sovon-codes',
+    ],
+    wijzigingen_de: [
+      'Feat: Nistkastenformular mit Kastentyp und Höhe erweitert',
+      'Feat: Besuchsformular registriert jetzt auch tote Eier und tote Küken',
+      'Feat: Datum des ersten Eis und Toleranz beim Anlegen eines neuen Geleges einstellbar',
+      'Feat: Nistkastendaten als JSON-Backup, CSV (AviNest-Stil) und XML (Neststandorte) exportieren',
+      'Data: KASTTYPE_CODES und EIMETHODE_CODES zu sovon-codes hinzugefügt',
+    ],
+  },
   {
     versie: '1.31.9',
     datum: '2026-03-23',

@@ -2,12 +2,18 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { useRecords } from '../../hooks/useRecords';
+import {
+  buildNestExportData, exportNestJSON, exportNestJSONBackup,
+  exportNestCSV, exportAviNestTXT, exportAviNestXML,
+} from '../../utils/nestExport';
 
 const HUIDIG_JAAR = new Date().getFullYear();
 
 export default function NestStatsPage() {
   const { t } = useTranslation();
-  const { nesten, legsels, bezoeken } = useNestData();
+  const { nesten, legsels, bezoeken, ringen } = useNestData();
+  const { records: vangsten } = useRecords();
   const species = useSpeciesRef();
 
   const speciesByEuring = useMemo(() => {
@@ -165,6 +171,53 @@ export default function NestStatsPage() {
           {t('nest_stats_empty', { jaar: seizoenFilter })}
         </p>
       )}
+
+      {/* ── Export ── */}
+      <div style={{ marginTop: 32, borderTop: '1px solid var(--border)', paddingTop: 24 }}>
+        <h3 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6 }}>
+          {t('nest_export_title')}
+        </h3>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 16 }}>
+          {t('nest_export_summary', {
+            nesten: nesten.length,
+            legsels: legsels.length,
+            bezoeken: bezoeken.length,
+            ringen: ringen.length,
+          })}
+        </p>
+        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 16 }}>
+          {t('nest_export_hint')}
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <button
+            className="btn-secondary"
+            onClick={() => {
+              const data = buildNestExportData({ nesten, legsels, bezoeken, ringen, jaar: seizoenFilter, speciesByEuring });
+              exportNestCSV(data, seizoenFilter);
+            }}
+          >
+            ↓ {t('nest_export_csv_label')}
+          </button>
+          <button
+            className="btn-secondary"
+            onClick={() => exportAviNestTXT({ nesten, legsels, bezoeken, ringen, vangsten: vangsten ?? [], speciesByEuring })}
+          >
+            ↓ {t('nest_export_csv_label')} (AviNest TXT — alle jaren)
+          </button>
+          <button
+            className="btn-secondary"
+            onClick={() => exportAviNestXML({ nesten, legsels, speciesByEuring })}
+          >
+            ↓ {t('nest_export_xml_label')}
+          </button>
+          <button
+            className="btn-secondary"
+            onClick={() => exportNestJSONBackup({ nesten, legsels, bezoeken, ringen, vangsten: vangsten ?? [] })}
+          >
+            ↓ {t('nest_export_json_label')}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

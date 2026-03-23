@@ -41,7 +41,9 @@ export default function WijzigBezoekPage() {
       stadiumPrimair: bezoek.stadium || '',
       stadiumSecundair: bezoek.stadium2 || '',
       aantalEieren:   bezoek.aantal_eieren != null ? String(bezoek.aantal_eieren) : '',
+      eiDood:         bezoek.ei_dood   != null ? String(bezoek.ei_dood)   : '',
       aantalPulli:    bezoek.aantal_pulli  != null ? String(bezoek.aantal_pulli)  : '',
+      jongDood:       bezoek.jong_dood != null ? String(bezoek.jong_dood) : '',
       soortEuring:    bezoek.soort_euring || '',
       opmerkingen:    bezoek.opmerkingen || '',
       betrouwbDatum:  bezoek.betrouwb_datum  ?? 1,
@@ -99,7 +101,9 @@ export default function WijzigBezoekPage() {
         stadium:        form.stadiumPrimair,
         stadium2:       form.stadiumSecundair || null,
         aantal_eieren:  form.aantalEieren !== '' ? parseInt(form.aantalEieren, 10) : null,
+        ei_dood:        form.eiDood   !== '' ? parseInt(form.eiDood,   10) : null,
         aantal_pulli:   form.aantalPulli  !== '' ? parseInt(form.aantalPulli,  10) : null,
+        jong_dood:      form.jongDood !== '' ? parseInt(form.jongDood, 10) : null,
         soort_euring:   form.soortEuring || null,
         opmerkingen:    form.opmerkingen,
         betrouwb_datum:  form.betrouwbDatum,
@@ -199,6 +203,24 @@ export default function WijzigBezoekPage() {
             onChangeAantalPulli={v => update('aantalPulli', v)}
             error={errors.stadium}
           />
+          {(form.stadiumPrimair?.startsWith('E') || form.aantalEieren !== '' || form.stadiumPrimair?.startsWith('N') || form.aantalPulli !== '') && (
+            <div className="form-row form-row--dood">
+              {(form.stadiumPrimair?.startsWith('E') || form.aantalEieren !== '') && (
+                <div className="form-group">
+                  <label>{t('nest_ei_dood')}</label>
+                  <input type="number" inputMode="numeric" min="0" max="30"
+                    value={form.eiDood} onChange={e => update('eiDood', e.target.value)} placeholder="0" />
+                </div>
+              )}
+              {(form.stadiumPrimair?.startsWith('N') || form.aantalPulli !== '') && (
+                <div className="form-group">
+                  <label>{t('nest_jong_dood')}</label>
+                  <input type="number" inputMode="numeric" min="0" max="30"
+                    value={form.jongDood} onChange={e => update('jongDood', e.target.value)} placeholder="0" />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

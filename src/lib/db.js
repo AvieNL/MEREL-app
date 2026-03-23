@@ -68,3 +68,9 @@ db.version(10).stores({
   nest_seizoen: null,
   legsel: 'id, nest_id, [nest_id+jaar]',
 });
+
+// Versie 11: nieuwe velden toegevoegd (geen schema-wijziging nodig, Dexie slaat alle velden op)
+// nest:      + kasttype, hoogte
+// legsel:    + datum_1e_ei, eistartmarge, eimethode
+// nestbezoek: + ei_dood, jong_dood
+db.version(11).stores({});

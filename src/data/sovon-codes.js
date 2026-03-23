@@ -304,6 +304,27 @@ export const VINDSTATUS_CODES = [
   { code: 3, nl: '3 — Oud (> 3 dagen)' },
 ];
 
+// ── KASTTYPE ─────────────────────────────────────────────────────────────────
+// Type nestkast of neststructuur
+export const KASTTYPE_CODES = [
+  { code: 0, nl: 'Geen nestkast (vrij nest / holte)',       en: 'No nest box (open nest / hollow)',       de: 'Kein Nistkasten (Freinest / Höhle)' },
+  { code: 1, nl: 'Standaard nestkast (ronde/ovale ingang)', en: 'Standard nest box (round/oval hole)',    de: 'Standard-Nistkasten (runde/ovale Öffnung)' },
+  { code: 2, nl: 'Half-open nestkast',                      en: 'Semi-open nest box',                    de: 'Halboffener Nistkasten' },
+  { code: 3, nl: 'Platform / nestplateau',                   en: 'Nest platform / tray',                  de: 'Nestplatte / Nestpalette' },
+  { code: 4, nl: 'Kunstmatige holte (nis, muurgat)',        en: 'Artificial hollow (niche, wall hole)',   de: 'Künstliche Höhle (Nische, Maueröffnung)' },
+  { code: 5, nl: 'Overig / onbekend',                       en: 'Other / unknown',                       de: 'Sonstiges / unbekannt' },
+];
+
+// ── EIMETHODE ─────────────────────────────────────────────────────────────────
+// Methode waarmee de datum van het eerste ei is bepaald
+export const EIMETHODE_CODES = [
+  { code: 0, nl: 'Onbekend',                                  en: 'Unknown',                             de: 'Unbekannt' },
+  { code: 1, nl: 'Eigen waarneming (eerste ei zelf gezien)',  en: 'Direct observation (egg seen)',       de: 'Eigene Beobachtung (Ei selbst gesehen)' },
+  { code: 2, nl: 'Berekend via broedduur',                    en: 'Calculated via incubation period',    de: 'Berechnet über Brutdauer' },
+  { code: 3, nl: 'Berekend via leeftijd pulli',               en: 'Calculated via pullus age',           de: 'Berechnet über Pullus-Alter' },
+  { code: 4, nl: 'Berekend via eilegsnelheid',                en: 'Calculated via egg-laying rate',      de: 'Berechnet über Legefolge' },
+];
+
 // ── NESTRING ─────────────────────────────────────────────────────────────────
 export const NEST_SEXE_CODES = [
   { code: 'O', nl: 'Onbekend' },

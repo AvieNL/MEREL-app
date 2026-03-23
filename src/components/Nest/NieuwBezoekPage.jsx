@@ -48,7 +48,11 @@ export default function NieuwBezoekPage() {
   const [stadiumPrimair,   setStadiumPrimair]   = useState('');
   const [stadiumSecundair, setStadiumSecundair] = useState('');
   const [aantalEieren,     setAantalEieren]     = useState('');
+  const [eiDood,           setEiDood]           = useState('');
   const [aantalPulli,      setAantalPulli]      = useState('');
+  const [jongDood,         setJongDood]         = useState('');
+  const [datum1eEi,        setDatum1eEi]        = useState('');
+  const [eistartmarge,     setEistartmarge]     = useState('');
   const [opmerkingen,      setOpmerkingen]      = useState('');
 
   const [betrouwbOpen,   setBetrouwbOpen]   = useState(false);
@@ -204,7 +208,9 @@ export default function NieuwBezoekPage() {
         stadium:         stadiumPrimair,
         stadium2:        stadiumSecundair || null,
         aantal_eieren:   aantalEieren !== '' ? parseInt(aantalEieren, 10) : null,
+        ei_dood:         eiDood !== '' ? parseInt(eiDood, 10) : null,
         aantal_pulli:    aantalPulli !== '' ? parseInt(aantalPulli, 10) : null,
+        jong_dood:       jongDood !== '' ? parseInt(jongDood, 10) : null,
         betrouwb_datum:  betrouwbDatum,
         betrouwb_aantal: betrouwbAantal,
         betrouwb_dagen:  betrouwbDagen,
@@ -212,6 +218,14 @@ export default function NieuwBezoekPage() {
         soort_euring:    soortEuring || null,
         volgende_bezoek_suggestie: suggestie || null,
       });
+
+      // Datum eerste ei opslaan op het legsel als het nieuw is en datum opgegeven
+      if (datum1eEi) {
+        await updateLegsel(doelLegselId, {
+          datum_1e_ei:    datum1eEi,
+          eistartmarge:   eistartmarge !== '' ? parseInt(eistartmarge, 10) : null,
+        });
+      }
 
       if (isAfsluitend) {
         await updateLegsel(doelLegselId, {
@@ -384,8 +398,47 @@ export default function NieuwBezoekPage() {
             onChangeAantalPulli={setAantalPulli}
             error={errors.stadium}
           />
+          {(stadiumPrimair?.startsWith('E') || aantalEieren !== '' || stadiumPrimair?.startsWith('N') || aantalPulli !== '') && (
+            <div className="form-row form-row--dood">
+              {(stadiumPrimair?.startsWith('E') || aantalEieren !== '') && (
+                <div className="form-group">
+                  <label>{t('nest_ei_dood')}</label>
+                  <input type="number" inputMode="numeric" min="0" max="30"
+                    value={eiDood} onChange={e => setEiDood(e.target.value)} placeholder="0" />
+                </div>
+              )}
+              {(stadiumPrimair?.startsWith('N') || aantalPulli !== '') && (
+                <div className="form-group">
+                  <label>{t('nest_jong_dood')}</label>
+                  <input type="number" inputMode="numeric" min="0" max="30"
+                    value={jongDood} onChange={e => setJongDood(e.target.value)} placeholder="0" />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
+
+      {/* ── Legselgegevens (alleen bij nieuw legsel) ── */}
+      {geselecteerdNestId && (seizoenLegsels.length === 0 || geselecteerdLegsel === 'nieuw') && (
+        <div className="section">
+          <div className="section-header"><h3>{t('nest_legsel_details')}</h3></div>
+          <div className="section-content">
+            <p className="admin-hint">{t('nest_legsel_details_hint')}</p>
+            <div className="form-row">
+              <div className="form-group">
+                <label>{t('nest_datum_1e_ei')}</label>
+                <input type="date" value={datum1eEi} onChange={e => setDatum1eEi(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>{t('nest_eistartmarge')}</label>
+                <input type="number" inputMode="numeric" min="0" max="14"
+                  value={eistartmarge} onChange={e => setEistartmarge(e.target.value)} placeholder="0" />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Nestsucces (bij C-/X-stadium) ── */}
       {isAfsluitend && (
