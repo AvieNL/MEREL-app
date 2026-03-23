@@ -108,38 +108,37 @@ export default function AviNestImportSection() {
       // en tegelijk naar Dexie. De sync queue wordt bewust overgeslagen om parallelle
       // verwerking te voorkomen die FK-violations veroorzaakt.
 
-      // 1. Nesten
-      const nieuweNestRecords = [];
+      // 1. Nesten — altijd upserten (ook hergebruikte) zodat ze zeker in Supabase bestaan
+      const alleNestRecords = [];
       for (const n of nestResultaten) {
-        if (n._bestaandId) {
-          nestIdMap.set(n._key, n._bestaandId);
-        } else {
-          const id = crypto.randomUUID();
-          const record = {
-            id,
-            kastnummer:      n.kastnummer,
-            adres:           n.adres,
-            lat:             n.lat,
-            lon:             n.lon,
-            soort_euring:    n.soort_euring,
-            habitat:         n.habitat,
-            nestplaats:      n.nestplaats,
-            kasttype:        n.kasttype,
-            hoogte:          n.hoogte,
-            bescherm:        n.bescherm,
-            verstopt:        n.verstopt,
-            aangemaakt_door: user.id,
-            aangemaakt_op:   now,
-            updated_at:      now,
-          };
-          nestIdMap.set(n._key, id);
-          nieuweNestRecords.push(record);
-        }
+        const id = n._bestaandId ?? crypto.randomUUID();
+        const bestaand = bestaandeNesten.find(e => e.id === n._bestaandId);
+        const record = bestaand
+          ? { ...bestaand, updated_at: now }
+          : {
+              id,
+              kastnummer:      n.kastnummer,
+              adres:           n.adres,
+              lat:             n.lat,
+              lon:             n.lon,
+              soort_euring:    n.soort_euring,
+              habitat:         n.habitat,
+              nestplaats:      n.nestplaats,
+              kasttype:        n.kasttype,
+              hoogte:          n.hoogte,
+              bescherm:        n.bescherm,
+              verstopt:        n.verstopt,
+              aangemaakt_door: user.id,
+              aangemaakt_op:   now,
+              updated_at:      now,
+            };
+        nestIdMap.set(n._key, id);
+        alleNestRecords.push(record);
       }
-      if (nieuweNestRecords.length > 0) {
-        const { error } = await supabase.from('nest').upsert(nieuweNestRecords);
+      if (alleNestRecords.length > 0) {
+        const { error } = await supabase.from('nest').upsert(alleNestRecords);
         if (error) throw error;
-        await db.nest.bulkPut(nieuweNestRecords);
+        await db.nest.bulkPut(alleNestRecords);
       }
 
       // 2. Legsels
