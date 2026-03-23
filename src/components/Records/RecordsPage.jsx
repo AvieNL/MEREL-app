@@ -50,6 +50,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
       setTimeout(() => document.querySelector('.prullenbak-section')?.scrollIntoView({ behavior: 'smooth' }), 100);
     }
   }, [location.search]);
+
   const navigate = useNavigate();
   const { canDelete } = useRole();
   const speciesRef = useSpeciesRef();
