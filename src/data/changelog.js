@@ -24,6 +24,25 @@ export const CHANGELOG = [
     ],
   },
   {
+    versie: '1.35.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Feat: app hernoemd naar MEREL — MEld.REgistreer.Log.',
+      'Feat: merel (lijster) SVG-logo toegevoegd',
+      'Feat: nieuw kleurenpalet — diep zwart achtergrond, oranje merkkleur (#e8720c)',
+    ],
+    wijzigingen_en: [
+      'Feat: app renamed to MEREL — MEld.REgistreer.Log.',
+      'Feat: blackbird SVG logo added',
+      'Feat: new color palette — deep black background, orange brand color (#e8720c)',
+    ],
+    wijzigingen_de: [
+      'Feat: App umbenannt in MEREL — MEld.REgistreer.Log.',
+      'Feat: Amsel SVG-Logo hinzugefügt',
+      'Feat: Neues Farbschema — tiefschwarzer Hintergrund, orange Markenfarbe (#e8720c)',
+    ],
+  },
+  {
     versie: '1.34.0',
     datum: '2026-03-23',
     wijzigingen: [
