@@ -190,7 +190,7 @@ export default function AviNestImportSection() {
       for (const r of ringen) {
         const bezoekId = bezoekIdMap.get(r._bezoekKey);
         if (!bezoekId) continue;
-        const vangst = await db.vangsten.where('ringnummer').equals(r.ringnummer).first();
+        const vangst = await db.vangsten.filter(v => v.ringnummer === r.ringnummer).first();
         const id = crypto.randomUUID();
         const record = {
           id,
