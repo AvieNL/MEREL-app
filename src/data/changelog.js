@@ -1,6 +1,19 @@
-export const VERSIE = '1.47.0';
+export const VERSIE = '1.48.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.48.0',
+    datum: '2026-03-24',
+    wijzigingen: [
+      'Fix: teruggevangen-tabel toont plaatsnaam (google_plaats / nesadres) in plaats van coördinaten',
+    ],
+    wijzigingen_en: [
+      'Fix: recaptured table shows place name (google_plaats / nest address) instead of coordinates',
+    ],
+    wijzigingen_de: [
+      'Fix: Wiederangefangen-Tabelle zeigt Ortsname (google_plaats / Nestadresse) statt Koordinaten',
+    ],
+  },
   {
     versie: '1.47.0',
     datum: '2026-03-24',

@@ -765,9 +765,9 @@ export default function NestStatsPage() {
                           {i === 0 ? (
                             <>
                               {p.eersteVangst.vangstdatum}
-                              {p.lat1 && p.lon1 && (
+                              {(p.eersteVangst.google_plaats || p.nest?.adres) && (
                                 <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
-                                  {p.lat1.toFixed(4)}, {p.lon1.toFixed(4)}
+                                  {p.eersteVangst.google_plaats || p.nest?.adres}
                                 </span>
                               )}
                             </>
@@ -775,9 +775,9 @@ export default function NestStatsPage() {
                         </td>
                         <td className="tt-col-soort" style={{ fontSize: '0.78rem' }}>
                           {rij.tv.vangstdatum}
-                          {rij.lat2 && rij.lon2 && (
+                          {rij.tv.google_plaats && (
                             <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
-                              {rij.lat2.toFixed(4)}, {rij.lon2.toFixed(4)}
+                              {rij.tv.google_plaats}
                             </span>
                           )}
                         </td>
