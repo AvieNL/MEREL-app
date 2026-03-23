@@ -140,6 +140,21 @@
   align-items: center;
 }
 
+.sync-reset-btn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 2px 6px;
+}
+
+.sync-reset-btn:hover {
+  background: var(--border);
+}
+
 .sync-clear-btn {
   background: var(--danger, #ef4444);
   color: #fff;

@@ -11,7 +11,7 @@ function formatTime(iso) {
 }
 
 export default function SyncIndicator() {
-  const { pendingCount, pendingItems, syncing, isOnline, syncError, lastSynced, processQueue, clearQueue } = useSync();
+  const { pendingCount, pendingItems, syncing, isOnline, syncError, lastSynced, processQueue, clearQueue, resetQueue } = useSync();
   const { t } = useTranslation();
   const failedItems = pendingItems.filter(i => (i.attempts ?? 0) >= MAX_ATTEMPTS);
   const retryableItems = pendingItems.filter(i => (i.attempts ?? 0) < MAX_ATTEMPTS);
@@ -79,6 +79,9 @@ export default function SyncIndicator() {
                     {t('sync_force_sync')}
                   </button>
                 )}
+                <button className="sync-reset-btn" onClick={e => { e.stopPropagation(); resetQueue(); setOpen(false); }} title="Reset pogingen en probeer opnieuw">
+                  ↺
+                </button>
                 {failedItems.length > 0 && (
                   <button className="sync-clear-btn" onClick={e => {
                     e.stopPropagation();

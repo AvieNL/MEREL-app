@@ -188,7 +188,10 @@ export function SyncProvider({ children }) {
       pullSpeciesIfNeeded(false).catch(e => console.warn('Species pull mislukt:', e.message));
     }
 
-    if (pending.length === 0) return;
+    if (pending.length === 0) {
+      setSyncError('');
+      return;
+    }
 
     syncingRef.current = true;
     setSyncing(true);
@@ -260,6 +263,13 @@ export function SyncProvider({ children }) {
     await refreshPendingCount();
   }
 
+  async function resetQueue() {
+    await db.sync_queue.toCollection().modify({ attempts: 0, nextRetryAt: null, lastError: null });
+    setSyncError('');
+    await refreshPendingCount();
+    if (navigator.onLine && user) processQueue();
+  }
+
   return (
     <SyncContext.Provider value={{
       pendingCount,
@@ -275,6 +285,7 @@ export function SyncProvider({ children }) {
       processQueue,
       refreshPendingCount,
       clearQueue,
+      resetQueue,
     }}>
       {children}
     </SyncContext.Provider>
