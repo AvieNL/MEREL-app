@@ -12,7 +12,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL      = Deno.env.get('SUPABASE_URL')      ?? '';
+const SUPABASE_URL         = Deno.env.get('SUPABASE_URL')              ?? '';
 const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
 
 const TYPE_LABEL: Record<string, string> = {
@@ -60,13 +60,13 @@ function fold(line: string): string {
 }
 
 interface PlanningItem {
-  legselId:    string;
-  kastnummer:  string;
+  legselId:     string;
+  kastnummer:   string;
   omschrijving: string;
-  soortNaam:   string;
-  datum:       string;
-  type:        string | null;
-  urgentie:    string;
+  soortNaam:    string;
+  datum:        string;
+  type:         string | null;
+  urgentie:     string;
 }
 
 function buildIcal(items: PlanningItem[]): string {
@@ -86,9 +86,9 @@ function buildIcal(items: PlanningItem[]): string {
   ].join('\r\n');
 
   const events = items.map(item => {
-    const typeLabel    = TYPE_LABEL[item.type ?? ''] ?? 'Nestbezoek';
+    const typeLabel     = TYPE_LABEL[item.type ?? ''] ?? 'Nestbezoek';
     const urgentieLabel = URGENTIE_LABEL[item.urgentie] ?? item.urgentie;
-    const summary      = [typeLabel, `kast ${item.kastnummer}`, item.soortNaam]
+    const summary       = [typeLabel, `kast ${item.kastnummer}`, item.soortNaam]
       .filter(Boolean).join(' — ');
 
     const descLines = [
@@ -144,19 +144,70 @@ Deno.serve(async (req: Request) => {
   const userId = profile.id;
   const jaar   = new Date().getFullYear();
 
-  // Data ophalen
-  const [nestenRes, legselsRes, bezoekenRes] = await Promise.all([
-    supabase.from('nest').select('id, kastnummer, omschrijving').eq('aangemaakt_door', userId),
-    supabase.from('legsel').select('id, nest_id, jaar, soort_euring').eq('aangemaakt_door', userId).eq('jaar', jaar),
-    supabase.from('nestbezoek').select('id, legsel_id, datum, soort_euring, volgende_bezoek_suggestie, volgende_bezoek_type').eq('aangemaakt_door', userId),
-  ]);
+  // Stap 1: nesten van deze gebruiker (zonder verwijderde)
+  const { data: nestenData, error: nestenErr } = await supabase
+    .from('nest')
+    .select('id, kastnummer, omschrijving')
+    .eq('aangemaakt_door', userId)
+    .is('deleted_at', null);
 
-  const nesten   = nestenRes.data   ?? [];
-  const legsels  = legselsRes.data  ?? [];
-  const bezoeken = bezoekenRes.data ?? [];
+  if (nestenErr) {
+    return new Response(`Fout bij ophalen nesten: ${nestenErr.message}`, { status: 500 });
+  }
 
-  // Soorten ophalen voor namen
-  const euringCodes = [...new Set(legsels.map(l => l.soort_euring).filter(Boolean))];
+  const nesten = nestenData ?? [];
+  if (nesten.length === 0) {
+    return new Response(buildIcal([]), {
+      status: 200,
+      headers: { 'Content-Type': 'text/calendar;charset=utf-8', 'Cache-Control': 'no-cache' },
+    });
+  }
+
+  const nestIds = nesten.map((n: { id: string }) => n.id);
+
+  // Stap 2: legsels voor deze nesten (filter jaar in code, niet in DB — year kan NULL zijn bij oude records)
+  const { data: legselsData, error: legselsErr } = await supabase
+    .from('legsel')
+    .select('id, nest_id, jaar, soort_euring')
+    .in('nest_id', nestIds);
+
+  if (legselsErr) {
+    return new Response(`Fout bij ophalen legsels: ${legselsErr.message}`, { status: 500 });
+  }
+
+  // Filter op huidig jaar in code (null = onbekend jaar, inclusief voor robuustheid)
+  const legsels = (legselsData ?? []).filter(
+    (l: { jaar: number | null }) => l.jaar === jaar || l.jaar === null
+  );
+
+  if (legsels.length === 0) {
+    return new Response(buildIcal([]), {
+      status: 200,
+      headers: { 'Content-Type': 'text/calendar;charset=utf-8', 'Cache-Control': 'no-cache' },
+    });
+  }
+
+  const legselIds = legsels.map((l: { id: string }) => l.id);
+
+  // Stap 3: bezoeken voor deze legsels
+  const { data: bezoekenData, error: bezoekenErr } = await supabase
+    .from('nestbezoek')
+    .select('id, legsel_id, datum, soort_euring, volgende_bezoek_suggestie, volgende_bezoek_type')
+    .in('legsel_id', legselIds)
+    .order('datum', { ascending: true });
+
+  if (bezoekenErr) {
+    return new Response(`Fout bij ophalen bezoeken: ${bezoekenErr.message}`, { status: 500 });
+  }
+
+  const bezoeken = bezoekenData ?? [];
+
+  // Stap 4: soorten ophalen voor namen
+  const euringCodes = [...new Set([
+    ...legsels.map((l: { soort_euring: string | null }) => l.soort_euring),
+    ...bezoeken.map((b: { soort_euring: string | null }) => b.soort_euring),
+  ].filter(Boolean))] as string[];
+
   const { data: soorten } = euringCodes.length > 0
     ? await supabase.from('species').select('euring_code, naam_nl').in('euring_code', euringCodes)
     : { data: [] };
@@ -166,7 +217,7 @@ Deno.serve(async (req: Request) => {
     speciesByEuring[s.euring_code] = s.naam_nl;
   });
 
-  // Planning berekenen (zelfde logica als client-side berekenPlanningItems)
+  // Stap 5: planning berekenen — meest recente bezoek per legsel met suggestie
   const vandaag = new Date().toISOString().slice(0, 10);
   const items: PlanningItem[] = [];
 
@@ -182,7 +233,7 @@ Deno.serve(async (req: Request) => {
       if (!laatste?.volgende_bezoek_suggestie) continue;
 
       const suggestieDatum = laatste.volgende_bezoek_suggestie;
-      const dagenAf        = Math.round(
+      const dagenAf = Math.round(
         (new Date(suggestieDatum + 'T12:00:00').getTime() - new Date(vandaag + 'T12:00:00').getTime()) / 86400000
       );
 
@@ -203,9 +254,7 @@ Deno.serve(async (req: Request) => {
 
   items.sort((a, b) => a.datum.localeCompare(b.datum));
 
-  const ical = buildIcal(items);
-
-  return new Response(ical, {
+  return new Response(buildIcal(items), {
     status: 200,
     headers: {
       'Content-Type':        'text/calendar;charset=utf-8',
