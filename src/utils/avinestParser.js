@@ -84,6 +84,7 @@ export function parseAviNestTXT(text) {
         _kaartnr:  intOrNull(kaartnr),
         _legselnr: intOrNull(legselnr),
         volgnummer:    intOrNull(kaartnr),  // KAARTNR als unieke sleutel
+        jaar:          intOrNull(jaar),
         datum_1e_ei:   datum1eEi,
         eistartmarge:  intOrNull(get(row, 'EISTARTMARGE')),
         nestsucces:    intOrNull(get(row, 'UITGEVL')),

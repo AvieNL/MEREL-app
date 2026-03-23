@@ -145,6 +145,7 @@ export default function AviNestImportSection() {
           id,
           nest_id:      nestId,
           volgnummer:   l.volgnummer,
+          jaar:         l.jaar,
           datum_1e_ei:  l.datum_1e_ei,
           eistartmarge: l.eistartmarge,
           nestsucces:   l.nestsucces,
