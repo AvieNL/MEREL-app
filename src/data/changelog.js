@@ -1,6 +1,19 @@
-export const VERSIE = '1.32.0';
+export const VERSIE = '1.32.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.32.1',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Fix: kopieerknop toegevoegd aan sync-foutmeldingen (CloudStatus + SyncIndicator)',
+    ],
+    wijzigingen_en: [
+      'Fix: copy button added to sync error messages (CloudStatus + SyncIndicator)',
+    ],
+    wijzigingen_de: [
+      'Fix: Kopierschaltfläche zu Sync-Fehlermeldungen hinzugefügt',
+    ],
+  },
   {
     versie: '1.32.0',
     datum: '2026-03-23',
