@@ -311,7 +311,7 @@ export default function Header({ onSwitchModule, activeModule }) {
                     </svg>
                     {t('nav_prullenbak')}
                     {prullenbakTel > 0 && (
-                      <span className="header-prullenbak-tel">{prullenbakTel > 9 ? '9+' : prullenbakTel}</span>
+                      <span className="header-prullenbak-tel">{prullenbakTel}</span>
                     )}
                   </button>
                 </div>

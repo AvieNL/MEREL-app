@@ -234,8 +234,8 @@
 
 .header-prullenbak-tel {
   margin-left: auto;
-  background: var(--danger, #ef4444);
-  color: #fff;
+  background: rgba(239, 68, 68, 0.45);
+  color: var(--text-primary);
   font-size: 0.65rem;
   font-weight: 700;
   border-radius: 8px;
