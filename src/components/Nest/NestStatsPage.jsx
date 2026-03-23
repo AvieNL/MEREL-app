@@ -29,14 +29,20 @@ function haversineKm(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.asin(Math.sqrt(a));
 }
 
-function dagenTussen(d1, d2) {
-  return Math.round((new Date(d2) - new Date(d1)) / 86_400_000);
+// vangstdatum is opgeslagen als dd-mm-yyyy → omzetten naar yyyy-mm-dd voor vergelijking
+function toISO(d) {
+  if (!d) return '';
+  const p = d.split('-');
+  return p.length === 3 && p[0].length === 2 ? `${p[2]}-${p[1]}-${p[0]}` : d;
 }
 
-function fmtDatum(d) {
-  if (!d) return '—';
-  const [y, m, dd] = d.split('-');
-  return `${dd}-${m}-${y}`;
+function dagenTussen(d1, d2) {
+  return Math.round((new Date(toISO(d2)) - new Date(toISO(d1))) / 86_400_000);
+}
+
+function capitalize(s) {
+  if (!s) return s;
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 // ── Kaart voor nestenlocaties ───────────────────────────────────────────────
@@ -331,8 +337,8 @@ export default function NestStatsPage() {
 
       const ringNr = (r.ringnummer || '').replace(/\./g, '');
       const terugvangsten = (vangstByRing.get(ringNr) || [])
-        .filter(v => v.id !== r.vangst_id && v.vangstdatum > eersteVangst.vangstdatum)
-        .sort((a, b) => a.vangstdatum.localeCompare(b.vangstdatum));
+        .filter(v => v.id !== r.vangst_id && toISO(v.vangstdatum) > toISO(eersteVangst.vangstdatum))
+        .sort((a, b) => toISO(a.vangstdatum).localeCompare(toISO(b.vangstdatum)));
       if (terugvangsten.length === 0) continue;
 
       const bezoek = bezoekById.get(r.nestbezoek_id);
@@ -350,7 +356,7 @@ export default function NestStatsPage() {
         return { tv, lat2, lon2, afstand, dagen };
       });
 
-      resultaten.push({ ringNr, vogelnaam: eersteVangst.vogelnaam, nest, eersteVangst, lat1, lon1, rijen });
+      resultaten.push({ ringNr, vogelnaam: capitalize(eersteVangst.vogelnaam), nest, eersteVangst, lat1, lon1, rijen });
     }
 
     return resultaten.sort((a, b) => {
@@ -691,7 +697,7 @@ export default function NestStatsPage() {
                         <td className="tt-col-soort" style={{ fontSize: '0.78rem' }}>
                           {i === 0 ? (
                             <>
-                              {fmtDatum(p.eersteVangst.vangstdatum)}
+                              {p.eersteVangst.vangstdatum}
                               {p.lat1 && p.lon1 && (
                                 <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
                                   {p.lat1.toFixed(4)}, {p.lon1.toFixed(4)}
@@ -701,7 +707,7 @@ export default function NestStatsPage() {
                           ) : ''}
                         </td>
                         <td className="tt-col-soort" style={{ fontSize: '0.78rem' }}>
-                          {fmtDatum(rij.tv.vangstdatum)}
+                          {rij.tv.vangstdatum}
                           {rij.lat2 && rij.lon2 && (
                             <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
                               {rij.lat2.toFixed(4)}, {rij.lon2.toFixed(4)}
