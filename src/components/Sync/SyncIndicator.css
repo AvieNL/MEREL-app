@@ -257,8 +257,8 @@
   border-radius: 5px;
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 0.72rem;
-  padding: 4px 8px;
+  font-size: 1.44rem;
+  padding: 8px 16px;
   white-space: nowrap;
 }
 
@@ -281,8 +281,8 @@
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 0.70rem;
-  padding: 0 2px;
+  font-size: 1.40rem;
+  padding: 0 4px;
   vertical-align: middle;
 }
 
