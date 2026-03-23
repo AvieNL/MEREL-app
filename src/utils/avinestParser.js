@@ -85,6 +85,7 @@ export function parseAviNestTXT(text) {
         _legselnr: intOrNull(legselnr),
         volgnummer:    intOrNull(kaartnr),  // KAARTNR als unieke sleutel
         jaar:          intOrNull(jaar),
+        link_type:     0,
         datum_1e_ei:   datum1eEi,
         eistartmarge:  intOrNull(get(row, 'EISTARTMARGE')),
         nestsucces:    intOrNull(get(row, 'UITGEVL')),
@@ -111,8 +112,10 @@ export function parseAviNestTXT(text) {
             ei_dood:       intOrNull(get(row, 'EI_DOOD')),
             aantal_pulli:  intOrNull(get(row, 'JONG')),
             jong_dood:     intOrNull(get(row, 'JONG_DOOD')),
-            betrouwb_datum: intOrNull(get(row, 'DATUM_BETR')) ?? 1,
-            opmerkingen:   get(row, 'OPM_BEZOEK') || null,
+            betrouwb_datum:  intOrNull(get(row, 'DATUM_BETR')) ?? 1,
+            betrouwb_aantal: intOrNull(get(row, 'EI_BETR')) ?? intOrNull(get(row, 'JONG_BETR')) ?? 1,
+            betrouwb_dagen:  2,
+            opmerkingen:     get(row, 'OPM_BEZOEK') || '',
           });
         }
       }
