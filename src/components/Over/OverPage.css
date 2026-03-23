@@ -17,6 +17,14 @@
   vertical-align: middle;
 }
 
+.over-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.03em;
+}
+
 .over-sectie {
   margin-bottom: 1.5rem;
 }

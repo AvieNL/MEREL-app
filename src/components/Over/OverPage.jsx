@@ -9,7 +9,8 @@ export default function OverPage() {
 
   return (
     <div className="over-page">
-      <h1>VRS App <span className="over-version">v{VERSIE}</span></h1>
+      <h1>WREN <span className="over-version">v{VERSIE}</span></h1>
+      <p className="over-subtitle">{t('app_subtitle')}</p>
 
       <div className="over-sectie">
         <h2>{t('about_title')}</h2>

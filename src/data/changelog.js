@@ -1,6 +1,22 @@
-export const VERSIE = '1.33.4';
+export const VERSIE = '1.34.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.34.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Feat: app hernoemd naar WREN — Wing Ringing & Entry for Nesting',
+      'Feat: winterkoning SVG-logo toegevoegd aan header en over-pagina',
+    ],
+    wijzigingen_en: [
+      'Feat: app renamed to WREN — Wing Ringing & Entry for Nesting',
+      'Feat: wren SVG logo added to header and about page',
+    ],
+    wijzigingen_de: [
+      'Feat: App umbenannt in WREN — Wing Ringing & Entry for Nesting',
+      'Feat: Zaunkönig SVG-Logo zu Header und Über-Seite hinzugefügt',
+    ],
+  },
   {
     versie: '1.33.4',
     datum: '2026-03-23',

@@ -88,11 +88,11 @@ function buildIcal(items: PlanningItem[]): string {
   const header = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//VRS Breedenbroek//Nestkastplanning//NL',
+    'PRODID:-//WREN//Nestkastplanning//NL',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:Nestkastplanning VRS',
-    'X-WR-CALDESC:Geplande nestbezoeken VRS Breedenbroek',
+    'X-WR-CALNAME:Nestkastplanning WREN',
+    'X-WR-CALDESC:Geplande nestbezoeken — WREN',
     'X-WR-TIMEZONE:Europe/Amsterdam',
     'REFRESH-INTERVAL;VALUE=DURATION:PT6H',
     'X-PUBLISHED-TTL:PT6H',
@@ -114,7 +114,7 @@ function buildIcal(items: PlanningItem[]): string {
       '',
       `Wat te doen: ${reden}`,
       `Urgentie: ${urgentieLabel}`,
-      nestUrl ? `\nOpen kast in VRS App: ${nestUrl}` : null,
+      nestUrl ? `\nOpen in WREN: ${nestUrl}` : null,
     ].filter(s => s !== null).join('\n');
 
     return [

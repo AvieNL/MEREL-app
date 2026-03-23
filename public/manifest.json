@@ -1,7 +1,7 @@
 {
-  "name": "VRS Breedenbroek",
-  "short_name": "VRS",
-  "description": "Vogelringregistratie App - VRS Breedenbroek",
+  "name": "WREN",
+  "short_name": "WREN",
+  "description": "Wing Ringing & Entry for Nesting",
   "id": "/",
   "start_url": "/",
   "display": "standalone",

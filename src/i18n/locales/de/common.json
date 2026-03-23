@@ -1,6 +1,6 @@
 {
-  "app_name": "VRS App",
-  "app_subtitle": "Vogelberingungsregistrierung",
+  "app_name": "WREN",
+  "app_subtitle": "Wing Ringing & Entry for Nesting",
   "loading": "Laden...",
   "profile_load_error": "Profil konnte nicht geladen werden. Einige Funktionen sind möglicherweise eingeschränkt.",
   "update_available": "Neue Version verfügbar",
