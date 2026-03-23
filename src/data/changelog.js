@@ -1,6 +1,19 @@
-export const VERSIE = '1.36.0';
+export const VERSIE = '1.37.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.37.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Rename: project hernoemd naar merel-app in GitHub, Vercel, Supabase en package.json',
+    ],
+    wijzigingen_en: [
+      'Rename: project renamed to merel-app in GitHub, Vercel, Supabase and package.json',
+    ],
+    wijzigingen_de: [
+      'Rename: Projekt in GitHub, Vercel, Supabase und package.json zu merel-app umbenannt',
+    ],
+  },
   {
     versie: '1.36.0',
     datum: '2026-03-23',
