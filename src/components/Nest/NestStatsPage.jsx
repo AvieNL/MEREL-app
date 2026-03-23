@@ -19,6 +19,26 @@ const nesttypeLabel   = Object.fromEntries(NESTTYPE_CODES.map(c   => [c.code, c.
 const nestplaatsLabel = Object.fromEntries(NESTPLAATS_CODES.map(c => [c.code, c.nl]));
 const stadiumLabel    = Object.fromEntries(STADIUM_CODES.map(c    => [c.code, c.nl]));
 
+// ── Helpers ────────────────────────────────────────────────────────────────
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+
+function dagenTussen(d1, d2) {
+  return Math.round((new Date(d2) - new Date(d1)) / 86_400_000);
+}
+
+function fmtDatum(d) {
+  if (!d) return '—';
+  const [y, m, dd] = d.split('-');
+  return `${dd}-${m}-${y}`;
+}
+
 // ── Kaart voor nestenlocaties ───────────────────────────────────────────────
 function NestKaart({ nesten }) {
   const mapRef = useRef(null);
@@ -285,6 +305,61 @@ export default function NestStatsPage() {
     reader.readAsText(file);
   }, [bulkImportNestBackup, addToast]);
 
+  // ── Teruggevangen pulli ──
+  const teruggevangenPulli = useMemo(() => {
+    if (!vangsten?.length || !ringen.length) return [];
+
+    const vangstById = new Map(vangsten.map(v => [v.id, v]));
+    const bezoekById = new Map(bezoeken.map(b => [b.id, b]));
+    const legselById = new Map(legsels.map(l => [l.id, l]));
+    const nestById   = new Map(nesten.map(n => [n.id, n]));
+
+    // Groepeer vangsten per ringnummer (punten gestript)
+    const vangstByRing = new Map();
+    vangsten.forEach(v => {
+      const ring = (v.ringnummer || '').replace(/\./g, '');
+      if (!ring) return;
+      if (!vangstByRing.has(ring)) vangstByRing.set(ring, []);
+      vangstByRing.get(ring).push(v);
+    });
+
+    const resultaten = [];
+    for (const r of ringen) {
+      if (!r.vangst_id) continue;
+      const eersteVangst = vangstById.get(r.vangst_id);
+      if (!eersteVangst) continue;
+
+      const ringNr = (r.ringnummer || '').replace(/\./g, '');
+      const terugvangsten = (vangstByRing.get(ringNr) || [])
+        .filter(v => v.id !== r.vangst_id && v.vangstdatum > eersteVangst.vangstdatum)
+        .sort((a, b) => a.vangstdatum.localeCompare(b.vangstdatum));
+      if (terugvangsten.length === 0) continue;
+
+      const bezoek = bezoekById.get(r.nestbezoek_id);
+      const legsel = bezoek ? legselById.get(bezoek.legsel_id) : null;
+      const nest   = legsel ? nestById.get(legsel.nest_id) : null;
+
+      const lat1 = parseFloat(eersteVangst.lat) || parseFloat(nest?.lat) || null;
+      const lon1 = parseFloat(eersteVangst.lon) || parseFloat(nest?.lon) || null;
+
+      const rijen = terugvangsten.map(tv => {
+        const lat2 = parseFloat(tv.lat) || null;
+        const lon2 = parseFloat(tv.lon) || null;
+        const afstand = (lat1 && lon1 && lat2 && lon2) ? haversineKm(lat1, lon1, lat2, lon2) : null;
+        const dagen   = dagenTussen(eersteVangst.vangstdatum, tv.vangstdatum);
+        return { tv, lat2, lon2, afstand, dagen };
+      });
+
+      resultaten.push({ ringNr, vogelnaam: eersteVangst.vogelnaam, nest, eersteVangst, lat1, lon1, rijen });
+    }
+
+    return resultaten.sort((a, b) => {
+      const maxA = Math.max(...a.rijen.map(r => r.afstand ?? 0));
+      const maxB = Math.max(...b.rijen.map(r => r.afstand ?? 0));
+      return maxB - maxA;
+    });
+  }, [ringen, vangsten, bezoeken, legsels, nesten]);
+
   const [soortenSorteer, setSoortenSorteer] = useState('legsels');
 
   const stadiumVolgorde = ['B1','B2','B3','E1','E2','E3','E4','N1','N2','N3','N4','C','C+','X0','P','L1','L2'];
@@ -428,6 +503,7 @@ export default function NestStatsPage() {
           <StatCard waarde={totaalStats.totaalPulli}           label="Pullen geteld" />
           <StatCard waarde={totaalStats.totaalUitgevlogen}     label="Uitgevlogen" />
           <StatCard waarde={totaalStats.aantalRingen}          label="Pullen geringd" />
+          <StatCard waarde={teruggevangenPulli.length}         label="Pulli teruggevangen" />
           <StatCard waarde={totaalStats.aantalBezoeken}        label="Bezoeken totaal" />
           <StatCard waarde={totaalStats.aantalAfgerond}        label="Legsels afgerond" />
         </div>
@@ -585,6 +661,69 @@ export default function NestStatsPage() {
               items={stadiumSorted.map(([code, count]) => [stadiumLabel[code] ?? code, count])}
               kleur="var(--warning, #f59e0b)"
             />
+          </div>
+        )}
+
+        {/* Teruggevangen pulli */}
+        {teruggevangenPulli.length > 0 && (
+          <div className="section">
+            <h3>Teruggevangen pulli ({teruggevangenPulli.length})</h3>
+            <div className="trektellen-table-wrap">
+              <table className="trektellen-table">
+                <thead>
+                  <tr>
+                    <th className="tt-col-soort">Soort</th>
+                    <th className="tt-col-soort">Ring</th>
+                    <th className="tt-col-soort">Kast</th>
+                    <th className="tt-col-soort">Eerste vangst</th>
+                    <th className="tt-col-soort">Terugvangst</th>
+                    <th className="tt-col-num">Afstand</th>
+                    <th className="tt-col-num">Dagen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {teruggevangenPulli.flatMap(p =>
+                    p.rijen.map((rij, i) => (
+                      <tr key={`${p.ringNr}-${i}`}>
+                        <td className="tt-col-soort">{i === 0 ? p.vogelnaam : ''}</td>
+                        <td className="tt-col-soort" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>{i === 0 ? p.ringNr : ''}</td>
+                        <td className="tt-col-soort">{i === 0 && p.nest ? `⌂ ${p.nest.kastnummer}` : ''}</td>
+                        <td className="tt-col-soort" style={{ fontSize: '0.78rem' }}>
+                          {i === 0 ? (
+                            <>
+                              {fmtDatum(p.eersteVangst.vangstdatum)}
+                              {p.lat1 && p.lon1 && (
+                                <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
+                                  {p.lat1.toFixed(4)}, {p.lon1.toFixed(4)}
+                                </span>
+                              )}
+                            </>
+                          ) : ''}
+                        </td>
+                        <td className="tt-col-soort" style={{ fontSize: '0.78rem' }}>
+                          {fmtDatum(rij.tv.vangstdatum)}
+                          {rij.lat2 && rij.lon2 && (
+                            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
+                              {rij.lat2.toFixed(4)}, {rij.lon2.toFixed(4)}
+                            </span>
+                          )}
+                        </td>
+                        <td className="tt-col-num">
+                          {rij.afstand != null
+                            ? <span style={{ color: 'var(--accent)', fontWeight: 600 }}>
+                                {rij.afstand < 1
+                                  ? `${Math.round(rij.afstand * 1000)} m`
+                                  : `${rij.afstand.toFixed(1)} km`}
+                              </span>
+                            : '—'}
+                        </td>
+                        <td className="tt-col-num">{rij.dagen}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
