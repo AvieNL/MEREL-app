@@ -1,6 +1,25 @@
-export const VERSIE = '1.39.0';
+export const VERSIE = '1.40.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.40.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Feat: AviNest TXT-import op de Statistieken-pagina (nesten, legsels, bezoeken, ringen)',
+      'Feat: preview met nieuwe records, hergebruikte nesten, duplicaten en fouten vóór import',
+      'Feat: ringnummers automatisch gekoppeld aan bestaande vangsten bij import',
+    ],
+    wijzigingen_en: [
+      'Feat: AviNest TXT import on the Statistics page (nests, clutches, visits, rings)',
+      'Feat: preview showing new records, reused nests, duplicates and errors before import',
+      'Feat: ring numbers automatically linked to existing catches on import',
+    ],
+    wijzigingen_de: [
+      'Feat: AviNest TXT-Import auf der Statistikseite (Nester, Gelege, Besuche, Ringe)',
+      'Feat: Vorschau mit neuen Datensätzen, wiederverwendeten Nestern, Duplikaten und Fehlern',
+      'Feat: Ringnummern werden beim Import automatisch mit vorhandenen Fängen verknüpft',
+    ],
+  },
   {
     versie: '1.39.0',
     datum: '2026-03-23',
