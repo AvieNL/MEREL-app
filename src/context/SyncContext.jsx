@@ -261,6 +261,7 @@ export function SyncProvider({ children }) {
   async function clearQueue() {
     await db.sync_queue.clear();
     await refreshPendingCount();
+    setSyncError('');
   }
 
   async function resetQueue() {
