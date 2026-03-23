@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
@@ -31,6 +31,16 @@ export default function NestPlanningPage() {
   const [icalToken, setIcalToken] = useState(null);
   const [webcalKopieerd, setWebcalKopieerd] = useState(false);
   const [webcalOpen, setWebcalOpen] = useState(false);
+  const webcalRef = useRef(null);
+
+  useEffect(() => {
+    if (!webcalOpen) return;
+    function handleClick(e) {
+      if (webcalRef.current && !webcalRef.current.contains(e.target)) setWebcalOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [webcalOpen]);
 
   useEffect(() => {
     if (!user) return;
@@ -85,7 +95,7 @@ export default function NestPlanningPage() {
             ↓ iCal
           </button>
           {webcalUrl && (
-            <div className="nest-planning-webcal">
+            <div className="nest-planning-webcal" ref={webcalRef}>
               <button
                 className="btn-secondary btn-sm"
                 onClick={() => setWebcalOpen(o => !o)}
