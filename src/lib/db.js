@@ -7,7 +7,7 @@ import Dexie from 'dexie';
  * Versiebeheer: verhoog het versienummer + voeg een nieuwe .stores() definitie toe
  * als je het schema uitbreidt. Verander NOOIT bestaande versies.
  */
-export const db = new Dexie('vrs-app');
+export const db = new Dexie('merel-app');
 
 db.version(1).stores({
   vangsten:          'id, user_id, [user_id+timestamp], vogelnaam, vangstdatum, project, uploaded, bron',
