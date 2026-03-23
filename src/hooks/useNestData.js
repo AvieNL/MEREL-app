@@ -168,6 +168,18 @@ export function useNestData() {
   }, [addToQueue]);
 
   const permanentDeleteNest = useCallback(async (id) => {
+    // Cascade: verwijder kinderen vóór de ouder (FK-volgorde)
+    const legsels = await db.legsel.where('nest_id').equals(id).toArray();
+    const legselIds = legsels.map(l => l.id);
+    if (legselIds.length > 0) {
+      const bezoeken = await db.nestbezoek.where('legsel_id').anyOf(legselIds).toArray();
+      const bezoekIds = bezoeken.map(b => b.id);
+      if (bezoekIds.length > 0) {
+        await db.nestring.where('nestbezoek_id').anyOf(bezoekIds).delete();
+        await db.nestbezoek.bulkDelete(bezoekIds);
+      }
+      await db.legsel.bulkDelete(legselIds);
+    }
     await db.nest.delete(id);
     await addToQueue('nest', 'nest_delete', { id });
   }, [addToQueue]);

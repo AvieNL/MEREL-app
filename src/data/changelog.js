@@ -1,6 +1,19 @@
-export const VERSIE = '1.37.0';
+export const VERSIE = '1.38.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.38.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Fix: permanentDeleteNest cascadet nu correct (legsel → nestbezoek → nestring) in Dexie en Supabase',
+    ],
+    wijzigingen_en: [
+      'Fix: permanentDeleteNest now correctly cascades (legsel → nestbezoek → nestring) in Dexie and Supabase',
+    ],
+    wijzigingen_de: [
+      'Fix: permanentDeleteNest kaskadiert jetzt korrekt (legsel → nestbezoek → nestring) in Dexie und Supabase',
+    ],
+  },
   {
     versie: '1.37.0',
     datum: '2026-03-23',
