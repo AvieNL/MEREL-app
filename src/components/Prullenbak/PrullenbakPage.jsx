@@ -17,8 +17,8 @@ export default function PrullenbakPage() {
   const { deletedRecords, restoreRecord, permanentDeleteRecord } = useRecords();
   const { deletedNesten, restoreNest, permanentDeleteNest } = useNestData();
 
-  const [bevestigId, setBevestigId] = useState(null);
-  const [bevestigType, setBevestigType] = useState(null); // 'vangst' | 'nest'
+  const [bevestigId, setBevestigId]     = useState(null);
+  const [bevestigType, setBevestigType] = useState(null); // 'vangst' | 'nest' | 'alles-ring' | 'alles-nest'
 
   const leeg = deletedRecords.length === 0 && deletedNesten.length === 0;
 
@@ -28,11 +28,29 @@ export default function PrullenbakPage() {
   }
 
   async function bevestigDefinitief() {
-    if (bevestigType === 'vangst') permanentDeleteRecord(bevestigId);
-    if (bevestigType === 'nest')   await permanentDeleteNest(bevestigId);
+    if (bevestigType === 'vangst') {
+      permanentDeleteRecord(bevestigId);
+    } else if (bevestigType === 'nest') {
+      await permanentDeleteNest(bevestigId);
+    } else if (bevestigType === 'alles-ring') {
+      for (const r of deletedRecords) permanentDeleteRecord(r.id);
+    } else if (bevestigType === 'alles-nest') {
+      for (const n of deletedNesten) await permanentDeleteNest(n.id);
+    }
     setBevestigId(null);
     setBevestigType(null);
   }
+
+  function allesHerstellen(module) {
+    if (module === 'ring') deletedRecords.forEach(r => restoreRecord(r.id));
+    if (module === 'nest') deletedNesten.forEach(n => restoreNest(n.id));
+  }
+
+  const bevestigLabel = bevestigType === 'alles-ring'
+    ? t('prullenbak_confirm_all_ring', { count: deletedRecords.length })
+    : bevestigType === 'alles-nest'
+    ? t('prullenbak_confirm_all_nest', { count: deletedNesten.length })
+    : t('prullenbak_confirm_permanent');
 
   return (
     <div className="page prullenbak-page">
@@ -42,13 +60,30 @@ export default function PrullenbakPage() {
         <p className="prullenbak-leeg">{t('prullenbak_empty')}</p>
       ) : (
         <>
-          {/* ── Vangsten ── */}
+          {/* ── Vangsten (ringmodule) ── */}
           {deletedRecords.length > 0 && (
             <section className="prullenbak-sectie">
-              <h3 className="prullenbak-sectie__titel">
-                {t('prullenbak_section_catches')}
-                <span className="prullenbak-sectie__tel">{deletedRecords.length}</span>
-              </h3>
+              <div className="prullenbak-sectie__header">
+                <h3 className="prullenbak-sectie__titel prullenbak-sectie__titel--ring">
+                  <span className="prullenbak-module-icon">◎</span>
+                  {t('prullenbak_section_catches')}
+                  <span className="prullenbak-sectie__tel">{deletedRecords.length}</span>
+                </h3>
+                <div className="prullenbak-bulk-acties">
+                  <button
+                    className="btn-secondary prullenbak-btn"
+                    onClick={() => allesHerstellen('ring')}
+                  >
+                    {t('prullenbak_restore_all')}
+                  </button>
+                  <button
+                    className="btn-danger prullenbak-btn"
+                    onClick={() => vraagBevestiging(null, 'alles-ring')}
+                  >
+                    {t('prullenbak_delete_all')}
+                  </button>
+                </div>
+              </div>
               <div className="prullenbak-lijst">
                 {deletedRecords.map(r => (
                   <div key={r.id} className="prullenbak-item">
@@ -71,13 +106,30 @@ export default function PrullenbakPage() {
             </section>
           )}
 
-          {/* ── Nesten ── */}
+          {/* ── Nesten (nestmodule) ── */}
           {deletedNesten.length > 0 && (
             <section className="prullenbak-sectie">
-              <h3 className="prullenbak-sectie__titel">
-                {t('prullenbak_section_nests')}
-                <span className="prullenbak-sectie__tel">{deletedNesten.length}</span>
-              </h3>
+              <div className="prullenbak-sectie__header">
+                <h3 className="prullenbak-sectie__titel prullenbak-sectie__titel--nest">
+                  <span className="prullenbak-module-icon">⌂</span>
+                  {t('prullenbak_section_nests')}
+                  <span className="prullenbak-sectie__tel">{deletedNesten.length}</span>
+                </h3>
+                <div className="prullenbak-bulk-acties">
+                  <button
+                    className="btn-secondary prullenbak-btn"
+                    onClick={() => allesHerstellen('nest')}
+                  >
+                    {t('prullenbak_restore_all')}
+                  </button>
+                  <button
+                    className="btn-danger prullenbak-btn"
+                    onClick={() => vraagBevestiging(null, 'alles-nest')}
+                  >
+                    {t('prullenbak_delete_all')}
+                  </button>
+                </div>
+              </div>
               <div className="prullenbak-lijst">
                 {deletedNesten.map(nest => (
                   <div key={nest.id} className="prullenbak-item">
@@ -107,12 +159,12 @@ export default function PrullenbakPage() {
       )}
 
       {/* Bevestigingsdialoog definitief verwijderen */}
-      {bevestigId && (
+      {bevestigType && (
         <div className="prullenbak-confirm-overlay">
           <div className="prullenbak-confirm">
-            <p>{t('prullenbak_confirm_permanent')}</p>
+            <p>{bevestigLabel}</p>
             <div className="prullenbak-confirm__acties">
-              <button className="btn-secondary" onClick={() => setBevestigId(null)}>
+              <button className="btn-secondary" onClick={() => { setBevestigId(null); setBevestigType(null); }}>
                 {t('btn_cancel')}
               </button>
               <button className="btn-danger" onClick={bevestigDefinitief}>

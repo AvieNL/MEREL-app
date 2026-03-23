@@ -1,6 +1,22 @@
-export const VERSIE = '1.33.1';
+export const VERSIE = '1.33.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.33.2',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Feat: prullenbak toont ring- en nestmodule apart met modulekleur',
+      'Feat: "Alles herstellen" en "Alles verwijderen" per sectie in prullenbak',
+    ],
+    wijzigingen_en: [
+      'Feat: trash page shows ring and nest module separately with module color',
+      'Feat: "Restore all" and "Delete all" buttons per section in trash',
+    ],
+    wijzigingen_de: [
+      'Feat: Papierkorb zeigt Ring- und Nestmodul getrennt mit Modulfarbe',
+      'Feat: "Alle wiederherstellen" und "Alle löschen" pro Abschnitt im Papierkorb',
+    ],
+  },
   {
     versie: '1.33.1',
     datum: '2026-03-23',

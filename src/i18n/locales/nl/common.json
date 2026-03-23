@@ -940,5 +940,9 @@
   "prullenbak_section_nests": "Nesten",
   "prullenbak_deleted_on": "Verwijderd op",
   "prullenbak_confirm_permanent": "Dit item definitief verwijderen? Dit kan niet ongedaan worden gemaakt.",
+  "prullenbak_restore_all": "Alles herstellen",
+  "prullenbak_delete_all": "Alles verwijderen",
+  "prullenbak_confirm_all_ring": "Alle {{count}} vangsten definitief verwijderen? Dit kan niet ongedaan worden gemaakt.",
+  "prullenbak_confirm_all_nest": "Alle {{count}} nesten definitief verwijderen? Dit kan niet ongedaan worden gemaakt.",
   "btn_to_trash": "Naar prullenbak"
 }

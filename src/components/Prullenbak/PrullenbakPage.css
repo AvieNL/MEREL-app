@@ -21,16 +21,38 @@
   margin-bottom: 28px;
 }
 
+.prullenbak-sectie__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
 .prullenbak-sectie__titel {
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--text-muted);
   letter-spacing: 0.05em;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+}
+
+.prullenbak-sectie__titel--ring .prullenbak-module-icon {
+  color: var(--accent);
+}
+
+.prullenbak-sectie__titel--nest .prullenbak-module-icon {
+  color: var(--success);
+}
+
+.prullenbak-module-icon {
+  font-size: 1rem;
+  line-height: 1;
 }
 
 .prullenbak-sectie__tel {
@@ -40,6 +62,12 @@
   font-size: 0.75rem;
   color: var(--text-secondary);
   font-weight: 600;
+}
+
+.prullenbak-bulk-acties {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 /* ── Items ── */

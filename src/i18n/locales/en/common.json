@@ -940,5 +940,9 @@
   "prullenbak_section_nests": "Nests",
   "prullenbak_deleted_on": "Deleted on",
   "prullenbak_confirm_permanent": "Permanently delete this item? This cannot be undone.",
+  "prullenbak_restore_all": "Restore all",
+  "prullenbak_delete_all": "Delete all",
+  "prullenbak_confirm_all_ring": "Permanently delete all {{count}} catches? This cannot be undone.",
+  "prullenbak_confirm_all_nest": "Permanently delete all {{count}} nests? This cannot be undone.",
   "btn_to_trash": "Move to trash"
 }
