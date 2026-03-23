@@ -350,7 +350,7 @@
   "nest_adres_placeholder": "e.g. Forest Road 3, Doetinchem",
   "nest_kastnummer": "Box / nest number",
   "nest_kastnummer_placeholder": "e.g. 12 or A3",
-  "nest_omschrijving": "Description",
+  "nest_omschrijving": "Name / Description",
   "nest_omschrijving_placeholder": "e.g. Bb.dD32 behind large shrub",
   "nest_soort": "Species",
   "nest_soort_placeholder": "Search species...",
