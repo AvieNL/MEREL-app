@@ -1,6 +1,22 @@
-export const VERSIE = '1.33.2';
+export const VERSIE = '1.33.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.33.3',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Fix: veldlabel omschrijving nest hernoemd naar "Naam / Omschrijving"',
+      'Fix: placeholder omschrijving nieuw nest bijgewerkt met voorbeeld Bb.dD32',
+    ],
+    wijzigingen_en: [
+      'Fix: nest description field renamed to "Name / Description"',
+      'Fix: nest description placeholder updated with example Bb.dD32',
+    ],
+    wijzigingen_de: [
+      'Fix: Nestbeschreibungsfeld umbenannt in "Name / Beschreibung"',
+      'Fix: Platzhalter Nestbeschreibung mit Beispiel Bb.dD32 aktualisiert',
+    ],
+  },
   {
     versie: '1.33.2',
     datum: '2026-03-23',
