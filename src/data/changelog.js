@@ -1,6 +1,22 @@
-export const VERSIE = '1.32.1';
+export const VERSIE = '1.33.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.33.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Feat: iCal-export op planningpagina — download .ics of abonneer via webcal-link',
+      'Feat: webcal-abonnement via Supabase Edge Function (live, automatisch bijgewerkt)',
+    ],
+    wijzigingen_en: [
+      'Feat: iCal export on planning page — download .ics or subscribe via webcal link',
+      'Feat: webcal subscription via Supabase Edge Function (live, auto-updated)',
+    ],
+    wijzigingen_de: [
+      'Feat: iCal-Export auf der Planungsseite — .ics herunterladen oder webcal-Link abonnieren',
+      'Feat: Webcal-Abonnement über Supabase Edge Function (live, automatisch aktualisiert)',
+    ],
+  },
   {
     versie: '1.32.1',
     datum: '2026-03-23',

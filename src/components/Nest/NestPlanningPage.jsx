@@ -1,9 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabase';
 import { berekenPlanningItems, URGENTIE_KLEUR, formatDatum } from '../../utils/nestPlanning';
+import { downloadNestIcal } from '../../utils/nestIcal';
 import './NestPlanningPage.css';
 
 const HUIDIG_JAAR = new Date().getFullYear();
@@ -17,11 +20,23 @@ const TYPE_LABEL = {
   check:      'Bezoek',
 };
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? '';
+
 export default function NestPlanningPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { nesten, legsels, bezoeken } = useNestData();
   const species = useSpeciesRef();
+  const [icalToken, setIcalToken] = useState(null);
+  const [webcalKopieerd, setWebcalKopieerd] = useState(false);
+  const [webcalOpen, setWebcalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from('profiles').select('ical_token').eq('id', user.id).maybeSingle()
+      .then(({ data }) => { if (data?.ical_token) setIcalToken(data.ical_token); });
+  }, [user]);
 
   const speciesByEuring = useMemo(() => {
     const map = {};
@@ -45,9 +60,64 @@ export default function NestPlanningPage() {
     { label: 'Gepland',    items: gepland,    kleur: URGENTIE_KLEUR.gepland },
   ].filter(g => g.items.length > 0);
 
+  const webcalUrl = icalToken
+    ? `${SUPABASE_URL}/functions/v1/nest-ical?token=${icalToken}`
+    : null;
+
+  function kopieerWebcal() {
+    if (!webcalUrl) return;
+    navigator.clipboard.writeText(webcalUrl.replace('https://', 'webcal://')).then(() => {
+      setWebcalKopieerd(true);
+      setTimeout(() => setWebcalKopieerd(false), 2500);
+    });
+  }
+
   return (
     <div className="page nest-planning-page">
-      <h2 className="nest-planning-titel">{t('nest_planning_title')}</h2>
+      <div className="nest-planning-header">
+        <h2 className="nest-planning-titel">{t('nest_planning_title')}</h2>
+        <div className="nest-planning-ical-knoppen">
+          <button
+            className="btn-secondary btn-sm"
+            onClick={() => downloadNestIcal(items)}
+            title="Download .ics bestand"
+          >
+            ↓ iCal
+          </button>
+          {webcalUrl && (
+            <div className="nest-planning-webcal">
+              <button
+                className="btn-secondary btn-sm"
+                onClick={() => setWebcalOpen(o => !o)}
+                title="Abonneer op live agenda-feed"
+              >
+                📅 Webcal
+              </button>
+              {webcalOpen && (
+                <div className="nest-planning-webcal-popover">
+                  <p className="nest-planning-webcal-uitleg">
+                    Kopieer deze link en voeg hem toe als agenda-abonnement in Apple Agenda
+                    (<strong>Bestand → Nieuw agenda-abonnement</strong>).
+                    De agenda werkt dan automatisch bij.
+                  </p>
+                  <div className="nest-planning-webcal-url">
+                    <code>{webcalUrl.replace('https://', 'webcal://')}</code>
+                    <button onClick={kopieerWebcal}>
+                      {webcalKopieerd ? '✓' : '⎘'}
+                    </button>
+                  </div>
+                  <a
+                    className="nest-planning-webcal-open"
+                    href={webcalUrl.replace('https://', 'webcal://')}
+                  >
+                    Openen in Agenda
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
 
       {items.length === 0 ? (
         <div className="nest-planning-leeg">
