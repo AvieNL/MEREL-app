@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useAuth } from '../../context/AuthContext';
-import { useSync } from '../../context/SyncContext';
 import { useToast } from '../../context/ToastContext';
 import { db } from '../../lib/db';
+import { supabase } from '../../lib/supabase';
 import { parseAviNestTXT } from '../../utils/avinestParser';
 
 /**
@@ -11,9 +11,8 @@ import { parseAviNestTXT } from '../../utils/avinestParser';
  * Toont een preview met nieuwe records, duplicaten en fouten vóór de import.
  */
 export default function AviNestImportSection() {
-  const { user }       = useAuth();
-  const { addToQueue } = useSync();
-  const { addToast }   = useToast();
+  const { user }     = useAuth();
+  const { addToast } = useToast();
   const fileRef        = useRef(null);
 
   const [preview,   setPreview]   = useState(null);
@@ -105,7 +104,12 @@ export default function AviNestImportSection() {
     const bezoekIdMap = new Map(); // _key → id
 
     try {
+      // Schrijf direct naar Supabase in FK-volgorde (nest → legsel → nestbezoek → nestring),
+      // en tegelijk naar Dexie. De sync queue wordt bewust overgeslagen om parallelle
+      // verwerking te voorkomen die FK-violations veroorzaakt.
+
       // 1. Nesten
+      const nieuweNestRecords = [];
       for (const n of nestResultaten) {
         if (n._bestaandId) {
           nestIdMap.set(n._key, n._bestaandId);
@@ -113,29 +117,34 @@ export default function AviNestImportSection() {
           const id = crypto.randomUUID();
           const record = {
             id,
-            kastnummer:   n.kastnummer,
-            adres:        n.adres,
-            lat:          n.lat,
-            lon:          n.lon,
-            soort_euring: n.soort_euring,
-            habitat:      n.habitat,
-            nestplaats:   n.nestplaats,
-            kasttype:     n.kasttype,
-            hoogte:       n.hoogte,
-            bescherm:     n.bescherm,
-            verstopt:     n.verstopt,
+            kastnummer:      n.kastnummer,
+            adres:           n.adres,
+            lat:             n.lat,
+            lon:             n.lon,
+            soort_euring:    n.soort_euring,
+            habitat:         n.habitat,
+            nestplaats:      n.nestplaats,
+            kasttype:        n.kasttype,
+            hoogte:          n.hoogte,
+            bescherm:        n.bescherm,
+            verstopt:        n.verstopt,
             aangemaakt_door: user.id,
             aangemaakt_op:   now,
             updated_at:      now,
           };
-          await db.nest.put(record);
-          await addToQueue('nest', 'upsert', record);
           nestIdMap.set(n._key, id);
+          nieuweNestRecords.push(record);
         }
+      }
+      if (nieuweNestRecords.length > 0) {
+        const { error } = await supabase.from('nest').upsert(nieuweNestRecords);
+        if (error) throw error;
+        await db.nest.bulkPut(nieuweNestRecords);
       }
 
       // 2. Legsels
       const nieuweLegselsKeys = new Set();
+      const nieuweLegselsRecords = [];
       for (const l of legselResultaten) {
         if (l._duplicaat) continue;
         const nestId = nestIdMap.get(l._nestKey);
@@ -143,25 +152,30 @@ export default function AviNestImportSection() {
         const id = crypto.randomUUID();
         const record = {
           id,
-          nest_id:      nestId,
-          volgnummer:   l.volgnummer,
-          jaar:         l.jaar,
-          datum_1e_ei:  l.datum_1e_ei,
-          eistartmarge: l.eistartmarge,
-          nestsucces:   l.nestsucces,
-          predatie:     l.predatie,
-          verlies:      l.verlies,
-          moment:       l.moment,
+          nest_id:         nestId,
+          volgnummer:      l.volgnummer,
+          jaar:            l.jaar,
+          datum_1e_ei:     l.datum_1e_ei,
+          eistartmarge:    l.eistartmarge,
+          nestsucces:      l.nestsucces,
+          predatie:        l.predatie,
+          verlies:         l.verlies,
+          moment:          l.moment,
           aangemaakt_door: user.id,
           updated_at:      now,
         };
-        await db.legsel.put(record);
-        await addToQueue('legsel', 'upsert', record);
         legselIdMap.set(l._key, id);
         nieuweLegselsKeys.add(l._key);
+        nieuweLegselsRecords.push(record);
+      }
+      if (nieuweLegselsRecords.length > 0) {
+        const { error } = await supabase.from('legsel').upsert(nieuweLegselsRecords);
+        if (error) throw error;
+        await db.legsel.bulkPut(nieuweLegselsRecords);
       }
 
       // 3. Bezoeken
+      const nieuweBezoekRecords = [];
       for (const b of bezoeken) {
         if (!nieuweLegselsKeys.has(b._legselKey)) continue;
         const legselId = legselIdMap.get(b._legselKey);
@@ -169,40 +183,48 @@ export default function AviNestImportSection() {
         const id = crypto.randomUUID();
         const record = {
           id,
-          legsel_id:      legselId,
-          datum:          b.datum,
-          stadium:        b.stadium,
-          stadium2:       b.stadium2,
-          aantal_eieren:  b.aantal_eieren,
-          ei_dood:        b.ei_dood,
-          aantal_pulli:   b.aantal_pulli,
-          jong_dood:      b.jong_dood,
-          betrouwb_datum: b.betrouwb_datum,
-          opmerkingen:    b.opmerkingen,
+          legsel_id:       legselId,
+          datum:           b.datum,
+          stadium:         b.stadium,
+          stadium2:        b.stadium2,
+          aantal_eieren:   b.aantal_eieren,
+          ei_dood:         b.ei_dood,
+          aantal_pulli:    b.aantal_pulli,
+          jong_dood:       b.jong_dood,
+          betrouwb_datum:  b.betrouwb_datum,
+          opmerkingen:     b.opmerkingen,
           aangemaakt_door: user.id,
           updated_at:      now,
         };
-        await db.nestbezoek.put(record);
-        await addToQueue('nestbezoek', 'upsert', record);
         bezoekIdMap.set(b._key, id);
+        nieuweBezoekRecords.push(record);
+      }
+      if (nieuweBezoekRecords.length > 0) {
+        const { error } = await supabase.from('nestbezoek').upsert(nieuweBezoekRecords);
+        if (error) throw error;
+        await db.nestbezoek.bulkPut(nieuweBezoekRecords);
       }
 
       // 4. Ringen — zoek vangst op ringnummer voor koppeling
+      const nieuweRingRecords = [];
       for (const r of ringen) {
         const bezoekId = bezoekIdMap.get(r._bezoekKey);
         if (!bezoekId) continue;
         const vangst = await db.vangsten.filter(v => v.ringnummer === r.ringnummer).first();
         const id = crypto.randomUUID();
-        const record = {
+        nieuweRingRecords.push({
           id,
-          nestbezoek_id: bezoekId,
-          vangst_id:     vangst?.id ?? null,
-          ringnummer:    r.ringnummer,
+          nestbezoek_id:   bezoekId,
+          vangst_id:       vangst?.id ?? null,
+          ringnummer:      r.ringnummer,
           aangemaakt_door: user.id,
           updated_at:      now,
-        };
-        await db.nestring.put(record);
-        await addToQueue('nestring', 'upsert', record);
+        });
+      }
+      if (nieuweRingRecords.length > 0) {
+        const { error } = await supabase.from('nestring').upsert(nieuweRingRecords);
+        if (error) throw error;
+        await db.nestring.bulkPut(nieuweRingRecords);
       }
 
       const pv = preview;
