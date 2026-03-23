@@ -1,6 +1,22 @@
-export const VERSIE = '1.48.0';
+export const VERSIE = '1.49.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.49.0',
+    datum: '2026-03-24',
+    wijzigingen: [
+      'Fix: ringnummer in teruggevangen-tabel is nu een tekstlink (geen knop)',
+      'Fix: tabel herschikt van 7 naar 5 kolommen — soort/ring/kast gecombineerd in één "Vogel"-kolom',
+    ],
+    wijzigingen_en: [
+      'Fix: ring number in recaptured table is now a text link (not a button)',
+      'Fix: table restructured from 7 to 5 columns — species/ring/box combined into one "Bird" column',
+    ],
+    wijzigingen_de: [
+      'Fix: Ringnummer in der Wiederangefangen-Tabelle ist jetzt ein Textlink (kein Button)',
+      'Fix: Tabelle von 7 auf 5 Spalten umstrukturiert — Art/Ring/Kasten in einer "Vogel"-Spalte zusammengefasst',
+    ],
+  },
   {
     versie: '1.48.0',
     datum: '2026-03-24',

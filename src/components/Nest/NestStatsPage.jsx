@@ -712,17 +712,15 @@ export default function NestStatsPage() {
           <div className="section">
             <h3>Teruggevangen nestringen ({teruggevangenPulli.length})</h3>
             <div className="trektellen-table-wrap">
-              <table className="trektellen-table">
+              <table className="trektellen-table" style={{ fontSize: '0.78rem' }}>
                 <thead>
                   <tr>
                     {[
-                      { key: 'soort', label: 'Soort', cls: 'tt-col-soort' },
-                      { key: 'ring',  label: 'Ring',  cls: 'tt-col-soort' },
-                      { key: 'kast',  label: 'Kast',  cls: 'tt-col-soort' },
-                      { key: 'eerste', label: 'Eerste vangst', cls: 'tt-col-soort' },
-                      { key: null,    label: 'Terugvangst',   cls: 'tt-col-soort' },
-                      { key: 'afstand', label: 'Afstand', cls: 'tt-col-num' },
-                      { key: 'dagen',   label: 'Dagen',   cls: 'tt-col-num' },
+                      { key: 'soort',   label: 'Vogel',         cls: 'tt-col-soort' },
+                      { key: 'eerste',  label: 'Eerste vangst', cls: 'tt-col-soort' },
+                      { key: null,      label: 'Terugvangst',   cls: 'tt-col-soort' },
+                      { key: 'afstand', label: 'Afstand',       cls: 'tt-col-num' },
+                      { key: 'dagen',   label: 'Dagen',         cls: 'tt-col-num' },
                     ].map(({ key, label, cls }) => (
                       <th
                         key={label}
@@ -739,30 +737,23 @@ export default function NestStatsPage() {
                   {teruggevangenSorted.flatMap(p =>
                     p.rijen.map((rij, i) => (
                       <tr key={`${p.ringNr}-${i}`}>
-                        <td className="tt-col-soort">{i === 0 ? p.vogelnaam : ''}</td>
-                        <td className="tt-col-soort" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
-                          {i === 0 ? (
-                            <button
-                              className="bezoek-item__ring-link"
-                              type="button"
-                              onClick={() => { switchModule('ring'); navigate('/records', { state: { ringnummer: p.ringNr } }); }}
-                            >{p.ringNr}</button>
-                          ) : ''}
-                        </td>
                         <td className="tt-col-soort">
-                          {i === 0 && p.nest ? (
+                          {i === 0 && (
                             <>
-                              ⌂ {p.nest.kastnummer}
-                              {p.nest.omschrijving && (
+                              <span style={{ color: 'var(--accent)', cursor: 'pointer', textDecoration: 'underline', fontFamily: 'monospace' }}
+                                onClick={() => { switchModule('ring'); navigate('/records', { state: { ringnummer: p.ringNr } }); }}
+                              >{p.ringNr}</span>
+                              {p.vogelnaam && <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>{p.vogelnaam}</span>}
+                              {p.nest && (
                                 <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
-                                  {p.nest.omschrijving}
+                                  ⌂ {p.nest.kastnummer}{p.nest.omschrijving ? ` — ${p.nest.omschrijving}` : ''}
                                 </span>
                               )}
                             </>
-                          ) : ''}
+                          )}
                         </td>
-                        <td className="tt-col-soort" style={{ fontSize: '0.78rem' }}>
-                          {i === 0 ? (
+                        <td className="tt-col-soort">
+                          {i === 0 && (
                             <>
                               {p.eersteVangst.vangstdatum}
                               {(p.eersteVangst.google_plaats || p.nest?.adres) && (
@@ -771,9 +762,9 @@ export default function NestStatsPage() {
                                 </span>
                               )}
                             </>
-                          ) : ''}
+                          )}
                         </td>
-                        <td className="tt-col-soort" style={{ fontSize: '0.78rem' }}>
+                        <td className="tt-col-soort">
                           {rij.tv.vangstdatum}
                           {rij.tv.google_plaats && (
                             <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
