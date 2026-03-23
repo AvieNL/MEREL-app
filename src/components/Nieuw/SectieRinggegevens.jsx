@@ -54,8 +54,8 @@ export default function SectieRinggegevens() {
               <input
                 type="text"
                 value={form.ringnummer}
-                onChange={e => { update('ringnummer', e.target.value.toUpperCase()); autoFilledRingId.current = null; }}
-                placeholder="bijv. ...7154867"
+                onChange={e => { update('ringnummer', e.target.value.toUpperCase().replace(/\./g, '')); autoFilledRingId.current = null; }}
+                placeholder="bijv. 7154867"
               />
               {isTerugvangst && terugvangstInfo && (
                 terugvangstInfo.eigen ? (

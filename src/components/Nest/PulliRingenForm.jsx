@@ -210,7 +210,7 @@ export default function PulliRingenForm({ bezoekId }) {
             <input
               type="text"
               value={form.ringnummer}
-              onChange={e => update('ringnummer', e.target.value)}
+              onChange={e => update('ringnummer', e.target.value.replace(/\./g, ''))}
               onKeyDown={e => e.key === 'Enter' && handleOpslaan()}
               placeholder="NLA 1234567"
             />

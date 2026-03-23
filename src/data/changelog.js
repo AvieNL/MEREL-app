@@ -1,6 +1,19 @@
-export const VERSIE = '1.38.0';
+export const VERSIE = '1.39.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.39.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Fix: punten worden automatisch verwijderd uit ringnummers bij invoer (formulier + pulli-ringen)',
+    ],
+    wijzigingen_en: [
+      'Fix: dots are automatically removed from ring numbers on input (form + pulli rings)',
+    ],
+    wijzigingen_de: [
+      'Fix: Punkte werden bei der Eingabe automatisch aus Ringnummern entfernt (Formular + Pulli-Ringe)',
+    ],
+  },
   {
     versie: '1.38.0',
     datum: '2026-03-23',
