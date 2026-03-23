@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
+import AviNestImportSection from './AviNestImportSection';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useRecords } from '../../hooks/useRecords';
 import { useToast } from '../../context/ToastContext';
@@ -586,6 +587,9 @@ export default function NestStatsPage() {
             />
           </div>
         )}
+
+        {/* AviNest import */}
+        <AviNestImportSection />
 
         {/* Import */}
         <div className="section">

@@ -2,7 +2,6 @@ import { useMemo, useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '../../context/ToastContext';
 import { Link, useNavigate } from 'react-router-dom';
-import AviNestImportSection from '../Nest/AviNestImportSection';
 import { exportCSV, exportJSON, exportGrielXML, downloadFile } from '../../utils/export';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
@@ -773,9 +772,6 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             </div>
           </div>
         )}
-
-        {/* AviNest nestkast import */}
-        <AviNestImportSection />
 
         {/* Import & Export */}
         <div className="section">
