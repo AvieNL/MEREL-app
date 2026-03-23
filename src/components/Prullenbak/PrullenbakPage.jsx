@@ -36,7 +36,7 @@ export default function PrullenbakPage() {
 
   return (
     <div className="page prullenbak-page">
-      <h2 className="prullenbak-titel">🗑 {t('nav_prullenbak')}</h2>
+      <h2 className="prullenbak-titel">{t('nav_prullenbak')}</h2>
 
       {leeg ? (
         <p className="prullenbak-leeg">{t('prullenbak_empty')}</p>

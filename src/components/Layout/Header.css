@@ -226,6 +226,23 @@
   font-weight: 600;
 }
 
+.header-prullenbak-btn {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-prullenbak-tel {
+  margin-left: auto;
+  background: var(--danger, #ef4444);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 1px 5px;
+  line-height: 1.3;
+}
+
 .header-logout-btn {
   color: var(--danger) !important;
 }

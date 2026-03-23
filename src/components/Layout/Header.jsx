@@ -6,6 +6,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
 import { useNestRole } from '../../hooks/useNestRole';
 import { useTheme } from '../../hooks/useTheme';
+import { useRecords } from '../../hooks/useRecords';
+import { useNestData } from '../../hooks/useNestData';
 import SyncIndicator from '../Sync/SyncIndicator';
 import './Header.css';
 
@@ -23,6 +25,9 @@ export default function Header({ onSwitchModule, activeModule }) {
   const { nestRol, isSimulatingNest } = useNestRole();
   const { mode, setMode } = useTheme();
   const { t } = useTranslation();
+  const { deletedRecords } = useRecords();
+  const { deletedNesten } = useNestData();
+  const prullenbakTel = (deletedRecords?.length ?? 0) + (deletedNesten?.length ?? 0);
 
   const isRealAdmin = profile?.rol === 'admin';
 
@@ -296,6 +301,19 @@ export default function Header({ onSwitchModule, activeModule }) {
                   )}
                   <button onClick={() => goTo('/instellingen')}>{t('nav_settings')}</button>
                   <button onClick={() => goTo('/over')}>{t('nav_about')}</button>
+                  <button onClick={() => goTo('/prullenbak')} className="header-prullenbak-btn">
+                    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+                      <polyline points="1,3 13,3"/>
+                      <path d="M4.5,3V2a.5.5,0,0,1,.5-.5h4a.5.5,0,0,1,.5.5V3"/>
+                      <path d="M2.5,3l.8,9a.5.5,0,0,0,.5.5h6.4a.5.5,0,0,0,.5-.5l.8-9"/>
+                      <line x1="5.5" y1="6" x2="5.5" y2="10"/>
+                      <line x1="8.5" y1="6" x2="8.5" y2="10"/>
+                    </svg>
+                    {t('nav_prullenbak')}
+                    {prullenbakTel > 0 && (
+                      <span className="header-prullenbak-tel">{prullenbakTel > 9 ? '9+' : prullenbakTel}</span>
+                    )}
+                  </button>
                 </div>
 
                 {/* ── Rol simuleren (admin only) ── */}
