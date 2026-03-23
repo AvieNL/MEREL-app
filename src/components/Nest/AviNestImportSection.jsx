@@ -219,6 +219,9 @@ export default function AviNestImportSection() {
           nestbezoek_id:   bezoekId,
           vangst_id:       vangst?.id ?? null,
           ringnummer:      r.ringnummer,
+          centrale:        r.centrale,
+          leeftijd:        r.leeftijd,
+          sexe:            r.sexe,
           aangemaakt_door: user.id,
           updated_at:      now,
         });

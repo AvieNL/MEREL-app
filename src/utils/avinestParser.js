@@ -129,12 +129,19 @@ export function parseAviNestTXT(text) {
         const ringKey   = `${bezoekKey}|${schoon}`;
         if (!ringenSeen.has(ringKey)) {
           ringenSeen.add(ringKey);
+          const leeftijdDagen = intOrNull(get(row, 'LEEFTIJD'));
+          const leeftijdStr = leeftijdDagen !== null ? String(leeftijdDagen).padStart(2, '0') : '99';
           ringenList.push({
-            _bezoekKey: bezoekKey,
-            ringnummer: schoon,
-            vleugel:    floatOrNull(get(row, 'VLEUGEL')),
-            tarsus:     floatOrNull(get(row, 'TARSUS')),
-            gewicht:    floatOrNull(get(row, 'GEWICHT')),
+            _bezoekKey:         bezoekKey,
+            ringnummer:         schoon,
+            centrale:           get(row, 'CENTRALE') || 'NLA',
+            leeftijd:           1,
+            sexe:               get(row, 'GESLACHT') || 'U',
+            pul_leeftijd:       leeftijdStr,
+            nauwk_pul_leeftijd: '2',
+            vleugel:            floatOrNull(get(row, 'VLEUGEL')),
+            tarsus:             floatOrNull(get(row, 'TARSUS')),
+            gewicht:            floatOrNull(get(row, 'GEWICHT')),
           });
         }
       }

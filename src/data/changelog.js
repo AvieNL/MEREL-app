@@ -1,11 +1,24 @@
-export const VERSIE = '1.40.0';
+export const VERSIE = '1.41.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.41.0',
+    datum: '2026-03-23',
+    wijzigingen: [
+      'Fix: AviNest import vult ontbrekende verplichte velden (centrale, leeftijd, sexe) correct in voor nestring-records',
+    ],
+    wijzigingen_en: [
+      'Fix: AviNest import correctly fills missing required fields (centrale, leeftijd, sexe) for nestring records',
+    ],
+    wijzigingen_de: [
+      'Fix: AviNest-Import füllt fehlende Pflichtfelder (centrale, leeftijd, sexe) korrekt für nestring-Datensätze',
+    ],
+  },
   {
     versie: '1.40.0',
     datum: '2026-03-23',
     wijzigingen: [
-      'Feat: AviNest TXT-import op de Statistieken-pagina (nesten, legsels, bezoeken, ringen)',
+      'Feat: AviNest TXT-import in de nestmodule (nesten, legsels, bezoeken, ringen)',
       'Feat: preview met nieuwe records, hergebruikte nesten, duplicaten en fouten vóór import',
       'Feat: ringnummers automatisch gekoppeld aan bestaande vangsten bij import',
     ],
