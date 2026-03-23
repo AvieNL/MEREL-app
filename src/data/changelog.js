@@ -1,6 +1,25 @@
-export const VERSIE = '1.46.0';
+export const VERSIE = '1.47.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.47.0',
+    datum: '2026-03-24',
+    wijzigingen: [
+      'Feat: ringnummers in teruggevangen-tabel zijn klikbaar en openen de vogel in de vangstlijst',
+      'Feat: kolomtitels in teruggevangen-tabel zijn klikbaar om te sorteren (▲/▼)',
+      'Feat: kastnummer toont nu ook de omschrijving van het nest',
+    ],
+    wijzigingen_en: [
+      'Feat: ring numbers in recaptured table are clickable and open the bird in the records list',
+      'Feat: column headers in recaptured table are clickable for sorting (▲/▼)',
+      'Feat: nest box number now also shows the nest description',
+    ],
+    wijzigingen_de: [
+      'Feat: Ringnummern in der Wiederangefangen-Tabelle sind anklickbar und öffnen den Vogel in der Fangliste',
+      'Feat: Spaltenüberschriften in der Wiederangefangen-Tabelle sind zum Sortieren anklickbar (▲/▼)',
+      'Feat: Nistkastennummer zeigt jetzt auch die Nestbeschreibung',
+    ],
+  },
   {
     versie: '1.46.0',
     datum: '2026-03-24',

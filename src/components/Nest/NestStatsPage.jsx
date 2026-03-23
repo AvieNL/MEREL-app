@@ -1,5 +1,7 @@
 import { useMemo, useEffect, useRef, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useModuleSwitch } from '../../App';
 import { useNestData } from '../../hooks/useNestData';
 import AviNestImportSection from './AviNestImportSection';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
@@ -209,6 +211,8 @@ function computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, 
 // ── Hoofdcomponent ─────────────────────────────────────────────────────────
 export default function NestStatsPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const switchModule = useModuleSwitch();
   const { nesten, legsels, bezoeken, ringen, bulkImportNestBackup, markLegselsExported } = useNestData();
   const { records: vangsten } = useRecords();
   const species = useSpeciesRef();
@@ -378,6 +382,28 @@ export default function NestStatsPage() {
   }, [ringen, vangsten, bezoeken, legsels, nesten]);
 
   const [soortenSorteer, setSoortenSorteer] = useState('legsels');
+  const [tvSorteer, setTvSorteer] = useState({ col: 'afstand', dir: 'desc' });
+
+  const tvSortToggle = (col) => {
+    setTvSorteer(s => s.col === col
+      ? { col, dir: s.dir === 'asc' ? 'desc' : 'asc' }
+      : { col, dir: (col === 'soort' || col === 'ring' || col === 'kast') ? 'asc' : 'desc' }
+    );
+  };
+
+  const teruggevangenSorted = useMemo(() => {
+    const { col, dir } = tvSorteer;
+    return [...teruggevangenPulli].sort((a, b) => {
+      let cmp = 0;
+      if (col === 'soort') cmp = a.vogelnaam.localeCompare(b.vogelnaam, 'nl');
+      else if (col === 'ring') cmp = a.ringNr.localeCompare(b.ringNr);
+      else if (col === 'kast') cmp = (a.nest?.kastnummer || '').localeCompare(b.nest?.kastnummer || '', undefined, { numeric: true });
+      else if (col === 'eerste') cmp = toISO(a.eersteVangst.vangstdatum).localeCompare(toISO(b.eersteVangst.vangstdatum));
+      else if (col === 'afstand') cmp = Math.max(0, ...a.rijen.map(r => r.afstand ?? 0)) - Math.max(0, ...b.rijen.map(r => r.afstand ?? 0));
+      else if (col === 'dagen') cmp = Math.max(0, ...a.rijen.map(r => r.dagen ?? 0)) - Math.max(0, ...b.rijen.map(r => r.dagen ?? 0));
+      return dir === 'asc' ? cmp : -cmp;
+    });
+  }, [teruggevangenPulli, tvSorteer]);
 
   const stadiumVolgorde = ['B1','B2','B3','E1','E2','E3','E4','N1','N2','N3','N4','C','C+','X0','P','L1','L2'];
 
@@ -681,7 +707,7 @@ export default function NestStatsPage() {
           </div>
         )}
 
-        {/* Teruggevangen pulli */}
+        {/* Teruggevangen nestringen */}
         {teruggevangenPulli.length > 0 && (
           <div className="section">
             <h3>Teruggevangen nestringen ({teruggevangenPulli.length})</h3>
@@ -689,22 +715,52 @@ export default function NestStatsPage() {
               <table className="trektellen-table">
                 <thead>
                   <tr>
-                    <th className="tt-col-soort">Soort</th>
-                    <th className="tt-col-soort">Ring</th>
-                    <th className="tt-col-soort">Kast</th>
-                    <th className="tt-col-soort">Eerste vangst</th>
-                    <th className="tt-col-soort">Terugvangst</th>
-                    <th className="tt-col-num">Afstand</th>
-                    <th className="tt-col-num">Dagen</th>
+                    {[
+                      { key: 'soort', label: 'Soort', cls: 'tt-col-soort' },
+                      { key: 'ring',  label: 'Ring',  cls: 'tt-col-soort' },
+                      { key: 'kast',  label: 'Kast',  cls: 'tt-col-soort' },
+                      { key: 'eerste', label: 'Eerste vangst', cls: 'tt-col-soort' },
+                      { key: null,    label: 'Terugvangst',   cls: 'tt-col-soort' },
+                      { key: 'afstand', label: 'Afstand', cls: 'tt-col-num' },
+                      { key: 'dagen',   label: 'Dagen',   cls: 'tt-col-num' },
+                    ].map(({ key, label, cls }) => (
+                      <th
+                        key={label}
+                        className={cls}
+                        style={key ? { cursor: 'pointer', userSelect: 'none' } : undefined}
+                        onClick={key ? () => tvSortToggle(key) : undefined}
+                      >
+                        {label}{key && tvSorteer.col === key ? (tvSorteer.dir === 'asc' ? ' ▲' : ' ▼') : ''}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {teruggevangenPulli.flatMap(p =>
+                  {teruggevangenSorted.flatMap(p =>
                     p.rijen.map((rij, i) => (
                       <tr key={`${p.ringNr}-${i}`}>
                         <td className="tt-col-soort">{i === 0 ? p.vogelnaam : ''}</td>
-                        <td className="tt-col-soort" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>{i === 0 ? p.ringNr : ''}</td>
-                        <td className="tt-col-soort">{i === 0 && p.nest ? `⌂ ${p.nest.kastnummer}` : ''}</td>
+                        <td className="tt-col-soort" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                          {i === 0 ? (
+                            <button
+                              className="bezoek-item__ring-link"
+                              type="button"
+                              onClick={() => { switchModule('ring'); navigate('/records', { state: { ringnummer: p.ringNr } }); }}
+                            >{p.ringNr}</button>
+                          ) : ''}
+                        </td>
+                        <td className="tt-col-soort">
+                          {i === 0 && p.nest ? (
+                            <>
+                              ⌂ {p.nest.kastnummer}
+                              {p.nest.omschrijving && (
+                                <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
+                                  {p.nest.omschrijving}
+                                </span>
+                              )}
+                            </>
+                          ) : ''}
+                        </td>
                         <td className="tt-col-soort" style={{ fontSize: '0.78rem' }}>
                           {i === 0 ? (
                             <>
