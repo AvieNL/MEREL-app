@@ -14,14 +14,26 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const SUPABASE_URL         = Deno.env.get('SUPABASE_URL')              ?? '';
 const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+// Stel in via Supabase Dashboard → Edge Functions → nest-ical → Secrets: APP_URL=https://jouw-app-url.nl
+const APP_URL              = (Deno.env.get('APP_URL') ?? '').replace(/\/$/, '');
 
 const TYPE_LABEL: Record<string, string> = {
-  ringen:     'Ringen',
-  nacontrole: 'Nacontrole',
-  eileg:      'Eileg verwacht',
-  jongen:     'Jongen verwacht',
-  bouw:       'Nestbouw verwacht',
-  check:      'Nestbezoek',
+  ringen:     '🐦 Ringen',
+  nacontrole: '🐦 Nacontrole',
+  eileg:      '🐦 Eileg verwacht',
+  jongen:     '🐦 Jongen verwacht',
+  bouw:       '🐦 Nestbouw verwacht',
+  check:      '🐦 Nestbezoek',
+};
+
+// Uitleg wat er gedaan moet worden bij dit bezoek
+const TYPE_REDEN: Record<string, string> = {
+  eileg:      'Controleer of de vogel begonnen is met leggen.',
+  bouw:       'Controleer of er een nest aanwezig is.',
+  ringen:     'Nestjongen zijn rijp om te ringen (stadium N6).',
+  nacontrole: 'Controleer of de jongen uitgevlogen zijn.',
+  jongen:     'Eerste nestjongen worden verwacht.',
+  check:      'Algemene nestcontrole — check de voortgang.',
 };
 
 const URGENTIE_LABEL: Record<string, string> = {
@@ -60,6 +72,7 @@ function fold(line: string): string {
 }
 
 interface PlanningItem {
+  nestId:       string;
   legselId:     string;
   kastnummer:   string;
   omschrijving: string;
@@ -86,18 +99,23 @@ function buildIcal(items: PlanningItem[]): string {
   ].join('\r\n');
 
   const events = items.map(item => {
-    const typeLabel     = TYPE_LABEL[item.type ?? ''] ?? 'Nestbezoek';
+    const typeKey       = item.type ?? 'check';
+    const typeLabel     = TYPE_LABEL[typeKey] ?? '🐦 Nestbezoek';
     const urgentieLabel = URGENTIE_LABEL[item.urgentie] ?? item.urgentie;
-    const summary       = [typeLabel, `kast ${item.kastnummer}`, item.soortNaam]
+    const reden         = TYPE_REDEN[typeKey] ?? TYPE_REDEN.check;
+    const nestUrl       = APP_URL ? `${APP_URL}/nest/${item.nestId}` : null;
+
+    const summary = [typeLabel, `kast ${item.kastnummer}`, item.soortNaam]
       .filter(Boolean).join(' — ');
 
     const descLines = [
-      `Kast: ${item.kastnummer}`,
-      item.omschrijving ? `Locatie: ${item.omschrijving}` : null,
-      item.soortNaam    ? `Soort: ${item.soortNaam}`      : null,
-      `Type: ${typeLabel}`,
+      `Kast: ${item.kastnummer}${item.omschrijving ? ` — ${item.omschrijving}` : ''}`,
+      item.soortNaam ? `Soort: ${item.soortNaam}` : null,
+      '',
+      `Wat te doen: ${reden}`,
       `Urgentie: ${urgentieLabel}`,
-    ].filter(Boolean).join('\n');
+      nestUrl ? `\nOpen kast in VRS App: ${nestUrl}` : null,
+    ].filter(s => s !== null).join('\n');
 
     return [
       'BEGIN:VEVENT',
@@ -241,6 +259,7 @@ Deno.serve(async (req: Request) => {
       const soortNaam   = soortEuring ? (speciesByEuring[soortEuring] ?? '') : '';
 
       items.push({
+        nestId:       nest.id,
         legselId:     legsel.id,
         kastnummer:   nest.kastnummer,
         omschrijving: nest.omschrijving ?? '',
