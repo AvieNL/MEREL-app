@@ -1,6 +1,64 @@
-export const VERSIE = '1.42.0';
+export const VERSIE = '1.46.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.46.0',
+    datum: '2026-03-24',
+    wijzigingen: [
+      'Fix: teruggevangen nestringen toont nu alle geringde vogels (pulli én adulten), niet alleen via vangst_id',
+      'Fix: dagen tussen vangsten was NaN door dd-mm-yyyy datumformaat — opgelost met robuuste toISO-conversie',
+    ],
+    wijzigingen_en: [
+      'Fix: recaptured nest rings now includes all ringed birds (pulli and adults), not only via vangst_id',
+      'Fix: days between catches was NaN due to dd-mm-yyyy date format — fixed with robust toISO conversion',
+    ],
+    wijzigingen_de: [
+      'Fix: Wiederangefangene Nestringe zeigt jetzt alle beringten Vögel (Nestjunge und Adulte), nicht nur via vangst_id',
+      'Fix: Tage zwischen Fängen war NaN wegen dd-mm-yyyy-Datumsformat — mit robuster toISO-Konvertierung behoben',
+    ],
+  },
+  {
+    versie: '1.45.0',
+    datum: '2026-03-24',
+    wijzigingen: [
+      'Fix: datum in teruggevangen-sectie stond dubbel geconverteerd — nu direct weergegeven als dd-mm-yyyy',
+      'Fix: vogelsoort in teruggevangen-sectie begint nu met hoofdletter',
+    ],
+    wijzigingen_en: [
+      'Fix: date in recaptured section was double-converted — now displayed directly as dd-mm-yyyy',
+      'Fix: species name in recaptured section now starts with capital letter',
+    ],
+    wijzigingen_de: [
+      'Fix: Datum in der Wiederangefangen-Sektion wurde doppelt konvertiert — jetzt direkt als dd-mm-yyyy angezeigt',
+      'Fix: Artname in der Wiederangefangen-Sektion beginnt jetzt mit Großbuchstaben',
+    ],
+  },
+  {
+    versie: '1.44.0',
+    datum: '2026-03-24',
+    wijzigingen: [
+      'Feat: sectie "Teruggevangen nestringen" toegevoegd aan neststats met eerste/laatste vangst, locatie, afstand (haversine) en dagen',
+    ],
+    wijzigingen_en: [
+      'Feat: "Recaptured nest rings" section added to nest stats with first/last catch, location, distance (haversine) and days',
+    ],
+    wijzigingen_de: [
+      'Feat: Abschnitt "Wiederangefangene Nestringe" zu Niststats hinzugefügt mit Erst-/Letztvang, Standort, Abstand (Haversine) und Tagen',
+    ],
+  },
+  {
+    versie: '1.43.0',
+    datum: '2026-03-24',
+    wijzigingen: [
+      'Feat: ringnummers in nestdetail zijn klikbare links die direct naar de juiste vogel op de vangstpagina navigeren',
+    ],
+    wijzigingen_en: [
+      'Feat: ring numbers in nest detail are now clickable links that navigate directly to the correct bird on the records page',
+    ],
+    wijzigingen_de: [
+      'Feat: Ringnummern im Nestdetail sind jetzt anklickbare Links, die direkt zum richtigen Vogel auf der Fangseite navigieren',
+    ],
+  },
   {
     versie: '1.42.0',
     datum: '2026-03-23',

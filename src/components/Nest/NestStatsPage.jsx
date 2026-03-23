@@ -29,15 +29,20 @@ function haversineKm(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.asin(Math.sqrt(a));
 }
 
-// vangstdatum is opgeslagen als dd-mm-yyyy → omzetten naar yyyy-mm-dd voor vergelijking
+// vangstdatum is dd-mm-yyyy → omzetten naar yyyy-mm-dd voor vergelijking en new Date()
 function toISO(d) {
   if (!d) return '';
-  const p = d.split('-');
-  return p.length === 3 && p[0].length === 2 ? `${p[2]}-${p[1]}-${p[0]}` : d;
+  const p = String(d).split('-');
+  if (p.length !== 3) return d;
+  if (p[0].length === 4) return d; // al ISO
+  return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
 }
 
 function dagenTussen(d1, d2) {
-  return Math.round((new Date(toISO(d2)) - new Date(toISO(d1))) / 86_400_000);
+  const t1 = new Date(toISO(d1)).getTime();
+  const t2 = new Date(toISO(d2)).getTime();
+  if (isNaN(t1) || isNaN(t2)) return null;
+  return Math.round((t2 - t1) / 86_400_000);
 }
 
 function capitalize(s) {
@@ -311,16 +316,23 @@ export default function NestStatsPage() {
     reader.readAsText(file);
   }, [bulkImportNestBackup, addToast]);
 
-  // ── Teruggevangen pulli ──
+  // ── Teruggevangen nestringen (pulli + adulten) ──
   const teruggevangenPulli = useMemo(() => {
     if (!vangsten?.length || !ringen.length) return [];
 
-    const vangstById = new Map(vangsten.map(v => [v.id, v]));
     const bezoekById = new Map(bezoeken.map(b => [b.id, b]));
     const legselById = new Map(legsels.map(l => [l.id, l]));
     const nestById   = new Map(nesten.map(n => [n.id, n]));
 
-    // Groepeer vangsten per ringnummer (punten gestript)
+    // Alle unieke ringnummers die ooit in een nestbezoek zijn geringd
+    const nestRingByNr = new Map(); // normalized ring → first nestring entry (voor nestkoppeling)
+    ringen.forEach(r => {
+      const ring = (r.ringnummer || '').replace(/\./g, '');
+      if (!ring) return;
+      if (!nestRingByNr.has(ring)) nestRingByNr.set(ring, r);
+    });
+
+    // Groepeer vangsten per ringnummer (punten gestript), gesorteerd op datum
     const vangstByRing = new Map();
     vangsten.forEach(v => {
       const ring = (v.ringnummer || '').replace(/\./g, '');
@@ -330,18 +342,17 @@ export default function NestStatsPage() {
     });
 
     const resultaten = [];
-    for (const r of ringen) {
-      if (!r.vangst_id) continue;
-      const eersteVangst = vangstById.get(r.vangst_id);
-      if (!eersteVangst) continue;
 
-      const ringNr = (r.ringnummer || '').replace(/\./g, '');
-      const terugvangsten = (vangstByRing.get(ringNr) || [])
-        .filter(v => v.id !== r.vangst_id && toISO(v.vangstdatum) > toISO(eersteVangst.vangstdatum))
+    for (const [ringNr, nestRing] of nestRingByNr) {
+      const alleVangsten = (vangstByRing.get(ringNr) || [])
         .sort((a, b) => toISO(a.vangstdatum).localeCompare(toISO(b.vangstdatum)));
-      if (terugvangsten.length === 0) continue;
 
-      const bezoek = bezoekById.get(r.nestbezoek_id);
+      if (alleVangsten.length < 2) continue;
+
+      const eersteVangst = alleVangsten[0];
+      const terugvangsten = alleVangsten.slice(1);
+
+      const bezoek = bezoekById.get(nestRing.nestbezoek_id);
       const legsel = bezoek ? legselById.get(bezoek.legsel_id) : null;
       const nest   = legsel ? nestById.get(legsel.nest_id) : null;
 
@@ -356,12 +367,12 @@ export default function NestStatsPage() {
         return { tv, lat2, lon2, afstand, dagen };
       });
 
-      resultaten.push({ ringNr, vogelnaam: capitalize(eersteVangst.vogelnaam), nest, eersteVangst, lat1, lon1, rijen });
+      resultaten.push({ ringNr, vogelnaam: capitalize(eersteVangst.vogelnaam || ''), nest, eersteVangst, lat1, lon1, rijen });
     }
 
     return resultaten.sort((a, b) => {
-      const maxA = Math.max(...a.rijen.map(r => r.afstand ?? 0));
-      const maxB = Math.max(...b.rijen.map(r => r.afstand ?? 0));
+      const maxA = Math.max(0, ...a.rijen.map(r => r.afstand ?? 0));
+      const maxB = Math.max(0, ...b.rijen.map(r => r.afstand ?? 0));
       return maxB - maxA;
     });
   }, [ringen, vangsten, bezoeken, legsels, nesten]);
@@ -509,7 +520,7 @@ export default function NestStatsPage() {
           <StatCard waarde={totaalStats.totaalPulli}           label="Pullen geteld" />
           <StatCard waarde={totaalStats.totaalUitgevlogen}     label="Uitgevlogen" />
           <StatCard waarde={totaalStats.aantalRingen}          label="Pullen geringd" />
-          <StatCard waarde={teruggevangenPulli.length}         label="Pulli teruggevangen" />
+          <StatCard waarde={teruggevangenPulli.length}         label="Nestringen teruggevangen" />
           <StatCard waarde={totaalStats.aantalBezoeken}        label="Bezoeken totaal" />
           <StatCard waarde={totaalStats.aantalAfgerond}        label="Legsels afgerond" />
         </div>
@@ -673,7 +684,7 @@ export default function NestStatsPage() {
         {/* Teruggevangen pulli */}
         {teruggevangenPulli.length > 0 && (
           <div className="section">
-            <h3>Teruggevangen pulli ({teruggevangenPulli.length})</h3>
+            <h3>Teruggevangen nestringen ({teruggevangenPulli.length})</h3>
             <div className="trektellen-table-wrap">
               <table className="trektellen-table">
                 <thead>
@@ -723,7 +734,7 @@ export default function NestStatsPage() {
                               </span>
                             : '—'}
                         </td>
-                        <td className="tt-col-num">{rij.dagen}</td>
+                        <td className="tt-col-num">{rij.dagen != null ? rij.dagen : '—'}</td>
                       </tr>
                     ))
                   )}
