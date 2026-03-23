@@ -5,6 +5,7 @@ import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useNestRole } from '../../hooks/useNestRole';
 import { useRecords } from '../../hooks/useRecords';
+import { useModuleSwitch } from '../../App';
 import { HABITAT_CODES, NESTPLAATS_CODES, STADIUM_CODES } from '../../data/sovon-codes';
 import { formatDatum, URGENTIE_KLEUR, BROEDSTATUS, getBroedStatus } from '../../utils/nestPlanning';
 import './NestDetailPage.css';
@@ -23,6 +24,7 @@ export default function NestDetailPage() {
   const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
   const { nesten, legsels, bezoeken, ringen, deleteNest, deleteBezoek } = useNestData();
   const { records } = useRecords();
+  const switchModule = useModuleSwitch();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
   const species = useSpeciesRef();
 
@@ -119,6 +121,7 @@ export default function NestDetailPage() {
             deleteBezoek={deleteBezoek}
             records={records}
             navigate={navigate}
+            switchModule={switchModule}
             t={t}
           />
         ))
@@ -137,7 +140,7 @@ export default function NestDetailPage() {
 }
 
 
-function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, records, navigate, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, records, navigate, switchModule, t }) {
   const [deleteBezoekId, setDeleteBezoekId] = useState(null);
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
@@ -253,7 +256,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                         <span key={r.id}>
                           {i > 0 && <span className="bezoek-item__ringen-sep">, </span>}
                           {vangst
-                            ? <button className="bezoek-item__ring-link" type="button" onClick={e => { e.stopPropagation(); navigate('/', { state: { editRecord: vangst } }); }}>{nr}</button>
+                            ? <button className="bezoek-item__ring-link" type="button" onClick={e => { e.stopPropagation(); switchModule('ring'); navigate('/', { state: { editRecord: vangst } }); }}>{nr}</button>
                             : <span className="bezoek-item__ring-orphan">{nr}</span>
                           }
                         </span>
