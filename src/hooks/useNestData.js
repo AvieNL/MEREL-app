@@ -12,7 +12,8 @@ export function useNestData() {
   const { user } = useAuth();
   const { addToQueue } = useSync();
 
-  const nesten    = useLiveQuery(() => db.nest.orderBy('kastnummer').toArray(), [], []);
+  const nesten    = useLiveQuery(() => db.nest.orderBy('kastnummer').filter(n => !n.deleted_at).toArray(), [], []);
+  const deletedNesten = useLiveQuery(() => db.nest.filter(n => !!n.deleted_at).toArray(), [], []);
   const legsels   = useLiveQuery(() => db.legsel.toArray(), [], []);
   const bezoeken  = useLiveQuery(() => db.nestbezoek.orderBy('datum').toArray(), [], []);
   const ringen    = useLiveQuery(() => db.nestring.toArray(), [], []);
@@ -105,6 +106,17 @@ export function useNestData() {
   }, [user, addToQueue]);
 
   const deleteNest = useCallback(async (id) => {
+    const deleted_at = new Date().toISOString();
+    await db.nest.update(id, { deleted_at });
+    await addToQueue('nest', 'nest_soft_delete', { id, deleted_at });
+  }, [addToQueue]);
+
+  const restoreNest = useCallback(async (id) => {
+    await db.nest.update(id, { deleted_at: null });
+    await addToQueue('nest', 'nest_restore', { id });
+  }, [addToQueue]);
+
+  const permanentDeleteNest = useCallback(async (id) => {
     await db.nest.delete(id);
     await addToQueue('nest', 'nest_delete', { id });
   }, [addToQueue]);
@@ -121,6 +133,7 @@ export function useNestData() {
 
   return {
     nesten,
+    deletedNesten,
     legsels,
     bezoeken,
     ringen,
@@ -132,6 +145,8 @@ export function useNestData() {
     updateBezoek,
     addNestring,
     deleteNest,
+    restoreNest,
+    permanentDeleteNest,
     deleteBezoek,
     deleteNestring,
   };

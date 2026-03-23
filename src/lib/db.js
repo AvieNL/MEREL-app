@@ -74,3 +74,8 @@ db.version(10).stores({
 // legsel:    + datum_1e_ei, eistartmarge, eimethode
 // nestbezoek: + ei_dood, jong_dood
 db.version(11).stores({});
+
+// Versie 12: deleted_at index op nest voor soft-delete (prullenbak)
+db.version(12).stores({
+  nest: 'id, aangemaakt_door, kastnummer, deleted_at',
+});

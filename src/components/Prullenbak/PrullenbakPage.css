@@ -1,0 +1,128 @@
+.prullenbak-page {
+  padding-bottom: 80px;
+}
+
+.prullenbak-titel {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.prullenbak-leeg {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 48px 0;
+  font-size: 0.9rem;
+}
+
+/* ── Secties ── */
+.prullenbak-sectie {
+  margin-bottom: 28px;
+}
+
+.prullenbak-sectie__titel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prullenbak-sectie__tel {
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* ── Items ── */
+.prullenbak-lijst {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prullenbak-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+}
+
+.prullenbak-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.prullenbak-item__info strong {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.prullenbak-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.prullenbak-meta--datum {
+  font-style: italic;
+}
+
+.prullenbak-item__acties {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.prullenbak-btn {
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+/* ── Bevestigingsdialoog ── */
+.prullenbak-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.prullenbak-confirm {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  max-width: 320px;
+  width: 100%;
+}
+
+.prullenbak-confirm p {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.prullenbak-confirm__acties {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}

@@ -85,7 +85,7 @@ export default function NestDetailPage() {
         </div>
       </div>
 
-      {/* ── Verwijder-bevestiging ── */}
+      {/* ── Verwijder-bevestiging (naar prullenbak) ── */}
       {deleteBevestig && (
         <div className="nest-delete-confirm">
           <p>{t('nest_delete_confirm', { nr: nest.kastnummer })}</p>
@@ -93,8 +93,8 @@ export default function NestDetailPage() {
             <button className="btn-secondary" onClick={() => setDeleteBevestig(false)}>{t('btn_cancel')}</button>
             <button
               className="btn-danger"
-              onClick={async () => { await deleteNest(id); navigate('/nest'); }}
-            >{t('btn_delete')}</button>
+              onClick={async () => { await deleteNest(id); navigate('/prullenbak'); }}
+            >🗑 {t('btn_to_trash')}</button>
           </div>
         </div>
       )}

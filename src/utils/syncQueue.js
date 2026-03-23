@@ -73,11 +73,29 @@ const HANDLERS = {
     if (error) throw error;
   },
 
-  // Nestkastonderzoek: delete via aangemaakt_door (RLS handelt autorisatie af)
+  // Nestkastonderzoek: hard delete via aangemaakt_door (RLS handelt autorisatie af)
   async nest_delete({ table_name, data }) {
     const { error } = await supabase
       .from(table_name)
       .delete()
+      .eq('id', data.id);
+    if (error) throw error;
+  },
+
+  // Nestkastonderzoek: soft-delete (zet deleted_at)
+  async nest_soft_delete({ table_name, data }) {
+    const { error } = await supabase
+      .from(table_name)
+      .update({ deleted_at: data.deleted_at, updated_at: new Date().toISOString() })
+      .eq('id', data.id);
+    if (error) throw error;
+  },
+
+  // Nestkastonderzoek: herstel uit prullenbak
+  async nest_restore({ table_name, data }) {
+    const { error } = await supabase
+      .from(table_name)
+      .update({ deleted_at: null, updated_at: new Date().toISOString() })
       .eq('id', data.id);
     if (error) throw error;
   },
