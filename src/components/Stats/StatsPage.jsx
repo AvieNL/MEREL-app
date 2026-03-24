@@ -14,6 +14,17 @@ import { STATS_UITGESLOTEN } from '../../data/constants';
 import { useSettings } from '../../hooks/useSettings';
 import './StatsPage.css';
 
+const BIO_EXTREMEN_FIELDS = [
+  { key: 'gewicht',        label: 'Gewicht',     unit: 'g'  },
+  { key: 'vleugel',        label: 'Vleugel',     unit: 'mm' },
+  { key: 'tarsus_lengte',  label: 'Tarsus',      unit: 'mm' },
+  { key: 'kop_snavel',     label: 'Kop+snavel',  unit: 'mm' },
+  { key: 'handpenlengte',  label: 'Handpen',     unit: 'mm' },
+  { key: 'staartlengte',   label: 'Staart',      unit: 'mm' },
+  { key: 'snavel_schedel', label: 'Snavel',      unit: 'mm' },
+  { key: 'tarsus_dikte',   label: 'Tarsusdikte', unit: 'mm' },
+];
+
 function capitalize(s) {
   if (!s) return s;
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
@@ -227,6 +238,18 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       : statsRecords,
     [statsRecords, eigenFilter, eigenProjectNamen]
   );
+
+  const bioExtremen = useMemo(() => {
+    const basis = gefilterdRecords.filter(r => r.leeftijd !== '1');
+    return BIO_EXTREMEN_FIELDS.map(({ key, label, unit }) => {
+      const metWaarde = basis
+        .filter(r => r[key] != null && r[key] !== '' && !isNaN(parseFloat(r[key])))
+        .map(r => ({ r, val: parseFloat(r[key]) }));
+      if (metWaarde.length === 0) return null;
+      const sorted = [...metWaarde].sort((a, b) => a.val - b.val);
+      return { key, label, unit, min: sorted[0], max: sorted[sorted.length - 1] };
+    }).filter(Boolean);
+  }, [gefilterdRecords]);
 
   // Kaart toont ook externe_ring_info (als rode stip), maar telt niet mee in stats
   const kaartRecords = useMemo(() => {
@@ -768,6 +791,51 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                     <td className="tt-col-num">{totaalStats.soorten}</td>
                   </tr>
                 </tfoot>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Biometrie extremen */}
+        {bioExtremen.length > 0 && (
+          <div className="section">
+            <h3>Biometrie extremen</h3>
+            <div className="trektellen-table-wrap">
+              <table className="trektellen-table" style={{ fontSize: '0.78rem' }}>
+                <thead>
+                  <tr>
+                    <th className="tt-col-soort">Meting</th>
+                    <th className="tt-col-soort">Grootst / Zwaarst</th>
+                    <th className="tt-col-soort">Kleinst / Lichtst</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bioExtremen.map(({ key, label, unit, min, max }) => (
+                    <tr key={key}>
+                      <td className="tt-col-soort" style={{ fontWeight: 600, whiteSpace: 'nowrap' }}>{label}</td>
+                      <td className="tt-col-soort">
+                        <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{max.val} {unit}</span>
+                        <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>
+                          {displayNaam(max.r.vogelnaam)}
+                          {max.r.ringnummer && <> · {max.r.ringnummer.replace(/\./g, '')}</>}
+                          {max.r.vangstdatum && <> · {formatDatum(max.r.vangstdatum)}</>}
+                        </span>
+                      </td>
+                      <td className="tt-col-soort">
+                        {min.val !== max.val ? (
+                          <>
+                            <span style={{ fontWeight: 600 }}>{min.val} {unit}</span>
+                            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>
+                              {displayNaam(min.r.vogelnaam)}
+                              {min.r.ringnummer && <> · {min.r.ringnummer.replace(/\./g, '')}</>}
+                              {min.r.vangstdatum && <> · {formatDatum(min.r.vangstdatum)}</>}
+                            </span>
+                          </>
+                        ) : <span style={{ color: 'var(--text-muted)' }}>= max</span>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
           </div>

@@ -1,6 +1,22 @@
-export const VERSIE = '1.49.0';
+export const VERSIE = '1.50.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.50.0',
+    datum: '2026-03-24',
+    wijzigingen: [
+      'Feat: stats-pagina toont "Biometrie extremen" — zwaarste, lichtste, langste en kortste vogel per meting (excl. pulli)',
+      'Feat: soortdetailpagina toont biometrie-extremen (max/min per meting) in "Mijn vangsten" (excl. pulli)',
+    ],
+    wijzigingen_en: [
+      'Feat: stats page shows "Biometry extremes" — heaviest, lightest, longest and shortest bird per measurement (excl. pulli)',
+      'Feat: species detail page shows biometry extremes (max/min per measurement) in "My catches" (excl. pulli)',
+    ],
+    wijzigingen_de: [
+      'Feat: Statistikseite zeigt "Biometrie-Extreme" — schwerster, leichtester, längster und kürzester Vogel pro Messung (ohne Nestjunge)',
+      'Feat: Artdetailseite zeigt Biometrie-Extreme (Max/Min pro Messung) in "Meine Fänge" (ohne Nestjunge)',
+    ],
+  },
   {
     versie: '1.49.0',
     datum: '2026-03-24',

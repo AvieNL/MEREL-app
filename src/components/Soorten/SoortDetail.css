@@ -887,6 +887,39 @@
   margin-bottom: 4px;
 }
 
+.sd-bio-extremen {
+  margin: 12px 0 4px;
+}
+
+.sd-extremen-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  margin-top: 6px;
+}
+
+.sd-extremen-table th {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 5px 6px;
+  text-align: left;
+  border-bottom: 2px solid var(--bg-secondary);
+}
+
+.sd-extremen-table td {
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--bg-tertiary);
+  vertical-align: top;
+}
+
+.sd-extremen-table tr:last-child td {
+  border-bottom: none;
+}
+
 /* =====================================================
    iOS / MOBIEL FIXES
    ===================================================== */

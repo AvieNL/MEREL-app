@@ -32,6 +32,8 @@ function isBoekKey(key) {
 
 const LANG_FIELD = { nl: 'naam_nl', en: 'naam_en', de: 'naam_de' };
 
+const BIO_EXTREMEN_KEYS = ['vleugel', 'handpenlengte', 'staartlengte', 'kop_snavel', 'snavel_schedel', 'tarsus_lengte', 'tarsus_dikte', 'gewicht'];
+
 export default function SoortDetail({ records, speciesOverrides }) {
   const { naam } = useParams();
   const navigate = useNavigate();
@@ -132,6 +134,19 @@ export default function SoortDetail({ records, speciesOverrides }) {
     () => computeBioRanges(soortRecords.filter(r => r.leeftijd !== '1')),
     [soortRecords]
   );
+
+  // Biometrie extremen uit eigen vangsten (excl. pulli)
+  const bioExtremenEigen = useMemo(() => {
+    const basis = soortRecords.filter(r => r.leeftijd !== '1');
+    return BIO_EXTREMEN_KEYS.map(key => {
+      const metWaarde = basis
+        .filter(r => r[key] != null && r[key] !== '' && !isNaN(parseFloat(r[key])))
+        .map(r => ({ r, val: parseFloat(r[key]) }));
+      if (metWaarde.length === 0) return null;
+      const sorted = [...metWaarde].sort((a, b) => a.val - b.val);
+      return { key, min: sorted[0], max: sorted[sorted.length - 1] };
+    }).filter(Boolean);
+  }, [soortRecords]);
 
   // Biometriewaarde: uit samengevoegde soortdata (admin-base + gebruikersoverride)
   const getBioValue = (field, stat) => soort[`bio_${field}_${stat}`] ?? '';
@@ -674,6 +689,48 @@ export default function SoortDetail({ records, speciesOverrides }) {
                     </div>
                   );
                 })()}
+              </div>
+            )}
+
+            {bioExtremenEigen.length > 0 && (
+              <div className="sd-bio-extremen">
+                <span className="sd-sub-title">Extremen (excl. pulli)</span>
+                <table className="sd-extremen-table">
+                  <thead>
+                    <tr>
+                      <th>{t('sd_bio_meting')}</th>
+                      <th>{t('sd_bio_max')}</th>
+                      <th>{t('sd_bio_min')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bioExtremenEigen.map(({ key, min, max }) => {
+                      const field = BIO_FIELDS.find(f => f.key === key);
+                      if (!field) return null;
+                      return (
+                        <tr key={key}>
+                          <td>{field.label}</td>
+                          <td>
+                            <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{max.val} {field.unit}</span>
+                            <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>
+                              {max.r.ringnummer?.replace(/\./g, '') || '—'} · {formatDatum(max.r.vangstdatum)}
+                            </span>
+                          </td>
+                          <td>
+                            {min.val !== max.val ? (
+                              <>
+                                <span style={{ fontWeight: 600 }}>{min.val} {field.unit}</span>
+                                <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.7rem' }}>
+                                  {min.r.ringnummer?.replace(/\./g, '') || '—'} · {formatDatum(min.r.vangstdatum)}
+                                </span>
+                              </>
+                            ) : <span style={{ color: 'var(--text-muted)' }}>= max</span>}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
 
