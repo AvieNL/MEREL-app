@@ -38,6 +38,7 @@ const NieuwBezoekPage   = lazy(() => import('./components/Nest/NieuwBezoekPage')
 const NieuwLegselPage   = lazy(() => import('./components/Nest/NieuwLegselPage'));
 const WijzigNestPage    = lazy(() => import('./components/Nest/WijzigNestPage'));
 const WijzigBezoekPage  = lazy(() => import('./components/Nest/WijzigBezoekPage'));
+const WijzigLegselPage  = lazy(() => import('./components/Nest/WijzigLegselPage'));
 const PulliRingenPage   = lazy(() => import('./components/Nest/PulliRingenPage'));
 const NestStatsPage     = lazy(() => import('./components/Nest/NestStatsPage'));
 const NestPlanningPage  = lazy(() => import('./components/Nest/NestPlanningPage'));
@@ -176,6 +177,7 @@ function NestApp({ onSwitchModule, activeModule }) {
             <Route path="/nest/bezoek/nieuw" element={<NieuwBezoekPage />} />
             <Route path="/nest/legsel/:legselId/bezoek/nieuw" element={<NieuwBezoekPage />} />
             <Route path="/nest/:nestId/legsel/nieuw" element={<NieuwLegselPage />} />
+            <Route path="/nest/legsel/:legselId/wijzigen" element={<WijzigLegselPage />} />
             <Route path="/nest/planning" element={<NestPlanningPage />} />
             <Route path="/nest/stats" element={<NestStatsPage />} />
             <Route path="/prullenbak" element={<PrullenbakPage />} />

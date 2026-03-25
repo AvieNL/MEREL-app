@@ -398,6 +398,7 @@
   "nest_nieuw_legsel": "Nieuw legsel",
   "nest_auto_seizoen_hint": "Nieuw seizoen {{jaar}} en 1e legsel worden automatisch aangemaakt.",
   "nest_new_legsel_title": "Nieuw legsel {{nr}}",
+  "nest_jaar": "Jaar",
   "nest_link_type": "Relatie met vorig legsel",
   "nest_legsel_volgnummer_hint": "Dit wordt legsel nr. {{nr}} in dit seizoen.",
   "nest_soort_bezoek": "Soort (dit bezoek)",

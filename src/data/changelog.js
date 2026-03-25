@@ -1,6 +1,19 @@
-export const VERSIE = '1.51.4';
+export const VERSIE = '1.51.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.51.5',
+    datum: '2026-03-25',
+    wijzigingen: [
+      'Feat: legsel bewerken — jaar, relatietype en nestsuccessvelden aanpasbaar via nieuw bewerkscherm',
+    ],
+    wijzigingen_en: [
+      'Feat: edit clutch — year, link type and nest success fields editable via new edit screen',
+    ],
+    wijzigingen_de: [
+      'Feat: Gelege bearbeiten — Jahr, Verknüpfungstyp und Nisterfolgfelder über neuen Bearbeitungsbildschirm änderbar',
+    ],
+  },
   {
     versie: '1.51.4',
     datum: '2026-03-25',

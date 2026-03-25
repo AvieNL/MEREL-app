@@ -190,6 +190,14 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
             {legsel.nestsucces === -1 ? t('nest_succes_unknown') : t('nest_succes_count', { count: legsel.nestsucces })}
           </span>
         )}
+        {canNestEdit && (
+          <button
+            className="icon-edit-btn legsel-blok__edit"
+            type="button"
+            onClick={() => navigate(`/nest/legsel/${legsel.id}/wijzigen`)}
+            title={t('btn_edit')}
+          >✏️</button>
+        )}
       </div>
 
       {legselBezoeken.length === 0 ? (
