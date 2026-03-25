@@ -143,6 +143,8 @@
   font-size: 0.8rem;
   color: var(--text-secondary);
   font-style: italic;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .nest-kaart__status {

@@ -157,16 +157,12 @@ function NestenLijst({ nesten, navigate, t, zoekterm, filterJaar }) {
             style={{ '--status-kleur': heeftLegsel ? statusKleur : 'var(--border)' }}
             onClick={() => navigate(`/nest/${nest.id}`)}
           >
-            {/* Regel 1: kastnummer + naam */}
+            {/* Regel 1: kastnummer + naam + soort rechts */}
             <div className="nest-kaart__hoofd">
               <span className="nest-kaart__nr">⌂ {nest.kastnummer}</span>
               {nest.omschrijving && <span className="nest-kaart__naam">{nest.omschrijving}</span>}
+              {nest.kastSoort && <span className="nest-kaart__soort">{nest.kastSoort}</span>}
             </div>
-
-            {/* Regel 2: soort (voor welke de kast bedoeld is) */}
-            {nest.kastSoort && (
-              <div className="nest-kaart__soort">{nest.kastSoort}</div>
-            )}
 
             {/* Regel 3: status · datum · bezoeken */}
             <div className="nest-kaart__status">
