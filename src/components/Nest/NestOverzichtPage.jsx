@@ -7,6 +7,7 @@ import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import 'leaflet/dist/leaflet.css';
 import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
 import { BROEDSTATUS, getBroedStatus, formatDatum } from '../../utils/nestPlanning';
+import { IconFlag } from '../shared/Icons';
 import './NestOverzichtPage.css';
 
 const HUIDIG_JAAR = new Date().getFullYear();
@@ -172,7 +173,7 @@ function NestenLijst({ nesten, navigate, t, zoekterm, filterJaar }) {
               {heeftLegsel ? (
                 <>
                   <span className="nest-kaart__stadium" style={{ '--stadium-kleur': statusKleur }}>
-                    {t(statusLabelKey)}
+                    <IconFlag size={11} />{t(statusLabelKey)}
                   </span>
                   {nest.laatsteBezoek ? (
                     <span className="nest-kaart__datum">{formatDatum(nest.laatsteBezoek.datum)}</span>

@@ -154,6 +154,9 @@
 }
 
 .nest-kaart__stadium {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 0.78rem;
   font-weight: 700;
   color: var(--stadium-kleur, var(--text-secondary));

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { IconEdit, IconDelete } from '../shared/Icons';
+import { IconEdit, IconDelete, IconFlag } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
@@ -184,7 +184,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
         {legsel.jaar && <span className="legsel-blok__jaar">{legsel.jaar}</span>}
         {vogelNaam && <span className="legsel-blok__soort">{vogelNaam}</span>}
         <span className="legsel-blok__status" style={{ '--status-kleur': statusKleur }}>
-          <span className="legsel-blok__status-prefix">{t('nest_status_label')}</span>
+          <span className="legsel-blok__status-prefix"><IconFlag /></span>
           <span className="legsel-blok__status-waarde">{t(statusLabelKey)}</span>
         </span>
         {legsel.nestsucces != null && (

@@ -1,17 +1,17 @@
-export const VERSIE = '1.52.1';
+export const VERSIE = '1.52.2';
 
 export const CHANGELOG = [
   {
-    versie: '1.52.1',
+    versie: '1.52.2',
     datum: '2026-03-25',
     wijzigingen: [
-      'Nestoverzicht: "Alle jaren" optie toegevoegd, jaarfilter-knoppen subtieler',
+      'UI: vlagsicoon als statusindicator in nestoverzicht en legsel-badges',
     ],
     wijzigingen_en: [
-      'Nest overview: added "All years" option, year filter buttons more subtle',
+      'UI: flag icon as status indicator in nest overview and clutch badges',
     ],
     wijzigingen_de: [
-      'Nestübersicht: Option "Alle Jahre" hinzugefügt, Jahresfilter-Schaltflächen dezenter',
+      'UI: Flaggensymbol als Statusindikator in Nestübersicht und Gelegebadges',
     ],
   },
   {
