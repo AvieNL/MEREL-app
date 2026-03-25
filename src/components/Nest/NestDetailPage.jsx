@@ -233,13 +233,13 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                         type="button"
                         onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
                         title={t('btn_edit')}
-                      ><IconEdit /></button>
+                      ><IconEdit size={18} /></button>
                       <button
                         className="icon-delete-btn"
                         type="button"
                         onClick={() => setDeleteBezoekId(bezoek.id)}
                         title={t('btn_delete')}
-                      ><IconDelete /></button>
+                      ><IconDelete size={18} /></button>
                     </div>
                   )}
                 </div>

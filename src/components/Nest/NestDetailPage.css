@@ -271,6 +271,8 @@
 
 .bezoek-item__acties .icon-edit-btn,
 .bezoek-item__acties .icon-delete-btn {
+  min-height: unset;
+  min-width: unset;
   padding: 2px 3px;
 }
 
