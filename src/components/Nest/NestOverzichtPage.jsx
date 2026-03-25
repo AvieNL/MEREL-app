@@ -47,23 +47,22 @@ export default function NestOverzichtPage() {
     return map;
   }, [nesten, legsels, bezoeken, speciesByEuring]);
 
-  // Verrijkte nestenlijst: voeg laatste bezoek toe (altijd huidig jaar)
+  // Verrijkte nestenlijst: voeg laatste bezoek toe (alle jaren)
   const verrijkteNesten = useMemo(() => {
-    const jaar = HUIDIG_JAAR;
     return nesten.map(nest => {
-      const legselsInSeizoen = legsels.filter(l => l.nest_id === nest.id && l.jaar === jaar);
-      const alleBezoeken = legselsInSeizoen.flatMap(l =>
+      const alleLegsels = legsels.filter(l => l.nest_id === nest.id);
+      const alleBezoeken = alleLegsels.flatMap(l =>
         bezoeken.filter(b => b.legsel_id === l.id)
       );
       const sortedBezoeken = [...alleBezoeken].sort((a, b) => b.datum.localeCompare(a.datum));
       const laatsteBezoek = sortedBezoeken[0] || null;
 
       const soortEuring = sortedBezoeken.find(b => b.soort_euring)?.soort_euring
-        || legselsInSeizoen.find(l => l.soort_euring)?.soort_euring
+        || alleLegsels.find(l => l.soort_euring)?.soort_euring
         || nest.soort_euring;
       const vogelNaam = soortEuring ? (speciesByEuring[soortEuring]?.naam_nl || soortEuring) : '';
 
-      return { ...nest, legselsInSeizoen, laatsteBezoek, vogelNaam, aantalBezoeken: alleBezoeken.length, planning: planningPerNest[nest.id] || null };
+      return { ...nest, alleLegsels, laatsteBezoek, vogelNaam, aantalBezoeken: alleBezoeken.length, planning: planningPerNest[nest.id] || null };
     });
   }, [nesten, legsels, bezoeken, speciesByEuring, planningPerNest]);
 
@@ -163,7 +162,7 @@ function NestenLijst({ nesten, navigate, t, zoekterm }) {
                   <span className="nest-kaart__datum">{formatDatum(nest.laatsteBezoek.datum)}</span>
                 </>
               ) : (
-                <span className="nest-kaart__geen-bezoek">{t('nest_no_visits_season', { jaar: HUIDIG_JAAR })}</span>
+                <span className="nest-kaart__geen-bezoek">{t('nest_no_visits')}</span>
               )}
               {nest.aantalBezoeken > 0 && (
                 <span className="nest-kaart__tel">{t('nest_visit_count', { count: nest.aantalBezoeken })}</span>

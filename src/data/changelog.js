@@ -1,12 +1,23 @@
-export const VERSIE = '1.51.2';
+export const VERSIE = '1.51.3';
 
 export const CHANGELOG = [
   {
-    versie: '1.51.2',
+    versie: '1.51.3',
     datum: '2026-03-25',
     wijzigingen: [
+      'Fix: nestoverzicht toont nu bezoeken van alle jaren — jaarsfilter op legsels verwijderd',
       'Fix: vangstlocaties-kaart niet zichtbaar op soortdetailpagina door ontbrekende hoogte (CSS in lazy-geladen chunk)',
       'Fix: recente vangsten op soortdetailpagina gesorteerd op meest recente datum (via toYMD-normalisatie)',
+    ],
+    wijzigingen_en: [
+      'Fix: nest overview now shows visits from all years — year filter on clutches removed',
+      'Fix: catch locations map not visible on species detail page due to missing height (CSS in lazy-loaded chunk)',
+      'Fix: recent catches on species detail page sorted by most recent date (via toYMD normalisation)',
+    ],
+    wijzigingen_de: [
+      'Fix: Nestübersicht zeigt nun Besuche aller Jahre — Jahresfilter auf Gelege entfernt',
+      'Fix: Karte der Fangstandorte auf der Artdetailseite nicht sichtbar wegen fehlender Höhe (CSS in lazy geladenem Chunk)',
+      'Fix: Letzte Fänge auf der Artdetailseite nach neuestem Datum sortiert (via toYMD-Normalisierung)',
     ],
     wijzigingen_en: [
       'Fix: catch locations map not visible on species detail page due to missing height (CSS in lazy-loaded chunk)',
