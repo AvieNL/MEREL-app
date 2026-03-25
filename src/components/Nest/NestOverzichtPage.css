@@ -6,7 +6,7 @@
   margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .nest-overzicht-controls {
@@ -57,7 +57,7 @@
 
 .nest-status-btn {
   flex-shrink: 0;
-  padding: 2px 8px;
+  padding: 1px 7px;
   font-size: 0.75rem;
   font-weight: 400;
   background: none;
@@ -92,7 +92,7 @@
 
 .nest-jaar-btn {
   flex-shrink: 0;
-  padding: 2px 8px;
+  padding: 1px 7px;
   font-size: 0.75rem;
   font-weight: 400;
   background: none;
