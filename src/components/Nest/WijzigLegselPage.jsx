@@ -19,6 +19,16 @@ export default function WijzigLegselPage() {
   const legsel = legsels.find(l => l.id === legselId);
   const nest   = legsel ? nesten.find(n => n.id === legsel.nest_id) : null;
 
+  // Zelfde displayNummer-logica als NestDetailPage
+  const displayNummer = legsel ? (() => {
+    const nestLegsels = legsels.filter(l => l.nest_id === legsel.nest_id);
+    const chronologisch = [...nestLegsels].sort((a, b) => {
+      if (a.jaar !== b.jaar) return (a.jaar || 0) - (b.jaar || 0);
+      return (a.volgnummer || 0) - (b.volgnummer || 0);
+    });
+    return chronologisch.findIndex(l => l.id === legselId) + 1;
+  })() : null;
+
   const [form, setForm] = useState(null);
 
   if (legsel && form === null) {
@@ -74,7 +84,7 @@ export default function WijzigLegselPage() {
       <div className="nieuw-sticky-header">
         <div className="nieuw-topbar">
           <span className="nieuw-topbar-titel">
-            ⌂ {nest.kastnummer}{nest.omschrijving ? ` — ${nest.omschrijving}` : ''} · {t('nest_legsel_nr', { nr: legsel.volgnummer })}
+            ⌂ {nest.kastnummer}{nest.omschrijving ? ` — ${nest.omschrijving}` : ''} · {t('nest_legsel_nr', { nr: displayNummer ?? legsel.volgnummer })}
           </span>
           <button type="button" className="btn-secondary nieuw-topbar-btn"
             onClick={() => navigate(`/nest/${nest.id}`)} disabled={saving}>
