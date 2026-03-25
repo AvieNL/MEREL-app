@@ -1,8 +1,8 @@
-export const VERSIE = '1.51.9';
+export const VERSIE = '1.51.10';
 
 export const CHANGELOG = [
   {
-    versie: '1.51.9',
+    versie: '1.51.10',
     datum: '2026-03-25',
     wijzigingen: [
       'UI: edit/verwijder-iconen in rechterbovenhoek van bezoekitems geplaatst (legsel-editknop ongewijzigd)',

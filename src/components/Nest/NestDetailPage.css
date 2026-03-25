@@ -223,11 +223,16 @@
 
 .bezoek-item__acties {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 2px;
+  right: 2px;
   display: flex;
-  gap: 2px;
+  gap: 0;
   flex-shrink: 0;
+}
+
+.bezoek-item__acties .icon-edit-btn,
+.bezoek-item__acties .icon-delete-btn {
+  padding: 2px 3px;
 }
 
 .bezoek-delete-confirm {
