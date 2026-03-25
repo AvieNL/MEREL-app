@@ -100,10 +100,12 @@
 
 /* ── Legsel ── */
 .legsel-blok {
+  position: relative;
   background: color-mix(in srgb, var(--bg-tertiary) 50%, var(--bg-secondary));
   border-left: 4px solid var(--status-kleur, var(--border));
   border-radius: var(--radius-sm);
   padding: 10px 12px;
+  padding-right: 36px;
   margin-bottom: 8px;
 }
 
@@ -112,6 +114,7 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
+  padding-right: 0;
 }
 
 .legsel-blok__nr {
@@ -150,6 +153,12 @@
   margin-left: auto;
 }
 
+.legsel-blok__edit {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
 .legsel-geen-bezoeken {
   font-size: 0.8rem;
   color: var(--text-muted);
@@ -174,8 +183,10 @@
 }
 
 .bezoek-item {
+  position: relative;
   font-size: 0.82rem;
   padding: 6px 8px;
+  padding-right: 52px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -219,9 +230,11 @@
 }
 
 .bezoek-item__acties {
+  position: absolute;
+  top: 4px;
+  right: 4px;
   display: flex;
-  gap: 4px;
-  margin-left: auto;
+  gap: 2px;
   flex-shrink: 0;
 }
 
