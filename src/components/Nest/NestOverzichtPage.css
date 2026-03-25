@@ -63,6 +63,8 @@
 
 .nest-status-btn {
   flex-shrink: 0;
+  min-height: unset;
+  min-width: unset;
   padding: 0 7px;
   line-height: 1.4;
   font-size: 0.75rem;
@@ -99,6 +101,8 @@
 
 .nest-jaar-btn {
   flex-shrink: 0;
+  min-height: unset;
+  min-width: unset;
   padding: 0 7px;
   line-height: 1.4;
   font-size: 0.75rem;
