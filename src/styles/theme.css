@@ -308,6 +308,14 @@ label {
   transform: rotate(180deg);
 }
 
+.section-hint {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 4px 0 8px;
+  margin: 0;
+}
+
 .info-bar {
   background: var(--bg-tertiary);
   border-left: 3px solid var(--accent);

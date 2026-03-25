@@ -335,6 +335,7 @@
   "nest_visit_count_other": "{{count}} visits",
   "nest_bezoeken_kort_one": "{{count}} visit",
   "nest_bezoeken_kort_other": "{{count}} visits",
+  "nest_succes_hint": "Fill in nest success here if already known",
   "nest_laatste_bezoek": "Last visit",
   "nest_bezoek_label": "Visit",
   "nest_geen_legsel_jaar": "No clutch in {{jaar}}",

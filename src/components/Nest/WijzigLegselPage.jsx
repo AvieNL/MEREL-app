@@ -15,6 +15,7 @@ export default function WijzigLegselPage() {
   const navigate = useNavigate();
   const { legsels, nesten, updateLegsel } = useNestData();
   const [saving, setSaving] = useState(false);
+  const [succesOpen, setSuccesOpen] = useState(false);
 
   const legsel = legsels.find(l => l.id === legselId);
   const nest   = legsel ? nesten.find(n => n.id === legsel.nest_id) : null;
@@ -126,8 +127,14 @@ export default function WijzigLegselPage() {
 
       {/* ── Nestsucces ── */}
       <div className="section">
-        <div className="section-header"><h3>{t('nest_section_nestsucces')}</h3></div>
-        <div className="section-content">
+        <div className="section-header" onClick={() => setSuccesOpen(o => !o)}>
+          <h3>{t('nest_section_nestsucces')}</h3>
+          <span className={`toggle${succesOpen ? ' open' : ''}`}>▼</span>
+        </div>
+        {!succesOpen && (
+          <p className="section-hint">{t('nest_succes_hint')}</p>
+        )}
+        <div className="section-content" style={{ display: succesOpen ? '' : 'none' }}>
           <div className="form-row">
             <div className="form-group">
               <label>{t('nest_nestsucces_aantal')}</label>
