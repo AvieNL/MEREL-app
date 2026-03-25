@@ -135,13 +135,31 @@
 
 .legsel-blok__status {
   margin-left: auto;
-  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--status-kleur);
-  background: color-mix(in srgb, var(--status-kleur) 15%, transparent);
-  padding: 2px 7px;
   border-radius: 4px;
+  overflow: hidden;
   white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.legsel-blok__status-prefix {
+  padding: 2px 5px;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-right: 1px solid color-mix(in srgb, var(--status-kleur) 30%, transparent);
+}
+
+.legsel-blok__status > :last-child {
+  padding: 2px 7px;
+  background: color-mix(in srgb, var(--status-kleur) 15%, transparent);
+  color: var(--status-kleur);
 }
 
 .legsel-blok__succes {

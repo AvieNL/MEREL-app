@@ -399,6 +399,7 @@
   "nest_auto_seizoen_hint": "Eine neue Saison {{jaar}} und 1. Gelege werden automatisch angelegt.",
   "nest_new_legsel_title": "Neues Gelege {{nr}}",
   "nest_jaar": "Jahr",
+  "nest_status_label": "Status",
   "nest_link_type": "Beziehung zum vorherigen Gelege",
   "nest_legsel_volgnummer_hint": "Dies wird Gelege Nr. {{nr}} in dieser Saison.",
   "nest_soort_bezoek": "Art (dieser Besuch)",

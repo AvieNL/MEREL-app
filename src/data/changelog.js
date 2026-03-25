@@ -1,20 +1,17 @@
-export const VERSIE = '1.51.10';
+export const VERSIE = '1.51.11';
 
 export const CHANGELOG = [
   {
-    versie: '1.51.10',
+    versie: '1.51.11',
     datum: '2026-03-25',
     wijzigingen: [
-      'UI: edit/verwijder-iconen in rechterbovenhoek van bezoekitems geplaatst (legsel-editknop ongewijzigd)',
-      'UI: prullenbak in hamburgermenu herkenbaar rood gekleurd',
+      'UI: statusbadge legsel toont nu tweeledig label "Status | waarde" voor duidelijkheid',
     ],
     wijzigingen_en: [
-      'UI: edit/delete icons positioned in top-right corner of visit items (clutch edit button unchanged)',
-      'UI: trash in hamburger menu colored recognizable red',
+      'UI: clutch status badge now shows two-part label "Status | value" for clarity',
     ],
     wijzigingen_de: [
-      'UI: Bearbeiten/Löschen-Icons in der oberen rechten Ecke der Besuchselemente positioniert (Gelegebearbeiten-Schaltfläche unverändert)',
-      'UI: Papierkorb im Hamburger-Menü erkennbar rot gefärbt',
+      'UI: Gelege-Statusbadge zeigt jetzt zweiteiliges Label "Status | Wert" zur Verdeutlichung',
     ],
   },
   {

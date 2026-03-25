@@ -399,6 +399,7 @@
   "nest_auto_seizoen_hint": "A new {{jaar}} season and 1st clutch will be created automatically.",
   "nest_new_legsel_title": "New clutch {{nr}}",
   "nest_jaar": "Year",
+  "nest_status_label": "Status",
   "nest_link_type": "Relation to previous clutch",
   "nest_legsel_volgnummer_hint": "This will be clutch no. {{nr}} in this season.",
   "nest_soort_bezoek": "Species (this visit)",
