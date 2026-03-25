@@ -372,7 +372,7 @@ export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLo
     <div className="chart-block">
       <h3>{t('stats_catch_locations')}</h3>
       <div style={{ position: 'relative' }}>
-        <div ref={mapRef} className="kaart-container" />
+        <div ref={mapRef} className="kaart-container" style={{ height: 320 }} />
         <button type="button" className="kaart-tile-toggle" onClick={toggleTile} title={tileType === 'osm' ? t('map_switch_satellite') : t('map_switch_osm')}>
           {tileType === 'osm' ? '🛰️' : '🗺️'}
         </button>

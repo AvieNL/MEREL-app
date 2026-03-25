@@ -1,16 +1,19 @@
-export const VERSIE = '1.51.1';
+export const VERSIE = '1.51.2';
 
 export const CHANGELOG = [
   {
-    versie: '1.51.1',
+    versie: '1.51.2',
     datum: '2026-03-25',
     wijzigingen: [
+      'Fix: vangstlocaties-kaart niet zichtbaar op soortdetailpagina door ontbrekende hoogte (CSS in lazy-geladen chunk)',
       'Fix: recente vangsten op soortdetailpagina gesorteerd op meest recente datum (via toYMD-normalisatie)',
     ],
     wijzigingen_en: [
+      'Fix: catch locations map not visible on species detail page due to missing height (CSS in lazy-loaded chunk)',
       'Fix: recent catches on species detail page sorted by most recent date (via toYMD normalisation)',
     ],
     wijzigingen_de: [
+      'Fix: Karte der Fangstandorte auf der Artdetailseite nicht sichtbar wegen fehlender Höhe (CSS in lazy geladenem Chunk)',
       'Fix: Letzte Fänge auf der Artdetailseite nach neuestem Datum sortiert (via toYMD-Normalisierung)',
     ],
   },
