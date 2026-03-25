@@ -177,8 +177,15 @@
 }
 
 .nest-kaart__datum {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 0.78rem;
   color: var(--text-secondary);
+}
+
+.nest-kaart__datum-label {
+  color: var(--text-muted);
 }
 
 

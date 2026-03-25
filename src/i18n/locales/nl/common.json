@@ -335,6 +335,7 @@
   "nest_visit_count_other": "{{count}} bezoeken",
   "nest_bezoeken_kort_one": "{{count}} bezoek",
   "nest_bezoeken_kort_other": "{{count}} bezoeken",
+  "nest_laatste_bezoek": "Laatste bezoek",
   "nest_geen_legsel_jaar": "Geen legsel in {{jaar}}",
   "nest_geen_legsel": "Geen legsels",
   "nest_filter_alle_jaren": "Alle jaren",

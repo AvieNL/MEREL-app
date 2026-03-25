@@ -177,7 +177,10 @@ function NestenLijst({ nesten, navigate, t, zoekterm, filterJaar }) {
                     <IconFlag size={11} />{t(statusLabelKey)}
                   </span>
                   {nest.laatsteBezoek ? (
-                    <span className="nest-kaart__datum">{formatDatum(nest.laatsteBezoek.datum)}</span>
+                    <span className="nest-kaart__datum">
+                      <span className="nest-kaart__datum-label">{t('nest_laatste_bezoek')}</span>
+                      {formatDatum(nest.laatsteBezoek.datum)}
+                    </span>
                   ) : null}
                 </>
               ) : (
