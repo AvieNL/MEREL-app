@@ -214,6 +214,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                 {/* ── Regel 1: datum + pill + potlood ── */}
                 <div className="bezoek-item__row">
                   <span className="bezoek-item__datum">
+                    <span className="bezoek-item__datum-label">{t('nest_bezoek_label')}</span>
                     {formatDatum(bezoek.datum)}{bezoek.tijd ? ` ${bezoek.tijd.slice(0,5)}` : ''}
                   </span>
                   {bezoek.volgende_bezoek_suggestie && (() => {

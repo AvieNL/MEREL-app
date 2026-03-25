@@ -234,9 +234,15 @@
 }
 
 .bezoek-item__datum {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   color: var(--text-secondary);
   white-space: nowrap;
-  min-width: 80px;
+}
+
+.bezoek-item__datum-label {
+  color: var(--text-muted);
 }
 
 .bezoek-item__stadium {

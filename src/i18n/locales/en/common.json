@@ -336,6 +336,7 @@
   "nest_bezoeken_kort_one": "{{count}} visit",
   "nest_bezoeken_kort_other": "{{count}} visits",
   "nest_laatste_bezoek": "Last visit",
+  "nest_bezoek_label": "Visit",
   "nest_geen_legsel_jaar": "No clutch in {{jaar}}",
   "nest_geen_legsel": "No clutches",
   "nest_filter_alle_jaren": "All years",
