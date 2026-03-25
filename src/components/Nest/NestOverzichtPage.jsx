@@ -61,14 +61,18 @@ export default function NestOverzichtPage() {
         .sort((a, b) => (b.jaar || 0) - (a.jaar || 0) || (b.volgnummer || 0) - (a.volgnummer || 0));
       const actueelLegsel = jaarLegsels[0] || null;
 
-      // Bezoeken voor dit legsel
-      const legselBezoeken = actueelLegsel
+      // Bezoeken: voor status/datum altijd het actuele legsel, voor teller afhankelijk van filter
+      const legselBezoekenActueel = actueelLegsel
         ? bezoeken.filter(b => b.legsel_id === actueelLegsel.id)
         : [];
-      const sortedBezoeken = [...legselBezoeken].sort((a, b) => b.datum.localeCompare(a.datum));
+      const sortedBezoeken = [...legselBezoekenActueel].sort((a, b) => b.datum.localeCompare(a.datum));
       const laatsteBezoek = sortedBezoeken[0] || null;
 
-      return { ...nest, kastSoort, actueelLegsel, aantalBezoeken: legselBezoeken.length, laatsteBezoek };
+      const aantalBezoeken = filterJaar === null
+        ? jaarLegsels.reduce((sum, l) => sum + bezoeken.filter(b => b.legsel_id === l.id).length, 0)
+        : legselBezoekenActueel.length;
+
+      return { ...nest, kastSoort, actueelLegsel, aantalBezoeken, laatsteBezoek };
     });
   }, [nesten, legsels, bezoeken, speciesByEuring, filterJaar]);
 
