@@ -87,14 +87,14 @@ export default function NestDetailPage() {
               className="icon-edit-btn"
               onClick={() => navigate(`/nest/${id}/wijzigen`)}
               title={t('btn_edit')}
-            ><IconEdit /></button>
+            ><IconEdit size={21} /></button>
           )}
           {canNestDelete && (
             <button
               className="icon-delete-btn"
               onClick={() => setDeleteBevestig(true)}
               title={t('btn_delete')}
-            ><IconDelete /></button>
+            ><IconDelete size={21} /></button>
           )}
         </div>
       </div>
@@ -198,7 +198,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
             type="button"
             onClick={() => navigate(`/nest/legsel/${legsel.id}/wijzigen`)}
             title={t('btn_edit')}
-          ><IconEdit /></button>
+          ><IconEdit size={21} /></button>
         )}
       </div>
 

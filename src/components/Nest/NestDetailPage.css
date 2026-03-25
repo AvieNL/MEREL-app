@@ -100,11 +100,22 @@
 
 /* ── Legsel ── */
 .legsel-blok {
+  position: relative;
   background: color-mix(in srgb, var(--bg-tertiary) 50%, var(--bg-secondary));
   border-left: 4px solid var(--status-kleur, var(--border));
   border-radius: var(--radius-sm);
   padding: 10px 12px;
+  padding-right: 36px;
   margin-bottom: 8px;
+}
+
+.legsel-blok__edit {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-height: unset;
+  min-width: unset;
+  padding: 3px;
 }
 
 .legsel-blok__header {
