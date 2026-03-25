@@ -120,7 +120,8 @@ export function useProjects() {
     const { data: shared } = await supabase
       .from('projecten')
       .select('*')
-      .in('id', ids);
+      .in('id', ids)
+      .neq('user_id', user.id);
 
     if (shared) {
       setSharedProjects(shared.filter(p => p.user_id !== user.id).map(p => ({

@@ -1,6 +1,22 @@
-export const VERSIE = '1.50.0';
+export const VERSIE = '1.51.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.51.0',
+    datum: '2026-03-25',
+    wijzigingen: [
+      'Fix: projecten niet meer dubbel door eigen gebruiker in project_members te filteren op DB-niveau',
+      'Feat: project, vangstmethode en locatie worden tot middernacht bewaard via localStorage (dagdefaults)',
+    ],
+    wijzigingen_en: [
+      'Fix: projects no longer duplicated by filtering own user from project_members at DB level',
+      'Feat: project, catch method and location are retained until midnight via localStorage (day defaults)',
+    ],
+    wijzigingen_de: [
+      'Fix: Projekte nicht mehr doppelt durch Filterung des eigenen Nutzers aus project_members auf DB-Ebene',
+      'Feat: Projekt, Fangmethode und Standort werden bis Mitternacht via localStorage gespeichert (Tagesstandards)',
+    ],
+  },
   {
     versie: '1.50.0',
     datum: '2026-03-24',

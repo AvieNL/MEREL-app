@@ -157,21 +157,39 @@ export default function NieuwPage() {
       return base;
     }
 
-    // Vul project en locatie voor uit de meest recente vangst van vandaag binnen een uur
-    const now = Date.now();
+    // Vul project, vangstmethode en locatie voor vanuit dagdefaults (localStorage) of meest recente vangst van vandaag
     const today = new Date().toISOString().split('T')[0];
-    const recent = [...(records || [])]
-      .filter(r => r.vangstdatum === today && r.timestamp && (now - new Date(r.timestamp).getTime()) <= PULL_INTERVAL_MS)
-      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
-    if (recent) {
-      base.project        = recent.project        ?? base.project;
-      base.plaatscode     = recent.plaatscode     ?? base.plaatscode;
-      base.google_plaats  = recent.google_plaats  ?? base.google_plaats;
-      base.lat            = recent.lat            ?? base.lat;
-      base.lon            = recent.lon            ?? base.lon;
-      base.nauwk_coord    = recent.nauwk_coord    ?? base.nauwk_coord;
-      base.vangstmethode  = recent.vangstmethode  ?? base.vangstmethode;
-      base.lokmiddelen    = recent.lokmiddelen    ?? base.lokmiddelen;
+    const DAG_KEY = `vrs-dag-defaults-${today}`;
+    let dagDefaults = null;
+    try {
+      const raw = localStorage.getItem(DAG_KEY);
+      dagDefaults = raw ? JSON.parse(raw) : null;
+    } catch { /* ignore */ }
+
+    if (dagDefaults) {
+      base.project        = dagDefaults.project        ?? base.project;
+      base.plaatscode     = dagDefaults.plaatscode     ?? base.plaatscode;
+      base.google_plaats  = dagDefaults.google_plaats  ?? base.google_plaats;
+      base.lat            = dagDefaults.lat            ?? base.lat;
+      base.lon            = dagDefaults.lon            ?? base.lon;
+      base.nauwk_coord    = dagDefaults.nauwk_coord    ?? base.nauwk_coord;
+      base.vangstmethode  = dagDefaults.vangstmethode  ?? base.vangstmethode;
+      base.lokmiddelen    = dagDefaults.lokmiddelen    ?? base.lokmiddelen;
+    } else {
+      // Geen localStorage-defaults: gebruik meest recente vangst van vandaag (hele dag, geen tijdslimiet)
+      const recent = [...(records || [])]
+        .filter(r => r.vangstdatum === today)
+        .sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0))[0];
+      if (recent) {
+        base.project        = recent.project        ?? base.project;
+        base.plaatscode     = recent.plaatscode     ?? base.plaatscode;
+        base.google_plaats  = recent.google_plaats  ?? base.google_plaats;
+        base.lat            = recent.lat            ?? base.lat;
+        base.lon            = recent.lon            ?? base.lon;
+        base.nauwk_coord    = recent.nauwk_coord    ?? base.nauwk_coord;
+        base.vangstmethode  = recent.vangstmethode  ?? base.vangstmethode;
+        base.lokmiddelen    = recent.lokmiddelen    ?? base.lokmiddelen;
+      }
     }
     return base;
   });
@@ -481,6 +499,23 @@ export default function NieuwPage() {
       onAdvanceRing(autoFilledRingId.current);
       autoFilledRingId.current = null;
     }
+
+    // Sla dagdefaults op voor de rest van de dag (tot middernacht)
+    const today = new Date().toISOString().split('T')[0];
+    const DAG_KEY = `vrs-dag-defaults-${today}`;
+    try {
+      localStorage.setItem(DAG_KEY, JSON.stringify({
+        project:       form.project,
+        plaatscode:    form.plaatscode,
+        google_plaats: form.google_plaats,
+        lat:           form.lat,
+        lon:           form.lon,
+        nauwk_coord:   form.nauwk_coord,
+        vangstmethode: form.vangstmethode,
+        lokmiddelen:   form.lokmiddelen,
+      }));
+    } catch { /* ignore */ }
+
     setForm({
       ...EMPTY_FORM,
       vangstdatum: form.vangstdatum,
