@@ -33,6 +33,7 @@ export default function NestOverzichtPage() {
   const [tab, setTab] = useState('lijst');
   const [zoekterm, setZoekterm] = useState('');
   const [filterJaar, setFilterJaar] = useState(HUIDIG_JAAR);
+  const [filterStatus, setFilterStatus] = useState(null);
 
   const speciesByEuring = useMemo(() => {
     const map = {};
@@ -76,17 +77,21 @@ export default function NestOverzichtPage() {
     });
   }, [nesten, legsels, bezoeken, speciesByEuring, filterJaar]);
 
-  // Zoekfilter
+  // Zoek- en statusfilter
   const gefilterdeNesten = useMemo(() => {
+    let result = verrijkteNesten;
     const q = zoekterm.trim().toLowerCase();
-    if (!q) return verrijkteNesten;
-    return verrijkteNesten.filter(n =>
+    if (q) result = result.filter(n =>
       String(n.kastnummer).toLowerCase().includes(q) ||
       (n.omschrijving && n.omschrijving.toLowerCase().includes(q)) ||
       (n.kastSoort && n.kastSoort.toLowerCase().includes(q)) ||
       (n.adres && n.adres.toLowerCase().includes(q))
     );
-  }, [verrijkteNesten, zoekterm]);
+    if (filterStatus) result = result.filter(n =>
+      getBroedStatus(n.laatsteBezoek?.stadium) === filterStatus
+    );
+    return result;
+  }, [verrijkteNesten, zoekterm, filterStatus]);
 
   return (
     <div className="page nest-overzicht-page">
@@ -124,6 +129,20 @@ export default function NestOverzichtPage() {
               className={`nest-jaar-btn${filterJaar === jaar ? ' active' : ''}`}
               onClick={() => setFilterJaar(jaar)}
             >{jaar}</button>
+          ))}
+        </div>
+        <div className="nest-status-filter">
+          <button
+            className={`nest-status-btn${filterStatus === null ? ' active' : ''}`}
+            onClick={() => setFilterStatus(null)}
+          >{t('nest_filter_alle_statussen')}</button>
+          {Object.entries(BROEDSTATUS).map(([key, cfg]) => (
+            <button
+              key={key}
+              className={`nest-status-btn${filterStatus === key ? ' active' : ''}`}
+              style={{ '--s-kleur': cfg.kleur }}
+              onClick={() => setFilterStatus(filterStatus === key ? null : key)}
+            >{t(cfg.labelKey)}</button>
           ))}
         </div>
       </div>

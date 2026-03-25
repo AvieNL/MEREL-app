@@ -42,6 +42,43 @@
   border-color: var(--accent);
 }
 
+/* ── Statusfilter ── */
+.nest-status-filter {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.nest-status-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.nest-status-btn {
+  flex-shrink: 0;
+  padding: 2px 9px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.nest-status-btn.active {
+  font-weight: 600;
+  color: var(--s-kleur, var(--accent));
+  border-color: color-mix(in srgb, var(--s-kleur, var(--accent)) 40%, transparent);
+  background: color-mix(in srgb, var(--s-kleur, var(--accent)) 10%, transparent);
+}
+
+.nest-status-btn:not(.active):hover {
+  color: var(--text-secondary);
+}
+
 /* ── Jaarfilter ── */
 .nest-jaar-filter {
   display: flex;
