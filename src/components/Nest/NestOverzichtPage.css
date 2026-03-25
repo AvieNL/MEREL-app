@@ -6,7 +6,14 @@
   margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+}
+
+.nest-overzicht-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .nest-nieuw-btn {
@@ -14,16 +21,9 @@
   flex-shrink: 0;
 }
 
-.nest-overzicht-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
 .nest-zoek-input {
   flex: 1;
-  min-width: 0;
+  min-width: 120px;
   height: 36px;
   padding: 0 10px;
   background: var(--bg-tertiary);
@@ -42,6 +42,42 @@
   border-color: var(--accent);
 }
 
+/* ── Jaarfilter ── */
+.nest-jaar-filter {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.nest-jaar-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.nest-jaar-btn {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.nest-jaar-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.nest-jaar-btn:not(.active):hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 
 /* ── Lijst ── */
 .nest-lijst {
@@ -57,18 +93,19 @@
   text-align: center;
 }
 
+/* ── Nestkaart ── */
 .nest-kaart {
   width: 100%;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-left: 4px solid var(--status-kleur, var(--border));
   border-radius: var(--radius);
-  padding: 12px 14px;
+  padding: 10px 14px;
   text-align: left;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   transition: border-color 0.15s;
   min-height: 44px;
 }
@@ -79,16 +116,21 @@
   outline: none;
 }
 
+.nest-kaart--geen-legsel {
+  opacity: 0.65;
+}
+
 .nest-kaart__hoofd {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .nest-kaart__nr {
   font-weight: 700;
   font-size: 1rem;
   color: var(--text-primary);
+  flex-shrink: 0;
 }
 
 .nest-kaart__naam {
@@ -100,60 +142,47 @@
 }
 
 .nest-kaart__soort {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  margin-left: auto;
-  flex-shrink: 0;
+  font-style: italic;
 }
 
 .nest-kaart__status {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
+  margin-top: 2px;
 }
 
 .nest-kaart__stadium {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--stadium-kleur, var(--text-secondary));
   background: color-mix(in srgb, var(--stadium-kleur, #64748b) 15%, transparent);
   padding: 2px 7px;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 .nest-kaart__datum {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
 }
 
-.nest-kaart__tel {
+.nest-kaart__bezoeken {
   font-size: 0.75rem;
   color: var(--text-muted);
   margin-left: auto;
 }
 
-.nest-kaart__geen-bezoek {
-  font-size: 0.8rem;
+.nest-kaart__geen-legsel {
+  font-size: 0.78rem;
   color: var(--text-muted);
   font-style: italic;
 }
 
-.nest-kaart__planning-pill {
-  margin-left: auto;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--pill-kleur, var(--success));
-  background: color-mix(in srgb, var(--pill-kleur, var(--success)) 15%, transparent);
-  border: 1px solid color-mix(in srgb, var(--pill-kleur, var(--success)) 40%, transparent);
-  border-radius: 10px;
-  padding: 2px 8px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-
-/* ── Kaart ── */
+/* ── Kaartweergave ── */
 .nest-kaart-map {
   height: calc(100dvh - 260px - 56px - env(safe-area-inset-bottom));
   min-height: 300px;
@@ -191,4 +220,3 @@
   border-radius: 50%;
   flex-shrink: 0;
 }
-

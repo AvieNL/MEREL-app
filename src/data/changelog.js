@@ -1,17 +1,17 @@
-export const VERSIE = '1.51.11';
+export const VERSIE = '1.52.0';
 
 export const CHANGELOG = [
   {
-    versie: '1.51.11',
+    versie: '1.52.0',
     datum: '2026-03-25',
     wijzigingen: [
-      'UI: statusbadge legsel toont nu tweeledig label "Status | waarde" voor duidelijkheid',
+      'Herbouw nestoverzicht: jaarfilter, soort op eigen regel, status/datum/bezoeken per huidig legsel',
     ],
     wijzigingen_en: [
-      'UI: clutch status badge now shows two-part label "Status | value" for clarity',
+      'Rebuilt nest overview: year filter, species on own line, status/date/visits per current clutch',
     ],
     wijzigingen_de: [
-      'UI: Gelege-Statusbadge zeigt jetzt zweiteiliges Label "Status | Wert" zur Verdeutlichung',
+      'Neuaufbau Nestübersicht: Jahresfilter, Art in eigener Zeile, Status/Datum/Besuche pro aktuellem Gelege',
     ],
   },
   {
