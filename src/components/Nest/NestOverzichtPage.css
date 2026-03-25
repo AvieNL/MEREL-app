@@ -181,11 +181,6 @@
   color: var(--text-secondary);
 }
 
-.nest-kaart__bezoeken {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-left: auto;
-}
 
 .nest-kaart__geen-legsel {
   font-size: 0.78rem;

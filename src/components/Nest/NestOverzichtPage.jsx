@@ -179,9 +179,6 @@ function NestenLijst({ nesten, navigate, t, zoekterm, filterJaar }) {
                   {nest.laatsteBezoek ? (
                     <span className="nest-kaart__datum">{formatDatum(nest.laatsteBezoek.datum)}</span>
                   ) : null}
-                  {nest.aantalBezoeken > 0 && (
-                    <span className="nest-kaart__bezoeken">{t('nest_bezoeken_kort', { count: nest.aantalBezoeken })}</span>
-                  )}
                 </>
               ) : (
                 <span className="nest-kaart__geen-legsel">
