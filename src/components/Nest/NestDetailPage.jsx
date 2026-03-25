@@ -185,7 +185,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
         {vogelNaam && <span className="legsel-blok__soort">{vogelNaam}</span>}
         <span className="legsel-blok__status" style={{ '--status-kleur': statusKleur }}>
           <span className="legsel-blok__status-prefix">{t('nest_status_label')}</span>
-          {t(statusLabelKey)}
+          <span className="legsel-blok__status-waarde">{t(statusLabelKey)}</span>
         </span>
         {legsel.nestsucces != null && (
           <span className="legsel-blok__succes">

@@ -156,7 +156,7 @@
   border-right: 1px solid color-mix(in srgb, var(--status-kleur) 30%, transparent);
 }
 
-.legsel-blok__status > :last-child {
+.legsel-blok__status-waarde {
   padding: 2px 7px;
   background: color-mix(in srgb, var(--status-kleur) 15%, transparent);
   color: var(--status-kleur);
