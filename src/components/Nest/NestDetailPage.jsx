@@ -37,13 +37,24 @@ export default function NestDetailPage() {
   const nest = nesten.find(n => n.id === id);
 
   // Platte lijst van legsels, gesorteerd op datum van meest recente bezoek (nieuwste eerst)
+  // displayNummer = volgordepositie over alle jaren (1 = oudste legsel van dit nest)
   const gesorteerdeLegsels = useMemo(() => {
     const nestLegsels = legsels.filter(l => l.nest_id === id);
+
+    // Chronologische volgorde voor nummering: oud → nieuw
+    const chronologisch = [...nestLegsels].sort((a, b) => {
+      if (a.jaar !== b.jaar) return (a.jaar || 0) - (b.jaar || 0);
+      return (a.volgnummer || 0) - (b.volgnummer || 0);
+    });
+    const nummerMap = {};
+    chronologisch.forEach((l, idx) => { nummerMap[l.id] = idx + 1; });
+
+    // Weergavevolgorde: nieuwste bezoek eerst
     return [...nestLegsels].sort((a, b) => {
       const latestA = bezoeken.filter(bz => bz.legsel_id === a.id).map(bz => bz.datum).sort().at(-1) || '';
       const latestB = bezoeken.filter(bz => bz.legsel_id === b.id).map(bz => bz.datum).sort().at(-1) || '';
       return latestB.localeCompare(latestA);
-    });
+    }).map(l => ({ ...l, displayNummer: nummerMap[l.id] }));
   }, [id, legsels, bezoeken]);
 
   if (!nest) {
@@ -168,7 +179,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
   return (
     <div className="legsel-blok" style={{ '--status-kleur': statusKleur }}>
       <div className="legsel-blok__header">
-        <span className="legsel-blok__nr">{t('nest_legsel_nr', { nr: legsel.volgnummer })}</span>
+        <span className="legsel-blok__nr">{t('nest_legsel_nr', { nr: legsel.displayNummer ?? legsel.volgnummer })}</span>
         {legsel.jaar && <span className="legsel-blok__jaar">{legsel.jaar}</span>}
         {vogelNaam && <span className="legsel-blok__soort">{vogelNaam}</span>}
         <span className="legsel-blok__status" style={{ '--status-kleur': statusKleur }}>

@@ -16,12 +16,13 @@ export default function NieuwLegselPage() {
 
   const nest = nesten.find(n => n.id === nestId);
 
-  // Hoogste bestaande volgnummer voor dit nest + huidig jaar
+  // Hoogste bestaande volgnummer voor dit nest (alle jaren)
   const { volgendVolgnummer, defaultLinkType } = useMemo(() => {
-    const bestaande = legsels.filter(l => l.nest_id === nestId && l.jaar === HUIDIG_JAAR);
+    const bestaande = legsels.filter(l => l.nest_id === nestId);
+    const bestaandeHuidigJaar = bestaande.filter(l => l.jaar === HUIDIG_JAAR);
     return {
       volgendVolgnummer: bestaande.length > 0 ? Math.max(...bestaande.map(l => l.volgnummer)) + 1 : 1,
-      defaultLinkType: bestaande.length > 0 ? 1 : 0,
+      defaultLinkType: bestaandeHuidigJaar.length > 0 ? 1 : 0,
     };
   }, [legsels, nestId]);
 

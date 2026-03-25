@@ -1,6 +1,19 @@
-export const VERSIE = '1.51.3';
+export const VERSIE = '1.51.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.51.4',
+    datum: '2026-03-25',
+    wijzigingen: [
+      'Fix: legselnummering is nu doorlopend per nest over alle jaren (niet meer per jaar opnieuw vanaf 1)',
+    ],
+    wijzigingen_en: [
+      'Fix: clutch numbering is now sequential per nest across all years (no longer restarting at 1 each year)',
+    ],
+    wijzigingen_de: [
+      'Fix: Gelegenummerierung ist jetzt fortlaufend pro Nest über alle Jahre (startet nicht mehr jedes Jahr bei 1)',
+    ],
+  },
   {
     versie: '1.51.3',
     datum: '2026-03-25',
