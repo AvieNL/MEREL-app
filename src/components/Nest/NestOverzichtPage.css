@@ -6,7 +6,7 @@
   margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .nest-overzicht-controls {
@@ -45,10 +45,10 @@
 /* ── Statusfilter ── */
 .nest-status-filter {
   display: flex;
-  gap: 6px;
+  gap: 2px;
   overflow-x: auto;
   scrollbar-width: none;
-  padding-bottom: 2px;
+  padding-bottom: 0;
 }
 
 .nest-status-filter::-webkit-scrollbar {
@@ -80,10 +80,10 @@
 /* ── Jaarfilter ── */
 .nest-jaar-filter {
   display: flex;
-  gap: 6px;
+  gap: 2px;
   overflow-x: auto;
   scrollbar-width: none;
-  padding-bottom: 2px;
+  padding-bottom: 0;
 }
 
 .nest-jaar-filter::-webkit-scrollbar {

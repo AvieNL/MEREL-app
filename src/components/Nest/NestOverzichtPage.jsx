@@ -32,7 +32,7 @@ export default function NestOverzichtPage() {
 
   const [tab, setTab] = useState('lijst');
   const [zoekterm, setZoekterm] = useState('');
-  const [filterJaar, setFilterJaar] = useState(HUIDIG_JAAR);
+  const [filterJaar, setFilterJaar] = useState(null);
   const [filterStatus, setFilterStatus] = useState(null);
 
   const speciesByEuring = useMemo(() => {
