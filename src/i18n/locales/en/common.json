@@ -336,6 +336,8 @@
   "nest_bezoeken_kort_one": "{{count}}×",
   "nest_bezoeken_kort_other": "{{count}}×",
   "nest_geen_legsel_jaar": "No clutch in {{jaar}}",
+  "nest_geen_legsel": "No clutches",
+  "nest_filter_alle_jaren": "All years",
   "nest_new_title": "New nest",
   "nest_edit_title": "Edit nest #{{nr}}",
   "nest_delete_confirm": "Are you sure you want to delete nest #{{nr}}? All seasons, clutches and visits will also be deleted.",

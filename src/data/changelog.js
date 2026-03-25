@@ -1,17 +1,17 @@
-export const VERSIE = '1.52.0';
+export const VERSIE = '1.52.1';
 
 export const CHANGELOG = [
   {
-    versie: '1.52.0',
+    versie: '1.52.1',
     datum: '2026-03-25',
     wijzigingen: [
-      'Herbouw nestoverzicht: jaarfilter, soort op eigen regel, status/datum/bezoeken per huidig legsel',
+      'Nestoverzicht: "Alle jaren" optie toegevoegd, jaarfilter-knoppen subtieler',
     ],
     wijzigingen_en: [
-      'Rebuilt nest overview: year filter, species on own line, status/date/visits per current clutch',
+      'Nest overview: added "All years" option, year filter buttons more subtle',
     ],
     wijzigingen_de: [
-      'Neuaufbau Nestübersicht: Jahresfilter, Art in eigener Zeile, Status/Datum/Besuche pro aktuellem Gelege',
+      'Nestübersicht: Option "Alle Jahre" hinzugefügt, Jahresfilter-Schaltflächen dezenter',
     ],
   },
   {

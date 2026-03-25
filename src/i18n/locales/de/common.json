@@ -336,6 +336,8 @@
   "nest_bezoeken_kort_one": "{{count}}×",
   "nest_bezoeken_kort_other": "{{count}}×",
   "nest_geen_legsel_jaar": "Kein Gelege in {{jaar}}",
+  "nest_geen_legsel": "Keine Gelege",
+  "nest_filter_alle_jaren": "Alle Jahre",
   "nest_new_title": "Neues Nest",
   "nest_edit_title": "Nest #{{nr}} bearbeiten",
   "nest_delete_confirm": "Möchtest du Nest #{{nr}} wirklich löschen? Alle Saisons, Gelege und Besuche werden ebenfalls gelöscht.",

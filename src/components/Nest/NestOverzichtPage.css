@@ -57,26 +57,24 @@
 
 .nest-jaar-btn {
   flex-shrink: 0;
-  padding: 4px 12px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border);
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  background: none;
+  border: none;
   border-radius: 20px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition: color 0.15s;
 }
 
 .nest-jaar-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
+  font-weight: 600;
+  color: var(--accent);
 }
 
 .nest-jaar-btn:not(.active):hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  color: var(--text-secondary);
 }
 
 /* ── Lijst ── */

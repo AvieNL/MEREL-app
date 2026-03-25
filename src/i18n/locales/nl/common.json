@@ -336,6 +336,8 @@
   "nest_bezoeken_kort_one": "{{count}}×",
   "nest_bezoeken_kort_other": "{{count}}×",
   "nest_geen_legsel_jaar": "Geen legsel in {{jaar}}",
+  "nest_geen_legsel": "Geen legsels",
+  "nest_filter_alle_jaren": "Alle jaren",
   "nest_new_title": "Nieuw nest",
   "nest_edit_title": "Nest #{{nr}} wijzigen",
   "nest_delete_confirm": "Weet je zeker dat je nest #{{nr}} wilt verwijderen? Alle seizoenen, legsels en bezoeken worden ook verwijderd.",

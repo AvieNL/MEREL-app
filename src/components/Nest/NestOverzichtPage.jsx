@@ -54,10 +54,10 @@ export default function NestOverzichtPage() {
         ? (speciesByEuring[nest.soort_euring]?.naam_nl || nest.soort_euring)
         : null;
 
-      // Meest recente legsel voor het gekozen jaar
+      // Meest recente legsel (gefilterd op jaar als gekozen)
       const jaarLegsels = legsels
-        .filter(l => l.nest_id === nest.id && l.jaar === filterJaar)
-        .sort((a, b) => (b.volgnummer || 0) - (a.volgnummer || 0));
+        .filter(l => l.nest_id === nest.id && (filterJaar === null || l.jaar === filterJaar))
+        .sort((a, b) => (b.jaar || 0) - (a.jaar || 0) || (b.volgnummer || 0) - (a.volgnummer || 0));
       const actueelLegsel = jaarLegsels[0] || null;
 
       // Bezoeken voor dit legsel
@@ -109,6 +109,10 @@ export default function NestOverzichtPage() {
           )}
         </div>
         <div className="nest-jaar-filter">
+          <button
+            className={`nest-jaar-btn${filterJaar === null ? ' active' : ''}`}
+            onClick={() => setFilterJaar(null)}
+          >{t('nest_filter_alle_jaren')}</button>
           {beschikbareJaren.map(jaar => (
             <button
               key={jaar}
@@ -178,7 +182,9 @@ function NestenLijst({ nesten, navigate, t, zoekterm, filterJaar }) {
                   )}
                 </>
               ) : (
-                <span className="nest-kaart__geen-legsel">{t('nest_geen_legsel_jaar', { jaar: filterJaar })}</span>
+                <span className="nest-kaart__geen-legsel">
+                  {filterJaar === null ? t('nest_geen_legsel') : t('nest_geen_legsel_jaar', { jaar: filterJaar })}
+                </span>
               )}
             </div>
           </button>
