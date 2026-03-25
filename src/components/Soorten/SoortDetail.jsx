@@ -9,7 +9,7 @@ import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuitypeInfo from './RuitypeInfo';
 import { VangstKaart } from '../Stats/Charts';
 import { renderMarkdown } from '../../utils/textHelper';
-import { formatDatum } from '../../utils/dateHelper';
+import { formatDatum, toYMD } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL } from '../../data/constants';
 import { computeBioRanges } from '../../utils/bioHelper';
 import { TYPE_CFG, buildNvByRing, getVangstType } from '../../utils/vangstType';
@@ -740,8 +740,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
               <span className="sd-sub-title">{t('sd_recent_catches')}</span>
               {[...soortRecords]
                 .sort((a, b) => {
-                  const dateA = a.vangstdatum || '';
-                  const dateB = b.vangstdatum || '';
+                  const dateA = toYMD(a.vangstdatum) || '';
+                  const dateB = toYMD(b.vangstdatum) || '';
                   if (dateB !== dateA) return dateB > dateA ? 1 : -1;
                   // Zelfde datum: ringnummer als tiebreaker, maar alleen voor nieuwe vangsten
                   const isTvA = a.metalenringinfo === 4 || a.metalenringinfo === '4';

@@ -1,6 +1,19 @@
-export const VERSIE = '1.51.0';
+export const VERSIE = '1.51.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.51.1',
+    datum: '2026-03-25',
+    wijzigingen: [
+      'Fix: recente vangsten op soortdetailpagina gesorteerd op meest recente datum (via toYMD-normalisatie)',
+    ],
+    wijzigingen_en: [
+      'Fix: recent catches on species detail page sorted by most recent date (via toYMD normalisation)',
+    ],
+    wijzigingen_de: [
+      'Fix: Letzte Fänge auf der Artdetailseite nach neuestem Datum sortiert (via toYMD-Normalisierung)',
+    ],
+  },
   {
     versie: '1.51.0',
     datum: '2026-03-25',
