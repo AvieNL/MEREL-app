@@ -165,6 +165,7 @@ function NestenLijst({ nesten, navigate, t, zoekterm, filterJaar }) {
             <div className="nest-kaart__hoofd">
               <span className="nest-kaart__nr">⌂ {nest.kastnummer}</span>
               {nest.omschrijving && <span className="nest-kaart__naam">{nest.omschrijving}</span>}
+              {nest.adres && <span className="nest-kaart__adres">{nest.adres}</span>}
               {nest.kastSoort && <span className="nest-kaart__soort">{nest.kastSoort}</span>}
             </div>
 

@@ -139,6 +139,14 @@
   text-overflow: ellipsis;
 }
 
+.nest-kaart__adres {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .nest-kaart__soort {
   font-size: 0.8rem;
   color: var(--text-secondary);
