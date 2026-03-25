@@ -1,19 +1,19 @@
-export const VERSIE = '1.51.8';
+export const VERSIE = '1.51.9';
 
 export const CHANGELOG = [
   {
-    versie: '1.51.8',
+    versie: '1.51.9',
     datum: '2026-03-25',
     wijzigingen: [
-      'UI: edit/verwijder-iconen in rechterbovenhoek van bezoek- en legselblokken geplaatst',
+      'UI: edit/verwijder-iconen in rechterbovenhoek van bezoekitems geplaatst (legsel-editknop ongewijzigd)',
       'UI: prullenbak in hamburgermenu herkenbaar rood gekleurd',
     ],
     wijzigingen_en: [
-      'UI: edit/delete icons positioned in top-right corner of visit and clutch blocks',
+      'UI: edit/delete icons positioned in top-right corner of visit items (clutch edit button unchanged)',
       'UI: trash in hamburger menu colored recognizable red',
     ],
     wijzigingen_de: [
-      'UI: Bearbeiten/Löschen-Icons in der oberen rechten Ecke der Besuchs- und Gelegeblöcke positioniert',
+      'UI: Bearbeiten/Löschen-Icons in der oberen rechten Ecke der Besuchselemente positioniert (Gelegebearbeiten-Schaltfläche unverändert)',
       'UI: Papierkorb im Hamburger-Menü erkennbar rot gefärbt',
     ],
   },
