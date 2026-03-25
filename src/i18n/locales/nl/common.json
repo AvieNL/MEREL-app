@@ -530,6 +530,7 @@
   "pulli_tarsus": "Tarsus (mm)",
   "pulli_btn_volgende": "Volgende pullus",
   "pulli_btn_klaar": "Klaar ({{count}} geringd)",
+  "pulli_btn_klaar_leeg": "Klaar",
   "pulli_ringstreng": "Ringstreng",
   "pulli_tijd": "Tijd",
   "pulli_broedselgrootte": "Broedselgrootte",

@@ -347,7 +347,7 @@ export default function PulliRingenPage() {
             + {t('pulli_btn_volgende')}
           </button>
           <button className="btn-secondary" onClick={handleKlaar}>
-            {opgeslagen.length > 0 ? t('pulli_btn_klaar', { count: opgeslagen.length }) : t('btn_cancel')}
+            {opgeslagen.length > 0 ? t('pulli_btn_klaar', { count: opgeslagen.length }) : t('pulli_btn_klaar_leeg')}
           </button>
         </div>
       </div>

@@ -530,6 +530,7 @@
   "pulli_tarsus": "Tarsus (mm)",
   "pulli_btn_volgende": "Next pullus",
   "pulli_btn_klaar": "Done ({{count}} ringed)",
+  "pulli_btn_klaar_leeg": "Done",
   "pulli_ringstreng": "Ring series",
   "pulli_tijd": "Time",
   "pulli_broedselgrootte": "Brood size",
