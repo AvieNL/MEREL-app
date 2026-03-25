@@ -3,17 +3,27 @@
 }
 
 .nest-detail-header {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 12px;
   margin-bottom: 20px;
+  padding-right: 52px;
 }
 
 .nest-detail-acties {
+  position: absolute;
+  top: 0;
+  right: 0;
   display: flex;
-  gap: 6px;
-  margin-left: auto;
-  flex-shrink: 0;
+  gap: 0;
+}
+
+.nest-detail-acties .icon-edit-btn,
+.nest-detail-acties .icon-delete-btn {
+  min-height: unset;
+  min-width: unset;
+  padding: 2px 3px;
 }
 
 .nest-actie-btn {
