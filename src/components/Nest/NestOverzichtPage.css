@@ -42,6 +42,12 @@
   border-color: var(--accent);
 }
 
+.nest-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
 /* ── Statusfilter ── */
 .nest-status-filter {
   display: flex;

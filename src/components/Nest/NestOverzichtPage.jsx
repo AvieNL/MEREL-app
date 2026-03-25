@@ -118,6 +118,7 @@ export default function NestOverzichtPage() {
             </button>
           )}
         </div>
+        <div className="nest-filters">
         <div className="nest-jaar-filter">
           <button
             className={`nest-jaar-btn${filterJaar === null ? ' active' : ''}`}
@@ -144,6 +145,7 @@ export default function NestOverzichtPage() {
               onClick={() => setFilterStatus(filterStatus === key ? null : key)}
             >{t(cfg.labelKey)}</button>
           ))}
+        </div>
         </div>
       </div>
 
