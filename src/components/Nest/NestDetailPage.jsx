@@ -108,7 +108,7 @@ export default function NestDetailPage() {
             <button
               className="btn-danger"
               onClick={async () => { await deleteNest(id); navigate('/prullenbak'); }}
-            >🗑 {t('btn_to_trash')}</button>
+            >{t('btn_to_trash')}</button>
           </div>
         </div>
       )}

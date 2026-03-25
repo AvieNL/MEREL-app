@@ -1,6 +1,19 @@
-export const VERSIE = '1.51.6';
+export const VERSIE = '1.51.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.51.7',
+    datum: '2026-03-25',
+    wijzigingen: [
+      'Fix: laatste 🗑-emoji verwijderd uit bevestigingsdialoog nestverwijdering',
+    ],
+    wijzigingen_en: [
+      'Fix: removed last 🗑 emoji from nest delete confirmation dialog',
+    ],
+    wijzigingen_de: [
+      'Fix: letztes 🗑-Emoji aus Bestätigungsdialog für Nestlöschung entfernt',
+    ],
+  },
   {
     versie: '1.51.6',
     datum: '2026-03-25',
