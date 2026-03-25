@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { IconEdit, IconDelete } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
@@ -86,14 +87,14 @@ export default function NestDetailPage() {
               className="icon-edit-btn"
               onClick={() => navigate(`/nest/${id}/wijzigen`)}
               title={t('btn_edit')}
-            >✏️</button>
+            ><IconEdit /></button>
           )}
           {canNestDelete && (
             <button
               className="icon-delete-btn"
               onClick={() => setDeleteBevestig(true)}
               title={t('btn_delete')}
-            >🗑️</button>
+            ><IconDelete /></button>
           )}
         </div>
       </div>
@@ -196,7 +197,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
             type="button"
             onClick={() => navigate(`/nest/legsel/${legsel.id}/wijzigen`)}
             title={t('btn_edit')}
-          >✏️</button>
+          ><IconEdit /></button>
         )}
       </div>
 
@@ -230,13 +231,13 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                         type="button"
                         onClick={() => navigate(`/nest/bezoek/${bezoek.id}/wijzigen`)}
                         title={t('btn_edit')}
-                      >✏️</button>
+                      ><IconEdit /></button>
                       <button
                         className="icon-delete-btn"
                         type="button"
                         onClick={() => setDeleteBezoekId(bezoek.id)}
                         title={t('btn_delete')}
-                      >🗑️</button>
+                      ><IconDelete /></button>
                     </div>
                   )}
                 </div>

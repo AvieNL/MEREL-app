@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { IconEdit, IconDelete } from '../shared/Icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRole } from '../../hooks/useRole';
@@ -214,13 +215,13 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
                         className="icon-edit-btn"
                         title="Wijzigen"
                         onClick={e => { e.stopPropagation(); navigate('/', { state: { editRecord: r } }); }}
-                      >✏️</button>
+                      ><IconEdit /></button>
                       {onDelete && (
                         <button
                           className="icon-delete-btn"
                           title="Verwijderen"
                           onClick={e => { e.stopPropagation(); onDelete(r.id); }}
-                        >🗑️</button>
+                        ><IconDelete /></button>
                       )}
                     </div>
                   )}

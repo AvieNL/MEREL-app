@@ -1,6 +1,19 @@
-export const VERSIE = '1.51.5';
+export const VERSIE = '1.51.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.51.6',
+    datum: '2026-03-25',
+    wijzigingen: [
+      'UI: bewerk/verwijder-knoppen subtieler — geen achtergrond, kleiner, SVG-iconen i.p.v. emoji',
+    ],
+    wijzigingen_en: [
+      'UI: edit/delete buttons more subtle — no background, smaller, SVG icons instead of emoji',
+    ],
+    wijzigingen_de: [
+      'UI: Bearbeiten/Löschen-Schaltflächen subtiler — kein Hintergrund, kleiner, SVG-Icons statt Emoji',
+    ],
+  },
   {
     versie: '1.51.5',
     datum: '2026-03-25',

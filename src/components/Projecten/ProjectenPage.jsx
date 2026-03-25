@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { IconEdit, IconDelete } from '../shared/Icons';
 import { useTranslation } from 'react-i18next';
 import { useRole } from '../../hooks/useRole';
 import { useAuth } from '../../context/AuthContext';
@@ -485,10 +486,10 @@ export default function ProjectenPage({ projects, onAdd, onUpdate, onDelete, onR
                       ) : (
                         <div className="project-actions">
                           {canEdit && isOwn && (
-                            <button className="icon-edit-btn" onClick={() => startEdit(p)} title={t('project_edit_aria')}>✎</button>
+                            <button className="icon-edit-btn" onClick={() => startEdit(p)} title={t('project_edit_aria')}><IconEdit /></button>
                           )}
                           {canDelete && isOwn && (
-                            <button className="icon-delete-btn" onClick={() => setConfirmDeleteId(p.id)} title={t('project_delete_aria')} aria-label={t('project_delete_aria')}>✕</button>
+                            <button className="icon-delete-btn" onClick={() => setConfirmDeleteId(p.id)} title={t('project_delete_aria')} aria-label={t('project_delete_aria')}><IconDelete /></button>
                           )}
                         </div>
                       )}

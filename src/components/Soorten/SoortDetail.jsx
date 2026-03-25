@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { IconEdit, IconDelete } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
@@ -459,10 +460,10 @@ export default function SoortDetail({ records, speciesOverrides }) {
             }}
           >⟳</button>
           {!isViewer && (
-            <button className="icon-edit-btn" onClick={startEdit} title="Bewerken">✏️</button>
+            <button className="icon-edit-btn" onClick={startEdit} title="Bewerken"><IconEdit /></button>
           )}
           {isAdmin && (
-            <button className="icon-delete-btn" onClick={deleteSoort} title="Soort verwijderen">🗑️</button>
+            <button className="icon-delete-btn" onClick={deleteSoort} title="Soort verwijderen"><IconDelete /></button>
           )}
         </div>
       </div>
