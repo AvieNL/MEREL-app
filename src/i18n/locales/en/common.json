@@ -502,6 +502,7 @@
   "btn_back": "Back",
   "btn_edit": "Edit",
   "btn_delete": "Delete",
+  "nest_legsel_delete_confirm": "Delete clutch {{nr}} and all visits?",
   "nest_bezoek_delete_confirm": "Delete visit of {{datum}}?",
   "nest_ring_delete_confirm": "Remove ring link?",
   "nest_geringd_label": "Ringed",

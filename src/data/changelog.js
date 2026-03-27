@@ -1,6 +1,19 @@
-export const VERSIE = '1.58.0';
+export const VERSIE = '1.59.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.59.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      'Feat: legsel verwijderen (met cascade naar bezoeken en ringen)',
+    ],
+    wijzigingen_en: [
+      'Feat: delete clutch (cascades to visits and rings)',
+    ],
+    wijzigingen_de: [
+      'Feat: Gelege löschen (kaskadiert zu Besuchen und Ringen)',
+    ],
+  },
   {
     versie: '1.58.0',
     datum: '2026-03-27',

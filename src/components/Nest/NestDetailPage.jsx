@@ -24,7 +24,7 @@ export default function NestDetailPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
-  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteBezoek, updateNest } = useNestData();
+  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteLegsel, deleteBezoek, updateNest } = useNestData();
   const { records } = useRecords();
   const switchModule = useModuleSwitch();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
@@ -134,6 +134,8 @@ export default function NestDetailPage() {
             speciesByEuring={speciesByEuring}
             canNestAdd={canNestAdd}
             canNestEdit={canNestEdit}
+            canNestDelete={canNestDelete}
+            deleteLegsel={deleteLegsel}
             deleteBezoek={deleteBezoek}
             records={records}
             navigate={navigate}
@@ -241,8 +243,9 @@ function NestFotoStrip({ nest, canNestEdit, updateNest }) {
 }
 
 
-function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, deleteBezoek, records, navigate, switchModule, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, canNestDelete, deleteLegsel, deleteBezoek, records, navigate, switchModule, t }) {
   const [deleteBezoekId, setDeleteBezoekId] = useState(null);
+  const [deleteLegselBevestig, setDeleteLegselBevestig] = useState(false);
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
@@ -289,7 +292,22 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
             title={t('btn_edit')}
           ><IconEdit size={18} /></button>
         )}
+        {canNestDelete && (
+          <button
+            className="icon-delete-btn legsel-blok__delete"
+            type="button"
+            onClick={() => setDeleteLegselBevestig(true)}
+            title={t('btn_delete')}
+          ><IconDelete size={18} /></button>
+        )}
       </div>
+      {deleteLegselBevestig && (
+        <div className="bezoek-delete-confirm">
+          <span>{t('nest_legsel_delete_confirm', { nr: legsel.displayNummer ?? legsel.volgnummer })}</span>
+          <button className="btn-secondary" onClick={() => setDeleteLegselBevestig(false)}>{t('btn_cancel')}</button>
+          <button className="btn-danger" onClick={() => deleteLegsel(legsel.id)}>{t('btn_delete')}</button>
+        </div>
+      )}
 
       {legselBezoeken.length === 0 ? (
         <p className="legsel-geen-bezoeken">{t('nest_no_visits')}</p>

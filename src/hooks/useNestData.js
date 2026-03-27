@@ -190,6 +190,18 @@ export function useNestData() {
     await addToQueue('legsel', 'mark_nest_exported', { ids, exported_at });
   }, [addToQueue]);
 
+  const deleteLegsel = useCallback(async (id) => {
+    // Cascade: verwijder ringen en bezoeken vóór het legsel
+    const bezoeken = await db.nestbezoek.where('legsel_id').equals(id).toArray();
+    const bezoekIds = bezoeken.map(b => b.id);
+    if (bezoekIds.length > 0) {
+      await db.nestring.where('nestbezoek_id').anyOf(bezoekIds).delete();
+      await db.nestbezoek.bulkDelete(bezoekIds);
+    }
+    await db.legsel.delete(id);
+    await addToQueue('legsel', 'nest_delete', { id });
+  }, [addToQueue]);
+
   const deleteBezoek = useCallback(async (id) => {
     await db.nestbezoek.delete(id);
     await addToQueue('nestbezoek', 'nest_delete', { id });
@@ -226,6 +238,7 @@ export function useNestData() {
     deleteNest,
     restoreNest,
     permanentDeleteNest,
+    deleteLegsel,
     deleteBezoek,
     deleteNestring,
     updateNestring,

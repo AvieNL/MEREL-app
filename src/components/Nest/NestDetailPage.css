@@ -247,11 +247,20 @@
   border-left: 4px solid var(--status-kleur, var(--border));
   border-radius: var(--radius-sm);
   padding: 10px 12px;
-  padding-right: 36px;
+  padding-right: 56px;
   margin-bottom: 8px;
 }
 
 .legsel-blok__edit {
+  position: absolute;
+  top: 4px;
+  right: 28px;
+  min-height: unset;
+  min-width: unset;
+  padding: 3px;
+}
+
+.legsel-blok__delete {
   position: absolute;
   top: 4px;
   right: 4px;

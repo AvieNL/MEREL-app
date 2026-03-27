@@ -502,6 +502,7 @@
   "btn_back": "Terug",
   "btn_edit": "Wijzigen",
   "btn_delete": "Verwijderen",
+  "nest_legsel_delete_confirm": "Legsel {{nr}} en alle bezoeken verwijderen?",
   "nest_bezoek_delete_confirm": "Bezoek van {{datum}} verwijderen?",
   "nest_ring_delete_confirm": "Ringkoppeling verwijderen?",
   "nest_geringd_label": "Geringd",
