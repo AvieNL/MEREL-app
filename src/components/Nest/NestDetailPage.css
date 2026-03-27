@@ -132,15 +132,27 @@
   border: 2px dashed var(--border);
   background: none;
   color: var(--text-muted);
-  font-size: 2rem;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 4px;
   flex-shrink: 0;
   transition: border-color 0.15s, color 0.15s;
   min-width: unset;
   min-height: unset;
+}
+
+.nest-foto-add__icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.nest-foto-add__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .nest-foto-add:hover:not(:disabled) {

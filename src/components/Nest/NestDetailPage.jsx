@@ -213,7 +213,12 @@ function NestFotoStrip({ nest, canNestEdit, updateNest }) {
             disabled={bezig}
             title="Foto toevoegen"
           >
-            {bezig ? '…' : '+'}
+            {bezig ? <span>…</span> : (
+              <>
+                <span className="nest-foto-add__icon">📷</span>
+                <span className="nest-foto-add__label">Foto</span>
+              </>
+            )}
           </button>
         )}
       </div>
