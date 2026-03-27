@@ -1,6 +1,19 @@
-export const VERSIE = '1.56.0';
+export const VERSIE = '1.57.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.57.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      'Fix: module-toggle (Ringen/Nestonderzoek) op eigen rij zodat vlaggen niet overlappen',
+    ],
+    wijzigingen_en: [
+      'Fix: module toggle (Ring/Nest) moved to its own row to prevent flag overlap',
+    ],
+    wijzigingen_de: [
+      'Fix: Modul-Umschalter (Ring/Nest) in eigene Zeile verschoben, damit Flaggen nicht überlappen',
+    ],
+  },
   {
     versie: '1.56.0',
     datum: '2026-03-27',

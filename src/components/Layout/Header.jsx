@@ -155,24 +155,7 @@ export default function Header({ onSwitchModule, activeModule }) {
             <MerelLogo size={36} />
             MEREL<span className="header-app-tld">.app</span>{isStaging && <span className="header-staging-badge">STAGING</span>}
           </button>
-          {onSwitchModule ? (
-            <div className="header-module-toggle">
-              <button
-                className={`header-module-segment header-module-segment--ring${activeModule === 'ring' ? ' active' : ''}`}
-                onClick={() => { if (activeModule !== 'ring') { onSwitchModule('ring'); navigate(getEquivalentPath('ring')); } }}
-                aria-pressed={activeModule === 'ring'}
-              >
-                ◎ {t('module_ring')}
-              </button>
-              <button
-                className={`header-module-segment header-module-segment--nest${activeModule === 'nest' ? ' active' : ''}`}
-                onClick={() => { if (activeModule !== 'nest') { onSwitchModule('nest'); navigate(getEquivalentPath('nest')); } }}
-                aria-pressed={activeModule === 'nest'}
-              >
-                ⌂ {t('module_nest')}
-              </button>
-            </div>
-          ) : (
+          {!onSwitchModule && (
             <span className={`header-module-pill header-module-pill--${activeModule || 'ring'}`}>
               {activeModule === 'nest' ? '⌂' : '◎'}
               <span>{activeModule === 'nest' ? t('module_nest') : t('module_ring')}</span>
@@ -364,6 +347,28 @@ export default function Header({ onSwitchModule, activeModule }) {
           </div>
         </div>
       </div>
+
+      {/* Module-toggle op eigen rij zodat het niet overlapt met de vlaggen */}
+      {onSwitchModule && (
+        <div className="header-module-row">
+          <div className="header-module-toggle">
+            <button
+              className={`header-module-segment header-module-segment--ring${activeModule === 'ring' ? ' active' : ''}`}
+              onClick={() => { if (activeModule !== 'ring') { onSwitchModule('ring'); navigate(getEquivalentPath('ring')); } }}
+              aria-pressed={activeModule === 'ring'}
+            >
+              ◎ {t('module_ring')}
+            </button>
+            <button
+              className={`header-module-segment header-module-segment--nest${activeModule === 'nest' ? ' active' : ''}`}
+              onClick={() => { if (activeModule !== 'nest') { onSwitchModule('nest'); navigate(getEquivalentPath('nest')); } }}
+              aria-pressed={activeModule === 'nest'}
+            >
+              ⌂ {t('module_nest')}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Simulatiebanner */}
       {(isSimulating || isSimulatingNest) && (
