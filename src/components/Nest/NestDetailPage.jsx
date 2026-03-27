@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef } from 'react';
-import { IconEdit, IconDelete, IconFlag, NestIcoon } from '../shared/Icons';
+import { IconEdit, IconDelete, IconFlag, IconRing, NestIcoon } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
@@ -315,7 +315,7 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
         <div className="bezoek-timeline">
           {legselBezoeken.map(bezoek => {
             const bezoekRingen = ringen.filter(r => r.nestbezoek_id === bezoek.id);
-            const isNGroep = bezoek.stadium?.startsWith('N');
+            const isRingbaar = ['N5', 'N6', 'N7'].includes(bezoek.stadium);
             return (
               <div key={bezoek.id} className="bezoek-item">
                 {/* ── Regel 1: datum + pill + potlood ── */}
@@ -392,6 +392,15 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                       );
                     })}
                   </p>
+                )}
+                {canNestAdd && isRingbaar && (
+                  <button
+                    className="bezoek-item__ring-btn"
+                    type="button"
+                    onClick={() => navigate(`/nest/bezoek/${bezoek.id}/ringen`)}
+                  >
+                    <IconRing size={13} /> {t('nest_btn_ringen_pulli')}
+                  </button>
                 )}
               </div>
             );

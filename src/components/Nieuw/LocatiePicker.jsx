@@ -22,6 +22,7 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
   const tileLayerRef = useRef(null);
+  const gpsZoomRef = useRef(false);
   const [gpsStatus, setGpsStatus] = useState(null); // null | 'loading' | 'error'
   const [tileType, setTileType] = useState(getTileType);
 
@@ -94,7 +95,9 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
       } else {
         markerRef.current.setLatLng(pos);
       }
-      map.setView(pos, Math.max(map.getZoom(), 12));
+      const targetZoom = gpsZoomRef.current ? 18 : Math.max(map.getZoom(), 13);
+      gpsZoomRef.current = false;
+      map.setView(pos, targetZoom);
     });
   }, [lat, lon]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -119,6 +122,7 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
     navigator.geolocation.getCurrentPosition(
       pos => {
         setGpsStatus(null);
+        gpsZoomRef.current = true;
         onChange(pos.coords.latitude.toFixed(6), pos.coords.longitude.toFixed(6));
       },
       err => {

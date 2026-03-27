@@ -474,3 +474,18 @@
 .bezoek-item__ring-orphan {
   color: var(--text-secondary);
 }
+
+.bezoek-item__ring-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius);
+  cursor: pointer;
+}

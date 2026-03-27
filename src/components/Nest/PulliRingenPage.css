@@ -173,3 +173,27 @@
   font-weight: 400;
   color: var(--text-secondary);
 }
+
+.pulli-match-suggestie {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius);
+  margin-top: 4px;
+}
+
+.pulli-match-suggestie__tekst {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.pulli-match-suggestie__knop {
+  align-self: flex-start;
+  min-height: unset;
+  padding: 5px 14px;
+  font-size: 0.85rem;
+}

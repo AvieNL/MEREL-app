@@ -1,6 +1,34 @@
-export const VERSIE = '1.60.0';
+export const VERSIE = '1.61.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.61.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Feat: ringen van pulli mogelijk vanaf N5 (was N6)",
+      "Feat: na bezoek met N5/N6/N7 direct naar ringpagina",
+      "Feat: 'Ring pulli'-knop zichtbaar op N5/N6/N7 bezoeken in nestdetail",
+      "Feat: bestaand ringnummer koppelen aan nestbezoek zonder dubbele vangst",
+      "Feat: toelichting en foto zichtbaar in nestoverzichtlijst",
+      "Fix: GPS-knop zoomt kaart in op straatniveau (zoom 18)",
+    ],
+    wijzigingen_en: [
+      "Feat: ringing chicks possible from N5 onwards (was N6)",
+      "Feat: after N5/N6/N7 visit, navigate directly to ringing page",
+      "Feat: 'Ring chicks' button visible on N5/N6/N7 visits in nest detail",
+      "Feat: link existing ring number to nest visit without duplicate catch",
+      "Feat: notes and photo visible in nest overview list",
+      "Fix: GPS button zooms map to street level (zoom 18)",
+    ],
+    wijzigingen_de: [
+      "Feat: Beringen von Nestjungen ab N5 möglich (war N6)",
+      "Feat: nach N5/N6/N7-Besuch direkt zur Beringungsseite",
+      "Feat: 'Nestjunge beringen'-Schaltfläche bei N5/N6/N7-Besuchen sichtbar",
+      "Feat: vorhandene Ringnummer mit Nestbesuch verknüpfen ohne doppelten Fang",
+      "Feat: Bemerkungen und Foto in der Nest-Übersichtsliste sichtbar",
+      "Fix: GPS-Schaltfläche zoomt Karte auf Straßenebene (Zoom 18)",
+    ],
+  },
   {
     versie: '1.60.0',
     datum: '2026-03-27',

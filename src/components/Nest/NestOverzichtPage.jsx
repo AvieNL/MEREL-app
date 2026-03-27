@@ -182,32 +182,39 @@ function NestenLijst({ nesten, navigate, t, zoekterm, filterJaar }) {
             style={{ '--status-kleur': heeftLegsel ? statusKleur : 'var(--border)' }}
             onClick={() => navigate(`/nest/${nest.id}`)}
           >
-            {/* Regel 1: kastnummer + naam + soort rechts */}
-            <div className="nest-kaart__hoofd">
-              <span className="nest-kaart__nr"><NestIcoon nest={nest} size={16} /> {nest.kastnummer}</span>
-              {nest.omschrijving && <span className="nest-kaart__naam">{nest.omschrijving}</span>}
-              {nest.adres && <span className="nest-kaart__adres">{nest.adres}</span>}
-              {nest.kastSoort && <span className="nest-kaart__soort">{nest.kastSoort}</span>}
-            </div>
-
-            {/* Regel 3: status · datum · bezoeken */}
-            <div className="nest-kaart__status">
-              {heeftLegsel ? (
-                <>
-                  <span className="nest-kaart__stadium" style={{ '--stadium-kleur': statusKleur }}>
-                    <IconFlag size={11} />{t(statusLabelKey)}
-                  </span>
-                  {nest.laatsteBezoek ? (
-                    <span className="nest-kaart__datum">
-                      <span className="nest-kaart__datum-label">{t('nest_laatste_bezoek')}</span>
-                      {formatDatum(nest.laatsteBezoek.datum)}
+            <div className="nest-kaart__inhoud">
+              <div className="nest-kaart__tekst">
+                <div className="nest-kaart__hoofd">
+                  <span className="nest-kaart__nr"><NestIcoon nest={nest} size={16} /> {nest.kastnummer}</span>
+                  {nest.omschrijving && <span className="nest-kaart__naam">{nest.omschrijving}</span>}
+                  {nest.adres && <span className="nest-kaart__adres">{nest.adres}</span>}
+                  {nest.kastSoort && <span className="nest-kaart__soort">{nest.kastSoort}</span>}
+                </div>
+                {nest.toelichting && (
+                  <p className="nest-kaart__toelichting">{nest.toelichting}</p>
+                )}
+                <div className="nest-kaart__status">
+                  {heeftLegsel ? (
+                    <>
+                      <span className="nest-kaart__stadium" style={{ '--stadium-kleur': statusKleur }}>
+                        <IconFlag size={11} />{t(statusLabelKey)}
+                      </span>
+                      {nest.laatsteBezoek ? (
+                        <span className="nest-kaart__datum">
+                          <span className="nest-kaart__datum-label">{t('nest_laatste_bezoek')}</span>
+                          {formatDatum(nest.laatsteBezoek.datum)}
+                        </span>
+                      ) : null}
+                    </>
+                  ) : (
+                    <span className="nest-kaart__geen-legsel">
+                      {filterJaar === null ? t('nest_geen_legsel') : t('nest_geen_legsel_jaar', { jaar: filterJaar })}
                     </span>
-                  ) : null}
-                </>
-              ) : (
-                <span className="nest-kaart__geen-legsel">
-                  {filterJaar === null ? t('nest_geen_legsel') : t('nest_geen_legsel_jaar', { jaar: filterJaar })}
-                </span>
+                  )}
+                </div>
+              </div>
+              {nest.fotos?.[0] && (
+                <img className="nest-kaart__foto" src={nest.fotos[0]} alt="" />
               )}
             </div>
           </button>

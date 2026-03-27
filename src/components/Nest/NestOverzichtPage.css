@@ -149,11 +149,22 @@
   padding: 10px 14px;
   text-align: left;
   cursor: pointer;
+  transition: border-color 0.15s;
+  min-height: 44px;
+}
+
+.nest-kaart__inhoud {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.nest-kaart__tekst {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  transition: border-color 0.15s;
-  min-height: 44px;
 }
 
 .nest-kaart:hover,
@@ -241,6 +252,24 @@
   font-size: 0.78rem;
   color: var(--text-muted);
   font-style: italic;
+}
+
+.nest-kaart__toelichting {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nest-kaart__foto {
+  width: 58px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 /* ── Kaartweergave ── */

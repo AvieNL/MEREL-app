@@ -202,7 +202,7 @@ export default function NieuwBezoekPage() {
         }
       }
 
-      await addBezoek({
+      const bezoekId = await addBezoek({
         legsel_id:       doelLegselId,
         datum,
         tijd:            tijd || null,
@@ -242,7 +242,11 @@ export default function NieuwBezoekPage() {
         });
       }
 
-      navigate(`/nest/${geselecteerdNestId}`);
+      if (['N5', 'N6', 'N7'].includes(stadiumPrimair)) {
+        navigate(`/nest/bezoek/${bezoekId}/ringen`);
+      } else {
+        navigate(`/nest/${geselecteerdNestId}`);
+      }
     } finally {
       setSaving(false);
     }

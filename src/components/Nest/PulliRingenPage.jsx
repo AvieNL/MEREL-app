@@ -1,6 +1,8 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../../lib/db';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useRecords } from '../../hooks/useRecords';
@@ -10,6 +12,8 @@ import { formatDatum } from '../../utils/nestPlanning';
 import { NAUWK_LEEFTIJD_OPTIONS } from '../Nieuw/NieuwPage.constants';
 import './PulliRingenPage.css';
 import { IconRing } from '../shared/Icons';
+
+function normRing(r) { return String(r || '').replace(/[\s.]/g, '').toUpperCase(); }
 
 const N_FRACTIE = {
   'N+': null, 'N0': 0.00, 'N1': 0.10, 'N2': 0.20, 'N3': 0.30,
@@ -59,7 +63,11 @@ export default function PulliRingenPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { bezoeken, legsels, nesten, addNestring } = useNestData();
-  const { addRecord } = useRecords();
+  const { addRecord, records } = useRecords();
+  const bezoekRingen = useLiveQuery(
+    () => db.nestring.where('nestbezoek_id').equals(bezoekId).toArray(),
+    [bezoekId], []
+  );
   const { settings } = useSettings();
   const { ringStrengen, advanceHuidige } = useRingStrengen();
   const species = useSpeciesRef();
@@ -193,6 +201,42 @@ export default function PulliRingenPage() {
     }));
   }
 
+  const bestaandeMatch = useMemo(() => {
+    const norm = normRing(form.ringnummer);
+    if (norm.length < 5) return null;
+    const match = records.find(r => normRing(r.ringnummer) === norm);
+    if (!match) return null;
+    if (bezoekRingen?.some(r => r.vangst_id === match.id)) return null;
+    if (opgeslagen.some(p => p.id === match.id)) return null;
+    return match;
+  }, [form.ringnummer, records, bezoekRingen, opgeslagen]);
+
+  async function handleKoppelen() {
+    if (!bestaandeMatch) return;
+    await addNestring({
+      nestbezoek_id: bezoekId,
+      vangst_id:     bestaandeMatch.id,
+      ringnummer:    bestaandeMatch.ringnummer,
+      centrale:      bestaandeMatch.centrale || 'NLA',
+      leeftijd:      1,
+      sexe:          bestaandeMatch.geslacht || 'U',
+    });
+    setOpgeslagen(prev => [...prev, {
+      id:         bestaandeMatch.id,
+      ringnummer: bestaandeMatch.ringnummer,
+      geslacht:   bestaandeMatch.geslacht || 'U',
+      vleugel:    bestaandeMatch.vleugel || '',
+      gewicht:    bestaandeMatch.gewicht || '',
+      tarsus:     bestaandeMatch.tarsus_lengte || '',
+    }]);
+    setForm(prev => ({
+      ...LEEG_FORM,
+      ringnummer:      '',
+      broedselgrootte: prev.broedselgrootte,
+      tijd:            prev.tijd,
+    }));
+  }
+
   function handleKlaar() {
     navigate(`/nest/${nest.id}`);
   }
@@ -290,6 +334,19 @@ export default function PulliRingenPage() {
             />
           </div>
         </div>
+        {bestaandeMatch && (
+          <div className="pulli-match-suggestie">
+            <span className="pulli-match-suggestie__tekst">
+              {t('pulli_ring_bestaat')}: <strong>{bestaandeMatch.ringnummer}</strong>
+              {bestaandeMatch.vogelnaam && ` · ${bestaandeMatch.vogelnaam}`}
+              {bestaandeMatch.vangstdatum && ` · ${formatDatum(bestaandeMatch.vangstdatum)}`}
+              {bestaandeMatch.google_plaats && ` · ${bestaandeMatch.google_plaats}`}
+            </span>
+            <button type="button" className="btn-primary pulli-match-suggestie__knop" onClick={handleKoppelen}>
+              {t('pulli_koppelen')}
+            </button>
+          </div>
+        )}
 
         <div className="pulli-form__rij">
           <div className="form-group">

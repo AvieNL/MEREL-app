@@ -2,6 +2,9 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../lib/db';
+import { formatDatum } from '../../utils/nestPlanning';
+
+function normRing(r) { return String(r || '').replace(/[\s.]/g, '').toUpperCase(); }
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useRecords } from '../../hooks/useRecords';
@@ -61,7 +64,7 @@ export default function PulliRingenForm({ bezoekId }) {
     () => db.nestring.where('nestbezoek_id').equals(bezoekId).toArray(),
     [bezoekId]
   ); // undefined = nog aan het laden
-  const { addRecord, updateRecord } = useRecords();
+  const { addRecord, updateRecord, records } = useRecords();
   const { settings } = useSettings();
   const { ringStrengen, advanceHuidige } = useRingStrengen();
   const species = useSpeciesRef();
@@ -208,6 +211,43 @@ export default function PulliRingenForm({ bezoekId }) {
     }));
   }
 
+  const bestaandeMatch = useMemo(() => {
+    const norm = normRing(form.ringnummer);
+    if (norm.length < 5) return null;
+    const match = records.find(r => normRing(r.ringnummer) === norm);
+    if (!match) return null;
+    if ((bezoekRingen ?? []).some(r => r.vangst_id === match.id)) return null;
+    if (opgeslagen.some(p => p.id === match.id)) return null;
+    return match;
+  }, [form.ringnummer, records, bezoekRingen, opgeslagen]);
+
+  async function handleKoppelen() {
+    if (!bestaandeMatch) return;
+    await addNestring({
+      nestbezoek_id: bezoekId,
+      vangst_id:     bestaandeMatch.id,
+      ringnummer:    bestaandeMatch.ringnummer,
+      centrale:      bestaandeMatch.centrale || 'NLA',
+      leeftijd:      1,
+      sexe:          bestaandeMatch.geslacht || 'U',
+    });
+    setOpgeslagen(prev => [...prev, {
+      id:         bestaandeMatch.id,
+      ringnummer: bestaandeMatch.ringnummer,
+      geslacht:   bestaandeMatch.geslacht || 'U',
+      vleugel:    bestaandeMatch.vleugel || '',
+      gewicht:    bestaandeMatch.gewicht || '',
+      tarsus:     bestaandeMatch.tarsus_lengte || '',
+    }]);
+    setForm(prev => ({
+      ...LEEG_FORM,
+      ringnummer:      '',
+      broedselgrootte: prev.broedselgrootte,
+      nauwk_pul_leeftijd: prev.nauwk_pul_leeftijd,
+      tijd:            prev.tijd,
+    }));
+  }
+
   if (!bezoek || !legsel || !nest) return null;
 
   const gesorteerd = [...opgeslagen].sort((a, b) => a.ringnummer.localeCompare(b.ringnummer));
@@ -345,6 +385,19 @@ export default function PulliRingenForm({ bezoekId }) {
             <input type="time" value={form.tijd} onChange={e => update('tijd', e.target.value)} />
           </div>
         </div>
+        {bestaandeMatch && (
+          <div className="pulli-match-suggestie">
+            <span className="pulli-match-suggestie__tekst">
+              {t('pulli_ring_bestaat')}: <strong>{bestaandeMatch.ringnummer}</strong>
+              {bestaandeMatch.vogelnaam && ` · ${bestaandeMatch.vogelnaam}`}
+              {bestaandeMatch.vangstdatum && ` · ${formatDatum(bestaandeMatch.vangstdatum)}`}
+              {bestaandeMatch.google_plaats && ` · ${bestaandeMatch.google_plaats}`}
+            </span>
+            <button type="button" className="btn-primary pulli-match-suggestie__knop" onClick={handleKoppelen}>
+              {t('pulli_koppelen')}
+            </button>
+          </div>
+        )}
 
         <div className="pulli-form__rij">
           <div className="form-group">

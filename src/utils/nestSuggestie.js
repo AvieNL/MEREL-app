@@ -15,15 +15,15 @@ const N_FRACTIE = {
   'N2': 0.20, // blind
   'N3': 0.30, // ogen open
   'N4': 0.45, // slagpennen in pin
-  'N5': 0.60, // slagpennen uit bloedspoel
-  'N6': 0.75, // slagpennen half volgroeid ← RINGEN
+  'N5': 0.60, // slagpennen uit bloedspoel ← RINGEN
+  'N6': 0.75, // slagpennen half volgroeid
   'N7': 0.90, // klaar om uit te vliegen
   'N9': 1.00, // uitgevlogen op controledag
   'N10': 1.00,
   'N11': 1.00,
 };
 
-const RING_FRACTIE = 0.75; // = N6
+const RING_FRACTIE = 0.60; // = N5
 
 /**
  * Schat de dag in het nest waarop N6 bereikt wordt (~75% van nestjongenperiode).
