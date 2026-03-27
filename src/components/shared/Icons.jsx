@@ -35,6 +35,31 @@ export function IconEdit({ size = 14 }) {
   );
 }
 
+/** Vogelnest — gevlochten komvorm */
+export function IconVogelNest({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+      aria-hidden="true">
+      {/* Bodem van het nest */}
+      <path d="M4 13 Q4 20 12 20 Q20 20 20 13" />
+      {/* Gevlochten rand van takjes */}
+      <path d="M4 13 Q6 9 9 11 Q12 7.5 15 11 Q18 9 20 13" />
+      {/* Takjes binnenin */}
+      <path d="M7 16.5 Q10 14 14 16" strokeWidth="1.2" />
+      <path d="M8.5 18.5 Q12 17 16 18" strokeWidth="1.2" />
+    </svg>
+  );
+}
+
+/** Toont het juiste icoon op basis van nest.locatie_type */
+export function NestIcoon({ nest, size = 18 }) {
+  if (nest?.locatie_type === 'nest') {
+    return <IconVogelNest size={size} />;
+  }
+  return <span aria-hidden="true" style={{ fontSize: `${size}px`, lineHeight: 1 }}>⌂</span>;
+}
+
 export function IconDelete({ size = 14 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none"

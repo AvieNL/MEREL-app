@@ -7,7 +7,7 @@ import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import 'leaflet/dist/leaflet.css';
 import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
 import { BROEDSTATUS, getBroedStatus, formatDatum } from '../../utils/nestPlanning';
-import { IconFlag } from '../shared/Icons';
+import { IconFlag, NestIcoon } from '../shared/Icons';
 import './NestOverzichtPage.css';
 
 const HUIDIG_JAAR = new Date().getFullYear();
@@ -184,7 +184,7 @@ function NestenLijst({ nesten, navigate, t, zoekterm, filterJaar }) {
           >
             {/* Regel 1: kastnummer + naam + soort rechts */}
             <div className="nest-kaart__hoofd">
-              <span className="nest-kaart__nr">⌂ {nest.kastnummer}</span>
+              <span className="nest-kaart__nr"><NestIcoon nest={nest} size={16} /> {nest.kastnummer}</span>
               {nest.omschrijving && <span className="nest-kaart__naam">{nest.omschrijving}</span>}
               {nest.adres && <span className="nest-kaart__adres">{nest.adres}</span>}
               {nest.kastSoort && <span className="nest-kaart__soort">{nest.kastSoort}</span>}
@@ -263,7 +263,8 @@ function NestenKaart({ nesten, navigate, t, filterJaar }) {
         const statusTekst = nest.actueelLegsel
           ? t(BROEDSTATUS[status].labelKey)
           : t('nest_geen_legsel_jaar', { jaar: filterJaar });
-        const tooltip = `<strong>⌂ ${nest.kastnummer}</strong>${nest.omschrijving ? ` — ${nest.omschrijving}` : ''}${nest.kastSoort ? `<br><em>${nest.kastSoort}</em>` : ''}<br>${statusTekst}${nest.laatsteBezoek ? ` · ${formatDatum(nest.laatsteBezoek.datum)}` : ''}`;
+        const icoonTxt = nest.locatie_type === 'nest' ? '○' : '⌂';
+        const tooltip = `<strong>${icoonTxt} ${nest.kastnummer}</strong>${nest.omschrijving ? ` — ${nest.omschrijving}` : ''}${nest.kastSoort ? `<br><em>${nest.kastSoort}</em>` : ''}<br>${statusTekst}${nest.laatsteBezoek ? ` · ${formatDatum(nest.laatsteBezoek.datum)}` : ''}`;
         const marker = L.marker([parseFloat(nest.lat), parseFloat(nest.lon)], { icon })
           .addTo(map)
           .bindTooltip(tooltip, { direction: 'top', offset: [0, -8] })

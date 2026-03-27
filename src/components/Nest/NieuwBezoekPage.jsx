@@ -6,7 +6,7 @@ import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { berekenVervolgbezoekInfo, isAfsluitendStadium } from '../../utils/nestSuggestie';
 import NestSoortInfoPanel from './NestSoortInfoPanel';
-import { IconRing } from '../shared/Icons';
+import { IconRing, NestIcoon } from '../shared/Icons';
 import NestSoortPicker from './NestSoortPicker';
 import {
   BETROUWB_DATUM_CODES, BETROUWB_AANTAL_CODES, BETROUWB_DAGEN_CODES,
@@ -296,7 +296,7 @@ export default function NieuwBezoekPage() {
                     {gefilterdeNesten.map(n => (
                       <button key={n.id} type="button" className="soort-zoeker__item"
                         onClick={() => { setGeselecteerdNestId(n.id); setNestZoek(''); }}>
-                        <span>⌂ {n.kastnummer}{n.omschrijving ? ` — ${n.omschrijving}` : ''}</span>
+                        <span><NestIcoon nest={n} size={14} /> {n.kastnummer}{n.omschrijving ? ` — ${n.omschrijving}` : ''}</span>
                         {n.soort_euring && (
                           <span className="soort-zoeker__latin">
                             {speciesByEuring[n.soort_euring]?.naam_nl || n.soort_euring}

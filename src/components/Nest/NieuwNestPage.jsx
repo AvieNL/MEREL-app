@@ -8,6 +8,7 @@ import {
   HABITAT_CODES, NESTPLAATS_CODES, NESTTYPE_CODES,
   VONDST_CODES, VERSTOPT_CODES, BESCHERM_CODES, KASTTYPE_CODES,
 } from '../../data/sovon-codes';
+import { IconVogelNest } from '../shared/Icons';
 import './NieuwNestPage.css';
 
 function codeLabel(c, lang) { return c[lang] || c.nl; }
@@ -34,6 +35,7 @@ const VONDST_HINTS = {
 };
 
 const LEEG_FORM = {
+  locatie_type: 'kast',
   kastnummer: '',
   omschrijving: '',
   eigenaar_naam: '',
@@ -135,6 +137,7 @@ export default function NieuwNestPage() {
     setSaving(true);
     try {
       const nestId = await addNest({
+        locatie_type:      form.locatie_type || 'kast',
         kastnummer:        form.kastnummer.trim(),
         omschrijving:      form.omschrijving.trim(),
         eigenaar_naam:     form.eigenaar_naam.trim(),
@@ -151,7 +154,7 @@ export default function NieuwNestPage() {
         vondst_toelichting:     form.vondst_toelichting.trim() || null,
         verstopt:          form.verstopt !== '' ? parseInt(form.verstopt, 10) : null,
         bescherm:          form.bescherm !== '' ? parseInt(form.bescherm, 10) : null,
-        kasttype:          form.kasttype !== '' ? parseInt(form.kasttype, 10) : null,
+        kasttype:          form.locatie_type !== 'nest' && form.kasttype !== '' ? parseInt(form.kasttype, 10) : null,
         hoogte:            form.hoogte !== '' ? parseFloat(form.hoogte) : null,
         lat:               form.lat ? parseFloat(form.lat) : null,
         lon:               form.lon ? parseFloat(form.lon) : null,
@@ -181,6 +184,21 @@ export default function NieuwNestPage() {
       <div className="section">
         <div className="section-header"><h3>{t('nest_section_info')}</h3></div>
         <div className="section-content">
+          <div className="form-group">
+            <label>{t('nest_locatie_type')}</label>
+            <div className="nest-type-picker">
+              <button type="button"
+                className={`nest-type-btn${form.locatie_type !== 'nest' ? ' nest-type-btn--active' : ''}`}
+                onClick={() => update('locatie_type', 'kast')}>
+                <span>⌂</span> {t('nest_type_kast')}
+              </button>
+              <button type="button"
+                className={`nest-type-btn${form.locatie_type === 'nest' ? ' nest-type-btn--active' : ''}`}
+                onClick={() => update('locatie_type', 'nest')}>
+                <IconVogelNest size={15} /> {t('nest_type_nest')}
+              </button>
+            </div>
+          </div>
           <div className="form-row">
             <div className={`form-group${errors.kastnummer ? ' form-group--error' : ''}`}>
               <label>{t('nest_kastnummer')} *</label>
@@ -362,6 +380,7 @@ export default function NieuwNestPage() {
             </div>
           </div>
           <div className="form-row">
+            {form.locatie_type !== 'nest' && (
             <div className="form-group">
               <label>{t('nest_kasttype')}</label>
               <select value={form.kasttype} onChange={e => update('kasttype', e.target.value)}>
@@ -369,6 +388,7 @@ export default function NieuwNestPage() {
                 {KASTTYPE_CODES.map(c => <option key={c.code} value={c.code}>{c.code} — {codeLabel(c, lang)}</option>)}
               </select>
             </div>
+            )}
             <div className="form-group">
               <label>{t('nest_hoogte')}</label>
               <input

@@ -1,6 +1,19 @@
-export const VERSIE = '1.59.0';
+export const VERSIE = '1.60.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.60.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Feat: nestkast-type kiezer (⌂ Nestkast / SVG Vrij nest) in formulier en overal als icoon",
+    ],
+    wijzigingen_en: [
+      "Feat: nest location type picker (⌂ Nest box / SVG Free nest) in form and as icon throughout",
+    ],
+    wijzigingen_de: [
+      "Feat: Nest-Typ-Auswahl (⌂ Nistkasten / SVG Freies Nest) im Formular und als Icon überall",
+    ],
+  },
   {
     versie: '1.59.0',
     datum: '2026-03-27',

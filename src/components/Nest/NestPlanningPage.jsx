@@ -7,6 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { berekenPlanningItems, URGENTIE_KLEUR, formatDatum } from '../../utils/nestPlanning';
 import { downloadNestIcal } from '../../utils/nestIcal';
+import { NestIcoon } from '../shared/Icons';
 import './NestPlanningPage.css';
 
 const HUIDIG_JAAR = new Date().getFullYear();
@@ -149,7 +150,7 @@ export default function NestPlanningPage() {
                   onClick={() => navigate(`/nest/legsel/${item.legselId}/bezoek/nieuw`)}
                 >
                   <div className="nest-planning-item__links">
-                    <span className="nest-planning-item__nr">⌂ {item.kastnummer}</span>
+                    <span className="nest-planning-item__nr"><NestIcoon nest={item} size={14} /> {item.kastnummer}</span>
                     {item.omschrijving && (
                       <span className="nest-planning-item__naam">{item.omschrijving}</span>
                     )}

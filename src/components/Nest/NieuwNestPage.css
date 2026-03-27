@@ -111,3 +111,38 @@
   border-color: var(--accent);
   background: var(--bg-secondary);
 }
+
+/* ── Type-kiezer (nestkast / vrij nest) ── */
+.nest-type-picker {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+}
+
+.nest-type-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  min-height: 40px;
+  min-width: unset;
+  font-family: inherit;
+}
+
+.nest-type-btn--active {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  font-weight: 600;
+  cursor: default;
+}

@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef } from 'react';
-import { IconEdit, IconDelete, IconFlag } from '../shared/Icons';
+import { IconEdit, IconDelete, IconFlag, NestIcoon } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
@@ -73,7 +73,7 @@ export default function NestDetailPage() {
       {/* ── Header ── */}
       <div className="nest-detail-header">
         <button className="btn-secondary page-back" onClick={() => navigate('/nest')}>{t('btn_back')}</button>
-        <div className="nest-detail-nummer">⌂ {nest.kastnummer}</div>
+        <div className="nest-detail-nummer"><NestIcoon nest={nest} size={22} /> {nest.kastnummer}</div>
         <div className="nest-detail-titel">
           {nest.omschrijving && <p className="nest-detail-omschrijving">{nest.omschrijving}</p>}
           {nest.adres ? (
