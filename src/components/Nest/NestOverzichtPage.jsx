@@ -90,6 +90,12 @@ export default function NestOverzichtPage() {
     if (filterStatus) result = result.filter(n =>
       getBroedStatus(n.laatsteBezoek?.stadium) === filterStatus
     );
+    // Lege nesten (geen legsel voor gekozen jaar) altijd onderaan
+    result = [...result].sort((a, b) => {
+      const aLeeg = a.actueelLegsel ? 0 : 1;
+      const bLeeg = b.actueelLegsel ? 0 : 1;
+      return aLeeg - bLeeg;
+    });
     return result;
   }, [verrijkteNesten, zoekterm, filterStatus]);
 

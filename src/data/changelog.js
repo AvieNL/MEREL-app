@@ -1,6 +1,19 @@
-export const VERSIE = '1.63.1';
+export const VERSIE = '1.63.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.63.2',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Fix: lege nesten (zonder legsel) staan onderaan in het nestoverzicht",
+    ],
+    wijzigingen_en: [
+      "Fix: empty nest boxes (no clutch) sorted to the bottom of the nest overview",
+    ],
+    wijzigingen_de: [
+      "Fix: Leere Nistkästen (ohne Gelege) werden im Nestübersicht nach unten sortiert",
+    ],
+  },
   {
     versie: '1.63.1',
     datum: '2026-03-27',
