@@ -237,7 +237,10 @@ export default function PulliRingenPage() {
     }));
   }
 
-  function handleKlaar() {
+  async function handleKlaar() {
+    if (form.ringnummer.trim()) {
+      await handleOpslaan();
+    }
     navigate(`/nest/${nest.id}`);
   }
 
@@ -410,7 +413,10 @@ export default function PulliRingenPage() {
             + {t('pulli_btn_volgende')}
           </button>
           <button className="btn-secondary" onClick={handleKlaar}>
-            {opgeslagen.length > 0 ? t('pulli_btn_klaar', { count: opgeslagen.length }) : t('pulli_btn_klaar_leeg')}
+            {(() => {
+              const totaal = opgeslagen.length + (form.ringnummer.trim() ? 1 : 0);
+              return totaal > 0 ? t('pulli_btn_klaar', { count: totaal }) : t('pulli_btn_klaar_leeg');
+            })()}
           </button>
         </div>
       </div>

@@ -1,6 +1,19 @@
-export const VERSIE = '1.61.1';
+export const VERSIE = '1.61.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.61.2',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Fix: 'Klaar'-knop slaat ingevulde pullus ook op; teller toont correct totaal",
+    ],
+    wijzigingen_en: [
+      "Fix: 'Done' button also saves the filled-in chick; counter shows correct total",
+    ],
+    wijzigingen_de: [
+      "Fix: 'Fertig'-Schaltfläche speichert auch den eingetragenen Nestling; Zähler zeigt korrekte Summe",
+    ],
+  },
   {
     versie: '1.61.1',
     datum: '2026-03-27',

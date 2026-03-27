@@ -460,8 +460,14 @@ export default function PulliRingenForm({ bezoekId }) {
           <button className="btn-primary" type="button" onClick={handleOpslaan}>
             + {t('pulli_btn_volgende')}
           </button>
-          <button className="btn-secondary" type="button" onClick={() => setKlaar(true)}>
-            {opgeslagen.length > 0 ? t('pulli_btn_klaar', { count: opgeslagen.length }) : t('pulli_btn_klaar_leeg')}
+          <button className="btn-secondary" type="button" onClick={async () => {
+            if (form.ringnummer.trim()) await handleOpslaan();
+            setKlaar(true);
+          }}>
+            {(() => {
+              const totaal = opgeslagen.length + (form.ringnummer.trim() ? 1 : 0);
+              return totaal > 0 ? t('pulli_btn_klaar', { count: totaal }) : t('pulli_btn_klaar_leeg');
+            })()}
           </button>
         </div>
       </div>
