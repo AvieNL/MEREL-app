@@ -1,6 +1,19 @@
-export const VERSIE = '1.57.0';
+export const VERSIE = '1.58.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.58.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Feat: tot 3 foto's toevoegen aan nestkaart, met thumbnails en lightbox",
+    ],
+    wijzigingen_en: [
+      "Feat: add up to 3 photos to a nest card, with thumbnails and lightbox",
+    ],
+    wijzigingen_de: [
+      "Feat: bis zu 3 Fotos zur Nestkarte hinzufügen, mit Miniaturansichten und Lightbox",
+    ],
+  },
   {
     versie: '1.57.0',
     datum: '2026-03-27',

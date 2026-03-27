@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { IconEdit, IconDelete, IconFlag } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import { useRecords } from '../../hooks/useRecords';
 import { useModuleSwitch } from '../../App';
 import { HABITAT_CODES, NESTPLAATS_CODES, STADIUM_CODES } from '../../data/sovon-codes';
 import { formatDatum, URGENTIE_KLEUR, BROEDSTATUS, getBroedStatus } from '../../utils/nestPlanning';
+import { verwerkFoto } from '../../utils/imageHelper';
 import './NestDetailPage.css';
 
 function stadiumLabel(code, t) {
@@ -23,7 +24,7 @@ export default function NestDetailPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
-  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteBezoek } = useNestData();
+  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteBezoek, updateNest } = useNestData();
   const { records } = useRecords();
   const switchModule = useModuleSwitch();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
@@ -99,6 +100,9 @@ export default function NestDetailPage() {
         </div>
       </div>
 
+      {/* ── Foto's ── */}
+      <NestFotoStrip nest={nest} canNestEdit={canNestEdit} updateNest={updateNest} />
+
       {/* ── Verwijder-bevestiging (naar prullenbak) ── */}
       {deleteBevestig && (
         <div className="nest-delete-confirm">
@@ -146,6 +150,86 @@ export default function NestDetailPage() {
         >
           + {t('nest_btn_add_legsel')}
         </button>
+      )}
+    </div>
+  );
+}
+
+
+const MAX_FOTOS = 3;
+
+function NestFotoStrip({ nest, canNestEdit, updateNest }) {
+  const fotos = nest.fotos || [];
+  const [bezig, setBezig] = useState(false);
+  const [fout, setFout] = useState('');
+  const [lightbox, setLightbox] = useState(null);
+  const inputRef = useRef(null);
+
+  async function handleToevoegen(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setFout('');
+    setBezig(true);
+    try {
+      const { preview } = await verwerkFoto(file);
+      await updateNest(nest.id, { fotos: [...fotos, preview] });
+    } catch (err) {
+      setFout(err.message);
+    } finally {
+      setBezig(false);
+      e.target.value = '';
+    }
+  }
+
+  async function handleVerwijderen(idx) {
+    await updateNest(nest.id, { fotos: fotos.filter((_, i) => i !== idx) });
+  }
+
+  if (fotos.length === 0 && !canNestEdit) return null;
+
+  return (
+    <div className="nest-fotos">
+      <div className="nest-fotos__strip">
+        {fotos.map((src, i) => (
+          <div key={i} className="nest-foto-thumb">
+            <img
+              src={src}
+              alt={`Foto ${i + 1}`}
+              onClick={() => setLightbox(i)}
+            />
+            {canNestEdit && (
+              <button
+                className="nest-foto-thumb__del"
+                onClick={() => handleVerwijderen(i)}
+                aria-label="Foto verwijderen"
+              >×</button>
+            )}
+          </div>
+        ))}
+        {canNestEdit && fotos.length < MAX_FOTOS && (
+          <button
+            className="nest-foto-add"
+            onClick={() => inputRef.current?.click()}
+            disabled={bezig}
+            title="Foto toevoegen"
+          >
+            {bezig ? '…' : '+'}
+          </button>
+        )}
+      </div>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*,.heic"
+        style={{ display: 'none' }}
+        onChange={handleToevoegen}
+      />
+      {fout && <p className="nest-fotos__fout">{fout}</p>}
+      {lightbox !== null && (
+        <div className="nest-foto-lightbox" onClick={() => setLightbox(null)}>
+          <img src={fotos[lightbox]} alt={`Foto ${lightbox + 1}`} onClick={e => e.stopPropagation()} />
+          <button className="nest-foto-lightbox__sluit" onClick={() => setLightbox(null)}>×</button>
+        </div>
       )}
     </div>
   );
