@@ -104,6 +104,43 @@
 .terugvangst-info--eigen .terugvangst-label { color: var(--success); }
 .terugvangst-info--vreemd .terugvangst-label { color: var(--warning); }
 
+/* ── Nestonderzoek-tip bij ringnummer ── */
+.nest-ring-tip {
+  margin-top: 6px;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.8rem;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border-left: 3px solid var(--accent);
+  color: var(--text-primary);
+}
+
+.nest-ring-tip__label {
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 2px;
+  color: var(--accent);
+}
+
+.nest-ring-tip__eigenaar {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.nest-ring-tip__mail {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.nest-ring-tip__mail:hover {
+  text-decoration: underline;
+}
+
 .field-hint {
   display: block;
   font-size: 0.72rem;

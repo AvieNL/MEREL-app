@@ -24,6 +24,8 @@ import { useBioRanges } from '../../hooks/useBioRanges';
 import { useAddNestring } from '../../hooks/useAddNestring';
 import { useModuleSwitch } from '../../App';
 import { NieuwFormContext } from './NieuwFormContext';
+import { db } from '../../lib/db';
+import { supabase } from '../../lib/supabase';
 
 const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
 import SectieSoort from './SectieSoort';
@@ -706,6 +708,52 @@ export default function NieuwPage() {
     };
   }, [isTerugvangst, form.ringnummer, records]);
 
+  // Nestonderzoek-tip: controleer of het ringnummer van een nestbezoek stamt
+  const [nestRingInfo, setNestRingInfo] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    async function lookup() {
+      const normalize = s => String(s || '').replace(/[\s.]/g, '').toUpperCase();
+      const nr = normalize(form.ringnummer);
+      if (nr.length < 5) { setNestRingInfo(null); return; }
+
+      // Zoek overeenkomende vangst(en) in eigen records
+      const matchingRecords = records.filter(r => r.ringnummer && normalize(r.ringnummer) === nr);
+      if (matchingRecords.length === 0) { setNestRingInfo(null); return; }
+
+      // Zoek nestring-koppeling
+      let nestringRecord = null;
+      for (const rec of matchingRecords) {
+        const entry = await db.nestring.where('vangst_id').equals(rec.id).first();
+        if (entry) { nestringRecord = entry; break; }
+      }
+      if (!nestringRecord || cancelled) { setNestRingInfo(null); return; }
+
+      // Volg de keten: nestbezoek → legsel → nest
+      const bezoek = await db.nestbezoek.get(nestringRecord.nestbezoek_id);
+      if (!bezoek || cancelled) { setNestRingInfo(null); return; }
+      const legsel = await db.legsel.get(bezoek.legsel_id);
+      if (!legsel || cancelled) { setNestRingInfo(null); return; }
+      const nest = await db.nest.get(legsel.nest_id);
+      if (!nest || cancelled) { setNestRingInfo(null); return; }
+
+      // Haal profiel van nestonderzoeker op (best-effort via Supabase)
+      let profiel = null;
+      try {
+        const { data } = await supabase
+          .from('profiles')
+          .select('ringer_naam, email, ringer_nummer')
+          .eq('id', nest.aangemaakt_door)
+          .single();
+        profiel = data;
+      } catch { /* offline of geen toegang: toon nest zonder profiel */ }
+
+      if (!cancelled) setNestRingInfo({ nest, profiel });
+    }
+    lookup();
+    return () => { cancelled = true; };
+  }, [form.ringnummer, records]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const toggleTerugvangst = useCallback(() => {
     setForm(prev => prev.metalenringinfo === 4
       ? { ...prev, metalenringinfo: 2, centrale: 'NLA', omstandigheden: '20' }
@@ -742,6 +790,7 @@ export default function NieuwPage() {
     resetRuikaart,
     isTerugvangst,
     terugvangstInfo,
+    nestRingInfo,
     toggleTerugvangst,
     autoFilledRingId,
     vogelnaamRef,

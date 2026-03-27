@@ -16,6 +16,7 @@ export default function SectieRinggegevens() {
     toggleSection,
     isTerugvangst,
     terugvangstInfo,
+    nestRingInfo,
     toggleTerugvangst,
     ringcentraleOptions,
     autoFilledRingId,
@@ -71,6 +72,24 @@ export default function SectieRinggegevens() {
                     <span className="terugvangst-label">{t('form_not_in_own')}</span>
                   </div>
                 )
+              )}
+              {nestRingInfo && (
+                <div className="nest-ring-tip">
+                  <span className="nest-ring-tip__label">{t('form_nest_ring_tip_label')}</span>
+                  <span>
+                    {t('form_nest_ring_tip_kast', { nr: nestRingInfo.nest.kastnummer })}
+                    {nestRingInfo.nest.omschrijving ? ` — ${nestRingInfo.nest.omschrijving}` : ''}
+                  </span>
+                  {nestRingInfo.profiel && (
+                    <span className="nest-ring-tip__eigenaar">
+                      {nestRingInfo.profiel.ringer_naam || ''}
+                      {nestRingInfo.profiel.email ? (
+                        <> · <a href={`mailto:${nestRingInfo.profiel.email}`} className="nest-ring-tip__mail">{nestRingInfo.profiel.email}</a></>
+                      ) : null}
+                      {nestRingInfo.profiel.ringer_nummer ? ` · #${nestRingInfo.profiel.ringer_nummer}` : ''}
+                    </span>
+                  )}
+                </div>
               )}
             </div>
           </div>

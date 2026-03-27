@@ -809,6 +809,8 @@
   "form_other_marks": "Andere merktekens",
   "form_own_bird": "Eigen vogel",
   "form_not_in_own": "Niet in eigen vangsten",
+  "form_nest_ring_tip_label": "🏠 Nestonderzoeksvogel",
+  "form_nest_ring_tip_kast": "Kast {{nr}}",
   "form_first_catch_date": "Eerste vangst:",
   "form_last_catch_date": "Laatste vangst:",
   "form_age_first_catch": "Leeftijd bij eerste vangst:",

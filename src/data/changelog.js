@@ -1,6 +1,19 @@
-export const VERSIE = '1.62.0';
+export const VERSIE = '1.63.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.63.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Feat: nestonderzoek-tip bij invoer ringnummer — toont kastnummer en contactgegevens van de nestonderzoeker",
+    ],
+    wijzigingen_en: [
+      "Feat: nest research tip on ring number entry — shows box number and contact details of nest researcher",
+    ],
+    wijzigingen_de: [
+      "Feat: Nestforschungs-Hinweis bei Ringnummerneingabe — zeigt Kastennummer und Kontaktdaten des Nestforschers",
+    ],
+  },
   {
     versie: '1.62.0',
     datum: '2026-03-27',

@@ -809,6 +809,8 @@
   "form_other_marks": "Andere Merkmale",
   "form_own_bird": "Eigener Vogel",
   "form_not_in_own": "Nicht in eigenen Fängen",
+  "form_nest_ring_tip_label": "🏠 Nestforschungsvogel",
+  "form_nest_ring_tip_kast": "Kasten {{nr}}",
   "form_first_catch_date": "Erstfang:",
   "form_last_catch_date": "Letzter Fang:",
   "form_age_first_catch": "Alter beim Erstfang:",

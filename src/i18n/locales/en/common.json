@@ -809,6 +809,8 @@
   "form_other_marks": "Other marks",
   "form_own_bird": "Own bird",
   "form_not_in_own": "Not in own catches",
+  "form_nest_ring_tip_label": "🏠 Nest research bird",
+  "form_nest_ring_tip_kast": "Box {{nr}}",
   "form_first_catch_date": "First catch:",
   "form_last_catch_date": "Last catch:",
   "form_age_first_catch": "Age at first catch:",
