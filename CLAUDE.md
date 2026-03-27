@@ -135,3 +135,4 @@ Toon gele waarschuwing bij waarde buiten range — blokkeer opslaan NIET.
 - Nederlandse variabelenamen voor domein-specifieke concepten (vangst, soort, ringnummer, rui)
 - Engelse namen voor technische concepten (state, handler, export, sync)
 - Bij elke commit: versienummer en changelog.js bijwerken
+- Na elke voltooide taak/prompt: altijd changelog.js bijwerken, committen én pushen naar GitHub — zonder uitzondering

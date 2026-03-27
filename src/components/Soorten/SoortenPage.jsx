@@ -9,6 +9,7 @@ import './SoortenPage.css';
 
 const EMPTY_FILTERS = {
   gevangen: false,
+  heeftFoto: false, geenFoto: false,
   nlIsLat: false, geenEuring: false,
   geenEn: false,  geenDe: false,
   geenFr: false,  geenEs: false,
@@ -26,6 +27,8 @@ export default function SoortenPage({ records }) {
 
   const FILTER_DEFS = [
     { key: 'gevangen',   label: t('species_filter_caught') },
+    { key: 'heeftFoto',  label: t('species_filter_heeft_foto') },
+    { key: 'geenFoto',   label: t('species_filter_geen_foto') },
     { key: 'nlIsLat',    label: t('species_filter_nl_is_lat') },
     { key: 'geenEuring', label: t('species_filter_no_euring') },
     { key: 'geenEn',     label: t('species_filter_no_en') },
@@ -69,6 +72,8 @@ export default function SoortenPage({ records }) {
     }
 
     if (filters.gevangen)   result = result.filter(s => (countPerSoort[s.naam_nl?.toLowerCase()] || 0) > 0);
+    if (filters.heeftFoto)  result = result.filter(s => !!s.foto);
+    if (filters.geenFoto)   result = result.filter(s => !s.foto);
     if (filters.nlIsLat)    result = result.filter(s => s.naam_nl === s.naam_lat);
     if (filters.geenEuring) result = result.filter(s => !euringLookup[s.naam_nl?.toLowerCase()]);
     if (filters.geenEn)     result = result.filter(s => !s.naam_en);

@@ -2,6 +2,16 @@
   padding-bottom: 20px;
 }
 
+.foto-tip {
+  margin: 0 16px 4px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
 /* Inline info-paneel onder Geslacht / Leeftijd velden */
 .info-panel {
   margin-top: 6px;
@@ -194,7 +204,8 @@
 }
 
 .suggestions li:hover,
-.suggestions li:active {
+.suggestions li:active,
+.suggestions li.active {
   background: var(--bg-secondary);
   color: var(--accent);
 }

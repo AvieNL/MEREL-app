@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
@@ -17,13 +18,21 @@ export default function SectieSoort() {
     euringCode,
     speciesInfo,
     suggestions,
+    activeIndex,
     vogelnaamRef,
     handleSpeciesInput,
     handleSpeciesFocus,
+    handleSpeciesKeyDown,
     selectSpecies,
     euringLookup,
     editRecord,
   } = useNieuwForm();
+
+  useEffect(() => {
+    if (activeIndex >= 0) {
+      document.getElementById(`suggestion-${activeIndex}`)?.scrollIntoView({ block: 'nearest' });
+    }
+  }, [activeIndex]);
 
   const TAAL_DISPLAY = {
     naam_nl: t('lang_nl'),
@@ -48,8 +57,11 @@ export default function SectieSoort() {
               value={vogelnaamDisplay}
               onChange={e => handleSpeciesInput(e.target.value)}
               onFocus={handleSpeciesFocus}
+              onKeyDown={handleSpeciesKeyDown}
               placeholder={t('form_bird_placeholder')}
               autoComplete="off"
+              aria-autocomplete="list"
+              aria-activedescendant={activeIndex >= 0 ? `suggestion-${activeIndex}` : undefined}
             />
             {suggestions.length > 0 && (
               <ul className="suggestions">
@@ -59,7 +71,10 @@ export default function SectieSoort() {
                   // Toon matchedName alleen als de overeenkomst in een andere taal was dan de weergavetaal
                   const showSub = s.matchedName && s.matchedField !== 'naam_' + i18n.language;
                   return (
-                    <li key={s.naam_nl + (s.matchedField || '')} onClick={() => selectSpecies(s.naam_nl)}>
+                    <li key={s.naam_nl + (s.matchedField || '')}
+                      id={`suggestion-${suggestions.indexOf(s)}`}
+                      className={activeIndex === suggestions.indexOf(s) ? 'active' : ''}
+                      onMouseDown={() => selectSpecies(s.naam_nl)}>
                       <div className="suggestion-content">
                         <span className="suggestion-name">
                           {primNaam}{code && <span className="suggestion-euring"> ({code})</span>}

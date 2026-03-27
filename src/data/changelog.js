@@ -1,6 +1,25 @@
-export const VERSIE = '1.53.0';
+export const VERSIE = '1.54.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.54.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      'Feat: pijltjestoetsen + Enter/Tab navigatie in vogelnaaminvoer',
+      'Feat: fototip bij soorten zonder foto in nieuwe-vangst formulier',
+      'Feat: filter op foto aanwezig/afwezig in soortenbrowser',
+    ],
+    wijzigingen_en: [
+      'Feat: arrow key + Enter/Tab navigation in bird name input',
+      'Feat: photo tip for species without photo in new catch form',
+      'Feat: filter by photo present/absent in species browser',
+    ],
+    wijzigingen_de: [
+      'Feat: Pfeiltasten + Enter/Tab-Navigation im Vogelname-Eingabefeld',
+      'Feat: Fototipp für Arten ohne Foto im neuen Fang-Formular',
+      'Feat: Filter nach Foto vorhanden/nicht vorhanden im Artenbrowser',
+    ],
+  },
   {
     versie: '1.53.0',
     datum: '2026-03-27',

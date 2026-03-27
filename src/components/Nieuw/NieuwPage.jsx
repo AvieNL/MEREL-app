@@ -211,6 +211,7 @@ export default function NieuwPage() {
   const [aiFotos, setAiFotos] = useState([]);
   const [aiResultaat, setAiResultaat] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const [saved, setSaved] = useState(false);
   const [vogelnaamDisplay, setVogelnaamDisplay] = useState(editRecord?.vogelnaam || '');
   const [ruikaart, setRuikaart] = useState(Array(RUIKAART_SLAGEN).fill(''));
@@ -430,7 +431,29 @@ export default function NieuwPage() {
   const selectSpecies = useCallback((name) => {
     update('vogelnaam', name);
     setSuggestions([]);
+    setActiveIndex(-1);
   }, [update]);
+
+  useEffect(() => { setActiveIndex(-1); }, [suggestions]);
+
+  function handleSpeciesKeyDown(e) {
+    if (!suggestions.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex(prev => Math.min(prev + 1, suggestions.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex(prev => Math.max(prev - 1, 0));
+    } else if (e.key === 'Enter' || e.key === 'Tab') {
+      const idx = activeIndex >= 0 ? activeIndex : 0;
+      if (suggestions[idx]) {
+        if (e.key === 'Enter') e.preventDefault();
+        selectSpecies(suggestions[idx].naam_nl);
+      }
+    } else if (e.key === 'Escape') {
+      setSuggestions([]);
+    }
+  }
 
   const toggleSection = useCallback((key) => {
     setSections(prev => ({ ...prev, [key]: !prev[key] }));
@@ -720,10 +743,12 @@ export default function NieuwPage() {
     vogelnaamRef,
     programmaticFocus,
     suggestions,
+    activeIndex,
     recentSpecies,
     recentSet,
     handleSpeciesInput,
     handleSpeciesFocus,
+    handleSpeciesKeyDown,
     selectSpecies,
     ringcentraleOptions,
     cloacaWarning,
@@ -779,6 +804,11 @@ export default function NieuwPage() {
           )}
 
           <SectieSoort />
+          {speciesInfo && !speciesInfo.foto && (
+            <div className="foto-tip">
+              📷 {t('form_foto_tip', { soort: vogelnaamDisplay || speciesInfo.naam_nl })}
+            </div>
+          )}
           <SectieProject />
           <SectieRinggegevens />
           <SectieAIAnalyse />
