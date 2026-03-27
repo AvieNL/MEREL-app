@@ -113,6 +113,16 @@ export default function PulliRingenPage() {
     }
   }, [bezoek?.aantal_pulli]);
 
+  const bestaandeMatch = useMemo(() => {
+    const norm = normRing(form.ringnummer);
+    if (norm.length < 5) return null;
+    const match = records.find(r => normRing(r.ringnummer) === norm);
+    if (!match) return null;
+    if (bezoekRingen?.some(r => r.vangst_id === match.id)) return null;
+    if (opgeslagen.some(p => p.id === match.id)) return null;
+    return match;
+  }, [form.ringnummer, records, bezoekRingen, opgeslagen]);
+
   if (!bezoek || !legsel || !nest) {
     return (
       <div className="page">
@@ -200,16 +210,6 @@ export default function PulliRingenPage() {
       tijd:             tijdReset,
     }));
   }
-
-  const bestaandeMatch = useMemo(() => {
-    const norm = normRing(form.ringnummer);
-    if (norm.length < 5) return null;
-    const match = records.find(r => normRing(r.ringnummer) === norm);
-    if (!match) return null;
-    if (bezoekRingen?.some(r => r.vangst_id === match.id)) return null;
-    if (opgeslagen.some(p => p.id === match.id)) return null;
-    return match;
-  }, [form.ringnummer, records, bezoekRingen, opgeslagen]);
 
   async function handleKoppelen() {
     if (!bestaandeMatch) return;
