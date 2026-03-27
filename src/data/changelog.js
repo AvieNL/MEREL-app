@@ -1,6 +1,19 @@
-export const VERSIE = '1.63.2';
+export const VERSIE = '1.63.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.63.3',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Feat: versienummer zichtbaar onder de syncstatus in de header",
+    ],
+    wijzigingen_en: [
+      "Feat: version number visible below sync status in header",
+    ],
+    wijzigingen_de: [
+      "Feat: Versionsnummer unter dem Sync-Status im Header sichtbar",
+    ],
+  },
   {
     versie: '1.63.2',
     datum: '2026-03-27',

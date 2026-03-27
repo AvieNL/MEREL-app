@@ -10,6 +10,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { useRecords } from '../../hooks/useRecords';
 import { useNestData } from '../../hooks/useNestData';
 import SyncIndicator from '../Sync/SyncIndicator';
+import { VERSIE } from '../../data/changelog';
 import './Header.css';
 
 export default function Header({ onSwitchModule, activeModule }) {
@@ -171,6 +172,7 @@ export default function Header({ onSwitchModule, activeModule }) {
           )}
           <div className="header-sync">
             <SyncIndicator />
+            <span className="header-versie">v{VERSIE}</span>
           </div>
         </div>
         <div className="header-right">

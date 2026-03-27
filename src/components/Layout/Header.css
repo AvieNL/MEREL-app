@@ -285,7 +285,18 @@
 .header-sync {
   min-height: 44px;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+
+.header-versie {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+  line-height: 1;
+  letter-spacing: 0.02em;
 }
 
 /* Rol-simulator */
