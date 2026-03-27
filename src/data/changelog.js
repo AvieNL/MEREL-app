@@ -1,6 +1,19 @@
-export const VERSIE = '1.54.0';
+export const VERSIE = '1.55.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.55.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      'Fix: fototip verplaatst naar binnen de soort-sectie zodat hij altijd zichtbaar is',
+    ],
+    wijzigingen_en: [
+      'Fix: photo tip moved inside species section so it is always visible',
+    ],
+    wijzigingen_de: [
+      'Fix: Fototipp innerhalb der Artsektion verschoben, damit er immer sichtbar ist',
+    ],
+  },
   {
     versie: '1.54.0',
     datum: '2026-03-27',

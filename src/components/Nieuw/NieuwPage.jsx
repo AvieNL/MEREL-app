@@ -804,11 +804,6 @@ export default function NieuwPage() {
           )}
 
           <SectieSoort />
-          {speciesInfo && !speciesInfo.foto && (
-            <div className="foto-tip">
-              📷 {t('form_foto_tip', { soort: vogelnaamDisplay || speciesInfo.naam_nl })}
-            </div>
-          )}
           <SectieProject />
           <SectieRinggegevens />
           <SectieAIAnalyse />

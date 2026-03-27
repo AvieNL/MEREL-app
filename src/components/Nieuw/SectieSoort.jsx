@@ -93,6 +93,13 @@ export default function SectieSoort() {
             )}
           </div>
 
+          {/* Foto-tip: soort zonder foto */}
+          {speciesInfo && !speciesInfo.foto && (
+            <div className="foto-tip">
+              📷 {t('form_foto_tip', { soort: vogelnaamDisplay || speciesInfo.naam_nl })}
+            </div>
+          )}
+
           {/* Soort-info paneel */}
           {speciesInfo && settings?.hulpModus !== 'basis' && (
             <div className="soort-info-panel">
