@@ -25,7 +25,6 @@ import { useAddNestring } from '../../hooks/useAddNestring';
 import { useModuleSwitch } from '../../App';
 import { NieuwFormContext } from './NieuwFormContext';
 import { db } from '../../lib/db';
-import { supabase } from '../../lib/supabase';
 
 const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
 import SectieSoort from './SectieSoort';
@@ -737,18 +736,7 @@ export default function NieuwPage() {
       const nest = await db.nest.get(legsel.nest_id);
       if (!nest || cancelled) { setNestRingInfo(null); return; }
 
-      // Haal profiel van nestonderzoeker op (best-effort via Supabase)
-      let profiel = null;
-      try {
-        const { data } = await supabase
-          .from('profiles')
-          .select('ringer_naam, email, ringer_nummer')
-          .eq('id', nest.aangemaakt_door)
-          .single();
-        profiel = data;
-      } catch { /* offline of geen toegang: toon nest zonder profiel */ }
-
-      if (!cancelled) setNestRingInfo({ nest, profiel });
+      if (!cancelled) setNestRingInfo({ nest });
     }
     lookup();
     return () => { cancelled = true; };

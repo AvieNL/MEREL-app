@@ -1,17 +1,17 @@
-export const VERSIE = '1.63.0';
+export const VERSIE = '1.63.1';
 
 export const CHANGELOG = [
   {
-    versie: '1.63.0',
+    versie: '1.63.1',
     datum: '2026-03-27',
     wijzigingen: [
-      "Feat: nestonderzoek-tip bij invoer ringnummer — toont kastnummer en contactgegevens van de nestonderzoeker",
+      "Fix: nestonderzoek-tip toont eigenaar/contactpersoon van de nestkaart (naam, e-mail, telefoon) i.p.v. de ringerprofiel",
     ],
     wijzigingen_en: [
-      "Feat: nest research tip on ring number entry — shows box number and contact details of nest researcher",
+      "Fix: nest research tip now shows nest box owner/contact (name, email, phone) instead of researcher profile",
     ],
     wijzigingen_de: [
-      "Feat: Nestforschungs-Hinweis bei Ringnummerneingabe — zeigt Kastennummer und Kontaktdaten des Nestforschers",
+      "Fix: Nestforschungs-Hinweis zeigt jetzt Kastenbesitzer/Kontakt (Name, E-Mail, Telefon) statt Forscherprofil",
     ],
   },
   {

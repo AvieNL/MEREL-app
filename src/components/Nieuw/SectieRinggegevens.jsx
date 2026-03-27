@@ -80,13 +80,15 @@ export default function SectieRinggegevens() {
                     {t('form_nest_ring_tip_kast', { nr: nestRingInfo.nest.kastnummer })}
                     {nestRingInfo.nest.omschrijving ? ` — ${nestRingInfo.nest.omschrijving}` : ''}
                   </span>
-                  {nestRingInfo.profiel && (
+                  {nestRingInfo.nest.eigenaar_naam && (
                     <span className="nest-ring-tip__eigenaar">
-                      {nestRingInfo.profiel.ringer_naam || ''}
-                      {nestRingInfo.profiel.email ? (
-                        <> · <a href={`mailto:${nestRingInfo.profiel.email}`} className="nest-ring-tip__mail">{nestRingInfo.profiel.email}</a></>
+                      {nestRingInfo.nest.eigenaar_naam}
+                      {nestRingInfo.nest.eigenaar_email ? (
+                        <> · <a href={`mailto:${nestRingInfo.nest.eigenaar_email}`} className="nest-ring-tip__mail">{nestRingInfo.nest.eigenaar_email}</a></>
                       ) : null}
-                      {nestRingInfo.profiel.ringer_nummer ? ` · #${nestRingInfo.profiel.ringer_nummer}` : ''}
+                      {nestRingInfo.nest.eigenaar_telefoon ? (
+                        <> · <a href={`tel:${nestRingInfo.nest.eigenaar_telefoon}`} className="nest-ring-tip__mail">{nestRingInfo.nest.eigenaar_telefoon}</a></>
+                      ) : null}
                     </span>
                   )}
                 </div>
