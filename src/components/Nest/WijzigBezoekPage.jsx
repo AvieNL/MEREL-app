@@ -6,6 +6,7 @@ import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { berekenVervolgbezoekInfo, isAfsluitendStadium } from '../../utils/nestSuggestie';
 import PulliRingenForm from './PulliRingenForm';
+import { IconRing } from '../shared/Icons';
 import NestSoortInfoPanel from './NestSoortInfoPanel';
 import NestSoortPicker from './NestSoortPicker';
 import {
@@ -354,6 +355,8 @@ export default function WijzigBezoekPage() {
         const [y, m, d] = suggestie.split('-');
         const datumFormatted = `${d}-${m}-${y}`;
         const dagenAf = Math.round((new Date(suggestie) - new Date(form.datum)) / 86400000);
+        const eenMaandGeleden = new Date(); eenMaandGeleden.setMonth(eenMaandGeleden.getMonth() - 1);
+        const isVerleden = new Date(suggestie) < eenMaandGeleden;
         const typeKeys = {
           ringen: 'nest_suggestie_ringen', nacontrole: 'nest_suggestie_nacontrole',
           eileg: 'nest_suggestie_eileg', jongen: 'nest_suggestie_jongen',
@@ -363,10 +366,10 @@ export default function WijzigBezoekPage() {
         return (
           <div className={`vervolgbezoek-suggestie${type === 'ringen' ? ' vervolgbezoek-suggestie--ringen' : ''}`}>
             <span className="vervolgbezoek-suggestie__label">
-              {type === 'ringen' ? '🔖' : '🗓'} {t(typeKeys[type] ?? 'nest_suggestie_check')}
+              {type === 'ringen' ? <IconRing size={13} /> : '🗓'} {t(typeKeys[type] ?? 'nest_suggestie_check')}
             </span>
             <strong className="vervolgbezoek-suggestie__datum">{datumFormatted}</strong>
-            <span className="vervolgbezoek-suggestie__dagen">{t('nest_suggestie_over_dagen', { n: dagenAf })}</span>
+            {!isVerleden && <span className="vervolgbezoek-suggestie__dagen">{t('nest_suggestie_over_dagen', { n: dagenAf })}</span>}
           </div>
         );
       })()}

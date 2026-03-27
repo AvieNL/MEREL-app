@@ -1,6 +1,34 @@
-export const VERSIE = '1.52.2';
+export const VERSIE = '1.53.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.53.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      'Feat: pulli-ringenformulier toont bestaande ringen bij bewerken bezoek',
+      'Feat: ringen sorteerbaar en inline bewerkbaar (ringnummer, geslacht, biometrie)',
+      'Feat: vangststijd overgenomen van vorige pullus, reset na middernacht',
+      'Feat: ring-SVG-icoon vervangt 🔖 emoji in gehele nestmodule',
+      'Fix: biometrie correct overgenomen in bewerkformulier (komma-decimalen)',
+      'Fix: vervolgbezoeksuggestie verbergt "over X dagen" na meer dan een maand',
+    ],
+    wijzigingen_en: [
+      'Feat: pulli ringing form shows existing rings when editing a visit',
+      'Feat: rings sortable and inline editable (ring number, sex, biometrics)',
+      'Feat: catch time carried over from previous pullus, resets after midnight',
+      'Feat: ring SVG icon replaces 🔖 emoji throughout nest module',
+      'Fix: biometrics correctly populated in edit form (comma decimals)',
+      'Fix: follow-up visit suggestion hides "in X days" after more than a month',
+    ],
+    wijzigingen_de: [
+      'Feat: Pulli-Beringungsformular zeigt vorhandene Ringe beim Bearbeiten eines Besuchs',
+      'Feat: Ringe sortierbar und inline bearbeitbar (Ringnummer, Geschlecht, Biometrie)',
+      'Feat: Fangzeit von vorherigem Pullus übernommen, Reset nach Mitternacht',
+      'Feat: Ring-SVG-Symbol ersetzt 🔖-Emoji im gesamten Nestmodul',
+      'Fix: Biometrie korrekt in Bearbeitungsformular übernommen (Komma-Dezimalzahlen)',
+      'Fix: Folgebesuchsvorschlag blendet "in X Tagen" nach mehr als einem Monat aus',
+    ],
+  },
   {
     versie: '1.52.2',
     datum: '2026-03-25',

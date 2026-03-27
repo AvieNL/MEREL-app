@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNestData } from '../../hooks/useNestData';
@@ -9,6 +9,7 @@ import { useRingStrengen } from '../../hooks/useRingStrengen';
 import { formatDatum } from '../../utils/nestPlanning';
 import { NAUWK_LEEFTIJD_OPTIONS } from '../Nieuw/NieuwPage.constants';
 import './PulliRingenPage.css';
+import { IconRing } from '../shared/Icons';
 
 const N_FRACTIE = {
   'N+': null, 'N0': 0.00, 'N1': 0.10, 'N2': 0.20, 'N3': 0.30,
@@ -65,6 +66,7 @@ export default function PulliRingenPage() {
 
   const [form, setForm] = useState({ ...LEEG_FORM, tijd: huidigTijd() });
   const [fouten, setFouten] = useState({});
+  const lastSavedDatum = useRef(null);
   const [opgeslagen, setOpgeslagen] = useState([]);
 
   const bezoek = bezoeken.find(b => b.id === bezoekId);
@@ -178,12 +180,16 @@ export default function PulliRingenPage() {
 
     setOpgeslagen(prev => [...prev, { ...form, id: vangst.id }]);
 
+    const vandaag = new Date().toDateString();
+    const tijdReset = lastSavedDatum.current !== vandaag ? huidigTijd() : form.tijd;
+    lastSavedDatum.current = vandaag;
+
     // Reset voor volgende pullus; ringnummer via useEffect zodra ringstreng bijgewerkt is
     setForm(prev => ({
       ...LEEG_FORM,
       ringnummer:       '',
       broedselgrootte:  prev.broedselgrootte,
-      tijd:             huidigTijd(),
+      tijd:             tijdReset,
     }));
   }
 
@@ -197,7 +203,7 @@ export default function PulliRingenPage() {
     <div className="page pulli-ringen-page">
       <div className="nieuw-topbar">
         <button className="btn-secondary page-back" onClick={handleKlaar}>{t('btn_back')}</button>
-        <span className="nieuw-topbar-titel">🔖 {t('pulli_ringen_titel')} — {nestLabel}</span>
+        <span className="nieuw-topbar-titel"><IconRing size={13} /> {t('pulli_ringen_titel')} — {nestLabel}</span>
       </div>
 
       {/* ── Context ── */}

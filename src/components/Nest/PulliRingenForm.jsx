@@ -1,11 +1,14 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../../lib/db';
 import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useRecords } from '../../hooks/useRecords';
 import { useSettings } from '../../hooks/useSettings';
 import { useRingStrengen } from '../../hooks/useRingStrengen';
 import { NAUWK_LEEFTIJD_OPTIONS } from '../Nieuw/NieuwPage.constants';
+import { IconRing } from '../shared/Icons';
 import './PulliRingenPage.css';
 
 const N_FRACTIE = {
@@ -53,8 +56,12 @@ const LEEG_FORM = {
 
 export default function PulliRingenForm({ bezoekId }) {
   const { t } = useTranslation();
-  const { bezoeken, legsels, nesten, addNestring } = useNestData();
-  const { addRecord } = useRecords();
+  const { bezoeken, legsels, nesten, addNestring, updateNestring } = useNestData();
+  const bezoekRingen = useLiveQuery(
+    () => db.nestring.where('nestbezoek_id').equals(bezoekId).toArray(),
+    [bezoekId]
+  ); // undefined = nog aan het laden
+  const { addRecord, updateRecord } = useRecords();
   const { settings } = useSettings();
   const { ringStrengen, advanceHuidige } = useRingStrengen();
   const species = useSpeciesRef();
@@ -62,6 +69,11 @@ export default function PulliRingenForm({ bezoekId }) {
   const [form, setForm] = useState({ ...LEEG_FORM, tijd: huidigTijd() });
   const [fouten, setFouten] = useState({});
   const [opgeslagen, setOpgeslagen] = useState([]);
+  const [klaar, setKlaar] = useState(false);
+  const [bewerkId, setBewerkId] = useState(null);
+  const [bewerkForm, setBewerkForm] = useState({});
+  const geinitialiseerd = useRef(false);
+  const lastSavedDatum = useRef(null);
 
   const bezoek = bezoeken.find(b => b.id === bezoekId);
   const legsel = bezoek ? legsels.find(l => l.id === bezoek.legsel_id) : null;
@@ -95,6 +107,28 @@ export default function PulliRingenForm({ bezoekId }) {
       });
     }
   }, [bezoek?.aantal_pulli]);
+
+  // Laad bestaande nestringen eenmalig via directe Dexie-lookup
+  useEffect(() => {
+    if (geinitialiseerd.current || bezoekRingen === undefined) return;
+    geinitialiseerd.current = true;
+    if (bezoekRingen.length === 0) return;
+
+    Promise.all(bezoekRingen.map(async r => {
+      const vangst = await db.vangsten.get(r.vangst_id);
+      return {
+        id: r.vangst_id,
+        ringnummer: r.ringnummer,
+        geslacht: r.sexe || 'U',
+        vleugel: vangst?.vleugel || '',
+        gewicht: vangst?.gewicht || '',
+        tarsus: vangst?.tarsus_lengte || '',
+      };
+    })).then(geladen => {
+      setOpgeslagen(geladen);
+      setKlaar(true);
+    });
+  }, [bezoekRingen]);
 
   function update(key, value) {
     setForm(prev => ({ ...prev, [key]: value }));
@@ -161,21 +195,112 @@ export default function PulliRingenForm({ bezoekId }) {
 
     setOpgeslagen(prev => [...prev, { ...form, id: vangst.id }]);
 
+    const vandaag = new Date().toDateString();
+    const tijdReset = lastSavedDatum.current !== vandaag ? huidigTijd() : form.tijd;
+    lastSavedDatum.current = vandaag;
+
     setForm(prev => ({
       ...LEEG_FORM,
-      ringnummer:      '',
-      broedselgrootte: prev.broedselgrootte,
+      ringnummer:         '',
+      broedselgrootte:    prev.broedselgrootte,
       nauwk_pul_leeftijd: prev.nauwk_pul_leeftijd,
-      tijd:            huidigTijd(),
+      tijd:               tijdReset,
     }));
   }
 
   if (!bezoek || !legsel || !nest) return null;
 
+  const gesorteerd = [...opgeslagen].sort((a, b) => a.ringnummer.localeCompare(b.ringnummer));
+
+  function normDecimaal(s) { return String(s || '').replace(',', '.'); }
+
+  async function handleBewerkOpslaan(p) {
+    const nestring = (bezoekRingen ?? []).find(r => r.vangst_id === p.id);
+    await updateRecord(p.id, {
+      ringnummer:    bewerkForm.ringnummer.trim(),
+      geslacht:      bewerkForm.geslacht,
+      vleugel:       normDecimaal(bewerkForm.vleugel),
+      gewicht:       normDecimaal(bewerkForm.gewicht),
+      tarsus_lengte: normDecimaal(bewerkForm.tarsus),
+    });
+    if (nestring) {
+      await updateNestring(nestring.id, {
+        ringnummer: bewerkForm.ringnummer.trim(),
+        sexe:       bewerkForm.geslacht,
+      });
+    }
+    setOpgeslagen(prev => prev.map(x => x.id === p.id ? { ...x, ...bewerkForm, ringnummer: bewerkForm.ringnummer.trim() } : x));
+    setBewerkId(null);
+  }
+
+  if (klaar) {
+    return (
+      <div className="pulli-ringen-inline">
+        <div className="pulli-ringen-inline__header">
+          <IconRing size={13} /> {t('pulli_geringd', { count: opgeslagen.length })}
+        </div>
+        {gesorteerd.map((p, i) => bewerkId === p.id ? (
+          <div key={p.id} className="pulli-bewerk-item">
+            <div className="pulli-bewerk-item__rij">
+              <div className="form-group">
+                <label>{t('pulli_ringnummer')}</label>
+                <input type="text" value={bewerkForm.ringnummer}
+                  onChange={e => setBewerkForm(prev => ({ ...prev, ringnummer: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>{t('pulli_geslacht')}</label>
+                <select value={bewerkForm.geslacht} onChange={e => setBewerkForm(prev => ({ ...prev, geslacht: e.target.value }))}>
+                  <option value="U">{t('pulli_geslacht_u')}</option>
+                  <option value="M">{t('pulli_geslacht_m')}</option>
+                  <option value="F">{t('pulli_geslacht_f')}</option>
+                </select>
+              </div>
+            </div>
+            <div className="pulli-bewerk-item__rij">
+              <div className="form-group">
+                <label>{t('pulli_vleugel')}</label>
+                <input type="text" inputMode="decimal" value={bewerkForm.vleugel}
+                  onChange={e => setBewerkForm(prev => ({ ...prev, vleugel: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>{t('pulli_gewicht')}</label>
+                <input type="text" inputMode="decimal" value={bewerkForm.gewicht}
+                  onChange={e => setBewerkForm(prev => ({ ...prev, gewicht: e.target.value }))} />
+              </div>
+              <div className="form-group">
+                <label>{t('pulli_tarsus')}</label>
+                <input type="text" inputMode="decimal" value={bewerkForm.tarsus}
+                  onChange={e => setBewerkForm(prev => ({ ...prev, tarsus: e.target.value }))} />
+              </div>
+            </div>
+            <div className="pulli-bewerk-item__acties">
+              <button type="button" className="btn-primary" onClick={() => handleBewerkOpslaan(p)}>{t('btn_save')}</button>
+              <button type="button" className="btn-secondary" onClick={() => setBewerkId(null)}>{t('btn_cancel')}</button>
+            </div>
+          </div>
+        ) : (
+          <div key={p.id} className="pulli-opgeslagen__item pulli-opgeslagen__item--klikbaar"
+            onClick={() => { setBewerkId(p.id); setBewerkForm({ ringnummer: p.ringnummer, geslacht: p.geslacht || 'U', vleugel: p.vleugel || '', gewicht: p.gewicht || '', tarsus: p.tarsus || '' }); }}>
+            <span className="pulli-opgeslagen__nr">{i + 1}.</span>
+            <span className="pulli-opgeslagen__ring">{p.ringnummer}</span>
+            {p.geslacht && p.geslacht !== 'U' && <span className="pulli-opgeslagen__meta">{p.geslacht}</span>}
+            {p.vleugel && <span className="pulli-opgeslagen__meta">{p.vleugel} mm</span>}
+            {p.gewicht && <span className="pulli-opgeslagen__meta">{p.gewicht} g</span>}
+            {p.tarsus && <span className="pulli-opgeslagen__meta">t: {p.tarsus} mm</span>}
+            <span className="pulli-opgeslagen__edit-hint">✎</span>
+          </div>
+        ))}
+        <button type="button" className="pulli-toevoegen-link" onClick={() => setKlaar(false)}>
+          {t('pulli_btn_toevoegen')}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="pulli-ringen-inline">
       <div className="pulli-ringen-inline__header">
-        🔖 {t('pulli_ringen_titel')}
+        <IconRing size={13} /> {t('pulli_ringen_titel')}
         {passendeRingstreng && (
           <span className="pulli-ringen-inline__streng">
             maat {passendeRingstreng.ringmaat} — {passendeRingstreng.huidige}
@@ -281,6 +406,9 @@ export default function PulliRingenForm({ bezoekId }) {
         <div className="pulli-form__acties">
           <button className="btn-primary" type="button" onClick={handleOpslaan}>
             + {t('pulli_btn_volgende')}
+          </button>
+          <button className="btn-secondary" type="button" onClick={() => setKlaar(true)}>
+            {opgeslagen.length > 0 ? t('pulli_btn_klaar', { count: opgeslagen.length }) : t('pulli_btn_klaar_leeg')}
           </button>
         </div>
       </div>

@@ -531,6 +531,7 @@
   "pulli_btn_volgende": "Next pullus",
   "pulli_btn_klaar": "Done ({{count}} ringed)",
   "pulli_btn_klaar_leeg": "Done",
+  "pulli_btn_toevoegen": "Add another pullus",
   "pulli_ringstreng": "Ring series",
   "pulli_tijd": "Time",
   "pulli_broedselgrootte": "Brood size",

@@ -1,3 +1,18 @@
+export function IconRing({ size = 14 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+      aria-hidden="true">
+      {/* Buitenste ring */}
+      <circle cx="12" cy="12" r="9" />
+      {/* Binnenste opening */}
+      <circle cx="12" cy="12" r="5" />
+      {/* Kleine inkeping bovenaan — ring kan open */}
+      <path d="M12 3 L12 1" strokeWidth="2.5" stroke="currentColor" />
+    </svg>
+  );
+}
+
 export function IconFlag({ size = 12 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none"

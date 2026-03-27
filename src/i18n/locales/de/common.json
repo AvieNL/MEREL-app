@@ -531,6 +531,7 @@
   "pulli_btn_volgende": "Nächster Pullus",
   "pulli_btn_klaar": "Fertig ({{count}} beringt)",
   "pulli_btn_klaar_leeg": "Fertig",
+  "pulli_btn_toevoegen": "Weiteren Pullus hinzufügen",
   "pulli_ringstreng": "Ringserie",
   "pulli_tijd": "Uhrzeit",
   "pulli_broedselgrootte": "Brutgröße",

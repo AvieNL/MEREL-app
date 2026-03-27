@@ -6,6 +6,7 @@ import { useNestData } from '../../hooks/useNestData';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { berekenVervolgbezoekInfo, isAfsluitendStadium } from '../../utils/nestSuggestie';
 import NestSoortInfoPanel from './NestSoortInfoPanel';
+import { IconRing } from '../shared/Icons';
 import NestSoortPicker from './NestSoortPicker';
 import {
   BETROUWB_DATUM_CODES, BETROUWB_AANTAL_CODES, BETROUWB_DAGEN_CODES,
@@ -563,7 +564,7 @@ export default function NieuwBezoekPage() {
         const datumFormatted = `${d}-${m}-${y}`;
         const dagenAf = Math.round((new Date(suggestie) - new Date(vandaag())) / 86400000);
         const typeIcons = {
-          ringen:     '🔖',
+          ringen:     null,
           nacontrole: '🗓',
           eileg:      '🗓',
           jongen:     '🗓',
@@ -580,10 +581,11 @@ export default function NieuwBezoekPage() {
         };
         const type = suggestieInfo?.type ?? 'check';
         const icon = typeIcons[type] ?? '🗓';
-        const labelStr = `${icon} ${t(typeKeys[type] ?? 'nest_suggestie_check')}`;
         return (
           <div className={`vervolgbezoek-suggestie${type === 'ringen' ? ' vervolgbezoek-suggestie--ringen' : ''}`}>
-            <span className="vervolgbezoek-suggestie__label">{labelStr}</span>
+            <span className="vervolgbezoek-suggestie__label">
+              {type === 'ringen' ? <IconRing size={13} /> : icon} {t(typeKeys[type] ?? 'nest_suggestie_check')}
+            </span>
             <strong className="vervolgbezoek-suggestie__datum">{datumFormatted}</strong>
             <span className="vervolgbezoek-suggestie__dagen">{t('nest_suggestie_over_dagen', { n: dagenAf })}</span>
           </div>

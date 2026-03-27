@@ -200,6 +200,14 @@ export function useNestData() {
     await addToQueue('nestring', 'nest_delete', { id });
   }, [addToQueue]);
 
+  const updateNestring = useCallback(async (id, updates) => {
+    const existing = await db.nestring.get(id);
+    if (!existing) return;
+    const updated = { ...existing, ...updates, updated_at: new Date().toISOString() };
+    await db.nestring.put(updated);
+    await addToQueue('nestring', 'upsert', updated);
+  }, [addToQueue]);
+
   return {
     nesten,
     deletedNesten,
@@ -220,5 +228,6 @@ export function useNestData() {
     permanentDeleteNest,
     deleteBezoek,
     deleteNestring,
+    updateNestring,
   };
 }
