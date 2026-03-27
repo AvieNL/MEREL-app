@@ -1,6 +1,19 @@
-export const VERSIE = '1.61.0';
+export const VERSIE = '1.61.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.61.1',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Fix: crash op ringpagina (React hook na early return)",
+    ],
+    wijzigingen_en: [
+      "Fix: crash on ringing page (React hook after early return)",
+    ],
+    wijzigingen_de: [
+      "Fix: Absturz auf Beringungsseite (React-Hook nach Early Return)",
+    ],
+  },
   {
     versie: '1.61.0',
     datum: '2026-03-27',
