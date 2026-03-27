@@ -1,6 +1,19 @@
-export const VERSIE = '1.61.3';
+export const VERSIE = '1.62.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.62.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Fix: stadiumlabels in nestdetail tonen nu correcte beschrijvingen (N6 = slagpennen half volgroeid, P0 = geen ouders aanwezig, etc.)",
+    ],
+    wijzigingen_en: [
+      "Fix: stadium labels in nest detail now show correct descriptions (N6 = half-grown flight feathers, P0 = no parents present, etc.)",
+    ],
+    wijzigingen_de: [
+      "Fix: Stadiumbezeichnungen im Nestdetail zeigen nun korrekte Beschreibungen (N6 = Schwungfedern halb gewachsen, P0 = Keine Eltern anwesend, usw.)",
+    ],
+  },
   {
     versie: '1.61.3',
     datum: '2026-03-27',
