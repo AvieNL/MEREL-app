@@ -24,7 +24,7 @@ export default function NestDetailPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
-  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteLegsel, deleteBezoek, updateNest } = useNestData();
+  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteLegsel, deleteBezoek, deleteNestring, updateNest } = useNestData();
   const { records } = useRecords();
   const switchModule = useModuleSwitch();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
@@ -137,6 +137,7 @@ export default function NestDetailPage() {
             canNestDelete={canNestDelete}
             deleteLegsel={deleteLegsel}
             deleteBezoek={deleteBezoek}
+            deleteNestring={deleteNestring}
             records={records}
             navigate={navigate}
             switchModule={switchModule}
@@ -243,9 +244,10 @@ function NestFotoStrip({ nest, canNestEdit, updateNest }) {
 }
 
 
-function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, canNestDelete, deleteLegsel, deleteBezoek, records, navigate, switchModule, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, canNestDelete, deleteLegsel, deleteBezoek, deleteNestring, records, navigate, switchModule, t }) {
   const [deleteBezoekId, setDeleteBezoekId] = useState(null);
   const [deleteLegselBevestig, setDeleteLegselBevestig] = useState(false);
+  const [deleteNestringId, setDeleteNestringId] = useState(null);
   const legselBezoeken = bezoeken
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
@@ -376,22 +378,47 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                   )}
                 </div>
                 {bezoekRingen.length > 0 && (
-                  <p className="bezoek-item__ringen">
-                    <span className="bezoek-item__ringen-label">{t('nest_geringd_label')}: </span>
-                    {bezoekRingen.map((r, i) => {
+                  <div className="bezoek-item__ringen-blok">
+                    <span className="bezoek-item__ringen-label">{t('nest_geringd_label')}:</span>
+                    {bezoekRingen.map((r) => {
                       const vangst = records?.find(v => v.id === r.vangst_id);
                       const nr = r.ringnummer?.replace(/\./g, '') || t('nest_ring_no_number');
                       return (
-                        <span key={r.id}>
-                          {i > 0 && <span className="bezoek-item__ringen-sep">, </span>}
-                          {vangst
-                            ? <button className="bezoek-item__ring-link" type="button" onClick={e => { e.stopPropagation(); switchModule('ring'); navigate('/records', { state: { openId: vangst.id, ringnummer: (vangst.ringnummer || '').replace(/\./g, '') } }); }}>{nr}</button>
-                            : <span className="bezoek-item__ring-orphan">{nr}</span>
-                          }
+                        <span key={r.id} className="bezoek-item__ring-rij">
+                          {deleteNestringId === r.id ? (
+                            <span className="bezoek-item__ring-confirm">
+                              <span>{t('nest_nestring_delete_confirm', { nr })}</span>
+                              <button type="button" className="btn-danger btn-xs"
+                                onClick={async () => { await deleteNestring(r.id); setDeleteNestringId(null); }}>
+                                {t('btn_delete')}
+                              </button>
+                              <button type="button" className="btn-secondary btn-xs"
+                                onClick={() => setDeleteNestringId(null)}>
+                                {t('btn_cancel')}
+                              </button>
+                            </span>
+                          ) : (
+                            <>
+                              {vangst
+                                ? <button className="bezoek-item__ring-link" type="button"
+                                    onClick={e => { e.stopPropagation(); switchModule('ring'); navigate('/records', { state: { openId: vangst.id, ringnummer: (vangst.ringnummer || '').replace(/\./g, '') } }); }}>
+                                    {nr}
+                                  </button>
+                                : <span className="bezoek-item__ring-orphan">{nr}</span>
+                              }
+                              {canNestEdit && (
+                                <button type="button" className="bezoek-item__ring-delete"
+                                  title={t('nest_nestring_delete_title')}
+                                  onClick={e => { e.stopPropagation(); setDeleteNestringId(r.id); }}>
+                                  ×
+                                </button>
+                              )}
+                            </>
+                          )}
                         </span>
                       );
                     })}
-                  </p>
+                  </div>
                 )}
                 {canNestAdd && isRingbaar && (
                   <button

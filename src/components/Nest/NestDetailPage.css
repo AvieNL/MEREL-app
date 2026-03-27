@@ -446,18 +446,58 @@
 /* ── Ring-knop vanuit bezoek ── */
 
 /* ── Regel 3: geringde vogels ── */
-.bezoek-item__ringen {
-  margin: 2px 0 0;
+.bezoek-item__ringen-blok {
+  margin: 4px 0 0;
   font-size: 0.82rem;
-  line-height: 1.4;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  line-height: 1.5;
 }
 
 .bezoek-item__ringen-label {
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
-.bezoek-item__ringen-sep {
+.bezoek-item__ring-rij {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.bezoek-item__ring-delete {
+  background: none;
+  border: none;
+  padding: 0 3px;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1;
   color: var(--text-muted);
+  cursor: pointer;
+  min-height: unset;
+  opacity: 0.5;
+}
+
+.bezoek-item__ring-delete:hover {
+  color: var(--danger, #ef4444);
+  opacity: 1;
+}
+
+.bezoek-item__ring-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.btn-xs {
+  min-height: unset;
+  padding: 2px 8px;
+  font-size: 0.78rem;
 }
 
 .bezoek-item__ring-link {

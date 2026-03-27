@@ -510,6 +510,8 @@
   "nest_bezoek_delete_confirm": "Bezoek van {{datum}} verwijderen?",
   "nest_ring_delete_confirm": "Ringkoppeling verwijderen?",
   "nest_geringd_label": "Geringd",
+  "nest_nestring_delete_title": "Koppeling verwijderen",
+  "nest_nestring_delete_confirm": "Koppeling {{nr}} verwijderen?",
   "nestonderzoek_project_label": "Griel-project voor nestkastonderzoek",
   "nestonderzoek_project_geen": "geen",
   "nestonderzoek_project_hint": "Wordt automatisch ingevuld bij het ringen van pulli vanuit een nestbezoek.",

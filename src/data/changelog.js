@@ -1,6 +1,19 @@
-export const VERSIE = '1.61.2';
+export const VERSIE = '1.61.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.61.3',
+    datum: '2026-03-27',
+    wijzigingen: [
+      "Feat: nestring-koppeling verwijderen via × knop in nestdetail",
+    ],
+    wijzigingen_en: [
+      "Feat: remove ring link via × button in nest detail",
+    ],
+    wijzigingen_de: [
+      "Feat: Ringverknüpfung über × Schaltfläche im Nestdetail entfernen",
+    ],
+  },
   {
     versie: '1.61.2',
     datum: '2026-03-27',
