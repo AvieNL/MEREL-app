@@ -1,6 +1,19 @@
-export const VERSIE = '1.55.0';
+export const VERSIE = '1.56.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.56.0',
+    datum: '2026-03-27',
+    wijzigingen: [
+      'Fix: vangstijd wordt overgenomen van vorige vangst (en reset na middernacht)',
+    ],
+    wijzigingen_en: [
+      'Fix: catch time is carried over from previous catch (and resets after midnight)',
+    ],
+    wijzigingen_de: [
+      'Fix: Fangzeit wird von vorherigem Fang übernommen (und setzt nach Mitternacht zurück)',
+    ],
+  },
   {
     versie: '1.55.0',
     datum: '2026-03-27',

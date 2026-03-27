@@ -175,6 +175,7 @@ export default function NieuwPage() {
       base.nauwk_coord    = dagDefaults.nauwk_coord    ?? base.nauwk_coord;
       base.vangstmethode  = dagDefaults.vangstmethode  ?? base.vangstmethode;
       base.lokmiddelen    = dagDefaults.lokmiddelen    ?? base.lokmiddelen;
+      base.tijd           = dagDefaults.tijd           ?? base.tijd;
     } else {
       // Geen localStorage-defaults: gebruik meest recente vangst van vandaag (hele dag, geen tijdslimiet)
       const recent = [...(records || [])]
@@ -189,6 +190,7 @@ export default function NieuwPage() {
         base.nauwk_coord    = recent.nauwk_coord    ?? base.nauwk_coord;
         base.vangstmethode  = recent.vangstmethode  ?? base.vangstmethode;
         base.lokmiddelen    = recent.lokmiddelen    ?? base.lokmiddelen;
+        base.tijd           = recent.tijd           ?? base.tijd;
       }
     }
     return base;
@@ -536,6 +538,7 @@ export default function NieuwPage() {
         nauwk_coord:   form.nauwk_coord,
         vangstmethode: form.vangstmethode,
         lokmiddelen:   form.lokmiddelen,
+        tijd:          form.tijd,
       }));
     } catch { /* ignore */ }
 
@@ -550,6 +553,7 @@ export default function NieuwPage() {
       nauwk_coord: form.nauwk_coord,
       vangstmethode: form.vangstmethode,
       lokmiddelen: form.lokmiddelen,
+      tijd: form.tijd,
       ringer_initiaal: settings?.ringerInitiaal || '',
       ringer_nummer: settings?.ringerNummer || '',
     });
