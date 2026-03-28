@@ -240,7 +240,6 @@
   "stats_longest_time": "Longest time",
   "stats_most_recaptured": "Most recaptured",
   "stats_col_recatch_count": "Recaptures",
-  "stats_all_species": "All species",
   "stats_furthest_distance": "Furthest distance",
   "stats_species_in_year": "{{count}} species in {{year}}",
   "stats_export_griel_current": "Export Griel XML",

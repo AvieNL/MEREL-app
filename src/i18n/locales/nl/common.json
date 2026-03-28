@@ -241,7 +241,6 @@
   "stats_furthest_distance": "Verste afstand",
   "stats_most_recaptured": "Vaakst gevangen",
   "stats_col_recatch_count": "Terugvangsten",
-  "stats_all_species": "Alle soorten",
   "stats_species_in_year": "{{count}} soorten in {{year}}",
   "stats_export_griel_current": "Griel XML exporteren",
   "stats_export_griel_all": "Griel XML",

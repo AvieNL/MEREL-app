@@ -221,7 +221,6 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     navigate('/stats/soorten', { state: { soortenTabel: translated, titel } });
   }
   const [tvSorteer, setTvSorteer] = useState('tijd');
-  const [tvSoortFilter, setTvSoortFilter] = useState('');
   const [jaarPopup, setJaarPopup] = useState(null);
   const [exportVan, setExportVan] = useState('');
   const [exportTot, setExportTot] = useState('');
@@ -349,17 +348,9 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     return sorted.slice(0, 10);
   }, [alleTerugvangsten, tvSorteer]);
 
-  const frequentSoorten = useMemo(() => {
-    const soorten = new Set(alleTerugvangsten.map(tv => tv.soort).filter(Boolean));
-    return [...soorten].sort((a, b) => a.localeCompare(b, 'nl'));
-  }, [alleTerugvangsten]);
-
   const topFrequent = useMemo(() => {
-    const basis = tvSoortFilter
-      ? alleTerugvangsten.filter(tv => tv.soort === tvSoortFilter)
-      : alleTerugvangsten;
     const counts = {};
-    basis.forEach(tv => {
+    alleTerugvangsten.forEach(tv => {
       if (!tv.ringnummer) return;
       const key = tv.ringnummer.replace(/\./g, '').toUpperCase();
       if (!counts[key]) counts[key] = { ringnummer: key, soort: tv.soort, count: 0, id: tv.id };
@@ -368,7 +359,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     return Object.values(counts)
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
-  }, [alleTerugvangsten, tvSoortFilter]);
+  }, [alleTerugvangsten]);
 
   const filterByDatum = useCallback((data) => {
     if (!exportVan && !exportTot) return data;
@@ -744,40 +735,26 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             </div>
             <div className="trektellen-table-wrap">
               {tvSorteer === 'frequent' ? (
-                <>
-                  <div className="tv-soort-filter">
-                    <select
-                      value={tvSoortFilter}
-                      onChange={e => setTvSoortFilter(e.target.value)}
-                      className="tv-soort-select"
-                    >
-                      <option value="">{t('stats_all_species')}</option>
-                      {frequentSoorten.map(s => (
-                        <option key={s} value={s}>{displayNaam(s)}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <table className="trektellen-table">
-                    <thead>
-                      <tr>
-                        <th className="tt-col-num" style={{ width: '2rem' }}>#</th>
-                        {!tvSoortFilter && <th className="tt-col-soort">{t('stats_col_species')}</th>}
-                        <th>{t('stats_col_ring')}</th>
-                        <th className="tt-col-num">{t('stats_col_recatch_count')}</th>
+                <table className="trektellen-table">
+                  <thead>
+                    <tr>
+                      <th className="tt-col-num" style={{ width: '2rem' }}>#</th>
+                      <th className="tt-col-soort">{t('stats_col_species')}</th>
+                      <th>{t('stats_col_ring')}</th>
+                      <th className="tt-col-num">{t('stats_col_recatch_count')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {topFrequent.map((tv, i) => (
+                      <tr key={tv.ringnummer}>
+                        <td className="tt-col-num" style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>{i + 1}</td>
+                        <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
+                        <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
+                        <td className="tt-col-num tv-tijd" style={{ fontWeight: 700 }}>{tv.count}×</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {topFrequent.map((tv, i) => (
-                        <tr key={tv.ringnummer}>
-                          <td className="tt-col-num" style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>{i + 1}</td>
-                          {!tvSoortFilter && <td className="tt-col-soort">{displayNaam(tv.soort)}</td>}
-                          <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
-                          <td className="tt-col-num tv-tijd" style={{ fontWeight: 700 }}>{tv.count}×</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </>
+                    ))}
+                  </tbody>
+                </table>
               ) : (
                 <table className="trektellen-table">
                   <thead>

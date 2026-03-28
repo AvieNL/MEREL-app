@@ -364,20 +364,6 @@
   font-weight: 600;
 }
 
-.tv-soort-filter {
-  margin-bottom: 8px;
-}
-
-.tv-soort-select {
-  font-size: 0.8rem;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  max-width: 100%;
-}
-
 /* Terugvangsten kolommen */
 .tv-ring {
   font-family: monospace;
