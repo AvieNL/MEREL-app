@@ -1,6 +1,19 @@
-export const VERSIE = '1.63.3';
+export const VERSIE = '1.64.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.64.0',
+    datum: '2026-03-28',
+    wijzigingen: [
+      "Feat: stats terugvangsten top 10 — nieuwe tab 'Vaakst gevangen' toont ringnummers met de meeste terugvangsten",
+    ],
+    wijzigingen_en: [
+      "Feat: recatch stats top 10 — new 'Most recaptured' tab shows ring numbers with most recaptures",
+    ],
+    wijzigingen_de: [
+      "Feat: Wiederfang-Stats Top 10 — neuer Tab 'Häufigste Wiederfänge' zeigt Ringnummern mit den meisten Wiederfängen",
+    ],
+  },
   {
     versie: '1.63.3',
     datum: '2026-03-27',

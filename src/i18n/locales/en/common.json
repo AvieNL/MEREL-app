@@ -238,6 +238,8 @@
   "stats_chart_per_month": "Catches per month",
   "stats_chart_species_per_year": "Species per year — click a point for species list",
   "stats_longest_time": "Longest time",
+  "stats_most_recaptured": "Most recaptured",
+  "stats_col_recatch_count": "Recaptures",
   "stats_furthest_distance": "Furthest distance",
   "stats_species_in_year": "{{count}} species in {{year}}",
   "stats_export_griel_current": "Export Griel XML",

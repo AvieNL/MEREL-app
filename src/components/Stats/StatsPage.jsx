@@ -340,12 +340,26 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   const { perJaar, perMaand, soortenPerJaar } = useChartData(gefilterdRecords);
 
   const terugvangsten = useMemo(() => {
+    if (tvSorteer === 'frequent') return [];
     const sorted = [...alleTerugvangsten].sort((a, b) => {
       if (tvSorteer === 'afstand') return (b.afstandKm || 0) - (a.afstandKm || 0);
       return (b.dagen || 0) - (a.dagen || 0);
     });
     return sorted.slice(0, 10);
   }, [alleTerugvangsten, tvSorteer]);
+
+  const topFrequent = useMemo(() => {
+    const counts = {};
+    alleTerugvangsten.forEach(tv => {
+      if (!tv.ringnummer) return;
+      const key = tv.ringnummer.replace(/\./g, '').toUpperCase();
+      if (!counts[key]) counts[key] = { ringnummer: key, soort: tv.soort, count: 0, id: tv.id };
+      counts[key].count++;
+    });
+    return Object.values(counts)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+  }, [alleTerugvangsten]);
 
   const filterByDatum = useCallback((data) => {
     if (!exportVan && !exportTot) return data;
@@ -709,38 +723,62 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
         </div>
 
         {/* Terugvangsten */}
-        {terugvangsten.length > 0 && (
+        {(alleTerugvangsten.length > 0) && (
           <div className="section">
             <div className="tv-header">
               <h3>{t('stats_recatches_top10')}</h3>
               <div className="tv-toggle">
                 <button className={`tv-toggle-btn${tvSorteer === 'tijd' ? ' active' : ''}`} onClick={() => setTvSorteer('tijd')}>{t('stats_longest_time')}</button>
                 <button className={`tv-toggle-btn${tvSorteer === 'afstand' ? ' active' : ''}`} onClick={() => setTvSorteer('afstand')}>{t('stats_furthest_distance')}</button>
+                <button className={`tv-toggle-btn${tvSorteer === 'frequent' ? ' active' : ''}`} onClick={() => setTvSorteer('frequent')}>{t('stats_most_recaptured')}</button>
               </div>
             </div>
             <div className="trektellen-table-wrap">
-              <table className="trektellen-table">
-                <thead>
-                  <tr>
-                    <th className="tt-col-soort">{t('stats_col_species')}</th>
-                    <th>{t('stats_col_ring')}</th>
-                    <th>{t('stats_col_date')}</th>
-                    <th className="tt-col-num">{t('stats_col_time')}</th>
-                    <th className="tt-col-num">{t('stats_col_distance')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {terugvangsten.map((tv, i) => (
-                    <tr key={`${tv.ringnummer}-${tv.datum}-${i}`}>
-                      <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
-                      <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer?.replace(/\./g, '')}</span></td>
-                      <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
-                      <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>
-                      <td className="tt-col-num tv-afstand">{formatAfstand(tv.afstandKm)}</td>
+              {tvSorteer === 'frequent' ? (
+                <table className="trektellen-table">
+                  <thead>
+                    <tr>
+                      <th className="tt-col-num" style={{ width: '2rem' }}>#</th>
+                      <th className="tt-col-soort">{t('stats_col_species')}</th>
+                      <th>{t('stats_col_ring')}</th>
+                      <th className="tt-col-num">{t('stats_col_recatch_count')}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {topFrequent.map((tv, i) => (
+                      <tr key={tv.ringnummer}>
+                        <td className="tt-col-num" style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>{i + 1}</td>
+                        <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
+                        <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
+                        <td className="tt-col-num tv-tijd" style={{ fontWeight: 700 }}>{tv.count}×</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <table className="trektellen-table">
+                  <thead>
+                    <tr>
+                      <th className="tt-col-soort">{t('stats_col_species')}</th>
+                      <th>{t('stats_col_ring')}</th>
+                      <th>{t('stats_col_date')}</th>
+                      <th className="tt-col-num">{t('stats_col_time')}</th>
+                      <th className="tt-col-num">{t('stats_col_distance')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {terugvangsten.map((tv, i) => (
+                      <tr key={`${tv.ringnummer}-${tv.datum}-${i}`}>
+                        <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
+                        <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer?.replace(/\./g, '')}</span></td>
+                        <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
+                        <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>
+                        <td className="tt-col-num tv-afstand">{formatAfstand(tv.afstandKm)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         )}
