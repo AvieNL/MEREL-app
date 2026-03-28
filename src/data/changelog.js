@@ -1,6 +1,32 @@
-export const VERSIE = '1.63.3';
+export const VERSIE = '1.64.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.64.1',
+    datum: '2026-03-28',
+    wijzigingen: [
+      "Feat: 'Vaakst gevangen' top 10 filterbaar per soort — soortkolom verdwijnt bij soortfilter",
+    ],
+    wijzigingen_en: [
+      "Feat: 'Most recaptured' top 10 filterable by species — species column hidden when filtered",
+    ],
+    wijzigingen_de: [
+      "Feat: 'Häufigste Wiederfänge' Top 10 nach Art filterbar — Artspalte ausgeblendet bei Artfilter",
+    ],
+  },
+  {
+    versie: '1.64.0',
+    datum: '2026-03-28',
+    wijzigingen: [
+      "Feat: stats terugvangsten top 10 — nieuwe tab 'Vaakst gevangen' toont ringnummers met de meeste terugvangsten",
+    ],
+    wijzigingen_en: [
+      "Feat: recatch stats top 10 — new 'Most recaptured' tab shows ring numbers with most recaptures",
+    ],
+    wijzigingen_de: [
+      "Feat: Wiederfang-Stats Top 10 — neuer Tab 'Häufigste Wiederfänge' zeigt Ringnummern mit den meisten Wiederfängen",
+    ],
+  },
   {
     versie: '1.63.3',
     datum: '2026-03-27',
