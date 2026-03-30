@@ -813,6 +813,11 @@ export default function NieuwPage() {
             🥚 {t('nest_ring_context_banner', { soort: nestContext.soortNaam || '?', datum: nestContext.datum || '?' })}
           </div>
         )}
+        {editRecord && (editRecord.bron === 'griel_import' || editRecord.bron === 'buitenland_import' || editRecord.bron === 'andere_banen_import') && (
+          <div className="griel-import-notice">
+            Dit record is geïmporteerd uit Griel en kan niet opnieuw naar Griel worden geëxporteerd. Je kunt het wel wijzigen voor je eigen administratie.
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           {/* Sticky header: topbar + foutmeldingen */}
           <div className="nieuw-sticky-header">

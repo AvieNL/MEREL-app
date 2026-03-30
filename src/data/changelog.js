@@ -1,6 +1,19 @@
-export const VERSIE = '1.64.0';
+export const VERSIE = '1.65.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.0',
+    datum: '2026-03-30',
+    wijzigingen: [
+      "Feat: Griel-import records zijn nu bewerkbaar voor eigen administratie — ze worden nooit geëxporteerd naar Griel",
+    ],
+    wijzigingen_en: [
+      "Feat: Griel-imported records can now be edited for personal administration — they are never exported to Griel",
+    ],
+    wijzigingen_de: [
+      "Feat: Griel-importierte Datensätze können jetzt für die eigene Verwaltung bearbeitet werden — sie werden nie nach Griel exportiert",
+    ],
+  },
   {
     versie: '1.64.0',
     datum: '2026-03-28',

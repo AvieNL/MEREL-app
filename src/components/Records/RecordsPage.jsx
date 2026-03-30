@@ -209,14 +209,14 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
                       </div>
                     </div>
                   )}
-                  {canDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
+                  {canDelete && (
                     <div className="record-actions">
                       <button
                         className="icon-edit-btn"
                         title="Wijzigen"
                         onClick={e => { e.stopPropagation(); navigate('/', { state: { editRecord: r } }); }}
                       ><IconEdit /></button>
-                      {onDelete && (
+                      {onDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
                         <button
                           className="icon-delete-btn"
                           title="Verwijderen"
