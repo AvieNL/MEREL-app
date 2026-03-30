@@ -341,7 +341,18 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
   const terugvangsten = useMemo(() => {
     if (tvSorteer === 'frequent') return [];
-    const sorted = [...alleTerugvangsten].sort((a, b) => {
+    let lijst = alleTerugvangsten;
+    if (tvSorteer === 'tijd') {
+      const perRing = {};
+      alleTerugvangsten.forEach(tv => {
+        const key = (tv.ringnummer || '').replace(/\./g, '').toUpperCase();
+        if (!perRing[key] || (tv.dagen || 0) > (perRing[key].dagen || 0)) {
+          perRing[key] = tv;
+        }
+      });
+      lijst = Object.values(perRing);
+    }
+    const sorted = [...lijst].sort((a, b) => {
       if (tvSorteer === 'afstand') return (b.afstandKm || 0) - (a.afstandKm || 0);
       return (b.dagen || 0) - (a.dagen || 0);
     });

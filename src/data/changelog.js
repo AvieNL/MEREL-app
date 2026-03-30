@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.0';
+export const VERSIE = '1.65.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.1',
+    datum: '2026-03-30',
+    wijzigingen: [
+      "Fix: 'Langste tijd' top-10 toont nu per ringnummer de tijd tussen eerste en laatste vangst (geen dubbele entries meer)",
+    ],
+    wijzigingen_en: [
+      "Fix: 'Longest time' top-10 now shows the interval between first and last catch per ring number (no duplicate entries)",
+    ],
+    wijzigingen_de: [
+      "Fix: 'Längste Zeit' Top-10 zeigt jetzt den Zeitraum zwischen Erst- und Letztvang pro Ringnummer (keine doppelten Einträge mehr)",
+    ],
+  },
   {
     versie: '1.65.0',
     datum: '2026-03-30',
