@@ -765,7 +765,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
                       <span className={`record-type ${cfg.cls}`}>{cfg.icon} {t(cfg.key)}</span>
                       <span
                         className="sd-recent-ring ring-link"
-                        onClick={() => navigate('/records', { state: { openId: r.id } })}
+                        onClick={() => navigate('/ring/records', { state: { openId: r.id } })}
                       >{r.ringnummer?.replace(/\./g, '')}</span>
                       <span className="sd-recent-date">{formatDatum(r.vangstdatum)}</span>
                       <span className="sd-recent-meta">
@@ -777,7 +777,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
                 })}
               <button
                 className="sd-all-records-link"
-                onClick={() => navigate('/records', { state: { filterSoort: decodedNaam } })}
+                onClick={() => navigate('/ring/records', { state: { filterSoort: decodedNaam } })}
               >
                 {t('sd_all_catches', { count: soortRecords.length, naam: soort.naam_nl })}
               </button>

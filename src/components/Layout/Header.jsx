@@ -128,22 +128,22 @@ export default function Header({ onSwitchModule, activeModule }) {
   const activeThema = THEMAS.find(th => th.mode === mode) || THEMAS[0];
 
   const handleTitleClick = () => {
-    navigate(activeModule === 'nest' ? '/nest' : '/');
+    navigate(activeModule === 'nest' ? '/nest' : '/ring/');
   };
 
   function getEquivalentPath(toModule) {
     const p = location.pathname;
     if (toModule === 'nest') {
-      if (p === '/stats') return '/nest/stats';
-      if (p === '/' || p === '/records') return '/nest';
+      if (p === '/ring/stats') return '/nest/stats';
+      if (p === '/ring/' || p === '/ring/records') return '/nest';
       if (p.startsWith('/soorten')) return p; // zelfde soortenpagina
       return '/nest';
     } else {
-      if (p === '/nest/stats') return '/stats';
-      if (p === '/nest/nieuw') return '/';
-      if (p.startsWith('/nest')) return '/records';
+      if (p === '/nest/stats') return '/ring/stats';
+      if (p === '/nest/nieuw') return '/ring/';
+      if (p.startsWith('/nest')) return '/ring/records';
       if (p.startsWith('/soorten')) return p;
-      return '/';
+      return '/ring/';
     }
   }
 
@@ -273,8 +273,8 @@ export default function Header({ onSwitchModule, activeModule }) {
                 {activeModule !== 'nest' && (
                   <div className="header-dropdown-section">
                     <span className="header-dropdown-section-label">◎ {t('module_ring')}</span>
-                    <button onClick={() => goTo('/projecten')}>{t('nav_projects')}</button>
-                    <button onClick={() => goTo('/ringstrengen')}>{t('nav_ring_strings')}</button>
+                    <button onClick={() => goTo('/ring/projecten')}>{t('nav_projects')}</button>
+                    <button onClick={() => goTo('/ring/ringstrengen')}>{t('nav_ring_strings')}</button>
                   </div>
                 )}
 

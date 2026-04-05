@@ -4,9 +4,9 @@ import { useRole } from '../../hooks/useRole';
 import './Navigation.css';
 
 const ALL_TABS = [
-  { path: '/', labelKey: 'nav_new', icon: '＋', requiresEdit: true },
-  { path: '/records', labelKey: 'nav_records', icon: '☰' },
-  { path: '/stats', labelKey: 'nav_stats', icon: '◔' },
+  { path: '/ring/', labelKey: 'nav_new', icon: '＋', requiresEdit: true },
+  { path: '/ring/records', labelKey: 'nav_records', icon: '☰' },
+  { path: '/ring/stats', labelKey: 'nav_stats', icon: '◔' },
   { path: '/soorten', labelKey: 'nav_species', icon: '◉' },
 ];
 
@@ -21,7 +21,7 @@ export default function Navigation() {
         <NavLink
           key={tab.path}
           to={tab.path}
-          end={tab.path === '/'}
+          end={tab.path === '/ring/'}
           className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
         >
           <span className="nav-icon">{tab.icon}</span>

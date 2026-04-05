@@ -16,7 +16,7 @@ export default function ProjectDetail({ records }) {
 
   function openSoorten() {
     const tabel = stats.soortenTabel.map(s => ({ naam: displayNaam(s.soort), nieuw: s.nieuw, terugvangst: s.terugvangst, totaal: s.totaal }));
-    navigate('/stats/soorten', { state: { soortenTabel: tabel, titel: naam } });
+    navigate('/ring/stats/soorten', { state: { soortenTabel: tabel, titel: naam } });
   }
 
   const projectRecords = useMemo(
@@ -132,7 +132,7 @@ export default function ProjectDetail({ records }) {
 
   return (
     <div className="page stats-page">
-      <Link to="/stats" className="btn-secondary page-back">{t('pd_back')}</Link>
+      <Link to="/ring/stats" className="btn-secondary page-back">{t('pd_back')}</Link>
       <h2 className="stats-section-title" style={{ marginTop: 8 }}>{naam}</h2>
 
       <div className="stats-grid">
@@ -277,7 +277,7 @@ export default function ProjectDetail({ records }) {
                 {terugvangsten.map((tv, i) => (
                   <tr key={`${tv.ringnummer}-${tv.datum}-${i}`}>
                     <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
-                    <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer?.replace(/\./g, '')}</span></td>
+                    <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/ring/records', { state: { openId: tv.id } })}>{tv.ringnummer?.replace(/\./g, '')}</span></td>
                     <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
                     <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>
                     <td className="tt-col-num tv-afstand">{formatAfstand(tv.afstandKm)}</td>

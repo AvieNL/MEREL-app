@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.1';
+export const VERSIE = '1.65.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.2',
+    datum: '2026-04-05',
+    wijzigingen: [
+      'Refactor: ring-module routes verplaatst naar /ring/... (was /records, /stats, etc.) — nestonderzoek blijft op /nest/..., gedeelde pagina\'s op root',
+    ],
+    wijzigingen_en: [
+      'Refactor: ring module routes moved to /ring/... (was /records, /stats, etc.) — nest research stays on /nest/..., shared pages at root',
+    ],
+    wijzigingen_de: [
+      'Refactor: Beringungsmodul-Routen nach /ring/... verschoben (war /records, /stats, etc.) — Nestforschung bleibt auf /nest/..., gemeinsame Seiten im Root',
+    ],
+  },
   {
     versie: '1.65.1',
     datum: '2026-03-30',

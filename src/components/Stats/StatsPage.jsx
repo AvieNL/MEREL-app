@@ -218,7 +218,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
   function openSoorten(soortenTabel, titel) {
     const translated = soortenTabel.map(s => ({ ...s, naam: displayNaam(s.naam) }));
-    navigate('/stats/soorten', { state: { soortenTabel: translated, titel } });
+    navigate('/ring/stats/soorten', { state: { soortenTabel: translated, titel } });
   }
   const [tvSorteer, setTvSorteer] = useState('tijd');
   const [jaarPopup, setJaarPopup] = useState(null);
@@ -669,7 +669,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             <div className="stat-value">{totaalStats.nieuw}</div>
             <div className="stat-label">{t('stats_new_rings')}</div>
           </div>
-          <div className="stat-card stat-card--link" onClick={() => navigate('/stats/terugvangsten', { state: { eigenFilter } })}>
+          <div className="stat-card stat-card--link" onClick={() => navigate('/ring/stats/terugvangsten', { state: { eigenFilter } })}>
             <div className="stat-value">{totaalStats.terugvangst}</div>
             <div className="stat-label">{t('stats_recatches')}</div>
           </div>
@@ -760,7 +760,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                       <tr key={tv.ringnummer}>
                         <td className="tt-col-num" style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>{i + 1}</td>
                         <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
-                        <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
+                        <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/ring/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
                         <td className="tt-col-num tv-tijd" style={{ fontWeight: 700 }}>{tv.count}×</td>
                       </tr>
                     ))}
@@ -781,7 +781,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                     {terugvangsten.map((tv, i) => (
                       <tr key={`${tv.ringnummer}-${tv.datum}-${i}`}>
                         <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
-                        <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/records', { state: { openId: tv.id } })}>{tv.ringnummer?.replace(/\./g, '')}</span></td>
+                        <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/ring/records', { state: { openId: tv.id } })}>{tv.ringnummer?.replace(/\./g, '')}</span></td>
                         <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>
                         <td className="tt-col-num tv-tijd">{formatDagen(tv.dagen)}</td>
                         <td className="tt-col-num tv-afstand">{formatAfstand(tv.afstandKm)}</td>
@@ -818,7 +818,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                     return (
                       <tr key={p.naam} className={eigenProject ? '' : 'project-row--extern'}>
                         <td className="tt-col-soort">
-                          <Link to={`/stats/project/${encodeURIComponent(p.naam)}`} className="project-table-link">
+                          <Link to={`/ring/stats/project/${encodeURIComponent(p.naam)}`} className="project-table-link">
                             {p.naam}
                           </Link>
                           {!eigenProject && <span className="project-extern-badge">extern</span>}

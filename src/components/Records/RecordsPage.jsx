@@ -214,7 +214,7 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
                       <button
                         className="icon-edit-btn"
                         title="Wijzigen"
-                        onClick={e => { e.stopPropagation(); navigate('/', { state: { editRecord: r } }); }}
+                        onClick={e => { e.stopPropagation(); navigate('/ring/', { state: { editRecord: r } }); }}
                       ><IconEdit /></button>
                       {onDelete && r.bron !== 'griel_import' && r.bron !== 'buitenland_import' && r.bron !== 'andere_banen_import' && (
                         <button

@@ -178,7 +178,7 @@ export default function TerugvangstDetail({ records, projects = [] }) {
     return (
       <div className="page stats-page">
         <div className="stats-section-header">
-          <Link to="/stats" className="project-back" style={{ marginTop: 8 }}>{t('pd_back')}</Link>
+          <Link to="/ring/stats" className="project-back" style={{ marginTop: 8 }}>{t('pd_back')}</Link>
           <div className="tv-toggle">
             <button className={`tv-toggle-btn${eigenFilter ? ' active' : ''}`} onClick={() => setEigenFilter(true)}>{t('stats_own_projects')}</button>
             <button className={`tv-toggle-btn${!eigenFilter ? ' active' : ''}`} onClick={() => setEigenFilter(false)}>{t('stats_all_catches')}</button>
@@ -193,7 +193,7 @@ export default function TerugvangstDetail({ records, projects = [] }) {
   return (
     <div className="page stats-page">
       <div className="stats-section-header">
-        <Link to="/stats" className="project-back" style={{ marginTop: 8 }}>{t('pd_back')}</Link>
+        <Link to="/ring/stats" className="project-back" style={{ marginTop: 8 }}>{t('pd_back')}</Link>
         <div className="tv-toggle">
           <button className={`tv-toggle-btn${eigenFilter ? ' active' : ''}`} onClick={() => setEigenFilter(true)}>{t('stats_own_projects')}</button>
           <button className={`tv-toggle-btn${!eigenFilter ? ' active' : ''}`} onClick={() => setEigenFilter(false)}>{t('stats_all_catches')}</button>
@@ -234,7 +234,7 @@ export default function TerugvangstDetail({ records, projects = [] }) {
             <div className="tv-record-value">{formatDagen(oudste.dagen)}</div>
             <span
               className="tv-record-ring ring-link"
-              onClick={() => navigate('/records', { state: { openId: oudste.id } })}
+              onClick={() => navigate('/ring/records', { state: { openId: oudste.id } })}
             >{oudste.ringnummer?.replace(/\./g, '')}</span>
             <div className="tv-record-dates">
               {formatDatum(oudste.origDatum)} → {formatDatum(oudste.datum)}
@@ -249,7 +249,7 @@ export default function TerugvangstDetail({ records, projects = [] }) {
             <div className="tv-record-value">{formatAfstand(verste.afstandKm)}</div>
             <span
               className="tv-record-ring ring-link"
-              onClick={() => navigate('/records', { state: { openId: verste.id } })}
+              onClick={() => navigate('/ring/records', { state: { openId: verste.id } })}
             >{verste.ringnummer?.replace(/\./g, '')}</span>
             <div className="tv-record-dates">
               {formatDatum(verste.origDatum)} → {formatDatum(verste.datum)}
@@ -341,7 +341,7 @@ export default function TerugvangstDetail({ records, projects = [] }) {
                   <td className="tv-ring">
                     <span
                       className="ring-link"
-                      onClick={() => navigate('/records', { state: { openId: tv.id } })}
+                      onClick={() => navigate('/ring/records', { state: { openId: tv.id } })}
                     >{tv.ringnummer?.replace(/\./g, '')}</span>
                   </td>
                   <td className="tv-datum">{formatDatum(tv.datum) || '—'}</td>

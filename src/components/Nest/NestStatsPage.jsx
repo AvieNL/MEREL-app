@@ -741,7 +741,7 @@ export default function NestStatsPage() {
                           {i === 0 && (
                             <>
                               <span style={{ color: 'var(--accent)', cursor: 'pointer', textDecoration: 'underline', fontFamily: 'monospace' }}
-                                onClick={() => { switchModule('ring'); navigate('/records', { state: { ringnummer: p.ringNr } }); }}
+                                onClick={() => { switchModule('ring'); navigate('/ring/records', { state: { ringnummer: p.ringNr } }); }}
                               >{p.ringNr}</span>
                               {p.vogelnaam && <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>{p.vogelnaam}</span>}
                               {p.nest && (

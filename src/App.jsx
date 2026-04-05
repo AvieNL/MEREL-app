@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useCallback, createContext, useContext } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from './i18n/index.js';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -210,8 +210,9 @@ function MainApp({ onSwitchModule, activeModule }) {
       <main className="app-content">
         <Suspense fallback={<PageSpinner />}>
         <Routes>
-          <Route path="/" element={<NieuwPage />} />
-          <Route path="/records" element={
+          {/* Ring-specifieke routes */}
+          <Route path="/ring/" element={<NieuwPage />} />
+          <Route path="/ring/records" element={
             <RecordsPage
               records={records}
               recordsLoading={recordsLoading}
@@ -222,31 +223,20 @@ function MainApp({ onSwitchModule, activeModule }) {
               onAddRecord={addExternRecord}
             />
           } />
-          <Route path="/stats" element={
+          <Route path="/ring/stats" element={
             <StatsPage records={records} recordsLoading={recordsLoading} markAllAsUploaded={markAllAsUploaded} importRecords={importRecords} projects={projects} myAupis={myAupis} />
           } />
-          <Route path="/stats/project/:naam" element={
+          <Route path="/ring/stats/project/:naam" element={
             <ProjectDetail records={records} />
           } />
-          <Route path="/stats/soorten" element={<SoortenOverzicht />} />
-          <Route path="/stats/terugvangsten" element={
+          <Route path="/ring/stats/soorten" element={<SoortenOverzicht />} />
+          <Route path="/ring/stats/terugvangsten" element={
             <TerugvangstDetail records={records} projects={projects} />
           } />
-          <Route path="/soorten" element={
-            <SoortenPage records={records} />
-          } />
-          <Route path="/soorten/:naam" element={
-            <SoortDetail records={records} speciesOverrides={speciesOverrides} />
-          } />
-          <Route path="/databases" element={<DatabasesPage />} />
-          <Route path="/over" element={<OverPage />} />
-          <Route path="/projecten" element={
+          <Route path="/ring/projecten" element={
             <ProjectenPage projects={projects} onAdd={addProject} onUpdate={updateProject} onDelete={deleteProject} onRenameProject={renameProject} onAupiSaved={refreshAupis} />
           } />
-          <Route path="/instellingen" element={
-            <InstellingenPage settings={settings} onUpdateSettings={updateSettings} onFullResync={fullResync} />
-          } />
-          <Route path="/ringstrengen" element={
+          <Route path="/ring/ringstrengen" element={
             <RingstrengenPage
               ringStrengen={ringStrengen}
               records={records}
@@ -255,10 +245,25 @@ function MainApp({ onSwitchModule, activeModule }) {
               onDelete={deleteRingstreng}
             />
           } />
+          <Route path="/ring/databases" element={<DatabasesPage />} />
+          <Route path="/ring/referentiebibliotheek" element={<ReferentiebibliotheekPage />} />
+          {/* Gedeelde routes */}
+          <Route path="/soorten" element={
+            <SoortenPage records={records} />
+          } />
+          <Route path="/soorten/:naam" element={
+            <SoortDetail records={records} speciesOverrides={speciesOverrides} />
+          } />
+          <Route path="/over" element={<OverPage />} />
+          <Route path="/instellingen" element={
+            <InstellingenPage settings={settings} onUpdateSettings={updateSettings} onFullResync={fullResync} />
+          } />
           <Route path="/admin" element={<AdminPage />} />
-          <Route path="/referentiebibliotheek" element={<ReferentiebibliotheekPage />} />
           <Route path="/ruitypen" element={<RuitypenPage />} />
           <Route path="/prullenbak" element={<PrullenbakPage />} />
+          {/* Redirects voor oude URLs */}
+          <Route path="/" element={<Navigate to="/ring/" replace />} />
+          <Route path="*" element={<Navigate to="/ring/" replace />} />
         </Routes>
         </Suspense>
       </main>

@@ -499,7 +499,7 @@ export default function NieuwPage() {
 
     if (editRecord) {
       updateRecord(editRecord.id, { ...form, euring_code: euringCode });
-      navigate('/records');
+      navigate('/ring/records');
       return;
     }
     const newRecord = addRecord({ ...form, euring_code: euringCode });
@@ -826,7 +826,7 @@ export default function NieuwPage() {
                 {editRecord ? t('form_edit_catch', { naam: editRecord.vogelnaam || '?' }) : t('form_new_catch')}
               </span>
               {editRecord && (
-                <button type="button" className="btn-secondary nieuw-topbar-btn" onClick={() => navigate('/records')}>
+                <button type="button" className="btn-secondary nieuw-topbar-btn" onClick={() => navigate('/ring/records')}>
                   {t('form_cancel')}
                 </button>
               )}

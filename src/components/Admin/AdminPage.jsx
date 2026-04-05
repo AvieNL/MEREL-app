@@ -248,7 +248,7 @@ export default function AdminPage() {
             <h3>{t('admin_referentiebibliotheek')}</h3>
             <div className="section-content">
               <p className="admin-hint">{t('admin_referentiebibliotheek_desc')}</p>
-              <button className="btn-primary" onClick={() => navigate('/referentiebibliotheek')}>
+              <button className="btn-primary" onClick={() => navigate('/ring/referentiebibliotheek')}>
                 {t('admin_referentiebibliotheek_link')}
               </button>
             </div>
