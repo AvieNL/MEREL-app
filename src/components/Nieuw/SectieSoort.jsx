@@ -103,44 +103,61 @@ export default function SectieSoort() {
           {/* Soort-info paneel */}
           {speciesInfo && settings?.hulpModus !== 'basis' && (
             <div className="soort-info-panel">
-              <div className="soort-info-grid">
-                <div className="soort-info-item highlight">
-                  <span className="sii-label">{t('form_ring_size')}</span>
-                  <span className="sii-value">{speciesInfo.ringmaat || '—'}</span>
-                </div>
-                {speciesInfo.ruitype && (
-                  <div className={`soort-info-item${['A','B','C','D'].includes(speciesInfo.ruitype) ? ' ruitype-highlight' : ''}`}>
-                    <span className="sii-label">{t('form_moult_type')}</span>
-                    <span className="sii-value">
-                      {speciesInfo.ruitype}
-                      {speciesInfo.ruitype === 'A' && <span className="ruitype-badge">{t('form_moult_age_limited')}</span>}
-                      {speciesInfo.ruitype === 'B' && <span className="ruitype-badge">{t('form_moult_boundary')}</span>}
-                      {speciesInfo.ruitype === 'C' && <span className="ruitype-badge">{t('form_moult_boundary')}</span>}
-                      {speciesInfo.ruitype === 'D' && <span className="ruitype-badge">{t('form_moult_plumage')}</span>}
-                      {speciesInfo.ruitype === 'X' && <span className="ruitype-badge">{t('form_moult_indeterminate')}</span>}
-                    </span>
+              <div className="soort-info-inhoud">
+                <div className="soort-info-grid">
+                  <div className="soort-info-item highlight">
+                    <span className="sii-label">{t('form_ring_size')}</span>
+                    <span className="sii-value">{speciesInfo.ringmaat || '—'}</span>
                   </div>
-                )}
-                {euringCode && (
-                  <div className="soort-info-item">
-                    <span className="sii-label">EURING</span>
-                    <span className="sii-value">{euringCode}</span>
+                  {speciesInfo.ruitype && (
+                    <div className={`soort-info-item${['A','B','C','D'].includes(speciesInfo.ruitype) ? ' ruitype-highlight' : ''}`}>
+                      <span className="sii-label">{t('form_moult_type')}</span>
+                      <span className="sii-value">
+                        {speciesInfo.ruitype}
+                        {speciesInfo.ruitype === 'A' && <span className="ruitype-badge">{t('form_moult_age_limited')}</span>}
+                        {speciesInfo.ruitype === 'B' && <span className="ruitype-badge">{t('form_moult_boundary')}</span>}
+                        {speciesInfo.ruitype === 'C' && <span className="ruitype-badge">{t('form_moult_boundary')}</span>}
+                        {speciesInfo.ruitype === 'D' && <span className="ruitype-badge">{t('form_moult_plumage')}</span>}
+                        {speciesInfo.ruitype === 'X' && <span className="ruitype-badge">{t('form_moult_indeterminate')}</span>}
+                      </span>
+                    </div>
+                  )}
+                  {euringCode && (
+                    <div className="soort-info-item">
+                      <span className="sii-label">EURING</span>
+                      <span className="sii-value">{euringCode}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Boeken */}
+                {speciesInfo.boeken && Object.keys(speciesInfo.boeken).length > 0 && (
+                  <div className="soort-info-boeken">
+                    <span className="boeken-label">{t('form_books')}</span>
+                    <div className="boeken-chips">
+                      {Object.entries(speciesInfo.boeken).map(([boek, pagina]) => (
+                        <span key={boek} className="boek-chip">
+                          <span className="boek-chip-naam">{boek.replace(/_/g, ' ')}</span>
+                          <span className="boek-chip-pagina">p.{pagina}</span>
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
 
-              {/* Boeken */}
-              {speciesInfo.boeken && Object.keys(speciesInfo.boeken).length > 0 && (
-                <div className="soort-info-boeken">
-                  <span className="boeken-label">{t('form_books')}</span>
-                  <div className="boeken-chips">
-                    {Object.entries(speciesInfo.boeken).map(([boek, pagina]) => (
-                      <span key={boek} className="boek-chip">
-                        <span className="boek-chip-naam">{boek.replace(/_/g, ' ')}</span>
-                        <span className="boek-chip-pagina">p.{pagina}</span>
-                      </span>
-                    ))}
-                  </div>
+              {speciesInfo.foto && (
+                <div className="soort-info-foto">
+                  <img
+                    src={speciesInfo.foto}
+                    alt={vogelnaamDisplay || speciesInfo.naam_nl}
+                    style={{
+                      objectPosition: (() => {
+                        const c = speciesInfo.foto_crop ?? { x: 50, y: 50 };
+                        return `${c.x}% ${c.y}%`;
+                      })(),
+                    }}
+                  />
                 </div>
               )}
             </div>

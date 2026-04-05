@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.3';
+export const VERSIE = '1.65.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.4',
+    datum: '2026-04-05',
+    wijzigingen: [
+      'Feat: vogelfoto zichtbaar naast soortinfo (ringmaat, ruitype, boeken) bij soortselectie in het invoerformulier',
+    ],
+    wijzigingen_en: [
+      'Feat: bird photo shown next to species info (ring size, moult type, books) when selecting a species in the catch form',
+    ],
+    wijzigingen_de: [
+      'Feat: Vogelfoto neben Artinformationen (Ringgröße, Mausertyp, Bücher) bei der Artauswahl im Erfassungsformular sichtbar',
+    ],
+  },
   {
     versie: '1.65.3',
     datum: '2026-04-05',
