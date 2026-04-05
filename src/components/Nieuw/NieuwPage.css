@@ -24,15 +24,14 @@
   color: var(--text-secondary);
 }
 .info-panel-item {
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 .info-panel-item:last-child { margin-bottom: 0; }
 .info-panel-label {
-  display: inline-block;
+  display: block;
   font-weight: 700;
   color: var(--accent);
-  margin-right: 6px;
-  min-width: 20px;
+  margin-bottom: 2px;
 }
 
 /* Validatie foutmeldingen — vast in sticky header */
