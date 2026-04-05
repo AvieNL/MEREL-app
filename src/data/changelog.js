@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.2';
+export const VERSIE = '1.65.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.3',
+    datum: '2026-04-05',
+    wijzigingen: [
+      'Style: hamburgermenu-items compacter — minder witruimte tussen de regels',
+    ],
+    wijzigingen_en: [
+      'Style: hamburger menu items more compact — less whitespace between lines',
+    ],
+    wijzigingen_de: [
+      'Style: Hamburgermenü-Einträge kompakter — weniger Leerraum zwischen den Zeilen',
+    ],
+  },
   {
     versie: '1.65.2',
     datum: '2026-04-05',
