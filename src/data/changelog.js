@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.4';
+export const VERSIE = '1.65.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.5',
+    datum: '2026-04-05',
+    wijzigingen: [
+      'Fix: nestoverzicht toont standaard het huidige seizoen (jaar) — nesten van vorig jaar verschijnen niet meer als actief',
+    ],
+    wijzigingen_en: [
+      'Fix: nest overview now defaults to the current season (year) — nests from last year no longer appear as active',
+    ],
+    wijzigingen_de: [
+      'Fix: Nestübersicht zeigt standardmäßig die aktuelle Saison (Jahr) — Nester vom letzten Jahr erscheinen nicht mehr als aktiv',
+    ],
+  },
   {
     versie: '1.65.4',
     datum: '2026-04-05',
