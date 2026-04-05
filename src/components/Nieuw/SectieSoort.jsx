@@ -148,16 +148,23 @@ export default function SectieSoort() {
 
               {speciesInfo.foto && (
                 <div className="soort-info-foto">
-                  <img
-                    src={speciesInfo.foto}
-                    alt={vogelnaamDisplay || speciesInfo.naam_nl}
-                    style={{
-                      objectPosition: (() => {
-                        const c = speciesInfo.foto_crop ?? { x: 50, y: 50 };
-                        return `${c.x}% ${c.y}%`;
-                      })(),
-                    }}
-                  />
+                  {(() => {
+                    const c = speciesInfo.foto_crop ?? { x: 50, y: 50, zoom: 1 };
+                    return (
+                      <img
+                        src={speciesInfo.foto}
+                        alt={vogelnaamDisplay || speciesInfo.naam_nl}
+                        style={{
+                          width: '100%', height: '100%',
+                          objectFit: 'cover',
+                          objectPosition: `${c.x}% ${c.y}%`,
+                          transform: c.zoom !== 1 ? `scale(${c.zoom})` : undefined,
+                          transformOrigin: `${c.x}% ${c.y}%`,
+                          display: 'block',
+                        }}
+                      />
+                    );
+                  })()}
                 </div>
               )}
             </div>
