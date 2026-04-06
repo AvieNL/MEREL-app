@@ -5,7 +5,7 @@ import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
 import { formatDatum } from '../../utils/dateHelper';
-import { buildEersteVangstMap } from '../../utils/catchHelper';
+import { buildEersteVangstMap, normalizeRingnummer } from '../../utils/catchHelper';
 import './StatsPage.css';
 
 export default function ProjectDetail({ records }) {
@@ -80,7 +80,7 @@ export default function ProjectDetail({ records }) {
       if (!r.ringnummer) return;
       if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') return;
 
-      const origineel = eersteVangst[r.ringnummer];
+      const origineel = eersteVangst[normalizeRingnummer(r.ringnummer)];
       const tvDatum = parseDate(r.vangstdatum);
       const origDatum = origineel ? parseDate(origineel.vangstdatum) : null;
       const dagen = dagenTussen(origDatum, tvDatum);

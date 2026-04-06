@@ -9,7 +9,7 @@ import { buildEuringLookup } from '../../utils/euring-lookup';
 import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
 import { formatDatum, toYMD, todayISO, yesterdayISO } from '../../utils/dateHelper';
-import { buildEersteVangstMap } from '../../utils/catchHelper';
+import { buildEersteVangstMap, normalizeRingnummer } from '../../utils/catchHelper';
 import { STATS_UITGESLOTEN } from '../../data/constants';
 import { useSettings } from '../../hooks/useSettings';
 import './StatsPage.css';
@@ -101,7 +101,7 @@ function computeTerugvangsten(records, fallbackLat, fallbackLon) {
     if (!r.ringnummer) return;
     if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') return;
 
-    const origineel = eersteVangst[r.ringnummer];
+    const origineel = eersteVangst[normalizeRingnummer(r.ringnummer)];
     const tvDatum = parseDate(r.vangstdatum);
     const origDatum = origineel ? parseDate(origineel.vangstdatum) : null;
     const dagen = dagenTussen(origDatum, tvDatum);

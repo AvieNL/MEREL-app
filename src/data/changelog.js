@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.20';
+export const VERSIE = '1.65.21';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.21',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: terugvangstlijn op kaart en "verste vangst" werken nu ook als ringnummer punten of spaties bevatte (buildEersteVangstMap normaliseert ringnummers)',
+    ],
+    wijzigingen_en: [
+      'Fix: recapture line on map and "furthest catch" now work even if ring number contained dots or spaces (buildEersteVangstMap normalises ring numbers)',
+    ],
+    wijzigingen_de: [
+      'Fix: Wiederfanglinie auf Karte und „weiteste Fangort" funktionieren jetzt auch bei Ringnummern mit Punkten oder Leerzeichen',
+    ],
+  },
   {
     versie: '1.65.20',
     datum: '2026-04-06',

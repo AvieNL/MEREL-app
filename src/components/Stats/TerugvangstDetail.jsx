@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { BarChartSimple, VangstKaart } from './Charts';
-import { buildEersteVangstMap } from '../../utils/catchHelper';
+import { buildEersteVangstMap, normalizeRingnummer } from '../../utils/catchHelper';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
 import { formatDatum } from '../../utils/dateHelper';
 import { STATS_UITGESLOTEN } from '../../data/constants';
@@ -49,7 +49,7 @@ export default function TerugvangstDetail({ records, projects = [] }) {
       tvRecords.push(r);
       if (!r.ringnummer) return;
 
-      const orig = eersteVangst[r.ringnummer];
+      const orig = eersteVangst[normalizeRingnummer(r.ringnummer)];
       const tvDatum = parseDate(r.vangstdatum);
       const origDatum = orig ? parseDate(orig.vangstdatum) : null;
       const dagen = dagenTussen(origDatum, tvDatum);

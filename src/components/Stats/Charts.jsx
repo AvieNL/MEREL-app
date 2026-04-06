@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { parseDate } from '../../utils/statsHelper';
-import { buildEersteVangstMap } from '../../utils/catchHelper';
+import { buildEersteVangstMap, normalizeRingnummer } from '../../utils/catchHelper';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import 'leaflet/dist/leaflet.css';
 import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
@@ -285,7 +285,7 @@ export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLo
       });
 
       if (!isNieuw && r.ringnummer) {
-        const orig = eersteVangst[r.ringnummer];
+        const orig = eersteVangst[normalizeRingnummer(r.ringnummer)];
         if (orig) {
           const oLat = parseFloat(orig.lat) || fallbackLat;
           const oLon = parseFloat(orig.lon) || fallbackLon;
