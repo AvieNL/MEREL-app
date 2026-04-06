@@ -237,10 +237,7 @@ export default function PulliRingenPage() {
     }));
   }
 
-  async function handleKlaar() {
-    if (form.ringnummer.trim()) {
-      await handleOpslaan();
-    }
+  function handleKlaar() {
     navigate(`/nest/${nest.id}`);
   }
 

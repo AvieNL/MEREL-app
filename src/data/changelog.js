@@ -1,6 +1,22 @@
-export const VERSIE = '1.65.7';
+export const VERSIE = '1.65.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.8',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: nestbezoek met N5/N6/N7 stadium stuurt niet meer automatisch door naar ringformulier — gebruik zelf de "ring pulli" knop',
+      'Fix: op de ring-pulli pagina is het nu mogelijk weg te gaan zonder een vangst aan te maken (terug/klaar slaat niet meer automatisch op)',
+    ],
+    wijzigingen_en: [
+      'Fix: nest visit with N5/N6/N7 stadium no longer auto-redirects to ring form — use the "ring pulli" button yourself',
+      'Fix: on the ring-pulli page it is now possible to leave without creating a catch (back/done no longer auto-saves)',
+    ],
+    wijzigingen_de: [
+      'Fix: Nestbesuch mit N5/N6/N7-Stadium leitet nicht mehr automatisch zum Beringungsformular weiter — nutze selbst den "Pulli beringen"-Knopf',
+      'Fix: Auf der Pulli-Beringungsseite kann man jetzt verlassen ohne einen Fang anzulegen (Zurück/Fertig speichert nicht mehr automatisch)',
+    ],
+  },
   {
     versie: '1.65.7',
     datum: '2026-04-06',

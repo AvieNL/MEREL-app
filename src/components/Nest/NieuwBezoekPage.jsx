@@ -242,11 +242,7 @@ export default function NieuwBezoekPage() {
         });
       }
 
-      if (['N5', 'N6', 'N7'].includes(stadiumPrimair)) {
-        navigate(`/nest/bezoek/${bezoekId}/ringen`);
-      } else {
-        navigate(`/nest/${geselecteerdNestId}`);
-      }
+      navigate(`/nest/${geselecteerdNestId}`);
     } finally {
       setSaving(false);
     }
