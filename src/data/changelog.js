@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.19';
+export const VERSIE = '1.65.20';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.20',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Stijl: nestenlijst gesorteerd op status (bouw → eieren → nestjongen → succesvol → mislukt → onbekend → leeg), daarbinnen op naam/omschrijving',
+    ],
+    wijzigingen_en: [
+      'Style: nest list sorted by status (building → eggs → nestlings → successful → failed → unknown → empty), then by name/description',
+    ],
+    wijzigingen_de: [
+      'Stil: Nestliste nach Status sortiert (Bau → Eier → Nestlinge → Erfolgreich → Gescheitert → Unbekannt → Leer), dann nach Name/Beschreibung',
+    ],
+  },
   {
     versie: '1.65.19',
     datum: '2026-04-06',

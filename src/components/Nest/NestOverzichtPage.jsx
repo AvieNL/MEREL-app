@@ -90,11 +90,15 @@ export default function NestOverzichtPage() {
     if (filterStatus) result = result.filter(n =>
       getBroedStatus(n.laatsteBezoek?.stadium) === filterStatus
     );
-    // Lege nesten (geen legsel voor gekozen jaar) altijd onderaan
+    const STATUS_VOLGORDE = { bouw: 0, eieren: 1, nestjongen: 2, succesvol: 3, mislukt: 4, onbekend: 5, leeg: 6 };
     result = [...result].sort((a, b) => {
-      const aLeeg = a.actueelLegsel ? 0 : 1;
-      const bLeeg = b.actueelLegsel ? 0 : 1;
-      return aLeeg - bLeeg;
+      const aStatus = a.actueelLegsel ? getBroedStatus(a.laatsteBezoek?.stadium) : 'leeg';
+      const bStatus = b.actueelLegsel ? getBroedStatus(b.laatsteBezoek?.stadium) : 'leeg';
+      const statusDiff = (STATUS_VOLGORDE[aStatus] ?? 6) - (STATUS_VOLGORDE[bStatus] ?? 6);
+      if (statusDiff !== 0) return statusDiff;
+      const aNaam = String(a.kastnummer || '') + (a.omschrijving || '');
+      const bNaam = String(b.kastnummer || '') + (b.omschrijving || '');
+      return aNaam.localeCompare(bNaam, undefined, { numeric: true });
     });
     return result;
   }, [verrijkteNesten, zoekterm, filterStatus]);
