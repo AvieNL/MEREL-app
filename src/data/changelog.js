@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.9';
+export const VERSIE = '1.65.10';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.10',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: klik op ringnummer in nestdetail opent nu betrouwbaar het bewerkformulier met alle vangstdata vooringevuld (via sessionStorage)',
+    ],
+    wijzigingen_en: [
+      'Fix: clicking a ring number in nest detail now reliably opens the edit form with all catch data pre-filled (via sessionStorage)',
+    ],
+    wijzigingen_de: [
+      'Fix: Klick auf Ringnummer in der Nestdetailansicht öffnet nun zuverlässig das Bearbeitungsformular mit allen Fangdaten vorausgefüllt (via sessionStorage)',
+    ],
+  },
   {
     versie: '1.65.9',
     datum: '2026-04-06',

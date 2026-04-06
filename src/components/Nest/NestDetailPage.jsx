@@ -401,7 +401,12 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
                             <>
                               {vangst
                                 ? <button className="bezoek-item__ring-link" type="button"
-                                    onClick={e => { e.stopPropagation(); switchModule('ring'); navigate('/ring/', { state: { editRecord: vangst } }); }}>
+                                    onClick={e => {
+  e.stopPropagation();
+  try { sessionStorage.setItem('vrs-edit-record', JSON.stringify(vangst)); } catch { /* ignore */ }
+  switchModule('ring');
+  navigate('/ring/');
+}}>
                                     {nr}
                                   </button>
                                 : <span className="bezoek-item__ring-orphan">{nr}</span>

@@ -27,6 +27,7 @@ import { NieuwFormContext } from './NieuwFormContext';
 import { db } from '../../lib/db';
 
 const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
+const EDIT_RECORD_KEY = 'vrs-edit-record';
 import SectieSoort from './SectieSoort';
 import SectieProject from './SectieProject';
 import SectieRinggegevens from './SectieRinggegevens';
@@ -49,7 +50,20 @@ export default function NieuwPage() {
   const navigate = useNavigate();
   const addNestring = useAddNestring();
   const switchModule = useModuleSwitch();
-  const editRecord = location.state?.editRecord ?? null;
+  // editRecord: uit location.state (normale navigate) of sessionStorage (module-switch vanuit nest)
+  const editRecordRef = useRef(undefined);
+  if (editRecordRef.current === undefined) {
+    if (location.state?.editRecord) {
+      editRecordRef.current = location.state.editRecord;
+    } else {
+      try {
+        const raw = sessionStorage.getItem(EDIT_RECORD_KEY);
+        editRecordRef.current = raw ? JSON.parse(raw) : null;
+        if (editRecordRef.current) sessionStorage.removeItem(EDIT_RECORD_KEY);
+      } catch { editRecordRef.current = null; }
+    }
+  }
+  const editRecord = editRecordRef.current;
 
   // Nestkast context: als de ringer vanuit een nestbezoek werd opgestart
   const nestContextRef = useRef(null);
