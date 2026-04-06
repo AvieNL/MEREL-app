@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.12';
+export const VERSIE = '1.65.13';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.13',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: min-height van knoppen in geringde-vogels-rij verwijderd zodat de regels compact blijven',
+    ],
+    wijzigingen_en: [
+      'Fix: removed min-height from ring-row buttons so lines stay compact',
+    ],
+    wijzigingen_de: [
+      'Fix: min-height der Schaltflächen in der Beringungszeile entfernt für kompakte Darstellung',
+    ],
+  },
   {
     versie: '1.65.12',
     datum: '2026-04-06',
