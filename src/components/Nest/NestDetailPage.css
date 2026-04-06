@@ -450,19 +450,17 @@
   margin: 4px 0 0;
   font-size: 0.82rem;
   display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 4px;
+  flex-direction: column;
+  gap: 2px;
   line-height: 1.5;
 }
 
 .bezoek-item__ringen-label {
   color: var(--text-muted);
-  flex-shrink: 0;
 }
 
 .bezoek-item__ring-rij {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 1px;
 }
