@@ -55,6 +55,7 @@ export const BROEDSTATUS = {
   nestjongen: { kleur: '#38bdf8', labelKey: 'nest_status_nestjongen' },
   succesvol:  { kleur: '#22c55e', labelKey: 'nest_status_succesvol' },
   mislukt:    { kleur: '#ef4444', labelKey: 'nest_status_mislukt' },
+  onbekend:   { kleur: '#94a3b8', labelKey: 'nest_status_onbekend' },
 };
 
 export function getBroedStatus(stadium) {
@@ -68,7 +69,8 @@ export function getBroedStatus(stadium) {
   if (stadium.startsWith('N')) return 'nestjongen';
   if (stadium === 'C1' || stadium === 'C2' || stadium === 'C3' || stadium === 'C4') return 'succesvol';
   if (stadium === 'C5' || stadium === 'C6' || stadium === 'C7') return 'mislukt';
-  return 'leeg'; // C8 (niet teruggevonden), C9 (onduidelijk), overig
+  if (stadium === 'C8' || stadium === 'C9') return 'onbekend';
+  return 'leeg';
 }
 
 /** Kleur per urgentie */

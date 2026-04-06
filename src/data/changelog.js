@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.15';
+export const VERSIE = '1.65.16';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.16',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: broedstatus C8/C9 toont nu "Onbekend" in plaats van "Leeg"',
+    ],
+    wijzigingen_en: [
+      'Fix: breeding status C8/C9 now shows "Unknown" instead of "Empty"',
+    ],
+    wijzigingen_de: [
+      'Fix: Brutstatus C8/C9 zeigt jetzt "Unbekannt" statt "Leer"',
+    ],
+  },
   {
     versie: '1.65.15',
     datum: '2026-04-06',

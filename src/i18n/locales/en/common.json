@@ -333,6 +333,7 @@
   "nest_status_nestjongen": "Nestlings",
   "nest_status_succesvol": "Successful",
   "nest_status_mislukt": "Failed",
+  "nest_status_onbekend": "Unknown",
   "nest_visit_count_one": "{{count}} visit",
   "nest_visit_count_other": "{{count}} visits",
   "nest_bezoeken_kort_one": "{{count}} visit",
