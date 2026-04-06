@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.21';
+export const VERSIE = '1.65.22';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.22',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Functie: kaart toont lijnen tussen vangsten in chronologische volgorde per vogel (1→2→3→...) in plaats van altijd vanaf de eerste vangst',
+    ],
+    wijzigingen_en: [
+      'Feature: map draws lines between catches in chronological order per bird (1→2→3→...) instead of always from the first catch',
+    ],
+    wijzigingen_de: [
+      'Funktion: Karte zeigt Linien zwischen Fängen in chronologischer Reihenfolge pro Vogel (1→2→3→...) statt immer vom Erstfang',
+    ],
+  },
   {
     versie: '1.65.21',
     datum: '2026-04-06',

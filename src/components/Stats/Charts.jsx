@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { parseDate } from '../../utils/statsHelper';
-import { buildEersteVangstMap, normalizeRingnummer } from '../../utils/catchHelper';
+import { normalizeRingnummer } from '../../utils/catchHelper';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import 'leaflet/dist/leaflet.css';
 import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
@@ -263,8 +263,6 @@ export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLo
   const displayNaam = useDisplayNaam();
 
   const kaartData = useMemo(() => {
-    const eersteVangst = buildEersteVangstMap(allRecords);
-
     const markers = [];
     const lijnen = [];
 
@@ -283,16 +281,33 @@ export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLo
         isNieuw,
         isExtern,
       });
+    });
 
-      if (!isNieuw && r.ringnummer) {
-        const orig = eersteVangst[normalizeRingnummer(r.ringnummer)];
-        if (orig) {
-          const oLat = parseFloat(orig.lat) || fallbackLat;
-          const oLon = parseFloat(orig.lon) || fallbackLon;
-          if (oLat && oLon && !isNaN(oLat) && !isNaN(oLon)) {
-            lijnen.push({ from: [oLat, oLon], to: [lat, lon] });
+    // Teken lijnen per ringnummer in chronologische volgorde (1→2→3→...)
+    const ringNummers = new Set(
+      targetRecords
+        .filter(r => r.ringnummer && (r.metalenringinfo === 4 || r.metalenringinfo === '4'))
+        .map(r => normalizeRingnummer(r.ringnummer))
+    );
+
+    ringNummers.forEach(normRing => {
+      const vangsten = allRecords
+        .filter(r => r.ringnummer && normalizeRingnummer(r.ringnummer) === normRing)
+        .sort((a, b) => (a.vangstdatum || '') < (b.vangstdatum || '') ? -1 : 1)
+        .map((r, i) => {
+          let lat = parseFloat(r.lat);
+          let lon = parseFloat(r.lon);
+          // Alleen voor de eerste vangst: fallback naar stationscoördinaten
+          if (i === 0 && (!lat || !lon || isNaN(lat) || isNaN(lon))) {
+            lat = fallbackLat;
+            lon = fallbackLon;
           }
-        }
+          return (lat && lon && !isNaN(lat) && !isNaN(lon)) ? [lat, lon] : null;
+        })
+        .filter(Boolean);
+
+      for (let i = 1; i < vangsten.length; i++) {
+        lijnen.push({ from: vangsten[i - 1], to: vangsten[i] });
       }
     });
 
