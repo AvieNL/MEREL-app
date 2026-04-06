@@ -66,10 +66,9 @@ export function getBroedStatus(stadium) {
   if (stadium === 'P2' || stadium === 'P3') return 'nestjongen';
   if (stadium.startsWith('P')) return 'eieren';
   if (stadium.startsWith('N')) return 'nestjongen';
-  if (stadium === 'C1' || stadium === 'C4') return 'succesvol';
-  if (stadium === 'C2' || stadium === 'C3') return 'mislukt';
-  if (stadium === 'C5') return 'nestjongen';
-  return 'leeg';
+  if (stadium === 'C1' || stadium === 'C2' || stadium === 'C3' || stadium === 'C4') return 'succesvol';
+  if (stadium === 'C5' || stadium === 'C6' || stadium === 'C7') return 'mislukt';
+  return 'leeg'; // C8 (niet teruggevonden), C9 (onduidelijk), overig
 }
 
 /** Kleur per urgentie */

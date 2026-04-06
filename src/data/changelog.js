@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.14';
+export const VERSIE = '1.65.15';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.15',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: broedstatus correct — C1 t/m C4 zijn succesvol, C5/C6/C7 zijn mislukt (C3 stond ten onrechte als mislukt)',
+    ],
+    wijzigingen_en: [
+      'Fix: breeding status corrected — C1–C4 are successful, C5/C6/C7 are failed (C3 was incorrectly marked as failed)',
+    ],
+    wijzigingen_de: [
+      'Fix: Brutstatus korrigiert — C1–C4 erfolgreich, C5/C6/C7 gescheitert (C3 war fälschlicherweise als gescheitert markiert)',
+    ],
+  },
   {
     versie: '1.65.14',
     datum: '2026-04-06',
