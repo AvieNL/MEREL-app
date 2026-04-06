@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.11';
+export const VERSIE = '1.65.12';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.12',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Stijl: regelafstand bij geringde vogels in nestbezoek verkleind',
+    ],
+    wijzigingen_en: [
+      'Style: reduced line spacing for ringed birds in nest visit',
+    ],
+    wijzigingen_de: [
+      'Stil: Zeilenabstand bei beringten Vögeln im Nestbesuch verkleinert',
+    ],
+  },
   {
     versie: '1.65.11',
     datum: '2026-04-06',
