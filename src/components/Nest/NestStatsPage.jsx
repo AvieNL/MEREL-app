@@ -14,6 +14,7 @@ import {
   exportNestCSV, exportAviNestTXT, exportAviNestXML,
 } from '../../utils/nestExport';
 import '../Stats/StatsPage.css';
+import './NestOverzichtPage.css';
 
 // Lookup maps voor labels
 const habitatLabel    = Object.fromEntries(HABITAT_CODES.map(c    => [c.code, c.nl]));
@@ -233,12 +234,6 @@ export default function NestStatsPage() {
     [nesten, nieutLegsels, bezoeken, ringen, speciesByEuring]
   );
 
-  // ── Totaaloverzicht ──
-  const totaalStats = useMemo(() =>
-    computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, jaar: null }),
-    [nesten, legsels, bezoeken, ringen, speciesByEuring]
-  );
-
   // Verdelingen op nestniveau (nesttype, habitat, nestplaats)
   const nesttypeVerdeling = useMemo(() => {
     const t = {};
@@ -381,8 +376,19 @@ export default function NestStatsPage() {
     });
   }, [ringen, vangsten, bezoeken, legsels, nesten]);
 
+  const [filterJaar, setFilterJaar] = useState(null);
   const [soortenSorteer, setSoortenSorteer] = useState('legsels');
   const [tvSorteer, setTvSorteer] = useState({ col: 'afstand', dir: 'desc' });
+
+  const beschikbareJaren = useMemo(() => {
+    const jaren = new Set(legsels.map(l => l.jaar).filter(Boolean));
+    return [...jaren].sort((a, b) => b - a);
+  }, [legsels]);
+
+  const gefilterdeStats = useMemo(() =>
+    computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, jaar: filterJaar }),
+    [nesten, legsels, bezoeken, ringen, speciesByEuring, filterJaar]
+  );
 
   const tvSortToggle = (col) => {
     setTvSorteer(s => s.col === col
@@ -408,18 +414,18 @@ export default function NestStatsPage() {
   const stadiumVolgorde = ['B1','B2','B3','E1','E2','E3','E4','N1','N2','N3','N4','C','C+','X0','P','L1','L2'];
 
   const stadiumSorted = useMemo(() =>
-    Object.entries(totaalStats.stadiumTelling)
+    Object.entries(gefilterdeStats.stadiumTelling)
       .sort((a, b) => {
         const ia = stadiumVolgorde.indexOf(a[0]);
         const ib = stadiumVolgorde.indexOf(b[0]);
         return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
       }),
-    [totaalStats.stadiumTelling]
+    [gefilterdeStats.stadiumTelling]
   );
 
   const maxStadium = useMemo(() =>
-    Math.max(1, ...Object.values(totaalStats.stadiumTelling)),
-    [totaalStats.stadiumTelling]
+    Math.max(1, ...Object.values(gefilterdeStats.stadiumTelling)),
+    [gefilterdeStats.stadiumTelling]
   );
 
   return (
@@ -537,18 +543,40 @@ export default function NestStatsPage() {
 
       {/* ══ Sectie 2: Totaaloverzicht ══════════════════════════════════════ */}
       <div className="stats-section stats-section--totaal">
-        <h2 className="stats-section-title">{t('stats_total_overview')}</h2>
+        <h2 className="stats-section-title">
+          {filterJaar ? `Overzicht ${filterJaar}` : t('stats_total_overview')}
+        </h2>
+
+        {beschikbareJaren.length > 1 && (
+          <div className="nest-jaar-filter" style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+            <button
+              className={`nest-jaar-btn${filterJaar === null ? ' active' : ''}`}
+              onClick={() => setFilterJaar(null)}
+            >
+              Alle jaren
+            </button>
+            {beschikbareJaren.map(jaar => (
+              <button
+                key={jaar}
+                className={`nest-jaar-btn${filterJaar === jaar ? ' active' : ''}`}
+                onClick={() => setFilterJaar(jaar)}
+              >
+                {jaar}
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="stats-grid">
-          <StatCard waarde={nesten.length}                     label="Nesten totaal" />
-          <StatCard waarde={totaalStats.aantalLegsels}         label="Legsels totaal" />
-          <StatCard waarde={totaalStats.totaalEieren}          label="Eieren gevonden" />
-          <StatCard waarde={totaalStats.totaalPulli}           label="Pullen geteld" />
-          <StatCard waarde={totaalStats.totaalUitgevlogen}     label="Uitgevlogen" />
-          <StatCard waarde={totaalStats.aantalRingen}          label="Pullen geringd" />
+          <StatCard waarde={gefilterdeStats.aantalNestenMet}   label="Actieve nesten" />
+          <StatCard waarde={gefilterdeStats.aantalLegsels}     label="Legsels" />
+          <StatCard waarde={gefilterdeStats.totaalEieren}      label="Eieren gevonden" />
+          <StatCard waarde={gefilterdeStats.totaalPulli}       label="Pullen geteld" />
+          <StatCard waarde={gefilterdeStats.totaalUitgevlogen} label="Uitgevlogen" />
+          <StatCard waarde={gefilterdeStats.aantalRingen}      label="Pullen geringd" />
           <StatCard waarde={teruggevangenPulli.length}         label="Nestringen teruggevangen" />
-          <StatCard waarde={totaalStats.aantalBezoeken}        label="Bezoeken totaal" />
-          <StatCard waarde={totaalStats.aantalAfgerond}        label="Legsels afgerond" />
+          <StatCard waarde={gefilterdeStats.aantalBezoeken}    label="Bezoeken" />
+          <StatCard waarde={gefilterdeStats.aantalAfgerond}    label="Legsels afgerond" />
         </div>
 
         {/* Legsels per jaar */}
@@ -597,10 +625,10 @@ export default function NestStatsPage() {
           </div>
         )}
 
-        {/* Top soorten (alle jaren) */}
-        {totaalStats.perSoort.length > 0 && (
+        {/* Top soorten */}
+        {gefilterdeStats.perSoort.length > 0 && (
           <div className="section">
-            <h3>Soorten (alle jaren)</h3>
+            <h3>Soorten{filterJaar ? ` ${filterJaar}` : ' (alle jaren)'}</h3>
             <div className="trektellen-table-wrap">
               <table className="trektellen-table">
                 <thead>
@@ -626,7 +654,7 @@ export default function NestStatsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...totaalStats.perSoort]
+                  {[...gefilterdeStats.perSoort]
                     .sort((a, b) => soortenSorteer === 'naam'
                       ? a.naam.localeCompare(b.naam, 'nl')
                       : (b[soortenSorteer] || 0) - (a[soortenSorteer] || 0)
@@ -653,7 +681,7 @@ export default function NestStatsPage() {
         )}
 
         {/* Nestsucces */}
-        {totaalStats.perSoort.some(s => s.succes > 0 || s.mislukt > 0) && (
+        {gefilterdeStats.perSoort.some(s => s.succes > 0 || s.mislukt > 0) && (
           <div className="section">
             <h3>Nestsucces per soort</h3>
             <div className="trektellen-table-wrap">
@@ -668,7 +696,7 @@ export default function NestStatsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {totaalStats.perSoort
+                  {gefilterdeStats.perSoort
                     .filter(s => s.succes > 0 || s.mislukt > 0)
                     .map(s => {
                       const pct = s.succes + s.mislukt > 0
@@ -827,7 +855,7 @@ export default function NestStatsPage() {
         </div>
       </div>
 
-      {totaalStats.aantalLegsels === 0 && nesten.length === 0 && (
+      {legsels.length === 0 && nesten.length === 0 && (
         <p className="stats-empty" style={{ textAlign: 'center', marginTop: 40 }}>
           {t('nest_stats_empty_all')}
         </p>

@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.5';
+export const VERSIE = '1.65.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.6',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Feat: jaarfilter toegevoegd aan neststatistieken — selecteer een specifiek jaar of bekijk alle jaren samen',
+    ],
+    wijzigingen_en: [
+      'Feat: year filter added to nest statistics — select a specific year or view all years combined',
+    ],
+    wijzigingen_de: [
+      'Feat: Jahresfilter zu Neststatistiken hinzugefügt — wähle ein bestimmtes Jahr oder zeige alle Jahre zusammen',
+    ],
+  },
   {
     versie: '1.65.5',
     datum: '2026-04-05',
