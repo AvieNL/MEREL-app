@@ -316,7 +316,9 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
       ) : (
         <div className="bezoek-timeline">
           {legselBezoeken.map(bezoek => {
-            const bezoekRingen = ringen.filter(r => r.nestbezoek_id === bezoek.id);
+            const bezoekRingen = ringen
+              .filter(r => r.nestbezoek_id === bezoek.id)
+              .sort((a, b) => (a.ringnummer || '').localeCompare(b.ringnummer || '', undefined, { numeric: true }));
             const isRingbaar = ['N5', 'N6', 'N7'].includes(bezoek.stadium);
             return (
               <div key={bezoek.id} className="bezoek-item">

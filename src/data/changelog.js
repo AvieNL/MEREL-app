@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.13';
+export const VERSIE = '1.65.14';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.14',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Stijl: geringde vogels in nestbezoek gesorteerd op ringnummer',
+    ],
+    wijzigingen_en: [
+      'Style: ringed birds in nest visit sorted by ring number',
+    ],
+    wijzigingen_de: [
+      'Stil: beringte Vögel im Nestbesuch nach Ringnummer sortiert',
+    ],
+  },
   {
     versie: '1.65.13',
     datum: '2026-04-06',
