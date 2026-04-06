@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.18';
+export const VERSIE = '1.65.19';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.19',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: ringnummer-check in pulliformulier bevraagt Dexie direct — werkt nu ook als records nog laden',
+    ],
+    wijzigingen_en: [
+      'Fix: ring number check in pulli form queries Dexie directly — now works even while records are still loading',
+    ],
+    wijzigingen_de: [
+      'Fix: Ringnummer-Prüfung im Pulliformular fragt Dexie direkt ab — funktioniert jetzt auch während Datensätze noch laden',
+    ],
+  },
   {
     versie: '1.65.18',
     datum: '2026-04-06',

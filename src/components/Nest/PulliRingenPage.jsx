@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -113,15 +113,21 @@ export default function PulliRingenPage() {
     }
   }, [bezoek?.aantal_pulli]);
 
-  const bestaandeMatch = useMemo(() => {
-    const norm = normRing(form.ringnummer);
-    if (norm.length < 5) return null;
-    const match = records.find(r => normRing(r.ringnummer) === norm);
-    if (!match) return null;
-    if (bezoekRingen?.some(r => r.vangst_id === match.id)) return null;
-    if (opgeslagen.some(p => p.id === match.id)) return null;
-    return match;
-  }, [form.ringnummer, records, bezoekRingen, opgeslagen]);
+  // Zoek rechtstreeks in Dexie zodat de check ook werkt als records nog laden
+  const normRingInput = normRing(form.ringnummer);
+  const bestaandeMatchRaw = useLiveQuery(async () => {
+    if (normRingInput.length < 5) return null;
+    const all = await db.vangsten
+      .filter(r => !r.deleted_at && normRing(r.ringnummer) === normRingInput)
+      .first();
+    return all ?? null;
+  }, [normRingInput], null);
+  // Filter uit: al gekoppeld aan dit bezoek, of al opgeslagen in deze sessie
+  const bezoekRingVangstIds = new Set((bezoekRingen || []).map(r => r.vangst_id));
+  const bestaandeMatch = bestaandeMatchRaw &&
+    !bezoekRingVangstIds.has(bestaandeMatchRaw.id) &&
+    !opgeslagen.some(p => p.id === bestaandeMatchRaw.id)
+    ? bestaandeMatchRaw : null;
 
   if (!bezoek || !legsel || !nest) {
     return (
