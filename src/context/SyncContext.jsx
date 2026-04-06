@@ -215,18 +215,15 @@ export function SyncProvider({ children }) {
       !(item.nextRetryAt && item.nextRetryAt > now)
     );
 
-    // Verwerk alle in-aanmerking-komende items parallel
-    const results = await Promise.allSettled(
-      eligible.map(item => executeQueueItem(item, user.id))
-    );
-
-    for (let i = 0; i < eligible.length; i++) {
-      const item = eligible[i];
-      if (results[i].status === 'fulfilled') {
+    // Verwerk items sequentieel op volgorde van invoer (queue-id).
+    // Dit voorkomt FK-violations bij nest → legsel → nestbezoek → nestring ketens,
+    // waarbij parallel verwerken het kind voor de ouder zou kunnen sturen.
+    for (const item of eligible) {
+      try {
+        await executeQueueItem(item, user.id);
         await db.sync_queue.delete(item.id);
-      } else {
+      } catch (err) {
         hasErrors = true;
-        const err = results[i].reason;
         const attempts = (item.attempts || 0) + 1;
         // Exponentiële backoff: 30s → 60s → 120s → 240s → 480s (max ~8 min)
         const backoffMs = Math.min(30_000 * Math.pow(2, attempts - 1), 8 * 60_000);

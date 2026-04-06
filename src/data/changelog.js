@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.16';
+export const VERSIE = '1.65.17';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.17',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: sync-wachtrij verwerkt items nu sequentieel — voorkomt FK-fout bij nest + legsel + bezoek tegelijk aanmaken',
+    ],
+    wijzigingen_en: [
+      'Fix: sync queue now processes items sequentially — prevents FK errors when creating nest + legsel + visit at the same time',
+    ],
+    wijzigingen_de: [
+      'Fix: Sync-Warteschlange verarbeitet Einträge nun sequenziell — verhindert FK-Fehler beim gleichzeitigen Erstellen von Nest, Legsel und Besuch',
+    ],
+  },
   {
     versie: '1.65.16',
     datum: '2026-04-06',
