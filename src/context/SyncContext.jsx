@@ -131,6 +131,15 @@ export function SyncProvider({ children }) {
    */
   const addToQueue = useCallback(async (tableName, operation, data) => {
     try {
+      // Bij een delete: verwijder eventuele pending upserts voor hetzelfde record
+      // zodat ze niet parallel lopen en FK-violations veroorzaken
+      if (data?.id && operation === 'nest_delete') {
+        await db.sync_queue
+          .where('table_name').equals(tableName)
+          .filter(item => item.operation === 'upsert' && item.data?.id === data.id)
+          .delete();
+      }
+
       // Dedupliceer identieke operaties op hetzelfde record (bijv. meerdere edits offline)
       if (data?.id && ['upsert', 'soft_delete', 'restore'].includes(operation)) {
         const existing = await db.sync_queue

@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.6';
+export const VERSIE = '1.65.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.7',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: FK-violation bij verwijderen nestring — pending upserts worden nu eerst uit de sync-queue verwijderd voor de delete wordt verwerkt',
+    ],
+    wijzigingen_en: [
+      'Fix: FK violation when deleting a nestring — pending upserts are now removed from the sync queue before the delete is processed',
+    ],
+    wijzigingen_de: [
+      'Fix: FK-Verletzung beim Löschen eines Nestring-Eintrags — ausstehende Upserts werden jetzt aus der Sync-Queue entfernt, bevor das Löschen verarbeitet wird',
+    ],
+  },
   {
     versie: '1.65.6',
     datum: '2026-04-06',
