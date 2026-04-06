@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.17';
+export const VERSIE = '1.65.18';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.18',
+    datum: '2026-04-06',
+    wijzigingen: [
+      'Fix: geringde vogels in pulliformulier toont nu ook ringen van vorige sessies (niet alleen huidige sessie)',
+    ],
+    wijzigingen_en: [
+      'Fix: ringed birds in pulli form now shows rings from previous sessions too (not only current session)',
+    ],
+    wijzigingen_de: [
+      'Fix: beringte Vögel im Pulliformular zeigt nun auch Ringe aus früheren Sitzungen',
+    ],
+  },
   {
     versie: '1.65.17',
     datum: '2026-04-06',

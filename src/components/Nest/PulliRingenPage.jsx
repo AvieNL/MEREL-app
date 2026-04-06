@@ -292,22 +292,36 @@ export default function PulliRingenPage() {
         )}
       </div>
 
-      {/* ── Reeds geringd ── */}
-      {opgeslagen.length > 0 && (
-        <div className="pulli-opgeslagen">
-          <p className="pulli-opgeslagen__titel">{t('pulli_geringd', { count: opgeslagen.length })}</p>
-          {opgeslagen.map((p, i) => (
-            <div key={p.id} className="pulli-opgeslagen__item">
-              <span className="pulli-opgeslagen__nr">{i + 1}.</span>
-              <span className="pulli-opgeslagen__ring">{p.ringnummer}</span>
-              {p.geslacht && p.geslacht !== 'U' && <span className="pulli-opgeslagen__meta">{p.geslacht}</span>}
-              {p.vleugel && <span className="pulli-opgeslagen__meta">{p.vleugel} mm</span>}
-              {p.gewicht && <span className="pulli-opgeslagen__meta">{p.gewicht} g</span>}
-              {p.tarsus && <span className="pulli-opgeslagen__meta">t: {p.tarsus} mm</span>}
-            </div>
-          ))}
-        </div>
-      )}
+      {/* ── Reeds geringd (alle sessies) ── */}
+      {(bezoekRingen?.length > 0 || opgeslagen.length > 0) && (() => {
+        // Combineer bezoekRingen (Dexie) met opgeslagen (huidige sessie) tot één gededupliceerde lijst
+        const bezoekRingIds = new Set((bezoekRingen || []).map(r => r.vangst_id));
+        const alleRingen = [
+          ...(bezoekRingen || []).map(r => {
+            const sessie = opgeslagen.find(p => p.id === r.vangst_id);
+            if (sessie) return { id: r.vangst_id, ringnummer: r.ringnummer, geslacht: sessie.geslacht, vleugel: sessie.vleugel, gewicht: sessie.gewicht, tarsus: sessie.tarsus };
+            const vangst = records.find(v => v.id === r.vangst_id);
+            return { id: r.vangst_id, ringnummer: r.ringnummer || vangst?.ringnummer || '', geslacht: vangst?.geslacht, vleugel: vangst?.vleugel, gewicht: vangst?.gewicht, tarsus: vangst?.tarsus_lengte };
+          }),
+          // Voeg sessie-items toe die nog niet in bezoekRingen zitten (Dexie-lag)
+          ...opgeslagen.filter(p => !bezoekRingIds.has(p.id)),
+        ];
+        return (
+          <div className="pulli-opgeslagen">
+            <p className="pulli-opgeslagen__titel">{t('pulli_geringd', { count: alleRingen.length })}</p>
+            {alleRingen.map((p, i) => (
+              <div key={p.id} className="pulli-opgeslagen__item">
+                <span className="pulli-opgeslagen__nr">{i + 1}.</span>
+                <span className="pulli-opgeslagen__ring">{p.ringnummer}</span>
+                {p.geslacht && p.geslacht !== 'U' && <span className="pulli-opgeslagen__meta">{p.geslacht}</span>}
+                {p.vleugel && <span className="pulli-opgeslagen__meta">{p.vleugel} mm</span>}
+                {p.gewicht && <span className="pulli-opgeslagen__meta">{p.gewicht} g</span>}
+                {p.tarsus && <span className="pulli-opgeslagen__meta">t: {p.tarsus} mm</span>}
+              </div>
+            ))}
+          </div>
+        );
+      })()}
 
       {/* ── Invoerformulier ── */}
       <div className="pulli-form">
