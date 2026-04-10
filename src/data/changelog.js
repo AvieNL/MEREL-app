@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.22';
+export const VERSIE = '1.65.23';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.23',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Data: 10 tuinvangsten (12-04-2025, Breedenbroek) eenmalig ingeladen als Extern op project Oeken',
+    ],
+    wijzigingen_en: [
+      'Data: 10 garden catches (12-04-2025, Breedenbroek) imported as Extern under project Oeken',
+    ],
+    wijzigingen_de: [
+      'Daten: 10 Gartenfänge (12-04-2025, Breedenbroek) einmalig als Extern unter Projekt Oeken importiert',
+    ],
+  },
   {
     versie: '1.65.22',
     datum: '2026-04-06',
