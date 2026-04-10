@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.26';
+export const VERSIE = '1.65.27';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.27',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Stijl: vangstlijst gesorteerd op meest gevangen soort (daarna datum aflopend), bij zoeken én zonder zoekterm',
+    ],
+    wijzigingen_en: [
+      'Style: catch list sorted by most caught species (then date descending), when searching and without search term',
+    ],
+    wijzigingen_de: [
+      'Stil: Fangliste sortiert nach am häufigsten gefangener Art (dann Datum absteigend), beim Suchen und ohne Suchbegriff',
+    ],
+  },
   {
     versie: '1.65.26',
     datum: '2026-04-10',

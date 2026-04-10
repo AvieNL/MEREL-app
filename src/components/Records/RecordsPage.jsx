@@ -92,6 +92,13 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state?.filterSoort]);
 
+  // Soortsfrequentie op basis van alle records (niet gefilterd)
+  const soortFrequentie = useMemo(() => {
+    const freq = {};
+    records.forEach(r => { if (r.vogelnaam) freq[r.vogelnaam] = (freq[r.vogelnaam] || 0) + 1; });
+    return freq;
+  }, [records]);
+
   const filtered = useMemo(() => {
     const base = !zoek ? records : (() => {
       const lower = zoek.toLowerCase();
@@ -115,8 +122,12 @@ export default function RecordsPage({ records, recordsLoading = false, deletedRe
       if (p[2].length === 4) return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
       return d;
     };
-    return [...base].sort((a, b) => toSortKey(b.vangstdatum).localeCompare(toSortKey(a.vangstdatum)));
-  }, [records, zoek]);
+    return [...base].sort((a, b) => {
+      const freqDiff = (soortFrequentie[b.vogelnaam] || 0) - (soortFrequentie[a.vogelnaam] || 0);
+      if (freqDiff !== 0) return freqDiff;
+      return toSortKey(b.vangstdatum).localeCompare(toSortKey(a.vangstdatum));
+    });
+  }, [records, zoek, soortFrequentie]);
 
   return (
     <div className="page records-page">
