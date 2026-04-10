@@ -315,6 +315,12 @@ export default function NestStatsPage() {
     reader.readAsText(file);
   }, [bulkImportNestBackup, addToast]);
 
+  const [exportOpen, setExportOpen] = useState(false);
+  const [filterJaar, setFilterJaar] = useState(null);
+  const [soortenSorteer, setSoortenSorteer] = useState('legsels');
+  const [tvSorteer, setTvSorteer] = useState({ col: 'afstand', dir: 'desc' });
+  const teruggevangenRef = useRef(null);
+
   // ── Teruggevangen nestringen (pulli + adulten) ──
   const teruggevangenPulli = useMemo(() => {
     if (!vangsten?.length || !ringen.length) return [];
@@ -323,11 +329,16 @@ export default function NestStatsPage() {
     const legselById = new Map(legsels.map(l => [l.id, l]));
     const nestById   = new Map(nesten.map(n => [n.id, n]));
 
-    // Alle unieke ringnummers die ooit in een nestbezoek zijn geringd
+    // Alle unieke ringnummers die in een nestbezoek zijn geringd (gefilterd op jaar)
     const nestRingByNr = new Map(); // normalized ring → first nestring entry (voor nestkoppeling)
     ringen.forEach(r => {
       const ring = (r.ringnummer || '').replace(/\./g, '');
       if (!ring) return;
+      if (filterJaar !== null) {
+        const bezoek = bezoekById.get(r.nestbezoek_id);
+        const legsel = bezoek ? legselById.get(bezoek.legsel_id) : null;
+        if (!legsel || legsel.jaar !== filterJaar) return;
+      }
       if (!nestRingByNr.has(ring)) nestRingByNr.set(ring, r);
     });
 
@@ -374,13 +385,8 @@ export default function NestStatsPage() {
       const maxB = Math.max(0, ...b.rijen.map(r => r.afstand ?? 0));
       return maxB - maxA;
     });
-  }, [ringen, vangsten, bezoeken, legsels, nesten]);
+  }, [ringen, vangsten, bezoeken, legsels, nesten, filterJaar]);
 
-  const [exportOpen, setExportOpen] = useState(false);
-  const [filterJaar, setFilterJaar] = useState(null);
-  const [soortenSorteer, setSoortenSorteer] = useState('legsels');
-  const [tvSorteer, setTvSorteer] = useState({ col: 'afstand', dir: 'desc' });
-  const teruggevangenRef = useRef(null);
 
   const beschikbareJaren = useMemo(() => {
     const jaren = new Set(legsels.map(l => l.jaar).filter(Boolean));

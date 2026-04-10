@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.35';
+export const VERSIE = '1.65.36';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.36',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Fix: teruggevangen nestringen gefilterd op geselecteerd jaar in neststatistieken',
+    ],
+    wijzigingen_en: [
+      'Fix: recaptured nest rings filtered by selected year in nest stats',
+    ],
+    wijzigingen_de: [
+      'Fix: Wiedergefangene Nestringe werden in Neststatistiken nach gewähltem Jahr gefiltert',
+    ],
+  },
   {
     versie: '1.65.35',
     datum: '2026-04-10',
