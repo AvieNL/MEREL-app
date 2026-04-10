@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.23';
+export const VERSIE = '1.65.24';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.24',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Opruimen: tijdelijke importcode en JSON voor Oeken-tuinvangsten verwijderd (data al ingeladen)',
+    ],
+    wijzigingen_en: [
+      'Cleanup: removed temporary import code and JSON for Oeken garden catches (data already loaded)',
+    ],
+    wijzigingen_de: [
+      'Aufräumen: temporären Importcode und JSON für Oeken-Gartenfänge entfernt (Daten bereits geladen)',
+    ],
+  },
   {
     versie: '1.65.23',
     datum: '2026-04-10',

@@ -9,7 +9,6 @@ import { toYMD } from '../utils/dateHelper';
 import { useAuth } from '../context/AuthContext';
 import { useSync } from '../context/SyncContext';
 import { pullNestData } from './useNestSync';
-import oekenTuinData from '../data/oeken-tuin-import.json';
 import { useToast } from '../context/ToastContext';
 import i18n from '../i18n/index.js';
 
@@ -63,7 +62,6 @@ export function useRecords() {
     pulledRef.current = true;
     fixExternBron().then(() => pullFromSupabase());
     normalizeVangstdatums();
-    importOekenTuinEenmalig();
   }, [user?.id]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function pullFromSupabase() {
@@ -103,15 +101,6 @@ export function useRecords() {
       key: `last_pull_vangsten_${user.id}`,
       value: new Date().toISOString(),
     });
-  }
-
-  async function importOekenTuinEenmalig() {
-    const meta = await db.meta.get(`oeken_tuin_v1_${user.id}`);
-    if (meta?.value) return;
-    const withIds = oekenTuinData.map(r => ({ ...r, user_id: user.id }));
-    await db.vangsten.bulkPut(withIds);
-    addToQueue('vangsten', 'batch_upsert', withIds.map(r => toVangstRow(r, user.id)));
-    await db.meta.put({ key: `oeken_tuin_v1_${user.id}`, value: true });
   }
 
   // Eenmalige migratie: reset lastPull als er TV-records zijn met bron=null (na Supabase-sync bug)
