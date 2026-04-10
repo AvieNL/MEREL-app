@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.36';
+export const VERSIE = '1.65.37';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.37',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Fix: klik op "Pullen geringd" gaat nu naar nestenlijst (pullen staan in nestmodule, niet in ringmodule)',
+    ],
+    wijzigingen_en: [
+      'Fix: clicking "Pullen geringd" now goes to nest list (pulli are stored in nest module, not ring module)',
+    ],
+    wijzigingen_de: [
+      'Fix: Klick auf „Beringte Nestlinge" führt jetzt zur Nestliste (Nestlinge sind im Nestmodul gespeichert, nicht im Ringmodul)',
+    ],
+  },
   {
     versie: '1.65.36',
     datum: '2026-04-10',
