@@ -252,8 +252,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   }, [gefilterdRecords]);
 
   const curiosa = useMemo(() => {
-    // Gebruik statsRecords (ongefilterd op project) zodat alle vangsten meetellen voor weetjes
-    const basis = statsRecords.filter(r => r.leeftijd !== '1');
+    const basis = gefilterdRecords.filter(r => r.leeftijd !== '1');
 
     // Totaal gewicht
     const gewichten = basis.filter(r => r.gewicht != null && r.gewicht !== '' && !isNaN(parseFloat(r.gewicht)));
@@ -281,7 +280,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     }
 
     // Vroegste + laatste vangst (op tijdstip van de dag)
-    const metTijd = statsRecords
+    const metTijd = gefilterdRecords
       .map(r => ({ r, nt: normTijd(r.tijd) }))
       .filter(({ nt }) => nt !== null);
 
@@ -292,7 +291,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
     // Drukste dag — ook project bijhouden (meest voorkomende die dag)
     const perDag = {};
-    statsRecords.forEach(r => {
+    gefilterdRecords.forEach(r => {
       if (!r.vangstdatum) return;
       if (!perDag[r.vangstdatum]) perDag[r.vangstdatum] = { count: 0, projecten: {} };
       perDag[r.vangstdatum].count++;
@@ -305,7 +304,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
     // Meeste soorten op één dag — ook project bijhouden
     const soortenPerDag = {};
-    statsRecords.forEach(r => {
+    gefilterdRecords.forEach(r => {
       if (!r.vangstdatum || !r.vogelnaam) return;
       if (!soortenPerDag[r.vangstdatum]) soortenPerDag[r.vangstdatum] = { soorten: new Set(), projecten: {} };
       soortenPerDag[r.vangstdatum].soorten.add(r.vogelnaam.toLowerCase());
@@ -318,7 +317,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       : null;
 
     return { totaalGewichtG, gewichtN: gewichten.length, totaalVleugelMm, vleugelN: vleugels.length, vroegste, laatste, druksteDag, meesteSoortenDag };
-  }, [statsRecords]);
+  }, [gefilterdRecords]);
 
   // Kaart toont ook externe_ring_info (als rode stip), maar telt niet mee in stats
   const kaartRecords = useMemo(() => {
