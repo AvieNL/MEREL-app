@@ -285,12 +285,10 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       .map(r => ({ r, nt: normTijd(r.tijd) }))
       .filter(({ nt }) => nt !== null);
 
-    const vroegste = metTijd.length > 0
-      ? metTijd.reduce((min, x) => x.nt < min.nt ? x : min).r
-      : null;
-    const laatste = metTijd.length > 0
-      ? metTijd.reduce((max, x) => x.nt > max.nt ? x : max).r
-      : null;
+    const vroegsteX = metTijd.length > 0 ? metTijd.reduce((min, x) => x.nt < min.nt ? x : min) : null;
+    const laatsteX  = metTijd.length > 0 ? metTijd.reduce((max, x) => x.nt > max.nt ? x : max) : null;
+    const vroegste = vroegsteX ? { ...vroegsteX.r, tijdNorm: vroegsteX.nt } : null;
+    const laatste  = laatsteX  ? { ...laatsteX.r,  tijdNorm: laatsteX.nt  } : null;
 
     // Drukste dag — ook project bijhouden (meest voorkomende die dag)
     const perDag = {};
@@ -1006,7 +1004,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 <div className="curiosum-rij">
                   <span className="curiosum-label">Vroegste vangst</span>
                   <span className="curiosum-waarde">
-                    {String(curiosa.vroegste.tijd).replace(/^(\d):/, '0$1:').slice(0, 5)}
+                    {curiosa.vroegste.tijdNorm}
                     <span className="curiosum-sub">
                       {displayNaam(curiosa.vroegste.vogelnaam)}
                       {curiosa.vroegste.vangstdatum && ` · ${formatDatum(curiosa.vroegste.vangstdatum)}`}
@@ -1020,7 +1018,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 <div className="curiosum-rij">
                   <span className="curiosum-label">Laatste vangst</span>
                   <span className="curiosum-waarde">
-                    {String(curiosa.laatste.tijd).replace(/^(\d):/, '0$1:').slice(0, 5)}
+                    {curiosa.laatste.tijdNorm}
                     <span className="curiosum-sub">
                       {displayNaam(curiosa.laatste.vogelnaam)}
                       {curiosa.laatste.vangstdatum && ` · ${formatDatum(curiosa.laatste.vangstdatum)}`}
