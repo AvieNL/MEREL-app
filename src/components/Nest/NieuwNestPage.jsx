@@ -75,6 +75,16 @@ export default function NieuwNestPage() {
     return nummers.length > 0 ? Math.max(...nummers) + 1 : 1;
   }, [nesten]);
 
+  // Suggestie voor vrij nest: hoogste nXXX + 1
+  const volgendVrijNest = useMemo(() => {
+    const nummers = nesten
+      .filter(n => n.locatie_type === 'nest')
+      .map(n => { const m = /^n(\d+)$/i.exec(n.kastnummer); return m ? parseInt(m[1], 10) : NaN; })
+      .filter(n => !isNaN(n));
+    const volgend = nummers.length > 0 ? Math.max(...nummers) + 1 : 1;
+    return 'n' + String(volgend).padStart(3, '0');
+  }, [nesten]);
+
   // Pre-vul zodra nesten geladen zijn (alleen als veld nog leeg is)
   useEffect(() => {
     if (nesten.length > 0) {
@@ -121,6 +131,15 @@ export default function NieuwNestPage() {
   }, [soortZoek, species, lang]);
 
   function update(field, value) {
+    if (field === 'locatie_type') {
+      setForm(prev => ({
+        ...prev,
+        locatie_type: value,
+        kastnummer: value === 'nest' ? volgendVrijNest : String(volgendNummer),
+      }));
+      if (errors.kastnummer) setErrors(prev => ({ ...prev, kastnummer: false }));
+      return;
+    }
     setForm(prev => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: false }));
   }

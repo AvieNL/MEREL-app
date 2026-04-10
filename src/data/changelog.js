@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.25';
+export const VERSIE = '1.65.26';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.26',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Functie: vrij nest krijgt automatisch volgend nXXX-nummer (n001, n002, ...) bij aanmaken nieuw nest',
+    ],
+    wijzigingen_en: [
+      'Feature: free nest is automatically pre-filled with next nXXX number (n001, n002, ...) when creating a new nest',
+    ],
+    wijzigingen_de: [
+      'Funktion: Freinest erhält beim Anlegen automatisch die nächste nXXX-Nummer (n001, n002, ...)',
+    ],
+  },
   {
     versie: '1.65.25',
     datum: '2026-04-10',
