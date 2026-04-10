@@ -540,6 +540,12 @@ button, a, label, select {
   color: var(--bg-primary);
 }
 
+/* Wrapper voor kaarten met tile-toggle — isoleert z-index zodat de knop niet boven header uitsteekt */
+.kaart-map-wrapper {
+  position: relative;
+  isolation: isolate;
+}
+
 /* Tile toggle button — floats top-right over Leaflet maps */
 .kaart-tile-toggle {
   position: absolute;

@@ -142,7 +142,7 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
 
   return (
     <div className="locatie-picker">
-      <div style={{ position: 'relative' }}>
+      <div className="kaart-map-wrapper">
         <div ref={mapRef} className="locatie-map" />
         <button type="button" className="kaart-tile-toggle" onClick={toggleTile} title={tileType === 'osm' ? t('map_switch_satellite') : t('map_switch_osm')}>
           {tileType === 'osm' ? '🛰️' : '🗺️'}

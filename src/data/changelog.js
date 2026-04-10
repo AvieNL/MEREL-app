@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.32';
+export const VERSIE = '1.65.33';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.33',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Fix: satelliet/kaart-knop schuift niet meer over header of footer bij scrollen (isolation: isolate op kaart-wrapper)',
+    ],
+    wijzigingen_en: [
+      'Fix: satellite/map toggle button no longer overlaps header or footer when scrolling (isolation: isolate on map wrapper)',
+    ],
+    wijzigingen_de: [
+      'Fix: Satellit/Karte-Schaltfläche überlagert beim Scrollen nicht mehr Kopf- oder Fußzeile (isolation: isolate am Karten-Wrapper)',
+    ],
+  },
   {
     versie: '1.65.32',
     datum: '2026-04-10',
