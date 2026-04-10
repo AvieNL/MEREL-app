@@ -262,32 +262,54 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     const vleugels = basis.filter(r => r.vleugel != null && r.vleugel !== '' && !isNaN(parseFloat(r.vleugel)));
     const totaalVleugelMm = vleugels.reduce((s, r) => s + parseFloat(r.vleugel), 0);
 
-    // Vroegste vangst (op tijdstip van de dag)
-    const metTijd = gefilterdRecords.filter(r => r.tijd && /^\d{2}:\d{2}/.test(r.tijd));
+    // Normaliseer tijd naar vergelijkbare HH:MM string (ook "6:30" → "06:30")
+    function normTijd(t) {
+      if (!t) return null;
+      const m = String(t).match(/^(\d{1,2}):(\d{2})/);
+      if (!m) return null;
+      return m[1].padStart(2, '0') + ':' + m[2];
+    }
+
+    // Vroegste + laatste vangst (op tijdstip van de dag)
+    const metTijd = gefilterdRecords
+      .map(r => ({ r, nt: normTijd(r.tijd) }))
+      .filter(({ nt }) => nt !== null);
+
     const vroegste = metTijd.length > 0
-      ? metTijd.reduce((min, r) => r.tijd < min.tijd ? r : min)
+      ? metTijd.reduce((min, x) => x.nt < min.nt ? x : min).r
+      : null;
+    const laatste = metTijd.length > 0
+      ? metTijd.reduce((max, x) => x.nt > max.nt ? x : max).r
       : null;
 
-    // Drukste dag
+    // Drukste dag — ook project bijhouden (meest voorkomende die dag)
     const perDag = {};
     gefilterdRecords.forEach(r => {
       if (!r.vangstdatum) return;
-      perDag[r.vangstdatum] = (perDag[r.vangstdatum] || 0) + 1;
+      if (!perDag[r.vangstdatum]) perDag[r.vangstdatum] = { count: 0, projecten: {} };
+      perDag[r.vangstdatum].count++;
+      if (r.project) perDag[r.vangstdatum].projecten[r.project] = (perDag[r.vangstdatum].projecten[r.project] || 0) + 1;
     });
-    const druksteDag = Object.entries(perDag).sort((a, b) => b[1] - a[1])[0] || null;
+    const druksteDagEntry = Object.entries(perDag).sort((a, b) => b[1].count - a[1].count)[0] || null;
+    const druksteDag = druksteDagEntry
+      ? { dag: druksteDagEntry[0], count: druksteDagEntry[1].count, project: Object.entries(druksteDagEntry[1].projecten).sort((a, b) => b[1] - a[1])[0]?.[0] || null }
+      : null;
 
-    // Meeste soorten op één dag
+    // Meeste soorten op één dag — ook project bijhouden
     const soortenPerDag = {};
     gefilterdRecords.forEach(r => {
       if (!r.vangstdatum || !r.vogelnaam) return;
-      if (!soortenPerDag[r.vangstdatum]) soortenPerDag[r.vangstdatum] = new Set();
-      soortenPerDag[r.vangstdatum].add(r.vogelnaam.toLowerCase());
+      if (!soortenPerDag[r.vangstdatum]) soortenPerDag[r.vangstdatum] = { soorten: new Set(), projecten: {} };
+      soortenPerDag[r.vangstdatum].soorten.add(r.vogelnaam.toLowerCase());
+      if (r.project) soortenPerDag[r.vangstdatum].projecten[r.project] = (soortenPerDag[r.vangstdatum].projecten[r.project] || 0) + 1;
     });
-    const meesteSoortenDag = Object.entries(soortenPerDag)
-      .map(([dag, set]) => [dag, set.size])
-      .sort((a, b) => b[1] - a[1])[0] || null;
+    const meesteSoortenEntry = Object.entries(soortenPerDag)
+      .sort((a, b) => b[1].soorten.size - a[1].soorten.size)[0] || null;
+    const meesteSoortenDag = meesteSoortenEntry
+      ? { dag: meesteSoortenEntry[0], count: meesteSoortenEntry[1].soorten.size, project: Object.entries(meesteSoortenEntry[1].projecten).sort((a, b) => b[1] - a[1])[0]?.[0] || null }
+      : null;
 
-    return { totaalGewichtG, gewichtN: gewichten.length, totaalVleugelMm, vleugelN: vleugels.length, vroegste, druksteDag, meesteSoortenDag };
+    return { totaalGewichtG, gewichtN: gewichten.length, totaalVleugelMm, vleugelN: vleugels.length, vroegste, laatste, druksteDag, meesteSoortenDag };
   }, [gefilterdRecords]);
 
   // Kaart toont ook externe_ring_info (als rode stip), maar telt niet mee in stats
@@ -974,10 +996,25 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 <div className="curiosum-rij">
                   <span className="curiosum-label">Vroegste vangst</span>
                   <span className="curiosum-waarde">
-                    {curiosa.vroegste.tijd.slice(0, 5)}
+                    {String(curiosa.vroegste.tijd).replace(/^(\d):/, '0$1:').slice(0, 5)}
                     <span className="curiosum-sub">
                       {displayNaam(curiosa.vroegste.vogelnaam)}
                       {curiosa.vroegste.vangstdatum && ` · ${formatDatum(curiosa.vroegste.vangstdatum)}`}
+                      {curiosa.vroegste.project && ` · ${curiosa.vroegste.project}`}
+                    </span>
+                  </span>
+                </div>
+              )}
+
+              {curiosa.laatste && curiosa.laatste !== curiosa.vroegste && (
+                <div className="curiosum-rij">
+                  <span className="curiosum-label">Laatste vangst</span>
+                  <span className="curiosum-waarde">
+                    {String(curiosa.laatste.tijd).replace(/^(\d):/, '0$1:').slice(0, 5)}
+                    <span className="curiosum-sub">
+                      {displayNaam(curiosa.laatste.vogelnaam)}
+                      {curiosa.laatste.vangstdatum && ` · ${formatDatum(curiosa.laatste.vangstdatum)}`}
+                      {curiosa.laatste.project && ` · ${curiosa.laatste.project}`}
                     </span>
                   </span>
                 </div>
@@ -987,8 +1024,11 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 <div className="curiosum-rij">
                   <span className="curiosum-label">Drukste dag</span>
                   <span className="curiosum-waarde">
-                    {curiosa.druksteDag[1]} vogels
-                    <span className="curiosum-sub">{formatDatum(curiosa.druksteDag[0])}</span>
+                    {curiosa.druksteDag.count} vogels
+                    <span className="curiosum-sub">
+                      {formatDatum(curiosa.druksteDag.dag)}
+                      {curiosa.druksteDag.project && ` · ${curiosa.druksteDag.project}`}
+                    </span>
                   </span>
                 </div>
               )}
@@ -997,8 +1037,11 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 <div className="curiosum-rij">
                   <span className="curiosum-label">Meeste soorten op één dag</span>
                   <span className="curiosum-waarde">
-                    {curiosa.meesteSoortenDag[1]} soorten
-                    <span className="curiosum-sub">{formatDatum(curiosa.meesteSoortenDag[0])}</span>
+                    {curiosa.meesteSoortenDag.count} soorten
+                    <span className="curiosum-sub">
+                      {formatDatum(curiosa.meesteSoortenDag.dag)}
+                      {curiosa.meesteSoortenDag.project && ` · ${curiosa.meesteSoortenDag.project}`}
+                    </span>
                   </span>
                 </div>
               )}

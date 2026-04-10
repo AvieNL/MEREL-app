@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.40';
+export const VERSIE = '1.65.41';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.41',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Fix/functie: weetjes — tijden met enkelvoudig uur (b.v. "6:30") correct vergeleken; laatste vangst toegevoegd; projectnaam zichtbaar bij vroegste/laatste/drukste dag/meeste soorten',
+    ],
+    wijzigingen_en: [
+      'Fix/feature: fun facts — times with single-digit hour (e.g. "6:30") now compared correctly; latest catch added; project shown for earliest/latest/busiest day/most species',
+    ],
+    wijzigingen_de: [
+      'Fix/Funktion: Wissenswertes — Zeiten mit einstelliger Stunde korrekt verglichen; letzter Fang hinzugefügt; Projekt bei frühestem/letztem/geschäftigstem Tag/meisten Arten sichtbar',
+    ],
+  },
   {
     versie: '1.65.40',
     datum: '2026-04-10',
