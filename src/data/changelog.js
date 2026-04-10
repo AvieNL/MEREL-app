@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.30';
+export const VERSIE = '1.65.31';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.31',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Fix: GPS-fout niet meer proactief tonen (iOS Permissions API onbetrouwbaar); iOS-instructie verwijst nu naar MEREL ipv Safari in locatie-instellingen',
+    ],
+    wijzigingen_en: [
+      'Fix: GPS error no longer shown proactively (iOS Permissions API unreliable); iOS instruction now refers to MEREL instead of Safari in location settings',
+    ],
+    wijzigingen_de: [
+      'Fix: GPS-Fehler wird nicht mehr proaktiv angezeigt (iOS Permissions API unzuverlässig); iOS-Anweisung verweist nun auf MEREL statt Safari in den Standorteinstellungen',
+    ],
+  },
   {
     versie: '1.65.30',
     datum: '2026-04-10',

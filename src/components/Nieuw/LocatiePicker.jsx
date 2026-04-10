@@ -33,18 +33,6 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
   const [gpsStatus, setGpsStatus] = useState(null); // null | 'loading' | 'error' | 'denied' | 'unavailable'
   const [tileType, setTileType] = useState(getTileType);
 
-  // Controleer bij mount of GPS-toestemming al geweigerd is
-  useEffect(() => {
-    if (!navigator.permissions) return;
-    navigator.permissions.query({ name: 'geolocation' }).then(result => {
-      if (result.state === 'denied') setGpsStatus('denied');
-      result.onchange = () => {
-        if (result.state === 'denied') setGpsStatus('denied');
-        else if (result.state === 'granted') setGpsStatus(null);
-      };
-    }).catch(() => {});
-  }, []);
-
   const hasCoords = lat !== '' && lon !== '' && !isNaN(parseFloat(lat)) && !isNaN(parseFloat(lon));
   const center = hasCoords
     ? [parseFloat(lat), parseFloat(lon)]
