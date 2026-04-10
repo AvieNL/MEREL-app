@@ -252,7 +252,8 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   }, [gefilterdRecords]);
 
   const curiosa = useMemo(() => {
-    const basis = gefilterdRecords.filter(r => r.leeftijd !== '1');
+    // Gebruik statsRecords (ongefilterd op project) zodat alle vangsten meetellen voor weetjes
+    const basis = statsRecords.filter(r => r.leeftijd !== '1');
 
     // Totaal gewicht
     const gewichten = basis.filter(r => r.gewicht != null && r.gewicht !== '' && !isNaN(parseFloat(r.gewicht)));
@@ -262,16 +263,25 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     const vleugels = basis.filter(r => r.vleugel != null && r.vleugel !== '' && !isNaN(parseFloat(r.vleugel)));
     const totaalVleugelMm = vleugels.reduce((s, r) => s + parseFloat(r.vleugel), 0);
 
-    // Normaliseer tijd naar vergelijkbare HH:MM string (ook "6:30" → "06:30")
+    // Normaliseer tijd naar vergelijkbare HH:MM string
+    // Ondersteunt: "08:01", "6:30", "0601", "630"
     function normTijd(t) {
       if (!t) return null;
-      const m = String(t).match(/^(\d{1,2}):(\d{2})/);
-      if (!m) return null;
-      return m[1].padStart(2, '0') + ':' + m[2];
+      const s = String(t).trim();
+      // Met dubbele punt: "H:MM" of "HH:MM"
+      const metKolon = s.match(/^(\d{1,2}):(\d{2})/);
+      if (metKolon) return metKolon[1].padStart(2, '0') + ':' + metKolon[2];
+      // Zonder dubbele punt: "HHMM" of "HMM"
+      const zonderKolon = s.match(/^(\d{3,4})$/);
+      if (zonderKolon) {
+        const p = s.padStart(4, '0');
+        return p.slice(0, 2) + ':' + p.slice(2, 4);
+      }
+      return null;
     }
 
     // Vroegste + laatste vangst (op tijdstip van de dag)
-    const metTijd = gefilterdRecords
+    const metTijd = statsRecords
       .map(r => ({ r, nt: normTijd(r.tijd) }))
       .filter(({ nt }) => nt !== null);
 
@@ -284,7 +294,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
     // Drukste dag — ook project bijhouden (meest voorkomende die dag)
     const perDag = {};
-    gefilterdRecords.forEach(r => {
+    statsRecords.forEach(r => {
       if (!r.vangstdatum) return;
       if (!perDag[r.vangstdatum]) perDag[r.vangstdatum] = { count: 0, projecten: {} };
       perDag[r.vangstdatum].count++;
@@ -297,7 +307,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
     // Meeste soorten op één dag — ook project bijhouden
     const soortenPerDag = {};
-    gefilterdRecords.forEach(r => {
+    statsRecords.forEach(r => {
       if (!r.vangstdatum || !r.vogelnaam) return;
       if (!soortenPerDag[r.vangstdatum]) soortenPerDag[r.vangstdatum] = { soorten: new Set(), projecten: {} };
       soortenPerDag[r.vangstdatum].soorten.add(r.vogelnaam.toLowerCase());
@@ -310,7 +320,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       : null;
 
     return { totaalGewichtG, gewichtN: gewichten.length, totaalVleugelMm, vleugelN: vleugels.length, vroegste, laatste, druksteDag, meesteSoortenDag };
-  }, [gefilterdRecords]);
+  }, [statsRecords]);
 
   // Kaart toont ook externe_ring_info (als rode stip), maar telt niet mee in stats
   const kaartRecords = useMemo(() => {

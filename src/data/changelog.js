@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.41';
+export const VERSIE = '1.65.42';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.42',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Fix: weetjes gebruikt nu alle vangsten (niet gefilterd op eigen projecten); tijdformaat "HHMM" (zonder dubbele punt) ook ondersteund',
+    ],
+    wijzigingen_en: [
+      'Fix: fun facts now use all catches (not filtered by own projects); time format "HHMM" (without colon) also supported',
+    ],
+    wijzigingen_de: [
+      'Fix: Wissenswertes verwendet jetzt alle Fänge (nicht nach eigenen Projekten gefiltert); Zeitformat „HHMM" (ohne Doppelpunkt) ebenfalls unterstützt',
+    ],
+  },
   {
     versie: '1.65.41',
     datum: '2026-04-10',
