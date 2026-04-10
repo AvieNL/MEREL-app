@@ -1004,7 +1004,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 <div className="curiosum-rij">
                   <span className="curiosum-label">Vroegste vangst</span>
                   <span className="curiosum-waarde">
-                    {curiosa.vroegste.tijdNorm}
+                    {curiosa.vroegste.tijdNorm} uur
                     <span className="curiosum-sub">
                       {displayNaam(curiosa.vroegste.vogelnaam)}
                       {curiosa.vroegste.vangstdatum && ` · ${formatDatum(curiosa.vroegste.vangstdatum)}`}
@@ -1018,7 +1018,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 <div className="curiosum-rij">
                   <span className="curiosum-label">Laatste vangst</span>
                   <span className="curiosum-waarde">
-                    {curiosa.laatste.tijdNorm}
+                    {curiosa.laatste.tijdNorm} uur
                     <span className="curiosum-sub">
                       {displayNaam(curiosa.laatste.vogelnaam)}
                       {curiosa.laatste.vangstdatum && ` · ${formatDatum(curiosa.laatste.vangstdatum)}`}
