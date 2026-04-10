@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.24';
+export const VERSIE = '1.65.25';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.25',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Fix: externe NV-referenties (bron=externe_ring_info) tellen nu mee als eerste vangst bij stats-berekening (langste tijd, verste afstand)',
+    ],
+    wijzigingen_en: [
+      'Fix: external NV references (bron=externe_ring_info) are now included in the first-catch lookup for stats (longest interval, furthest distance)',
+    ],
+    wijzigingen_de: [
+      'Fix: externe NV-Referenzen (bron=externe_ring_info) werden jetzt bei der Statistikberechnung als Erstfang berücksichtigt (längste Zeit, weiteste Entfernung)',
+    ],
+  },
   {
     versie: '1.65.24',
     datum: '2026-04-10',

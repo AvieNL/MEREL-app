@@ -93,8 +93,8 @@ function computeStats(records) {
   return { total: records.length, soorten: soorten.size, nieuw, terugvangst, topSoorten, perMaand, perProject, soortenTabel, projectTabel };
 }
 
-function computeTerugvangsten(records, fallbackLat, fallbackLon) {
-  const eersteVangst = buildEersteVangstMap(records);
+function computeTerugvangsten(records, fallbackLat, fallbackLon, referentieRecords) {
+  const eersteVangst = buildEersteVangstMap(referentieRecords ?? records);
 
   const lijst = [];
   records.forEach(r => {
@@ -335,8 +335,9 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   const alleTerugvangsten = useMemo(() => {
     const fbLat = parseFloat(settings.ringstationLat) || null;
     const fbLon = parseFloat(settings.ringstationLon) || null;
-    return computeTerugvangsten(gefilterdRecords, fbLat, fbLon);
-  }, [gefilterdRecords, settings.ringstationLat, settings.ringstationLon]);
+    const externRefs = records.filter(r => r.bron === 'externe_ring_info');
+    return computeTerugvangsten(gefilterdRecords, fbLat, fbLon, [...gefilterdRecords, ...externRefs]);
+  }, [gefilterdRecords, records, settings.ringstationLat, settings.ringstationLon]);
   const { perJaar, perMaand, soortenPerJaar } = useChartData(gefilterdRecords);
 
   const terugvangsten = useMemo(() => {
