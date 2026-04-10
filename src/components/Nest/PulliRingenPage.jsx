@@ -9,6 +9,7 @@ import { useRecords } from '../../hooks/useRecords';
 import { useSettings } from '../../hooks/useSettings';
 import { useRingStrengen } from '../../hooks/useRingStrengen';
 import { formatDatum } from '../../utils/nestPlanning';
+import { normalizeTime } from '../../utils/dateHelper';
 import { NAUWK_LEEFTIJD_OPTIONS } from '../Nieuw/NieuwPage.constants';
 import './PulliRingenPage.css';
 import { IconRing } from '../shared/Icons';
@@ -348,9 +349,13 @@ export default function PulliRingenPage() {
           <div className="form-group">
             <label>{t('pulli_tijd')}</label>
             <input
-              type="time"
+              type="text"
+              inputMode="numeric"
+              maxLength={5}
               value={form.tijd}
               onChange={e => update('tijd', e.target.value)}
+              onBlur={e => update('tijd', normalizeTime(e.target.value))}
+              placeholder="08:00"
             />
           </div>
         </div>

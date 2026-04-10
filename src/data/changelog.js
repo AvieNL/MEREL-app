@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.28';
+export const VERSIE = '1.65.29';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.29',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Fix: tijdveld bij pulliringen accepteert nu ook hhmm (bijv. 0800 → 08:00), net als de ringmodule',
+    ],
+    wijzigingen_en: [
+      'Fix: time field for pulli ringing now accepts hhmm format (e.g. 0800 → 08:00), consistent with ring module',
+    ],
+    wijzigingen_de: [
+      'Fix: Zeitfeld beim Pulliberingen akzeptiert nun auch hhmm (z.B. 0800 → 08:00), wie im Ringmodul',
+    ],
+  },
   {
     versie: '1.65.28',
     datum: '2026-04-10',

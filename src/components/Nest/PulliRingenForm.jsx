@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../lib/db';
 import { formatDatum } from '../../utils/nestPlanning';
+import { normalizeTime } from '../../utils/dateHelper';
 
 function normRing(r) { return String(r || '').replace(/[\s.]/g, '').toUpperCase(); }
 import { useNestData } from '../../hooks/useNestData';
@@ -382,7 +383,15 @@ export default function PulliRingenForm({ bezoekId }) {
           </div>
           <div className="form-group">
             <label>{t('pulli_tijd')}</label>
-            <input type="time" value={form.tijd} onChange={e => update('tijd', e.target.value)} />
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={5}
+              value={form.tijd}
+              onChange={e => update('tijd', e.target.value)}
+              onBlur={e => update('tijd', normalizeTime(e.target.value))}
+              placeholder="08:00"
+            />
           </div>
         </div>
         {bestaandeMatch && (

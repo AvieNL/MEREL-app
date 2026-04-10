@@ -33,6 +33,15 @@ export function yesterdayISO() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+// Tijd normaliseren naar HH:MM (accepteert hhmm of hh:mm)
+export function normalizeTime(val) {
+  if (!val) return val;
+  const clean = String(val).replace(/\D/g, '');
+  if (clean.length === 3) return `0${clean[0]}:${clean.slice(1)}`;
+  if (clean.length === 4) return `${clean.slice(0, 2)}:${clean.slice(2, 4)}`;
+  return val;
+}
+
 // Datum normaliseren naar yyyy-mm-dd (voor opslag en sortering)
 export function toYMD(d) {
   if (!d) return d;
