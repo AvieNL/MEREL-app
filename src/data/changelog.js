@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.37';
+export const VERSIE = '1.65.38';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.38',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Fix: klik op "Pullen geringd" navigeert nu correct naar ringmodule-vangstlijst (navigate vóór switchModule)',
+    ],
+    wijzigingen_en: [
+      'Fix: clicking "Pullen geringd" now correctly navigates to ring module records (navigate before switchModule)',
+    ],
+    wijzigingen_de: [
+      'Fix: Klick auf „Beringte Nestlinge" navigiert jetzt korrekt zur Ringmodul-Fangliste (navigate vor switchModule)',
+    ],
+  },
   {
     versie: '1.65.37',
     datum: '2026-04-10',

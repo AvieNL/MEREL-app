@@ -458,7 +458,7 @@ export default function NestStatsPage() {
           <StatCard waarde={nieutStats.aantalNestenMet}  label="Actieve nesten"  onClick={() => navigate('/nest')} />
           <StatCard waarde={nieutStats.aantalLegsels}    label="Legsels"         onClick={() => navigate('/nest')} />
           <StatCard waarde={nieutStats.aantalBezoeken}   label="Bezoeken"        onClick={() => navigate('/nest')} />
-          <StatCard waarde={nieutStats.aantalRingen}     label="Geringde pullen" onClick={() => navigate('/nest')} />
+          <StatCard waarde={nieutStats.aantalRingen}     label="Geringde pullen" onClick={() => { navigate('/ring/records'); switchModule('ring'); }} />
         </div>
 
         {nieutStats.perSoort.length > 0 && (
@@ -593,7 +593,7 @@ export default function NestStatsPage() {
           <StatCard waarde={gefilterdeStats.totaalEieren}      label="Eieren gevonden"            onClick={() => navigate('/nest')} />
           <StatCard waarde={gefilterdeStats.totaalPulli}       label="Pullen geteld"              onClick={() => navigate('/nest')} />
           <StatCard waarde={gefilterdeStats.totaalUitgevlogen} label="Uitgevlogen"                onClick={() => navigate('/nest')} />
-          <StatCard waarde={gefilterdeStats.aantalRingen}      label="Pullen geringd"             onClick={() => navigate('/nest')} />
+          <StatCard waarde={gefilterdeStats.aantalRingen}      label="Pullen geringd"             onClick={() => { navigate('/ring/records'); switchModule('ring'); }} />
           <StatCard waarde={teruggevangenPulli.length}         label="Nestringen teruggevangen"   onClick={() => teruggevangenRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })} />
           <StatCard waarde={gefilterdeStats.aantalBezoeken}    label="Bezoeken"                   onClick={() => navigate('/nest')} />
           <StatCard waarde={gefilterdeStats.aantalAfgerond}    label="Legsels afgerond"           onClick={() => navigate('/nest')} />
