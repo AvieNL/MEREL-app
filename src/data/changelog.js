@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.27';
+export const VERSIE = '1.65.28';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.28',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Functie: soortensuggesties in invoerformulier gesorteerd op meest gevangen soort — bij leeg veld én bij zoeken',
+    ],
+    wijzigingen_en: [
+      'Feature: species suggestions in entry form sorted by most caught species — on empty field and while searching',
+    ],
+    wijzigingen_de: [
+      'Funktion: Artvorschläge im Eingabeformular sortiert nach am häufigsten gefangener Art — bei leerem Feld und beim Suchen',
+    ],
+  },
   {
     versie: '1.65.27',
     datum: '2026-04-10',

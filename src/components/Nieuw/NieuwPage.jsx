@@ -341,6 +341,21 @@ export default function NieuwPage() {
 
   const recentSet = useMemo(() => new Set(recentSpecies), [recentSpecies]);
 
+  // Vangstfrequentie per soort (voor sortering suggesties)
+  const soortFrequentie = useMemo(() => {
+    const freq = {};
+    records.forEach(r => { if (r.vogelnaam) freq[r.vogelnaam] = (freq[r.vogelnaam] || 0) + 1; });
+    return freq;
+  }, [records]);
+
+  // Top 8 meest gevangen soorten (voor lege zoekveld-suggesties)
+  const topSoorten = useMemo(() => {
+    return Object.entries(soortFrequentie)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([naam]) => naam);
+  }, [soortFrequentie]);
+
   // Update weergave-naam als soort geselecteerd is (bij taalwissel of na laden soortendata)
   useEffect(() => {
     if (speciesInfo) {
@@ -390,19 +405,20 @@ export default function NieuwPage() {
           matchedName: bestField !== 'naam_nl' && bestField !== 'euring_code' ? sp[bestField] : null,
           score: bestScore,
           isRecent: recentSet.has(sp.naam_nl),
+          freq: soortFrequentie[sp.naam_nl] || 0,
         });
       }
     }
 
-    // Sort: recent first, then by score, then alphabetical
+    // Sort: match-kwaliteit eerst, dan meest gevangen, dan alphabetisch
     results.sort((a, b) => {
-      if (a.isRecent !== b.isRecent) return a.isRecent ? -1 : 1;
       if (a.score !== b.score) return a.score - b.score;
+      if (a.freq !== b.freq) return b.freq - a.freq;
       return a.naam_nl.localeCompare(b.naam_nl);
     });
 
     return results.slice(0, 10);
-  }, [recentSet, speciesData, i18n.language]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [recentSet, soortFrequentie, speciesData, i18n.language]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSpeciesInput = useCallback((value) => {
     setVogelnaamDisplay(value);
@@ -413,8 +429,8 @@ export default function NieuwPage() {
         setSuggestions(searchSpecies(value));
       }, 150);
     } else if (value.length === 0) {
-      if (recentSpecies.length > 0) {
-        setSuggestions(recentSpecies.slice(0, 8).map(name => ({
+      if (topSoorten.length > 0) {
+        setSuggestions(topSoorten.map(name => ({
           naam_nl: name,
           matchedField: 'naam_nl',
           matchedName: null,
@@ -427,15 +443,15 @@ export default function NieuwPage() {
     } else {
       setSuggestions([]);
     }
-  }, [update, searchSpecies, recentSpecies]);
+  }, [update, searchSpecies, topSoorten]);
 
   const handleSpeciesFocus = useCallback(() => {
     if (programmaticFocus.current) {
       programmaticFocus.current = false;
       return;
     }
-    if (form.vogelnaam.length === 0 && recentSpecies.length > 0) {
-      setSuggestions(recentSpecies.slice(0, 8).map(name => ({
+    if (form.vogelnaam.length === 0 && topSoorten.length > 0) {
+      setSuggestions(topSoorten.map(name => ({
         naam_nl: name,
         matchedField: 'naam_nl',
         matchedName: null,
@@ -443,7 +459,7 @@ export default function NieuwPage() {
         isRecent: true,
       })));
     }
-  }, [form.vogelnaam, recentSpecies]);
+  }, [form.vogelnaam, topSoorten]);
 
   const selectSpecies = useCallback((name) => {
     update('vogelnaam', name);
