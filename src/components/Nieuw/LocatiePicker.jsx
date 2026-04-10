@@ -16,6 +16,13 @@ async function getLeaflet() {
   return L.default;
 }
 
+function detectPlatform() {
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(ua)) return 'ios';
+  if (/Android/.test(ua)) return 'android';
+  return 'other';
+}
+
 export default function LocatiePicker({ lat, lon, onChange, latError, lonError }) {
   const { t } = useTranslation();
   const mapRef = useRef(null);
@@ -23,8 +30,20 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
   const markerRef = useRef(null);
   const tileLayerRef = useRef(null);
   const gpsZoomRef = useRef(false);
-  const [gpsStatus, setGpsStatus] = useState(null); // null | 'loading' | 'error'
+  const [gpsStatus, setGpsStatus] = useState(null); // null | 'loading' | 'error' | 'denied' | 'unavailable'
   const [tileType, setTileType] = useState(getTileType);
+
+  // Controleer bij mount of GPS-toestemming al geweigerd is
+  useEffect(() => {
+    if (!navigator.permissions) return;
+    navigator.permissions.query({ name: 'geolocation' }).then(result => {
+      if (result.state === 'denied') setGpsStatus('denied');
+      result.onchange = () => {
+        if (result.state === 'denied') setGpsStatus('denied');
+        else if (result.state === 'granted') setGpsStatus(null);
+      };
+    }).catch(() => {});
+  }, []);
 
   const hasCoords = lat !== '' && lon !== '' && !isNaN(parseFloat(lat)) && !isNaN(parseFloat(lon));
   const center = hasCoords
@@ -167,7 +186,15 @@ export default function LocatiePicker({ lat, lon, onChange, latError, lonError }
         {gpsStatus === 'loading' ? t('loc_loading') : t('loc_gps_btn')}
       </button>
       {gpsStatus === 'denied' && (
-        <span className="field-warning">{t('loc_gps_denied')}</span>
+        <span className="field-warning">
+          {t('loc_gps_denied')}
+          {detectPlatform() === 'ios' && (
+            <span className="gps-instructions"> {t('loc_gps_denied_ios')}</span>
+          )}
+          {detectPlatform() === 'android' && (
+            <span className="gps-instructions"> {t('loc_gps_denied_android')}</span>
+          )}
+        </span>
       )}
       {(gpsStatus === 'error' || gpsStatus === 'unavailable') && (
         <span className="field-warning">{t('loc_gps_error')}</span>

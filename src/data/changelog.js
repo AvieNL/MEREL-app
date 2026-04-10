@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.29';
+export const VERSIE = '1.65.30';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.30',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Verbetering: GPS geweigerd toont direct platform-specifieke instructies (iOS/Android) en wordt ook bij pagina-load al gedetecteerd',
+    ],
+    wijzigingen_en: [
+      'Improvement: GPS denied shows platform-specific instructions (iOS/Android) immediately and is also detected on page load',
+    ],
+    wijzigingen_de: [
+      'Verbesserung: GPS verweigert zeigt sofort plattformspezifische Anweisungen (iOS/Android) und wird auch beim Laden erkannt',
+    ],
+  },
   {
     versie: '1.65.29',
     datum: '2026-04-10',
