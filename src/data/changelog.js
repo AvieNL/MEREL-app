@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.34';
+export const VERSIE = '1.65.35';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.35',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Stijl: sectie "Te exporteren" in neststatistieken standaard ingeklapt',
+    ],
+    wijzigingen_en: [
+      'Style: "To export" section in nest stats collapsed by default',
+    ],
+    wijzigingen_de: [
+      'Stil: Abschnitt „Zu exportieren" in Neststatistiken standardmäßig eingeklappt',
+    ],
+  },
   {
     versie: '1.65.34',
     datum: '2026-04-10',

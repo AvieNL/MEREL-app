@@ -376,6 +376,7 @@ export default function NestStatsPage() {
     });
   }, [ringen, vangsten, bezoeken, legsels, nesten]);
 
+  const [exportOpen, setExportOpen] = useState(false);
   const [filterJaar, setFilterJaar] = useState(null);
   const [soortenSorteer, setSoortenSorteer] = useState('legsels');
   const [tvSorteer, setTvSorteer] = useState({ col: 'afstand', dir: 'desc' });
@@ -434,9 +435,20 @@ export default function NestStatsPage() {
 
       {/* ══ Sectie 1: Te exporteren ════════════════════════════════════════ */}
       <div className="stats-section stats-section--huidig">
-        <h2 className="stats-section-title">Te exporteren</h2>
+        <div className="section-header" onClick={() => setExportOpen(o => !o)}>
+          <h2 className="stats-section-title" style={{ margin: 0 }}>
+            Te exporteren
+            {nieutStats.aantalLegsels > 0 && (
+              <span style={{ marginLeft: 8, fontSize: '0.8rem', color: 'var(--brand)', fontWeight: 700 }}>
+                {nieutStats.aantalLegsels}
+              </span>
+            )}
+          </h2>
+          <span className={`toggle${exportOpen ? ' open' : ''}`}>▾</span>
+        </div>
 
-        <div className="stats-grid">
+        {exportOpen && (<>
+        <div className="stats-grid" style={{ marginTop: 12 }}>
           <StatCard waarde={nieutStats.aantalNestenMet}  label="Actieve nesten"  onClick={() => navigate('/nest')} />
           <StatCard waarde={nieutStats.aantalLegsels}    label="Legsels"         onClick={() => navigate('/nest')} />
           <StatCard waarde={nieutStats.aantalBezoeken}   label="Bezoeken"        onClick={() => navigate('/nest')} />
@@ -540,6 +552,7 @@ export default function NestStatsPage() {
             </div>
           </div>
         )}
+        </>)}
       </div>
 
       {/* ══ Sectie 2: Totaaloverzicht ══════════════════════════════════════ */}
