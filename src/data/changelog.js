@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.33';
+export const VERSIE = '1.65.34';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.34',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Functie: statistieken nestonderzoek — klikbare cijfers navigeren naar nesten, ringgegevens of terugvangstentabel',
+    ],
+    wijzigingen_en: [
+      'Feature: nest stats — clickable numbers navigate to nests, ring records, or the recap table',
+    ],
+    wijzigingen_de: [
+      'Funktion: Neststatistiken — anklickbare Zahlen navigieren zu Nestern, Ringdaten oder der Wiederfangstabelle',
+    ],
+  },
   {
     versie: '1.65.33',
     datum: '2026-04-10',

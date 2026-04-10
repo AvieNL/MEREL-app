@@ -379,6 +379,7 @@ export default function NestStatsPage() {
   const [filterJaar, setFilterJaar] = useState(null);
   const [soortenSorteer, setSoortenSorteer] = useState('legsels');
   const [tvSorteer, setTvSorteer] = useState({ col: 'afstand', dir: 'desc' });
+  const teruggevangenRef = useRef(null);
 
   const beschikbareJaren = useMemo(() => {
     const jaren = new Set(legsels.map(l => l.jaar).filter(Boolean));
@@ -436,10 +437,10 @@ export default function NestStatsPage() {
         <h2 className="stats-section-title">Te exporteren</h2>
 
         <div className="stats-grid">
-          <StatCard waarde={nieutStats.aantalNestenMet}  label="Actieve nesten" />
-          <StatCard waarde={nieutStats.aantalLegsels}    label="Legsels" />
-          <StatCard waarde={nieutStats.aantalBezoeken}   label="Bezoeken" />
-          <StatCard waarde={nieutStats.aantalRingen}     label="Geringde pullen" />
+          <StatCard waarde={nieutStats.aantalNestenMet}  label="Actieve nesten"  onClick={() => navigate('/nest')} />
+          <StatCard waarde={nieutStats.aantalLegsels}    label="Legsels"         onClick={() => navigate('/nest')} />
+          <StatCard waarde={nieutStats.aantalBezoeken}   label="Bezoeken"        onClick={() => navigate('/nest')} />
+          <StatCard waarde={nieutStats.aantalRingen}     label="Geringde pullen" onClick={() => { switchModule('ring'); navigate('/ring/records'); }} />
         </div>
 
         {nieutStats.perSoort.length > 0 && (
@@ -568,15 +569,15 @@ export default function NestStatsPage() {
         )}
 
         <div className="stats-grid">
-          <StatCard waarde={gefilterdeStats.aantalNestenMet}   label="Actieve nesten" />
-          <StatCard waarde={gefilterdeStats.aantalLegsels}     label="Legsels" />
-          <StatCard waarde={gefilterdeStats.totaalEieren}      label="Eieren gevonden" />
-          <StatCard waarde={gefilterdeStats.totaalPulli}       label="Pullen geteld" />
-          <StatCard waarde={gefilterdeStats.totaalUitgevlogen} label="Uitgevlogen" />
-          <StatCard waarde={gefilterdeStats.aantalRingen}      label="Pullen geringd" />
-          <StatCard waarde={teruggevangenPulli.length}         label="Nestringen teruggevangen" />
-          <StatCard waarde={gefilterdeStats.aantalBezoeken}    label="Bezoeken" />
-          <StatCard waarde={gefilterdeStats.aantalAfgerond}    label="Legsels afgerond" />
+          <StatCard waarde={gefilterdeStats.aantalNestenMet}   label="Actieve nesten"            onClick={() => navigate('/nest')} />
+          <StatCard waarde={gefilterdeStats.aantalLegsels}     label="Legsels"                   onClick={() => navigate('/nest')} />
+          <StatCard waarde={gefilterdeStats.totaalEieren}      label="Eieren gevonden"            onClick={() => navigate('/nest')} />
+          <StatCard waarde={gefilterdeStats.totaalPulli}       label="Pullen geteld"              onClick={() => navigate('/nest')} />
+          <StatCard waarde={gefilterdeStats.totaalUitgevlogen} label="Uitgevlogen"                onClick={() => navigate('/nest')} />
+          <StatCard waarde={gefilterdeStats.aantalRingen}      label="Pullen geringd"             onClick={() => { switchModule('ring'); navigate('/ring/records'); }} />
+          <StatCard waarde={teruggevangenPulli.length}         label="Nestringen teruggevangen"   onClick={() => teruggevangenRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })} />
+          <StatCard waarde={gefilterdeStats.aantalBezoeken}    label="Bezoeken"                   onClick={() => navigate('/nest')} />
+          <StatCard waarde={gefilterdeStats.aantalAfgerond}    label="Legsels afgerond"           onClick={() => navigate('/nest')} />
         </div>
 
         {/* Legsels per jaar */}
@@ -737,7 +738,7 @@ export default function NestStatsPage() {
 
         {/* Teruggevangen nestringen */}
         {teruggevangenPulli.length > 0 && (
-          <div className="section">
+          <div ref={teruggevangenRef} className="section">
             <h3>Teruggevangen nestringen ({teruggevangenPulli.length})</h3>
             <div className="trektellen-table-wrap">
               <table className="trektellen-table" style={{ fontSize: '0.78rem' }}>
@@ -865,9 +866,15 @@ export default function NestStatsPage() {
 }
 
 // ── Sub-componenten ────────────────────────────────────────────────────────
-function StatCard({ waarde, label }) {
+function StatCard({ waarde, label, onClick }) {
   return (
-    <div className="stat-card">
+    <div
+      className={`stat-card${onClick ? ' stat-card--link' : ''}`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') onClick(); } : undefined}
+    >
       <div className="stat-value">{waarde}</div>
       <div className="stat-label">{label}</div>
     </div>
