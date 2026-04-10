@@ -893,7 +893,7 @@
   "loc_loading": "Locatie ophalen…",
   "loc_gps_btn": "Gebruik GPS",
   "loc_gps_denied": "Locatietoegang geweigerd.",
-  "loc_gps_denied_ios": "Ga naar Instellingen → Privacy en beveiliging → Locatievoorzieningen → zoek MEREL (niet Safari) → Tijdens gebruik. Staat MEREL er niet? Open de app eerst in Safari en sta locatie toe.",
+  "loc_gps_denied_ios": "Ga naar Instellingen → Privacy en beveiliging → Locatievoorzieningen → Safari-websites → Tijdens gebruik. Of zoek MEREL als de app geïnstalleerd is.",
   "loc_gps_denied_android": "Houd het MEREL-icoon ingedrukt → App-info → Rechten → Locatie → Toestaan.",
   "loc_gps_error": "GPS niet beschikbaar — klik op de kaart om een locatie in te stellen",
   "loc_hint": "Klik op de kaart of gebruik GPS om de locatie in te stellen",

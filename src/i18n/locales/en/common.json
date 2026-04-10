@@ -893,7 +893,7 @@
   "loc_loading": "Getting location…",
   "loc_gps_btn": "Use GPS",
   "loc_gps_denied": "Location access denied.",
-  "loc_gps_denied_ios": "Go to Settings → Privacy & Security → Location Services → find MEREL (not Safari) → While Using. Not there? Open the app in Safari first and allow location.",
+  "loc_gps_denied_ios": "Go to Settings → Privacy & Security → Location Services → Safari Websites → While Using. Or find MEREL in the list if the app is installed.",
   "loc_gps_denied_android": "Long-press the MEREL icon → App info → Permissions → Location → Allow.",
   "loc_gps_error": "GPS not available — click on the map to set a location",
   "loc_hint": "Click on the map or use GPS to set the location",

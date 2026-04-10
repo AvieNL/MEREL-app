@@ -893,7 +893,7 @@
   "loc_loading": "Standort wird abgerufen…",
   "loc_gps_btn": "GPS verwenden",
   "loc_gps_denied": "Standortzugriff verweigert.",
-  "loc_gps_denied_ios": "Einstellungen → Datenschutz & Sicherheit → Ortungsdienste → MEREL suchen (nicht Safari) → Beim Verwenden. Nicht vorhanden? App zuerst in Safari öffnen und Standort erlauben.",
+  "loc_gps_denied_ios": "Einstellungen → Datenschutz & Sicherheit → Ortungsdienste → Safari-Websites → Beim Verwenden. Oder MEREL in der Liste suchen, wenn die App installiert ist.",
   "loc_gps_denied_android": "MEREL-Symbol gedrückt halten → App-Info → Berechtigungen → Standort → Zulassen.",
   "loc_gps_error": "GPS nicht verfügbar — klicken Sie auf die Karte, um einen Standort festzulegen",
   "loc_hint": "Klicken Sie auf die Karte oder verwenden Sie GPS, um den Standort festzulegen",

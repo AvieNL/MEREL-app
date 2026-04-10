@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.31';
+export const VERSIE = '1.65.32';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.32',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Tekst: GPS iOS-instructie verwijst nu correct naar Safari-websites in Locatievoorzieningen',
+    ],
+    wijzigingen_en: [
+      'Text: GPS iOS instruction now correctly refers to Safari Websites in Location Services',
+    ],
+    wijzigingen_de: [
+      'Text: GPS iOS-Anweisung verweist nun korrekt auf Safari-Websites in den Ortungsdiensten',
+    ],
+  },
   {
     versie: '1.65.31',
     datum: '2026-04-10',
