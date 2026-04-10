@@ -251,6 +251,45 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     }).filter(Boolean);
   }, [gefilterdRecords]);
 
+  const curiosa = useMemo(() => {
+    const basis = gefilterdRecords.filter(r => r.leeftijd !== '1');
+
+    // Totaal gewicht
+    const gewichten = basis.filter(r => r.gewicht != null && r.gewicht !== '' && !isNaN(parseFloat(r.gewicht)));
+    const totaalGewichtG = gewichten.reduce((s, r) => s + parseFloat(r.gewicht), 0);
+
+    // Totale vleugellengtes
+    const vleugels = basis.filter(r => r.vleugel != null && r.vleugel !== '' && !isNaN(parseFloat(r.vleugel)));
+    const totaalVleugelMm = vleugels.reduce((s, r) => s + parseFloat(r.vleugel), 0);
+
+    // Vroegste vangst (op tijdstip van de dag)
+    const metTijd = gefilterdRecords.filter(r => r.tijd && /^\d{2}:\d{2}/.test(r.tijd));
+    const vroegste = metTijd.length > 0
+      ? metTijd.reduce((min, r) => r.tijd < min.tijd ? r : min)
+      : null;
+
+    // Drukste dag
+    const perDag = {};
+    gefilterdRecords.forEach(r => {
+      if (!r.vangstdatum) return;
+      perDag[r.vangstdatum] = (perDag[r.vangstdatum] || 0) + 1;
+    });
+    const druksteDag = Object.entries(perDag).sort((a, b) => b[1] - a[1])[0] || null;
+
+    // Meeste soorten op één dag
+    const soortenPerDag = {};
+    gefilterdRecords.forEach(r => {
+      if (!r.vangstdatum || !r.vogelnaam) return;
+      if (!soortenPerDag[r.vangstdatum]) soortenPerDag[r.vangstdatum] = new Set();
+      soortenPerDag[r.vangstdatum].add(r.vogelnaam.toLowerCase());
+    });
+    const meesteSoortenDag = Object.entries(soortenPerDag)
+      .map(([dag, set]) => [dag, set.size])
+      .sort((a, b) => b[1] - a[1])[0] || null;
+
+    return { totaalGewichtG, gewichtN: gewichten.length, totaalVleugelMm, vleugelN: vleugels.length, vroegste, druksteDag, meesteSoortenDag };
+  }, [gefilterdRecords]);
+
   // Kaart toont ook externe_ring_info (als rode stip), maar telt niet mee in stats
   const kaartRecords = useMemo(() => {
     const externRingInfo = records.filter(r => r.bron === 'externe_ring_info' && r.lat && r.lon);
@@ -887,6 +926,83 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* Weetjes */}
+        {gefilterdRecords.length > 0 && (
+          <div className="section">
+            <h3>Weetjes</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+
+              {curiosa.totaalGewichtG > 0 && (() => {
+                const kg = (curiosa.totaalGewichtG / 1000).toFixed(1);
+                const katten = Math.round(curiosa.totaalGewichtG / 4000);
+                return (
+                  <div className="curiosum-rij">
+                    <span className="curiosum-label">Totaalgewicht</span>
+                    <span className="curiosum-waarde">
+                      {kg} kg
+                      <span className="curiosum-sub">
+                        ({curiosa.gewichtN} vogels gewogen
+                        {katten >= 2 ? ` · ≈ ${katten}× een kat` : ''})
+                      </span>
+                    </span>
+                  </div>
+                );
+              })()}
+
+              {curiosa.totaalVleugelMm > 0 && (() => {
+                const m = (curiosa.totaalVleugelMm / 1000).toFixed(1);
+                const velden = Math.round(curiosa.totaalVleugelMm / 105000);
+                return (
+                  <div className="curiosum-rij">
+                    <span className="curiosum-label">Vleugels aan elkaar</span>
+                    <span className="curiosum-waarde">
+                      {m} m
+                      <span className="curiosum-sub">
+                        ({curiosa.vleugelN} vleugels gemeten
+                        {velden >= 1 ? ` · ≈ ${velden}× een voetbalveld` : ''})
+                      </span>
+                    </span>
+                  </div>
+                );
+              })()}
+
+              {curiosa.vroegste && (
+                <div className="curiosum-rij">
+                  <span className="curiosum-label">Vroegste vangst</span>
+                  <span className="curiosum-waarde">
+                    {curiosa.vroegste.tijd.slice(0, 5)}
+                    <span className="curiosum-sub">
+                      {displayNaam(curiosa.vroegste.vogelnaam)}
+                      {curiosa.vroegste.vangstdatum && ` · ${formatDatum(curiosa.vroegste.vangstdatum)}`}
+                    </span>
+                  </span>
+                </div>
+              )}
+
+              {curiosa.druksteDag && (
+                <div className="curiosum-rij">
+                  <span className="curiosum-label">Drukste dag</span>
+                  <span className="curiosum-waarde">
+                    {curiosa.druksteDag[1]} vogels
+                    <span className="curiosum-sub">{formatDatum(curiosa.druksteDag[0])}</span>
+                  </span>
+                </div>
+              )}
+
+              {curiosa.meesteSoortenDag && (
+                <div className="curiosum-rij">
+                  <span className="curiosum-label">Meeste soorten op één dag</span>
+                  <span className="curiosum-waarde">
+                    {curiosa.meesteSoortenDag[1]} soorten
+                    <span className="curiosum-sub">{formatDatum(curiosa.meesteSoortenDag[0])}</span>
+                  </span>
+                </div>
+              )}
+
             </div>
           </div>
         )}

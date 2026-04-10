@@ -742,3 +742,34 @@
 .avinest-preview__fout-lijst li { margin-bottom: 2px; }
 
 .avinest-preview__acties { display: flex; gap: 8px; }
+
+.curiosum-rij {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--bg-tertiary);
+}
+.curiosum-rij:last-child { border-bottom: none; }
+
+.curiosum-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex: 0 0 180px;
+}
+
+.curiosum-waarde {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.curiosum-sub {
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}

@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.39';
+export const VERSIE = '1.65.40';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.40',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Functie: sectie "Weetjes" in ringstatistieken — totaalgewicht, vleugels aan elkaar, vroegste vangst, drukste dag, meeste soorten op één dag',
+    ],
+    wijzigingen_en: [
+      'Feature: "Fun facts" section in ring stats — total weight, total wing length, earliest catch, busiest day, most species in one day',
+    ],
+    wijzigingen_de: [
+      'Funktion: Abschnitt „Wissenswertes" in Ringstatistiken — Gesamtgewicht, Flügellängen zusammen, frühester Fang, geschäftgster Tag, meiste Arten an einem Tag',
+    ],
+  },
   {
     versie: '1.65.39',
     datum: '2026-04-10',
