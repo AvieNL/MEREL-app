@@ -1,6 +1,19 @@
-export const VERSIE = '1.65.38';
+export const VERSIE = '1.65.39';
 
 export const CHANGELOG = [
+  {
+    versie: '1.65.39',
+    datum: '2026-04-10',
+    wijzigingen: [
+      'Functie: klik op "Pullen geringd" scrolt naar tabel van geringde pullen in neststatistieken (ringnummer, vogel, datum, nest, biometrie)',
+    ],
+    wijzigingen_en: [
+      'Feature: clicking "Pullen geringd" scrolls to ringed pulli table in nest stats (ring number, species, date, nest, biometrics)',
+    ],
+    wijzigingen_de: [
+      'Funktion: Klick auf „Beringte Nestlinge" scrollt zur Tabelle der beringten Nestlinge in Neststatistiken',
+    ],
+  },
   {
     versie: '1.65.38',
     datum: '2026-04-10',

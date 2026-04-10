@@ -320,6 +320,29 @@ export default function NestStatsPage() {
   const [soortenSorteer, setSoortenSorteer] = useState('legsels');
   const [tvSorteer, setTvSorteer] = useState({ col: 'afstand', dir: 'desc' });
   const teruggevangenRef = useRef(null);
+  const pullenGeringdRef = useRef(null);
+
+  // ── Geringde pullen (voor tabel onderaan) ──
+  const pullenGeringdLijst = useMemo(() => {
+    const legselsInJaar = filterJaar != null ? legsels.filter(l => l.jaar === filterJaar) : legsels;
+    const legselIds     = new Set(legselsInJaar.map(l => l.id));
+    const bezoekenInJaar = bezoeken.filter(b => legselIds.has(b.legsel_id));
+    const bezoekIds     = new Set(bezoekenInJaar.map(b => b.id));
+    const ringenInJaar  = ringen.filter(r => bezoekIds.has(r.nestbezoek_id));
+
+    const vangstById = new Map((vangsten || []).map(v => [v.id, v]));
+    const bezoekById = new Map(bezoeken.map(b => [b.id, b]));
+    const legselById = new Map(legsels.map(l => [l.id, l]));
+    const nestById   = new Map(nesten.map(n => [n.id, n]));
+
+    return ringenInJaar.map(r => {
+      const vangst = vangstById.get(r.vangst_id);
+      const bezoek = bezoekById.get(r.nestbezoek_id);
+      const legsel = bezoek ? legselById.get(bezoek.legsel_id) : null;
+      const nest   = legsel ? nestById.get(legsel.nest_id) : null;
+      return { ...r, vangst, bezoek, nest };
+    }).sort((a, b) => (b.bezoek?.datum || '').localeCompare(a.bezoek?.datum || ''));
+  }, [ringen, vangsten, bezoeken, legsels, nesten, filterJaar]);
 
   // ── Teruggevangen nestringen (pulli + adulten) ──
   const teruggevangenPulli = useMemo(() => {
@@ -458,7 +481,7 @@ export default function NestStatsPage() {
           <StatCard waarde={nieutStats.aantalNestenMet}  label="Actieve nesten"  onClick={() => navigate('/nest')} />
           <StatCard waarde={nieutStats.aantalLegsels}    label="Legsels"         onClick={() => navigate('/nest')} />
           <StatCard waarde={nieutStats.aantalBezoeken}   label="Bezoeken"        onClick={() => navigate('/nest')} />
-          <StatCard waarde={nieutStats.aantalRingen}     label="Geringde pullen" onClick={() => { navigate('/ring/records'); switchModule('ring'); }} />
+          <StatCard waarde={nieutStats.aantalRingen}     label="Geringde pullen" onClick={() => pullenGeringdRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })} />
         </div>
 
         {nieutStats.perSoort.length > 0 && (
@@ -593,7 +616,7 @@ export default function NestStatsPage() {
           <StatCard waarde={gefilterdeStats.totaalEieren}      label="Eieren gevonden"            onClick={() => navigate('/nest')} />
           <StatCard waarde={gefilterdeStats.totaalPulli}       label="Pullen geteld"              onClick={() => navigate('/nest')} />
           <StatCard waarde={gefilterdeStats.totaalUitgevlogen} label="Uitgevlogen"                onClick={() => navigate('/nest')} />
-          <StatCard waarde={gefilterdeStats.aantalRingen}      label="Pullen geringd"             onClick={() => { navigate('/ring/records'); switchModule('ring'); }} />
+          <StatCard waarde={gefilterdeStats.aantalRingen}      label="Pullen geringd"             onClick={() => pullenGeringdRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })} />
           <StatCard waarde={teruggevangenPulli.length}         label="Nestringen teruggevangen"   onClick={() => teruggevangenRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })} />
           <StatCard waarde={gefilterdeStats.aantalBezoeken}    label="Bezoeken"                   onClick={() => navigate('/nest')} />
           <StatCard waarde={gefilterdeStats.aantalAfgerond}    label="Legsels afgerond"           onClick={() => navigate('/nest')} />
@@ -752,6 +775,41 @@ export default function NestStatsPage() {
               items={stadiumSorted.map(([code, count]) => [stadiumLabel[code] ?? code, count])}
               kleur="var(--warning, #f59e0b)"
             />
+          </div>
+        )}
+
+        {/* Geringde pullen */}
+        {pullenGeringdLijst.length > 0 && (
+          <div ref={pullenGeringdRef} className="section">
+            <h3>Geringde pullen ({pullenGeringdLijst.length})</h3>
+            <div className="trektellen-table-wrap">
+              <table className="trektellen-table" style={{ fontSize: '0.78rem' }}>
+                <thead>
+                  <tr>
+                    <th className="tt-col-soort">Ringnummer</th>
+                    <th className="tt-col-soort">Vogel</th>
+                    <th className="tt-col-soort">Datum</th>
+                    <th className="tt-col-soort">Nest</th>
+                    <th className="tt-col-num">Vleugel</th>
+                    <th className="tt-col-num">Gewicht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pullenGeringdLijst.map(r => (
+                    <tr key={r.id} style={{ cursor: 'pointer' }} onClick={() => r.nest && navigate(`/nest/${r.nest.id}`)}>
+                      <td className="tt-col-soort" style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>{r.ringnummer}</td>
+                      <td className="tt-col-soort">{r.vangst?.vogelnaam || '—'}</td>
+                      <td className="tt-col-soort">{r.bezoek?.datum ? formatDatum(r.bezoek.datum) : '—'}</td>
+                      <td className="tt-col-soort" style={{ color: 'var(--text-muted)' }}>
+                        {r.nest ? `⌂ ${r.nest.kastnummer}${r.nest.omschrijving ? ` — ${r.nest.omschrijving}` : ''}` : '—'}
+                      </td>
+                      <td className="tt-col-num">{r.vangst?.vleugel || '—'}</td>
+                      <td className="tt-col-num">{r.vangst?.gewicht || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
