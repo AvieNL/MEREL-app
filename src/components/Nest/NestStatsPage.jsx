@@ -798,7 +798,7 @@ export default function NestStatsPage() {
                 <tbody>
                   {pullenGeringdLijst.map(r => (
                     <tr key={r.id} style={{ cursor: 'pointer' }} onClick={() => r.nest && navigate(`/nest/${r.nest.id}`)}>
-                      <td className="tt-col-soort" style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>{r.ringnummer}</td>
+                      <td className="tt-col-soort" style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>{(r.ringnummer || '').replace(/[\s.]/g, '').toUpperCase()}</td>
                       <td className="tt-col-soort">{r.vangst?.vogelnaam || '—'}</td>
                       <td className="tt-col-soort">{r.bezoek?.datum ? formatDatum(r.bezoek.datum) : '—'}</td>
                       <td className="tt-col-soort" style={{ color: 'var(--text-muted)' }}>
