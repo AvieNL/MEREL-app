@@ -1,6 +1,25 @@
-export const VERSIE = '1.66.2';
+export const VERSIE = '1.66.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.66.3',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Fix: stamboom inspringing per generatie correct',
+      'Functie: jarenfilter werkt nu ook op stamboom',
+      'Technisch: verouderd importbestand verwijderd',
+    ],
+    wijzigingen_en: [
+      'Fix: family tree indentation now correct per generation',
+      'Feature: year filter now also applies to family tree',
+      'Technical: removed outdated import file',
+    ],
+    wijzigingen_de: [
+      'Fix: Stammbaum-Einrückung jetzt pro Generation korrekt',
+      'Funktion: Jahresfilter gilt jetzt auch für den Stammbaum',
+      'Technisch: veraltete Importdatei entfernt',
+    ],
+  },
   {
     versie: '1.66.2',
     datum: '2026-04-11',

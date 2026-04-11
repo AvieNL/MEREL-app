@@ -217,7 +217,7 @@ function computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, 
  * Bouwt stamboomstatistieken op basis van legsel_ouder (oudervogels) en nestring (geringde jongen).
  * Een generatieketen: ouder in legsel A → was zelf jong in legsel B → ...
  */
-function computeStamboom({ legsels, bezoeken, nestring, ouders, nesten, vangsten }) {
+function computeStamboom({ legsels, bezoeken, nestring, ouders, nesten, vangsten, filterJaar }) {
   if (ouders.length === 0) return null;
 
   const bezoekById  = new Map(bezoeken.map(b => [b.id, b]));
@@ -349,10 +349,18 @@ function computeStamboom({ legsels, bezoeken, nestring, ouders, nesten, vangsten
     return { legselId, legsel, nest, ouderRingen, alleJongen };
   }
 
-  const stamBomen = topBomen.map(({ legselId, generaties }) => ({
-    generaties,
-    boom: bouwTak(legselId),
-  }));
+  // Controleer recursief of een tak een legsel bevat uit het geselecteerde jaar
+  function takBevatJaar(tak, jaar) {
+    if (!tak) return false;
+    if (tak.legsel?.jaar === jaar) return true;
+    return tak.alleJongen?.some(jong =>
+      jong.kindLegsels?.some(kindTak => takBevatJaar(kindTak, jaar))
+    ) ?? false;
+  }
+
+  const stamBomen = topBomen
+    .map(({ legselId, generaties }) => ({ generaties, boom: bouwTak(legselId) }))
+    .filter(({ boom }) => !filterJaar || takBevatJaar(boom, filterJaar));
 
   return { topOuders, stamBomen };
 }
@@ -565,8 +573,8 @@ export default function NestStatsPage() {
   }, [legsels]);
 
   const stamboomData = useMemo(() =>
-    computeStamboom({ legsels, bezoeken, nestring: ringen, ouders, nesten, vangsten }),
-    [legsels, bezoeken, ringen, ouders, nesten, vangsten]
+    computeStamboom({ legsels, bezoeken, nestring: ringen, ouders, nesten, vangsten, filterJaar }),
+    [legsels, bezoeken, ringen, ouders, nesten, vangsten, filterJaar]
   );
 
   const gefilterdeStats = useMemo(() =>
@@ -1221,7 +1229,7 @@ function StamboomTak({ tak, diepte, navigate }) {
               </span>
               {/* Recursief: legsels van dit jong als ouder */}
               {jong.kindLegsels.map((kindTak, j) => (
-                <StamboomTak key={kindTak.legselId + j} tak={kindTak} diepte={0} navigate={navigate} />
+                <StamboomTak key={kindTak.legselId + j} tak={kindTak} diepte={diepte + 1} navigate={navigate} />
               ))}
             </div>
           ))}
