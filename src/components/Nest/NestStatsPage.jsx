@@ -1099,7 +1099,7 @@ export default function NestStatsPage() {
               <div className="section">
                 <h3>Stambomen</h3>
                 <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 12 }}>
-                  Geringde jongen die later als ouder zijn geïdentificeerd.
+                  Legsels met gekoppelde oudervogels. Groen gemarkeerde jongen zijn later zelf als ouder teruggezien.
                 </p>
                 {stamboomData.stamBomen.map(({ generaties, boom }, i) => boom && (
                   <div key={i} className="stamboom-blok">
