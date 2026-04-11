@@ -6,7 +6,7 @@ import { exportCSV, exportJSON, exportGrielXML, downloadFile } from '../../utils
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
 import { buildEuringLookup } from '../../utils/euring-lookup';
-import { BarChartStacked, BarChartSimple, LineChart, VangstKaart, useChartData } from './Charts';
+import { BarChartStacked, BarChartSimple, LineChart, MultiLineChart, VangstKaart, useChartData } from './Charts';
 import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from '../../utils/statsHelper';
 import { formatDatum, toYMD, todayISO, yesterdayISO } from '../../utils/dateHelper';
 import { buildEersteVangstMap, normalizeRingnummer } from '../../utils/catchHelper';
@@ -222,6 +222,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   }
   const [tvSorteer, setTvSorteer] = useState('tijd');
   const [jaarPopup, setJaarPopup] = useState(null);
+  const [vergelijkingOpen, setVergelijkingOpen] = useState(false);
   const [exportVan, setExportVan] = useState('');
   const [exportTot, setExportTot] = useState('');
   const [eigenFilter, setEigenFilter] = useState(true);
@@ -400,6 +401,42 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   }, [huidigeRecords, historischeRecords, huidigeStats]);
 
   const totaalStats = useMemo(() => computeStats(gefilterdRecords), [gefilterdRecords]);
+
+  // Jaar-op-jaar vergelijking
+  const beschikbareJaren = useMemo(() => {
+    const jaren = new Set();
+    gefilterdRecords.forEach(r => {
+      const d = parseDate(r.vangstdatum);
+      if (d) jaren.add(d.getFullYear());
+    });
+    return [...jaren].sort((a, b) => a - b);
+  }, [gefilterdRecords]);
+
+  const [vergelijkJaarA, setVergelijkJaarA] = useState(null);
+  const [vergelijkJaarB, setVergelijkJaarB] = useState(null);
+
+  const jaarVergelijkingJaren = useMemo(() => {
+    if (beschikbareJaren.length < 2) return null;
+    const a = vergelijkJaarA ?? beschikbareJaren[beschikbareJaren.length - 2];
+    const b = vergelijkJaarB ?? beschikbareJaren[beschikbareJaren.length - 1];
+    return { a, b };
+  }, [beschikbareJaren, vergelijkJaarA, vergelijkJaarB]);
+
+  const jaarVergelijking = useMemo(() => {
+    if (!jaarVergelijkingJaren) return null;
+    const { a, b } = jaarVergelijkingJaren;
+    const recA = gefilterdRecords.filter(r => { const d = parseDate(r.vangstdatum); return d?.getFullYear() === a; });
+    const recB = gefilterdRecords.filter(r => { const d = parseDate(r.vangstdatum); return d?.getFullYear() === b; });
+    const statsA = computeStats(recA);
+    const statsB = computeStats(recB);
+    const MAANDNAMEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    const maandA = Array.from({ length: 12 }, () => 0);
+    const maandB = Array.from({ length: 12 }, () => 0);
+    recA.forEach(r => { const d = parseDate(r.vangstdatum); if (d) maandA[d.getMonth()]++; });
+    recB.forEach(r => { const d = parseDate(r.vangstdatum); if (d) maandB[d.getMonth()]++; });
+    return { a, b, statsA, statsB, maandA, maandB, maandnamen: MAANDNAMEN };
+  }, [gefilterdRecords, jaarVergelijkingJaren]);
+
   const alleTerugvangsten = useMemo(() => {
     const fbLat = parseFloat(settings.ringstationLat) || null;
     const fbLon = parseFloat(settings.ringstationLon) || null;
@@ -781,6 +818,85 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
               </div>
             )}
           </>
+        )}
+
+        {/* Jaar-op-jaar vergelijking */}
+        {jaarVergelijking && (
+          <div className="section">
+            <button
+              type="button"
+              className="section-toggle"
+              onClick={() => setVergelijkingOpen(o => !o)}
+            >
+              <span>Jaar-op-jaar vergelijking</span>
+              <span className={`tv-vergelijking__pijl${vergelijkingOpen ? ' open' : ''}`}>▾</span>
+            </button>
+            {vergelijkingOpen && (
+              <div className="jaarvergl">
+                <div className="jaarvergl__selectors">
+                  <select
+                    className="jaarvergl__select"
+                    value={jaarVergelijkingJaren.a}
+                    onChange={e => setVergelijkJaarA(+e.target.value)}
+                  >
+                    {beschikbareJaren.filter(j => j !== jaarVergelijkingJaren.b).map(j => (
+                      <option key={j} value={j}>{j}</option>
+                    ))}
+                  </select>
+                  <span className="jaarvergl__vs">vs</span>
+                  <select
+                    className="jaarvergl__select"
+                    value={jaarVergelijkingJaren.b}
+                    onChange={e => setVergelijkJaarB(+e.target.value)}
+                  >
+                    {beschikbareJaren.filter(j => j !== jaarVergelijkingJaren.a).map(j => (
+                      <option key={j} value={j}>{j}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="jaarvergl__tabel-wrap">
+                  <table className="jaarvergl__tabel">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>{jaarVergelijking.a}</th>
+                        <th>{jaarVergelijking.b}</th>
+                        <th>Δ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { label: 'Totaal', a: jaarVergelijking.statsA.total,      b: jaarVergelijking.statsB.total },
+                        { label: 'Soorten', a: jaarVergelijking.statsA.soorten,   b: jaarVergelijking.statsB.soorten },
+                        { label: 'Nieuw',   a: jaarVergelijking.statsA.nieuw,     b: jaarVergelijking.statsB.nieuw },
+                        { label: 'Terugvangst', a: jaarVergelijking.statsA.terugvangst, b: jaarVergelijking.statsB.terugvangst },
+                      ].map(({ label, a, b }) => {
+                        const delta = b - a;
+                        return (
+                          <tr key={label}>
+                            <td className="jaarvergl__label">{label}</td>
+                            <td className="jaarvergl__waarde">{a}</td>
+                            <td className="jaarvergl__waarde">{b}</td>
+                            <td className={`jaarvergl__delta${delta > 0 ? ' pos' : delta < 0 ? ' neg' : ''}`}>
+                              {delta > 0 ? `+${delta}` : delta === 0 ? '—' : delta}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <MultiLineChart
+                  labels={jaarVergelijking.maandnamen}
+                  series={[
+                    { naam: String(jaarVergelijking.a), color: 'var(--accent, #38bdf8)',   values: jaarVergelijking.maandA },
+                    { naam: String(jaarVergelijking.b), color: 'var(--success, #22c55e)', values: jaarVergelijking.maandB },
+                  ]}
+                  title="Vangsten per maand"
+                />
+              </div>
+            )}
+          </div>
         )}
 
         {/* Top soorten */}

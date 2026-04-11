@@ -1,6 +1,19 @@
-export const VERSIE = '1.67.1';
+export const VERSIE = '1.67.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.2',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: jaar-op-jaar vergelijking in ringstatistieken — inklapbaar met jaarselectie, vergelijkingstabel en maandgrafiek',
+    ],
+    wijzigingen_en: [
+      'Feature: year-on-year comparison in ring statistics — collapsible with year selectors, comparison table and monthly chart',
+    ],
+    wijzigingen_de: [
+      'Funktion: Jahr-für-Jahr-Vergleich in Ringstatistiken — ausklappbar mit Jahresauswahl, Vergleichstabelle und Monatsgrafik',
+    ],
+  },
   {
     versie: '1.67.1',
     datum: '2026-04-11',

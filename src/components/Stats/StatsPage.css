@@ -773,3 +773,90 @@
   font-size: 0.78rem;
   color: var(--text-muted);
 }
+
+/* ── Jaar-op-jaar vergelijking ─────────────────────────────────── */
+.section-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  min-height: 36px;
+  text-align: left;
+}
+.section-toggle:hover { color: var(--accent); }
+
+.tv-vergelijking__pijl {
+  display: inline-block;
+  transition: transform 0.2s;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+.tv-vergelijking__pijl.open { transform: rotate(180deg); }
+
+.jaarvergl {
+  margin-top: 12px;
+}
+.jaarvergl__selectors {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.jaarvergl__select {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  min-height: 36px;
+}
+.jaarvergl__vs {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.jaarvergl__tabel-wrap {
+  overflow-x: auto;
+  margin-bottom: 4px;
+}
+.jaarvergl__tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.jaarvergl__tabel th {
+  padding: 6px 10px;
+  text-align: right;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.jaarvergl__tabel th:first-child { text-align: left; }
+.jaarvergl__tabel td {
+  padding: 5px 10px;
+  text-align: right;
+  border-bottom: 1px solid var(--bg-tertiary);
+}
+.jaarvergl__label {
+  text-align: left !important;
+  color: var(--text-secondary);
+}
+.jaarvergl__waarde {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.jaarvergl__delta {
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.jaarvergl__delta.pos { color: var(--success, #22c55e); }
+.jaarvergl__delta.neg { color: var(--danger, #ef4444); }
