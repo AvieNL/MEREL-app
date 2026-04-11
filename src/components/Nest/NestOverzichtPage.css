@@ -86,6 +86,44 @@
   font-style: italic;
 }
 
+.stamboom-jongen-blok {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0 4px 16px;
+  padding-left: 10px;
+  border-left: 2px solid var(--border);
+}
+
+.stamboom-jong-rij {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stamboom-jong-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+  align-self: flex-start;
+}
+
+.stamboom-jong-chip--ouder {
+  border-color: color-mix(in srgb, var(--success) 40%, transparent);
+  background: color-mix(in srgb, var(--success) 8%, transparent);
+}
+
+.stamboom-jong-pijl {
+  color: var(--success);
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
 .nest-overzicht-header {
   margin-bottom: 16px;
   display: flex;
