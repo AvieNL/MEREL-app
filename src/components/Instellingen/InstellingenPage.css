@@ -326,6 +326,54 @@
   word-break: break-word;
 }
 
+/* Vastgelopen sync-items */
+.sync-vastgelopen {
+  margin-bottom: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--danger, #ef4444) 40%, transparent);
+  background: color-mix(in srgb, var(--danger, #ef4444) 8%, transparent);
+  overflow: hidden;
+}
+.sync-vastgelopen__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  gap: 8px;
+}
+.sync-vastgelopen__titel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--danger, #ef4444);
+}
+.sync-vastgelopen__lijst {
+  border-top: 1px solid color-mix(in srgb, var(--danger, #ef4444) 20%, transparent);
+  padding: 6px 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sync-vastgelopen__item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.sync-vastgelopen__label {
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.sync-vastgelopen__pogingen {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.sync-vastgelopen__fout {
+  font-size: 0.72rem;
+  color: var(--danger, #ef4444);
+  word-break: break-all;
+  opacity: 0.8;
+}
+
 .instellingen-saved {
   display: block;
   font-size: 0.8rem;

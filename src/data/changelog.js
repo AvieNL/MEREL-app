@@ -1,6 +1,19 @@
-export const VERSIE = '1.66.8';
+export const VERSIE = '1.66.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.66.9',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: sync-wachtrij toont vastgelopen items met foutmelding en "Opnieuw proberen" knop in Instellingen',
+    ],
+    wijzigingen_en: [
+      'Feature: sync queue shows stuck items with error message and retry button in Settings',
+    ],
+    wijzigingen_de: [
+      'Funktion: Sync-Warteschlange zeigt fehlgeschlagene Elemente mit Fehlermeldung und Wiederholung-Schaltfläche in Einstellungen',
+    ],
+  },
   {
     versie: '1.66.8',
     datum: '2026-04-11',

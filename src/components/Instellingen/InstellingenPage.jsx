@@ -19,7 +19,7 @@ const TALEN = [
 
 export default function InstellingenPage({ settings, onUpdateSettings, onFullResync }) {
   const { user, profile, updateProfile } = useAuth();
-  const { processQueue, clearQueue, syncing, pendingCount, isOnline, lastSynced } = useSync();
+  const { processQueue, clearQueue, resetQueue, syncing, pendingCount, pendingItems, isOnline, lastSynced } = useSync();
   const { hasNestAccess } = useNestRole();
   const { projects } = useProjects();
   const { t } = useTranslation(['common', 'forms']);
@@ -241,6 +241,46 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
         <h3>{t('section_sync')}</h3>
         <div className="section-content">
           <CloudStatus />
+
+          {/* Vastgelopen items */}
+          {(() => {
+            const vastgelopen = (pendingItems || []).filter(i => (i.attempts || 0) > 0);
+            if (vastgelopen.length === 0) return null;
+            return (
+              <div className="sync-vastgelopen">
+                <div className="sync-vastgelopen__header">
+                  <span className="sync-vastgelopen__titel">
+                    ⚠ {vastgelopen.length} vastgelopen {vastgelopen.length === 1 ? 'item' : 'items'}
+                  </span>
+                  <button
+                    className="btn-primary btn-xs"
+                    onClick={resetQueue}
+                    disabled={syncing || !isOnline}
+                    title="Reset pogingen en probeer opnieuw"
+                  >
+                    Opnieuw proberen
+                  </button>
+                </div>
+                <div className="sync-vastgelopen__lijst">
+                  {vastgelopen.map(item => (
+                    <div key={item.id} className="sync-vastgelopen__item">
+                      <span className="sync-vastgelopen__label">{item.label || item.table_name}</span>
+                      <span className="sync-vastgelopen__pogingen">
+                        poging {item.attempts}/5
+                        {item.nextRetryAt && item.nextRetryAt > Date.now() && (
+                          <> · volgende over {Math.ceil((item.nextRetryAt - Date.now()) / 1000)}s</>
+                        )}
+                      </span>
+                      {item.lastError && (
+                        <span className="sync-vastgelopen__fout">{item.lastError}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+
           <div className="sync-acties">
             <div className="sync-actie">
               <div className="sync-actie-tekst">
