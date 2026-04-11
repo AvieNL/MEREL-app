@@ -73,7 +73,7 @@ const HANDLERS = {
     if (error) throw error;
   },
 
-  // Nestkastonderzoek: hard delete met cascade (FK: legsel → nestbezoek → nestring)
+  // Nestkastonderzoek: hard delete met cascade (FK: legsel → nestbezoek → nestring / legsel_ouder)
   async nest_delete({ table_name, data }) {
     if (table_name === 'nest') {
       const { data: legsels } = await supabase.from('legsel').select('id').eq('nest_id', data.id);
@@ -85,8 +85,18 @@ const HANDLERS = {
           await supabase.from('nestring').delete().in('nestbezoek_id', bezoekIds);
           await supabase.from('nestbezoek').delete().in('id', bezoekIds);
         }
+        await supabase.from('legsel_ouder').delete().in('legsel_id', legselIds);
         await supabase.from('legsel').delete().in('id', legselIds);
       }
+    }
+    if (table_name === 'legsel') {
+      const { data: bezoeken } = await supabase.from('nestbezoek').select('id').eq('legsel_id', data.id);
+      const bezoekIds = (bezoeken ?? []).map(b => b.id);
+      if (bezoekIds.length > 0) {
+        await supabase.from('nestring').delete().in('nestbezoek_id', bezoekIds);
+        await supabase.from('nestbezoek').delete().in('id', bezoekIds);
+      }
+      await supabase.from('legsel_ouder').delete().eq('legsel_id', data.id);
     }
     const { error } = await supabase
       .from(table_name)

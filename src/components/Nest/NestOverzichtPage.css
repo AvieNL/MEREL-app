@@ -2,6 +2,90 @@
   padding-bottom: 80px;
 }
 
+/* ── Stamboom ── */
+.stamboom-blok {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  font-size: 0.82rem;
+}
+
+.stamboom-blok__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.stamboom-blok__generaties {
+  font-weight: 700;
+  font-size: 0.78rem;
+  background: color-mix(in srgb, var(--success) 15%, transparent);
+  color: var(--success);
+  border-radius: 10px;
+  padding: 2px 8px;
+  flex-shrink: 0;
+}
+
+.stamboom-blok__nest {
+  font-size: 0.8rem;
+}
+
+.stamboom-blok__jaar {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  padding: 1px 6px;
+  flex-shrink: 0;
+}
+
+.stamboom-ouders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.stamboom-ouder-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+}
+
+.stamboom-legsel-rij {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+  flex-wrap: wrap;
+}
+
+.stamboom-pijl {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.stamboom-legsel-link {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.stamboom-jongen-teller {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 .nest-overzicht-header {
   margin-bottom: 16px;
   display: flex;

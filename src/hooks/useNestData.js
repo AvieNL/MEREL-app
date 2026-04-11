@@ -17,6 +17,7 @@ export function useNestData() {
   const legsels   = useLiveQuery(() => db.legsel.toArray(), [], []);
   const bezoeken  = useLiveQuery(() => db.nestbezoek.orderBy('datum').toArray(), [], []);
   const ringen    = useLiveQuery(() => db.nestring.toArray(), [], []);
+  const ouders    = useLiveQuery(() => db.legsel_ouder.toArray(), [], []);
 
   // ── Schrijfoperaties ──────────────────────────────────────────────────────
 
@@ -105,6 +106,34 @@ export function useNestData() {
     return id;
   }, [user, addToQueue]);
 
+  const addOuder = useCallback(async (ouderData) => {
+    if (!user) return null;
+    const id = crypto.randomUUID();
+    const now = new Date().toISOString();
+    const record = {
+      ...ouderData,
+      id,
+      aangemaakt_door: user.id,
+      updated_at: now,
+    };
+    await db.legsel_ouder.put(record);
+    await addToQueue('legsel_ouder', 'upsert', record);
+    return id;
+  }, [user, addToQueue]);
+
+  const updateOuder = useCallback(async (id, updates) => {
+    const existing = await db.legsel_ouder.get(id);
+    if (!existing) return;
+    const record = { ...existing, ...updates, updated_at: new Date().toISOString() };
+    await db.legsel_ouder.put(record);
+    await addToQueue('legsel_ouder', 'upsert', record);
+  }, [addToQueue]);
+
+  const deleteOuder = useCallback(async (id) => {
+    await db.legsel_ouder.delete(id);
+    await addToQueue('legsel_ouder', 'nest_delete', { id });
+  }, [addToQueue]);
+
   const bulkImportNestBackup = useCallback(async (backup) => {
     if (!user) return null;
     const now = new Date().toISOString();
@@ -178,6 +207,7 @@ export function useNestData() {
         await db.nestring.where('nestbezoek_id').anyOf(bezoekIds).delete();
         await db.nestbezoek.bulkDelete(bezoekIds);
       }
+      await db.legsel_ouder.where('legsel_id').anyOf(legselIds).delete();
       await db.legsel.bulkDelete(legselIds);
     }
     await db.nest.delete(id);
@@ -191,13 +221,14 @@ export function useNestData() {
   }, [addToQueue]);
 
   const deleteLegsel = useCallback(async (id) => {
-    // Cascade: verwijder ringen en bezoeken vóór het legsel
+    // Cascade: verwijder ringen, bezoeken en oudervogels vóór het legsel
     const bezoeken = await db.nestbezoek.where('legsel_id').equals(id).toArray();
     const bezoekIds = bezoeken.map(b => b.id);
     if (bezoekIds.length > 0) {
       await db.nestring.where('nestbezoek_id').anyOf(bezoekIds).delete();
       await db.nestbezoek.bulkDelete(bezoekIds);
     }
+    await db.legsel_ouder.where('legsel_id').equals(id).delete();
     await db.legsel.delete(id);
     await addToQueue('legsel', 'nest_delete', { id });
   }, [addToQueue]);
@@ -226,6 +257,7 @@ export function useNestData() {
     legsels,
     bezoeken,
     ringen,
+    ouders,
     bulkImportNestBackup,
     addNest,
     updateNest,
@@ -242,5 +274,8 @@ export function useNestData() {
     deleteBezoek,
     deleteNestring,
     updateNestring,
+    addOuder,
+    updateOuder,
+    deleteOuder,
   };
 }

@@ -19,6 +19,7 @@ function getLabelForQueueItem(tableName, data) {
   if (tableName === 'nest') return `Nest ${data?.kastnummer ?? ''}`.trim();
   if (tableName === 'nestbezoek') return `Nestbezoek ${data?.datum ?? ''}`.trim();
   if (tableName === 'legsel') return `Legsel ${data?.volgnummer ?? ''}`.trim();
+  if (tableName === 'legsel_ouder') return `Oudervogel ${data?.ringnummer ?? ''}`.trim();
   return tableName;
 }
 

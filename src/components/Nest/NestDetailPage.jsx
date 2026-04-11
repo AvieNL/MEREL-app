@@ -24,7 +24,7 @@ export default function NestDetailPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { canNestAdd, canNestEdit, canNestDelete } = useNestRole();
-  const { nesten, legsels, bezoeken, ringen, deleteNest, deleteLegsel, deleteBezoek, deleteNestring, updateNest } = useNestData();
+  const { nesten, legsels, bezoeken, ringen, ouders, deleteNest, deleteLegsel, deleteBezoek, deleteNestring, updateNest, addOuder, deleteOuder } = useNestData();
   const { records } = useRecords();
   const switchModule = useModuleSwitch();
   const [deleteBevestig, setDeleteBevestig] = useState(false);
@@ -130,6 +130,7 @@ export default function NestDetailPage() {
             nest={nest}
             bezoeken={bezoeken}
             ringen={ringen}
+            ouders={ouders.filter(o => o.legsel_id === legsel.id)}
             soort={speciesByEuring[legsel.soort_euring] || null}
             speciesByEuring={speciesByEuring}
             canNestAdd={canNestAdd}
@@ -138,6 +139,8 @@ export default function NestDetailPage() {
             deleteLegsel={deleteLegsel}
             deleteBezoek={deleteBezoek}
             deleteNestring={deleteNestring}
+            addOuder={addOuder}
+            deleteOuder={deleteOuder}
             records={records}
             navigate={navigate}
             switchModule={switchModule}
@@ -153,6 +156,175 @@ export default function NestDetailPage() {
         >
           + {t('nest_btn_add_legsel')}
         </button>
+      )}
+    </div>
+  );
+}
+
+
+// ── Oudervogel-sectie per legsel ──────────────────────────────────────────
+
+const GESLACHT_LABELS = { M: '♂', V: '♀', O: '' };
+
+function LegselOuderBlok({ legselId, ouders, canNestEdit, addOuder, deleteOuder, records, speciesByEuring, switchModule, navigate }) {
+  const [open, setOpen] = useState(false);
+  const [formulier, setFormulier] = useState(false);
+  const [ring, setRing] = useState('');
+  const [geslacht, setGeslacht] = useState('O');
+  const [naamVogel, setNaamVogel] = useState('');
+  const [deleteId, setDeleteId] = useState(null);
+  const [bezig, setBezig] = useState(false);
+
+  // Zoek bijpassende vangst op ringnummer
+  const ringNorm = ring.replace(/[\s.]/g, '').toUpperCase();
+  const gekoppeldeVangst = ringNorm.length >= 4
+    ? records?.find(v => (v.ringnummer || '').replace(/[\s.]/g, '').toUpperCase() === ringNorm)
+    : null;
+
+  // Auto-fill naam vogel als er een vangst gevonden wordt
+  const effectiefNaam = naamVogel || (gekoppeldeVangst?.vogelnaam ? gekoppeldeVangst.vogelnaam.charAt(0).toUpperCase() + gekoppeldeVangst.vogelnaam.slice(1) : '');
+
+  async function handleToevoegen(e) {
+    e.preventDefault();
+    if (!ring.trim()) return;
+    setBezig(true);
+    await addOuder({
+      legsel_id: legselId,
+      ringnummer: ring.trim(),
+      geslacht,
+      naam_vogel: effectiefNaam,
+      soort_euring: gekoppeldeVangst?.soort_euring || '',
+      vangst_id: gekoppeldeVangst?.id || null,
+    });
+    setRing('');
+    setGeslacht('O');
+    setNaamVogel('');
+    setFormulier(false);
+    setBezig(false);
+  }
+
+  if (ouders.length === 0 && !canNestEdit) return null;
+
+  return (
+    <div className="legsel-ouder-blok">
+      <button
+        type="button"
+        className="legsel-ouder-toggle"
+        onClick={() => setOpen(o => !o)}
+      >
+        <span className="legsel-ouder-toggle__label">
+          Ouders
+          {ouders.length > 0 && <span className="legsel-ouder-toggle__teller">{ouders.length}</span>}
+        </span>
+        <span className={`toggle-pijl${open ? ' open' : ''}`}>▾</span>
+      </button>
+
+      {open && (
+        <div className="legsel-ouder-inhoud">
+          {ouders.length === 0 && (
+            <p className="legsel-ouder-leeg">Nog geen oudervogels gekoppeld.</p>
+          )}
+          {ouders.map(ouder => {
+            const nr = ouder.ringnummer?.replace(/\./g, '') || '—';
+            const vangst = records?.find(v => v.id === ouder.vangst_id);
+            const geslLabel = GESLACHT_LABELS[ouder.geslacht] || '';
+            return (
+              <span key={ouder.id} className="legsel-ouder-rij">
+                {deleteId === ouder.id ? (
+                  <span className="legsel-ouder-confirm">
+                    <span>Verwijderen?</span>
+                    <button type="button" className="btn-danger btn-xs"
+                      onClick={async () => { await deleteOuder(ouder.id); setDeleteId(null); }}>
+                      Ja
+                    </button>
+                    <button type="button" className="btn-secondary btn-xs"
+                      onClick={() => setDeleteId(null)}>
+                      Nee
+                    </button>
+                  </span>
+                ) : (
+                  <>
+                    {geslLabel && <span className="legsel-ouder-geslacht">{geslLabel}</span>}
+                    {vangst
+                      ? <button className="bezoek-item__ring-link" type="button"
+                          onClick={() => {
+                            try { sessionStorage.setItem('vrs-edit-record', JSON.stringify(vangst)); } catch { /* ignore */ }
+                            switchModule('ring');
+                            navigate('/ring/');
+                          }}>
+                          {nr}
+                        </button>
+                      : <span className="bezoek-item__ring-orphan">{nr}</span>
+                    }
+                    {ouder.naam_vogel && <span className="legsel-ouder-naam">{ouder.naam_vogel}</span>}
+                    {canNestEdit && (
+                      <button type="button" className="bezoek-item__ring-delete"
+                        onClick={() => setDeleteId(ouder.id)}>
+                        ×
+                      </button>
+                    )}
+                  </>
+                )}
+              </span>
+            );
+          })}
+
+          {canNestEdit && !formulier && (
+            <button
+              type="button"
+              className="legsel-ouder-add-btn"
+              onClick={() => setFormulier(true)}
+            >
+              + Oudervogel koppelen
+            </button>
+          )}
+
+          {formulier && (
+            <form className="legsel-ouder-form" onSubmit={handleToevoegen}>
+              <div className="legsel-ouder-form__rij">
+                <input
+                  className="legsel-ouder-form__ring"
+                  type="text"
+                  placeholder="Ringnummer"
+                  value={ring}
+                  onChange={e => setRing(e.target.value)}
+                  autoFocus
+                />
+                <select
+                  className="legsel-ouder-form__geslacht"
+                  value={geslacht}
+                  onChange={e => setGeslacht(e.target.value)}
+                >
+                  <option value="O">Onbekend</option>
+                  <option value="M">♂ Man</option>
+                  <option value="V">♀ Vrouw</option>
+                </select>
+              </div>
+              {gekoppeldeVangst && (
+                <p className="legsel-ouder-form__match">
+                  Gevonden: {effectiefNaam} — {gekoppeldeVangst.vangstdatum}
+                </p>
+              )}
+              {ring.length >= 4 && !gekoppeldeVangst && (
+                <input
+                  className="legsel-ouder-form__naam"
+                  type="text"
+                  placeholder="Soort (optioneel)"
+                  value={naamVogel}
+                  onChange={e => setNaamVogel(e.target.value)}
+                />
+              )}
+              <div className="legsel-ouder-form__acties">
+                <button type="submit" className="btn-primary btn-xs" disabled={!ring.trim() || bezig}>
+                  Koppelen
+                </button>
+                <button type="button" className="btn-secondary btn-xs" onClick={() => { setFormulier(false); setRing(''); setGeslacht('O'); setNaamVogel(''); }}>
+                  Annuleren
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
       )}
     </div>
   );
@@ -244,7 +416,7 @@ function NestFotoStrip({ nest, canNestEdit, updateNest }) {
 }
 
 
-function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, canNestAdd, canNestEdit, canNestDelete, deleteLegsel, deleteBezoek, deleteNestring, records, navigate, switchModule, t }) {
+function LegselBlok({ legsel, nest, bezoeken, ringen, ouders, soort, speciesByEuring, canNestAdd, canNestEdit, canNestDelete, deleteLegsel, deleteBezoek, deleteNestring, addOuder, deleteOuder, records, navigate, switchModule, t }) {
   const [deleteBezoekId, setDeleteBezoekId] = useState(null);
   const [deleteLegselBevestig, setDeleteLegselBevestig] = useState(false);
   const [deleteNestringId, setDeleteNestringId] = useState(null);
@@ -450,6 +622,18 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, soort, speciesByEuring, ca
           + {t('nest_btn_add_bezoek')}
         </button>
       )}
+
+      <LegselOuderBlok
+        legselId={legsel.id}
+        ouders={ouders}
+        canNestEdit={canNestEdit}
+        addOuder={addOuder}
+        deleteOuder={deleteOuder}
+        records={records}
+        speciesByEuring={speciesByEuring}
+        switchModule={switchModule}
+        navigate={navigate}
+      />
     </div>
   );
 }

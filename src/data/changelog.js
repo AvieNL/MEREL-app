@@ -1,6 +1,22 @@
-export const VERSIE = '1.65.42';
+export const VERSIE = '1.66.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.66.0',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: oudervogels koppelen aan legsels — identificeer ouders via ringnummer en link ze aan een legsel',
+      'Functie: stamboom in neststatistieken — overzicht van meest productieve ouders en generatieketens',
+    ],
+    wijzigingen_en: [
+      'Feature: link parent birds to clutches — identify parents by ring number and couple them to a clutch',
+      'Feature: family tree in nest statistics — overview of most productive parents and generation chains',
+    ],
+    wijzigingen_de: [
+      'Funktion: Elternvögel mit Gelegen verknüpfen — Eltern per Ringnummer identifizieren und einem Gelege zuordnen',
+      'Funktion: Stammbaum in Neststatistiken — Übersicht der produktivsten Eltern und Generationsketten',
+    ],
+  },
   {
     versie: '1.65.42',
     datum: '2026-04-10',

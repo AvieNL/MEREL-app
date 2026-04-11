@@ -211,11 +211,142 @@ function computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, 
 }
 
 // ── Hoofdcomponent ─────────────────────────────────────────────────────────
+// ── Stamboom-helpers ────────────────────────────────────────────────────────
+
+/**
+ * Bouwt stamboomstatistieken op basis van legsel_ouder (oudervogels) en nestring (geringde jongen).
+ * Een generatieketen: ouder in legsel A → was zelf jong in legsel B → ...
+ */
+function computeStamboom({ legsels, bezoeken, nestring, ouders, nesten, speciesByEuring }) {
+  if (ouders.length === 0) return null;
+
+  const bezoekById  = new Map(bezoeken.map(b => [b.id, b]));
+  const legselById  = new Map(legsels.map(l => [l.id, l]));
+  const nestById    = new Map(nesten.map(n => [n.id, n]));
+
+  const normRing = r => (r || '').replace(/[\s.]/g, '').toUpperCase();
+
+  // ring → legsel_id (geboortelegsel: legsel waar deze vogel als jong geringd werd)
+  const geboorteLegsel = new Map();
+  nestring.forEach(r => {
+    const ring = normRing(r.ringnummer);
+    if (!ring) return;
+    if (!geboorteLegsel.has(ring)) {
+      const bezoek = bezoekById.get(r.nestbezoek_id);
+      if (bezoek) geboorteLegsel.set(ring, bezoek.legsel_id);
+    }
+  });
+
+  // legsel_id → [ringnummer] van geringde jongen in dat legsel
+  const jongenPerLegsel = new Map();
+  nestring.forEach(r => {
+    const ring = normRing(r.ringnummer);
+    if (!ring) return;
+    const bezoek = bezoekById.get(r.nestbezoek_id);
+    if (!bezoek) return;
+    const legselId = bezoek.legsel_id;
+    if (!jongenPerLegsel.has(legselId)) jongenPerLegsel.set(legselId, new Set());
+    jongenPerLegsel.get(legselId).add(ring);
+  });
+
+  // ring → [legsel_id] waar deze vogel als ouder gekoppeld is
+  const legselsAlsOuder = new Map();
+  ouders.forEach(o => {
+    const ring = normRing(o.ringnummer);
+    if (!ring) return;
+    if (!legselsAlsOuder.has(ring)) legselsAlsOuder.set(ring, []);
+    legselsAlsOuder.get(ring).push(o.legsel_id);
+  });
+
+  // ── Generatiediepte per legsel (diepste nakomelingenketen) ──
+  const memo = new Map();
+  function diepte(legselId, bezocht = new Set()) {
+    if (memo.has(legselId)) return memo.get(legselId);
+    if (bezocht.has(legselId)) return 0; // cyclus-beveiliging
+    bezocht.add(legselId);
+    const jongen = jongenPerLegsel.get(legselId) || new Set();
+    let maxKind = 0;
+    for (const ring of jongen) {
+      for (const kindLegselId of (legselsAlsOuder.get(ring) || [])) {
+        const d = diepte(kindLegselId, new Set(bezocht));
+        if (d > maxKind) maxKind = d;
+      }
+    }
+    const result = 1 + maxKind;
+    memo.set(legselId, result);
+    return result;
+  }
+
+  // Bereken diepte voor alle legsels (alleen die met ouders of jongen zijn interessant)
+  const relevanteLegselIds = new Set([
+    ...ouders.map(o => o.legsel_id),
+    ...[...jongenPerLegsel.keys()],
+  ]);
+  const dieptes = [];
+  for (const legselId of relevanteLegselIds) {
+    // Alleen legsels die de wortel zijn (= hun ouders zijn NIET zelf jongen van een ander legsel)
+    const ouderRingen = ouders.filter(o => o.legsel_id === legselId).map(o => normRing(o.ringnummer));
+    const isWortel = ouderRingen.every(ring => !geboorteLegsel.has(ring));
+    if (isWortel) {
+      const d = diepte(legselId);
+      if (d > 1) dieptes.push({ legselId, generaties: d });
+    }
+  }
+  const topBomen = dieptes.sort((a, b) => b.generaties - a.generaties).slice(0, 5);
+
+  // ── Meest productieve ouders (meeste legsels als ouder) ──
+  const oudertelling = new Map(); // ring → { count, naam, geslacht, legselIds }
+  ouders.forEach(o => {
+    const ring = normRing(o.ringnummer);
+    if (!ring) return;
+    if (!oudertelling.has(ring)) {
+      oudertelling.set(ring, { ring, naam: o.naam_vogel || '', geslacht: o.geslacht, legselIds: [], vangst_id: o.vangst_id });
+    }
+    const entry = oudertelling.get(ring);
+    entry.legselIds.push(o.legsel_id);
+    if (!entry.naam && o.naam_vogel) entry.naam = o.naam_vogel;
+  });
+
+  const topOuders = [...oudertelling.values()]
+    .map(e => ({
+      ...e,
+      aantalLegsels: e.legselIds.length,
+      aantalJongen: e.legselIds.reduce((sum, lId) => sum + (jongenPerLegsel.get(lId)?.size || 0), 0),
+    }))
+    .sort((a, b) => b.aantalLegsels !== a.aantalLegsels ? b.aantalLegsels - a.aantalLegsels : b.aantalJongen - a.aantalJongen)
+    .slice(0, 10);
+
+  // ── Bouw stamboom-weergave voor top-bomen ──
+  function bouwTak(legselId, bezocht = new Set(), diepteMax = 6) {
+    if (bezocht.has(legselId) || bezocht.size >= diepteMax) return null;
+    bezocht.add(legselId);
+    const legsel = legselById.get(legselId);
+    const nest = legsel ? nestById.get(legsel.nest_id) : null;
+    const ouderRingen = ouders.filter(o => o.legsel_id === legselId);
+    const jongen = [...(jongenPerLegsel.get(legselId) || [])];
+    const kinderLegsels = [];
+    jongen.forEach(ring => {
+      (legselsAlsOuder.get(ring) || []).forEach(kindId => {
+        const tak = bouwTak(kindId, new Set(bezocht), diepteMax);
+        if (tak) kinderLegsels.push({ ring, ...tak });
+      });
+    });
+    return { legselId, legsel, nest, ouderRingen, kinderLegsels };
+  }
+
+  const stamBomen = topBomen.map(({ legselId, generaties }) => ({
+    generaties,
+    boom: bouwTak(legselId),
+  }));
+
+  return { topOuders, stamBomen };
+}
+
 export default function NestStatsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const switchModule = useModuleSwitch();
-  const { nesten, legsels, bezoeken, ringen, bulkImportNestBackup, markLegselsExported } = useNestData();
+  const { nesten, legsels, bezoeken, ringen, ouders, bulkImportNestBackup, markLegselsExported } = useNestData();
   const { records: vangsten } = useRecords();
   const species = useSpeciesRef();
   const { addToast } = useToast();
@@ -416,6 +547,11 @@ export default function NestStatsPage() {
     const jaren = new Set(legsels.map(l => l.jaar).filter(Boolean));
     return [...jaren].sort((a, b) => b - a);
   }, [legsels]);
+
+  const stamboomData = useMemo(() =>
+    computeStamboom({ legsels, bezoeken, nestring: ringen, ouders, nesten, speciesByEuring }),
+    [legsels, bezoeken, ringen, ouders, nesten, speciesByEuring]
+  );
 
   const gefilterdeStats = useMemo(() =>
     computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, jaar: filterJaar }),
@@ -898,6 +1034,71 @@ export default function NestStatsPage() {
           </div>
         )}
 
+        {/* ── Stamboom ── */}
+        {stamboomData && (
+          <>
+            {stamboomData.topOuders.length > 0 && (
+              <div className="section">
+                <h3>Meest productieve ouders</h3>
+                <div className="trektellen-table-wrap">
+                  <table className="trektellen-table" style={{ fontSize: '0.78rem' }}>
+                    <thead>
+                      <tr>
+                        <th className="tt-col-soort">Ring</th>
+                        <th className="tt-col-soort">Soort</th>
+                        <th className="tt-col-num">Legsels</th>
+                        <th className="tt-col-num">Jongen</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {stamboomData.topOuders.map(o => (
+                        <tr key={o.ring}>
+                          <td className="tt-col-soort" style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>
+                            {o.geslacht === 'M' ? '♂ ' : o.geslacht === 'V' ? '♀ ' : ''}{o.ring}
+                          </td>
+                          <td className="tt-col-soort" style={{ fontStyle: 'italic', color: 'var(--text-secondary)' }}>
+                            {o.naam || '—'}
+                          </td>
+                          <td className="tt-col-num" style={{ fontWeight: 600 }}>{o.aantalLegsels}</td>
+                          <td className="tt-col-num">{o.aantalJongen || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {stamboomData.stamBomen.length > 0 && (
+              <div className="section">
+                <h3>Stambomen</h3>
+                <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 12 }}>
+                  Geringde jongen die later als ouder zijn geïdentificeerd.
+                </p>
+                {stamboomData.stamBomen.map(({ generaties, boom }, i) => boom && (
+                  <div key={i} className="stamboom-blok">
+                    <div className="stamboom-blok__header">
+                      <span className="stamboom-blok__generaties">{generaties} generatie{generaties !== 1 ? 's' : ''}</span>
+                      {boom.nest && (
+                        <span
+                          className="stamboom-blok__nest"
+                          style={{ cursor: 'pointer', color: 'var(--accent)' }}
+                          onClick={() => navigate(`/nest/${boom.nest.id}`)}
+                        >
+                          ⌂ {boom.nest.kastnummer}
+                          {boom.nest.omschrijving ? ` — ${boom.nest.omschrijving}` : ''}
+                        </span>
+                      )}
+                      {boom.legsel && <span className="stamboom-blok__jaar">{boom.legsel.jaar}</span>}
+                    </div>
+                    <StamboomTak tak={boom} diepte={0} navigate={navigate} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
         {/* AviNest import */}
         <AviNestImportSection />
 
@@ -944,6 +1145,57 @@ export default function NestStatsPage() {
 }
 
 // ── Sub-componenten ────────────────────────────────────────────────────────
+
+function StamboomTak({ tak, diepte, navigate }) {
+  const INSPRINGING = 18;
+  const normRing = r => (r || '').replace(/[\s.]/g, '').toUpperCase();
+  const GESLACHT_LABELS = { M: '♂', V: '♀' };
+
+  return (
+    <div style={{ marginLeft: diepte * INSPRINGING }}>
+      {/* Ouders van dit legsel */}
+      {tak.ouderRingen.length > 0 && (
+        <div className="stamboom-ouders">
+          {tak.ouderRingen.map(o => (
+            <span key={o.id} className="stamboom-ouder-chip">
+              {GESLACHT_LABELS[o.geslacht] && <span>{GESLACHT_LABELS[o.geslacht]} </span>}
+              <span style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>
+                {normRing(o.ringnummer)}
+              </span>
+              {o.naam_vogel && <span style={{ color: 'var(--text-muted)', fontSize: '0.72rem' }}> {o.naam_vogel}</span>}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Legsel-info */}
+      {tak.legsel && (
+        <div className="stamboom-legsel-rij">
+          <span className="stamboom-pijl">↓</span>
+          <span
+            className="stamboom-legsel-link"
+            onClick={() => tak.nest && navigate(`/nest/${tak.nest.id}`)}
+            style={{ cursor: tak.nest ? 'pointer' : 'default' }}
+          >
+            {tak.nest ? `⌂ ${tak.nest.kastnummer}` : '?'}
+            {tak.legsel.jaar ? ` (${tak.legsel.jaar})` : ''}
+          </span>
+          {tak.kinderLegsels.length > 0 && (
+            <span className="stamboom-jongen-teller">
+              {tak.kinderLegsels.length} jong{tak.kinderLegsels.length !== 1 ? 'en' : ''} met nakomelingen
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Recursief: kinderlegsels */}
+      {tak.kinderLegsels.map((kind, i) => (
+        <StamboomTak key={kind.ring + i} tak={kind} diepte={diepte + 1} navigate={navigate} />
+      ))}
+    </div>
+  );
+}
+
 function StatCard({ waarde, label, onClick }) {
   return (
     <div

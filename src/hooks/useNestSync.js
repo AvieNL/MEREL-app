@@ -19,7 +19,7 @@ export function pullNestData() {
 
 async function _doNestPull() {
   // Pull volgorde: ouder vóór kind (i.v.m. FK-constraints bij weergave)
-  const tables = ['nest', 'legsel', 'nestbezoek', 'nestring'];
+  const tables = ['nest', 'legsel', 'nestbezoek', 'nestring', 'legsel_ouder'];
 
   for (const table of tables) {
     const { data, error } = await supabase.from(table).select('*');

@@ -84,3 +84,8 @@ db.version(12).stores({
 db.version(13).stores({
   legsel: 'id, nest_id, [nest_id+jaar], exported_at',
 });
+
+// Versie 14: legsel_ouder tabel voor koppeling oudervogels aan legsels (stamboomfunctie)
+db.version(14).stores({
+  legsel_ouder: 'id, legsel_id, ringnummer',
+});
