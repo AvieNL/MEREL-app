@@ -1,9 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
-import { IconEdit, IconDelete } from '../shared/Icons';
+import { IconEdit, IconDelete, NestIcoon } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
 import { useRole } from '../../hooks/useRole';
+import { useNestData } from '../../hooks/useNestData';
+import { useModuleSwitch } from '../../App';
 import { db } from '../../lib/db';
 import { supabase } from '../../lib/supabase';
 import { buildEuringLookup } from '../../utils/euring-lookup';
@@ -115,7 +117,11 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const [editMode, setEditMode] = useState(false);
   const [editData, setEditData] = useState({});
   const [vangstenOpen, setVangstenOpen] = useState(false);
+  const [nestenOpen, setNestenOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
+  const { nesten, legsels, bezoeken, ringen } = useNestData();
+  const switchModule = useModuleSwitch();
 
   // Auto-start edit voor een nieuwe soort
   useEffect(() => {
@@ -302,6 +308,34 @@ export default function SoortDetail({ records, speciesOverrides }) {
   }, [soortRecords]);
 
   const tvCount = soortRecords.filter(r => r.metalenringinfo === 4 || r.metalenringinfo === '4').length;
+
+  // Legsels voor deze soort (via bezoek.soort_euring of legsel.soort_euring)
+  const soortEuringCode = soort?.euring_code || euringLookup[decodedNaam?.toLowerCase()] || '';
+  const nestLegsels = useMemo(() => {
+    if (!soortEuringCode || legsels.length === 0) return [];
+    const relevanteLegselIds = new Set();
+    bezoeken.forEach(b => { if (b.soort_euring === soortEuringCode) relevanteLegselIds.add(b.legsel_id); });
+    legsels.forEach(l => { if (l.soort_euring === soortEuringCode) relevanteLegselIds.add(l.id); });
+    return legsels
+      .filter(l => relevanteLegselIds.has(l.id))
+      .map(l => {
+        const nest = nesten.find(n => n.id === l.nest_id);
+        if (!nest || nest.deleted_at) return null;
+        const legselBezoeken = bezoeken
+          .filter(b => b.legsel_id === l.id)
+          .sort((a, b) => a.datum.localeCompare(b.datum));
+        const legselRingen = ringen.filter(r =>
+          legselBezoeken.some(b => b.id === r.nestbezoek_id)
+        );
+        return { legsel: l, nest, bezoeken: legselBezoeken, ringen: legselRingen };
+      })
+      .filter(Boolean)
+      .sort((a, b) => {
+        const latA = a.bezoeken.at(-1)?.datum || '';
+        const latB = b.bezoeken.at(-1)?.datum || '';
+        return latB.localeCompare(latA);
+      });
+  }, [soortEuringCode, legsels, bezoeken, nesten, ringen]);
 
   if (speciesRef.length === 0) {
     return (
@@ -785,6 +819,44 @@ export default function SoortDetail({ records, speciesOverrides }) {
           </div>
         ))}
       </div>
+
+      {/* Nesten */}
+      {nestLegsels.length > 0 && (
+        <div className="sd-card">
+          <div className="sd-vangsten-header" onClick={() => setNestenOpen(o => !o)}>
+            <h3 className="sd-card-title sd-card-title--toggle">
+              {t('sd_nests')}
+              <span className="sd-vangsten-count">{nestLegsels.length}</span>
+            </h3>
+            <span className={`sd-vangsten-toggle${nestenOpen ? ' sd-vangsten-toggle--open' : ''}`}>▼</span>
+          </div>
+          {nestenOpen && (
+            <div className="sd-vangsten-content">
+              {nestLegsels.map(({ legsel, nest, bezoeken: lb, ringen: lr }) => {
+                const eersteBezoek = lb[0]?.datum;
+                const laatste = lb.at(-1)?.datum;
+                const succes = legsel.nestsucces;
+                return (
+                  <div key={legsel.id} className="sd-nest-item"
+                    onClick={() => { if (switchModule) switchModule('nest'); navigate(`/nest/${nest.id}`); }}
+                  >
+                    <span className="sd-nest-kast">
+                      <NestIcoon nest={nest} size={13} /> {nest.kastnummer}
+                      {nest.omschrijving && <span className="sd-nest-omschrijving"> — {nest.omschrijving}</span>}
+                    </span>
+                    <span className="sd-nest-meta">
+                      {legsel.jaar} · #{legsel.volgnummer}
+                      {eersteBezoek && <> · {formatDatum(eersteBezoek)}{laatste && laatste !== eersteBezoek ? ` – ${formatDatum(laatste)}` : ''}</>}
+                      {lr.length > 0 && <span className="sd-nest-ringen"> · {lr.length} geringd</span>}
+                      {succes != null && succes >= 0 && <span className="sd-nest-succes"> · {succes} uitgevlogen</span>}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -656,6 +656,35 @@
   background: var(--accent-bg);
 }
 
+/* Nesten per soort */
+.sd-nest-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sd-nest-item:hover { background: var(--accent-bg); }
+.sd-nest-kast {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sd-nest-omschrijving { font-weight: 400; color: var(--text-secondary); }
+.sd-nest-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.sd-nest-ringen { color: var(--accent); }
+.sd-nest-succes { color: var(--success); }
+
 /* Stats row */
 .sd-stats-row {
   display: flex;

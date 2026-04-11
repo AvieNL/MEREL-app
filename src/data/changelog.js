@@ -1,6 +1,19 @@
-export const VERSIE = '1.66.7';
+export const VERSIE = '1.66.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.66.8',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: soortdetailpagina toont bijbehorende nesten — inklapbare sectie met legsels, bezoekdata en geringde pullen',
+    ],
+    wijzigingen_en: [
+      'Feature: species detail page shows related nests — collapsible section with clutches, visit dates and ringed nestlings',
+    ],
+    wijzigingen_de: [
+      'Funktion: Artdetailseite zeigt zugehörige Nester — einklappbarer Bereich mit Gelegen, Besuchsdaten und beringten Nestlingen',
+    ],
+  },
   {
     versie: '1.66.7',
     datum: '2026-04-11',
