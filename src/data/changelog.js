@@ -1,6 +1,19 @@
-export const VERSIE = '1.66.4';
+export const VERSIE = '1.66.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.66.5',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: oudervogels bewerken — potlood-icoon per ouder opent inline bewerkformulier',
+    ],
+    wijzigingen_en: [
+      'Feature: edit parent birds — pencil icon per parent opens inline edit form',
+    ],
+    wijzigingen_de: [
+      'Funktion: Elternvögel bearbeiten — Stift-Symbol pro Elternteil öffnet Inline-Bearbeitungsformular',
+    ],
+  },
   {
     versie: '1.66.4',
     datum: '2026-04-11',
