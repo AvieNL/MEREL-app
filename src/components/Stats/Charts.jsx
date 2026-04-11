@@ -254,6 +254,74 @@ export function LineChart({ data, title, xKey, yKey, onPointClick }) {
   );
 }
 
+// Grouped bar chart: one group per label (year), one bar per series
+// series: [{ naam, color, values: [n, n, ...] }]  — values aligned with labels array
+export function GroupedBarChart({ labels, series, title }) {
+  const containerRef = useRef(null);
+  const containerW = useContainerWidth(containerRef);
+  if (!labels?.length || !series?.length) return <div ref={containerRef} />;
+
+  const maxVal = Math.max(1, ...series.flatMap(s => s.values));
+  const chartH = 180;
+  const padTop = 24;
+  const padBottom = 28;
+  const padLeft = 32;
+  const padRight = 8;
+  const barArea = chartH - padTop - padBottom;
+  const chartW = containerW || 300;
+  const usableW = chartW - padLeft - padRight;
+  const groupW = usableW / labels.length;
+  const barW = Math.max(6, Math.min(20, (groupW / series.length) - 2));
+  const groupPad = (groupW - barW * series.length) / 2;
+
+  return (
+    <div className="chart-block" ref={containerRef}>
+      <h3>{title}</h3>
+      {containerW > 0 && (
+        <svg viewBox={`0 0 ${chartW} ${chartH}`} width="100%" preserveAspectRatio="xMinYMin meet" className="chart-svg">
+          {[0, 0.5, 1].map(f => {
+            const y = padTop + barArea * (1 - f);
+            const val = Math.round(maxVal * f);
+            return (
+              <g key={f}>
+                <line x1={padLeft} y1={y} x2={chartW} y2={y} stroke="var(--bg-tertiary)" strokeWidth="1" />
+                <text x={padLeft - 4} y={y + 3} textAnchor="end" fill="var(--text-muted)" fontSize="9">{val}</text>
+              </g>
+            );
+          })}
+          {labels.map((label, gi) => {
+            const gx = padLeft + groupW * gi + groupPad;
+            return (
+              <g key={label}>
+                {series.map((s, si) => {
+                  const v = s.values[gi] || 0;
+                  const h = (v / maxVal) * barArea;
+                  const x = gx + si * barW;
+                  const y = padTop + barArea - h;
+                  return (
+                    <g key={si}>
+                      {v > 0 && <rect x={x} y={y} width={barW - 1} height={h} rx="1" fill={s.color} />}
+                    </g>
+                  );
+                })}
+                <text x={padLeft + groupW * gi + groupW / 2} y={chartH - 4} textAnchor="middle" fill="var(--text-muted)" fontSize="9">{label}</text>
+              </g>
+            );
+          })}
+        </svg>
+      )}
+      <div className="chart-legend">
+        {series.map((s, i) => (
+          <span key={i} className="chart-legend-item">
+            <span className="chart-dot" style={{ background: s.color }} />
+            {s.naam}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function VangstKaart({ targetRecords, allRecords, fallbackLat, fallbackLon }) {
   const { t } = useTranslation();
   const mapRef = useRef(null);

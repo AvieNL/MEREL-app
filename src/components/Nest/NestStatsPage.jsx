@@ -7,7 +7,7 @@ import AviNestImportSection from './AviNestImportSection';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useRecords } from '../../hooks/useRecords';
 import { useToast } from '../../context/ToastContext';
-import { BarChartSimple, DonutChart, LineChart } from '../Stats/Charts';
+import { BarChartSimple, DonutChart, GroupedBarChart, LineChart } from '../Stats/Charts';
 import { HABITAT_CODES, NESTTYPE_CODES, NESTPLAATS_CODES, STADIUM_CODES } from '../../data/sovon-codes';
 import {
   buildNestExportData, exportNestJSONBackup,
@@ -446,6 +446,41 @@ export default function NestStatsPage() {
       });
   }, [bezoeken]);
 
+  // Grafiek: legsels per soort per jaar (trendlijn meerdere soorten)
+  const TREND_PALETTE = [
+    '#22c55e', '#38bdf8', '#f59e0b', '#a78bfa',
+    '#f472b6', '#34d399', '#60a5fa', '#fb923c',
+  ];
+  const trendPerSoort = useMemo(() => {
+    if (beschikbareJaren.length < 2) return null;
+    // Count legsels per species per year
+    const telling = {}; // euring -> { naam, jaren: { jaar: count } }
+    legsels.forEach(l => {
+      const euring = l.soort_euring;
+      if (!euring || !l.jaar) return;
+      if (!telling[euring]) telling[euring] = { naam: speciesByEuring[euring]?.naam_nl || euring, jaren: {} };
+      telling[euring].jaren[l.jaar] = (telling[euring].jaren[l.jaar] || 0) + 1;
+    });
+    // Only species present in >= 2 different years
+    const soorten = Object.values(telling)
+      .filter(s => Object.keys(s.jaren).length >= 2)
+      .sort((a, b) => {
+        const totA = Object.values(a.jaren).reduce((x, y) => x + y, 0);
+        const totB = Object.values(b.jaren).reduce((x, y) => x + y, 0);
+        return totB - totA;
+      })
+      .slice(0, 8);
+    if (soorten.length < 1) return null;
+    return {
+      labels: beschikbareJaren.map(String),
+      series: soorten.map((s, i) => ({
+        naam: s.naam,
+        color: TREND_PALETTE[i % TREND_PALETTE.length],
+        values: beschikbareJaren.map(j => s.jaren[j] || 0),
+      })),
+    };
+  }, [legsels, beschikbareJaren, speciesByEuring]);
+
   const handleImport = useCallback((e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -789,6 +824,15 @@ export default function NestStatsPage() {
             data={legselsPerJaar}
             title="Legsels per jaar"
             color="var(--success)"
+          />
+        )}
+
+        {/* Legsels per soort per jaar */}
+        {trendPerSoort && (
+          <GroupedBarChart
+            labels={trendPerSoort.labels}
+            series={trendPerSoort.series}
+            title="Legsels per soort per jaar"
           />
         )}
 

@@ -1,6 +1,19 @@
-export const VERSIE = '1.67.0';
+export const VERSIE = '1.67.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.1',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: soortentrendgrafiek in neststatistieken — gegroepeerd staafdiagram met legsels per soort per jaar',
+    ],
+    wijzigingen_en: [
+      'Feature: species trend chart in nest statistics — grouped bar chart showing clutches per species per year',
+    ],
+    wijzigingen_de: [
+      'Funktion: Artentrend-Diagramm in Neststatistiken — gruppiertes Balkendiagramm mit Gelegen pro Art pro Jahr',
+    ],
+  },
   {
     versie: '1.67.0',
     datum: '2026-04-11',
