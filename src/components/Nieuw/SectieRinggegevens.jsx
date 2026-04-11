@@ -16,6 +16,7 @@ export default function SectieRinggegevens() {
     toggleSection,
     isTerugvangst,
     terugvangstInfo,
+    duplicaatRingInfo,
     nestRingInfo,
     toggleTerugvangst,
     ringcentraleOptions,
@@ -72,6 +73,16 @@ export default function SectieRinggegevens() {
                     <span className="terugvangst-label">{t('form_not_in_own')}</span>
                   </div>
                 )
+              )}
+              {duplicaatRingInfo && (
+                <div className="terugvangst-info terugvangst-info--duplicaat">
+                  <span className="terugvangst-label">⚠ {t('form_duplicate_ring')}</span>
+                  <span>{duplicaatRingInfo.vogelnaam}{duplicaatRingInfo.vangstdatum && ` — ${t('form_first_catch_date_short')} ${duplicaatRingInfo.vangstdatum}`}</span>
+                  {duplicaatRingInfo.laatste_vangstdatum && <span>{t('form_last_catch_date')} <strong>{duplicaatRingInfo.laatste_vangstdatum}</strong></span>}
+                  {duplicaatRingInfo.count > 1 && <span>{t('form_duplicate_count', { n: duplicaatRingInfo.count })}</span>}
+                  <button type="button" className="btn-primary btn-xs"
+                    onClick={toggleTerugvangst}>{t('form_set_recap')}</button>
+                </div>
               )}
               {nestRingInfo && (
                 <div className="nest-ring-tip">

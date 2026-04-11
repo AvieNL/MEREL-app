@@ -1,6 +1,19 @@
-export const VERSIE = '1.66.6';
+export const VERSIE = '1.66.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.66.7',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: duplicaat-waarschuwing bij ringnummer — melding als ringnummer al bekend is met optie terugvangst in te stellen',
+    ],
+    wijzigingen_en: [
+      'Feature: duplicate ring warning — alert when ring number already known, with option to set as recapture',
+    ],
+    wijzigingen_de: [
+      'Funktion: Duplikat-Warnung bei Ringnummer — Hinweis wenn Ringnummer bereits bekannt ist, mit Möglichkeit Wiederfang zu setzen',
+    ],
+  },
   {
     versie: '1.66.6',
     datum: '2026-04-11',

@@ -737,6 +737,30 @@ export default function NieuwPage() {
     };
   }, [isTerugvangst, form.ringnummer, records]);
 
+  // Duplicaat-waarschuwing: ringnummer al eerder gebruikt als nieuw ring (niet terugvangst)
+  const duplicaatRingInfo = useMemo(() => {
+    if (isTerugvangst || form.ringnummer.length < 5) return null;
+    const normalize = s => s.trim().replace(/\./g, '').toLowerCase();
+    const nr = normalize(form.ringnummer);
+    const matches = records.filter(r =>
+      r.ringnummer && normalize(r.ringnummer) === nr
+      && (!editRecord || r.id !== editRecord.id)
+    );
+    if (matches.length === 0) return null;
+    const gesorteerd = [...matches].sort((a, b) =>
+      (toYMD(a.vangstdatum) || '').localeCompare(toYMD(b.vangstdatum) || '')
+    );
+    const eerste = gesorteerd[0];
+    const laatste = gesorteerd[gesorteerd.length - 1];
+    const naam = eerste.vogelnaam || '';
+    return {
+      count: matches.length,
+      vogelnaam: naam ? naam.charAt(0).toUpperCase() + naam.slice(1).toLowerCase() : naam,
+      vangstdatum: formatDatum(eerste.vangstdatum),
+      laatste_vangstdatum: gesorteerd.length > 1 ? formatDatum(laatste.vangstdatum) : null,
+    };
+  }, [isTerugvangst, form.ringnummer, records, editRecord]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Nestonderzoek-tip: controleer of het ringnummer van een nestbezoek stamt
   const [nestRingInfo, setNestRingInfo] = useState(null);
   useEffect(() => {
@@ -808,6 +832,7 @@ export default function NieuwPage() {
     resetRuikaart,
     isTerugvangst,
     terugvangstInfo,
+    duplicaatRingInfo,
     nestRingInfo,
     toggleTerugvangst,
     autoFilledRingId,

@@ -103,6 +103,14 @@
 .terugvangst-info--eigen .terugvangst-label { color: var(--success); }
 .terugvangst-info--vreemd .terugvangst-label { color: var(--warning); }
 
+.terugvangst-info--duplicaat {
+  background: color-mix(in srgb, var(--danger, #ef4444) 12%, transparent);
+  border-left: 3px solid var(--danger, #ef4444);
+  color: var(--text-primary);
+}
+.terugvangst-info--duplicaat .terugvangst-label { color: var(--danger, #ef4444); font-weight: 600; }
+.terugvangst-info--duplicaat .btn-xs { margin-top: 4px; align-self: flex-start; }
+
 /* ── Nestonderzoek-tip bij ringnummer ── */
 .nest-ring-tip {
   margin-top: 6px;
