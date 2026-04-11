@@ -291,10 +291,12 @@ function computeStamboom({ legsels, bezoeken, nestring, ouders, nesten, vangsten
   const dieptes = [];
   for (const legselId of relevanteLegselIds) {
     const ouderRingen = ouders.filter(o => o.legsel_id === legselId).map(o => normRing(o.ringnummer));
+    const heeftOuders = ouderRingen.length > 0;
     const isWortel = ouderRingen.every(ring => !geboorteLegsel.has(ring));
     if (isWortel) {
       const d = diepte(legselId);
-      if (d > 1) dieptes.push({ legselId, generaties: d });
+      // Toon als er ouders gekoppeld zijn (d >= 1) of als er een echte keten is (d > 1)
+      if (heeftOuders || d > 1) dieptes.push({ legselId, generaties: d });
     }
   }
   const topBomen = dieptes.sort((a, b) => b.generaties - a.generaties).slice(0, 5);
@@ -464,6 +466,7 @@ export default function NestStatsPage() {
   const [filterJaar, setFilterJaar] = useState(null);
   const [soortenSorteer, setSoortenSorteer] = useState('legsels');
   const [tvSorteer, setTvSorteer] = useState({ col: 'afstand', dir: 'desc' });
+  const [pullenOpen, setPullenOpen] = useState(false);
   const teruggevangenRef = useRef(null);
   const pullenGeringdRef = useRef(null);
 
@@ -928,38 +931,48 @@ export default function NestStatsPage() {
           </div>
         )}
 
-        {/* Geringde pullen */}
+        {/* Geringde pullen — inklapbaar */}
         {pullenGeringdLijst.length > 0 && (
           <div ref={pullenGeringdRef} className="section">
-            <h3>Geringde pullen ({pullenGeringdLijst.length})</h3>
-            <div className="trektellen-table-wrap">
-              <table className="trektellen-table" style={{ fontSize: '0.78rem' }}>
-                <thead>
-                  <tr>
-                    <th className="tt-col-soort">Ringnummer</th>
-                    <th className="tt-col-soort">Vogel</th>
-                    <th className="tt-col-soort">Datum</th>
-                    <th className="tt-col-soort">Nest</th>
-                    <th className="tt-col-num">Vleugel</th>
-                    <th className="tt-col-num">Gewicht</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pullenGeringdLijst.map(r => (
-                    <tr key={r.id} style={{ cursor: 'pointer' }} onClick={() => r.nest && navigate(`/nest/${r.nest.id}`)}>
-                      <td className="tt-col-soort" style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>{(r.ringnummer || '').replace(/[\s.]/g, '').toUpperCase()}</td>
-                      <td className="tt-col-soort">{r.vangst?.vogelnaam || '—'}</td>
-                      <td className="tt-col-soort">{r.bezoek?.datum ? formatDatum(r.bezoek.datum) : '—'}</td>
-                      <td className="tt-col-soort" style={{ color: 'var(--text-muted)' }}>
-                        {r.nest ? `⌂ ${r.nest.kastnummer}${r.nest.omschrijving ? ` — ${r.nest.omschrijving}` : ''}` : '—'}
-                      </td>
-                      <td className="tt-col-num">{r.vangst?.vleugel || '—'}</td>
-                      <td className="tt-col-num">{r.vangst?.gewicht || '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="section-header" style={{ cursor: 'pointer' }} onClick={() => setPullenOpen(o => !o)}>
+              <h3 style={{ margin: 0 }}>
+                Geringde pullen
+                <span style={{ marginLeft: 8, fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 400 }}>
+                  ({pullenGeringdLijst.length})
+                </span>
+              </h3>
+              <span className={`toggle${pullenOpen ? ' open' : ''}`}>▾</span>
             </div>
+            {pullenOpen && (
+              <div className="trektellen-table-wrap" style={{ marginTop: 10 }}>
+                <table className="trektellen-table" style={{ fontSize: '0.78rem' }}>
+                  <thead>
+                    <tr>
+                      <th className="tt-col-soort">Ringnummer</th>
+                      <th className="tt-col-soort">Vogel</th>
+                      <th className="tt-col-soort">Datum</th>
+                      <th className="tt-col-soort">Nest</th>
+                      <th className="tt-col-num">Vleugel</th>
+                      <th className="tt-col-num">Gewicht</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pullenGeringdLijst.map(r => (
+                      <tr key={r.id} style={{ cursor: 'pointer' }} onClick={() => r.nest && navigate(`/nest/${r.nest.id}`)}>
+                        <td className="tt-col-soort" style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>{(r.ringnummer || '').replace(/[\s.]/g, '').toUpperCase()}</td>
+                        <td className="tt-col-soort">{r.vangst?.vogelnaam || '—'}</td>
+                        <td className="tt-col-soort">{r.bezoek?.datum ? formatDatum(r.bezoek.datum) : '—'}</td>
+                        <td className="tt-col-soort" style={{ color: 'var(--text-muted)' }}>
+                          {r.nest ? `⌂ ${r.nest.kastnummer}${r.nest.omschrijving ? ` — ${r.nest.omschrijving}` : ''}` : '—'}
+                        </td>
+                        <td className="tt-col-num">{r.vangst?.vleugel || '—'}</td>
+                        <td className="tt-col-num">{r.vangst?.gewicht || '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 

@@ -1,6 +1,22 @@
-export const VERSIE = '1.66.0';
+export const VERSIE = '1.66.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.66.2',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Fix/functie: stamboom toont nu ook legsels met alleen gekoppelde ouders (niet alleen meerdere generaties)',
+      'Stijl: "Geringde pullen" in neststatistieken is nu inklapbaar',
+    ],
+    wijzigingen_en: [
+      'Fix/feature: family tree now also shows clutches with only linked parents (not just multi-generation chains)',
+      'Style: "Ringed chicks" in nest statistics is now collapsible',
+    ],
+    wijzigingen_de: [
+      'Fix/Funktion: Stammbaum zeigt jetzt auch Gelege mit nur verknüpften Eltern (nicht nur Mehrgenerationenketten)',
+      'Stil: „Beringte Pulli" in Neststatistiken ist jetzt einklappbar',
+    ],
+  },
   {
     versie: '1.66.0',
     datum: '2026-04-11',
