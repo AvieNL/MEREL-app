@@ -1,6 +1,22 @@
-export const VERSIE = '1.67.3';
+export const VERSIE = '1.67.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.4',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Fix: meest productieve ouders filtert nu correct op het geselecteerde jaar',
+      'Fix: nesticoon in stamboom toont huisje voor nestkast en nestje voor zelfgebouwd nest',
+    ],
+    wijzigingen_en: [
+      'Fix: most productive parents now correctly filters by selected year',
+      'Fix: nest icon in family tree shows house for nest box and nest for natural nest',
+    ],
+    wijzigingen_de: [
+      'Fix: produktivste Eltern filtert jetzt korrekt nach dem gewählten Jahr',
+      'Fix: Nest-Symbol im Stammbaum zeigt Haus für Nistkasten und Nest für natürliches Nest',
+    ],
+  },
   {
     versie: '1.67.3',
     datum: '2026-04-11',

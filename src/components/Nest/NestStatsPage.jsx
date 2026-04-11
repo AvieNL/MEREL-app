@@ -14,6 +14,7 @@ import {
   exportNestCSV, exportAviNestTXT, exportAviNestXML,
 } from '../../utils/nestExport';
 import { formatDatum } from '../../utils/nestPlanning';
+import { NestIcoon } from '../shared/Icons';
 import '../Stats/StatsPage.css';
 import './NestOverzichtPage.css';
 
@@ -306,6 +307,10 @@ function computeStamboom({ legsels, bezoeken, nestring, ouders, nesten, vangsten
   ouders.forEach(o => {
     const ring = normRing(o.ringnummer);
     if (!ring) return;
+    if (filterJaar !== null) {
+      const legsel = legselById.get(o.legsel_id);
+      if (!legsel || legsel.jaar !== filterJaar) return;
+    }
     if (!oudertelling.has(ring)) {
       oudertelling.set(ring, { ring, naam: o.naam_vogel || '', geslacht: o.geslacht, legselIds: [], vangst_id: o.vangst_id });
     }
@@ -1161,7 +1166,7 @@ export default function NestStatsPage() {
                           style={{ cursor: 'pointer', color: 'var(--accent)' }}
                           onClick={() => navigate(`/nest/${boom.nest.id}`)}
                         >
-                          ⌂ {boom.nest.kastnummer}
+                          <NestIcoon nest={boom.nest} size={14} /> {boom.nest.kastnummer}
                           {boom.nest.omschrijving ? ` — ${boom.nest.omschrijving}` : ''}
                         </span>
                       )}
