@@ -1,6 +1,22 @@
-export const VERSIE = '1.66.3';
+export const VERSIE = '1.66.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.66.4',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: nest JSON-backup bevat nu ook oudervogels per legsel (export_versie 3.0)',
+      'Functie: nest JSON-import herstelt ook oudervogels uit backup',
+    ],
+    wijzigingen_en: [
+      'Feature: nest JSON backup now includes parent birds per clutch (export_version 3.0)',
+      'Feature: nest JSON import also restores parent birds from backup',
+    ],
+    wijzigingen_de: [
+      'Funktion: Nest-JSON-Backup enthält jetzt auch Elternvögel pro Gelege (export_version 3.0)',
+      'Funktion: Nest-JSON-Import stellt auch Elternvögel aus Backup wieder her',
+    ],
+  },
   {
     versie: '1.66.3',
     datum: '2026-04-11',

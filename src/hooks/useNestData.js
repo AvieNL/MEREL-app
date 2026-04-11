@@ -137,7 +137,7 @@ export function useNestData() {
   const bulkImportNestBackup = useCallback(async (backup) => {
     if (!user) return null;
     const now = new Date().toISOString();
-    let counts = { nesten: 0, legsels: 0, bezoeken: 0, ringen: 0 };
+    let counts = { nesten: 0, legsels: 0, bezoeken: 0, ringen: 0, ouders: 0 };
 
     for (const nest of (backup.nesten ?? [])) {
       const { legsels: nestLegsels, ...nestData } = nest;
@@ -150,13 +150,23 @@ export function useNestData() {
       }
 
       for (const legsel of (nestLegsels ?? [])) {
-        const { bezoeken: legselBezoeken, ...legselData } = legsel;
+        const { bezoeken: legselBezoeken, ouders: legselOuders, ...legselData } = legsel;
         const existingL = await db.legsel.get(legselData.id);
         if (!existingL) {
           const record = { ...legselData, aangemaakt_door: user.id, updated_at: now };
           await db.legsel.put(record);
           await addToQueue('legsel', 'upsert', record);
           counts.legsels++;
+        }
+
+        for (const ouder of (legselOuders ?? [])) {
+          const existingO = await db.legsel_ouder.get(ouder.id);
+          if (!existingO) {
+            const record = { ...ouder, aangemaakt_door: user.id, updated_at: now };
+            await db.legsel_ouder.put(record);
+            await addToQueue('legsel_ouder', 'upsert', record);
+            counts.ouders++;
+          }
         }
 
         for (const bezoek of (legselBezoeken ?? [])) {

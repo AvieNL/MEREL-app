@@ -459,7 +459,7 @@ export default function NestStatsPage() {
         }
         const counts = await bulkImportNestBackup(backup);
         addToast(
-          `Geïmporteerd: ${counts.nesten} nesten, ${counts.legsels} legsels, ${counts.bezoeken} bezoeken, ${counts.ringen} ringen.`,
+          `Geïmporteerd: ${counts.nesten} nesten, ${counts.legsels} legsels, ${counts.bezoeken} bezoeken, ${counts.ringen} ringen, ${counts.ouders} oudervogels.`,
           'success'
         );
       } catch {
@@ -1161,7 +1161,7 @@ export default function NestStatsPage() {
           <div className="export-buttons">
             <button
               className="btn-secondary"
-              onClick={() => exportNestJSONBackup({ nesten, legsels, bezoeken, ringen, vangsten: vangsten ?? [] })}
+              onClick={() => exportNestJSONBackup({ nesten, legsels, bezoeken, ringen, vangsten: vangsten ?? [], ouders })}
             >
               ↓ JSON backup (alle data)
             </button>

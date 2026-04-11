@@ -42,12 +42,12 @@ export function exportNestJSON(data, jaar) {
 }
 
 /**
- * JSON backup: alle data over alle jaren incl. vangsten
+ * JSON backup: alle data over alle jaren incl. vangsten en oudervogels
  */
-export function exportNestJSONBackup({ nesten, legsels, bezoeken, ringen, vangsten }) {
+export function exportNestJSONBackup({ nesten, legsels, bezoeken, ringen, vangsten, ouders }) {
   const json = JSON.stringify({
     export_datum: new Date().toISOString(),
-    export_versie: '2.0',
+    export_versie: '3.0',
     bron: 'VRS Breedenbroek nestkastmodule',
     nesten: nesten.map(nest => ({
       ...nest,
@@ -56,6 +56,7 @@ export function exportNestJSONBackup({ nesten, legsels, bezoeken, ringen, vangst
         .sort((a, b) => (a.jaar - b.jaar) || (a.volgnummer - b.volgnummer))
         .map(legsel => ({
           ...legsel,
+          ouders: (ouders || []).filter(o => o.legsel_id === legsel.id),
           bezoeken: bezoeken
             .filter(b => b.legsel_id === legsel.id)
             .sort((a, b) => a.datum.localeCompare(b.datum))
