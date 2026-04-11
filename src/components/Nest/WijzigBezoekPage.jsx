@@ -3,8 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/index.js';
 import { useNestData } from '../../hooks/useNestData';
+import { useRecords } from '../../hooks/useRecords';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { useNestRole } from '../../hooks/useNestRole';
+import { useModuleSwitch } from '../../App';
 import { berekenVervolgbezoekInfo, isAfsluitendStadium } from '../../utils/nestSuggestie';
+import LegselOuderBlok from './LegselOuderBlok';
 import PulliRingenForm from './PulliRingenForm';
 import { IconRing } from '../shared/Icons';
 import NestSoortInfoPanel from './NestSoortInfoPanel';
@@ -22,7 +26,10 @@ export default function WijzigBezoekPage() {
   const { bezoekId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { nesten, legsels, bezoeken, updateBezoek, updateLegsel } = useNestData();
+  const { nesten, legsels, bezoeken, ouders, updateBezoek, updateLegsel, addOuder, updateOuder, deleteOuder } = useNestData();
+  const { records } = useRecords();
+  const { canNestEdit } = useNestRole();
+  const switchModule = useModuleSwitch();
   const species = useSpeciesRef();
 
   const bezoek = bezoeken.find(b => b.id === bezoekId);
@@ -308,6 +315,26 @@ export default function WijzigBezoekPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Oudervogels ── */}
+      {legsel && (
+        <div className="section">
+          <div className="section-content">
+            <LegselOuderBlok
+              legselId={legsel.id}
+              ouders={ouders.filter(o => o.legsel_id === legsel.id)}
+              canNestEdit={canNestEdit}
+              addOuder={addOuder}
+              updateOuder={updateOuder}
+              deleteOuder={deleteOuder}
+              records={records}
+              speciesByEuring={speciesByEuring}
+              switchModule={switchModule}
+              navigate={navigate}
+            />
+          </div>
+        </div>
+      )}
 
       {/* ── Betrouwbaarheid (inklapbaar) ── */}
       <div className="section">

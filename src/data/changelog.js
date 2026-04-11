@@ -1,6 +1,19 @@
-export const VERSIE = '1.66.5';
+export const VERSIE = '1.66.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.66.6',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: oudervogels koppelen vanuit bezoekformulier (nieuw en wijzigen)',
+    ],
+    wijzigingen_en: [
+      'Feature: link parent birds from visit form (new and edit)',
+    ],
+    wijzigingen_de: [
+      'Funktion: Elternvögel direkt im Besuchsformular verknüpfen (neu und bearbeiten)',
+    ],
+  },
   {
     versie: '1.66.5',
     datum: '2026-04-11',

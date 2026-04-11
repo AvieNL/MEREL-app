@@ -3,11 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/index.js';
 import { useNestData } from '../../hooks/useNestData';
+import { useRecords } from '../../hooks/useRecords';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import { useNestRole } from '../../hooks/useNestRole';
+import { useModuleSwitch } from '../../App';
 import { berekenVervolgbezoekInfo, isAfsluitendStadium } from '../../utils/nestSuggestie';
 import NestSoortInfoPanel from './NestSoortInfoPanel';
 import { IconRing, NestIcoon } from '../shared/Icons';
 import NestSoortPicker from './NestSoortPicker';
+import LegselOuderBlok from './LegselOuderBlok';
 import {
   BETROUWB_DATUM_CODES, BETROUWB_AANTAL_CODES, BETROUWB_DAGEN_CODES,
   SUCCES2_CODES, MOMENT_CODES, PREDATIE_CODES, METHODE_CODES, VERLIES_CODES,
@@ -34,7 +38,10 @@ export default function NieuwBezoekPage() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.slice(0, 2) || 'nl';
   const navigate = useNavigate();
-  const { nesten, legsels, bezoeken, addLegsel, addBezoek, updateLegsel } = useNestData();
+  const { nesten, legsels, bezoeken, ouders, addLegsel, addBezoek, updateLegsel, addOuder, updateOuder, deleteOuder } = useNestData();
+  const { records } = useRecords();
+  const { canNestEdit } = useNestRole();
+  const switchModule = useModuleSwitch();
   const species = useSpeciesRef();
 
   // ── Nest- en legsel-context ───────────────────────────────────────────────
@@ -524,6 +531,26 @@ export default function NieuwBezoekPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Oudervogels ── */}
+      {actiefLegselId && (
+        <div className="section">
+          <div className="section-content">
+            <LegselOuderBlok
+              legselId={actiefLegselId}
+              ouders={ouders.filter(o => o.legsel_id === actiefLegselId)}
+              canNestEdit={canNestEdit}
+              addOuder={addOuder}
+              updateOuder={updateOuder}
+              deleteOuder={deleteOuder}
+              records={records}
+              speciesByEuring={speciesByEuring}
+              switchModule={switchModule}
+              navigate={navigate}
+            />
+          </div>
+        </div>
+      )}
 
       {/* ── Betrouwbaarheid (inklapbaar) ── */}
       <div className="section">
