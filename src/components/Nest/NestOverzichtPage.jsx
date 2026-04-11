@@ -6,7 +6,7 @@ import { useNestRole } from '../../hooks/useNestRole';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import 'leaflet/dist/leaflet.css';
 import { getTileType, saveTileType, addTileLayer } from '../../utils/leafletTiles';
-import { BROEDSTATUS, getBroedStatus, formatDatum } from '../../utils/nestPlanning';
+import { BROEDSTATUS, getBroedStatus, formatDatum, berekenPlanningItems, URGENTIE_KLEUR } from '../../utils/nestPlanning';
 import { IconFlag, NestIcoon } from '../shared/Icons';
 import './NestOverzichtPage.css';
 
@@ -31,6 +31,7 @@ export default function NestOverzichtPage() {
   const species = useSpeciesRef();
 
   const [tab, setTab] = useState('lijst');
+  const [planningOpen, setPlanningOpen] = useState(false);
   const [zoekterm, setZoekterm] = useState('');
   const [filterJaar, setFilterJaar] = useState(new Date().getFullYear());
   const [filterStatus, setFilterStatus] = useState(null);
@@ -40,6 +41,12 @@ export default function NestOverzichtPage() {
     species.forEach(s => { if (s.euring_code) map[s.euring_code] = s; });
     return map;
   }, [species]);
+
+  // Planning: verlopen + dringend items voor huidig jaar
+  const urgentePlanningItems = useMemo(() => {
+    const items = berekenPlanningItems({ nesten, legsels, bezoeken, speciesByEuring, jaar: HUIDIG_JAAR });
+    return items.filter(i => i.urgentie === 'verlopen' || i.urgentie === 'dringend');
+  }, [nesten, legsels, bezoeken, speciesByEuring]);
 
   // Alle jaren waarvoor legsels bestaan + huidig jaar
   const beschikbareJaren = useMemo(() => {
@@ -105,6 +112,61 @@ export default function NestOverzichtPage() {
 
   return (
     <div className="page nest-overzicht-page">
+      {urgentePlanningItems.length > 0 && (
+        <div className="planning-banner">
+          <button
+            type="button"
+            className="planning-banner__header"
+            onClick={() => setPlanningOpen(o => !o)}
+          >
+            <span className="planning-banner__titel">
+              <span className="planning-banner__stip" />
+              {urgentePlanningItems.filter(i => i.urgentie === 'verlopen').length > 0 && (
+                <span style={{ color: URGENTIE_KLEUR.verlopen }}>
+                  {urgentePlanningItems.filter(i => i.urgentie === 'verlopen').length} verlopen
+                </span>
+              )}
+              {urgentePlanningItems.filter(i => i.urgentie === 'verlopen').length > 0 &&
+               urgentePlanningItems.filter(i => i.urgentie === 'dringend').length > 0 && ' · '}
+              {urgentePlanningItems.filter(i => i.urgentie === 'dringend').length > 0 && (
+                <span style={{ color: URGENTIE_KLEUR.dringend }}>
+                  {urgentePlanningItems.filter(i => i.urgentie === 'dringend').length} dringend
+                </span>
+              )}
+              {' '}bezoek{urgentePlanningItems.length !== 1 ? 'en' : ''}
+            </span>
+            <span className={`planning-banner__pijl${planningOpen ? ' open' : ''}`}>▾</span>
+          </button>
+          {planningOpen && (
+            <div className="planning-banner__lijst">
+              {urgentePlanningItems.map(item => (
+                <button
+                  key={`${item.nestId}-${item.legselId}`}
+                  type="button"
+                  className="planning-banner__item"
+                  style={{ '--urgentie-kleur': URGENTIE_KLEUR[item.urgentie] }}
+                  onClick={() => navigate(`/nest/legsel/${item.legselId}/bezoek/nieuw`)}
+                >
+                  <span className="planning-banner__item-nr">
+                    <NestIcoon nest={item} size={12} /> {item.kastnummer}
+                    {item.soortNaam && <span className="planning-banner__item-soort"> · {item.soortNaam}</span>}
+                  </span>
+                  <span className="planning-banner__item-datum" style={{ color: URGENTIE_KLEUR[item.urgentie] }}>
+                    {item.dagenAf < 0 ? `${Math.abs(item.dagenAf)}d te laat` : item.dagenAf === 0 ? 'vandaag' : `${item.dagenAf}d`}
+                  </span>
+                </button>
+              ))}
+              <button
+                type="button"
+                className="planning-banner__naar-planning"
+                onClick={() => navigate('/nest/planning')}
+              >
+                Naar volledige planning ▸
+              </button>
+            </div>
+          )}
+        </div>
+      )}
       <div className="nest-overzicht-header">
         <div className="nest-overzicht-controls">
           <div className="mode-toggle">

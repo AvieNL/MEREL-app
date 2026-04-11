@@ -1,6 +1,19 @@
-export const VERSIE = '1.67.2';
+export const VERSIE = '1.67.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.3',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: planning-banner op nestenlijst — inklapbare melding van verlopen en dringende nestbezoeken met directe link naar nieuw bezoek',
+    ],
+    wijzigingen_en: [
+      'Feature: planning banner on nest overview — collapsible alert for overdue and urgent nest visits with direct link to new visit',
+    ],
+    wijzigingen_de: [
+      'Funktion: Planungsbanner in der Nestübersicht — ausklappbare Meldung für überfällige und dringende Nestbesuche mit direktem Link zu neuem Besuch',
+    ],
+  },
   {
     versie: '1.67.2',
     datum: '2026-04-11',

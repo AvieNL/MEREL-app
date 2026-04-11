@@ -2,6 +2,99 @@
   padding-bottom: 80px;
 }
 
+/* ── Planning banner ── */
+.planning-banner {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-left: 3px solid #ef4444;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.planning-banner__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+  min-height: 40px;
+  text-align: left;
+  gap: 8px;
+}
+.planning-banner__header:hover { background: var(--bg-tertiary); }
+.planning-banner__stip {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+.planning-banner__titel {
+  font-size: 0.88rem;
+  font-weight: 600;
+  flex: 1;
+}
+.planning-banner__pijl {
+  color: var(--text-muted);
+  font-size: 1rem;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.planning-banner__pijl.open { transform: rotate(180deg); }
+.planning-banner__lijst {
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+.planning-banner__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--bg-tertiary);
+  cursor: pointer;
+  text-align: left;
+  gap: 8px;
+  border-left: 3px solid var(--urgentie-kleur, var(--border));
+}
+.planning-banner__item:last-of-type { border-bottom: none; }
+.planning-banner__item:hover { background: var(--bg-tertiary); }
+.planning-banner__item-nr {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+.planning-banner__item-soort {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+.planning-banner__item-datum {
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.planning-banner__naar-planning {
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  padding: 8px 14px;
+  color: var(--accent);
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-align: right;
+  width: 100%;
+}
+.planning-banner__naar-planning:hover { text-decoration: underline; }
+
 /* ── Stamboom ── */
 .stamboom-blok {
   background: var(--bg-secondary);
