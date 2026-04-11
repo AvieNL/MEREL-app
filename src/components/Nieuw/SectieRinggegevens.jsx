@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import {
   ANDERE_MERKTEKENS_OPTIONS, VERIFICATIE_OPTIONS, LEEFTIJD_LABELS, getOptLabel,
 } from './NieuwPage.constants';
+import { formatDatum } from '../../utils/dateHelper';
 import './NieuwPage.css';
 
 export default function SectieRinggegevens() {
@@ -16,6 +18,7 @@ export default function SectieRinggegevens() {
     toggleSection,
     isTerugvangst,
     terugvangstInfo,
+    terugvangstVangsten,
     duplicaatRingInfo,
     nestRingInfo,
     toggleTerugvangst,
@@ -23,6 +26,8 @@ export default function SectieRinggegevens() {
     autoFilledRingId,
     getCodesForSelect,
   } = useNieuwForm();
+
+  const [vergelijkingOpen, setVergelijkingOpen] = useState(false);
 
   return (
     <div className="section">
@@ -61,13 +66,67 @@ export default function SectieRinggegevens() {
               />
               {isTerugvangst && terugvangstInfo && (
                 terugvangstInfo.eigen ? (
-                  <div className="terugvangst-info terugvangst-info--eigen">
-                    <span className="terugvangst-label">{t('form_own_bird')}</span>
-                    <span>{terugvangstInfo.vogelnaam}{terugvangstInfo.geslacht === 'M' ? ' ♂' : terugvangstInfo.geslacht === 'F' ? ' ♀' : ''}</span>
-                    {terugvangstInfo.vangstdatum && <span>{t('form_first_catch_date')} <strong>{terugvangstInfo.vangstdatum}</strong></span>}
-                    {terugvangstInfo.laatste_vangstdatum && <span>{t('form_last_catch_date')} <strong>{terugvangstInfo.laatste_vangstdatum}</strong></span>}
-                    {terugvangstInfo.leeftijd && <span>{t('form_age_first_catch')} <strong>{LEEFTIJD_LABELS[terugvangstInfo.leeftijd] ?? terugvangstInfo.leeftijd}</strong></span>}
-                  </div>
+                  <>
+                    <div className="terugvangst-info terugvangst-info--eigen">
+                      <span className="terugvangst-label">{t('form_own_bird')}</span>
+                      <span>{terugvangstInfo.vogelnaam}{terugvangstInfo.geslacht === 'M' ? ' ♂' : terugvangstInfo.geslacht === 'F' ? ' ♀' : ''}</span>
+                      {terugvangstInfo.vangstdatum && <span>{t('form_first_catch_date')} <strong>{terugvangstInfo.vangstdatum}</strong></span>}
+                      {terugvangstInfo.laatste_vangstdatum && <span>{t('form_last_catch_date')} <strong>{terugvangstInfo.laatste_vangstdatum}</strong></span>}
+                      {terugvangstInfo.leeftijd && <span>{t('form_age_first_catch')} <strong>{LEEFTIJD_LABELS[terugvangstInfo.leeftijd] ?? terugvangstInfo.leeftijd}</strong></span>}
+                    </div>
+                    {terugvangstVangsten.length > 0 && (
+                      <div className="tv-vergelijking">
+                        <button
+                          type="button"
+                          className="tv-vergelijking__toggle"
+                          onClick={() => setVergelijkingOpen(o => !o)}
+                        >
+                          {t('form_recap_history', { n: terugvangstVangsten.length })}
+                          <span className={`tv-vergelijking__pijl${vergelijkingOpen ? ' open' : ''}`}>▾</span>
+                        </button>
+                        {vergelijkingOpen && (
+                          <div className="tv-vergelijking__inhoud">
+                            {(() => {
+                              // Welke biometrievelden zijn beschikbaar in de vangsten?
+                              const BIO = [
+                                { key: 'vleugel',       label: 'Vl.' },
+                                { key: 'gewicht',       label: 'Gew.' },
+                                { key: 'tarsus_lengte', label: 'Tars.' },
+                                { key: 'staartlengte',  label: 'Staart' },
+                              ];
+                              const aanwezigBio = BIO.filter(b =>
+                                terugvangstVangsten.some(r => r[b.key] != null && r[b.key] !== '')
+                              );
+                              return (
+                                <table className="tv-vergelijking__tabel">
+                                  <thead>
+                                    <tr>
+                                      <th>{t('form_date')}</th>
+                                      <th>{t('form_age_short')}</th>
+                                      <th>{t('form_sex_short')}</th>
+                                      {aanwezigBio.map(b => <th key={b.key}>{b.label}</th>)}
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {terugvangstVangsten.map(r => (
+                                      <tr key={r.id}>
+                                        <td>{formatDatum(r.vangstdatum)}</td>
+                                        <td>{LEEFTIJD_LABELS[r.leeftijd] ?? r.leeftijd ?? '—'}</td>
+                                        <td>{r.geslacht === 'M' ? '♂' : r.geslacht === 'F' ? '♀' : '—'}</td>
+                                        {aanwezigBio.map(b => (
+                                          <td key={b.key}>{r[b.key] != null && r[b.key] !== '' ? r[b.key] : '—'}</td>
+                                        ))}
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              );
+                            })()}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="terugvangst-info terugvangst-info--vreemd">
                     <span className="terugvangst-label">{t('form_not_in_own')}</span>

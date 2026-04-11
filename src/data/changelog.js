@@ -1,6 +1,19 @@
-export const VERSIE = '1.66.9';
+export const VERSIE = '1.67.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.0',
+    datum: '2026-04-11',
+    wijzigingen: [
+      'Functie: vergelijking bij terugvangst — inklapbare historietabel met datum, leeftijd, geslacht en biometrie van eerdere vangsten',
+    ],
+    wijzigingen_en: [
+      'Feature: comparison on recapture — collapsible history table with date, age, sex and biometrics of previous catches',
+    ],
+    wijzigingen_de: [
+      'Funktion: Vergleich bei Wiederfang — ausklappbare Verlaufstabelle mit Datum, Alter, Geschlecht und Biometrie früherer Fänge',
+    ],
+  },
   {
     versie: '1.66.9',
     datum: '2026-04-11',

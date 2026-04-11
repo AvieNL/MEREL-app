@@ -737,6 +737,17 @@ export default function NieuwPage() {
     };
   }, [isTerugvangst, form.ringnummer, records]);
 
+  // Alle eigen vangsten van dit ringnummer (terugvangst-vergelijking)
+  const terugvangstVangsten = useMemo(() => {
+    if (!isTerugvangst || form.ringnummer.length < 5) return [];
+    const normalize = s => s.trim().replace(/\./g, '').toLowerCase();
+    const nr = normalize(form.ringnummer);
+    return records
+      .filter(r => r.ringnummer && normalize(r.ringnummer) === nr
+        && (!editRecord || r.id !== editRecord.id))
+      .sort((a, b) => (toYMD(a.vangstdatum) || '').localeCompare(toYMD(b.vangstdatum) || ''));
+  }, [isTerugvangst, form.ringnummer, records, editRecord]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Duplicaat-waarschuwing: ringnummer al eerder gebruikt als nieuw ring (niet terugvangst)
   const duplicaatRingInfo = useMemo(() => {
     if (isTerugvangst || form.ringnummer.length < 5) return null;
@@ -832,6 +843,7 @@ export default function NieuwPage() {
     resetRuikaart,
     isTerugvangst,
     terugvangstInfo,
+    terugvangstVangsten,
     duplicaatRingInfo,
     nestRingInfo,
     toggleTerugvangst,

@@ -111,6 +111,54 @@
 .terugvangst-info--duplicaat .terugvangst-label { color: var(--danger, #ef4444); font-weight: 600; }
 .terugvangst-info--duplicaat .btn-xs { margin-top: 4px; align-self: flex-start; }
 
+/* ── Terugvangst-vergelijking (historietabel) ── */
+.tv-vergelijking {
+  margin-top: 4px;
+}
+.tv-vergelijking__toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 5px 0;
+  color: var(--accent);
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+.tv-vergelijking__toggle:hover { text-decoration: underline; }
+.tv-vergelijking__pijl {
+  display: inline-block;
+  transition: transform 0.15s;
+  font-size: 0.75rem;
+}
+.tv-vergelijking__pijl.open { transform: rotate(180deg); }
+.tv-vergelijking__inhoud {
+  overflow-x: auto;
+  margin-top: 4px;
+}
+.tv-vergelijking__tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+.tv-vergelijking__tabel th {
+  text-align: left;
+  padding: 4px 6px;
+  color: var(--text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+.tv-vergelijking__tabel td {
+  padding: 4px 6px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--bg-tertiary);
+  white-space: nowrap;
+}
+.tv-vergelijking__tabel tr:last-child td { border-bottom: none; }
+
 /* ── Nestonderzoek-tip bij ringnummer ── */
 .nest-ring-tip {
   margin-top: 6px;
