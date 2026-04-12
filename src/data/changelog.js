@@ -1,6 +1,19 @@
-export const VERSIE = '1.67.6';
+export const VERSIE = '1.67.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.7',
+    datum: '2026-04-12',
+    wijzigingen: [
+      'Stijl: logo en naam/koffie-link op gelijke hoogte; versienummer dichter bij logo; weerdata groter/donkerder met SVG-iconen voor zon, temperatuur, neerslag en wind',
+    ],
+    wijzigingen_en: [
+      'Style: logo and name/coffee link at same height; version number closer to logo; weather data larger/darker with SVG icons for sun, temperature, precipitation and wind',
+    ],
+    wijzigingen_de: [
+      'Stil: Logo und Name/Kaffee-Link auf gleicher Höhe; Versionsnummer näher am Logo; Wetterdaten größer/dunkler mit SVG-Symbolen für Sonne, Temperatur, Niederschlag und Wind',
+    ],
+  },
   {
     versie: '1.67.6',
     datum: '2026-04-12',

@@ -178,15 +178,57 @@ export default function Header({ onSwitchModule, activeModule }) {
           </div>
           {weer && (
             <div className="header-weer">
-              <span className="header-weer-zon">
-                <span title="Zonsopgang">↑{weer.zonsopgang}</span>
-                <span title="Zonsondergang">↓{weer.zonsondergang}</span>
-              </span>
-              <span className="header-weer-info">
-                <span title="Temperatuur">{weer.temperatuur}°</span>
-                {weer.neerslag > 0 && <span title="Neerslag">{weer.neerslag}mm</span>}
-                <span title="Wind">{weer.windsnelheid} {weer.windRichting}</span>
-              </span>
+              <div className="header-weer-zon">
+                <span className="header-weer-item" title="Zonsopgang">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <circle cx="6" cy="7" r="2.5" stroke="currentColor" strokeWidth="1.2"/>
+                    <line x1="6" y1="1" x2="6" y2="3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                    <line x1="6" y1="3" x2="6" y2="1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                    <polyline points="4.5,2.5 6,1 7.5,2.5" stroke="currentColor" strokeWidth="1.1" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                    <line x1="1.5" y1="7" x2="10.5" y2="7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" opacity="0.5"/>
+                    <line x1="2" y1="4.5" x2="3.2" y2="5.2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.5"/>
+                    <line x1="10" y1="4.5" x2="8.8" y2="5.2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.5"/>
+                  </svg>
+                  {weer.zonsopgang}
+                </span>
+                <span className="header-weer-item" title="Zonsondergang">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <circle cx="6" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.2"/>
+                    <line x1="1.5" y1="9" x2="10.5" y2="9" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" opacity="0.5"/>
+                    <polyline points="4.5,9.5 6,11 7.5,9.5" stroke="currentColor" strokeWidth="1.1" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                    <line x1="2" y1="2.5" x2="3.2" y2="3.2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.5"/>
+                    <line x1="10" y1="2.5" x2="8.8" y2="3.2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.5"/>
+                    <line x1="6" y1="1" x2="6" y2="1.8" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" opacity="0.5"/>
+                  </svg>
+                  {weer.zonsondergang}
+                </span>
+              </div>
+              <div className="header-weer-info">
+                <span className="header-weer-item" title="Temperatuur">
+                  <svg width="11" height="12" viewBox="0 0 11 14" fill="none" aria-hidden="true">
+                    <rect x="4" y="1" width="3" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.1"/>
+                    <circle cx="5.5" cy="11" r="2.2" stroke="currentColor" strokeWidth="1.1"/>
+                    <line x1="5.5" y1="4" x2="5.5" y2="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                  {weer.temperatuur}°
+                </span>
+                {weer.neerslag > 0 && (
+                  <span className="header-weer-item" title="Neerslag">
+                    <svg width="10" height="12" viewBox="0 0 10 13" fill="none" aria-hidden="true">
+                      <path d="M5 1 Q8.5 5.5 8.5 8 A3.5 3.5 0 0 1 1.5 8 Q1.5 5.5 5 1Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"/>
+                    </svg>
+                    {weer.neerslag}mm
+                  </span>
+                )}
+                <span className="header-weer-item" title={`Wind: ${weer.windsnelheid} km/h ${weer.windRichting}`}>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M1 4.5 Q5 4.5 7 4.5 Q9.5 4.5 9.5 3 Q9.5 1.5 8 1.5 Q6.5 1.5 6.5 3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
+                    <line x1="1" y1="6.5" x2="8" y2="6.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
+                    <path d="M1 8.5 Q4 8.5 6 8.5 Q8 8.5 8 10 Q8 11.5 6.5 11.5 Q5 11.5 5 10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
+                  </svg>
+                  {weer.windsnelheid} {weer.windRichting}
+                </span>
+              </div>
             </div>
           )}
         </div>

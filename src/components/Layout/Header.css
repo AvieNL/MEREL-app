@@ -20,8 +20,7 @@
 .header-right {
   position: absolute;
   right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 14px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -261,8 +260,7 @@
 .header-left {
   position: absolute;
   left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 14px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -311,24 +309,31 @@
 .header-weer {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  margin-top: 1px;
+  gap: 2px;
+  margin-top: 3px;
 }
 
 .header-weer-zon,
 .header-weer-info {
   display: flex;
-  gap: 6px;
-  font-size: 0.6rem;
-  color: var(--text-muted);
-  opacity: 0.85;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
   line-height: 1.2;
   white-space: nowrap;
 }
 
-.header-weer-zon span,
-.header-weer-info span {
+.header-weer-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
   cursor: default;
+}
+
+.header-weer-item svg {
+  flex-shrink: 0;
+  opacity: 0.75;
 }
 
 /* Rol-simulator */
@@ -451,7 +456,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 1px;
 }
 
 /* Klikbare app-naam boven de module-pill */
