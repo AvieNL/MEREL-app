@@ -10,9 +10,9 @@
 
 .header-inner {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 14px 16px;
+  padding: 7px 16px 14px;
   text-align: center;
   position: relative;
 }

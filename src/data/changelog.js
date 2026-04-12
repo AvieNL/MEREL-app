@@ -1,6 +1,13 @@
-export const VERSIE = '1.67.9';
+export const VERSIE = '1.68.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.0',
+    datum: '2026-04-12',
+    wijzigingen: ['Stijl: logo/naam ook op top 7px uitgelijnd met naam en koffie-link'],
+    wijzigingen_en: ['Style: logo/name also aligned at top 7px with name and coffee link'],
+    wijzigingen_de: ['Stil: Logo/Name ebenfalls bei top 7px mit Name und Kaffee-Link ausgerichtet'],
+  },
   {
     versie: '1.67.9',
     datum: '2026-04-12',
