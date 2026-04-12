@@ -1,6 +1,13 @@
-export const VERSIE = '1.67.8';
+export const VERSIE = '1.67.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.9',
+    datum: '2026-04-12',
+    wijzigingen: ['Stijl: header-elementen iets hoger geplaatst (top 14px → 7px)'],
+    wijzigingen_en: ['Style: header elements positioned slightly higher (top 14px → 7px)'],
+    wijzigingen_de: ['Stil: Header-Elemente etwas höher positioniert (top 14px → 7px)'],
+  },
   {
     versie: '1.67.8',
     datum: '2026-04-12',
