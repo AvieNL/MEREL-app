@@ -1,6 +1,19 @@
-export const VERSIE = '1.67.4';
+export const VERSIE = '1.67.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.5',
+    datum: '2026-04-12',
+    wijzigingen: [
+      'Functie: versienummer verplaatst naar onder het logo; weerwidget in header (zonsopgang/ondergang, temperatuur, neerslag, wind) via Open-Meteo',
+    ],
+    wijzigingen_en: [
+      'Feature: version number moved below logo; weather widget in header (sunrise/sunset, temperature, precipitation, wind) via Open-Meteo',
+    ],
+    wijzigingen_de: [
+      'Funktion: Versionsnummer unter das Logo verschoben; Wetter-Widget im Header (Sonnenaufgang/-untergang, Temperatur, Niederschlag, Wind) über Open-Meteo',
+    ],
+  },
   {
     versie: '1.67.4',
     datum: '2026-04-11',

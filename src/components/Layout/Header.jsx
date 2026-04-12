@@ -11,6 +11,7 @@ import { useRecords } from '../../hooks/useRecords';
 import { useNestData } from '../../hooks/useNestData';
 import SyncIndicator from '../Sync/SyncIndicator';
 import { VERSIE } from '../../data/changelog';
+import { useWeer } from '../../hooks/useWeer';
 import './Header.css';
 
 export default function Header({ onSwitchModule, activeModule }) {
@@ -110,6 +111,7 @@ export default function Header({ onSwitchModule, activeModule }) {
     setSimulatedNestRole(null);
   }
 
+  const weer = useWeer();
   const isStaging = import.meta.env.VITE_STAGING === 'true';
 
   const TALEN = [
@@ -156,6 +158,7 @@ export default function Header({ onSwitchModule, activeModule }) {
             <MerelLogo size={36} />
             MEREL<span className="header-app-tld">.app</span>{isStaging && <span className="header-staging-badge">STAGING</span>}
           </button>
+          <span className="header-versie">v{VERSIE}</span>
           {!onSwitchModule && (
             <span className={`header-module-pill header-module-pill--${activeModule || 'ring'}`}>
               {activeModule === 'nest' ? '⌂' : '◎'}
@@ -172,8 +175,20 @@ export default function Header({ onSwitchModule, activeModule }) {
           )}
           <div className="header-sync">
             <SyncIndicator />
-            <span className="header-versie">v{VERSIE}</span>
           </div>
+          {weer && (
+            <div className="header-weer">
+              <span className="header-weer-zon">
+                <span title="Zonsopgang">↑{weer.zonsopgang}</span>
+                <span title="Zonsondergang">↓{weer.zonsondergang}</span>
+              </span>
+              <span className="header-weer-info">
+                <span title="Temperatuur">{weer.temperatuur}°</span>
+                {weer.neerslag > 0 && <span title="Neerslag">{weer.neerslag}mm</span>}
+                <span title="Wind">{weer.windsnelheid} {weer.windRichting}</span>
+              </span>
+            </div>
+          )}
         </div>
         <div className="header-right">
           <a

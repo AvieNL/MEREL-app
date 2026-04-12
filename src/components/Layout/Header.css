@@ -301,6 +301,36 @@
   letter-spacing: 0.02em;
 }
 
+/* Versie staat nu in header-title-group — geen pointer-events */
+.header-title-group .header-versie {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Weerwidget */
+.header-weer {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 1px;
+}
+
+.header-weer-zon,
+.header-weer-info {
+  display: flex;
+  gap: 6px;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  opacity: 0.85;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.header-weer-zon span,
+.header-weer-info span {
+  cursor: default;
+}
+
 /* Rol-simulator */
 .hamburger-btn--simulating {
   color: #f59e0b !important;
