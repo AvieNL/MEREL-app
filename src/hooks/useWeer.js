@@ -22,15 +22,11 @@ export function useWeer() {
   const timerRef = useRef(null);
 
   useEffect(() => {
-    const lat = parseFloat(settings.ringstationLat);
-    const lon = parseFloat(settings.ringstationLon);
-    if (!lat || !lon) return;
-
-    async function haalWeer() {
+    async function haalWeer(la, lo) {
       try {
         const url =
           `https://api.open-meteo.com/v1/forecast` +
-          `?latitude=${lat}&longitude=${lon}` +
+          `?latitude=${la}&longitude=${lo}` +
           `&current=temperature_2m,precipitation,wind_speed_10m,wind_direction_10m` +
           `&daily=sunrise,sunset` +
           `&timezone=auto&forecast_days=1`;
@@ -50,8 +46,23 @@ export function useWeer() {
       }
     }
 
-    haalWeer();
-    timerRef.current = setInterval(haalWeer, REFRESH_MS);
+    function startFetch(la, lo) {
+      haalWeer(la, lo);
+      timerRef.current = setInterval(() => haalWeer(la, lo), REFRESH_MS);
+    }
+
+    const lat = parseFloat(settings.ringstationLat);
+    const lon = parseFloat(settings.ringstationLon);
+
+    if (!isNaN(lat) && !isNaN(lon) && lat !== 0 && lon !== 0) {
+      startFetch(lat, lon);
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        pos => startFetch(pos.coords.latitude, pos.coords.longitude),
+        () => {} // geen locatie beschikbaar of geweigerd
+      );
+    }
+
     return () => clearInterval(timerRef.current);
   }, [settings.ringstationLat, settings.ringstationLon]);
 

@@ -1,6 +1,19 @@
-export const VERSIE = '1.67.5';
+export const VERSIE = '1.67.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.6',
+    datum: '2026-04-12',
+    wijzigingen: [
+      'Fix: weerwidget valt terug op GPS-locatie als ringstation-coördinaten niet zijn ingevuld',
+    ],
+    wijzigingen_en: [
+      'Fix: weather widget falls back to GPS location if ringstation coordinates are not set',
+    ],
+    wijzigingen_de: [
+      'Fix: Wetter-Widget fällt auf GPS-Standort zurück, wenn Ringstation-Koordinaten nicht gesetzt sind',
+    ],
+  },
   {
     versie: '1.67.5',
     datum: '2026-04-12',
