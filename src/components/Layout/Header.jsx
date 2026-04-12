@@ -212,14 +212,12 @@ export default function Header({ onSwitchModule, activeModule }) {
                   </svg>
                   {weer.temperatuur}°
                 </span>
-                {weer.neerslag > 0 && (
-                  <span className="header-weer-item" title="Neerslag">
-                    <svg width="10" height="12" viewBox="0 0 10 13" fill="none" aria-hidden="true">
-                      <path d="M5 1 Q8.5 5.5 8.5 8 A3.5 3.5 0 0 1 1.5 8 Q1.5 5.5 5 1Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"/>
-                    </svg>
-                    {weer.neerslag}mm
-                  </span>
-                )}
+                <span className="header-weer-item" title="Neerslag">
+                  <svg width="10" height="12" viewBox="0 0 10 13" fill="none" aria-hidden="true">
+                    <path d="M5 1 Q8.5 5.5 8.5 8 A3.5 3.5 0 0 1 1.5 8 Q1.5 5.5 5 1Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"/>
+                  </svg>
+                  {weer.neerslag > 0 ? `${weer.neerslag}mm` : '0mm'}
+                </span>
                 <span className="header-weer-item" title={`Wind: ${weer.windsnelheid} km/h ${weer.windRichting}`}>
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <path d="M1 4.5 Q5 4.5 7 4.5 Q9.5 4.5 9.5 3 Q9.5 1.5 8 1.5 Q6.5 1.5 6.5 3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" fill="none"/>

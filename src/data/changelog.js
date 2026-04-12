@@ -1,6 +1,13 @@
-export const VERSIE = '1.67.7';
+export const VERSIE = '1.67.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.67.8',
+    datum: '2026-04-12',
+    wijzigingen: ['Stijl: neerslag altijd zichtbaar in weerwidget, ook bij 0mm'],
+    wijzigingen_en: ['Style: precipitation always visible in weather widget, even at 0mm'],
+    wijzigingen_de: ['Stil: Niederschlag im Wetter-Widget immer sichtbar, auch bei 0mm'],
+  },
   {
     versie: '1.67.7',
     datum: '2026-04-12',
