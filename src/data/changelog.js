@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.0';
+export const VERSIE = '1.68.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.1',
+    datum: '2026-04-13',
+    wijzigingen: [
+      'Functie: top 10 terugvangsten omvat nu ook series waarbij de eerste vangst of terugvangst buiten eigen projecten viel (cross-project terugvangsten)',
+    ],
+    wijzigingen_en: [
+      'Feature: top 10 recaptures now includes series where the first catch or recapture was outside own projects (cross-project recaptures)',
+    ],
+    wijzigingen_de: [
+      'Funktion: Top-10-Wiederfänge umfasst jetzt auch Serien, bei denen der Erstfang oder Wiederfang außerhalb eigener Projekte lag (projektübergreifende Wiederfänge)',
+    ],
+  },
   {
     versie: '1.68.0',
     datum: '2026-04-12',
