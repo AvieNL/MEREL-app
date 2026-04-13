@@ -233,9 +233,9 @@ function computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, 
   let totaalEieren = 0, totaalPulli = 0, totaalUitgevlogen = 0;
   legselsInJaar.forEach(l => {
     const bvl = bezoekenInJaar.filter(b => b.legsel_id === l.id);
-    totaalEieren     += Math.max(0, ...bvl.map(b => b.aantal_eieren ?? 0));
-    totaalPulli      += Math.max(0, ...bvl.map(b => b.aantal_pulli  ?? 0));
-    totaalUitgevlogen += Math.max(0, ...bvl.map(b => b.nestsucces   ?? 0));
+    totaalEieren      += Math.max(0, ...bvl.map(b => b.aantal_eieren ?? 0));
+    totaalPulli       += Math.max(0, ...bvl.map(b => b.aantal_pulli  ?? 0));
+    totaalUitgevlogen += Math.max(0, parseInt(l.nestsucces) || 0); // nestsucces staat op het legsel, niet het bezoek
   });
 
   const aantalAfgerond = legselsInJaar.filter(l =>
@@ -447,50 +447,60 @@ function svgLocatieKaart(perNest) {
   </svg>`;
 }
 
-function svgJaarGrafiek(legselsPerJaar) {
+function svgSuccesGrafiek(legselsPerJaar) {
   if (legselsPerJaar.length === 0) return '';
-  const W = 480, H = 180, PL = 32, PR = 16, PT = 16, PB = 28;
+  const W = 480, H = 180, PL = 32, PR = 20, PT = 16, PB = 28;
   const cW = W - PL - PR, cH = H - PT - PB;
-  const maxL = Math.max(...legselsPerJaar.map(d => d.legsels), 1);
-  const maxU = Math.max(...legselsPerJaar.map(d => d.uitgevlogen), 0);
-  const maxVal = Math.max(maxL, maxU, 1);
-  const n = legselsPerJaar.length;
-  const groupW = cW / n;
-  const bW = Math.min(groupW * 0.28, 18);
+  const maxVal = Math.max(...legselsPerJaar.map(d => d.succes + d.mislukt + d.onbekend), 1);
+  const bW = Math.min(cW / legselsPerJaar.length * 0.55, 32);
   const yLines = [0.25, 0.5, 0.75, 1].map(f => {
     const y = PT + cH - f * cH;
-    const val = Math.round(f * maxVal);
     return `<line x1="${PL}" y1="${y}" x2="${W-PR}" y2="${y}" stroke="#e2e8f0" stroke-width="0.8"/>
-      <text x="${PL-3}" y="${y+3}" font-size="7" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif">${val}</text>`;
+      <text x="${PL-3}" y="${y+3}" font-size="7" text-anchor="end" fill="#94a3b8" font-family="system-ui,sans-serif">${Math.round(f * maxVal)}</text>`;
   }).join('');
+  const groupW = cW / legselsPerJaar.length;
   const bars = legselsPerJaar.map((d, i) => {
     const cx = PL + i * groupW + groupW / 2;
-    const lH = (d.legsels / maxVal) * cH;
-    const uH = (d.uitgevlogen / maxVal) * cH;
-    return `<rect x="${cx - bW - 1}" y="${PT + cH - lH}" width="${bW}" height="${lH}" fill="#1e3a5f" opacity="0.8" rx="2"/>
-      <rect x="${cx + 1}" y="${PT + cH - uH}" width="${bW}" height="${uH}" fill="#16a34a" opacity="0.85" rx="2"/>
-      <text x="${cx}" y="${H - PB + 12}" font-size="9" text-anchor="middle" fill="#475569" font-family="system-ui,sans-serif">${d.jaar}</text>`;
+    const totH = ((d.succes + d.mislukt + d.onbekend) / maxVal) * cH;
+    const sH = (d.succes  / maxVal) * cH;
+    const mH = (d.mislukt / maxVal) * cH;
+    const oH = (d.onbekend/ maxVal) * cH;
+    let y = PT + cH;
+    const stacks = [];
+    if (d.succes  > 0) { y -= sH; stacks.push(`<rect x="${cx-bW/2}" y="${y}" width="${bW}" height="${sH}" fill="#16a34a" opacity="0.85" rx="1"/>`); }
+    if (d.mislukt > 0) { y -= mH; stacks.push(`<rect x="${cx-bW/2}" y="${y}" width="${bW}" height="${mH}" fill="#dc2626" opacity="0.75" rx="1"/>`); }
+    if (d.onbekend> 0) { y -= oH; stacks.push(`<rect x="${cx-bW/2}" y="${y}" width="${bW}" height="${oH}" fill="#94a3b8" opacity="0.6"  rx="1"/>`); }
+    const totaal = d.succes + d.mislukt + d.onbekend;
+    return stacks.join('') +
+      `<text x="${cx}" y="${PT + cH - totH - 3}" font-size="8" text-anchor="middle" fill="#475569" font-family="system-ui,sans-serif">${totaal}</text>
+       <text x="${cx}" y="${H-PB+12}" font-size="9" text-anchor="middle" fill="#475569" font-family="system-ui,sans-serif">${d.jaar}</text>`;
   }).join('');
-  const legendY = PT + 8;
+  const lY = PT + 6;
   return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;max-width:100%">
     <line x1="${PL}" y1="${PT}" x2="${PL}" y2="${PT+cH}" stroke="#cbd5e1" stroke-width="1"/>
     <line x1="${PL}" y1="${PT+cH}" x2="${W-PR}" y2="${PT+cH}" stroke="#cbd5e1" stroke-width="1"/>
     ${yLines}${bars}
-    <rect x="${W-PR-100}" y="${legendY}" width="10" height="10" fill="#1e3a5f" opacity="0.8" rx="2"/>
-    <text x="${W-PR-87}" y="${legendY+8}" font-size="8" fill="#475569" font-family="system-ui,sans-serif">Legsels</text>
-    <rect x="${W-PR-50}" y="${legendY}" width="10" height="10" fill="#16a34a" opacity="0.85" rx="2"/>
-    <text x="${W-PR-37}" y="${legendY+8}" font-size="8" fill="#475569" font-family="system-ui,sans-serif">Uitgevlogen</text>
+    <rect x="${W-PR-145}" y="${lY}" width="9" height="9" fill="#16a34a" rx="1"/>
+    <text x="${W-PR-133}" y="${lY+8}" font-size="8" fill="#475569" font-family="system-ui,sans-serif">Succesvol</text>
+    <rect x="${W-PR-85}" y="${lY}" width="9" height="9" fill="#dc2626" rx="1"/>
+    <text x="${W-PR-73}" y="${lY+8}" font-size="8" fill="#475569" font-family="system-ui,sans-serif">Mislukt</text>
+    <rect x="${W-PR-28}" y="${lY}" width="9" height="9" fill="#94a3b8" rx="1"/>
+    <text x="${W-PR-16}" y="${lY+8}" font-size="8" fill="#475569" font-family="system-ui,sans-serif">?</text>
   </svg>`;
 }
 
-function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, perNest, legselsPerJaar, nestCoords }) {
+function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, perNest, perSoortRapport, legselsPerJaar, nestCoords }) {
   const datum = new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
   const jaarLabel = jaar ? String(jaar) : 'Alle jaren';
 
-  const soortRijen = stats.perSoort.map(s => {
+  const soortRijen = (perSoortRapport || []).map(s => {
     const pct = s.succes + s.mislukt > 0 ? Math.round(s.succes / (s.succes + s.mislukt) * 100) : null;
+    const vEi  = s.verliesEi  > 0 ? `<span style="color:#dc2626">-${s.verliesEi}</span>`  : (s.verliesEi  === 0 ? '0' : '—');
+    const vPul = s.verliesPul > 0 ? `<span style="color:#dc2626">-${s.verliesPul}</span>` : (s.verliesPul === 0 ? '0' : '—');
     return `<tr>
-      <td>${s.naam}</td><td>${s.legsels}</td><td>${s.eieren || '—'}</td><td>${s.pulli || '—'}</td>
+      <td>${s.naam}</td><td>${s.legsels}</td>
+      <td>${s.eieren || '—'}</td><td>${s.pulliGeteld || '—'}</td><td>${s.geringd || '—'}</td>
+      <td>${vEi}</td><td>${vPul}</td>
       <td>${pct !== null ? `<span class="${pct >= 50 ? 'ok' : 'nok'}">${s.succes}/${s.succes + s.mislukt} (${pct}%)</span>` : '—'}</td>
     </tr>`;
   }).join('');
@@ -530,7 +540,7 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
     </div>`;
   }).join('');
 
-  const grafiekSvg = svgJaarGrafiek(legselsPerJaar);
+  const grafiekSvg = svgSuccesGrafiek(legselsPerJaar);
   const heeftKaart = nestCoords && nestCoords.length > 0;
   const nestCoordsJson = heeftKaart ? JSON.stringify(nestCoords) : '[]';
 
@@ -590,12 +600,12 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
 <div class="sg">
   <div class="sb"><div class="sw">${perNest.length}</div><div class="sl">Nesten</div></div>
   <div class="sb"><div class="sw">${stats.aantalLegsels}</div><div class="sl">Legsels</div></div>
-  <div class="sb"><div class="sw">${stats.totaalEieren || 0}</div><div class="sl">Eieren</div></div>
-  <div class="sb"><div class="sw">${stats.totaalUitgevlogen || 0}</div><div class="sl">Uitgevlogen</div></div>
+  <div class="sb"><div class="sw">${stats.totaalEieren > 0 ? stats.totaalEieren : '—'}</div><div class="sl">Eieren</div></div>
+  <div class="sb"><div class="sw">${stats.totaalUitgevlogen > 0 ? stats.totaalUitgevlogen : (stats.aantalAfgerond > 0 ? '0' : '—')}</div><div class="sl">Uitgevlogen</div></div>
 </div>
 ${successPct !== null ? `<div class="succes-regel">Nestsucces: <span class="${successPct >= 50 ? 'ok' : 'nok'}">${succes}/${stats.aantalAfgerond} legsels succesvol (${successPct}%)</span></div>` : ''}
-${grafiekSvg ? `<h2>Activiteit per jaar</h2><div class="grafiek-titel">Aantal legsels (blauw) en uitgevlogen jongen (groen) per jaar</div>${grafiekSvg}` : ''}
-${stats.perSoort.length > 0 ? `<h2>Per soort</h2><table><thead><tr><th>Soort</th><th>Legsels</th><th>Eieren</th><th>Pullen geringd</th><th>Succes</th></tr></thead><tbody>${soortRijen}</tbody></table>` : ''}
+${grafiekSvg ? `<h2>Nestsucces per jaar</h2><div class="grafiek-titel">Aantal legsels per jaar: geslaagd (groen) / mislukt (rood) / onbekend (grijs). Getal = totaal legsels dat jaar.</div>${grafiekSvg}` : ''}
+${soortRijen ? `<h2>Per soort</h2><table><thead><tr><th>Soort</th><th>Legsels</th><th>Eieren</th><th>Pulli geteld</th><th>Geringd</th><th>Verlies ei</th><th>Verlies pul</th><th>Succes</th></tr></thead><tbody>${soortRijen}</tbody></table>` : ''}
 ${heeftKaart ? `<h2>Locatie nestkasten</h2><div id="kaart"></div>` : ''}
 ${perNest.length > 0 ? `<h2>Nestkasten</h2>${nestSections}` : ''}
 <div class="rf"><span>VRS Breedenbroek — nestonderzoek</span><span>Gegenereerd op ${datum}</span></div>
@@ -722,13 +732,40 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
       };
     }).filter(n => geselecteerdJaar === null || n.legsels.length > 0);
 
-    // Legsels + uitgevlogen per jaar (altijd alle jaren voor de grafiek)
+    // Per soort samenvatting voor het rapport (met extra kolommen)
+    const perSoortMap = {};
+    perNest.forEach(n => {
+      n.legsels.forEach(l => {
+        const key = l.legselSoort;
+        if (!perSoortMap[key]) perSoortMap[key] = { naam: key, legsels: 0, eieren: 0, pulliGeteld: 0, geringd: 0, verliesEi: 0, verliesPul: 0, succes: 0, mislukt: 0 };
+        const s = perSoortMap[key];
+        s.legsels++;
+        s.eieren      += l.maxEieren      || 0;
+        s.pulliGeteld += l.maxPulli       || 0;
+        s.geringd     += l.aantalGeringd  || 0;
+        if (l.verliesEi  != null) s.verliesEi  += l.verliesEi;
+        if (l.verliesPul != null) s.verliesPul += l.verliesPul;
+        if (l.resultaat?.startsWith('✓')) s.succes++;
+        else if (l.resultaat?.startsWith('✗')) s.mislukt++;
+      });
+    });
+    const perSoortRapport = Object.values(perSoortMap).sort((a, b) => b.legsels - a.legsels);
+
+    // Succes per jaar voor de grafiek (alle jaren, niet alleen geselecteerde periode)
     const jarenSet = new Set(eigenaarLegselsGefilterd.map(l => l.jaar).filter(Boolean));
-    const legselsPerJaar = [...jarenSet].sort().map(j => ({
-      jaar: j,
-      legsels: eigenaarLegselsGefilterd.filter(l => l.jaar === j).length,
-      uitgevlogen: eigenaarLegselsGefilterd.filter(l => l.jaar === j).reduce((sum, l) => sum + Math.max(0, n2i(l.nestsucces)), 0),
-    }));
+    const legselsPerJaar = [...jarenSet].sort().map(j => {
+      const jLegsels = eigenaarLegselsGefilterd.filter(l => l.jaar === j);
+      let succes = 0, mislukt = 0, onbekend = 0;
+      jLegsels.forEach(l => {
+        const bvl = bezoeken.filter(b => String(b.legsel_id) === String(l.id));
+        const heeftAfsl = bvl.some(b => b.stadium?.startsWith('C') || b.stadium === 'X0');
+        const ns = n2i(l.nestsucces);
+        if (l.nestsucces != null && ns > 0) succes++;
+        else if (heeftAfsl || (l.nestsucces != null && ns === 0)) mislukt++;
+        else onbekend++;
+      });
+      return { jaar: j, succes, mislukt, onbekend };
+    });
 
     const nestCoords = eigenaarNesten
       .filter(n => n.lat && n.lon && !isNaN(parseFloat(n.lat)))
@@ -736,7 +773,7 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
 
     const html = generateRapportHTML({
       eigenaar: geselecteerd, jaar: geselecteerdJaar, info: eigenaarInfo,
-      stats, succes, successPct, perNest, legselsPerJaar, nestCoords,
+      stats, succes, successPct, perNest, perSoortRapport, legselsPerJaar, nestCoords,
     });
 
     // Blob URL zodat externe scripts (Leaflet CDN) correct laden

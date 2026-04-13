@@ -1,6 +1,28 @@
-export const VERSIE = '1.68.20';
+export const VERSIE = '1.68.21';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.21',
+    datum: '2026-04-13',
+    wijzigingen: [
+      'Fix: totaal uitgevlogen las nestsucces van bezoek ipv legsel — altijd 0, nu correct',
+      'Fix: samenvatting toont streepje voor eieren/uitgevlogen als niet geteld',
+      'Stijl: grafiek toont nu nestsucces per jaar (geslaagd/mislukt/onbekend gestapeld)',
+      'Stijl: per soort tabel heeft nu ook kolommen Pulli geteld, Geringd, Verlies ei, Verlies pul',
+    ],
+    wijzigingen_en: [
+      'Fix: total fledged was reading nestsucces from visit instead of clutch — always 0, now correct',
+      'Fix: summary shows dash for eggs/fledged when not counted',
+      'Style: chart now shows nest success per year (succeeded/failed/unknown stacked)',
+      'Style: per species table now also has columns Chicks counted, Ringed, Egg loss, Chick loss',
+    ],
+    wijzigingen_de: [
+      'Fix: Gesamtausgeflogene las Nestsucces vom Besuch statt vom Gelege — immer 0, jetzt korrekt',
+      'Fix: Zusammenfassung zeigt Strich für Eier/Ausgeflogene wenn nicht gezählt',
+      'Stil: Diagramm zeigt jetzt Nestkastenerfolg pro Jahr (erfolgreich/gescheitert/unbekannt gestapelt)',
+      'Stil: Arttabelle hat jetzt auch Spalten Pulli gezählt, Beringt, Ei-Verlust, Pul-Verlust',
+    ],
+  },
   {
     versie: '1.68.20',
     datum: '2026-04-13',
