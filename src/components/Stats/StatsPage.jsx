@@ -651,11 +651,14 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
               <div className="stat-record-badge">{t('stats_record_totaal')}</div>
             )}
           </div>
-          <div className={`stat-card${dagRecordIndicatoren.soorten ? ' stat-card--record' : ''}`}>
+          <div className={`stat-card${(dagRecordIndicatoren.soorten || dagRecordIndicatoren.totaal) ? ' stat-card--record' : ''}`}>
             <div className="stat-value">{huidigeStats.soorten}</div>
             <div className="stat-label">{t('stats_species')}</div>
             {dagRecordIndicatoren.soorten && (
               <div className="stat-record-badge">{t('stats_record_soorten')}</div>
+            )}
+            {dagRecordIndicatoren.totaal && (
+              <div className="stat-record-badge">{t('stats_record_totaal')}</div>
             )}
           </div>
           <div className="stat-card">

@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.7';
+export const VERSIE = '1.68.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.8',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: dagrecord-badges oranje; soorten-tegel toont nu ook dagrecord vogels'],
+    wijzigingen_en: ['Style: day record badges orange; species tile now also shows day record birds'],
+    wijzigingen_de: ['Stil: Tagesrekord-Badges orange; Arten-Kachel zeigt jetzt auch Tagesrekord Vögel'],
+  },
   {
     versie: '1.68.7',
     datum: '2026-04-13',
