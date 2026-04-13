@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.5';
+export const VERSIE = '1.68.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.6',
+    datum: '2026-04-13',
+    wijzigingen: [
+      'Functie: ringsoort (oranje naam) = soort nooit eerder gevangen in welk project dan ook; baansoort (rode *) = soort nooit in eigen projecten',
+    ],
+    wijzigingen_en: [
+      'Feature: ringing species (orange name) = species never caught in any project; site species (red *) = species never in own projects',
+    ],
+    wijzigingen_de: [
+      'Funktion: Ringart (oranger Name) = Art in keinem Projekt je gefangen; Stationsart (roter *) = Art nie in eigenen Projekten',
+    ],
+  },
   {
     versie: '1.68.5',
     datum: '2026-04-13',

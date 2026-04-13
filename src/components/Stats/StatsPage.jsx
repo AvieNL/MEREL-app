@@ -343,6 +343,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     if (huidigeRecords.length === 0) return {};
     const huidigJaar = new Date().getFullYear();
 
+    // Historisch eigen projecten → baansoort, dagrecord, jaarsoort
     const historisch = {};
     historischeRecords.forEach(r => {
       const key = (r.vogelnaam || 'onbekend').toLowerCase();
@@ -355,40 +356,35 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       }
     });
 
-    // Ringsoort: controleer alle projecten samen — niet alleen eigen projecten
-    const historischGeringd = new Set();
+    // Alle projecten samen → ringsoort (nooit eerder gevangen in welk project ook)
+    const ooitGevangen = new Set();
     statsRecords.forEach(r => {
       if (r.uploaded || r.bron === 'griel_import') {
-        if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
-          historischGeringd.add((r.vogelnaam || 'onbekend').toLowerCase());
-        }
+        ooitGevangen.add((r.vogelnaam || 'onbekend').toLowerCase());
       }
     });
 
     const vandaagCounts = {};
-    const vandaagNieuw = new Set(); // soorten vandaag geringd (nieuwe vangst)
     huidigeRecords.forEach(r => {
       const key = (r.vogelnaam || 'onbekend').toLowerCase();
       vandaagCounts[key] = (vandaagCounts[key] || 0) + 1;
-      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
-        vandaagNieuw.add(key);
-      }
     });
 
     const result = {};
     for (const [key, vandaagCount] of Object.entries(vandaagCounts)) {
       const hist = historisch[key];
       const maxDagCount = hist ? Math.max(...Object.values(hist.dagCounts), 0) : 0;
-      const isBaansoort = !hist;
-      const isDagrecord = vandaagCount > maxDagCount;
-      const isJaarsoort = !hist || !hist.jaren.has(huidigJaar);
-      const isRingsoort = !isBaansoort && vandaagNieuw.has(key) && !historischGeringd.has(key);
+
+      const isRingsoort = !ooitGevangen.has(key);            // nooit eerder gevangen, welk project dan ook
+      const isBaansoort = !hist;                             // nooit eerder in eigen projecten
+      const isDagrecord = hist && vandaagCount > maxDagCount;
+      const isJaarsoort = hist && !hist.jaren.has(huidigJaar);
 
       const tags = new Set();
+      if (isRingsoort) tags.add('ringsoort');
       if (isBaansoort) tags.add('baansoort');
-      if (isRingsoort || (isBaansoort && vandaagNieuw.has(key))) tags.add('ringsoort');
-      if (!isBaansoort && isDagrecord) tags.add('dagrecord');
-      if (!isBaansoort && isJaarsoort) tags.add('jaar');
+      if (isDagrecord) tags.add('dagrecord');
+      if (isJaarsoort) tags.add('jaar');
       if (tags.size > 0) result[key] = tags;
     }
     return result;
@@ -689,7 +685,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                   return (
                     <tr key={s.naam}>
                       <td className="tt-col-soort">
-                        <span className={indicatoren?.has('ringsoort') ? 'soort-naam--ringsoort' : indicatoren?.has('baansoort') ? 'soort-naam--baansoort' : undefined}>{displayNaam(s.naam)}</span>
+                        <span className={indicatoren?.has('ringsoort') ? 'soort-naam--ringsoort' : undefined}>{displayNaam(s.naam)}</span>
                         {indicatoren && [...indicatoren].map(ind => (
                           <span key={ind} className={`soort-indicator soort-indicator--${ind}`}>*</span>
                         ))}
