@@ -14,6 +14,22 @@ import { VERSIE } from '../../data/changelog';
 import { useWeer } from '../../hooks/useWeer';
 import './Header.css';
 
+function kmhNaarBft(kmh) {
+  if (kmh < 1)   return 0;
+  if (kmh < 6)   return 1;
+  if (kmh < 12)  return 2;
+  if (kmh < 20)  return 3;
+  if (kmh < 29)  return 4;
+  if (kmh < 39)  return 5;
+  if (kmh < 50)  return 6;
+  if (kmh < 62)  return 7;
+  if (kmh < 75)  return 8;
+  if (kmh < 89)  return 9;
+  if (kmh < 103) return 10;
+  if (kmh < 118) return 11;
+  return 12;
+}
+
 export default function Header({ onSwitchModule, activeModule }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [taalOpen, setTaalOpen] = useState(false);
@@ -224,7 +240,7 @@ export default function Header({ onSwitchModule, activeModule }) {
                     <line x1="1" y1="6.5" x2="8" y2="6.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
                     <path d="M1 8.5 Q4 8.5 6 8.5 Q8 8.5 8 10 Q8 11.5 6.5 11.5 Q5 11.5 5 10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
                   </svg>
-                  {weer.windsnelheid} km/h {weer.windRichting}
+                  {weer.windsnelheid} km/h bft {kmhNaarBft(weer.windsnelheid)} {weer.windRichting}
                 </span>
               </div>
             </div>

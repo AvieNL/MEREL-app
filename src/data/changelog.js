@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.14';
+export const VERSIE = '1.68.15';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.15',
+    datum: '2026-04-13',
+    wijzigingen: ['Functie: windkracht in Beaufort (bft) toegevoegd naast km/h in weerwidget'],
+    wijzigingen_en: ['Feature: wind force in Beaufort (bft) added next to km/h in weather widget'],
+    wijzigingen_de: ['Funktion: Windstärke in Beaufort (bft) neben km/h im Wetter-Widget hinzugefügt'],
+  },
   {
     versie: '1.68.14',
     datum: '2026-04-13',
