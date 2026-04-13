@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.17';
+export const VERSIE = '1.68.18';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.18',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: eigenaarrapport toont nu nestfoto\'s per kast, SVG-locatiekaart van alle nestkasten en staafgrafiek legsels/uitgevlogen per jaar'],
+    wijzigingen_en: ['Style: owner report now shows nest photos per box, SVG location map of all nest boxes and bar chart of clutches/fledglings per year'],
+    wijzigingen_de: ['Stil: Eigentümerbericht zeigt jetzt Nestfotos pro Kasten, SVG-Lagekarte aller Nistkästen und Balkendiagramm Gelege/Ausgeflogene pro Jahr'],
+  },
   {
     versie: '1.68.17',
     datum: '2026-04-13',
