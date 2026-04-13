@@ -188,7 +188,7 @@ function computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, 
   const perSoort = {};
   legselsInJaar.forEach(l => {
     const nest = nestenById[l.nest_id];
-    const key  = nest?.soort_euring || 'onbekend';
+    const key  = l.soort_euring || nest?.soort_euring || 'onbekend';
     if (!perSoort[key]) perSoort[key] = { naam: speciesByEuring[key]?.naam_nl || key, legsels: 0, eieren: 0, pulli: 0, succes: 0, mislukt: 0 };
     perSoort[key].legsels++;
 
@@ -430,17 +430,17 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
     const legselRijen = n.legsels.length === 0
       ? '<tr><td colspan="4" style="color:#888;font-style:italic">Geen legsels in geselecteerde periode</td></tr>'
       : n.legsels.map(l => `<tr>
-          <td>${l.jaar || '—'}</td><td>${l.maxEieren || '—'}</td><td>${l.maxPulli || '—'}</td>
+          <td>${l.jaar || '—'}</td><td>${l.legselSoort}</td><td>${l.maxEieren || '—'}</td><td>${l.maxPulli || '—'}</td>
           <td>${l.succesLabel || '—'}</td>
         </tr>`).join('');
     return `<div class="nest-blok">
       <div class="nest-header">
         <span class="nest-nr">⌂ ${n.kastnummer}</span>
         ${n.omschrijving ? `<span class="nest-omsch">${n.omschrijving}</span>` : ''}
-        <span class="nest-soort">${n.soortNaam}</span>
+        ${n.soortNaam !== '—' ? `<span class="nest-soort">${n.soortNaam}</span>` : ''}
       </div>
       ${n.adres ? `<div class="nest-adres">${n.adres}</div>` : ''}
-      <table><thead><tr><th>Jaar</th><th>Eieren</th><th>Pullen geringd</th><th>Resultaat</th></tr></thead>
+      <table><thead><tr><th>Jaar</th><th>Soort</th><th>Eieren</th><th>Pullen geringd</th><th>Resultaat</th></tr></thead>
       <tbody>${legselRijen}</tbody></table>
     </div>`;
   }).join('');
@@ -570,7 +570,8 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
           let succesLabel = '';
           if (ns != null && ns > 0) succesLabel = `✓ ${ns} uitgevlogen`;
           else if (ns === 0 || heeftX0 || heeftC) succesLabel = '✗ mislukt';
-          return { ...l, maxEieren, maxPulli, succesLabel };
+          const legselSoort = speciesByEuring[l.soort_euring || n.soort_euring]?.naam_nl || '—';
+          return { ...l, maxEieren, maxPulli, succesLabel, legselSoort };
         }),
       };
     }).filter(n => geselecteerdJaar === null || n.legsels.length > 0);

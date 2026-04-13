@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.16';
+export const VERSIE = '1.68.17';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.17',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: eigenaarrapport gebruikt soort van het legsel (niet alleen de nestintentie) — "onbekend" verdwijnt; soort per legselrij zichtbaar in rapport'],
+    wijzigingen_en: ['Fix: owner report uses species from the clutch (not just the nest intention) — "unknown" disappears; species shown per clutch row in report'],
+    wijzigingen_de: ['Fix: Eigentümerbericht verwendet Vogelart des Geleges (nicht nur die Nistabsicht) — „unbekannt" verschwindet; Vogelart pro Gelegezeile im Bericht sichtbar'],
+  },
   {
     versie: '1.68.16',
     datum: '2026-04-13',
