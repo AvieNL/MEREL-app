@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.9';
+export const VERSIE = '1.69.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.69.0',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: nestsucces-kolom leest nu correct van het legsel (niet het bezoek) — uitgevlogen jongen worden nu zichtbaar'],
+    wijzigingen_en: ['Fix: nest success column now correctly reads from the clutch (not the visit) — fledged young now visible'],
+    wijzigingen_de: ['Fix: Nestkasterfolgsspalte liest jetzt korrekt vom Gelege (nicht vom Besuch) — ausgeflogene Junge jetzt sichtbar'],
+  },
   {
     versie: '1.68.9',
     datum: '2026-04-13',
