@@ -117,6 +117,7 @@ function computeTerugvangsten(records, fallbackLat, fallbackLon, referentieRecor
 
     lijst.push({
       id: r.id,
+      origId: origineel?.id || null,
       ringnummer: r.ringnummer,
       soort: r.vogelnaam || 'Onbekend',
       datum: r.vangstdatum,
@@ -442,15 +443,13 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     const fbLat = parseFloat(settings.ringstationLat) || null;
     const fbLon = parseFloat(settings.ringstationLon) || null;
     const externRefs = records.filter(r => r.bron === 'externe_ring_info');
-    // Scan alle records zodat cross-project series (eerste vangst of terugvangst buiten eigen projecten) meegenomen worden
+    // Scan alle records zodat cross-project series meegenomen worden
     const alle = computeTerugvangsten(statsRecords, fbLat, fbLon, [...statsRecords, ...externRefs]);
     if (!eigenFilter) return alle;
-    // Houd series waarbij tenminste één vangst (eerste of terugvangst) van een eigen project is
-    return alle.filter(tv =>
-      !tv.project || eigenProjectNamen.has(tv.project) ||
-      !tv.origProject || eigenProjectNamen.has(tv.origProject)
-    );
-  }, [statsRecords, records, eigenFilter, eigenProjectNamen, settings.ringstationLat, settings.ringstationLon]);
+    // Filter: tenminste één vangst in de serie (terugvangst of eerste vangst) moet van een eigen record zijn
+    const eigenIds = new Set(gefilterdRecords.map(r => r.id));
+    return alle.filter(tv => eigenIds.has(tv.id) || eigenIds.has(tv.origId));
+  }, [statsRecords, gefilterdRecords, records, eigenFilter, settings.ringstationLat, settings.ringstationLon]);
   const { perJaar, perMaand, soortenPerJaar } = useChartData(gefilterdRecords);
 
   const terugvangsten = useMemo(() => {

@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.1';
+export const VERSIE = '1.68.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.2',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: cross-project terugvangsten filtert nu correct op record-ID — alleen series waarbij de terugvangst of eerste vangst daadwerkelijk een eigen record is'],
+    wijzigingen_en: ['Fix: cross-project recaptures now filters correctly by record ID — only series where the recapture or first catch is actually an own record'],
+    wijzigingen_de: ['Fix: projektübergreifende Wiederfänge filtert jetzt korrekt nach Datensatz-ID — nur Serien, bei denen der Wiederfang oder Erstfang tatsächlich ein eigener Datensatz ist'],
+  },
   {
     versie: '1.68.1',
     datum: '2026-04-13',
