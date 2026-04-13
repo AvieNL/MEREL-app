@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.25';
+export const VERSIE = '1.68.26';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.26',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: legselsoort in statistieken en rapport zoekt nu ook in bezoeken als legsel zelf geen soort heeft'],
+    wijzigingen_en: ['Fix: clutch species in stats and report now also looks at visits when clutch has no species set'],
+    wijzigingen_de: ['Fix: Gelegeart in Statistiken und Bericht sucht jetzt auch in Besuchen wenn das Gelege keine Art hat'],
+  },
   {
     versie: '1.68.25',
     datum: '2026-04-13',

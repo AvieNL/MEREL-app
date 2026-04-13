@@ -186,16 +186,16 @@ function computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, 
 
   const nestenMet = new Set(legselsInJaar.map(l => l.nest_id));
 
-  // Per soort — soort staat op het nest, niet het legsel
+  // Per soort — soort staat op het legsel of meest recente bezoek
   const perSoort = {};
   legselsInJaar.forEach(l => {
-    const nest = nestenById[l.nest_id];
-    const key  = l.soort_euring || 'onbekend';
-    if (!perSoort[key]) perSoort[key] = { naam: speciesByEuring[key]?.naam_nl || key, legsels: 0, eieren: 0, pulli: 0, succes: 0, mislukt: 0 };
-    perSoort[key].legsels++;
-
     // Hoogste eiertelling per legsel
     const bezoekenVanLegsel = bezoekenInJaar.filter(b => b.legsel_id === l.id);
+    const effectiefEuring = l.soort_euring ||
+      [...bezoekenVanLegsel].reverse().find(b => b.soort_euring)?.soort_euring;
+    const key  = effectiefEuring || 'onbekend';
+    if (!perSoort[key]) perSoort[key] = { naam: speciesByEuring[key]?.naam_nl || (key === 'onbekend' ? 'Onbekend' : key), legsels: 0, eieren: 0, pulli: 0, succes: 0, mislukt: 0 };
+    perSoort[key].legsels++;
     const maxEieren = Math.max(0, ...bezoekenVanLegsel.map(b => b.aantal_eieren || 0));
     perSoort[key].eieren += maxEieren;
 
@@ -733,7 +733,9 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
             if (redenen.length) resultaat += ` — ${redenen.join(', ')}`;
           }
 
-          const legselSoort = speciesByEuring[l.soort_euring]?.naam_nl || '—';
+          const effectiefLegselEuring = l.soort_euring ||
+            [...bvl].reverse().find(b => b.soort_euring)?.soort_euring;
+          const legselSoort = speciesByEuring[effectiefLegselEuring]?.naam_nl || '—';
           const eierenLabel = maxEieren > 0 ? String(maxEieren)
             : (maxPulli > 0 ? `≥${maxPulli}` : '—');
           return { ...l, maxEieren, maxPulli, aantalGeringd, verliesEi, verliesPul, resultaat, legselSoort, eierenLabel };
