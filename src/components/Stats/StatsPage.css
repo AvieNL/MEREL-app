@@ -186,11 +186,11 @@
 }
 
 .soort-indicator--baansoort {
-  color: var(--danger, #ef4444);
+  color: #f97316;
 }
 
 .soort-indicator--dagrecord {
-  color: var(--accent, #38bdf8);
+  color: #facc15;
 }
 
 .soort-indicator--jaar {
@@ -202,7 +202,19 @@
 }
 
 .soort-naam--ringsoort {
+  color: var(--danger, #ef4444);
+}
+
+.soort-naam--baansoort {
   color: #f97316;
+}
+
+.soort-naam--dagrecord {
+  color: #facc15;
+}
+
+.soort-naam--jaar {
+  color: var(--success, #22c55e);
 }
 
 .soort-indicator-legenda {

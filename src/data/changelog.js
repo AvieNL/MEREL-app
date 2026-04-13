@@ -1,6 +1,13 @@
-export const VERSIE = '1.69.0';
+export const VERSIE = '1.69.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.69.1',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: soort-indicatoren gekleurd — ringsoort rood, baansoort oranje, dagrecord geel, jaarsoort groen'],
+    wijzigingen_en: ['Style: species indicators colored — ringing species red, site species orange, day record yellow, year species green'],
+    wijzigingen_de: ['Stil: Artindikatoren farbig — Ringart rot, Stationsart orange, Tagesrekord gelb, Jahresart grün'],
+  },
   {
     versie: '1.69.0',
     datum: '2026-04-13',

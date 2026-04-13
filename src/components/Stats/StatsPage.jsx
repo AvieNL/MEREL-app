@@ -689,8 +689,11 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                     <tr key={s.naam}>
                       <td className="tt-col-soort">
                         <span className={[
-                          indicatoren?.has('ringsoort') ? 'soort-naam--ringsoort' : '',
-                          (indicatoren?.has('baansoort') || indicatoren?.has('dagrecord') || indicatoren?.has('jaar')) ? 'soort-naam--vet' : '',
+                          indicatoren?.has('ringsoort') ? 'soort-naam--ringsoort' :
+                          indicatoren?.has('baansoort') ? 'soort-naam--baansoort' :
+                          indicatoren?.has('dagrecord') ? 'soort-naam--dagrecord' :
+                          indicatoren?.has('jaar')      ? 'soort-naam--jaar'      : '',
+                          indicatoren?.size > 0 ? 'soort-naam--vet' : '',
                         ].filter(Boolean).join(' ') || undefined}>{displayNaam(s.naam)}</span>
                         {indicatoren && [...indicatoren].map(ind => (
                           <span key={ind} className={`soort-indicator soort-indicator--${ind}`}>*</span>
