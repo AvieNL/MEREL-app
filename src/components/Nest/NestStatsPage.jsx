@@ -196,8 +196,8 @@ function computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, 
     const key  = effectiefEuring || 'onbekend';
     if (!perSoort[key]) perSoort[key] = { naam: speciesByEuring[key]?.naam_nl || (key === 'onbekend' ? 'Onbekend' : key), legsels: 0, eieren: 0, pulli: 0, succes: 0, mislukt: 0 };
     perSoort[key].legsels++;
-    const maxEieren = Math.max(0, ...bezoekenVanLegsel.map(b => b.aantal_eieren || 0));
-    perSoort[key].eieren += maxEieren;
+    const clutchSize = Math.max(0, ...bezoekenVanLegsel.map(b => (b.aantal_eieren || 0) + (b.ei_dood || 0) + (b.aantal_pulli || 0)));
+    perSoort[key].eieren += clutchSize;
 
     // Geringde pulli
     perSoort[key].pulli += ringenInJaar.filter(r =>
@@ -233,7 +233,7 @@ function computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, 
   let totaalEieren = 0, totaalPulli = 0, totaalUitgevlogen = 0;
   legselsInJaar.forEach(l => {
     const bvl = bezoekenInJaar.filter(b => b.legsel_id === l.id);
-    totaalEieren      += Math.max(0, ...bvl.map(b => b.aantal_eieren ?? 0));
+    totaalEieren      += Math.max(0, ...bvl.map(b => (b.aantal_eieren ?? 0) + (b.ei_dood ?? 0) + (b.aantal_pulli ?? 0)));
     totaalPulli       += Math.max(0, ...bvl.map(b => b.aantal_pulli  ?? 0));
     totaalUitgevlogen += Math.max(0, parseInt(l.nestsucces) || 0); // nestsucces staat op het legsel, niet het bezoek
   });
@@ -705,6 +705,8 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
           const maxPulli    = Math.max(0, ...bvl.map(b => n2i(b.aantal_pulli)));
           const maxEiDood   = Math.max(0, ...bvl.map(b => n2i(b.ei_dood)));
           const maxJongDood = Math.max(0, ...bvl.map(b => n2i(b.jong_dood)));
+          // Infereerde legselgrootte: eieren + dode eieren + pulli per bezoek
+          const clutchSize  = Math.max(0, ...bvl.map(b => n2i(b.aantal_eieren) + n2i(b.ei_dood) + n2i(b.aantal_pulli)));
           const bezoekIds = new Set(bvl.map(b => b.id));
           const aantalGeringd = ringen.filter(r => bezoekIds.has(r.nestbezoek_id)).length;
 
@@ -714,9 +716,9 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
           const heeftC  = bvl.some(b => b.stadium?.startsWith('C'));
           const isAfgesloten = heeftX0 || heeftC;
 
-          // Verlies ei: ei_dood heeft voorrang; anders maxEieren - maxPulli
+          // Verlies ei: ei_dood heeft voorrang; anders clutchSize - maxPulli (of maxEieren - maxPulli)
           const verliesEi = isAfgesloten
-            ? (maxEiDood > 0 ? maxEiDood : (maxEieren > 0 ? Math.max(0, maxEieren - maxPulli) : null))
+            ? (maxEiDood > 0 ? maxEiDood : (clutchSize > 0 ? Math.max(0, clutchSize - maxPulli) : null))
             : null;
           // Verlies pul: jong_dood heeft voorrang; anders maxPulli - nestsucces
           const verliesPul = isAfgesloten && !isNsOnbekend
@@ -743,7 +745,7 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
           const effectiefLegselEuring = l.soort_euring ||
             [...bvl].reverse().find(b => b.soort_euring)?.soort_euring;
           const legselSoort = speciesByEuring[effectiefLegselEuring]?.naam_nl || '—';
-          const eierenLabel = maxEieren > 0 ? String(maxEieren)
+          const eierenLabel = clutchSize > 0 ? String(clutchSize)
             : (maxPulli > 0 ? `≥${maxPulli}` : '—');
           return { ...l, maxEieren, maxPulli, aantalGeringd, verliesEi, verliesPul, resultaat, legselSoort, eierenLabel };
         }),

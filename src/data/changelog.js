@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.28';
+export const VERSIE = '1.68.29';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.29',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: legselgrootte afgeleid uit eieren + dode eieren + pulli per bezoek — gemengd bezoek telt nu correct'],
+    wijzigingen_en: ['Fix: clutch size inferred from eggs + dead eggs + chicks per visit — mixed visits now counted correctly'],
+    wijzigingen_de: ['Fix: Gelegegröße wird aus Eiern + toten Eiern + Jungen pro Besuch abgeleitet — gemischte Besuche jetzt korrekt'],
+  },
   {
     versie: '1.68.28',
     datum: '2026-04-13',
