@@ -344,7 +344,6 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     const huidigJaar = new Date().getFullYear();
 
     const historisch = {};
-    const historischGeringd = new Set(); // soorten waarvoor ooit een ring is gezet
     historischeRecords.forEach(r => {
       const key = (r.vogelnaam || 'onbekend').toLowerCase();
       if (!historisch[key]) historisch[key] = { dagCounts: {}, jaren: new Set() };
@@ -354,8 +353,15 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
         historisch[key].dagCounts[dagKey] = (historisch[key].dagCounts[dagKey] || 0) + 1;
         historisch[key].jaren.add(d.getFullYear());
       }
-      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
-        historischGeringd.add(key);
+    });
+
+    // Ringsoort: controleer alle projecten samen — niet alleen eigen projecten
+    const historischGeringd = new Set();
+    statsRecords.forEach(r => {
+      if (r.uploaded || r.bron === 'griel_import') {
+        if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
+          historischGeringd.add((r.vogelnaam || 'onbekend').toLowerCase());
+        }
       }
     });
 
@@ -389,7 +395,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       }
     }
     return result;
-  }, [huidigeRecords, historischeRecords]);
+  }, [huidigeRecords, historischeRecords, statsRecords]);
 
   // Dagrecord totaal vangsten en dagrecord aantal soorten
   const dagRecordIndicatoren = useMemo(() => {

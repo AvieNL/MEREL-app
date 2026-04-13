@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.3';
+export const VERSIE = '1.68.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.4',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: ringsoort-check kijkt nu naar alle projecten samen (niet alleen eigen projecten)'],
+    wijzigingen_en: ['Fix: ringing species check now looks across all projects (not just own projects)'],
+    wijzigingen_de: ['Fix: Ringart-Prüfung berücksichtigt jetzt alle Projekte zusammen (nicht nur eigene Projekte)'],
+  },
   {
     versie: '1.68.3',
     datum: '2026-04-13',
