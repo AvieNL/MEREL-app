@@ -1,6 +1,13 @@
-export const VERSIE = '1.69.1';
+export const VERSIE = '1.69.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.69.2',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: kleuromschrijvingen verwijderd uit legenda-teksten'],
+    wijzigingen_en: ['Style: color descriptions removed from legend texts'],
+    wijzigingen_de: ['Stil: Farbbezeichnungen aus Legendentexten entfernt'],
+  },
   {
     versie: '1.69.1',
     datum: '2026-04-13',
