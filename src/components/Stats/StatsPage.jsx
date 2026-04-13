@@ -344,6 +344,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     const huidigJaar = new Date().getFullYear();
 
     const historisch = {};
+    const historischGeringd = new Set(); // soorten waarvoor ooit een ring is gezet
     historischeRecords.forEach(r => {
       const key = (r.vogelnaam || 'onbekend').toLowerCase();
       if (!historisch[key]) historisch[key] = { dagCounts: {}, jaren: new Set() };
@@ -353,12 +354,19 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
         historisch[key].dagCounts[dagKey] = (historisch[key].dagCounts[dagKey] || 0) + 1;
         historisch[key].jaren.add(d.getFullYear());
       }
+      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
+        historischGeringd.add(key);
+      }
     });
 
     const vandaagCounts = {};
+    const vandaagNieuw = new Set(); // soorten vandaag geringd (nieuwe vangst)
     huidigeRecords.forEach(r => {
       const key = (r.vogelnaam || 'onbekend').toLowerCase();
       vandaagCounts[key] = (vandaagCounts[key] || 0) + 1;
+      if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
+        vandaagNieuw.add(key);
+      }
     });
 
     const result = {};
@@ -368,11 +376,13 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       const isBaansoort = !hist;
       const isDagrecord = vandaagCount > maxDagCount;
       const isJaarsoort = !hist || !hist.jaren.has(huidigJaar);
+      const isRingsoort = !isBaansoort && vandaagNieuw.has(key) && !historischGeringd.has(key);
 
       if (isBaansoort) {
         result[key] = new Set(['baansoort']);
       } else {
         const tags = new Set();
+        if (isRingsoort) tags.add('ringsoort');
         if (isDagrecord) tags.add('dagrecord');
         if (isJaarsoort) tags.add('jaar');
         if (tags.size > 0) result[key] = tags;
@@ -676,7 +686,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                   return (
                     <tr key={s.naam}>
                       <td className="tt-col-soort">
-                        <span className={indicatoren?.has('baansoort') ? 'soort-naam--baansoort' : undefined}>{displayNaam(s.naam)}</span>
+                        <span className={indicatoren?.has('baansoort') ? 'soort-naam--baansoort' : indicatoren?.has('ringsoort') ? 'soort-naam--ringsoort' : undefined}>{displayNaam(s.naam)}</span>
                         {indicatoren && [...indicatoren].map(ind => (
                           <span key={ind} className={`soort-indicator soort-indicator--${ind}`}>*</span>
                         ))}
@@ -706,6 +716,9 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
           <div className="soort-indicator-legenda">
             {Object.values(soortenIndicatoren).some(s => s.has('baansoort')) && (
               <span><span className="soort-indicator soort-indicator--baansoort">*</span> {t('stats_indicator_baansoort')}</span>
+            )}
+            {Object.values(soortenIndicatoren).some(s => s.has('ringsoort')) && (
+              <span><span className="soort-naam--ringsoort">{t('stats_indicator_ringsoort')}</span></span>
             )}
             {Object.values(soortenIndicatoren).some(s => s.has('dagrecord')) && (
               <span><span className="soort-indicator soort-indicator--dagrecord">*</span> {t('stats_indicator_record')}</span>

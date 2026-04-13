@@ -201,6 +201,11 @@
   font-weight: 700;
 }
 
+.soort-naam--ringsoort {
+  color: #f97316;
+  font-weight: 600;
+}
+
 .soort-indicator-legenda {
   display: flex;
   gap: 1rem;

@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.2';
+export const VERSIE = '1.68.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.3',
+    datum: '2026-04-13',
+    wijzigingen: ['Functie: nieuwe ringsoort-indicator in dagstatistieken (oranje vogelnaam) — soort vandaag voor het eerst geringd'],
+    wijzigingen_en: ['Feature: new ringing species indicator in day statistics (orange species name) — species ringed for the first time today'],
+    wijzigingen_de: ['Funktion: Neue Ringart-Indikator in Tagesstatistiken (oranger Artname) — Art heute zum ersten Mal beringt'],
+  },
   {
     versie: '1.68.2',
     datum: '2026-04-13',

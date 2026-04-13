@@ -186,6 +186,7 @@
   "stats_recatch": "Recapture",
   "stats_extern": "External report",
   "stats_indicator_baansoort": "new site species (bold, red)",
+  "stats_indicator_ringsoort": "new ringing species (orange) — never ringed before",
   "stats_indicator_record": "new day record",
   "stats_record_totaal": "★ day record catches",
   "stats_record_soorten": "★ day record species",

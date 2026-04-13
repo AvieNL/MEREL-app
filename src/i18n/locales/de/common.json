@@ -186,6 +186,7 @@
   "stats_recatch": "Wiederfang",
   "stats_extern": "Externe Meldung",
   "stats_indicator_baansoort": "neue Stationsart (fett, rot)",
+  "stats_indicator_ringsoort": "neue Ringart (orange) — noch nie beringt",
   "stats_indicator_record": "neuer Tagesrekord",
   "stats_record_totaal": "★ Tagesrekord Fänge",
   "stats_record_soorten": "★ Tagesrekord Arten",
