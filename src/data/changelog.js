@@ -1,57 +1,57 @@
-export const VERSIE = '1.69.3';
+export const VERSIE = '1.68.12';
 
 export const CHANGELOG = [
   {
-    versie: '1.69.3',
+    versie: '1.68.12',
     datum: '2026-04-13',
     wijzigingen: ['Stijl: soort-indicatoren tonen nu als lichte rijkleur in de tabel (naam vet, geen gekleurde tekst)'],
     wijzigingen_en: ['Style: species indicators now shown as light row background in table (name bold, no colored text)'],
     wijzigingen_de: ['Stil: Artindikatoren werden jetzt als helle Zeilenhintergrundfarbe in der Tabelle angezeigt (Name fett, kein farbiger Text)'],
   },
   {
-    versie: '1.69.2',
+    versie: '1.68.11',
     datum: '2026-04-13',
     wijzigingen: ['Stijl: kleuromschrijvingen verwijderd uit legenda-teksten'],
     wijzigingen_en: ['Style: color descriptions removed from legend texts'],
     wijzigingen_de: ['Stil: Farbbezeichnungen aus Legendentexten entfernt'],
   },
   {
-    versie: '1.69.1',
+    versie: '1.68.10',
     datum: '2026-04-13',
     wijzigingen: ['Stijl: soort-indicatoren gekleurd — ringsoort rood, baansoort oranje, dagrecord geel, jaarsoort groen'],
     wijzigingen_en: ['Style: species indicators colored — ringing species red, site species orange, day record yellow, year species green'],
     wijzigingen_de: ['Stil: Artindikatoren farbig — Ringart rot, Stationsart orange, Tagesrekord gelb, Jahresart grün'],
   },
   {
-    versie: '1.69.0',
+    versie: '1.68.9',
     datum: '2026-04-13',
     wijzigingen: ['Fix: nestsucces-kolom leest nu correct van het legsel (niet het bezoek) — uitgevlogen jongen worden nu zichtbaar'],
     wijzigingen_en: ['Fix: nest success column now correctly reads from the clutch (not the visit) — fledged young now visible'],
     wijzigingen_de: ['Fix: Nestkasterfolgsspalte liest jetzt korrekt vom Gelege (nicht vom Besuch) — ausgeflogene Junge jetzt sichtbar'],
   },
   {
-    versie: '1.68.9',
+    versie: '1.68.8',
     datum: '2026-04-13',
     wijzigingen: ['Fix: nestsucces-kolom toont nu correct succes/mislukt — null-waarden en X0-stadium (mislukt zonder nestsucces-telling) worden nu meegenomen'],
     wijzigingen_en: ['Fix: nest success column now correctly shows success/failure — null values and X0 stadium (failed without count) are now included'],
     wijzigingen_de: ['Fix: Nistkasterfolgsspalte zeigt nun korrekt Erfolg/Misserfolg — Null-Werte und X0-Stadium (fehlgeschlagen ohne Zählung) werden jetzt berücksichtigt'],
   },
   {
-    versie: '1.68.8',
+    versie: '1.68.7',
     datum: '2026-04-13',
     wijzigingen: ['Stijl: dagrecord-badges oranje; soorten-tegel toont nu ook dagrecord vogels'],
     wijzigingen_en: ['Style: day record badges orange; species tile now also shows day record birds'],
     wijzigingen_de: ['Stil: Tagesrekord-Badges orange; Arten-Kachel zeigt jetzt auch Tagesrekord Vögel'],
   },
   {
-    versie: '1.68.7',
+    versie: '1.68.6',
     datum: '2026-04-13',
     wijzigingen: ['Stijl: baansoort/dagrecord/jaarsoort in vet; legenda-teksten ingekort'],
     wijzigingen_en: ['Style: site/day/year species in bold; legend texts shortened'],
     wijzigingen_de: ['Stil: Stations-/Tages-/Jahresart fett; Legendentexte gekürzt'],
   },
   {
-    versie: '1.68.6',
+    versie: '1.68.5',
     datum: '2026-04-13',
     wijzigingen: [
       'Functie: ringsoort (oranje naam) = soort nooit eerder gevangen in welk project dan ook; baansoort (rode *) = soort nooit in eigen projecten',
@@ -64,35 +64,35 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.68.5',
+    versie: '1.68.4',
     datum: '2026-04-13',
     wijzigingen: ['Fix: ringsoort (oranje naam) ook getoond bij baansoorten die vandaag voor het eerst geringd worden'],
     wijzigingen_en: ['Fix: ringing species (orange name) also shown for site-new species ringed for the first time today'],
     wijzigingen_de: ['Fix: Ringart (oranger Name) wird auch bei neuen Stationsarten angezeigt, die heute zum ersten Mal beringt werden'],
   },
   {
-    versie: '1.68.4',
+    versie: '1.68.3',
     datum: '2026-04-13',
     wijzigingen: ['Fix: ringsoort-check kijkt nu naar alle projecten samen (niet alleen eigen projecten)'],
     wijzigingen_en: ['Fix: ringing species check now looks across all projects (not just own projects)'],
     wijzigingen_de: ['Fix: Ringart-Prüfung berücksichtigt jetzt alle Projekte zusammen (nicht nur eigene Projekte)'],
   },
   {
-    versie: '1.68.3',
+    versie: '1.68.2',
     datum: '2026-04-13',
     wijzigingen: ['Functie: nieuwe ringsoort-indicator in dagstatistieken (oranje vogelnaam) — soort vandaag voor het eerst geringd'],
     wijzigingen_en: ['Feature: new ringing species indicator in day statistics (orange species name) — species ringed for the first time today'],
     wijzigingen_de: ['Funktion: Neue Ringart-Indikator in Tagesstatistiken (oranger Artname) — Art heute zum ersten Mal beringt'],
   },
   {
-    versie: '1.68.2',
+    versie: '1.68.1',
     datum: '2026-04-13',
     wijzigingen: ['Fix: cross-project terugvangsten filtert nu correct op record-ID — alleen series waarbij de terugvangst of eerste vangst daadwerkelijk een eigen record is'],
     wijzigingen_en: ['Fix: cross-project recaptures now filters correctly by record ID — only series where the recapture or first catch is actually an own record'],
     wijzigingen_de: ['Fix: projektübergreifende Wiederfänge filtert jetzt korrekt nach Datensatz-ID — nur Serien, bei denen der Wiederfang oder Erstfang tatsächlich ein eigener Datensatz ist'],
   },
   {
-    versie: '1.68.1',
+    versie: '1.68.0',
     datum: '2026-04-13',
     wijzigingen: [
       'Functie: top 10 terugvangsten omvat nu ook series waarbij de eerste vangst of terugvangst buiten eigen projecten viel (cross-project terugvangsten)',
@@ -105,28 +105,28 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.68.0',
+    versie: '1.67.5',
     datum: '2026-04-12',
     wijzigingen: ['Stijl: logo/naam ook op top 7px uitgelijnd met naam en koffie-link'],
     wijzigingen_en: ['Style: logo/name also aligned at top 7px with name and coffee link'],
     wijzigingen_de: ['Stil: Logo/Name ebenfalls bei top 7px mit Name und Kaffee-Link ausgerichtet'],
   },
   {
-    versie: '1.67.9',
+    versie: '1.67.4',
     datum: '2026-04-12',
     wijzigingen: ['Stijl: header-elementen iets hoger geplaatst (top 14px → 7px)'],
     wijzigingen_en: ['Style: header elements positioned slightly higher (top 14px → 7px)'],
     wijzigingen_de: ['Stil: Header-Elemente etwas höher positioniert (top 14px → 7px)'],
   },
   {
-    versie: '1.67.8',
+    versie: '1.67.3',
     datum: '2026-04-12',
     wijzigingen: ['Stijl: neerslag altijd zichtbaar in weerwidget, ook bij 0mm'],
     wijzigingen_en: ['Style: precipitation always visible in weather widget, even at 0mm'],
     wijzigingen_de: ['Stil: Niederschlag im Wetter-Widget immer sichtbar, auch bei 0mm'],
   },
   {
-    versie: '1.67.7',
+    versie: '1.67.2',
     datum: '2026-04-12',
     wijzigingen: [
       'Stijl: logo en naam/koffie-link op gelijke hoogte; versienummer dichter bij logo; weerdata groter/donkerder met SVG-iconen voor zon, temperatuur, neerslag en wind',
@@ -139,7 +139,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.67.6',
+    versie: '1.67.1',
     datum: '2026-04-12',
     wijzigingen: [
       'Fix: weerwidget valt terug op GPS-locatie als ringstation-coördinaten niet zijn ingevuld',
@@ -152,7 +152,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.67.5',
+    versie: '1.67.0',
     datum: '2026-04-12',
     wijzigingen: [
       'Functie: versienummer verplaatst naar onder het logo; weerwidget in header (zonsopgang/ondergang, temperatuur, neerslag, wind) via Open-Meteo',
@@ -165,7 +165,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.67.4',
+    versie: '1.66.14',
     datum: '2026-04-11',
     wijzigingen: [
       'Fix: meest productieve ouders filtert nu correct op het geselecteerde jaar',
@@ -181,7 +181,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.67.3',
+    versie: '1.66.13',
     datum: '2026-04-11',
     wijzigingen: [
       'Functie: planning-banner op nestenlijst — inklapbare melding van verlopen en dringende nestbezoeken met directe link naar nieuw bezoek',
@@ -194,7 +194,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.67.2',
+    versie: '1.66.12',
     datum: '2026-04-11',
     wijzigingen: [
       'Functie: jaar-op-jaar vergelijking in ringstatistieken — inklapbaar met jaarselectie, vergelijkingstabel en maandgrafiek',
@@ -207,7 +207,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.67.1',
+    versie: '1.66.11',
     datum: '2026-04-11',
     wijzigingen: [
       'Functie: soortentrendgrafiek in neststatistieken — gegroepeerd staafdiagram met legsels per soort per jaar',
@@ -220,7 +220,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    versie: '1.67.0',
+    versie: '1.66.10',
     datum: '2026-04-11',
     wijzigingen: [
       'Functie: vergelijking bij terugvangst — inklapbare historietabel met datum, leeftijd, geslacht en biometrie van eerdere vangsten',
