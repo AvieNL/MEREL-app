@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.24';
+export const VERSIE = '1.68.25';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.25',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: nesttype-soort erft niet meer door naar legsels en bezoeken in de gehele nestmodule'],
+    wijzigingen_en: ['Fix: nest box target species no longer inherited by clutches and visits throughout the nest module'],
+    wijzigingen_de: ['Fix: Zielart des Nistkastens wird nicht mehr auf Gelege und Besuche vererbt'],
+  },
   {
     versie: '1.68.24',
     datum: '2026-04-13',

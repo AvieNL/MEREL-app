@@ -257,11 +257,10 @@ function LegselBlok({ legsel, nest, bezoeken, ringen, ouders, soort, speciesByEu
     .filter(b => b.legsel_id === legsel.id)
     .sort((a, b) => a.datum.localeCompare(b.datum));
 
-  // Soort: meest recente bezoek met soort_euring → legsel → nest
+  // Soort: meest recente bezoek met soort_euring → legsel (niet de kast zelf)
   const soortEuring =
     [...legselBezoeken].reverse().find(b => b.soort_euring)?.soort_euring ||
-    legsel?.soort_euring ||
-    nest?.soort_euring || '';
+    legsel?.soort_euring || '';
   const effectieveSoort = speciesByEuring[soortEuring] || soort || null;
   const vogelNaam = effectieveSoort?.naam_nl || soortEuring || '';
 

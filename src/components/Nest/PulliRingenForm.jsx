@@ -83,7 +83,7 @@ export default function PulliRingenForm({ bezoekId }) {
   const legsel = bezoek ? legsels.find(l => l.id === bezoek.legsel_id) : null;
   const nest = legsel ? nesten.find(n => n.id === legsel.nest_id) : null;
 
-  const soortEuring = bezoek?.soort_euring || legsel?.soort_euring || nest?.soort_euring || '';
+  const soortEuring = bezoek?.soort_euring || legsel?.soort_euring || '';
   const soort = useMemo(
     () => species.find(s => s.euring_code === soortEuring) || null,
     [species, soortEuring]

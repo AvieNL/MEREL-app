@@ -154,7 +154,7 @@ export default function NieuwBezoekPage() {
         .sort((a, b) => b.datum.localeCompare(a.datum))[0]?.soort_euring;
       if (eerdereSoort) { setSoortEuring(eerdereSoort); return; }
     }
-    setSoortEuring(seizoenLegsels[0]?.soort_euring || geselecteerdNest?.soort_euring || '');
+    setSoortEuring(seizoenLegsels[0]?.soort_euring || '');
   }, [geselecteerdNestId, actiefLegselId, bezoeken.length, seizoenLegsels]);
 
   const soort = useMemo(
@@ -256,7 +256,7 @@ export default function NieuwBezoekPage() {
   }
 
   // ── Nestsoort-afwijking check ─────────────────────────────────────────────
-  const nestStandaardEuring = seizoenLegsels[0]?.soort_euring || geselecteerdNest?.soort_euring;
+  const nestStandaardEuring = seizoenLegsels[0]?.soort_euring;
   const soortWijktAf = nestStandaardEuring && soortEuring && soortEuring !== nestStandaardEuring;
 
   return (
