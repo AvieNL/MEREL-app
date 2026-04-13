@@ -224,7 +224,7 @@ export default function Header({ onSwitchModule, activeModule }) {
                     <line x1="1" y1="6.5" x2="8" y2="6.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
                     <path d="M1 8.5 Q4 8.5 6 8.5 Q8 8.5 8 10 Q8 11.5 6.5 11.5 Q5 11.5 5 10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
                   </svg>
-                  {weer.windsnelheid} {weer.windRichting}
+                  {weer.windsnelheid} km/h {weer.windRichting}
                 </span>
               </div>
             </div>

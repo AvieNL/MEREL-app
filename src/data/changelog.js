@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.12';
+export const VERSIE = '1.68.13';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.13',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: eenheid "km/h" toegevoegd achter windsnelheid in weerwidget'],
+    wijzigingen_en: ['Style: unit "km/h" added after wind speed in weather widget'],
+    wijzigingen_de: ['Stil: Einheit „km/h" hinter Windgeschwindigkeit im Wetter-Widget hinzugefügt'],
+  },
   {
     versie: '1.68.12',
     datum: '2026-04-13',
