@@ -519,7 +519,7 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
           const vEi  = l.verliesEi  != null && l.verliesEi  > 0 ? `<span style="color:#dc2626">-${l.verliesEi}</span>`  : (l.verliesEi  === 0 ? '0' : '—');
           const vPul = l.verliesPul != null && l.verliesPul > 0 ? `<span style="color:#dc2626">-${l.verliesPul}</span>` : (l.verliesPul === 0 ? '0' : '—');
           const res  = l.resultaat
-            ? `<span class="${l.resultaat.startsWith('✓') ? 'ok' : 'nok'}">${l.resultaat}</span>`
+            ? `<span class="${l.resultaat.startsWith('✓') ? 'ok' : l.resultaat.startsWith('✗') ? 'nok' : 'onb'}">${l.resultaat}</span>`
             : '—';
           return `<tr><td>${l.jaar || '—'}</td><td>${l.legselSoort}</td><td>${ei}</td><td>${pul}</td><td>${ger}</td><td>${vEi}</td><td>${vPul}</td><td>${res}</td></tr>`;
         }).join('');
@@ -576,6 +576,7 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
   tr:nth-child(even){background:#f8fafc}
   .ok{color:#16a34a;font-weight:600}
   .nok{color:#dc2626;font-weight:600}
+  .onb{color:#92400e;font-weight:600}
   .nest-blok{border:1px solid #e2e8f0;border-radius:6px;margin-bottom:12px;overflow:hidden}
   .nest-header{background:#eef2f8;padding:10px 12px;display:flex;gap:12px;align-items:flex-start}
   .nest-nr{font-weight:700;color:#1e3a5f;font-size:11pt}
@@ -704,21 +705,27 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
           const aantalGeringd = ringen.filter(r => bezoekIds.has(r.nestbezoek_id)).length;
 
           const ns = l.nestsucces != null ? n2i(l.nestsucces) : null;
+          const isNsOnbekend = ns === null || ns === -1;
           const heeftX0 = bvl.some(b => b.stadium === 'X0');
           const heeftC  = bvl.some(b => b.stadium?.startsWith('C'));
           const isAfgesloten = heeftX0 || heeftC;
 
-          // Verlies berekenen (alleen als afgesloten)
+          // Verlies berekenen (alleen als afgesloten en nestsucces bekend ≥ 0)
           const verliesEi  = isAfgesloten && maxEieren > 0 && maxPulli >= 0
             ? Math.max(0, maxEieren - maxPulli) : null;
-          const verliesPul = isAfgesloten && ns != null && maxPulli > 0
+          const verliesPul = isAfgesloten && !isNsOnbekend && maxPulli > 0
             ? Math.max(0, maxPulli - ns) : null;
 
           // Resultaat/reden
+          const heeftVerliesReden = (l.verlies && verliesLabel[l.verlies]) || (l.predatie && l.predatie > 0);
           let resultaat = '';
-          if (ns != null && ns > 0) {
+          if (!isNsOnbekend && ns > 0) {
             resultaat = `✓ ${ns} uitgevlogen`;
-          } else if (isAfgesloten) {
+          } else if (isNsOnbekend && aantalGeringd > 0 && !heeftVerliesReden) {
+            resultaat = `? ≥${aantalGeringd} geringd`;
+          } else if (isNsOnbekend && isAfgesloten) {
+            resultaat = '? Onbekend';
+          } else if (!isNsOnbekend && ns === 0 && isAfgesloten) {
             resultaat = '✗ Mislukt';
             const redenen = [];
             if (l.verlies && verliesLabel[l.verlies]) redenen.push(verliesLabel[l.verlies]);
@@ -762,8 +769,9 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
         const bvl = bezoeken.filter(b => String(b.legsel_id) === String(l.id));
         const heeftAfsl = bvl.some(b => b.stadium?.startsWith('C') || b.stadium === 'X0');
         const ns = n2i(l.nestsucces);
-        if (l.nestsucces != null && ns > 0) succes++;
-        else if (heeftAfsl || (l.nestsucces != null && ns === 0)) mislukt++;
+        const isOnb = l.nestsucces == null || ns === -1;
+        if (!isOnb && ns > 0) succes++;
+        else if (!isOnb && ns === 0 && heeftAfsl) mislukt++;
         else onbekend++;
       });
       return { jaar: j, succes, mislukt, onbekend };

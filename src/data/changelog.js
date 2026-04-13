@@ -1,6 +1,25 @@
-export const VERSIE = '1.68.23';
+export const VERSIE = '1.68.24';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.24',
+    datum: '2026-04-13',
+    wijzigingen: [
+      'Fix: legsel zonder nestsucces maar met geringde pullen toont "≥X geringd" in rapport i.p.v. mislukt',
+      'Fix: nestsucces onbekend (null/-1) toont "Onbekend" in rapport i.p.v. mislukt',
+      'Fix: grafiek en statistieken tellen nestsucces -1 als onbekend, niet als mislukt',
+    ],
+    wijzigingen_en: [
+      'Fix: clutch without nestsucces but with ringed chicks shows "≥X ringed" in report instead of failed',
+      'Fix: unknown nestsucces (null/-1) shows "Unknown" in report instead of failed',
+      'Fix: chart and stats count nestsucces -1 as unknown, not failed',
+    ],
+    wijzigingen_de: [
+      'Fix: Gelege ohne Nestsucces aber mit beringten Jungvögeln zeigt „≥X beringt" statt gescheitert',
+      'Fix: Unbekanntes Nestsucces (null/-1) zeigt „Unbekannt" statt gescheitert',
+      'Fix: Grafik und Statistiken zählen Nestsucces -1 als unbekannt, nicht als gescheitert',
+    ],
+  },
   {
     versie: '1.68.23',
     datum: '2026-04-13',
