@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.29';
+export const VERSIE = '1.68.30';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.30',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: bezoek wijzigen laadt nestsucces, verlies, predatie en andere legseldata nu correct vanuit het legsel'],
+    wijzigingen_en: ['Fix: editing a visit now correctly loads nestsucces, loss, predation and other clutch fields from the clutch'],
+    wijzigingen_de: ['Fix: Besuche bearbeiten lädt Nestsucces, Verlust, Prädation und andere Gelegefelder jetzt korrekt aus dem Gelege'],
+  },
   {
     versie: '1.68.29',
     datum: '2026-04-13',

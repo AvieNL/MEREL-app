@@ -57,14 +57,14 @@ export default function WijzigBezoekPage() {
       betrouwbDatum:  bezoek.betrouwb_datum  ?? 1,
       betrouwbAantal: bezoek.betrouwb_aantal ?? 1,
       betrouwbDagen:  bezoek.betrouwb_dagen  ?? 2,
-      nestsucces:     bezoek.nestsucces  != null ? String(bezoek.nestsucces)  : '',
-      succes2:        bezoek.succes2  || '',
-      moment:         bezoek.moment   != null ? String(bezoek.moment)   : '',
-      predatie:       bezoek.predatie != null ? String(bezoek.predatie) : '',
-      methode:        bezoek.methode  != null ? String(bezoek.methode)  : '',
-      verlies:        bezoek.verlies  || '',
-      eisucces:       bezoek.eisucces != null ? String(bezoek.eisucces) : '',
-      vindstatus:     bezoek.vindstatus != null ? String(bezoek.vindstatus) : '',
+      nestsucces:     legsel?.nestsucces  != null ? String(legsel.nestsucces)  : '',
+      succes2:        legsel?.succes2   || '',
+      moment:         legsel?.moment    != null ? String(legsel.moment)    : '',
+      predatie:       legsel?.predatie  != null ? String(legsel.predatie)  : '',
+      methode:        legsel?.methode   != null ? String(legsel.methode)   : '',
+      verlies:        legsel?.verlies   || '',
+      eisucces:       legsel?.eisucces  != null ? String(legsel.eisucces)  : '',
+      vindstatus:     legsel?.vindstatus != null ? String(legsel.vindstatus) : '',
     });
   }
 
