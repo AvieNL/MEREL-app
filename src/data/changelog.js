@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.8';
+export const VERSIE = '1.68.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.9',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: nestsucces-kolom toont nu correct succes/mislukt — null-waarden en X0-stadium (mislukt zonder nestsucces-telling) worden nu meegenomen'],
+    wijzigingen_en: ['Fix: nest success column now correctly shows success/failure — null values and X0 stadium (failed without count) are now included'],
+    wijzigingen_de: ['Fix: Nistkasterfolgsspalte zeigt nun korrekt Erfolg/Misserfolg — Null-Werte und X0-Stadium (fehlgeschlagen ohne Zählung) werden jetzt berücksichtigt'],
+  },
   {
     versie: '1.68.8',
     datum: '2026-04-13',

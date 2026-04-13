@@ -163,13 +163,19 @@ function computeNestStats({ nesten, legsels, bezoeken, ringen, speciesByEuring, 
       bezoekenVanLegsel.some(b => b.id === r.nestbezoek_id)
     ).length;
 
-    // Nestsucces: afsluitend bezoek C-stadium
+    // Nestsucces: afsluitend bezoek C-stadium of X0
     const afsluitend = bezoekenVanLegsel
       .filter(b => b.stadium?.startsWith('C') || b.stadium === 'X0')
       .sort((a, b) => b.datum.localeCompare(a.datum))[0];
     if (afsluitend) {
-      if (afsluitend.nestsucces > 0) perSoort[key].succes++;
-      else if (afsluitend.nestsucces === 0) perSoort[key].mislukt++;
+      const ns = afsluitend.nestsucces;
+      if (ns != null) {
+        if (ns > 0) perSoort[key].succes++;
+        else perSoort[key].mislukt++;
+      } else if (afsluitend.stadium === 'X0') {
+        // X0 zonder nestsucces-waarde = mislukt
+        perSoort[key].mislukt++;
+      }
     }
   });
 
