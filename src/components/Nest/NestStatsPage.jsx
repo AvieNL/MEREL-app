@@ -413,6 +413,258 @@ function computeStamboom({ legsels, bezoeken, nestring, ouders, nesten, vangsten
   return { topOuders, stamBomen };
 }
 
+// ── Eigenaar rapport ─────────────────────────────────────────────────────────
+function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, perNest }) {
+  const datum = new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+  const jaarLabel = jaar ? String(jaar) : 'Alle jaren';
+
+  const soortRijen = stats.perSoort.map(s => {
+    const pct = s.succes + s.mislukt > 0 ? Math.round(s.succes / (s.succes + s.mislukt) * 100) : null;
+    return `<tr>
+      <td>${s.naam}</td><td>${s.legsels}</td><td>${s.eieren || '—'}</td><td>${s.pulli || '—'}</td>
+      <td>${pct !== null ? `<span class="${pct >= 50 ? 'ok' : 'nok'}">${s.succes}/${s.succes + s.mislukt} (${pct}%)</span>` : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  const nestSections = perNest.map(n => {
+    const legselRijen = n.legsels.length === 0
+      ? '<tr><td colspan="4" style="color:#888;font-style:italic">Geen legsels in geselecteerde periode</td></tr>'
+      : n.legsels.map(l => `<tr>
+          <td>${l.jaar || '—'}</td><td>${l.maxEieren || '—'}</td><td>${l.maxPulli || '—'}</td>
+          <td>${l.succesLabel || '—'}</td>
+        </tr>`).join('');
+    return `<div class="nest-blok">
+      <div class="nest-header">
+        <span class="nest-nr">⌂ ${n.kastnummer}</span>
+        ${n.omschrijving ? `<span class="nest-omsch">${n.omschrijving}</span>` : ''}
+        <span class="nest-soort">${n.soortNaam}</span>
+      </div>
+      ${n.adres ? `<div class="nest-adres">${n.adres}</div>` : ''}
+      <table><thead><tr><th>Jaar</th><th>Eieren</th><th>Pullen geringd</th><th>Resultaat</th></tr></thead>
+      <tbody>${legselRijen}</tbody></table>
+    </div>`;
+  }).join('');
+
+  const contactRegel = [
+    info.adres ? `<div>${info.adres}</div>` : '',
+    info.email ? `<div>✉ ${info.email}</div>` : '',
+    info.telefoon ? `<div>☎ ${info.telefoon}</div>` : '',
+  ].filter(Boolean).join('');
+
+  return `<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">
+<title>Nestrapport — ${eigenaar}</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;font-size:10.5pt;color:#1a202c;background:#fff;padding:18mm 20mm}
+  .rh{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #1e3a5f;padding-bottom:12px;margin-bottom:18px}
+  .rh-titel{font-size:20pt;font-weight:700;color:#1e3a5f}
+  .rh-sub{font-size:9.5pt;color:#64748b;margin-top:2px}
+  .rh-meta{text-align:right;font-size:8.5pt;color:#64748b;line-height:1.7}
+  .eb{background:#eef2f8;border-left:4px solid #1e3a5f;padding:10px 14px;margin-bottom:18px;border-radius:2px}
+  .eb-naam{font-size:14pt;font-weight:700;color:#1e3a5f}
+  .eb-contact{font-size:9pt;color:#555;margin-top:5px;line-height:1.7}
+  h2{font-size:12pt;color:#1e3a5f;border-bottom:1px solid #cbd5e1;padding-bottom:4px;margin:18px 0 10px}
+  .sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px}
+  .sb{border:1px solid #e2e8f0;border-radius:6px;padding:10px;text-align:center}
+  .sw{font-size:19pt;font-weight:700;color:#1e3a5f}
+  .sl{font-size:8pt;color:#64748b;margin-top:2px}
+  .succes-regel{text-align:center;margin:8px 0 4px;font-size:10.5pt}
+  table{width:100%;border-collapse:collapse;font-size:9pt;margin-bottom:6px}
+  th{background:#1e3a5f;color:#fff;padding:5px 8px;text-align:left;font-weight:600;font-size:8.5pt}
+  td{padding:5px 8px;border-bottom:1px solid #e2e8f0}
+  tr:last-child td{border-bottom:none}
+  tr:nth-child(even){background:#f8fafc}
+  .ok{color:#16a34a;font-weight:600}
+  .nok{color:#dc2626;font-weight:600}
+  .nest-blok{border:1px solid #e2e8f0;border-radius:6px;margin-bottom:10px;overflow:hidden}
+  .nest-header{background:#eef2f8;padding:7px 12px;display:flex;align-items:baseline;gap:10px}
+  .nest-nr{font-weight:700;color:#1e3a5f;font-size:11pt}
+  .nest-omsch{color:#475569;font-size:9pt}
+  .nest-soort{margin-left:auto;color:#64748b;font-size:8.5pt;font-style:italic}
+  .nest-adres{font-size:8.5pt;color:#888;padding:3px 12px 5px;border-bottom:1px solid #e2e8f0}
+  .nest-blok table{margin:0}
+  .rf{margin-top:28px;padding-top:8px;border-top:1px solid #cbd5e1;font-size:8pt;color:#94a3b8;display:flex;justify-content:space-between}
+  @media print{body{padding:10mm 15mm}}
+</style></head><body>
+<div class="rh">
+  <div><div class="rh-titel">Nestrapport</div><div class="rh-sub">${jaarLabel}</div></div>
+  <div class="rh-meta">Opgesteld door: Thijs ter Avest<br>VRS Breedenbroek · Ringernr. 3254<br>${datum}</div>
+</div>
+<div class="eb">
+  <div class="eb-naam">${eigenaar}</div>
+  ${contactRegel ? `<div class="eb-contact">${contactRegel}</div>` : ''}
+</div>
+<h2>Samenvatting</h2>
+<div class="sg">
+  <div class="sb"><div class="sw">${perNest.length}</div><div class="sl">Nesten</div></div>
+  <div class="sb"><div class="sw">${stats.aantalLegsels}</div><div class="sl">Legsels</div></div>
+  <div class="sb"><div class="sw">${stats.totaalEieren || 0}</div><div class="sl">Eieren</div></div>
+  <div class="sb"><div class="sw">${stats.totaalUitgevlogen || 0}</div><div class="sl">Uitgevlogen</div></div>
+</div>
+${successPct !== null ? `<div class="succes-regel">Nestsucces: <span class="${successPct >= 50 ? 'ok' : 'nok'}">${succes}/${stats.aantalAfgerond} legsels succesvol (${successPct}%)</span></div>` : ''}
+${stats.perSoort.length > 0 ? `<h2>Per soort</h2><table><thead><tr><th>Soort</th><th>Legsels</th><th>Eieren</th><th>Pullen geringd</th><th>Succes</th></tr></thead><tbody>${soortRijen}</tbody></table>` : ''}
+${perNest.length > 0 ? `<h2>Nestkasten</h2>${nestSections}` : ''}
+<div class="rf"><span>VRS Breedenbroek — nestonderzoek</span><span>Gegenereerd op ${datum}</span></div>
+</body></html>`;
+}
+
+function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuring, onClose }) {
+  const eigenaars = useMemo(() => {
+    const seen = new Set();
+    const list = [];
+    nesten.forEach(n => {
+      const naam = (n.eigenaar_naam || '').trim();
+      if (!naam) return;
+      const key = naam.toLowerCase();
+      if (!seen.has(key)) { seen.add(key); list.push(naam); }
+    });
+    return list.sort((a, b) => a.localeCompare(b, 'nl'));
+  }, [nesten]);
+
+  const beschikbareJaren = useMemo(() => {
+    const jaren = new Set(legsels.map(l => l.jaar).filter(Boolean));
+    return [...jaren].sort().reverse();
+  }, [legsels]);
+
+  const [geselecteerd, setGeselecteerd] = useState(() => eigenaars[0] || '');
+  const [jaar, setJaar] = useState('alle');
+
+  const eigenaarNesten = useMemo(
+    () => nesten.filter(n => (n.eigenaar_naam || '').trim().toLowerCase() === geselecteerd.toLowerCase()),
+    [nesten, geselecteerd]
+  );
+
+  const eigenaarInfo = useMemo(() => ({
+    email: eigenaarNesten.map(n => n.eigenaar_email).find(Boolean) || '',
+    telefoon: eigenaarNesten.map(n => n.eigenaar_telefoon).find(Boolean) || '',
+    adres: eigenaarNesten.map(n => n.adres).find(Boolean) || '',
+  }), [eigenaarNesten]);
+
+  const geselecteerdJaar = jaar === 'alle' ? null : parseInt(jaar);
+
+  const stats = useMemo(
+    () => computeNestStats({ nesten: eigenaarNesten, legsels, bezoeken, ringen, speciesByEuring, jaar: geselecteerdJaar }),
+    [eigenaarNesten, legsels, bezoeken, ringen, speciesByEuring, geselecteerdJaar]
+  );
+
+  const succes = stats.perSoort.reduce((a, s) => a + s.succes, 0);
+  const successPct = stats.aantalAfgerond > 0 ? Math.round((succes / stats.aantalAfgerond) * 100) : null;
+
+  function drukAf() {
+    const nestenIds = new Set(eigenaarNesten.map(n => n.id));
+    const eigenaarLegsels = legsels.filter(
+      l => nestenIds.has(l.nest_id) && (geselecteerdJaar === null || l.jaar === geselecteerdJaar)
+    );
+    const perNest = eigenaarNesten.map(n => {
+      const nestLegsels = eigenaarLegsels.filter(l => l.nest_id === n.id);
+      return {
+        ...n,
+        soortNaam: speciesByEuring[n.soort_euring]?.naam_nl || '—',
+        legsels: nestLegsels.map(l => {
+          const bvl = bezoeken.filter(b => b.legsel_id === l.id);
+          const maxEieren = Math.max(0, ...bvl.map(b => b.aantal_eieren || 0));
+          const maxPulli = Math.max(0, ...bvl.map(b => b.aantal_pulli || 0));
+          const ns = l.nestsucces;
+          const heeftX0 = bvl.some(b => b.stadium === 'X0');
+          const heeftC = bvl.some(b => b.stadium?.startsWith('C'));
+          let succesLabel = '';
+          if (ns != null && ns > 0) succesLabel = `✓ ${ns} uitgevlogen`;
+          else if (ns === 0 || heeftX0 || heeftC) succesLabel = '✗ mislukt';
+          return { ...l, maxEieren, maxPulli, succesLabel };
+        }),
+      };
+    }).filter(n => geselecteerdJaar === null || n.legsels.length > 0);
+
+    const html = generateRapportHTML({
+      eigenaar: geselecteerd, jaar: geselecteerdJaar, info: eigenaarInfo,
+      stats, succes, successPct, perNest,
+    });
+    const w = window.open('', '_blank');
+    w.document.write(html);
+    w.document.close();
+    w.focus();
+    setTimeout(() => w.print(), 500);
+  }
+
+  const overlayStyle = {
+    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    zIndex: 1000, padding: 16,
+  };
+  const modalStyle = {
+    background: 'var(--bg-elevated, #1e293b)', borderRadius: 'var(--radius, 10px)',
+    border: '1px solid var(--border)', width: '100%', maxWidth: 440,
+    maxHeight: '90vh', overflowY: 'auto',
+  };
+
+  if (eigenaars.length === 0) return (
+    <div style={overlayStyle} onClick={onClose}>
+      <div style={modalStyle} onClick={e => e.stopPropagation()}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
+          <h2 style={{ margin: 0, fontSize: '1.1rem' }}>Eigenaarrapport</h2>
+          <button className="btn-secondary" style={{ padding: '2px 10px' }} onClick={onClose}>✕</button>
+        </div>
+        <p style={{ padding: 20, color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+          Geen nesten met een eigenaar gevonden. Voeg een eigenaar toe bij de nestkast.
+        </p>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={overlayStyle} onClick={onClose}>
+      <div style={modalStyle} onClick={e => e.stopPropagation()}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
+          <h2 style={{ margin: 0, fontSize: '1.1rem' }}>Eigenaarrapport</h2>
+          <button className="btn-secondary" style={{ padding: '2px 10px' }} onClick={onClose}>✕</button>
+        </div>
+        <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.78rem', marginBottom: 4, color: 'var(--text-muted)' }}>Eigenaar</label>
+            <select value={geselecteerd} onChange={e => setGeselecteerd(e.target.value)} style={{ width: '100%' }}>
+              {eigenaars.map(naam => <option key={naam} value={naam}>{naam}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.78rem', marginBottom: 4, color: 'var(--text-muted)' }}>Periode</label>
+            <select value={jaar} onChange={e => setJaar(e.target.value)} style={{ width: '100%' }}>
+              <option value="alle">Alle jaren</option>
+              {beschikbareJaren.map(j => <option key={j} value={j}>{j}</option>)}
+            </select>
+          </div>
+
+          {stats.aantalLegsels > 0 ? (
+            <div style={{ background: 'var(--bg-surface, #0f172a)', borderRadius: 8, padding: '12px 16px', fontSize: '0.85rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px 16px' }}>
+                {[
+                  ['Nesten', eigenaarNesten.length],
+                  ['Legsels', stats.aantalLegsels],
+                  ['Eieren', stats.totaalEieren || '—'],
+                  ['Uitgevlogen', stats.totaalUitgevlogen || '—'],
+                ].map(([label, val]) => (
+                  <><span style={{ color: 'var(--text-muted)' }}>{label}</span><span>{val}</span></>
+                ))}
+                {successPct !== null && (
+                  <><span style={{ color: 'var(--text-muted)' }}>Succes</span>
+                  <span style={{ color: successPct >= 50 ? 'var(--success)' : 'var(--danger)' }}>
+                    {succes}/{stats.aantalAfgerond} ({successPct}%)
+                  </span></>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>Geen legsels voor deze selectie.</p>
+          )}
+
+          <button className="btn-primary" onClick={drukAf}>
+            Afdrukken / PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function NestStatsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -423,6 +675,7 @@ export default function NestStatsPage() {
   const { addToast } = useToast();
   const fileInputRef = useRef(null);
   const [showExportConfirm, setShowExportConfirm] = useState(false);
+  const [rapportOpen, setRapportOpen] = useState(false);
 
   const speciesByEuring = useMemo(() => {
     const map = {};
@@ -1245,6 +1498,19 @@ export default function NestStatsPage() {
           </div>
         </div>
 
+        {/* Eigenaarrapport */}
+        <div className="section">
+          <h3>Eigenaarrapport</h3>
+          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: 10 }}>
+            Genereer een printbaar nestrapport voor een tuineigenaar — inclusief samenvatting, nestsucces en overzicht per nestkast.
+          </p>
+          <div className="export-buttons">
+            <button className="btn-secondary" onClick={() => setRapportOpen(true)}>
+              ↗ Rapport genereren
+            </button>
+          </div>
+        </div>
+
         {/* Backup export */}
         <div className="section">
           <h3>Backup</h3>
@@ -1263,6 +1529,17 @@ export default function NestStatsPage() {
         <p className="stats-empty" style={{ textAlign: 'center', marginTop: 40 }}>
           {t('nest_stats_empty_all')}
         </p>
+      )}
+
+      {rapportOpen && (
+        <EigenaarRapportModal
+          nesten={nesten}
+          legsels={legsels}
+          bezoeken={bezoeken}
+          ringen={ringen}
+          speciesByEuring={speciesByEuring}
+          onClose={() => setRapportOpen(false)}
+        />
       )}
     </div>
   );

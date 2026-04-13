@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.15';
+export const VERSIE = '1.68.16';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.16',
+    datum: '2026-04-13',
+    wijzigingen: ['Functie: eigenaarrapport in neststatistieken — selecteer eigenaar en jaar, genereer printbaar PDF-rapport met samenvatting, nestsucces en nestkasten'],
+    wijzigingen_en: ['Feature: owner report in nest statistics — select owner and year, generate printable PDF report with summary, nest success and nest boxes'],
+    wijzigingen_de: ['Funktion: Eigentümerbericht in Neststatistiken — Eigentümer und Jahr auswählen, druckbaren PDF-Bericht mit Zusammenfassung, Nestkastenerfolg und Nistkästen generieren'],
+  },
   {
     versie: '1.68.15',
     datum: '2026-04-13',
