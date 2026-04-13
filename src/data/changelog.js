@@ -1,6 +1,22 @@
-export const VERSIE = '1.68.18';
+export const VERSIE = '1.68.19';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.19',
+    datum: '2026-04-13',
+    wijzigingen: [
+      'Fix: eigenaarrapport filtert legsels correct op eigenaar — "onbekend" soorten van andere nesten verdwijnen',
+      'Fix: kaart in rapport is nu een echte OpenStreetMap-plattegrond via Leaflet (print wacht op laden tiles)',
+    ],
+    wijzigingen_en: [
+      'Fix: owner report now correctly filters clutches by owner — "unknown" species from other nests disappear',
+      'Fix: map in report is now a real OpenStreetMap street map via Leaflet (print waits for tiles to load)',
+    ],
+    wijzigingen_de: [
+      'Fix: Eigentümerbericht filtert Gelege korrekt nach Eigentümer — „unbekannte" Vogelarten anderer Nester verschwinden',
+      'Fix: Karte im Bericht ist jetzt eine echte OpenStreetMap-Karte via Leaflet (Druck wartet auf Kachelladung)',
+    ],
+  },
   {
     versie: '1.68.18',
     datum: '2026-04-13',
