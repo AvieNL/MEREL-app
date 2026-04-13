@@ -1,6 +1,34 @@
-export const VERSIE = '1.68.19';
+export const VERSIE = '1.68.20';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.20',
+    datum: '2026-04-13',
+    wijzigingen: [
+      'Fix: eigenaarrapport kaart via blob-URL (Leaflet laadt nu correct)',
+      'Fix: eierentelling robuuster (parseInt, string-numbers werken nu ook)',
+      'Fix: "Geringd" toont nu werkelijk geringde pullen (ringen-tabel), niet bezoek-telling',
+      'Functie: verlies in eifase en pulfase zichtbaar per legsel in rapport',
+      'Functie: reden mislukking (verliesoorzaak, predatie) per legsel getoond',
+      'Stijl: legsels gesorteerd nieuwste boven; kolommen Pulli geteld / Geringd / Verlies ei / Verlies pul / Resultaat',
+    ],
+    wijzigingen_en: [
+      'Fix: owner report map via blob URL (Leaflet now loads correctly)',
+      'Fix: egg count more robust (parseInt, string numbers now work)',
+      'Fix: "Ringed" now shows actually ringed chicks (rings table), not visit count',
+      'Feature: egg phase and chick phase losses visible per clutch in report',
+      'Feature: failure reason (loss cause, predation) shown per clutch',
+      'Style: clutches sorted newest first; columns Chicks counted / Ringed / Egg loss / Chick loss / Result',
+    ],
+    wijzigingen_de: [
+      'Fix: Eigentümerbericht-Karte via Blob-URL (Leaflet lädt jetzt korrekt)',
+      'Fix: Eierzählung robuster (parseInt, String-Zahlen funktionieren jetzt auch)',
+      'Fix: „Beringt" zeigt jetzt tatsächlich beringte Nestlinge (Ringe-Tabelle), nicht Besuchszählung',
+      'Funktion: Verluste in Ei- und Nistlingsphase pro Gelege im Bericht sichtbar',
+      'Funktion: Misserfolgsgrund (Verlustursache, Prädation) pro Gelege angezeigt',
+      'Stil: Gelege sortiert neueste oben; Spalten Pulli gezählt / Beringt / Ei-Verlust / Pul-Verlust / Ergebnis',
+    ],
+  },
   {
     versie: '1.68.19',
     datum: '2026-04-13',

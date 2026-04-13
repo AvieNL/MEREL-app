@@ -8,7 +8,7 @@ import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import { useRecords } from '../../hooks/useRecords';
 import { useToast } from '../../context/ToastContext';
 import { BarChartSimple, DonutChart, GroupedBarChart, LineChart } from '../Stats/Charts';
-import { HABITAT_CODES, NESTTYPE_CODES, NESTPLAATS_CODES, STADIUM_CODES } from '../../data/sovon-codes';
+import { HABITAT_CODES, NESTTYPE_CODES, NESTPLAATS_CODES, STADIUM_CODES, VERLIES_CODES, PREDATIE_CODES } from '../../data/sovon-codes';
 import {
   buildNestExportData, exportNestJSONBackup,
   exportNestCSV, exportAviNestTXT, exportAviNestXML,
@@ -23,6 +23,8 @@ const habitatLabel    = Object.fromEntries(HABITAT_CODES.map(c    => [c.code, c.
 const nesttypeLabel   = Object.fromEntries(NESTTYPE_CODES.map(c   => [c.code, c.nl]));
 const nestplaatsLabel = Object.fromEntries(NESTPLAATS_CODES.map(c => [c.code, c.nl]));
 const stadiumLabel    = Object.fromEntries(STADIUM_CODES.map(c    => [c.code, c.nl]));
+const verliesLabel    = Object.fromEntries(VERLIES_CODES.map(c    => [c.code, c.nl.replace(/^[A-Z0-9]+ — /, '')]));
+const predatieLabel   = Object.fromEntries(PREDATIE_CODES.map(c   => [c.code, c.nl.replace(/^\d+ — /, '')]));
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function haversineKm(lat1, lon1, lat2, lon2) {
@@ -499,11 +501,18 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
       ? `<img src="${eersteEchteFoto}" style="width:90px;height:70px;object-fit:cover;border-radius:4px;border:1px solid #e2e8f0;flex-shrink:0"/>`
       : '';
     const legselRijen = n.legsels.length === 0
-      ? '<tr><td colspan="5" style="color:#888;font-style:italic">Geen legsels in geselecteerde periode</td></tr>'
-      : n.legsels.map(l => `<tr>
-          <td>${l.jaar || '—'}</td><td>${l.legselSoort}</td><td>${l.maxEieren || '—'}</td><td>${l.maxPulli || '—'}</td>
-          <td>${l.succesLabel || '—'}</td>
-        </tr>`).join('');
+      ? '<tr><td colspan="8" style="color:#888;font-style:italic">Geen legsels in geselecteerde periode</td></tr>'
+      : n.legsels.map(l => {
+          const ei  = l.maxEieren  > 0 ? l.maxEieren  : '—';
+          const pul = l.maxPulli   > 0 ? l.maxPulli   : '—';
+          const ger = l.aantalGeringd > 0 ? l.aantalGeringd : '—';
+          const vEi  = l.verliesEi  != null && l.verliesEi  > 0 ? `<span style="color:#dc2626">-${l.verliesEi}</span>`  : (l.verliesEi  === 0 ? '0' : '—');
+          const vPul = l.verliesPul != null && l.verliesPul > 0 ? `<span style="color:#dc2626">-${l.verliesPul}</span>` : (l.verliesPul === 0 ? '0' : '—');
+          const res  = l.resultaat
+            ? `<span class="${l.resultaat.startsWith('✓') ? 'ok' : 'nok'}">${l.resultaat}</span>`
+            : '—';
+          return `<tr><td>${l.jaar || '—'}</td><td>${l.legselSoort}</td><td>${ei}</td><td>${pul}</td><td>${ger}</td><td>${vEi}</td><td>${vPul}</td><td>${res}</td></tr>`;
+        }).join('');
     return `<div class="nest-blok">
       <div class="nest-header">
         ${fotoHtml}
@@ -511,12 +520,12 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
           <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
             <span class="nest-nr">⌂ ${n.kastnummer}</span>
             ${n.omschrijving ? `<span class="nest-omsch">${n.omschrijving}</span>` : ''}
-            ${n.soortNaam !== '—' ? `<span class="nest-soort">${n.soortNaam}</span>` : ''}
+            ${n.soortNaam ? `<span class="nest-soort">${n.soortNaam}</span>` : ''}
           </div>
           ${n.adres ? `<div class="nest-adres">${n.adres}</div>` : ''}
         </div>
       </div>
-      <table><thead><tr><th>Jaar</th><th>Soort</th><th>Eieren</th><th>Pullen geringd</th><th>Resultaat</th></tr></thead>
+      <table><thead><tr><th>Jaar</th><th>Soort</th><th>Eieren</th><th>Pulli geteld</th><th>Geringd</th><th>Verlies ei</th><th>Verlies pul</th><th>Resultaat</th></tr></thead>
       <tbody>${legselRijen}</tbody></table>
     </div>`;
   }).join('');
@@ -662,26 +671,53 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
   const successPct = stats.aantalAfgerond > 0 ? Math.round((succes / stats.aantalAfgerond) * 100) : null;
 
   function drukAf() {
+    const n2i = v => { const n = parseInt(v, 10); return isNaN(n) ? 0 : n; };
+
     const periodeLegsels = eigenaarLegselsGefilterd.filter(
       l => geselecteerdJaar === null || l.jaar === geselecteerdJaar
     );
+
     const perNest = eigenaarNesten.map(n => {
-      const nestLegsels = periodeLegsels.filter(l => l.nest_id === n.id);
+      // Nieuwste legsel bovenaan
+      const nestLegsels = periodeLegsels
+        .filter(l => l.nest_id === n.id)
+        .sort((a, b) => (b.jaar ?? 0) - (a.jaar ?? 0));
+
       return {
         ...n,
         soortNaam: speciesByEuring[n.soort_euring]?.naam_nl || '',
         legsels: nestLegsels.map(l => {
-          const bvl = bezoeken.filter(b => b.legsel_id === l.id);
-          const maxEieren = Math.max(0, ...bvl.map(b => b.aantal_eieren || 0));
-          const maxPulli = Math.max(0, ...bvl.map(b => b.aantal_pulli || 0));
-          const ns = l.nestsucces;
+          const bvl = bezoeken.filter(b => String(b.legsel_id) === String(l.id));
+          const maxEieren = Math.max(0, ...bvl.map(b => n2i(b.aantal_eieren)));
+          const maxPulli  = Math.max(0, ...bvl.map(b => n2i(b.aantal_pulli)));
+          const bezoekIds = new Set(bvl.map(b => b.id));
+          const aantalGeringd = ringen.filter(r => bezoekIds.has(r.nestbezoek_id)).length;
+
+          const ns = l.nestsucces != null ? n2i(l.nestsucces) : null;
           const heeftX0 = bvl.some(b => b.stadium === 'X0');
-          const heeftC = bvl.some(b => b.stadium?.startsWith('C'));
-          let succesLabel = '';
-          if (ns != null && ns > 0) succesLabel = `✓ ${ns} uitgevlogen`;
-          else if (ns === 0 || heeftX0 || heeftC) succesLabel = '✗ mislukt';
+          const heeftC  = bvl.some(b => b.stadium?.startsWith('C'));
+          const isAfgesloten = heeftX0 || heeftC;
+
+          // Verlies berekenen (alleen als afgesloten)
+          const verliesEi  = isAfgesloten && maxEieren > 0 && maxPulli >= 0
+            ? Math.max(0, maxEieren - maxPulli) : null;
+          const verliesPul = isAfgesloten && ns != null && maxPulli > 0
+            ? Math.max(0, maxPulli - ns) : null;
+
+          // Resultaat/reden
+          let resultaat = '';
+          if (ns != null && ns > 0) {
+            resultaat = `✓ ${ns} uitgevlogen`;
+          } else if (isAfgesloten) {
+            resultaat = '✗ Mislukt';
+            const redenen = [];
+            if (l.verlies && verliesLabel[l.verlies]) redenen.push(verliesLabel[l.verlies]);
+            if (l.predatie && l.predatie > 0) redenen.push(predatieLabel[l.predatie] || `predatie ${l.predatie}`);
+            if (redenen.length) resultaat += ` — ${redenen.join(', ')}`;
+          }
+
           const legselSoort = speciesByEuring[l.soort_euring || n.soort_euring]?.naam_nl || '—';
-          return { ...l, maxEieren, maxPulli, succesLabel, legselSoort };
+          return { ...l, maxEieren, maxPulli, aantalGeringd, verliesEi, verliesPul, resultaat, legselSoort };
         }),
       };
     }).filter(n => geselecteerdJaar === null || n.legsels.length > 0);
@@ -691,10 +727,9 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
     const legselsPerJaar = [...jarenSet].sort().map(j => ({
       jaar: j,
       legsels: eigenaarLegselsGefilterd.filter(l => l.jaar === j).length,
-      uitgevlogen: eigenaarLegselsGefilterd.filter(l => l.jaar === j).reduce((sum, l) => sum + Math.max(0, l.nestsucces ?? 0), 0),
+      uitgevlogen: eigenaarLegselsGefilterd.filter(l => l.jaar === j).reduce((sum, l) => sum + Math.max(0, n2i(l.nestsucces)), 0),
     }));
 
-    // Nest-coördinaten voor de Leaflet-kaart
     const nestCoords = eigenaarNesten
       .filter(n => n.lat && n.lon && !isNaN(parseFloat(n.lat)))
       .map(n => ({ lat: parseFloat(n.lat), lon: parseFloat(n.lon), kastnummer: n.kastnummer, omschrijving: n.omschrijving || '' }));
@@ -703,11 +738,12 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
       eigenaar: geselecteerd, jaar: geselecteerdJaar, info: eigenaarInfo,
       stats, succes, successPct, perNest, legselsPerJaar, nestCoords,
     });
-    const w = window.open('', '_blank');
-    w.document.write(html);
-    w.document.close();
-    w.focus();
-    // print wordt getriggerd vanuit de HTML zelf (na laden kaart-tiles)
+
+    // Blob URL zodat externe scripts (Leaflet CDN) correct laden
+    const blob = new Blob([html], { type: 'text/html; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    setTimeout(() => URL.revokeObjectURL(url), 120_000);
   }
 
   const overlayStyle = {
