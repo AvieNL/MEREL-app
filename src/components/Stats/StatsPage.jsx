@@ -384,15 +384,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       const isJaarsoort = !hist || !hist.jaren.has(huidigJaar);
       const isRingsoort = !isBaansoort && vandaagNieuw.has(key) && !historischGeringd.has(key);
 
-      if (isBaansoort) {
-        result[key] = new Set(['baansoort']);
-      } else {
-        const tags = new Set();
-        if (isRingsoort) tags.add('ringsoort');
-        if (isDagrecord) tags.add('dagrecord');
-        if (isJaarsoort) tags.add('jaar');
-        if (tags.size > 0) result[key] = tags;
-      }
+      const tags = new Set();
+      if (isBaansoort) tags.add('baansoort');
+      if (isRingsoort || (isBaansoort && vandaagNieuw.has(key))) tags.add('ringsoort');
+      if (!isBaansoort && isDagrecord) tags.add('dagrecord');
+      if (!isBaansoort && isJaarsoort) tags.add('jaar');
+      if (tags.size > 0) result[key] = tags;
     }
     return result;
   }, [huidigeRecords, historischeRecords, statsRecords]);
@@ -692,7 +689,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                   return (
                     <tr key={s.naam}>
                       <td className="tt-col-soort">
-                        <span className={indicatoren?.has('baansoort') ? 'soort-naam--baansoort' : indicatoren?.has('ringsoort') ? 'soort-naam--ringsoort' : undefined}>{displayNaam(s.naam)}</span>
+                        <span className={indicatoren?.has('ringsoort') ? 'soort-naam--ringsoort' : indicatoren?.has('baansoort') ? 'soort-naam--baansoort' : undefined}>{displayNaam(s.naam)}</span>
                         {indicatoren && [...indicatoren].map(ind => (
                           <span key={ind} className={`soort-indicator soort-indicator--${ind}`}>*</span>
                         ))}

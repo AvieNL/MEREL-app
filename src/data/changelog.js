@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.4';
+export const VERSIE = '1.68.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.5',
+    datum: '2026-04-13',
+    wijzigingen: ['Fix: ringsoort (oranje naam) ook getoond bij baansoorten die vandaag voor het eerst geringd worden'],
+    wijzigingen_en: ['Fix: ringing species (orange name) also shown for site-new species ringed for the first time today'],
+    wijzigingen_de: ['Fix: Ringart (oranger Name) wird auch bei neuen Stationsarten angezeigt, die heute zum ersten Mal beringt werden'],
+  },
   {
     versie: '1.68.4',
     datum: '2026-04-13',
