@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.6';
+export const VERSIE = '1.68.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.7',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: baansoort/dagrecord/jaarsoort in vet; legenda-teksten ingekort'],
+    wijzigingen_en: ['Style: site/day/year species in bold; legend texts shortened'],
+    wijzigingen_de: ['Stil: Stations-/Tages-/Jahresart fett; Legendentexte gekürzt'],
+  },
   {
     versie: '1.68.6',
     datum: '2026-04-13',

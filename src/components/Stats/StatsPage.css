@@ -197,13 +197,12 @@
   color: var(--success, #22c55e);
 }
 
-.soort-naam--baansoort {
+.soort-naam--vet {
   font-weight: 700;
 }
 
 .soort-naam--ringsoort {
   color: #f97316;
-  font-weight: 600;
 }
 
 .soort-indicator-legenda {
