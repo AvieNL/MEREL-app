@@ -212,16 +212,16 @@ export default function WijzigBezoekPage() {
             onChangeAantalPulli={v => update('aantalPulli', v)}
             error={errors.stadium}
           />
-          {(form.stadiumPrimair?.startsWith('E') || form.aantalEieren !== '' || form.stadiumPrimair?.startsWith('N') || form.aantalPulli !== '') && (
+          {(form.stadiumPrimair?.startsWith('E') || form.stadiumPrimair?.startsWith('N') || form.stadiumPrimair?.startsWith('C') || form.aantalEieren !== '' || form.aantalPulli !== '') && (
             <div className="form-row form-row--dood">
-              {(form.stadiumPrimair?.startsWith('E') || form.aantalEieren !== '') && (
+              {(form.stadiumPrimair?.startsWith('E') || form.stadiumPrimair?.startsWith('N') || form.stadiumPrimair?.startsWith('C') || form.aantalEieren !== '') && (
                 <div className="form-group">
                   <label>{t('nest_ei_dood')}</label>
                   <input type="number" inputMode="numeric" min="0" max="30"
                     value={form.eiDood} onChange={e => update('eiDood', e.target.value)} placeholder="0" />
                 </div>
               )}
-              {(form.stadiumPrimair?.startsWith('N') || form.aantalPulli !== '') && (
+              {(form.stadiumPrimair?.startsWith('N') || form.stadiumPrimair?.startsWith('C') || form.aantalPulli !== '') && (
                 <div className="form-group">
                   <label>{t('nest_jong_dood')}</label>
                   <input type="number" inputMode="numeric" min="0" max="30"

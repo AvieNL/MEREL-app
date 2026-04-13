@@ -409,14 +409,14 @@ export default function NieuwBezoekPage() {
           />
           {(stadiumPrimair?.startsWith('E') || aantalEieren !== '' || stadiumPrimair?.startsWith('N') || aantalPulli !== '') && (
             <div className="form-row form-row--dood">
-              {(stadiumPrimair?.startsWith('E') || aantalEieren !== '') && (
+              {(stadiumPrimair?.startsWith('E') || stadiumPrimair?.startsWith('N') || stadiumPrimair?.startsWith('C') || aantalEieren !== '') && (
                 <div className="form-group">
                   <label>{t('nest_ei_dood')}</label>
                   <input type="number" inputMode="numeric" min="0" max="30"
                     value={eiDood} onChange={e => setEiDood(e.target.value)} placeholder="0" />
                 </div>
               )}
-              {(stadiumPrimair?.startsWith('N') || aantalPulli !== '') && (
+              {(stadiumPrimair?.startsWith('N') || stadiumPrimair?.startsWith('C') || aantalPulli !== '') && (
                 <div className="form-group">
                   <label>{t('nest_jong_dood')}</label>
                   <input type="number" inputMode="numeric" min="0" max="30"

@@ -1,6 +1,15 @@
-export const VERSIE = '1.68.27';
+export const VERSIE = '1.68.28';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.28',
+    datum: '2026-04-13',
+    wijzigingen: [
+      'Functie: dood ei invulbaar bij stadium E, N én C; dood jong bij N én C',
+    ],
+    wijzigingen_en: ['Feature: dead egg enterable at stadium E, N and C; dead chick at N and C'],
+    wijzigingen_de: ['Funktion: Totes Ei eingebbar bei Stadium E, N und C; totes Junge bei N und C'],
+  },
   {
     versie: '1.68.27',
     datum: '2026-04-13',
