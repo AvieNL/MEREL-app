@@ -201,20 +201,20 @@
   font-weight: 700;
 }
 
-.soort-naam--ringsoort {
-  color: var(--danger, #ef4444);
+.tt-row--ringsoort {
+  background: rgba(239, 68, 68, 0.10);
 }
 
-.soort-naam--baansoort {
-  color: #f97316;
+.tt-row--baansoort {
+  background: rgba(249, 115, 22, 0.10);
 }
 
-.soort-naam--dagrecord {
-  color: #facc15;
+.tt-row--dagrecord {
+  background: rgba(250, 204, 21, 0.10);
 }
 
-.soort-naam--jaar {
-  color: var(--success, #22c55e);
+.tt-row--jaar {
+  background: rgba(34, 197, 94, 0.10);
 }
 
 .soort-indicator-legenda {

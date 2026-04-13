@@ -1,6 +1,13 @@
-export const VERSIE = '1.69.2';
+export const VERSIE = '1.69.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.69.3',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: soort-indicatoren tonen nu als lichte rijkleur in de tabel (naam vet, geen gekleurde tekst)'],
+    wijzigingen_en: ['Style: species indicators now shown as light row background in table (name bold, no colored text)'],
+    wijzigingen_de: ['Stil: Artindikatoren werden jetzt als helle Zeilenhintergrundfarbe in der Tabelle angezeigt (Name fett, kein farbiger Text)'],
+  },
   {
     versie: '1.69.2',
     datum: '2026-04-13',

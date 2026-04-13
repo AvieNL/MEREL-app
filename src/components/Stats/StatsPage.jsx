@@ -686,15 +686,14 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                 {huidigeStats.soortenTabel.map(s => {
                   const indicatoren = soortenIndicatoren[s.naam.toLowerCase()];
                   return (
-                    <tr key={s.naam}>
+                    <tr key={s.naam} className={
+                      indicatoren?.has('ringsoort') ? 'tt-row--ringsoort' :
+                      indicatoren?.has('baansoort') ? 'tt-row--baansoort' :
+                      indicatoren?.has('dagrecord') ? 'tt-row--dagrecord' :
+                      indicatoren?.has('jaar')      ? 'tt-row--jaar'      : undefined
+                    }>
                       <td className="tt-col-soort">
-                        <span className={[
-                          indicatoren?.has('ringsoort') ? 'soort-naam--ringsoort' :
-                          indicatoren?.has('baansoort') ? 'soort-naam--baansoort' :
-                          indicatoren?.has('dagrecord') ? 'soort-naam--dagrecord' :
-                          indicatoren?.has('jaar')      ? 'soort-naam--jaar'      : '',
-                          indicatoren?.size > 0 ? 'soort-naam--vet' : '',
-                        ].filter(Boolean).join(' ') || undefined}>{displayNaam(s.naam)}</span>
+                        <span className={indicatoren?.size > 0 ? 'soort-naam--vet' : undefined}>{displayNaam(s.naam)}</span>
                         {indicatoren && [...indicatoren].map(ind => (
                           <span key={ind} className={`soort-indicator soort-indicator--${ind}`}>*</span>
                         ))}
