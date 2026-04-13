@@ -55,6 +55,22 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+// Kleuren per nesttype (code → [fill, stroke])
+const NESTTYPE_KLEUREN = {
+  '-1': ['#94a3b8', '#64748b'], // Onbekend — grijs
+   '0': ['#22c55e', '#16a34a'], // Zelf gebouwd — groen
+   '1': ['#a78bfa', '#7c3aed'], // Van andere soort — paars
+   '2': ['#38bdf8', '#0284c7'], // Nestkast — blauw
+   '3': ['#f59e0b', '#d97706'], // Holte — amber
+   '4': ['#94a3b8', '#64748b'], // Overig — grijs
+   '5': ['#fb923c', '#ea580c'], // Nest uit eerder jaar — oranje
+   '6': ['#facc15', '#ca8a04'], // Hergebruikt nest — geel
+};
+
+function nesttypeKleur(type) {
+  return NESTTYPE_KLEUREN[String(type ?? -1)] ?? NESTTYPE_KLEUREN['-1'];
+}
+
 // ── Kaart voor nestenlocaties ───────────────────────────────────────────────
 function NestKaart({ nesten }) {
   const mapRef = useRef(null);
@@ -90,10 +106,11 @@ function NestKaart({ nesten }) {
         const lon = parseFloat(n.lon);
         bounds.push([lat, lon]);
 
+        const [fill, stroke] = nesttypeKleur(n.nesttype);
         const marker = L.circleMarker([lat, lon], {
           radius: 7,
-          fillColor: '#22c55e',
-          color: '#16a34a',
+          fillColor: fill,
+          color: stroke,
           weight: 1.5,
           fillOpacity: 0.85,
         }).addTo(map);
@@ -121,6 +138,15 @@ function NestKaart({ nesten }) {
     };
   }, [markers]);
 
+  const gebruikteTypes = useMemo(() => {
+    const seen = new Map();
+    markers.forEach(n => {
+      const code = n.nesttype ?? -1;
+      if (!seen.has(code)) seen.set(code, nesttypeLabel[code] ?? 'Onbekend');
+    });
+    return [...seen.entries()].sort((a, b) => a[0] - b[0]);
+  }, [markers]);
+
   if (markers.length === 0) return null;
 
   return (
@@ -130,6 +156,19 @@ function NestKaart({ nesten }) {
       <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
         {markers.length} van {nesten.length} nesten met GPS-coördinaten
       </p>
+      {gebruikteTypes.length > 1 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 16px', marginTop: 6 }}>
+          {gebruikteTypes.map(([code, label]) => {
+            const [fill] = nesttypeKleur(code);
+            return (
+              <span key={code} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
+                <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill={fill} /></svg>
+                {label}
+              </span>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

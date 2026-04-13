@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.13';
+export const VERSIE = '1.68.14';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.14',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: nestkaart toont stippen in kleur per nesttype (nestkast=blauw, zelfgebouwd=groen, holte=amber, etc.) met legenda'],
+    wijzigingen_en: ['Style: nest map shows dots colored by nest type (nest box=blue, self-built=green, hollow=amber, etc.) with legend'],
+    wijzigingen_de: ['Stil: Nestkarte zeigt Punkte farbig nach Nesttyp (Nistkasten=blau, selbstgebaut=grün, Höhle=amber, usw.) mit Legende'],
+  },
   {
     versie: '1.68.13',
     datum: '2026-04-13',
