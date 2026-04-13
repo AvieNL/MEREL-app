@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.21';
+export const VERSIE = '1.68.22';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.22',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: onbekende eierenaantal toont "≥ pulli" in eigenaarrapport als pullen wel geteld zijn'],
+    wijzigingen_en: ['Style: unknown egg count shows "≥ chicks" in owner report when chicks were counted'],
+    wijzigingen_de: ['Stil: Unbekannte Eierzahl zeigt „≥ Nestlinge" im Eigentümerbericht wenn Nestlinge gezählt wurden'],
+  },
   {
     versie: '1.68.21',
     datum: '2026-04-13',

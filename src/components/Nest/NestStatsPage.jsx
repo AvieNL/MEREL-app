@@ -499,7 +499,7 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
     const vPul = s.verliesPul > 0 ? `<span style="color:#dc2626">-${s.verliesPul}</span>` : (s.verliesPul === 0 ? '0' : '—');
     return `<tr>
       <td>${s.naam}</td><td>${s.legsels}</td>
-      <td>${s.eieren || '—'}</td><td>${s.pulliGeteld || '—'}</td><td>${s.geringd || '—'}</td>
+      <td>${s.eieren > 0 ? s.eieren : (s.pulliGeteld > 0 ? `≥${s.pulliGeteld}` : '—')}</td><td>${s.pulliGeteld || '—'}</td><td>${s.geringd || '—'}</td>
       <td>${vEi}</td><td>${vPul}</td>
       <td>${pct !== null ? `<span class="${pct >= 50 ? 'ok' : 'nok'}">${s.succes}/${s.succes + s.mislukt} (${pct}%)</span>` : '—'}</td>
     </tr>`;
@@ -513,7 +513,7 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
     const legselRijen = n.legsels.length === 0
       ? '<tr><td colspan="8" style="color:#888;font-style:italic">Geen legsels in geselecteerde periode</td></tr>'
       : n.legsels.map(l => {
-          const ei  = l.maxEieren  > 0 ? l.maxEieren  : '—';
+          const ei  = l.eierenLabel;
           const pul = l.maxPulli   > 0 ? l.maxPulli   : '—';
           const ger = l.aantalGeringd > 0 ? l.aantalGeringd : '—';
           const vEi  = l.verliesEi  != null && l.verliesEi  > 0 ? `<span style="color:#dc2626">-${l.verliesEi}</span>`  : (l.verliesEi  === 0 ? '0' : '—');
@@ -727,7 +727,9 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
           }
 
           const legselSoort = speciesByEuring[l.soort_euring || n.soort_euring]?.naam_nl || '—';
-          return { ...l, maxEieren, maxPulli, aantalGeringd, verliesEi, verliesPul, resultaat, legselSoort };
+          const eierenLabel = maxEieren > 0 ? String(maxEieren)
+            : (maxPulli > 0 ? `≥${maxPulli}` : '—');
+          return { ...l, maxEieren, maxPulli, aantalGeringd, verliesEi, verliesPul, resultaat, legselSoort, eierenLabel };
         }),
       };
     }).filter(n => geselecteerdJaar === null || n.legsels.length > 0);
