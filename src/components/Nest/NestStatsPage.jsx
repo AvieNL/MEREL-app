@@ -791,8 +791,9 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
     zIndex: 1000, padding: 16,
   };
   const modalStyle = {
-    background: 'var(--bg-elevated, #1e293b)', borderRadius: 'var(--radius, 10px)',
-    border: '1px solid var(--border)', width: '100%', maxWidth: 440,
+    background: 'var(--bg-secondary)', borderRadius: 'var(--radius)',
+    border: '1px solid var(--border)', boxShadow: 'var(--shadow)',
+    color: 'var(--text-primary)', width: '100%', maxWidth: 440,
     maxHeight: '90vh', overflowY: 'auto',
   };
 
@@ -833,7 +834,7 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
           </div>
 
           {stats.aantalLegsels > 0 ? (
-            <div style={{ background: 'var(--bg-surface, #0f172a)', borderRadius: 8, padding: '12px 16px', fontSize: '0.85rem' }}>
+            <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 16px', fontSize: '0.85rem' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px 16px' }}>
                 {[
                   ['Nesten', eigenaarNesten.length],

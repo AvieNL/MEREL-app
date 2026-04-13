@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.22';
+export const VERSIE = '1.68.23';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.23',
+    datum: '2026-04-13',
+    wijzigingen: ['Stijl: eigenaarrapport pop-up past nu bij donker en licht thema'],
+    wijzigingen_en: ['Style: owner report popup now matches dark and light theme'],
+    wijzigingen_de: ['Stil: Eigentümerbericht-Popup passt jetzt zum dunklen und hellen Thema'],
+  },
   {
     versie: '1.68.22',
     datum: '2026-04-13',
