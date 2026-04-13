@@ -528,7 +528,9 @@ function generateRapportHTML({ eigenaar, jaar, info, stats, succes, successPct, 
         ${fotoHtml}
         <div style="flex:1;min-width:0">
           <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
-            <span class="nest-nr">⌂ ${n.kastnummer}</span>
+            <span class="nest-nr">${n.locatie_type === 'nest'
+              ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px"><path d="M4 13 Q4 20 12 20 Q20 20 20 13"/><path d="M4 13 Q6 9 9 11 Q12 7.5 15 11 Q18 9 20 13"/><path d="M7 16.5 Q10 14 14 16" stroke-width="1.2"/><path d="M8.5 18.5 Q12 17 16 18" stroke-width="1.2"/></svg>`
+              : '⌂ '}${n.kastnummer}</span>
             ${n.omschrijving ? `<span class="nest-omsch">${n.omschrijving}</span>` : ''}
             ${n.soortNaam ? `<span class="nest-soort">${n.soortNaam}</span>` : ''}
           </div>
@@ -699,8 +701,10 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
         soortNaam: speciesByEuring[n.soort_euring]?.naam_nl || '',
         legsels: nestLegsels.map(l => {
           const bvl = bezoeken.filter(b => String(b.legsel_id) === String(l.id));
-          const maxEieren = Math.max(0, ...bvl.map(b => n2i(b.aantal_eieren)));
-          const maxPulli  = Math.max(0, ...bvl.map(b => n2i(b.aantal_pulli)));
+          const maxEieren   = Math.max(0, ...bvl.map(b => n2i(b.aantal_eieren)));
+          const maxPulli    = Math.max(0, ...bvl.map(b => n2i(b.aantal_pulli)));
+          const maxEiDood   = Math.max(0, ...bvl.map(b => n2i(b.ei_dood)));
+          const maxJongDood = Math.max(0, ...bvl.map(b => n2i(b.jong_dood)));
           const bezoekIds = new Set(bvl.map(b => b.id));
           const aantalGeringd = ringen.filter(r => bezoekIds.has(r.nestbezoek_id)).length;
 
@@ -710,11 +714,14 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
           const heeftC  = bvl.some(b => b.stadium?.startsWith('C'));
           const isAfgesloten = heeftX0 || heeftC;
 
-          // Verlies berekenen (alleen als afgesloten en nestsucces bekend ≥ 0)
-          const verliesEi  = isAfgesloten && maxEieren > 0 && maxPulli >= 0
-            ? Math.max(0, maxEieren - maxPulli) : null;
-          const verliesPul = isAfgesloten && !isNsOnbekend && maxPulli > 0
-            ? Math.max(0, maxPulli - ns) : null;
+          // Verlies ei: ei_dood heeft voorrang; anders maxEieren - maxPulli
+          const verliesEi = isAfgesloten
+            ? (maxEiDood > 0 ? maxEiDood : (maxEieren > 0 ? Math.max(0, maxEieren - maxPulli) : null))
+            : null;
+          // Verlies pul: jong_dood heeft voorrang; anders maxPulli - nestsucces
+          const verliesPul = isAfgesloten && !isNsOnbekend
+            ? (maxJongDood > 0 ? maxJongDood : (maxPulli > 0 ? Math.max(0, maxPulli - ns) : null))
+            : null;
 
           // Resultaat/reden
           const heeftVerliesReden = (l.verlies && verliesLabel[l.verlies]) || (l.predatie && l.predatie > 0);

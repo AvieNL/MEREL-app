@@ -1,6 +1,25 @@
-export const VERSIE = '1.68.26';
+export const VERSIE = '1.68.27';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.27',
+    datum: '2026-04-13',
+    wijzigingen: [
+      'Fix: verlies ei gebruikt nu ei_dood uit bezoeken als primaire bron (was maxEieren−maxPulli)',
+      'Fix: verlies pul gebruikt nu jong_dood uit bezoeken als primaire bron (was maxPulli−nestsucces)',
+      'Stijl: eigenaarrapport toont nest-icoon i.p.v. huisje bij zelfgebouwde nesten',
+    ],
+    wijzigingen_en: [
+      'Fix: egg loss now uses ei_dood from visits as primary source (was maxEggs−maxChicks)',
+      'Fix: chick loss now uses jong_dood from visits as primary source (was maxChicks−nestsucces)',
+      'Style: owner report shows nest icon instead of house for natural nests',
+    ],
+    wijzigingen_de: [
+      'Fix: Eiverlust verwendet jetzt ei_dood aus Besuchen als Primärquelle (war maxEier−maxJunge)',
+      'Fix: Jungvogelverlust verwendet jetzt jong_dood aus Besuchen als Primärquelle',
+      'Stil: Eigentümerbericht zeigt Nesticon statt Haus bei selbst gebauten Nestern',
+    ],
+  },
   {
     versie: '1.68.26',
     datum: '2026-04-13',
