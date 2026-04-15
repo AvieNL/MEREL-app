@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.30';
+export const VERSIE = '1.68.31';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.31',
+    datum: '2026-04-15',
+    wijzigingen: ['Functie: zoekvenster nesten doorzoekt nu ook eigenaar naam'],
+    wijzigingen_en: ['Feature: nest search now also searches owner name'],
+    wijzigingen_de: ['Funktion: Nestsuchfeld sucht jetzt auch nach Eigentümer'],
+  },
   {
     versie: '1.68.30',
     datum: '2026-04-13',

@@ -324,7 +324,7 @@
   "nest_tab_list": "Lijst",
   "nest_tab_map": "Kaart",
   "nest_season_filter": "Seizoen filteren",
-  "nest_search_placeholder": "Zoek op nummer, naam, soort…",
+  "nest_search_placeholder": "Zoek op nummer, naam, soort, eigenaar…",
   "nest_search_no_results": "Geen nesten gevonden voor deze zoekopdracht.",
   "nest_no_nests": "Nog geen nesten geregistreerd.",
   "nest_no_visits_season": "Geen bezoeken in {{jaar}}",

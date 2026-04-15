@@ -92,7 +92,8 @@ export default function NestOverzichtPage() {
       String(n.kastnummer).toLowerCase().includes(q) ||
       (n.omschrijving && n.omschrijving.toLowerCase().includes(q)) ||
       (n.kastSoort && n.kastSoort.toLowerCase().includes(q)) ||
-      (n.adres && n.adres.toLowerCase().includes(q))
+      (n.adres && n.adres.toLowerCase().includes(q)) ||
+      (n.eigenaar_naam && n.eigenaar_naam.toLowerCase().includes(q))
     );
     if (filterStatus) result = result.filter(n =>
       getBroedStatus(n.laatsteBezoek?.stadium) === filterStatus
