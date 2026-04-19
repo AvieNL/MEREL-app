@@ -234,13 +234,13 @@ export default function Header({ onSwitchModule, activeModule }) {
                   </svg>
                   {weer.neerslag > 0 ? `${weer.neerslag}mm` : '0mm'}
                 </span>
-                <span className="header-weer-item" title={`Wind: ${weer.windsnelheid} km/h ${weer.windRichting}`}>
+                <span className="header-weer-item" title={`Wind: ${weer.windsnelheid} km/h`}>
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <path d="M1 4.5 Q5 4.5 7 4.5 Q9.5 4.5 9.5 3 Q9.5 1.5 8 1.5 Q6.5 1.5 6.5 3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
                     <line x1="1" y1="6.5" x2="8" y2="6.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
                     <path d="M1 8.5 Q4 8.5 6 8.5 Q8 8.5 8 10 Q8 11.5 6.5 11.5 Q5 11.5 5 10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
                   </svg>
-                  {weer.windsnelheid} km/h bft {kmhNaarBft(weer.windsnelheid)} {weer.windRichting}
+                  {weer.windRichting}-{kmhNaarBft(weer.windsnelheid)}
                 </span>
               </div>
             </div>

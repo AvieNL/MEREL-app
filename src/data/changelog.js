@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.31';
+export const VERSIE = '1.68.32';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.32',
+    datum: '2026-04-19',
+    wijzigingen: ['UI: windweergave in header compact als richting-bft (bijv. NW-1)'],
+    wijzigingen_en: ['UI: wind display in header compact as direction-bft (e.g. NW-1)'],
+    wijzigingen_de: ['UI: Windanzeige im Header kompakt als Richtung-Bft (z.B. NW-1)'],
+  },
   {
     versie: '1.68.31',
     datum: '2026-04-15',
