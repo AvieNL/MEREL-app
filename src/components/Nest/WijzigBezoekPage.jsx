@@ -10,7 +10,7 @@ import { useModuleSwitch } from '../../App';
 import { berekenVervolgbezoekInfo, isAfsluitendStadium } from '../../utils/nestSuggestie';
 import LegselOuderBlok from './LegselOuderBlok';
 import PulliRingenForm from './PulliRingenForm';
-import { IconRing } from '../shared/Icons';
+import { IconRing, NestIcoon } from '../shared/Icons';
 import NestSoortInfoPanel from './NestSoortInfoPanel';
 import NestSoortPicker from './NestSoortPicker';
 import {
@@ -147,7 +147,7 @@ export default function WijzigBezoekPage() {
       <div className="nieuw-sticky-header">
         <div className="nieuw-topbar">
           <span className="nieuw-topbar-titel">
-            ⌂ {nest.kastnummer}{nest.omschrijving ? ` — ${nest.omschrijving}` : ''}
+            <NestIcoon nest={nest} size={16} /> {nest.kastnummer}{nest.omschrijving ? ` — ${nest.omschrijving}` : ''}
           </span>
           <button type="button" className="btn-secondary nieuw-topbar-btn"
             onClick={() => navigate(`/nest/${nest.id}`)} disabled={saving}>

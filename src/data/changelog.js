@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.32';
+export const VERSIE = '1.68.33';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.33',
+    datum: '2026-04-23',
+    wijzigingen: ['Stijl: nesticoon (SVG nest) overal doorgevoerd voor zelfgebouwde nesten — sticky headers, prullenbak, statistieken, stamboom, pulli-ringen'],
+    wijzigingen_en: ['Style: nest icon (SVG nest) applied everywhere for self-built nests — sticky headers, trash, statistics, family tree, pulli ringing'],
+    wijzigingen_de: ['Stil: Nestikon (SVG Nest) überall für selbstgebaute Nester umgesetzt — Sticky-Header, Papierkorb, Statistiken, Stammbaum, Pulli-Beringung'],
+  },
   {
     versie: '1.68.32',
     datum: '2026-04-19',

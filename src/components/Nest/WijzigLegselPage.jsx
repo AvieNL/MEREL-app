@@ -7,6 +7,7 @@ import {
   SUCCES2_CODES, MOMENT_CODES, PREDATIE_CODES, METHODE_CODES,
   VERLIES_CODES, EISUCCES_CODES, VINDSTATUS_CODES,
 } from '../../data/sovon-codes';
+import { NestIcoon } from '../shared/Icons';
 import './NieuwNestPage.css';
 
 export default function WijzigLegselPage() {
@@ -85,7 +86,7 @@ export default function WijzigLegselPage() {
       <div className="nieuw-sticky-header">
         <div className="nieuw-topbar">
           <span className="nieuw-topbar-titel">
-            ⌂ {nest.kastnummer}{nest.omschrijving ? ` — ${nest.omschrijving}` : ''} · {t('nest_legsel_nr', { nr: displayNummer ?? legsel.volgnummer })}
+            <NestIcoon nest={nest} size={16} /> {nest.kastnummer}{nest.omschrijving ? ` — ${nest.omschrijving}` : ''} · {t('nest_legsel_nr', { nr: displayNummer ?? legsel.volgnummer })}
           </span>
           <button type="button" className="btn-secondary nieuw-topbar-btn"
             onClick={() => navigate(`/nest/${nest.id}`)} disabled={saving}>

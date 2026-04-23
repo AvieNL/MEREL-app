@@ -621,7 +621,8 @@ ${heeftKaart ? `<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\
   var bounds=[];
   nesten.forEach(function(n){
     var m=L.circleMarker([n.lat,n.lon],{radius:9,fillColor:'#1e3a5f',color:'white',weight:2,fillOpacity:0.9}).addTo(map);
-    m.bindPopup('<strong>⌂ '+n.kastnummer+'<\/strong>'+(n.omschrijving?'<br>'+n.omschrijving:''));
+    var icoon=n.locatie_type==='nest'?'○':'⌂';
+    m.bindPopup('<strong>'+icoon+' '+n.kastnummer+'<\/strong>'+(n.omschrijving?'<br>'+n.omschrijving:''));
     bounds.push([n.lat,n.lon]);
   });
   if(bounds.length===1) map.setView(bounds[0],17);
@@ -790,7 +791,7 @@ function EigenaarRapportModal({ nesten, legsels, bezoeken, ringen, speciesByEuri
 
     const nestCoords = eigenaarNesten
       .filter(n => n.lat && n.lon && !isNaN(parseFloat(n.lat)))
-      .map(n => ({ lat: parseFloat(n.lat), lon: parseFloat(n.lon), kastnummer: n.kastnummer, omschrijving: n.omschrijving || '' }));
+      .map(n => ({ lat: parseFloat(n.lat), lon: parseFloat(n.lon), kastnummer: n.kastnummer, omschrijving: n.omschrijving || '', locatie_type: n.locatie_type || 'kast' }));
 
     const html = generateRapportHTML({
       eigenaar: geselecteerd, jaar: geselecteerdJaar, info: eigenaarInfo,
@@ -1533,7 +1534,7 @@ export default function NestStatsPage() {
                         <td className="tt-col-soort">{r.vangst?.vogelnaam || '—'}</td>
                         <td className="tt-col-soort">{r.bezoek?.datum ? formatDatum(r.bezoek.datum) : '—'}</td>
                         <td className="tt-col-soort" style={{ color: 'var(--text-muted)' }}>
-                          {r.nest ? `⌂ ${r.nest.kastnummer}${r.nest.omschrijving ? ` — ${r.nest.omschrijving}` : ''}` : '—'}
+                          {r.nest ? <><NestIcoon nest={r.nest} size={14} /> {r.nest.kastnummer}{r.nest.omschrijving ? ` — ${r.nest.omschrijving}` : ''}</> : '—'}
                         </td>
                         <td className="tt-col-num">{r.vangst?.vleugel || '—'}</td>
                         <td className="tt-col-num">{r.vangst?.gewicht || '—'}</td>
@@ -1585,7 +1586,7 @@ export default function NestStatsPage() {
                               {p.vogelnaam && <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>{p.vogelnaam}</span>}
                               {p.nest && (
                                 <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.72rem' }}>
-                                  ⌂ {p.nest.kastnummer}{p.nest.omschrijving ? ` — ${p.nest.omschrijving}` : ''}
+                                  <NestIcoon nest={p.nest} size={14} /> {p.nest.kastnummer}{p.nest.omschrijving ? ` — ${p.nest.omschrijving}` : ''}
                                 </span>
                               )}
                             </>
@@ -1797,7 +1798,7 @@ function StamboomTak({ tak, diepte, navigate }) {
             onClick={() => tak.nest && navigate(`/nest/${tak.nest.id}`)}
             style={{ cursor: tak.nest ? 'pointer' : 'default' }}
           >
-            {tak.nest ? `⌂ ${tak.nest.kastnummer}` : '?'}
+            {tak.nest ? <><NestIcoon nest={tak.nest} size={14} /> {tak.nest.kastnummer}</> : '?'}
             {tak.legsel.jaar ? ` (${tak.legsel.jaar})` : ''}
           </span>
         </div>

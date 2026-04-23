@@ -12,7 +12,7 @@ import { formatDatum } from '../../utils/nestPlanning';
 import { normalizeTime } from '../../utils/dateHelper';
 import { NAUWK_LEEFTIJD_OPTIONS } from '../Nieuw/NieuwPage.constants';
 import './PulliRingenPage.css';
-import { IconRing } from '../shared/Icons';
+import { IconRing, NestIcoon } from '../shared/Icons';
 
 function normRing(r) { return String(r || '').replace(/[\s.]/g, '').toUpperCase(); }
 
@@ -248,13 +248,11 @@ export default function PulliRingenPage() {
     navigate(`/nest/${nest.id}`);
   }
 
-  const nestLabel = `⌂ ${nest.kastnummer}${nest.omschrijving ? ` — ${nest.omschrijving}` : ''}`;
-
   return (
     <div className="page pulli-ringen-page">
       <div className="nieuw-topbar">
         <button className="btn-secondary page-back" onClick={handleKlaar}>{t('btn_back')}</button>
-        <span className="nieuw-topbar-titel"><IconRing size={13} /> {t('pulli_ringen_titel')} — {nestLabel}</span>
+        <span className="nieuw-topbar-titel"><IconRing size={13} /> {t('pulli_ringen_titel')} — <NestIcoon nest={nest} size={14} /> {nest.kastnummer}{nest.omschrijving ? ` — ${nest.omschrijving}` : ''}</span>
       </div>
 
       {/* ── Context ── */}

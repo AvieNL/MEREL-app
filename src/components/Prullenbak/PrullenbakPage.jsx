@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useRecords } from '../../hooks/useRecords';
 import { useNestData } from '../../hooks/useNestData';
 import { formatDatum as formatDatumNest } from '../../utils/nestPlanning';
+import { NestIcoon } from '../shared/Icons';
 import './PrullenbakPage.css';
 
 function stripDots(s) { return s ? s.replace(/\./g, '') : ''; }
@@ -134,7 +135,7 @@ export default function PrullenbakPage() {
                 {deletedNesten.map(nest => (
                   <div key={nest.id} className="prullenbak-item">
                     <div className="prullenbak-item__info">
-                      <strong>⌂ {nest.kastnummer}</strong>
+                      <strong><NestIcoon nest={nest} size={14} /> {nest.kastnummer}</strong>
                       {nest.omschrijving && <span className="prullenbak-meta">{nest.omschrijving}</span>}
                       {nest.deleted_at && (
                         <span className="prullenbak-meta prullenbak-meta--datum">

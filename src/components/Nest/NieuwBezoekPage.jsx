@@ -172,11 +172,14 @@ export default function NieuwBezoekPage() {
   const isAfsluitend = useMemo(() => isAfsluitendStadium(stadiumPrimair), [stadiumPrimair]);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  function nestDisplayNaam(nest) {
+  function nestDisplayTekst(nest) {
     const vogelNaam = nest.soort_euring
       ? (speciesByEuring[nest.soort_euring]?.[`naam_${lang}`] || speciesByEuring[nest.soort_euring]?.naam_nl)
       : null;
-    return `⌂ ${nest.kastnummer}${nest.omschrijving ? ` — ${nest.omschrijving}` : ''}${vogelNaam ? ` (${vogelNaam})` : ''}`;
+    return `${nest.kastnummer}${nest.omschrijving ? ` — ${nest.omschrijving}` : ''}${vogelNaam ? ` (${vogelNaam})` : ''}`;
+  }
+  function nestDisplayNaam(nest) {
+    return `${nest.locatie_type === 'nest' ? '○' : '⌂'} ${nestDisplayTekst(nest)}`;
   }
 
   // ── Validatie ─────────────────────────────────────────────────────────────
@@ -266,7 +269,7 @@ export default function NieuwBezoekPage() {
       <div className="nieuw-sticky-header">
         <div className="nieuw-topbar">
           <span className="nieuw-topbar-titel">
-            {geselecteerdNest ? nestDisplayNaam(geselecteerdNest) : t('nest_new_bezoek_title')}
+            {geselecteerdNest ? <><NestIcoon nest={geselecteerdNest} size={16} /> {nestDisplayTekst(geselecteerdNest)}</> : t('nest_new_bezoek_title')}
           </span>
           <button type="button" className="btn-primary nieuw-topbar-btn"
             onClick={handleSave} disabled={saving}>
