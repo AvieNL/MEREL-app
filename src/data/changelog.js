@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.33';
+export const VERSIE = '1.68.34';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.34',
+    datum: '2026-04-23',
+    wijzigingen: ['Fix: nesticoon in planningsbalk en planningtab toont nu correct nestje voor zelfgebouwde nesten (locatie_type ontbrak in planningsitems)'],
+    wijzigingen_en: ['Fix: nest icon in planning bar and planning tab now correctly shows nest for self-built nests (locatie_type was missing from planning items)'],
+    wijzigingen_de: ['Fix: Nestikon in Planungsleiste und Planungs-Tab zeigt jetzt korrekt Nest für selbstgebaute Nester (locatie_type fehlte in Planungselementen)'],
+  },
   {
     versie: '1.68.33',
     datum: '2026-04-23',

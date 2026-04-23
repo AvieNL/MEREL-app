@@ -35,6 +35,7 @@ export function berekenPlanningItems({ nesten, legsels, bezoeken, speciesByEurin
         legselId:  legsel.id,
         kastnummer: nest.kastnummer,
         omschrijving: nest.omschrijving || '',
+        locatie_type: nest.locatie_type || 'kast',
         soortNaam: soort?.naam_nl || '',
         datum:     suggestieDatum,
         type:      laatste.volgende_bezoek_type || null, // indien opgeslagen
