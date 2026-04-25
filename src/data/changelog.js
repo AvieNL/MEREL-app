@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.38';
+export const VERSIE = '1.68.39';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.39',
+    datum: '2026-04-25',
+    wijzigingen: ['UI: "vaakst gevangen" top 10 toont nu ook de datum van de laatste vangst'],
+    wijzigingen_en: ['UI: "most recaptured" top 10 now also shows the date of the last catch'],
+    wijzigingen_de: ['UI: "am häufigsten gefangen" Top 10 zeigt jetzt auch das Datum des letzten Fangs'],
+  },
   {
     versie: '1.68.38',
     datum: '2026-04-25',

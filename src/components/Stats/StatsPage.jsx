@@ -486,8 +486,11 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     alleTerugvangsten.forEach(tv => {
       if (!tv.ringnummer) return;
       const key = tv.ringnummer.replace(/\./g, '').toUpperCase();
-      if (!counts[key]) counts[key] = { ringnummer: key, soort: tv.soort, count: 0, id: tv.id };
+      if (!counts[key]) counts[key] = { ringnummer: key, soort: tv.soort, count: 0, id: tv.id, laatste_datum: null };
       counts[key].count++;
+      if (tv.datum && (!counts[key].laatste_datum || tv.datum > counts[key].laatste_datum)) {
+        counts[key].laatste_datum = tv.datum;
+      }
     });
     return Object.values(counts)
       .sort((a, b) => b.count - a.count)
@@ -965,6 +968,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                       <th className="tt-col-soort">{t('stats_col_species')}</th>
                       <th>{t('stats_col_ring')}</th>
                       <th className="tt-col-num">{t('stats_col_recatch_count')}</th>
+                      <th>{t('stats_col_date_last')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -974,6 +978,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                         <td className="tt-col-soort">{displayNaam(tv.soort)}</td>
                         <td className="tv-ring"><span className="ring-link" onClick={() => navigate('/ring/records', { state: { openId: tv.id } })}>{tv.ringnummer}</span></td>
                         <td className="tt-col-num tv-tijd" style={{ fontWeight: 700 }}>{tv.count}×</td>
+                        <td className="tv-datum">{formatDatum(tv.laatste_datum) || '—'}</td>
                       </tr>
                     ))}
                   </tbody>

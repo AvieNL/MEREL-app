@@ -232,6 +232,7 @@
   "stats_col_total": "Total",
   "stats_col_ring": "Ring",
   "stats_col_date": "Date",
+  "stats_col_date_last": "Last catch",
   "stats_col_time": "Time",
   "stats_col_distance": "Distance",
   "stats_col_project": "Project",

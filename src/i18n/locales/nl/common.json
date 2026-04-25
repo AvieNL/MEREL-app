@@ -232,6 +232,7 @@
   "stats_col_total": "Totaal",
   "stats_col_ring": "Ring",
   "stats_col_date": "Datum",
+  "stats_col_date_last": "Laatste vangst",
   "stats_col_time": "Tijd",
   "stats_col_distance": "Afstand",
   "stats_col_project": "Project",
