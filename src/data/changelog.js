@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.36';
+export const VERSIE = '1.68.37';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.37',
+    datum: '2026-04-25',
+    wijzigingen: ['Fix: "Herlaad data" wist nu ook de veld_config-cache zodat formulieropties (zoals omstandigheden) direct worden vernieuwd'],
+    wijzigingen_en: ['Fix: "Reload data" now also clears the veld_config cache so form options (e.g. circumstances) are refreshed immediately'],
+    wijzigingen_de: ['Fix: "Daten neu laden" leert jetzt auch den veld_config-Cache, sodass Formularoptionen (z.B. Umstände) sofort aktualisiert werden'],
+  },
   {
     versie: '1.68.36',
     datum: '2026-04-25',
