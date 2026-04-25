@@ -78,11 +78,18 @@ export default function AdminPage() {
       }));
     }
 
+    const lastSignInMap = {};
+    const { data: signInData } = await supabase.rpc('get_user_last_sign_in');
+    if (signInData) {
+      signInData.forEach(r => { lastSignInMap[r.id] = r.last_sign_in_at; });
+    }
+
     const metCounts = data.map(p => ({
       ...p,
       vangsten_count: vangstCountMap[p.id] ?? 0,
       nest_count: nestCountMap[p.id] ?? 0,
       nestbezoek_count: nestbezoekCountMap[p.id] ?? 0,
+      last_sign_in_at: lastSignInMap[p.id] ?? null,
     }));
     setGebruikers(metCounts);
     setLoading(false);
@@ -155,6 +162,12 @@ export default function AdminPage() {
                       <span className="admin-count">· {t('admin_catches', { count: g.vangsten_count })}</span>
                       {g.nest_count > 0 && <span className="admin-count">· {t('admin_nests', { count: g.nest_count })}</span>}
                       {g.nestbezoek_count > 0 && <span className="admin-count">· {t('admin_nestbezoeken', { count: g.nestbezoek_count })}</span>}
+                    </div>
+                    <div className="admin-user-last-login">
+                      {g.last_sign_in_at
+                        ? <>Laatste login: {new Date(g.last_sign_in_at).toLocaleString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</>
+                        : <>Nog nooit ingelogd</>
+                      }
                     </div>
                   </div>
 

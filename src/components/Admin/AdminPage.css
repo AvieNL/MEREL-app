@@ -108,6 +108,12 @@
   color: var(--text-secondary);
 }
 
+.admin-user-last-login {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
 .admin-count {
   color: var(--accent);
 }

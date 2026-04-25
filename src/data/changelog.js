@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.37';
+export const VERSIE = '1.68.38';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.38',
+    datum: '2026-04-25',
+    wijzigingen: ['Functie: admin-panel toont laatste inlogtijd per gebruiker'],
+    wijzigingen_en: ['Feature: admin panel shows last login time per user'],
+    wijzigingen_de: ['Funktion: Admin-Panel zeigt letzten Login-Zeitpunkt pro Benutzer'],
+  },
   {
     versie: '1.68.37',
     datum: '2026-04-25',
