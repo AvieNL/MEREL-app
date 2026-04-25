@@ -1,6 +1,13 @@
-export const VERSIE = '1.68.34';
+export const VERSIE = '1.68.35';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.35',
+    datum: '2026-04-25',
+    wijzigingen: ['Fix: omstandighedenlijst gesorteerd conform Griel-specificatie — code 39 staat nu als laatste optie (na 91)'],
+    wijzigingen_en: ['Fix: circumstances list sorted according to Griel specification — code 39 now appears as last option (after 91)'],
+    wijzigingen_de: ['Fix: Umstandsliste gemäß Griel-Spezifikation sortiert — Code 39 erscheint jetzt als letzte Option (nach 91)'],
+  },
   {
     versie: '1.68.34',
     datum: '2026-04-23',

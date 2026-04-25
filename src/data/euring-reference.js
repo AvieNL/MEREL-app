@@ -169,7 +169,6 @@ export const euringReference = {
       { code: '36', beschrijving: 'door radioactiviteit', beschrijving_en: 'Through radioactivity', beschrijving_de: 'Durch Radioaktivität' },
       { code: '37', beschrijving: 'onopzettelijk vergiftigd, vergif bekend', beschrijving_en: 'Accidentally poisoned, poison known', beschrijving_de: 'Versehentlich vergiftet, Gift bekannt' },
       { code: '38', beschrijving: 'vergiftigd, vergif onbekend', beschrijving_en: 'Poisoned, poison unknown', beschrijving_de: 'Vergiftet, Gift unbekannt' },
-      { code: '39', beschrijving: 'vogel vergiftigd gevonden', beschrijving_en: 'Bird found poisoned', beschrijving_de: 'Vergifteten Vogel gefunden' },
       { code: '40', beschrijving: 'verkeersslachtoffer', beschrijving_en: 'Road casualty', beschrijving_de: 'Straßenverkehrsopfer' },
       { code: '41', beschrijving: 'treinslachtoffer', beschrijving_en: 'Train casualty', beschrijving_de: 'Eisenbahnopfer' },
       { code: '42', beschrijving: 'vliegtuigslachtoffer', beschrijving_en: 'Aircraft casualty', beschrijving_de: 'Flugzeugopfer' },
@@ -219,6 +218,7 @@ export const euringReference = {
       { code: '88', beschrijving: 'alleen gestempelde veer gevonden', beschrijving_en: 'Only stamped feather found', beschrijving_de: 'Nur gestempelte Feder gefunden' },
       { code: '89', beschrijving: 'vogel geidentificeerd mbv verf op lichaam en/of vleugel(s)', beschrijving_en: 'Bird identified by paint on body and/or wing(s)', beschrijving_de: 'Vogel durch Farbe auf Körper und/oder Flügel identifiziert' },
       { code: '91', beschrijving: 'tegen windmolen aangevlogen', beschrijving_en: 'Flew into wind turbine', beschrijving_de: 'Gegen Windmühle/Windturbine geflogen' },
+      { code: '39', beschrijving: 'vogel vergiftigd gevonden', beschrijving_en: 'Bird found poisoned', beschrijving_de: 'Vergifteten Vogel gefunden' },
     ],
   },
   status: {
