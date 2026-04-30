@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.41';
+export const VERSIE = '1.68.42';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.42',
+    datum: '2026-04-30',
+    wijzigingen: [
+      'UI: determinatiehulp-trigger geïntegreerd in het veldlabel — klik op "Geslacht 🔍" om de popup te openen, hover toont tooltip met naam van de hulp',
+    ],
+    wijzigingen_en: [
+      'UI: determination aid trigger integrated into field label — click "Sex 🔍" to open the popup, hover shows tooltip with aid name',
+    ],
+    wijzigingen_de: [
+      'UI: Bestimmungshilfe-Trigger in Feldbezeichnung integriert — Klick auf "Geschlecht 🔍" öffnet das Popup, Hover zeigt Tooltip mit Hilfenamen',
+    ],
+  },
   {
     versie: '1.68.41',
     datum: '2026-04-30',

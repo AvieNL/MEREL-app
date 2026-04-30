@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import {
@@ -8,7 +9,7 @@ import {
 } from './NieuwPage.constants';
 import InfoPanel from './InfoPanel';
 import RuiSeizoenTekst from './RuiSeizoenTekst';
-import DeterminatieButton from '../Determinatie/DeterminatieButton';
+import DeterminatieModal from '../Determinatie/DeterminatieModal';
 import { getAidsVoorSoort } from '../../data/determinatie/index';
 import './NieuwPage.css';
 
@@ -30,10 +31,13 @@ export default function SectieVogel() {
     euringCode,
   } = useNieuwForm();
 
+  const [geslachtDetOpen, setGeslachtDetOpen] = useState(false);
+
   const detAids = euringCode ? getAidsVoorSoort(euringCode) : [];
   const geslachtAids = detAids.filter(a => a.resultaat_veld === 'geslacht');
   const leeftijdAids = detAids.filter(a => a.resultaat_veld === 'leeftijd');
   const soortAids    = detAids.filter(a => a.resultaat_veld === 'soort');
+  const geslachtAid  = geslachtAids[0] ?? null;
 
   return (
     <div className="section">
@@ -45,18 +49,22 @@ export default function SectieVogel() {
         <div className="section-content">
           <div className="form-row">
             <div className={`form-group${errCls('geslacht')}`}>
-              <label>
+              <label
+                className={geslachtAid ? 'det-label-trigger' : undefined}
+                data-tooltip={geslachtAid ? geslachtAid.naam : undefined}
+                onClick={geslachtAid ? () => setGeslachtDetOpen(true) : undefined}
+              >
                 {t('form_sex')}
-                {geslachtAids.map(aid => (
-                  <DeterminatieButton
-                    key={aid.id}
-                    aid={aid}
-                    formValues={form}
-                    onGebruik={(veld, waarde) => update(veld, waarde)}
-                    label="Bepaal"
-                  />
-                ))}
+                {geslachtAid && <span className="det-label-icon">🔍</span>}
               </label>
+              {geslachtAid && geslachtDetOpen && (
+                <DeterminatieModal
+                  aid={geslachtAid}
+                  formValues={form}
+                  onGebruik={(veld, waarde) => update(veld, waarde)}
+                  onSluit={() => setGeslachtDetOpen(false)}
+                />
+              )}
               <select value={form.geslacht} onChange={e => update('geslacht', e.target.value)}>
                 {GESLACHT_OPTIONS.map(o => (
                   <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
