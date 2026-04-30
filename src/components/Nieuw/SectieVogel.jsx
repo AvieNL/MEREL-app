@@ -32,12 +32,14 @@ export default function SectieVogel() {
   } = useNieuwForm();
 
   const [geslachtDetOpen, setGeslachtDetOpen] = useState(false);
+  const [leeftijdDetOpen, setLeeftijdDetOpen] = useState(false);
 
   const detAids = euringCode ? getAidsVoorSoort(euringCode) : [];
   const geslachtAids = detAids.filter(a => a.resultaat_veld === 'geslacht');
   const leeftijdAids = detAids.filter(a => a.resultaat_veld === 'leeftijd');
   const soortAids    = detAids.filter(a => a.resultaat_veld === 'soort');
   const geslachtAid  = geslachtAids[0] ?? null;
+  const leeftijdAid  = leeftijdAids[0] ?? null;
 
   return (
     <div className="section">
@@ -104,7 +106,22 @@ export default function SectieVogel() {
           })()}
 
           <div className={`form-group${errCls('leeftijd')}`}>
-            <label>{t('form_age')}</label>
+            <label
+              className={leeftijdAid ? 'det-label-trigger' : undefined}
+              data-tooltip={leeftijdAid ? leeftijdAid.naam : undefined}
+              onClick={leeftijdAid ? () => setLeeftijdDetOpen(true) : undefined}
+            >
+              {t('form_age')}
+              {leeftijdAid && <span className="det-label-icon">🔍</span>}
+            </label>
+            {leeftijdAid && leeftijdDetOpen && (
+              <DeterminatieModal
+                aid={leeftijdAid}
+                formValues={form}
+                onGebruik={(veld, waarde) => update(veld, waarde)}
+                onSluit={() => setLeeftijdDetOpen(false)}
+              />
+            )}
             <select value={form.leeftijd} onChange={e => update('leeftijd', e.target.value)}>
               {LEEFTIJD_OPTIONS.map(o => (
                 <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>

@@ -1,6 +1,22 @@
-export const VERSIE = '1.68.43';
+export const VERSIE = '1.68.44';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.44',
+    datum: '2026-04-30',
+    wijzigingen: [
+      'Functie: leeftijdsbepaling Roek toegevoegd (Speek 1994 p.191) — meerstaps-survey via kopglans, slagpennen, dekveren, kin/wangen en periode',
+      'UI: 🔍-trigger ook naast het Leeftijd-veld in het formulier als er een leeftijdshulp beschikbaar is',
+    ],
+    wijzigingen_en: [
+      'Feature: Rook age determination added (Speek 1994 p.191) — multi-step survey via head gloss, primaries, coverts, chin/cheeks and period',
+      'UI: 🔍 trigger also next to Age field in the form when an age aid is available',
+    ],
+    wijzigingen_de: [
+      'Funktion: Altersbestimmung Saatkrähe hinzugefügt (Speek 1994 S.191) — mehrstufige Umfrage via Kopfglanz, Handschwingen, Deckfedern, Kinn/Wangen und Zeitraum',
+      'UI: 🔍-Auslöser auch neben dem Altersfeld im Formular wenn eine Altershilfe verfügbar ist',
+    ],
+  },
   {
     versie: '1.68.43',
     datum: '2026-04-30',
