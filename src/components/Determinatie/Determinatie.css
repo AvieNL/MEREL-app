@@ -1,0 +1,297 @@
+/* ── Trigger-knop naast veld ─────────────────────────────────────── */
+.det-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  line-height: 1;
+}
+.det-btn:hover {
+  background: var(--accent);
+  color: #000;
+}
+.det-btn__icon {
+  font-size: 0.85rem;
+}
+
+/* ── Modal overlay ───────────────────────────────────────────────── */
+.det-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  animation: det-fade-in 0.15s ease;
+}
+@media (min-width: 540px) {
+  .det-overlay {
+    align-items: center;
+  }
+}
+@keyframes det-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.det-modal {
+  background: var(--bg-card, #1e293b);
+  border-radius: 12px 12px 0 0;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90dvh;
+  overflow-y: auto;
+  padding: 1.25rem 1.25rem 2rem;
+  animation: det-slide-up 0.2s ease;
+}
+@media (min-width: 540px) {
+  .det-modal {
+    border-radius: 12px;
+    max-height: 80dvh;
+  }
+}
+@keyframes det-slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Modal header ────────────────────────────────────────────────── */
+.det-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+.det-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary, #f1f5f9);
+  margin: 0;
+}
+.det-bron {
+  font-size: 0.7rem;
+  color: var(--text-muted, #64748b);
+  margin: 0 0 1rem;
+}
+.det-close {
+  background: none;
+  border: none;
+  color: var(--text-muted, #64748b);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.det-close:hover { color: var(--text-primary); }
+
+/* ── Voortgang ───────────────────────────────────────────────────── */
+.det-voortgang {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 1.1rem;
+}
+.det-stap-dot {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-input, #334155);
+  flex: 1;
+  transition: background 0.2s;
+}
+.det-stap-dot--actief  { background: var(--accent, #38bdf8); }
+.det-stap-dot--gedaan  { background: var(--success, #22c55e); }
+
+/* ── Stap inhoud ─────────────────────────────────────────────────── */
+.det-stap-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent, #38bdf8);
+  margin-bottom: 0.35rem;
+}
+.det-stap-vraag {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary, #f1f5f9);
+  margin-bottom: 0.2rem;
+}
+.det-toelichting {
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  margin-bottom: 0.9rem;
+}
+
+/* ── Keuze-opties ────────────────────────────────────────────────── */
+.det-opties {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.det-optie {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-input, #1e293b);
+  border: 1.5px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-secondary, #cbd5e1);
+  transition: border-color 0.15s, background 0.15s;
+  text-align: left;
+  width: 100%;
+}
+.det-optie:hover { border-color: var(--accent, #38bdf8); }
+.det-optie--actief {
+  border-color: var(--accent, #38bdf8);
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--text-primary);
+}
+.det-optie--auto {
+  border-color: var(--success, #22c55e);
+  opacity: 0.85;
+}
+.det-optie__check { font-size: 0.85rem; color: var(--accent, #38bdf8); }
+.det-auto-label {
+  font-size: 0.67rem;
+  color: var(--success, #22c55e);
+  margin-left: auto;
+}
+
+/* ── Metingen ────────────────────────────────────────────────────── */
+.det-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+.det-input-group label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted, #94a3b8);
+  margin-bottom: 0.25rem;
+}
+.det-input-group input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: var(--bg-input, #1e293b);
+  border: 1px solid var(--border, #334155);
+  border-radius: 6px;
+  color: var(--text-primary, #f1f5f9);
+  font-size: 1rem;
+}
+.det-input-group input:focus {
+  outline: none;
+  border-color: var(--accent, #38bdf8);
+}
+.det-input-auto-label {
+  font-size: 0.67rem;
+  color: var(--success, #22c55e);
+  margin-top: 0.15rem;
+}
+
+/* ── Bereken-knop ────────────────────────────────────────────────── */
+.det-bereken-btn {
+  width: 100%;
+  padding: 0.7rem;
+  background: var(--accent, #38bdf8);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.det-bereken-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* ── Resultaat ───────────────────────────────────────────────────── */
+.det-resultaat {
+  background: var(--bg-input, #1e293b);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.det-resultaat--positief { border-left: 3px solid var(--success, #22c55e); }
+.det-resultaat--negatief { border-left: 3px solid var(--accent, #38bdf8); }
+.det-resultaat--onzeker  { border-left: 3px solid var(--text-muted, #64748b); }
+.det-resultaat--zeker    { border-left: 3px solid var(--success, #22c55e); }
+
+.det-resultaat__label {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary, #f1f5f9);
+  margin-bottom: 0.4rem;
+}
+.det-resultaat__zekerheid {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  margin-bottom: 0.5rem;
+}
+.det-resultaat__zekerheid--zeker   { background: rgba(34,197,94,0.15); color: var(--success, #22c55e); }
+.det-resultaat__zekerheid--mogelijk { background: rgba(56,189,248,0.12); color: var(--accent, #38bdf8); }
+.det-resultaat__zekerheid--onbekend { background: rgba(100,116,139,0.15); color: var(--text-muted); }
+
+.det-resultaat__uitleg {
+  font-size: 0.8rem;
+  color: var(--text-muted, #94a3b8);
+  line-height: 1.5;
+}
+
+/* ── Actieknoppen ────────────────────────────────────────────────── */
+.det-acties {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.det-gebruik-btn {
+  flex: 1;
+  padding: 0.7rem;
+  background: var(--success, #22c55e);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.det-opnieuw-btn {
+  padding: 0.7rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border, #334155);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.det-opnieuw-btn:hover { border-color: var(--text-secondary); }
+
+/* ── Terug-knop ──────────────────────────────────────────────────── */
+.det-terug-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 0.75rem;
+  display: block;
+}
+.det-terug-btn:hover { color: var(--text-secondary); }

@@ -1,6 +1,25 @@
-export const VERSIE = '1.68.39';
+export const VERSIE = '1.68.40';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.40',
+    datum: '2026-04-30',
+    wijzigingen: [
+      'Functie: determinatiehulp infrastructuur — soortspecifieke hulp bij geslacht/leeftijd/soortbepaling via survey of berekening',
+      'Functie: eerste aid — Roek geslachtsbepaling via broedvlek en vleugel/snavelverhouding (Svensson 1992)',
+      'UI: 🔍-knopje naast Geslacht-veld in formulier als er een determinatiehulp beschikbaar is',
+    ],
+    wijzigingen_en: [
+      'Feature: determination aid infrastructure — species-specific help for sex/age/species identification via survey or calculation',
+      'Feature: first aid — Rook sex determination via brood patch and wing/bill ratio (Svensson 1992)',
+      'UI: 🔍 button next to Sex field in form when a determination aid is available',
+    ],
+    wijzigingen_de: [
+      'Funktion: Bestimmungshilfe-Infrastruktur — artspezifische Hilfe zur Geschlechts-/Alters-/Artbestimmung',
+      'Funktion: erste Hilfe — Saatkrähe Geschlechtsbestimmung via Brutfleck und Flügel/Schnabelindex (Svensson 1992)',
+      'UI: 🔍-Schaltfläche neben dem Geschlechtsfeld im Formular wenn eine Bestimmungshilfe verfügbar ist',
+    ],
+  },
   {
     versie: '1.68.39',
     datum: '2026-04-25',
