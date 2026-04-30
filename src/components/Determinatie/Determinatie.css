@@ -46,7 +46,7 @@
 }
 
 .det-modal {
-  background: var(--bg-card, #1e293b);
+  background: var(--bg-secondary, #1a1a1a);
   border-radius: 12px 12px 0 0;
   width: 100%;
   max-width: 480px;

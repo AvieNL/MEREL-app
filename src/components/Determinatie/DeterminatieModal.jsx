@@ -162,7 +162,7 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
         {/* Header */}
         <div className="det-header">
           <h2 className="det-title">{aid.naam}</h2>
-          <button className="det-close" onClick={onSluit} aria-label="Sluiten">×</button>
+          <button type="button" className="det-close" onClick={onSluit} aria-label="Sluiten">×</button>
         </div>
         {aid.bron && <p className="det-bron">Bron: {aid.bron}</p>}
 
@@ -199,6 +199,7 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
                   return (
                     <button
                       key={optie.waarde}
+                      type="button"
                       className={`det-optie${isActief ? ' det-optie--actief' : ''}${isAuto ? ' det-optie--auto' : ''}`}
                       onClick={() => kiesOptie(huidigeStap, optie)}
                     >
@@ -239,6 +240,7 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
                   })}
                 </div>
                 <button
+                  type="button"
                   className="det-bereken-btn"
                   disabled={!metingenCompleet}
                   onClick={() => berekenMetingen(huidigeStap)}
@@ -250,7 +252,7 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
 
             {/* Terug-knop */}
             {geschiedenis.length > 1 && (
-              <button className="det-terug-btn" onClick={gaTerug}>← Terug</button>
+              <button type="button" className="det-terug-btn" onClick={gaTerug}>← Terug</button>
             )}
           </div>
         )}
@@ -271,13 +273,14 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
             <div className="det-acties">
               {onGebruik && resultaat.waarde && (
                 <button
+                  type="button"
                   className="det-gebruik-btn"
                   onClick={() => { onGebruik(aid.resultaat_veld, resultaat.waarde); onSluit(); }}
                 >
                   Gebruik dit resultaat →
                 </button>
               )}
-              <button className="det-opnieuw-btn" onClick={startSurvey}>
+              <button type="button" className="det-opnieuw-btn" onClick={startSurvey}>
                 Opnieuw
               </button>
             </div>

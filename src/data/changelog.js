@@ -1,6 +1,22 @@
-export const VERSIE = '1.68.40';
+export const VERSIE = '1.68.41';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.41',
+    datum: '2026-04-30',
+    wijzigingen: [
+      'Fix: determinatiehulp-venster kon niet gesloten worden (kruisje, buitenklik) — knoppen misten type="button" waardoor ze het formulier submitten',
+      'Fix: determinatiehulp-venster toont nu correct donker thema (geen blauwgrijze achtergrond meer)',
+    ],
+    wijzigingen_en: [
+      'Fix: determination aid modal could not be closed (×, click outside) — buttons were missing type="button" causing form submission',
+      'Fix: determination aid modal now correctly shows dark theme (no more blue-gray background)',
+    ],
+    wijzigingen_de: [
+      'Fix: Bestimmungshilfe-Fenster konnte nicht geschlossen werden (×, Klick außerhalb) — Buttons fehlte type="button" und lösten Formular-Submit aus',
+      'Fix: Bestimmungshilfe-Fenster zeigt nun korrekt dunkles Theme (kein blaugrauer Hintergrund mehr)',
+    ],
+  },
   {
     versie: '1.68.40',
     datum: '2026-04-30',
