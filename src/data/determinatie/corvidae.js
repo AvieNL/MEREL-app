@@ -17,7 +17,7 @@ export const corvidae = [
     resultaat_veld: 'geslacht',
     naam: 'Geslachtsbepaling Roek',
     korte_beschrijving: 'Via broedvlek en vleugel/snavelverhouding (alleen adult)',
-    bron: 'Svensson (1992)',
+    bron: 'Demongin (2020) p.349',
     type: 'survey',
     start: 'broedvlek',
     stappen: {
