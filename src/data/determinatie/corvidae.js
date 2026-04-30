@@ -1,6 +1,6 @@
 /**
  * Determinatiehulpen voor Corvidae (kraaivogels)
- * EURING-codes: Roek = 15820 (Corvus frugilegus)
+ * EURING-codes: Roek = 15630 (Corvus frugilegus)
  */
 
 // Grenswaarde vleugel bij gegeven snavellengte tot schedel
@@ -13,7 +13,7 @@ function roekGrens(snavel) {
 export const corvidae = [
   {
     id: 'roek-geslacht',
-    soorten: ['15820'],           // Corvus frugilegus (Roek)
+    soorten: ['15630'],           // Corvus frugilegus (Roek)
     resultaat_veld: 'geslacht',
     naam: 'Geslachtsbepaling Roek',
     korte_beschrijving: 'Via broedvlek en vleugel/snavelverhouding (alleen adult)',
