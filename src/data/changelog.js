@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.42';
+export const VERSIE = '1.68.43';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.43',
+    datum: '2026-04-30',
+    wijzigingen: [
+      'Functie: determinatiehulpen zichtbaar op soortenpagina als naslag — klik "Probeer" om de hulp te doorlopen zonder terugschrijven naar een formulier',
+    ],
+    wijzigingen_en: [
+      'Feature: determination aids visible on species page as reference — click "Probeer" to run through the aid without writing back to a form',
+    ],
+    wijzigingen_de: [
+      'Funktion: Bestimmungshilfen auf Artenseite als Nachschlagewerk sichtbar — "Probeer" klicken um die Hilfe ohne Formular-Rückschreiben durchzuführen',
+    ],
+  },
   {
     versie: '1.68.42',
     datum: '2026-04-30',

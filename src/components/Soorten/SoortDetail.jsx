@@ -17,6 +17,8 @@ import { LEEFTIJD_LABEL } from '../../data/constants';
 import { computeBioRanges } from '../../utils/bioHelper';
 import { TYPE_CFG, buildNvByRing, getVangstType } from '../../utils/vangstType';
 import SoortDetailEditor from './SoortDetailEditor';
+import DeterminatieButton from '../Determinatie/DeterminatieButton';
+import { getAidsVoorSoort } from '../../data/determinatie/index';
 import './SoortDetail.css';
 
 function leeftijdLabel(code) { return LEEFTIJD_LABEL[code] || code; }
@@ -543,6 +545,38 @@ export default function SoortDetail({ records, speciesOverrides }) {
           </div>
         </div>
       )}
+
+      {/* Determinatiehulpen (naslag-modus) */}
+      {(() => {
+        const aids = getAidsVoorSoort(soortEuringCode);
+        if (!aids.length) return null;
+        return (
+          <div className="sd-card">
+            <h3 className="sd-card-title">Determinatiehulp</h3>
+            <div className="sd-det-aids">
+              {aids.map(aid => (
+                <div key={aid.id} className="sd-det-aid-row">
+                  <div className="sd-det-aid-info">
+                    <span className="sd-det-aid-naam">{aid.naam}</span>
+                    {aid.korte_beschrijving && (
+                      <span className="sd-det-aid-beschrijving">{aid.korte_beschrijving}</span>
+                    )}
+                    {aid.bron && (
+                      <span className="sd-det-aid-bron">Bron: {aid.bron}</span>
+                    )}
+                  </div>
+                  <DeterminatieButton
+                    aid={aid}
+                    formValues={null}
+                    onGebruik={null}
+                    label="Probeer"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Ring & Rui */}
       <div className="sd-card">
