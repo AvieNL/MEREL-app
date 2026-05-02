@@ -89,6 +89,7 @@ export const corvidae = [
             label: 'Nee, juveniel / 1e kj',
             resultaat: {
               waarde: null,
+              fallback_waarde: 'U',
               label: 'Niet te bepalen',
               zeker: false,
               uitleg: 'De snavelindex voor geslachtsbepaling geldt alleen bij adulte vogels.',
@@ -146,6 +147,7 @@ export const corvidae = [
           }
           return {
             waarde: null,
+            fallback_waarde: 'U',
             label: 'Exact op de grens — niet te bepalen',
             zeker: false,
             uitleg: `Vleugel ${v} mm valt exact op de grenswaarde bij snavellengte ${s} mm.`,

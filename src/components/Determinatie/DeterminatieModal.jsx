@@ -328,7 +328,7 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
                 <button
                   type="button"
                   className="det-gebruik-btn"
-                  onClick={() => { onGebruik(aid.resultaat_veld, resultaat.waarde ?? '0'); onSluit(); }}
+                  onClick={() => { onGebruik(aid.resultaat_veld, resultaat.waarde ?? resultaat.fallback_waarde ?? '0'); onSluit(); }}
                 >
                   Gebruik dit resultaat →
                 </button>
