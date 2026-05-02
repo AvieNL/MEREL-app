@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../lib/db';
 import { fetchAllPages } from '../utils/supabaseHelper';
@@ -34,6 +34,15 @@ export function useSpeciesRef() {
     [],
     []
   ) ?? [];
+
+  // Vangnet: als de cache leeg is (bijv. na Dexie-upgrade), direct een pull starten.
+  // Normaal doet SyncContext dit — maar dit vangt gevallen op waarbij SyncContext
+  // al vóór de Dexie-upgrade heeft geprobeerd te putten (en 0 rijen kreeg).
+  useEffect(() => {
+    if (species.length === 0 && navigator.onLine) {
+      pullSpeciesIfNeeded(false).catch(() => {});
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return species;
 }
@@ -72,11 +81,21 @@ async function _doSpeciesPull(force) {
     return;
   }
 
-  if (allData.length === 0) return;
+  if (allData.length === 0) {
+    console.warn('Species pull: 0 rijen ontvangen van Supabase (RLS of verbindingsprobleem?)');
+    return;
+  }
 
   // Merge: data-blob + top-level euring_code (PK) zodat Dexie de juiste primary key gebruikt
   const rows = allData.map(r => ({ ...r.data, euring_code: r.euring_code }));
-  await db.species.bulkPut(rows);
+
+  try {
+    await db.species.bulkPut(rows);
+  } catch (err) {
+    console.error('Species bulkPut mislukt:', err.message, err);
+    setSpeciesError('Soorten konden niet worden opgeslagen. Probeer de pagina te verversen.');
+    return;
+  }
 
   // Verwijder lokale soorten die op een ander apparaat zijn gewist
   const supabaseCodes = new Set(allData.map(r => r.euring_code).filter(Boolean));
@@ -84,4 +103,5 @@ async function _doSpeciesPull(force) {
   if (toDelete.length > 0) await db.species.bulkDelete(toDelete);
 
   await db.meta.put({ key: 'species_last_pull', value: new Date().toISOString() });
+  console.log(`Species pull geslaagd: ${rows.length} soorten opgeslagen`);
 }
