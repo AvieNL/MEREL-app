@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.48';
+export const VERSIE = '1.68.49';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.49',
+    datum: '2026-05-02',
+    wijzigingen: [
+      'Data (Fase 2): EURING-code is nu primaire sleutel van de soortendatabase — 84 dubbele rijen verwijderd (82 Latijnse namen als naam_nl, plus Noordelijke Klapekster en Witkeelkwikstaart met hogere datakwaliteit behouden als resp. Klapekster en Italiaanse Gele Kwikstaart), 3475 soorten over',
+    ],
+    wijzigingen_en: [
+      'Data (Phase 2): EURING code is now primary key of the species database — 84 duplicate rows removed (82 Latin names used as naam_nl, plus Noordelijke Klapekster and Witkeelkwikstaart merged into better-data entries), 3475 species remain',
+    ],
+    wijzigingen_de: [
+      'Daten (Phase 2): EURING-Code ist jetzt Primärschlüssel der Artendatenbank — 84 doppelte Einträge entfernt (82 lateinische Namen als naam_nl, plus zwei Dutch-Duplikate mit weniger Daten gelöscht), 3475 Arten verbleiben',
+    ],
+  },
   {
     versie: '1.68.48',
     datum: '2026-05-02',
