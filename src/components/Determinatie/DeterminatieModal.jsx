@@ -151,16 +151,31 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
     return auto !== null && auto !== undefined && stap.opties.some(o => o.waarde === auto);
   }
 
-  // Verwijzing: open genest hulpvenster en herstart daarna met het resultaat
+  // Verwijzing: open genest hulpvenster
   function openVerwijzing(stapVerwijzing) {
     const genestAid = getAidById(stapVerwijzing.aid_id);
     if (genestAid) setVerwijzingAid(genestAid);
   }
 
+  // Na "Gebruik dit resultaat" in het geneste venster:
+  // schrijf terug naar het formulier én ga direct verder vanuit de huidige stap.
+  // Niet herstarten — formValues-prop is nog niet bijgewerkt door React op dit moment.
   function verwijzingGebruikt(veld, waarde) {
-    if (onGebruik) onGebruik(veld, waarde);      // schrijf terug naar formulier
+    if (onGebruik) onGebruik(veld, waarde);
     setVerwijzingAid(null);
-    startSurvey({ [veld]: waarde });              // herstart met nieuwe waarde
+
+    // Huidige stap verwijst naar dit veld → bereken de auto-waarde en kies de optie
+    if (huidigeStap?.type === 'keuze' && huidigeStap.uit_formulier?.veld === veld) {
+      const { transform } = huidigeStap.uit_formulier;
+      const autoWaarde = transform ? transform(waarde) : waarde;
+      const optie = huidigeStap.opties?.find(o => o.waarde === autoWaarde);
+      if (optie) {
+        kiesOptie(huidigeStap, optie);
+        return;
+      }
+    }
+    // Fallback: geen directe koppeling, herstart de survey
+    startSurvey({ [veld]: waarde });
   }
 
   const gekozenOptie = useCallback((stap) => {
