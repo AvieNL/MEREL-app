@@ -1,17 +1,17 @@
-export const VERSIE = '1.68.51';
+export const VERSIE = '1.69.0';
 
 export const CHANGELOG = [
   {
-    versie: '1.68.51',
+    versie: '1.69.0',
     datum: '2026-05-02',
     wijzigingen: [
-      'Data (Fase 3): determinatie-hulpen verplaatst naar Supabase — tabel determinatie_aid, Dexie versie 16 als offline-cache, interpreter vertaalt transform_type/bereken_type terug naar JS-functies; corvidae.js blijft als seed-fallback',
+      'Architectuur: volledige data-migratie — EURING-code is nu primaire sleutel in Supabase én Dexie, 84 dubbele soortrecords opgeruimd (3475 soorten over), determinatie-hulpen verplaatst naar Supabase met offline-cache en transform-interpreter; backup/restore-scripts toegevoegd',
     ],
     wijzigingen_en: [
-      'Data (Phase 3): determination aids moved to Supabase — determinatie_aid table, Dexie version 16 as offline cache, interpreter converts transform_type/bereken_type back to JS functions; corvidae.js remains as seed fallback',
+      'Architecture: full data migration — EURING code is now primary key in Supabase and Dexie, 84 duplicate species records cleaned up (3475 species remaining), determination aids moved to Supabase with offline cache and transform interpreter; backup/restore scripts added',
     ],
     wijzigingen_de: [
-      'Daten (Phase 3): Bestimmungshilfen nach Supabase verschoben — Tabelle determinatie_aid, Dexie Version 16 als Offline-Cache, Interpreter wandelt transform_type/bereken_type in JS-Funktionen um; corvidae.js bleibt als Seed-Fallback',
+      'Architektur: vollständige Datenmigration — EURING-Code ist jetzt Primärschlüssel in Supabase und Dexie, 84 doppelte Artdatensätze bereinigt (3475 Arten verbleiben), Bestimmungshilfen nach Supabase verschoben mit Offline-Cache und Transform-Interpreter; Backup-/Restore-Skripte hinzugefügt',
     ],
   },
   {
