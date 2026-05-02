@@ -190,13 +190,18 @@ export const corvidae = [
         conditie: 'Kop min of meer glanzend',
         sub: [
           {
-            conditie: 'Slagpennen zwartachtig bruin, enkele sporen metaalglans, contrasterend met kleine en middelste vleugeldekveren; veren op kin en wangen; neusgaten bedekt',
+            conditie: 'Slagpennen zwartachtig bruin, enkele sporen metaalglans, contrasterend met kleine en middelste vleugeldekveren',
             sub: [
-              { conditie: 'Januari t/m mei', resultaat: '2e kj' },
-              { conditie: 'Juni t/m december', resultaat: '1e kj' },
+              {
+                conditie: 'Veren op kin en wangen; neusgaten bedekt',
+                sub: [
+                  { conditie: 'Januari t/m mei', resultaat: '2e kj' },
+                  { conditie: 'Juni t/m december', resultaat: '1e kj' },
+                ],
+              },
+              { conditie: 'Kin en wangen kaal, neusgaten nog bedekt', resultaat: '2e kj (jan–jun)' },
             ],
           },
-          { conditie: 'Kin en wangen kaal, neusgaten nog bedekt', resultaat: '2e kj (jan–jun)' },
           {
             conditie: 'Slagpennen zwart met sterk metaalachtige purpergroene glans, overeenkomend met vleugeldekveren',
             sub: [
@@ -251,11 +256,31 @@ export const corvidae = [
         label: 'Slagpennen & dekveren',
         type: 'keuze',
         vraag: 'Hoe zijn de slagpennen en buitenste armpendekveren?',
-        toelichting: 'Vergelijk kleur en glans van slagpennen met de kleine en middelste vleugeldekveren. Let ook op de vedering van kin, wangen en neusgaten.',
+        toelichting: 'Vergelijk kleur en glans van slagpennen met de kleine en middelste vleugeldekveren.',
         opties: [
           {
             waarde: 'bruin',
-            label: 'Zwartachtig bruin, slechts enkele sporen metaalglans — contrasterend met kleine en middelste vleugeldekveren; veren op kin en wangen; neusgaten bedekt met veren',
+            label: 'Zwartachtig bruin, slechts enkele sporen metaalglans — contrasterend met kleine en middelste vleugeldekveren',
+            volgende: 'kin_toestand_bruin',
+          },
+          {
+            waarde: 'zwart_metaalglans',
+            label: 'Zwart met sterk metaalachtige purpergroene glans — overeenkomend met de vleugeldekveren',
+            volgende: 'kin_sporen',
+          },
+        ],
+      },
+
+      kin_toestand_bruin: {
+        id: 'kin_toestand_bruin',
+        label: 'Kin & wangen',
+        type: 'keuze',
+        vraag: 'Hoe zijn kin, wangen en neusgaten?',
+        toelichting: 'Let op de aanwezigheid van veren op kin en wangen en of de neusgaten bedekt zijn.',
+        opties: [
+          {
+            waarde: 'veren',
+            label: 'Veren op kin en wangen; neusgaten bedekt met veren',
             volgende: 'periode_a',
           },
           {
@@ -267,11 +292,6 @@ export const corvidae = [
               zeker: false,
               uitleg: 'Kale kin en wangen maar bedekte neusgaten duiden op een 2e-kalenderjaar vogel (januari t/m juni).',
             },
-          },
-          {
-            waarde: 'zwart_metaalglans',
-            label: 'Zwart met sterk metaalachtige purpergroene glans — overeenkomend met de vleugeldekveren',
-            volgende: 'kin_sporen',
           },
         ],
       },

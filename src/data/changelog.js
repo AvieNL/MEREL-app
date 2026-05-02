@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.46';
+export const VERSIE = '1.68.47';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.47',
+    datum: '2026-04-30',
+    wijzigingen: [
+      'Data: beslisboom Roek leeftijdsbepaling gecorrigeerd — "Slagpennen zwartachtig bruin" leidt nu via tussenstap naar "Veren op kin/wangen + neusgaten bedekt" of "Kin/wangen kaal, neusgaten nog bedekt"',
+    ],
+    wijzigingen_en: [
+      'Data: Rook age determination decision tree corrected — "Primary feathers dark brownish" now routes via intermediate step to "feathers on chin/cheeks + covered nostrils" or "chin/cheeks bare, nostrils still covered"',
+    ],
+    wijzigingen_de: [
+      'Daten: Entscheidungsbaum Saatkrähe Altersbestimmung korrigiert — "Schwungfedern schwärzlich braun" führt jetzt über Zwischenschritt zu "Federn auf Kinn/Wangen + verdeckte Nasenlöcher" oder "Kinn/Wangen kahl, Nasenlöcher noch bedeckt"',
+    ],
+  },
   {
     versie: '1.68.46',
     datum: '2026-05-02',
