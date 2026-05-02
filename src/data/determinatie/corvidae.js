@@ -192,8 +192,8 @@ export const corvidae = [
           {
             conditie: 'Slagpennen zwartachtig bruin, enkele sporen metaalglans, contrasterend met kleine en middelste vleugeldekveren; veren op kin en wangen; neusgaten bedekt',
             sub: [
-              { conditie: 'Juni t/m december', resultaat: '1e kj' },
               { conditie: 'Januari t/m mei', resultaat: '2e kj' },
+              { conditie: 'Juni t/m december', resultaat: '1e kj' },
             ],
           },
           { conditie: 'Kin en wangen kaal, neusgaten nog bedekt', resultaat: '2e kj (jan–jun)' },
@@ -203,15 +203,15 @@ export const corvidae = [
               {
                 conditie: 'Sporen van haren, dons of afgebroken pennen op kin, wangen of neusgaten',
                 sub: [
-                  { conditie: 'Juni t/m december', resultaat: '2e kj' },
                   { conditie: 'Januari t/m mei', resultaat: '3e kj' },
+                  { conditie: 'Juni t/m december', resultaat: '2e kj' },
                 ],
               },
               {
                 conditie: 'Kin, wangen en neusgaten geheel kaal',
                 sub: [
-                  { conditie: 'Juni t/m december', resultaat: 'na 1e kj' },
                   { conditie: 'Januari t/m mei', resultaat: 'na 2e kj' },
+                  { conditie: 'Juni t/m december', resultaat: 'na 1e kj' },
                 ],
               },
             ],
@@ -288,16 +288,6 @@ export const corvidae = [
         },
         opties: [
           {
-            waarde: 'jun_dec',
-            label: 'Juni t/m december',
-            resultaat: {
-              waarde: '3',
-              label: '1e kj',
-              zeker: false,
-              uitleg: 'Bruinachtige slagpennen met veren op kin/wangen en bedekte neusgaten; periode juni–december: 1e kalenderjaar.',
-            },
-          },
-          {
             waarde: 'jan_mei',
             label: 'Januari t/m mei',
             resultaat: {
@@ -305,6 +295,16 @@ export const corvidae = [
               label: '2e kj',
               zeker: false,
               uitleg: 'Bruinachtige slagpennen met veren op kin/wangen en bedekte neusgaten; periode januari–mei: 2e kalenderjaar.',
+            },
+          },
+          {
+            waarde: 'jun_dec',
+            label: 'Juni t/m december',
+            resultaat: {
+              waarde: '3',
+              label: '1e kj',
+              zeker: false,
+              uitleg: 'Bruinachtige slagpennen met veren op kin/wangen en bedekte neusgaten; periode juni–december: 1e kalenderjaar.',
             },
           },
         ],
@@ -342,16 +342,6 @@ export const corvidae = [
         },
         opties: [
           {
-            waarde: 'jun_dec',
-            label: 'Juni t/m december',
-            resultaat: {
-              waarde: '5',
-              label: '2e kj',
-              zeker: false,
-              uitleg: 'Zwarte slagpennen met sterke metaalglans; sporen op kin/wangen; periode juni–december: 2e kalenderjaar.',
-            },
-          },
-          {
             waarde: 'jan_mei',
             label: 'Januari t/m mei',
             resultaat: {
@@ -359,6 +349,16 @@ export const corvidae = [
               label: '3e kj',
               zeker: false,
               uitleg: 'Zwarte slagpennen met sterke metaalglans; sporen op kin/wangen; periode januari–mei: 3e kalenderjaar.',
+            },
+          },
+          {
+            waarde: 'jun_dec',
+            label: 'Juni t/m december',
+            resultaat: {
+              waarde: '5',
+              label: '2e kj',
+              zeker: false,
+              uitleg: 'Zwarte slagpennen met sterke metaalglans; sporen op kin/wangen; periode juni–december: 2e kalenderjaar.',
             },
           },
         ],
@@ -376,16 +376,6 @@ export const corvidae = [
         },
         opties: [
           {
-            waarde: 'jun_dec',
-            label: 'Juni t/m december',
-            resultaat: {
-              waarde: '4',
-              label: 'na 1e kj',
-              zeker: false,
-              uitleg: 'Zwarte slagpennen met sterke metaalglans; kin/wangen geheel kaal; periode juni–december: na 1e kalenderjaar (2e kj of ouder).',
-            },
-          },
-          {
             waarde: 'jan_mei',
             label: 'Januari t/m mei',
             resultaat: {
@@ -393,6 +383,16 @@ export const corvidae = [
               label: 'na 2e kj',
               zeker: false,
               uitleg: 'Zwarte slagpennen met sterke metaalglans; kin/wangen geheel kaal; periode januari–mei: na 2e kalenderjaar (3e kj of ouder).',
+            },
+          },
+          {
+            waarde: 'jun_dec',
+            label: 'Juni t/m december',
+            resultaat: {
+              waarde: '4',
+              label: 'na 1e kj',
+              zeker: false,
+              uitleg: 'Zwarte slagpennen met sterke metaalglans; kin/wangen geheel kaal; periode juni–december: na 1e kalenderjaar (2e kj of ouder).',
             },
           },
         ],
