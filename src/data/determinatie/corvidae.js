@@ -28,6 +28,23 @@ export const corvidae = [
     bron: 'Demongin (2020) p.349',
     type: 'survey',
     start: 'broedvlek',
+    overzicht: [
+      { conditie: 'Broedvlek aanwezig', resultaat: '♀ Vrouw', zeker: true },
+      {
+        conditie: 'Geen broedvlek / niet vastgesteld',
+        sub: [
+          { conditie: 'Juveniel / 1e kj', resultaat: 'Niet te bepalen' },
+          {
+            conditie: 'Adult (2e kj of ouder)',
+            sub: [
+              { conditie: 'Vleugel > grenswaarde', resultaat: '♂ Mogelijk man' },
+              { conditie: 'Vleugel < grenswaarde', resultaat: '♀ Mogelijk vrouw' },
+              { conditie: 'Grenswaarde (mm) = −2,375 × snavellengte tot schedel + 448,75', info: true },
+            ],
+          },
+        ],
+      },
+    ],
     stappen: {
 
       broedvlek: {
@@ -167,6 +184,41 @@ export const corvidae = [
     bron: 'Speek (1994) p.191',
     type: 'survey',
     start: 'kop_kleur',
+    overzicht: [
+      { conditie: 'Kop matzwart', resultaat: '1e kj', zeker: true },
+      {
+        conditie: 'Kop min of meer glanzend',
+        sub: [
+          {
+            conditie: 'Slagpennen zwartachtig bruin, enkele sporen metaalglans, contrasterend met kleine en middelste vleugeldekveren; veren op kin en wangen; neusgaten bedekt',
+            sub: [
+              { conditie: 'Juni t/m december', resultaat: '1e kj' },
+              { conditie: 'Januari t/m mei', resultaat: '2e kj' },
+            ],
+          },
+          { conditie: 'Kin en wangen kaal, neusgaten nog bedekt', resultaat: '2e kj (jan–jun)' },
+          {
+            conditie: 'Slagpennen zwart met sterk metaalachtige purpergroene glans, overeenkomend met vleugeldekveren',
+            sub: [
+              {
+                conditie: 'Sporen van haren, dons of afgebroken pennen op kin, wangen of neusgaten',
+                sub: [
+                  { conditie: 'Juni t/m december', resultaat: '2e kj' },
+                  { conditie: 'Januari t/m mei', resultaat: '3e kj' },
+                ],
+              },
+              {
+                conditie: 'Kin, wangen en neusgaten geheel kaal',
+                sub: [
+                  { conditie: 'Juni t/m december', resultaat: 'na 1e kj' },
+                  { conditie: 'Januari t/m mei', resultaat: 'na 2e kj' },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
     stappen: {
 
       kop_kleur: {

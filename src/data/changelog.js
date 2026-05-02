@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.45';
+export const VERSIE = '1.68.46';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.46',
+    datum: '2026-05-02',
+    wijzigingen: [
+      'UI: soortenpagina toont uitgeschreven beslisboom per determinatiehulp — condities, perioden en uitkomsten als leesbaar overzicht naast de interactieve "Probeer"-knop',
+    ],
+    wijzigingen_en: [
+      'UI: species page shows written-out decision tree per determination aid — conditions, periods and outcomes as readable overview next to the interactive "Probeer" button',
+    ],
+    wijzigingen_de: [
+      'UI: Artenseite zeigt ausgeschriebenen Entscheidungsbaum pro Bestimmungshilfe — Bedingungen, Zeiträume und Ergebnisse als lesbarer Überblick neben dem interaktiven "Probeer"-Button',
+    ],
+  },
   {
     versie: '1.68.45',
     datum: '2026-05-02',
