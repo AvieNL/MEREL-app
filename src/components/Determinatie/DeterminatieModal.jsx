@@ -219,6 +219,20 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
               <div className="det-toelichting">{huidigeStap.toelichting}</div>
             )}
 
+            {/* Verwijzing naar andere hulp */}
+            {huidigeStap.verwijzing && (
+              <div className="det-verwijzing">
+                <span className="det-verwijzing__label">{huidigeStap.verwijzing.label}</span>
+                <button
+                  type="button"
+                  className="det-verwijzing__btn"
+                  onClick={() => openVerwijzing(huidigeStap.verwijzing)}
+                >
+                  🔍 {huidigeStap.verwijzing.knop_label}
+                </button>
+              </div>
+            )}
+
             {/* Keuze */}
             {huidigeStap.type === 'keuze' && (
               <div className="det-opties">
@@ -277,20 +291,6 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
                   Bereken
                 </button>
               </>
-            )}
-
-            {/* Verwijzing naar andere hulp */}
-            {huidigeStap.verwijzing && (
-              <div className="det-verwijzing">
-                <span className="det-verwijzing__label">{huidigeStap.verwijzing.label}</span>
-                <button
-                  type="button"
-                  className="det-verwijzing__btn"
-                  onClick={() => openVerwijzing(huidigeStap.verwijzing)}
-                >
-                  🔍 {huidigeStap.verwijzing.knop_label}
-                </button>
-              </div>
             )}
 
             {/* Terug-knop */}
