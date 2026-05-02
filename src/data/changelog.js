@@ -5,12 +5,15 @@ export const CHANGELOG = [
     versie: '1.69.0',
     datum: '2026-05-02',
     wijzigingen: [
+      'Fix: publieke leestoegang toegevoegd aan species-tabel in Supabase (RLS-policy ontbrak, waardoor soorten niet laadden na Dexie-upgrade)',
       'Architectuur: volledige data-migratie — EURING-code is nu primaire sleutel in Supabase én Dexie, 84 dubbele soortrecords opgeruimd (3475 soorten over), determinatie-hulpen verplaatst naar Supabase met offline-cache en transform-interpreter; backup/restore-scripts toegevoegd',
     ],
     wijzigingen_en: [
+      'Fix: added public read access to species table in Supabase (RLS policy was missing, causing species not to load after Dexie upgrade)',
       'Architecture: full data migration — EURING code is now primary key in Supabase and Dexie, 84 duplicate species records cleaned up (3475 species remaining), determination aids moved to Supabase with offline cache and transform interpreter; backup/restore scripts added',
     ],
     wijzigingen_de: [
+      'Fix: öffentliche Leseberechtigung für die Species-Tabelle in Supabase hinzugefügt (RLS-Policy fehlte, wodurch Arten nach Dexie-Upgrade nicht geladen wurden)',
       'Architektur: vollständige Datenmigration — EURING-Code ist jetzt Primärschlüssel in Supabase und Dexie, 84 doppelte Artdatensätze bereinigt (3475 Arten verbleiben), Bestimmungshilfen nach Supabase verschoben mit Offline-Cache und Transform-Interpreter; Backup-/Restore-Skripte hinzugefügt',
     ],
   },
