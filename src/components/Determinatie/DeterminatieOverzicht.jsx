@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './Determinatie.css';
 
 /**
@@ -34,15 +35,23 @@ function OverzichtRegel({ item, diepte = 0 }) {
 }
 
 export default function DeterminatieOverzicht({ aid }) {
+  const [open, setOpen] = useState(false);
+
   if (!aid.overzicht?.length) return null;
 
   return (
     <div className="det-ov">
-      <ul className="det-ov-lijst">
-        {aid.overzicht.map((item, i) => (
-          <OverzichtRegel key={i} item={item} diepte={0} />
-        ))}
-      </ul>
+      <button type="button" className="det-ov-toggle" onClick={() => setOpen(o => !o)}>
+        <span className={`det-ov-toggle__pijl${open ? ' det-ov-toggle__pijl--open' : ''}`}>▾</span>
+        {open ? 'Verberg overzicht' : 'Toon overzicht'}
+      </button>
+      {open && (
+        <ul className="det-ov-lijst">
+          {aid.overzicht.map((item, i) => (
+            <OverzichtRegel key={i} item={item} diepte={0} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
