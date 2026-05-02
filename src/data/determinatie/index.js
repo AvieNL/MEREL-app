@@ -15,7 +15,9 @@ const alleAids = [
 
 // Index op EURING-code voor snelle lookup
 const aidsByEuring = {};
+const aidsById = {};
 alleAids.forEach(aid => {
+  aidsById[aid.id] = aid;
   aid.soorten.forEach(code => {
     if (!aidsByEuring[code]) aidsByEuring[code] = [];
     aidsByEuring[code].push(aid);
@@ -24,12 +26,17 @@ alleAids.forEach(aid => {
 
 /**
  * Geeft alle determinatiehulpen terug voor een EURING-code.
- * @param {string} euringCode
- * @returns {Array}
  */
 export function getAidsVoorSoort(euringCode) {
   if (!euringCode) return [];
   return aidsByEuring[euringCode] || [];
+}
+
+/**
+ * Geeft één determinatiehulp terug op basis van id.
+ */
+export function getAidById(id) {
+  return aidsById[id] || null;
 }
 
 export { alleAids };

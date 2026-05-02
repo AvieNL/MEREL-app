@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.44';
+export const VERSIE = '1.68.45';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.45',
+    datum: '2026-05-02',
+    wijzigingen: [
+      'Functie: determinatie-surveys kunnen doorverwijzen naar een andere hulp — geslachtsbepaling Roek toont "Bepaal leeftijd eerst" knop die de leeftijdshulp als genest venster opent; na gebruik herstart de geslachtsbepaling automatisch',
+    ],
+    wijzigingen_en: [
+      'Feature: determination surveys can cross-reference another aid — Rook sex determination shows "Determine age first" button that opens the age aid as a nested window; after use the sex determination restarts automatically',
+    ],
+    wijzigingen_de: [
+      'Funktion: Bestimmungs-Surveys können auf eine andere Hilfe verweisen — Saatkrähe-Geschlechtsbestimmung zeigt "Alter zuerst bestimmen"-Schaltfläche die die Altershilfe als geschachteltes Fenster öffnet; danach startet die Geschlechtsbestimmung automatisch neu',
+    ],
+  },
   {
     versie: '1.68.44',
     datum: '2026-04-30',

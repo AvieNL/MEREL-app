@@ -65,6 +65,11 @@ export const corvidae = [
         type: 'keuze',
         vraag: 'Is de vogel volwassen (adult)?',
         toelichting: 'De snavelindex geldt alleen voor adulten (2e kj of ouder).',
+        verwijzing: {
+          aid_id: 'roek-leeftijd',
+          label: 'Leeftijd nog niet bepaald?',
+          knop_label: 'Bepaal leeftijd eerst',
+        },
         uit_formulier: {
           veld: 'leeftijd',
           transform: v => {

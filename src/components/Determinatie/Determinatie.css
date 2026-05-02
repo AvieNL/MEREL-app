@@ -332,6 +332,40 @@
 }
 .det-opnieuw-btn:hover { border-color: var(--text-secondary); }
 
+/* ── Verwijzing naar andere hulp ─────────────────────────────────── */
+.det-verwijzing {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.85rem;
+  padding: 0.55rem 0.75rem;
+  background: rgba(56, 189, 248, 0.06);
+  border: 1px dashed rgba(56, 189, 248, 0.3);
+  border-radius: 7px;
+}
+.det-verwijzing__label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  flex: 1;
+}
+.det-verwijzing__btn {
+  background: transparent;
+  border: 1px solid var(--accent, #38bdf8);
+  color: var(--accent, #38bdf8);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.det-verwijzing__btn:hover {
+  background: var(--accent, #38bdf8);
+  color: #000;
+}
+
 /* ── Terug-knop ──────────────────────────────────────────────────── */
 .det-terug-btn {
   background: none;

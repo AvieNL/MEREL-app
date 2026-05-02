@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { getAidById } from '../../data/determinatie/index';
 import './Determinatie.css';
 
 /**
@@ -12,11 +13,12 @@ import './Determinatie.css';
  */
 export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit }) {
   const stappenIds = Object.keys(aid.stappen);
-  const [geschiedenis, setGeschiedenis] = useState([]); // stack van doorlopen stap-ids
+  const [geschiedenis, setGeschiedenis] = useState([]);
   const [huidigeStapId, setHuidigeStapId] = useState(null);
-  const [keuzes, setKeuzes] = useState({});     // { stapId: gekozenWaarde }
-  const [metingen, setMetingen] = useState({}); // { inputKey: waarde }
+  const [keuzes, setKeuzes] = useState({});
+  const [metingen, setMetingen] = useState({});
   const [resultaat, setResultaat] = useState(null);
+  const [verwijzingAid, setVerwijzingAid] = useState(null); // genest venster
 
   // Initialiseer: doorloop auto-stappen
   useEffect(() => {
@@ -24,30 +26,30 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
     startSurvey();
   }, [aid]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function startSurvey() {
+  function startSurvey(extraFormValues = {}) {
     setGeschiedenis([]);
     setKeuzes({});
     setMetingen({});
     setResultaat(null);
-    verwerkStap(aid.start, {}, {}, []);
+    setVerwijzingAid(null);
+    const effectief = formValues ? { ...formValues, ...extraFormValues } : null;
+    verwerkStap(aid.start, {}, {}, [], effectief);
   }
 
   /**
    * Probeer stap automatisch op te lossen vanuit formulierwaarden.
-   * Als dat lukt en er is een resultaat → meteen afsluiten.
-   * Als dat lukt en er is een volgende stap → ga daarheen.
-   * Als dat niet lukt → toon de stap.
+   * effectiefFormValues is formValues + eventuele overrides na een geneste terugkoppeling.
    */
-  function verwerkStap(stapId, huidigKeuzes, huidigMetingen, huidigGeschiedenis) {
+  function verwerkStap(stapId, huidigKeuzes, huidigMetingen, huidigGeschiedenis, effectiefFormValues = formValues) {
     const stap = aid.stappen[stapId];
     if (!stap) return;
 
     const nieuweGeschiedenis = [...huidigGeschiedenis, stapId];
 
     // Auto-resolve keuze-stap via formulierwaarden
-    if (stap.type === 'keuze' && stap.uit_formulier && formValues) {
+    if (stap.type === 'keuze' && stap.uit_formulier && effectiefFormValues) {
       const { veld, transform } = stap.uit_formulier;
-      const rawWaarde = formValues[veld];
+      const rawWaarde = effectiefFormValues[veld];
       const autoWaarde = transform ? transform(rawWaarde) : rawWaarde;
 
       if (autoWaarde !== null && autoWaarde !== undefined) {
@@ -63,7 +65,7 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
           }
           if (optie.volgende) {
             // Ga stil door naar volgende stap
-            verwerkStap(optie.volgende, nieuweKeuzes, huidigMetingen, nieuweGeschiedenis);
+            verwerkStap(optie.volgende, nieuweKeuzes, huidigMetingen, nieuweGeschiedenis, effectiefFormValues);
             return;
           }
         }
@@ -71,11 +73,11 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
     }
 
     // Pre-fill meting-inputs vanuit formulierwaarden
-    if (stap.type === 'meting' && formValues) {
+    if (stap.type === 'meting' && effectiefFormValues) {
       const preFill = {};
       stap.inputs.forEach(inp => {
-        if (inp.uit_formulier && formValues[inp.uit_formulier]) {
-          preFill[inp.key] = String(formValues[inp.uit_formulier]);
+        if (inp.uit_formulier && effectiefFormValues[inp.uit_formulier]) {
+          preFill[inp.key] = String(effectiefFormValues[inp.uit_formulier]);
         }
       });
       if (Object.keys(preFill).length > 0) {
@@ -147,6 +149,18 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
     const raw = formValues[veld];
     const auto = transform ? transform(raw) : raw;
     return auto !== null && auto !== undefined && stap.opties.some(o => o.waarde === auto);
+  }
+
+  // Verwijzing: open genest hulpvenster en herstart daarna met het resultaat
+  function openVerwijzing(stapVerwijzing) {
+    const genestAid = getAidById(stapVerwijzing.aid_id);
+    if (genestAid) setVerwijzingAid(genestAid);
+  }
+
+  function verwijzingGebruikt(veld, waarde) {
+    if (onGebruik) onGebruik(veld, waarde);      // schrijf terug naar formulier
+    setVerwijzingAid(null);
+    startSurvey({ [veld]: waarde });              // herstart met nieuwe waarde
   }
 
   const gekozenOptie = useCallback((stap) => {
@@ -250,11 +264,35 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
               </>
             )}
 
+            {/* Verwijzing naar andere hulp */}
+            {huidigeStap.verwijzing && (
+              <div className="det-verwijzing">
+                <span className="det-verwijzing__label">{huidigeStap.verwijzing.label}</span>
+                <button
+                  type="button"
+                  className="det-verwijzing__btn"
+                  onClick={() => openVerwijzing(huidigeStap.verwijzing)}
+                >
+                  🔍 {huidigeStap.verwijzing.knop_label}
+                </button>
+              </div>
+            )}
+
             {/* Terug-knop */}
             {geschiedenis.length > 1 && (
               <button type="button" className="det-terug-btn" onClick={gaTerug}>← Terug</button>
             )}
           </div>
+        )}
+
+        {/* Genest hulpvenster voor verwijzingen */}
+        {verwijzingAid && (
+          <DeterminatieModal
+            aid={verwijzingAid}
+            formValues={formValues}
+            onGebruik={verwijzingGebruikt}
+            onSluit={() => setVerwijzingAid(null)}
+          />
         )}
 
         {/* Resultaat */}
