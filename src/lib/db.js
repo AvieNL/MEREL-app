@@ -96,3 +96,8 @@ db.version(14).stores({
 db.version(15).stores({
   species: 'euring_code, naam_nl',
 }).upgrade(tx => tx.table('species').clear());
+
+// Versie 16: offline-cache voor determinatie-hulpen (aid-definities als JSON)
+db.version(16).stores({
+  determinatie_aid: 'id',
+});

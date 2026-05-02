@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.50';
+export const VERSIE = '1.68.51';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.51',
+    datum: '2026-05-02',
+    wijzigingen: [
+      'Data (Fase 3): determinatie-hulpen verplaatst naar Supabase — tabel determinatie_aid, Dexie versie 16 als offline-cache, interpreter vertaalt transform_type/bereken_type terug naar JS-functies; corvidae.js blijft als seed-fallback',
+    ],
+    wijzigingen_en: [
+      'Data (Phase 3): determination aids moved to Supabase — determinatie_aid table, Dexie version 16 as offline cache, interpreter converts transform_type/bereken_type back to JS functions; corvidae.js remains as seed fallback',
+    ],
+    wijzigingen_de: [
+      'Daten (Phase 3): Bestimmungshilfen nach Supabase verschoben — Tabelle determinatie_aid, Dexie Version 16 als Offline-Cache, Interpreter wandelt transform_type/bereken_type in JS-Funktionen um; corvidae.js bleibt als Seed-Fallback',
+    ],
+  },
   {
     versie: '1.68.50',
     datum: '2026-05-02',

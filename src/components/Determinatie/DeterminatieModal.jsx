@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getAidById } from '../../data/determinatie/index';
 import './Determinatie.css';
 
 /**
@@ -11,7 +10,7 @@ import './Determinatie.css';
  *   onGebruik   — callback(veld, waarde) om resultaat terug te schrijven (null in naslag-modus)
  *   onSluit     — sluit de modal
  */
-export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit }) {
+export default function DeterminatieModal({ aid, getAidById, formValues, onGebruik, onSluit }) {
   const stappenIds = Object.keys(aid.stappen);
   const [geschiedenis, setGeschiedenis] = useState([]);
   const [huidigeStapId, setHuidigeStapId] = useState(null);
@@ -153,7 +152,7 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
 
   // Verwijzing: open genest hulpvenster
   function openVerwijzing(stapVerwijzing) {
-    const genestAid = getAidById(stapVerwijzing.aid_id);
+    const genestAid = getAidById ? getAidById(stapVerwijzing.aid_id) : null;
     if (genestAid) setVerwijzingAid(genestAid);
   }
 
@@ -304,6 +303,7 @@ export default function DeterminatieModal({ aid, formValues, onGebruik, onSluit 
         {verwijzingAid && (
           <DeterminatieModal
             aid={verwijzingAid}
+            getAidById={getAidById}
             formValues={formValues}
             onGebruik={verwijzingGebruikt}
             onSluit={() => setVerwijzingAid(null)}

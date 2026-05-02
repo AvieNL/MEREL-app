@@ -13,7 +13,7 @@ import './Determinatie.css';
  *   onGebruik   — callback(veld, waarde) voor write-back naar formulier (null = naslag-modus)
  *   label       — optionele knoptekst (default: 'Bepaal')
  */
-export default function DeterminatieButton({ aid, formValues, onGebruik, label = 'Bepaal' }) {
+export default function DeterminatieButton({ aid, getAidById, formValues, onGebruik, label = 'Bepaal' }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -31,6 +31,7 @@ export default function DeterminatieButton({ aid, formValues, onGebruik, label =
       {open && (
         <DeterminatieModal
           aid={aid}
+          getAidById={getAidById}
           formValues={formValues}
           onGebruik={onGebruik}
           onSluit={() => setOpen(false)}

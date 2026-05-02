@@ -19,7 +19,7 @@ import { TYPE_CFG, buildNvByRing, getVangstType } from '../../utils/vangstType';
 import SoortDetailEditor from './SoortDetailEditor';
 import DeterminatieButton from '../Determinatie/DeterminatieButton';
 import DeterminatieOverzicht from '../Determinatie/DeterminatieOverzicht';
-import { getAidsVoorSoort } from '../../data/determinatie/index';
+import { useDeterminatieAids } from '../../hooks/useDeterminatieAids';
 import './SoortDetail.css';
 
 function leeftijdLabel(code) { return LEEFTIJD_LABEL[code] || code; }
@@ -103,6 +103,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
   const speciesRef = useSpeciesRef();
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
+  const { getAidsVoorSoort, getAidById } = useDeterminatieAids();
   const soorten = useMemo(
     () => speciesRef.filter(s => s.naam_nl && !s.naam_nl.includes('groene tekst')),
     [speciesRef]
@@ -577,6 +578,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
                     </div>
                     <DeterminatieButton
                       aid={aid}
+                      getAidById={getAidById}
                       formValues={null}
                       onGebruik={null}
                       label="Probeer"

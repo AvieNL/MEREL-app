@@ -10,7 +10,7 @@ import {
 import InfoPanel from './InfoPanel';
 import RuiSeizoenTekst from './RuiSeizoenTekst';
 import DeterminatieModal from '../Determinatie/DeterminatieModal';
-import { getAidsVoorSoort } from '../../data/determinatie/index';
+import { useDeterminatieAids } from '../../hooks/useDeterminatieAids';
 import './NieuwPage.css';
 
 export default function SectieVogel() {
@@ -34,6 +34,7 @@ export default function SectieVogel() {
   const [geslachtDetOpen, setGeslachtDetOpen] = useState(false);
   const [leeftijdDetOpen, setLeeftijdDetOpen] = useState(false);
 
+  const { getAidsVoorSoort, getAidById } = useDeterminatieAids();
   const detAids = euringCode ? getAidsVoorSoort(euringCode) : [];
   const geslachtAids = detAids.filter(a => a.resultaat_veld === 'geslacht');
   const leeftijdAids = detAids.filter(a => a.resultaat_veld === 'leeftijd');
@@ -62,6 +63,7 @@ export default function SectieVogel() {
               {geslachtAid && geslachtDetOpen && (
                 <DeterminatieModal
                   aid={geslachtAid}
+                  getAidById={getAidById}
                   formValues={form}
                   onGebruik={(veld, waarde) => update(veld, waarde)}
                   onSluit={() => setGeslachtDetOpen(false)}
@@ -117,6 +119,7 @@ export default function SectieVogel() {
             {leeftijdAid && leeftijdDetOpen && (
               <DeterminatieModal
                 aid={leeftijdAid}
+                getAidById={getAidById}
                 formValues={form}
                 onGebruik={(veld, waarde) => update(veld, waarde)}
                 onSluit={() => setLeeftijdDetOpen(false)}

@@ -5,6 +5,9 @@ import { db } from '../lib/db';
 import i18n from '../i18n/index.js';
 import { pullSpeciesIfNeeded } from '../hooks/useSpeciesRef';
 import { pullSpeciesOverrides } from '../hooks/useSpeciesOverrides';
+import { pullDeterminatieAidsIfNeeded } from '../hooks/useDeterminatieAids';
+import { populateFromAids } from '../data/determinatie/index';
+import { hydrateAid } from '../utils/determinatie-interpreter';
 import { useSyncPulls } from '../hooks/useSyncPulls';
 import { executeQueueItem } from '../utils/syncQueue';
 
@@ -98,6 +101,13 @@ export function SyncProvider({ children }) {
 
   // Pull-orchestratie: wanneer referentiedata wordt opgehaald (login + heractivering)
   useSyncPulls(user);
+
+  // Bij (her)inloggen: determinatie-aids uit Dexie lezen en in-memory index vullen
+  useEffect(() => {
+    db.determinatie_aid.toArray().then(rows => {
+      if (rows.length > 0) populateFromAids(rows.map(r => hydrateAid(r.data)));
+    });
+  }, [user]);
 
   // Bij (her)inloggen: pending count ophalen en wachtrij verwerken
   useEffect(() => {
@@ -196,6 +206,22 @@ export function SyncProvider({ children }) {
     // Pull species basisdata als de cache leeg is (ongeacht queue)
     if (speciesCount === 0) {
       pullSpeciesIfNeeded(false).catch(e => console.warn('Species pull mislukt:', e.message));
+    }
+
+    // Pull determinatie-hulpen als de cache leeg is
+    const aidCount = await db.determinatie_aid.count();
+    if (aidCount === 0) {
+      pullDeterminatieAidsIfNeeded(false)
+        .then(async () => {
+          const rows = await db.determinatie_aid.toArray();
+          populateFromAids(rows.map(r => hydrateAid(r.data)));
+        })
+        .catch(e => console.warn('Determinatie-aid pull mislukt:', e.message));
+    } else {
+      // Cache is gevuld: initialiseer de synchrone index uit Dexie
+      db.determinatie_aid.toArray().then(rows => {
+        populateFromAids(rows.map(r => hydrateAid(r.data)));
+      });
     }
 
     if (pending.length === 0) {
