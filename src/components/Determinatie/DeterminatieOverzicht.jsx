@@ -2,21 +2,10 @@ import { useState } from 'react';
 import './Determinatie.css';
 
 function FlowRegel({ item }) {
-  const heeftKinderen = !!item.sub?.length;
-  const isPeriode     = item.type === 'periode';
-  const isBeslissing  = heeftKinderen && !isPeriode && !item.info;
-
-  const boxKlasse = [
-    'fc-box',
-    isBeslissing ? 'fc-box--beslissing' : '',
-    isPeriode    ? 'fc-box--periode'    : '',
-    item.info    ? 'fc-box--info'       : '',
-  ].filter(Boolean).join(' ');
-
   return (
     <div className="fc-item">
       <div className="fc-row">
-        <div className={boxKlasse}>
+        <div className={`fc-box${item.info ? ' fc-box--info' : ''}`}>
           {item.conditie}
         </div>
         {item.resultaat && (
@@ -27,8 +16,8 @@ function FlowRegel({ item }) {
           </div>
         )}
       </div>
-      {heeftKinderen && (
-        <div className={`fc-tak${isPeriode ? ' fc-tak--periode' : isBeslissing ? ' fc-tak--beslissing' : ''}`}>
+      {item.sub?.length > 0 && (
+        <div className="fc-tak">
           {item.sub.map((sub, i) => (
             <FlowRegel key={i} item={sub} />
           ))}
