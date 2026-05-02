@@ -214,11 +214,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const deleteSoort = async () => {
     if (!window.confirm(t('sd_delete_confirm', { naam: decodedNaam }))) return;
     await supabase.from('species').delete().eq('naam_nl', decodedNaam);
-    if (soort?.euring_code) {
-      await db.species.delete(soort.euring_code);
-    } else {
-      await db.species.where('naam_nl').equals(decodedNaam).delete();
-    }
+    await db.species.where('naam_nl').equals(decodedNaam).delete();
     navigate('/soorten');
   };
 
@@ -272,11 +268,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
     if (naamGewijzigd) {
       await supabase.from('species').delete().eq('naam_nl', decodedNaam);
-      if (soort?.euring_code) {
-        await db.species.delete(soort.euring_code);
-      } else {
-        await db.species.where('naam_nl').equals(decodedNaam).delete();
-      }
+      await db.species.where('naam_nl').equals(decodedNaam).delete();
     }
 
     const { error } = await supabase

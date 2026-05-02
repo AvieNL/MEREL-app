@@ -90,14 +90,11 @@ db.version(14).stores({
   legsel_ouder: 'id, legsel_id, ringnummer',
 });
 
-// Versie 15: species-tabel gebruikt euring_code als primaire sleutel (ipv naam_nl)
-// naam_nl blijft een unieke index zodat lookups op beide sleutels werken.
-// Cache geleegd + meta-timestamp verwijderd zodat de volgende pull altijd doorloopt.
+// Versie 15: euring_code toegevoegd als secundaire index op species-tabel.
+// naam_nl blijft de primaire sleutel — geen datamigratie of clear nodig.
+// Bestaande records worden automatisch geïndexeerd op euring_code (uit de data-blob).
 db.version(15).stores({
-  species: 'euring_code, naam_nl',
-}).upgrade(tx => {
-  tx.table('species').clear();
-  tx.table('meta').delete('species_last_pull');
+  species: 'naam_nl, euring_code',
 });
 
 // Versie 16: offline-cache voor determinatie-hulpen (aid-definities als JSON)

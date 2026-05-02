@@ -86,7 +86,8 @@ async function _doSpeciesPull(force) {
     return;
   }
 
-  // Merge: data-blob + top-level euring_code (PK) zodat Dexie de juiste primary key gebruikt
+  // Merge: data-blob + top-level euring_code zodat de secundaire index gevuld wordt.
+  // naam_nl blijft de primaire sleutel in Dexie.
   const rows = allData.map(r => ({ ...r.data, euring_code: r.euring_code }));
 
   try {
@@ -98,8 +99,8 @@ async function _doSpeciesPull(force) {
   }
 
   // Verwijder lokale soorten die op een ander apparaat zijn gewist
-  const supabaseCodes = new Set(allData.map(r => r.euring_code).filter(Boolean));
-  const toDelete = await db.species.filter(r => !supabaseCodes.has(r.euring_code)).primaryKeys();
+  const supabaseNamen = new Set(allData.map(r => r.naam_nl).filter(Boolean));
+  const toDelete = await db.species.filter(r => !supabaseNamen.has(r.naam_nl)).primaryKeys();
   if (toDelete.length > 0) await db.species.bulkDelete(toDelete);
 
   await db.meta.put({ key: 'species_last_pull', value: new Date().toISOString() });
