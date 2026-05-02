@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.47';
+export const VERSIE = '1.68.48';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.48',
+    datum: '2026-05-02',
+    wijzigingen: [
+      'Data (Fase 1): soortendatabase opgeschoond — 5 lege taxonomische dubbelen verwijderd (Curruca curruca e.a.), EURING-codes aangevuld voor alle 84 soorten zonder code, ontbrekende Latijnse namen ingevuld',
+    ],
+    wijzigingen_en: [
+      'Data (Phase 1): species database cleaned up — 5 empty taxonomic duplicates removed (Curruca curruca etc.), EURING codes added for all 84 species missing them, missing Latin names filled in',
+    ],
+    wijzigingen_de: [
+      'Daten (Phase 1): Artendatenbank bereinigt — 5 leere taxonomische Duplikate entfernt (Curruca curruca usw.), EURING-Codes für alle 84 Arten ohne Code ergänzt, fehlende lateinische Namen eingetragen',
+    ],
+  },
   {
     versie: '1.68.47',
     datum: '2026-04-30',
