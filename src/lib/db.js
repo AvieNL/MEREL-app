@@ -89,3 +89,10 @@ db.version(13).stores({
 db.version(14).stores({
   legsel_ouder: 'id, legsel_id, ringnummer',
 });
+
+// Versie 15: species-tabel gebruikt euring_code als primaire sleutel (ipv naam_nl)
+// naam_nl blijft een unieke index zodat lookups op beide sleutels werken.
+// De cache wordt geleegd — bij de volgende sync wordt hij opnieuw gevuld.
+db.version(15).stores({
+  species: 'euring_code, naam_nl',
+}).upgrade(tx => tx.table('species').clear());

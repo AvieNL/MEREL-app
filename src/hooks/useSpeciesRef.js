@@ -64,7 +64,7 @@ async function _doSpeciesPull(force) {
   let allData;
   try {
     allData = await fetchAllPages((from, to) =>
-      supabase.from('species').select('naam_nl, data').range(from, to)
+      supabase.from('species').select('euring_code, naam_nl, data').range(from, to)
     );
   } catch (err) {
     console.error('Soorten ophalen mislukt:', err.message);
@@ -74,12 +74,13 @@ async function _doSpeciesPull(force) {
 
   if (allData.length === 0) return;
 
-  const rows = allData.map(r => r.data);
+  // Merge: data-blob + top-level euring_code (PK) zodat Dexie de juiste primary key gebruikt
+  const rows = allData.map(r => ({ ...r.data, euring_code: r.euring_code }));
   await db.species.bulkPut(rows);
 
   // Verwijder lokale soorten die op een ander apparaat zijn gewist
-  const supabaseNames = new Set(allData.map(r => r.data?.naam_nl).filter(Boolean));
-  const toDelete = await db.species.filter(r => !supabaseNames.has(r.naam_nl)).primaryKeys();
+  const supabaseCodes = new Set(allData.map(r => r.euring_code).filter(Boolean));
+  const toDelete = await db.species.filter(r => !supabaseCodes.has(r.euring_code)).primaryKeys();
   if (toDelete.length > 0) await db.species.bulkDelete(toDelete);
 
   await db.meta.put({ key: 'species_last_pull', value: new Date().toISOString() });

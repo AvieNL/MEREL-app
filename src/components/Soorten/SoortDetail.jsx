@@ -213,7 +213,11 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const deleteSoort = async () => {
     if (!window.confirm(t('sd_delete_confirm', { naam: decodedNaam }))) return;
     await supabase.from('species').delete().eq('naam_nl', decodedNaam);
-    await db.species.delete(decodedNaam);
+    if (soort?.euring_code) {
+      await db.species.delete(soort.euring_code);
+    } else {
+      await db.species.where('naam_nl').equals(decodedNaam).delete();
+    }
     navigate('/soorten');
   };
 
@@ -267,12 +271,16 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
     if (naamGewijzigd) {
       await supabase.from('species').delete().eq('naam_nl', decodedNaam);
-      await db.species.delete(decodedNaam);
+      if (soort?.euring_code) {
+        await db.species.delete(soort.euring_code);
+      } else {
+        await db.species.where('naam_nl').equals(decodedNaam).delete();
+      }
     }
 
     const { error } = await supabase
       .from('species')
-      .upsert({ naam_nl: newNaamNl, data: newData });
+      .upsert({ euring_code: newData.euring_code, naam_nl: newNaamNl, data: newData });
 
     if (error) {
       alert(t('sd_save_error', { msg: error.message }));

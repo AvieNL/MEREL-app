@@ -1,6 +1,19 @@
-export const VERSIE = '1.68.49';
+export const VERSIE = '1.68.50';
 
 export const CHANGELOG = [
+  {
+    versie: '1.68.50',
+    datum: '2026-05-02',
+    wijzigingen: [
+      'Code (Fase 2): app-code bijgewerkt voor EURING-code als primaire sleutel — Dexie versie 15 (euring_code PK, naam_nl index), soortensync haalt euring_code op uit Supabase, soort opslaan/verwijderen via EURING-code',
+    ],
+    wijzigingen_en: [
+      'Code (Phase 2): app code updated for EURING code as primary key — Dexie version 15 (euring_code PK, naam_nl index), species sync fetches euring_code from Supabase, save/delete species via EURING code',
+    ],
+    wijzigingen_de: [
+      'Code (Phase 2): App-Code aktualisiert für EURING-Code als Primärschlüssel — Dexie Version 15 (euring_code PK, naam_nl Index), Artenabgleich holt euring_code aus Supabase, Arten speichern/löschen über EURING-Code',
+    ],
+  },
   {
     versie: '1.68.49',
     datum: '2026-05-02',
