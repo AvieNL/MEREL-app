@@ -1,36 +1,29 @@
 import { useState } from 'react';
 import './Determinatie.css';
 
-/**
- * Rendert het overzicht-veld van een aid als uitgeschreven beslisboom.
- * Elk item heeft: conditie, resultaat?, zeker?, info?, sub?[]
- */
-function OverzichtRegel({ item, diepte = 0 }) {
-  const isInfo = item.info;
-
+function FlowRegel({ item }) {
   return (
-    <li className={`det-ov-item det-ov-item--d${Math.min(diepte, 3)}${isInfo ? ' det-ov-item--info' : ''}`}>
-      <div className="det-ov-regel">
-        {!isInfo && <span className="det-ov-pijl">{'›'}</span>}
-        <span className="det-ov-conditie">{item.conditie}</span>
+    <div className="fc-item">
+      <div className="fc-row">
+        <div className={`fc-box${item.info ? ' fc-box--info' : ''}`}>
+          {item.conditie}
+        </div>
         {item.resultaat && (
-          <>
-            <span className="det-ov-sep">→</span>
-            <span className={`det-ov-resultaat${item.zeker ? ' det-ov-resultaat--zeker' : ''}`}>
-              {item.resultaat}
-              {item.zeker && <span className="det-ov-zeker-badge">zeker</span>}
-            </span>
-          </>
+          <div className={`fc-uitkomst${item.zeker ? ' fc-uitkomst--zeker' : ''}`}>
+            <span className="fc-pijl">→</span>
+            <span className="fc-uitkomst-label">{item.resultaat}</span>
+            {item.zeker && <span className="fc-zeker-chip">zeker</span>}
+          </div>
         )}
       </div>
       {item.sub?.length > 0 && (
-        <ul className="det-ov-sub">
+        <div className="fc-tak">
           {item.sub.map((sub, i) => (
-            <OverzichtRegel key={i} item={sub} diepte={diepte + 1} />
+            <FlowRegel key={i} item={sub} />
           ))}
-        </ul>
+        </div>
       )}
-    </li>
+    </div>
   );
 }
 
@@ -43,14 +36,14 @@ export default function DeterminatieOverzicht({ aid }) {
     <div className="det-ov">
       <button type="button" className="det-ov-toggle" onClick={() => setOpen(o => !o)}>
         <span className={`det-ov-toggle__pijl${open ? ' det-ov-toggle__pijl--open' : ''}`}>▾</span>
-        {open ? 'Verberg overzicht' : 'Toon overzicht'}
+        {open ? 'Verberg schema' : 'Toon schema'}
       </button>
       {open && (
-        <ul className="det-ov-lijst">
+        <div className="fc-tree">
           {aid.overzicht.map((item, i) => (
-            <OverzichtRegel key={i} item={item} diepte={0} />
+            <FlowRegel key={i} item={item} />
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

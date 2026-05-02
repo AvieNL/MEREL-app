@@ -1,4 +1,4 @@
-/* ── Uitgeschreven overzicht (soortenpagina) ─────────────────────── */
+/* ── Schema / flowchart (soortenpagina) ──────────────────────────── */
 .det-ov {
   margin-top: 0.9rem;
   border-top: 1px solid var(--border, #334155);
@@ -23,65 +23,94 @@
   transition: transform 0.2s;
 }
 .det-ov-toggle__pijl--open { transform: rotate(180deg); }
-.det-ov-lijst,
-.det-ov-sub {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.det-ov-sub {
-  margin-top: 0.25rem;
-  padding-left: 1rem;
-  border-left: 1px solid var(--border, #334155);
-  margin-left: 0.5rem;
-}
-.det-ov-item {
-  margin: 0.25rem 0;
-}
-.det-ov-regel {
+
+/* Flowchart-boom */
+.fc-tree {
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.fc-item {
+  position: relative;
+}
+
+/* Horizontale connector voor geneste items */
+.fc-tak > .fc-item {
+  padding-left: 1.1rem;
+}
+.fc-tak > .fc-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.9em;
+  width: 0.85rem;
+  height: 2px;
+  background: var(--border, #334155);
+}
+
+/* Verticale lijn langs de tak */
+.fc-tak {
+  margin-left: 0.7rem;
+  padding-left: 0;
+  border-left: 2px solid var(--border, #334155);
+  margin-top: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: 0.1rem;
+}
+
+/* Knoop: conditie-box */
+.fc-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   flex-wrap: wrap;
-  gap: 0.3rem;
+}
+.fc-box {
+  background: var(--bg-secondary, #1a1a1a);
+  border: 1px solid var(--border, #334155);
+  border-radius: 6px;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
   line-height: 1.4;
 }
-.det-ov-pijl {
+.fc-box--info {
+  font-style: italic;
   color: var(--text-muted);
-  font-size: 0.8rem;
+  background: transparent;
+  border-style: dashed;
+  font-size: 0.71rem;
+}
+
+/* Pijl + resultaat */
+.fc-pijl {
+  color: var(--text-muted);
+  font-size: 0.72rem;
   flex-shrink: 0;
 }
-.det-ov-conditie {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-}
-.det-ov-sep {
-  color: var(--text-muted);
-  font-size: 0.75rem;
+.fc-uitkomst {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
   flex-shrink: 0;
 }
-.det-ov-resultaat {
+.fc-uitkomst-label {
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--accent, #38bdf8);
 }
-.det-ov-resultaat--zeker {
+.fc-uitkomst--zeker .fc-uitkomst-label {
   color: var(--success, #22c55e);
 }
-.det-ov-zeker-badge {
-  display: inline-block;
+.fc-zeker-chip {
   font-size: 0.62rem;
   font-weight: 600;
-  background: rgba(34,197,94,0.12);
+  background: rgba(34, 197, 94, 0.12);
   color: var(--success, #22c55e);
   border-radius: 99px;
   padding: 0.05rem 0.35rem;
-  margin-left: 0.3rem;
-  vertical-align: middle;
-}
-.det-ov-item--info .det-ov-conditie {
-  font-style: italic;
-  color: var(--text-muted);
-  font-size: 0.75rem;
 }
 
 /* ── Label-trigger (geïntegreerd in veldlabel) ───────────────────── */
