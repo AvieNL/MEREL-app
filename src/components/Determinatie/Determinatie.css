@@ -76,6 +76,36 @@
   color: var(--text-secondary);
   line-height: 1.4;
 }
+
+/* Beslissingsknoop: heeft vertakkingen → accentblauw */
+.fc-box--beslissing {
+  background: rgba(56, 189, 248, 0.07);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.fc-tak--beslissing {
+  border-left-color: rgba(56, 189, 248, 0.3);
+}
+.fc-tak--beslissing > .fc-item::before {
+  background: rgba(56, 189, 248, 0.3);
+}
+
+/* Periodeknoop → amber */
+.fc-box--periode {
+  background: rgba(251, 191, 36, 0.07);
+  border-color: rgba(251, 191, 36, 0.35);
+  color: #fbbf24;
+  font-weight: 600;
+}
+.fc-tak--periode {
+  border-left-color: rgba(251, 191, 36, 0.3);
+}
+.fc-tak--periode > .fc-item::before {
+  background: rgba(251, 191, 36, 0.3);
+}
+
+/* Info-knoop: dashed, muted */
 .fc-box--info {
   font-style: italic;
   color: var(--text-muted);

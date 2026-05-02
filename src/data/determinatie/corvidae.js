@@ -192,8 +192,8 @@ export const corvidae = [
           {
             conditie: 'Slagpennen zwartachtig bruin, enkele sporen metaalglans, contrasterend met kleine en middelste vleugeldekveren; veren op kin en wangen; neusgaten bedekt',
             sub: [
-              { conditie: 'Januari t/m mei', resultaat: '2e kj' },
-              { conditie: 'Juni t/m december', resultaat: '1e kj' },
+              { conditie: 'Januari t/m mei', resultaat: '2e kj', type: 'periode' },
+              { conditie: 'Juni t/m december', resultaat: '1e kj', type: 'periode' },
             ],
           },
           { conditie: 'Kin en wangen kaal, neusgaten nog bedekt', resultaat: '2e kj (jan–jun)' },
@@ -203,15 +203,15 @@ export const corvidae = [
               {
                 conditie: 'Sporen van haren, dons of afgebroken pennen op kin, wangen of neusgaten',
                 sub: [
-                  { conditie: 'Januari t/m mei', resultaat: '3e kj' },
-                  { conditie: 'Juni t/m december', resultaat: '2e kj' },
+                  { conditie: 'Januari t/m mei', resultaat: '3e kj', type: 'periode' },
+                  { conditie: 'Juni t/m december', resultaat: '2e kj', type: 'periode' },
                 ],
               },
               {
                 conditie: 'Kin, wangen en neusgaten geheel kaal',
                 sub: [
-                  { conditie: 'Januari t/m mei', resultaat: 'na 2e kj' },
-                  { conditie: 'Juni t/m december', resultaat: 'na 1e kj' },
+                  { conditie: 'Januari t/m mei', resultaat: 'na 2e kj', type: 'periode' },
+                  { conditie: 'Juni t/m december', resultaat: 'na 1e kj', type: 'periode' },
                 ],
               },
             ],
