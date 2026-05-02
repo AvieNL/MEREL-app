@@ -92,10 +92,13 @@ db.version(14).stores({
 
 // Versie 15: species-tabel gebruikt euring_code als primaire sleutel (ipv naam_nl)
 // naam_nl blijft een unieke index zodat lookups op beide sleutels werken.
-// De cache wordt geleegd — bij de volgende sync wordt hij opnieuw gevuld.
+// Cache geleegd + meta-timestamp verwijderd zodat de volgende pull altijd doorloopt.
 db.version(15).stores({
   species: 'euring_code, naam_nl',
-}).upgrade(tx => tx.table('species').clear());
+}).upgrade(tx => {
+  tx.table('species').clear();
+  tx.table('meta').delete('species_last_pull');
+});
 
 // Versie 16: offline-cache voor determinatie-hulpen (aid-definities als JSON)
 db.version(16).stores({
