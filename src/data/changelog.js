@@ -1,6 +1,25 @@
-export const VERSIE = '1.72.6';
+export const VERSIE = '1.72.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.72.7',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Kennisbank en soortenpagina\'s zijn nu openbaar toegankelijk zonder inloggen (via /kennis)',
+      'Kennisbank: sectie "Soorten" toegevoegd met gedocumenteerde soorten als klikbare fotokaarten',
+      'Soortenpagina\'s tonen nu ringspecifieke data (vangsten, biometrie) alleen voor ingelogde gebruikers',
+    ],
+    wijzigingen_en: [
+      'Knowledge base and species pages are now publicly accessible without login (via /kennis)',
+      'Knowledge base: "Species" section added with documented species as clickable photo cards',
+      'Species pages show ring-specific data (catches, biometry) only for logged-in users',
+    ],
+    wijzigingen_de: [
+      'Wissensdatenbank und Artsseiten sind jetzt ohne Login öffentlich zugänglich (über /kennis)',
+      'Wissensdatenbank: Abschnitt "Arten" mit dokumentierten Arten als klickbare Fotokarten hinzugefügt',
+      'Artsseiten zeigen ringspezifische Daten (Fänge, Biometrie) nur für eingeloggte Benutzer',
+    ],
+  },
   {
     versie: '1.72.6',
     datum: '2026-05-03',

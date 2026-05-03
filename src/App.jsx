@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useCallback, createContext, useContext } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from './i18n/index.js';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -89,10 +89,57 @@ const MODULE_KEY = 'vrs-module';
 export const ModuleSwitchContext = createContext(null);
 export function useModuleSwitch() { return useContext(ModuleSwitchContext); }
 
+// ── Publieke shell (kennisbank + soortenpagina's zonder login) ────────────────
+function PublicHeader() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  return (
+    <header style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '10px 16px', background: 'var(--bg-secondary)',
+      borderBottom: '1px solid var(--border)', gap: 12,
+    }}>
+      <button
+        onClick={() => navigate('/kennis')}
+        style={{ background: 'none', border: 'none', cursor: 'pointer',
+          color: 'var(--accent)', fontWeight: 600, fontSize: '1rem' }}
+      >
+        MEREL kennisbank
+      </button>
+      <button
+        className="btn-primary"
+        style={{ fontSize: '0.8rem', padding: '6px 14px' }}
+        onClick={() => navigate(user ? '/ring/' : '/login')}
+      >
+        {user ? 'Naar ringmodule' : 'Inloggen'}
+      </button>
+    </header>
+  );
+}
+
+function PublicShell() {
+  return (
+    <div className="app-shell">
+      <PublicHeader />
+      <main className="main-content">
+        <Suspense fallback={<PageSpinner />}>
+          <Routes>
+            <Route path="/kennis" element={<KennisbankPage />} />
+            <Route path="/kennis/soorten" element={<SoortenPage records={[]} />} />
+            <Route path="/kennis/soorten/:naam" element={<SoortDetail records={[]} speciesOverrides={null} />} />
+            <Route path="*" element={<Navigate to="/kennis" replace />} />
+          </Routes>
+        </Suspense>
+      </main>
+    </div>
+  );
+}
+
 function AppShell() {
   const { user, loading, profile, profileError } = useAuth();
   const { hasNestAccess } = useNestRole();
   const { t } = useTranslation();
+  const location = useLocation();
 
   // Module opgeslagen in sessionStorage; null = nog niet gekozen
   const [module, setModuleState] = useState(() => sessionStorage.getItem(MODULE_KEY));
@@ -125,6 +172,11 @@ function AppShell() {
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
+  }
+
+  // Publieke routes: toegankelijk zonder login
+  if (location.pathname.startsWith('/kennis')) {
+    return <PublicShell />;
   }
 
   if (!user) {

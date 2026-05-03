@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { KENNISBANK, getKennisbankCategorieen } from '../../data/kennisbank';
+import { useSpeciesRef } from '../../hooks/useSpeciesRef';
 import './KennisbankPage.css';
 
 // ── Renderers per sectietype ─────────────────────────────────────────────────
@@ -136,6 +138,44 @@ function CategorieBlok({ categorie, artikelen }) {
   );
 }
 
+// ── Soorten-sectie (gedocumenteerde soorten uit Supabase) ────────────────────
+
+function SoortenBankSectie() {
+  const navigate = useNavigate();
+  const allSpecies = useSpeciesRef();
+
+  // Alleen soorten die een foto hebben (= volledig gedocumenteerd)
+  const gedocumenteerd = allSpecies.filter(s => s.foto);
+
+  if (gedocumenteerd.length === 0) return null;
+
+  return (
+    <section className="kb-categorie">
+      <h3 className="kb-categorie-titel">Soorten ({gedocumenteerd.length})</h3>
+      <div className="kb-soorten-grid">
+        {gedocumenteerd.map(soort => (
+          <button
+            key={soort.naam_nl}
+            className="kb-soort-kaart"
+            onClick={() => navigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
+          >
+            <img
+              className="kb-soort-foto"
+              src={soort.foto}
+              alt={soort.naam_nl}
+              loading="lazy"
+            />
+            <div className="kb-soort-info">
+              <span className="kb-soort-naam">{soort.naam_nl}</span>
+              <span className="kb-soort-latijn">{soort.naam_lat}</span>
+            </div>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ── Hoofd-pagina ─────────────────────────────────────────────────────────────
 
 export default function KennisbankPage() {
@@ -184,11 +224,14 @@ export default function KennisbankPage() {
         </div>
       ) : (
         // Normale weergave per categorie
-        categorieen.map(cat => {
-          const artikelen = gefilterd.filter(a => a.categorie === cat);
-          if (artikelen.length === 0) return null;
-          return <CategorieBlok key={cat} categorie={cat} artikelen={artikelen} />;
-        })
+        <>
+          {categorieen.map(cat => {
+            const artikelen = gefilterd.filter(a => a.categorie === cat);
+            if (artikelen.length === 0) return null;
+            return <CategorieBlok key={cat} categorie={cat} artikelen={artikelen} />;
+          })}
+          <SoortenBankSectie />
+        </>
       )}
     </div>
   );

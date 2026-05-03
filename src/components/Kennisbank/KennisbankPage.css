@@ -286,3 +286,59 @@
   font-size: 0.9rem;
   text-align: center;
 }
+
+/* ── Soorten-grid ──────────────────────────────────────────────────────────── */
+
+.kb-soorten-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  padding: 8px 16px 16px;
+}
+
+.kb-soort-kaart {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: border-color 0.15s, transform 0.1s;
+}
+
+.kb-soort-kaart:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.kb-soort-foto {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  background: var(--bg-primary);
+}
+
+.kb-soort-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+}
+
+.kb-soort-naam {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.kb-soort-latijn {
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.3;
+}
