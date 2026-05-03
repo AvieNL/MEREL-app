@@ -1,6 +1,19 @@
-export const VERSIE = '1.73.5';
+export const VERSIE = '1.73.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.6',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: verwijderknop verwijderd — soorten worden voortaan alleen via Claude Code verwijderd',
+    ],
+    wijzigingen_en: [
+      'Species page: delete button removed — species are now only deleted via Claude Code',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Löschen-Schaltfläche entfernt — Arten werden fortan nur noch über Claude Code gelöscht',
+    ],
+  },
   {
     versie: '1.73.5',
     datum: '2026-05-03',

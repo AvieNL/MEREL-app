@@ -1,14 +1,11 @@
 import { useState, useMemo } from 'react';
-import { IconDelete, NestIcoon } from '../shared/Icons';
+import { NestIcoon } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
 import { useAuth } from '../../context/AuthContext';
-import { useRole } from '../../hooks/useRole';
 import { useNestData } from '../../hooks/useNestData';
 import { useModuleSwitch } from '../../App';
-import { db } from '../../lib/db';
-import { supabase } from '../../lib/supabase';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuitypeInfo from './RuitypeInfo';
 import { VangstKaart } from '../Stats/Charts';
@@ -46,7 +43,6 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const navigate = useNavigate();
   const decodedNaam = decodeURIComponent(naam);
   const { user } = useAuth();
-  const { isAdmin } = useRole();
   const { t, i18n } = useTranslation();
 
   const BIO_FIELDS = [
@@ -165,12 +161,6 @@ export default function SoortDetail({ records, speciesOverrides }) {
     return !isNaN(n) && n % 1 === 0 ? String(Math.round(n)) : val;
   };
 
-  const deleteSoort = async () => {
-    if (!window.confirm(t('sd_delete_confirm', { naam: decodedNaam }))) return;
-    await supabase.from('species').delete().eq('naam_nl', decodedNaam);
-    await db.species.where('naam_nl').equals(decodedNaam).delete();
-    navigate('/soorten');
-  };
 
   const genderStats = useMemo(() => {
     const counts = {};
@@ -375,9 +365,6 @@ export default function SoortDetail({ records, speciesOverrides }) {
               } finally { setRefreshing(false); }
             }}
           >⟳</button>
-          {isAdmin && (
-            <button className="icon-delete-btn" onClick={deleteSoort} title="Soort verwijderen"><IconDelete /></button>
-          )}
         </div>
       </div>
 
