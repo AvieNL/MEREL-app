@@ -410,25 +410,27 @@ export default function SoortDetail({ records, speciesOverrides }) {
                   onClick={() => setLeeftijdSeizoen('nj')}
                 >Najaar <span className="sd-det-tab__sub">jul–dec</span></button>
               </div>
-              {/* Legenda */}
-              {(() => {
-                const BUFFER_DAYS = 21;
-                const MAANDEN_KORT = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
-                const now = new Date();
-                const winStart = new Date(now); winStart.setDate(winStart.getDate() - BUFFER_DAYS);
-                const winEnd = new Date(now); winEnd.setDate(winEnd.getDate() + BUFFER_DAYS);
-                const fmt = d => `${d.getDate()} ${MAANDEN_KORT[d.getMonth()]}`;
-                return (
-                  <p className="leeftijd-legenda">
-                    <span className="leeftijd-legenda__kleur" aria-hidden="true" />
-                    Gemarkeerd = momenteel relevant ({fmt(winStart)} – {fmt(winEnd)})
-                  </p>
-                );
-              })()}
-              <div
-                className="sd-notities-text sd-leeftijd-blokken"
-                dangerouslySetInnerHTML={{ __html: renderLeeftijdMarkdown(leeftijdsVj, leeftijdSeizoen) }}
-              />
+              <div className="sd-leeftijd-panel">
+                {/* Legenda */}
+                {(() => {
+                  const BUFFER_DAYS = 21;
+                  const MAANDEN_KORT = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+                  const now = new Date();
+                  const winStart = new Date(now); winStart.setDate(winStart.getDate() - BUFFER_DAYS);
+                  const winEnd = new Date(now); winEnd.setDate(winEnd.getDate() + BUFFER_DAYS);
+                  const fmt = d => `${d.getDate()} ${MAANDEN_KORT[d.getMonth()]}`;
+                  return (
+                    <p className="leeftijd-legenda">
+                      <span className="leeftijd-legenda__kleur" aria-hidden="true" />
+                      Gemarkeerd = momenteel relevant ({fmt(winStart)} – {fmt(winEnd)})
+                    </p>
+                  );
+                })()}
+                <div
+                  className="sd-notities-text sd-leeftijd-blokken"
+                  dangerouslySetInnerHTML={{ __html: renderLeeftijdMarkdown(leeftijdsVj, leeftijdSeizoen) }}
+                />
+              </div>
             </>
           ) : (
             // Klassieke modus: apart voorjaar en najaar

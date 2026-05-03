@@ -82,6 +82,15 @@
   opacity: 0.7;
 }
 
+/* Inhoudsgebied onder de seizoenstabs */
+.sd-leeftijd-panel {
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-sm, 4px) var(--radius-sm, 4px);
+  padding: 12px 12px 8px;
+  margin-bottom: 4px;
+}
+
 /* Legenda bij samengevoegde leeftijdsblokken */
 .leeftijd-legenda {
   display: flex;
