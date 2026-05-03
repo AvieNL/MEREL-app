@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from 'react';
-import { IconEdit, IconDelete, NestIcoon } from '../shared/Icons';
+import { useState, useMemo } from 'react';
+import { IconDelete, NestIcoon } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
@@ -17,7 +17,6 @@ import { formatDatum, toYMD } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL } from '../../data/constants';
 import { computeBioRanges } from '../../utils/bioHelper';
 import { TYPE_CFG, buildNvByRing, getVangstType } from '../../utils/vangstType';
-import SoortDetailEditor from './SoortDetailEditor';
 import BronBadge from '../shared/BronBadge';
 import DeterminatieButton from '../Determinatie/DeterminatieButton';
 import DeterminatieOverzicht from '../Determinatie/DeterminatieOverzicht';
@@ -47,7 +46,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const navigate = useNavigate();
   const decodedNaam = decodeURIComponent(naam);
   const { user } = useAuth();
-  const { isAdmin, isViewer } = useRole();
+  const { isAdmin } = useRole();
   const { t, i18n } = useTranslation();
 
   const BIO_FIELDS = [
@@ -124,20 +123,12 @@ export default function SoortDetail({ records, speciesOverrides }) {
     ? speciesOverrides.getMerged(decodedNaam, defaultSoort || {})
     : defaultSoort;
 
-  const isNieuweSoort = decodedNaam === '__nieuw__';
-  const [editMode, setEditMode] = useState(false);
-  const [editData, setEditData] = useState({});
   const [vangstenOpen, setVangstenOpen] = useState(false);
   const [nestenOpen, setNestenOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   const { nesten, legsels, bezoeken, ringen } = useNestData();
   const switchModule = useModuleSwitch();
-
-  // Auto-start edit voor een nieuwe soort
-  useEffect(() => {
-    if (isNieuweSoort && isAdmin) setEditMode(true);
-  }, [isNieuweSoort, isAdmin]);
 
   const soortRecords = useMemo(() => {
     if (!decodedNaam) return [];
@@ -174,142 +165,11 @@ export default function SoortDetail({ records, speciesOverrides }) {
     return !isNaN(n) && n % 1 === 0 ? String(Math.round(n)) : val;
   };
 
-  const startEdit = () => {
-    const data = {};
-    Object.values(EDITABLE_FIELDS).flat().forEach(f => {
-      if (isBoekKey(f.key)) {
-        data[f.key] = soort.boeken?.[f.key] ?? '';
-      } else {
-        data[f.key] = soort[f.key] ?? '';
-      }
-    });
-    // Bio fields: prefill met huidige waarden (admin-basis of eigen override)
-    BIO_FIELDS.forEach(f => {
-      ['min', 'max'].forEach(stat => {
-        const key = `bio_${f.key}_${stat}`;
-        data[key] = getBioValue(f.key, stat);
-      });
-      // Geslachtsspecifieke biometrie (adult + juveniel)
-      ['M', 'F', 'JM', 'JF'].forEach(gender => {
-        ['min', 'avg', 'max'].forEach(stat => {
-          if (gender.startsWith('J') && stat === 'avg') return; // geen avg voor juv
-          const key = `bio_${f.key}_${gender}_${stat}`;
-          data[key] = soort[key] ?? '';
-        });
-      });
-    });
-    // Geslachtsbepaling: apart voor man en vrouw
-    // Migratie: oude geslachts_notities / ruitype_notities valt terug op ♂-veld
-    data.euring_code = soort.euring_code || euringLookup[decodedNaam.toLowerCase()] || '';
-    data.geslachts_notities_m = soort.geslachts_notities_m ?? soort.geslachts_notities ?? soort.ruitype_notities ?? '';
-    data.geslachts_notities_f = soort.geslachts_notities_f ?? '';
-    data.bron_geslacht = soort.bron_geslacht ?? '';
-    // Leeftijdsbepaling: apart voor voorjaar en najaar
-    // Migratie: oude leeftijds_notities valt terug op voorjaar-veld
-    data.leeftijds_notities_vj = soort.leeftijds_notities_vj ?? soort.leeftijds_notities ?? '';
-    data.leeftijds_notities_nj = soort.leeftijds_notities_nj ?? '';
-    data.bron_leeftijdsbepaling = soort.bron_leeftijdsbepaling ?? '';
-    data.bron_ring = soort.bron_ring ?? '';
-    data.determinatie_id_notities = soort.determinatie_id_notities ?? '';
-    data.bron_id_kenmerken = soort.bron_id_kenmerken ?? '';
-    data.foto = soort.foto ?? '';
-    data.foto_crop = soort.foto_crop ?? { x: 50, y: 50, zoom: 1 };
-    setEditData(data);
-    setEditMode(true);
-  };
-
-  const cancelEdit = () => {
-    setEditMode(false);
-    setEditData({});
-    if (isNieuweSoort) navigate('/soorten');
-  };
-
   const deleteSoort = async () => {
     if (!window.confirm(t('sd_delete_confirm', { naam: decodedNaam }))) return;
     await supabase.from('species').delete().eq('naam_nl', decodedNaam);
     await db.species.where('naam_nl').equals(decodedNaam).delete();
     navigate('/soorten');
-  };
-
-  const saveEdit = async () => {
-    if (isNieuweSoort && !editData.naam_nl?.trim()) {
-      alert(t('sd_name_required'));
-      return;
-    }
-
-    // Alle data gaat altijd naar de centrale species-tabel in Supabase,
-    // zodat alle apparaten exact dezelfde data zien.
-    // Start vanuit de huidige samengevoegde soortdata (basisdata + eventuele override).
-    const newData = {
-      ...(soort || {}),
-      boeken: { ...((soort?.boeken) || {}) },
-    };
-
-    Object.values(EDITABLE_FIELDS).flat().forEach(f => {
-      if (isBoekKey(f.key)) {
-        if (editData[f.key]) {
-          newData.boeken[f.key] = editData[f.key];
-        } else {
-          delete newData.boeken[f.key];
-        }
-      } else {
-        newData[f.key] = editData[f.key] ?? '';
-      }
-    });
-
-    BIO_FIELDS.forEach(f => {
-      ['min', 'max'].forEach(stat => {
-        newData[`bio_${f.key}_${stat}`] = editData[`bio_${f.key}_${stat}`] ?? '';
-      });
-      ['M', 'F', 'JM', 'JF'].forEach(gender => {
-        ['min', 'avg', 'max'].forEach(stat => {
-          if (gender.startsWith('J') && stat === 'avg') return;
-          const key = `bio_${f.key}_${gender}_${stat}`;
-          newData[key] = editData[key] ?? '';
-        });
-      });
-    });
-
-    newData.geslachts_notities_m  = editData.geslachts_notities_m  ?? '';
-    newData.geslachts_notities_f  = editData.geslachts_notities_f  ?? '';
-    newData.bron_geslacht         = editData.bron_geslacht         ?? '';
-    newData.leeftijds_notities_vj = editData.leeftijds_notities_vj ?? '';
-    newData.leeftijds_notities_nj = editData.leeftijds_notities_nj ?? '';
-    newData.bron_leeftijdsbepaling = editData.bron_leeftijdsbepaling ?? '';
-    newData.bron_ring              = editData.bron_ring             ?? '';
-    newData.determinatie_id_notities = editData.determinatie_id_notities ?? '';
-    newData.bron_id_kenmerken        = editData.bron_id_kenmerken     ?? '';
-    if (editData.foto !== undefined) newData.foto = editData.foto;
-    newData.foto_crop = editData.foto_crop ?? null;
-
-    const newNaamNl = newData.naam_nl || decodedNaam;
-    const naamGewijzigd = newNaamNl !== decodedNaam;
-
-    if (naamGewijzigd) {
-      await supabase.from('species').delete().eq('naam_nl', decodedNaam);
-      await db.species.where('naam_nl').equals(decodedNaam).delete();
-    }
-
-    const { error } = await supabase
-      .from('species')
-      .upsert({ euring_code: newData.euring_code, naam_nl: newNaamNl, data: newData });
-
-    if (error) {
-      alert(t('sd_save_error', { msg: error.message }));
-      return;
-    }
-
-    await db.species.put(newData);
-
-    // Verwijder eventuele lokale override: data staat nu in de centrale tabel
-    if (speciesOverrides) {
-      const ov = speciesOverrides.getOverride(decodedNaam);
-      if (Object.keys(ov).length > 0) speciesOverrides.resetOverride(decodedNaam);
-    }
-
-    setEditMode(false);
-    setEditData({});
-    if (naamGewijzigd) navigate('/soorten/' + encodeURIComponent(newNaamNl));
   };
 
   const genderStats = useMemo(() => {
@@ -369,7 +229,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
     );
   }
 
-  if (!defaultSoort && !isNieuweSoort) {
+  if (!defaultSoort) {
     return (
       <div className="page">
         <button className="btn-secondary page-back" onClick={() => navigate('/soorten')}>{t('sd_back')}</button>
@@ -455,20 +315,6 @@ export default function SoortDetail({ records, speciesOverrides }) {
     );
   };
 
-  if (editMode) {
-    return (
-      <SoortDetailEditor
-        editData={editData}
-        setEditData={setEditData}
-        onSave={saveEdit}
-        onCancel={cancelEdit}
-        soortInfo={soort || {}}
-        isNieuweSoort={isNieuweSoort}
-        bioRangesFromCatches={bioRangesFromCatches}
-      />
-    );
-  }
-
   return (
     <div className="page soort-detail">
       <button className="btn-secondary page-back" onClick={() => navigate('/soorten')}>
@@ -529,9 +375,6 @@ export default function SoortDetail({ records, speciesOverrides }) {
               } finally { setRefreshing(false); }
             }}
           >⟳</button>
-          {!isViewer && (
-            <button className="icon-edit-btn" onClick={startEdit} title="Bewerken"><IconEdit /></button>
-          )}
           {isAdmin && (
             <button className="icon-delete-btn" onClick={deleteSoort} title="Soort verwijderen"><IconDelete /></button>
           )}

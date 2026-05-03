@@ -1,6 +1,19 @@
-export const VERSIE = '1.73.4';
+export const VERSIE = '1.73.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.5',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: bewerkfunctie verwijderd — soortdata wordt voortaan alleen via Claude Code aangepast',
+    ],
+    wijzigingen_en: [
+      'Species page: edit functionality removed — species data is now only modified via Claude Code',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Bearbeitungsfunktion entfernt — Artdaten werden fortan nur noch über Claude Code angepasst',
+    ],
+  },
   {
     versie: '1.73.4',
     datum: '2026-05-03',
