@@ -1,6 +1,28 @@
-export const VERSIE = '1.71.1';
+export const VERSIE = '1.72.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.72.0',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Kennisbank: nieuw tabblad (✦) in de navigatie voor ornithologische basiskennis — beschikbaar in zowel ring- als nestmodule',
+      'Kennisbank: vleugelformule begrippen (P-nummering, WP, emaginatie, notch) als eerste artikel',
+      'Kennisbank: vleugelformule Roek (P2-positie, WP-afstand, notch P2, emaginaties per leeftijdsklasse) op basis van Demongin (2020)',
+      'Kennisbank: doorzoekbaar, uitbreidbaar met statische artikeldata per categorie',
+    ],
+    wijzigingen_en: [
+      'Knowledge base: new tab (✦) in navigation for ornithological reference knowledge — available in both ringing and nest modules',
+      'Knowledge base: wing formula concepts (P-numbering, WP, emargination, notch) as first article',
+      'Knowledge base: Rook wing formula (P2 position, WP distance, notch P2, emarginations per age class) based on Demongin (2020)',
+      'Knowledge base: searchable, extensible with static article data per category',
+    ],
+    wijzigingen_de: [
+      'Wissensdatenbank: neuer Reiter (✦) in der Navigation für ornithologisches Grundwissen — in Ring- und Nestmodul verfügbar',
+      'Wissensdatenbank: Flügelformel-Begriffe (P-Nummerierung, WP, Emargination, Notch) als erster Artikel',
+      'Wissensdatenbank: Flügelformel Saatkrähe (P2-Position, WP-Abstand, Notch P2, Emargination je Altersklasse) nach Demongin (2020)',
+      'Wissensdatenbank: durchsuchbar, erweiterbar mit statischen Artikeln je Kategorie',
+    ],
+  },
   {
     versie: '1.71.1',
     datum: '2026-05-03',
