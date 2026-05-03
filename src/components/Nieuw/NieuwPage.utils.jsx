@@ -12,31 +12,11 @@ export function extractGeslachtsHint(tekst) {
   const alineas = tekst.split(/\n{2,}/).map(a => a.trim()).filter(Boolean);
 
   const resultaat = alineas
-    .map(alinea => {
-      const regels = alinea.split('\n').filter(regel => {
-        const r = regel.trim();
-        if (!r) return false;
-
-        // Gooi regels weg die maateenheden bevatten (mm, g, kg, cm)
-        // Gebruik losse check op unit — getal en unit hoeven niet aaneen te staan
-        const heeftEenheid = /\b(mm|cm|kg)\b|(?<!\w)g\.(?!\w)|(?<=\d\s{0,4})g\b/.test(r);
-        // Simpelere fallback: bevat " mm" of " g." of " kg"
-        const heeftMaat = heeftEenheid || / mm\b| g[,. ·]| kg\b/.test(r);
-
-        // Uitzondering: regel bevat ook kwalitatieve kenmerken
-        const heeftKenmerk = /broedvlek|verenkleed|kleur|kaal|bleek|donker|glans|iris|oog|poot|lap\b/i.test(r);
-
-        if (heeftMaat && !heeftKenmerk) return false;
-        return true;
-      });
-      return regels.join('\n');
-    })
-    .filter(a => {
-      if (!a) return false;
-      // Gooi alinea's weg die alleen een "Maten"-koptekst zijn (zonder kwalitatief deel erna)
-      const zonderMarkdown = a.replace(/\*\*/g, '').trim();
-      // Detecteer: begint met symbool/tekst gevolgd door "Maten" of "maten"
-      if (/maten\s*[\:\(]/i.test(zonderMarkdown) && zonderMarkdown.split('\n').length === 1) return false;
+    .filter(alinea => {
+      // Gooi de "Maten"-alinea weg: begint (na bold-markers) met een "Maten"-koptekst
+      // Voorbeeld: "**♂ Maten (Demongin...)**:" of "**♀ Maten:**"
+      const kaal = alinea.replace(/\*\*/g, '').trim();
+      if (/^[^\w]*maten[\s(]/i.test(kaal)) return false;
       return true;
     })
     .join('\n\n');
