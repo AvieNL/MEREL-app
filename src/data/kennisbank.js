@@ -29,7 +29,7 @@ export const KENNISBANK = [
   {
     id: 'vleugel-naamgeving',
     categorie: 'Biometrie & morfologie',
-    titel: 'Vleugelnaamgeving — afkortingen EN/NL',
+    titel: 'Vleugeltopografie',
     bron: 'Demongin (2020)',
     secties: [
       {
@@ -70,7 +70,7 @@ export const KENNISBANK = [
   {
     id: 'vleugelformule-begrippen',
     categorie: 'Biometrie & morfologie',
-    titel: 'Vleugelformule — begrippen',
+    titel: 'Vleugelformule',
     bron: 'Svensson (1992); Demongin (2020)',
     secties: [
       {
