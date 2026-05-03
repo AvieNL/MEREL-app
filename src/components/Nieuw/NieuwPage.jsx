@@ -241,6 +241,11 @@ export default function NieuwPage() {
         next.nauwk_pul_leeftijd = '--';
         next.broedselgrootte = '--';
       }
+      // ONGEVAL-ringnummer: ongeringde vogel overleden bij/door het ringen
+      if (field === 'ringnummer' && value.toUpperCase().startsWith('ONGEVAL')) {
+        next.conditie = '2';        // net dood
+        next.omstandigheden = '08'; // gedood of ernstig gewond door vangst of ringer
+      }
       return next;
     });
     setFormErrors(prev => prev.filter(f => f.key !== field));

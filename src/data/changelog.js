@@ -1,6 +1,19 @@
-export const VERSIE = '1.73.1';
+export const VERSIE = '1.73.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.2',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Invoerformulier: ringnummer dat begint met "ONGEVAL" zet automatisch conditie op 2 (net dood) en omstandigheden op 08 (gedood/gewond door vangst of ringer)',
+    ],
+    wijzigingen_en: [
+      'Catch form: ring number starting with "ONGEVAL" automatically sets condition to 2 (freshly dead) and circumstances to 08 (killed/injured by catching or ringer)',
+    ],
+    wijzigingen_de: [
+      'Erfassungsformular: Ringnummer beginnend mit "ONGEVAL" setzt automatisch Kondition auf 2 (frisch tot) und Umstände auf 08 (getötet/verletzt durch Fang oder Beringer)',
+    ],
+  },
   {
     versie: '1.73.1',
     datum: '2026-05-03',
