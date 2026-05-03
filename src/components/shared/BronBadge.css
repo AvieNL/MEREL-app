@@ -29,10 +29,9 @@
   padding: 5px 9px;
   font-size: 0.75rem;
   font-style: italic;
-  white-space: nowrap;
-  max-width: 260px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  max-width: 280px;
+  width: max-content;
 
   pointer-events: none;
   opacity: 0;
