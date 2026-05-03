@@ -1334,6 +1334,12 @@
   border-top: 1px solid var(--border-color);
 }
 
+.sd-vleugelformule .sd-label {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
 .sd-vleugelformule-tekst {
   font-family: inherit;
   font-size: 0.8rem;
@@ -1341,6 +1347,7 @@
   white-space: pre-wrap;
   word-break: break-word;
   margin: 4px 0 0 0;
+  padding-left: 15px;
   line-height: 1.6;
 }
 
