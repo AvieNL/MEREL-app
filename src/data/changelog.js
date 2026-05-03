@@ -1,6 +1,19 @@
-export const VERSIE = '1.74.1';
+export const VERSIE = '1.74.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.2',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: seizoenstabs (Voorjaar jan–jun / Najaar jul–dec) toegevoegd bij samengevoegde leeftijdsbepaling; standaard huidig seizoen geselecteerd',
+    ],
+    wijzigingen_en: [
+      'Species page: season tabs (Spring Jan–Jun / Autumn Jul–Dec) added to merged age determination; defaults to current season',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Saisontabs (Frühjahr Jan–Jun / Herbst Jul–Dez) zur zusammengeführten Altersbestimmung hinzugefügt; standardmäßig aktuelle Saison ausgewählt',
+    ],
+  },
   {
     versie: '1.74.1',
     datum: '2026-05-03',

@@ -30,6 +30,45 @@
   color: var(--accent);
 }
 
+/* Seizoenstabs bij samengevoegde leeftijdsblokken */
+.sd-det-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.sd-det-tab {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 5px 14px;
+  border-radius: var(--radius-sm, 4px);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.sd-det-tab:hover {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--text);
+}
+
+.sd-det-tab--actief {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.sd-det-tab__sub {
+  font-size: 0.68rem;
+  font-weight: 400;
+  opacity: 0.75;
+}
+
 /* Legenda bij samengevoegde leeftijdsblokken */
 .leeftijd-legenda {
   display: flex;

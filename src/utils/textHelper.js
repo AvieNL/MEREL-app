@@ -21,7 +21,8 @@ export function renderMarkdown(text) {
 // Renderer voor leeftijdsbepalingsteksten met {{MM-MM}} maandmarkeringen.
 // Blokken gescheiden door dubbele newline. Relevante blokken (huidige datum ± 21 dagen)
 // krijgen class 'leeftijd-blok--actueel'.
-export function renderLeeftijdMarkdown(text) {
+// seizoen: 'vj' (jan–jun) | 'nj' (jul–dec) | null (alles tonen)
+export function renderLeeftijdMarkdown(text, seizoen = null) {
   if (!text) return '';
 
   const BUFFER_DAYS = 21;
@@ -36,9 +37,16 @@ export function renderLeeftijdMarkdown(text) {
 
   const blocks = text.split(/\n\n+/);
 
-  const parts = blocks.map(block => {
+  const parts = blocks.flatMap(block => {
     const match = block.match(MARKER_RE);
     const content = match ? block.replace(MARKER_RE, '') : block;
+
+    // Seizoensfilter: sla blok over als het niet overlapt met het geselecteerde seizoen
+    if (match && seizoen) {
+      const sm = parseInt(match[1], 10);
+      const em = parseInt(match[2], 10);
+      if (!blokOverlapt(sm, em, seizoen)) return [];
+    }
 
     const inner = content
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -60,13 +68,26 @@ export function renderLeeftijdMarkdown(text) {
         : `<span class="leeftijd-maand">${MAANDEN[sm - 1]}–${MAANDEN[em - 1]}</span>`;
     }
 
-    return `<div class="${cls}">${maandLabel}${inner}</div>`;
+    return [`<div class="${cls}">${maandLabel}${inner}</div>`];
   });
 
   return DOMPurify.sanitize(parts.join(''), {
     ALLOWED_TAGS: ['div', 'span', 'strong', 'em', 'u', 'br', 'a'],
     ALLOWED_ATTR: ['class', 'href'],
   });
+}
+
+// Controleer of een blok overlapt met het opgegeven seizoen.
+// seizoen: 'vj' = maanden 1–6, 'nj' = maanden 7–12
+function blokOverlapt(sm, em, seizoen) {
+  const [sS, sE] = seizoen === 'vj' ? [1, 6] : [7, 12];
+  if (sm <= em) {
+    // Zelfde-jaar bereik
+    return sm <= sE && em >= sS;
+  } else {
+    // Cross-jaar bereik (bijv. 07-04): splits in [sm–12] en [1–em]
+    return (sm <= sE && 12 >= sS) || (1 <= sE && em >= sS);
+  }
 }
 
 // Controleer of het huidige venster (winStart–winEnd) overlapt met het maandbereik.

@@ -122,6 +122,9 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const [vangstenOpen, setVangstenOpen] = useState(false);
   const [nestenOpen, setNestenOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [leeftijdSeizoen, setLeeftijdSeizoen] = useState(
+    () => new Date().getMonth() + 1 <= 6 ? 'vj' : 'nj'
+  );
 
   const { nesten, legsels, bezoeken, ringen } = useNestData();
   const switchModule = useModuleSwitch();
@@ -396,6 +399,18 @@ export default function SoortDetail({ records, speciesOverrides }) {
           {leeftijdsVj && !leeftijdsNj ? (
             // Samengevoegde modus: één tekst met {{MM-MM}} maandblokken
             <>
+              {/* Seizoenstabs */}
+              <div className="sd-det-tabs">
+                <button
+                  className={`sd-det-tab${leeftijdSeizoen === 'vj' ? ' sd-det-tab--actief' : ''}`}
+                  onClick={() => setLeeftijdSeizoen('vj')}
+                >Voorjaar <span className="sd-det-tab__sub">jan–jun</span></button>
+                <button
+                  className={`sd-det-tab${leeftijdSeizoen === 'nj' ? ' sd-det-tab--actief' : ''}`}
+                  onClick={() => setLeeftijdSeizoen('nj')}
+                >Najaar <span className="sd-det-tab__sub">jul–dec</span></button>
+              </div>
+              {/* Legenda */}
               {(() => {
                 const BUFFER_DAYS = 21;
                 const MAANDEN_KORT = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
@@ -412,9 +427,9 @@ export default function SoortDetail({ records, speciesOverrides }) {
               })()}
               <div
                 className="sd-notities-text sd-leeftijd-blokken"
-                dangerouslySetInnerHTML={{ __html: renderLeeftijdMarkdown(leeftijdsVj) }}
+                dangerouslySetInnerHTML={{ __html: renderLeeftijdMarkdown(leeftijdsVj, leeftijdSeizoen) }}
               />
-            />
+            </>
           ) : (
             // Klassieke modus: apart voorjaar en najaar
             <div className="sd-det-view">
