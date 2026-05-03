@@ -1,6 +1,19 @@
-export const VERSIE = '1.74.9';
+export const VERSIE = '1.75.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.75.0',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Ringformulier: leeftijdshint toont bij samengevoegd formaat alleen de momenteel relevante leeftijdsklassen (±21 dagen), zonder {{MM-MM}} markers',
+    ],
+    wijzigingen_en: [
+      'Ring form: age hint shows only currently relevant age classes (±21 days) for merged format, without {{MM-MM}} markers',
+    ],
+    wijzigingen_de: [
+      'Ringformular: Altershinweis zeigt nur aktuell relevante Altersklassen (±21 Tage) im zusammengeführten Format, ohne {{MM-MM}}-Marker',
+    ],
+  },
   {
     versie: '1.74.9',
     datum: '2026-05-03',

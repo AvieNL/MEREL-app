@@ -183,6 +183,38 @@ function escapeHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// Compacte renderer voor in het invoerformulier: toont alleen de blokken
+// die binnen het huidige ±21-dagenvenster vallen. Markers worden verwijderd.
+// Tekst zonder {{MM-MM}} wordt gewoon als markdown gerenderd.
+export function renderLeeftijdActueel(text) {
+  if (!text) return '';
+  if (!text.includes('{{')) return renderMarkdown(text);
+
+  const BUFFER_DAYS = 21;
+  const now = new Date();
+  const winStart = new Date(now); winStart.setDate(winStart.getDate() - BUFFER_DAYS);
+  const winEnd   = new Date(now); winEnd.setDate(winEnd.getDate()   + BUFFER_DAYS);
+  const MARKER_RE = /^\{\{(\d{2})-(\d{2})\}\}\n?/;
+
+  const blocks = text.split(/\n\n+/);
+  const parts = blocks.flatMap(block => {
+    const match = block.match(MARKER_RE);
+    if (match) {
+      const sm = parseInt(match[1], 10);
+      const em = parseInt(match[2], 10);
+      if (!maandRelevant(sm, em, winStart, winEnd)) return [];
+    }
+    const content = match ? block.replace(MARKER_RE, '') : block;
+    return [`<p class="lft-actueel">${inlineMarkdown(content.replace(/\n/g, '<br>'))}</p>`];
+  });
+
+  if (!parts.length) return '';
+  return DOMPurify.sanitize(parts.join(''), {
+    ALLOWED_TAGS: ['p', 'strong', 'em', 'u', 'br', 'a'],
+    ALLOWED_ATTR: ['class', 'href'],
+  });
+}
+
 // Controleer of een blok overlapt met het opgegeven seizoen.
 // seizoen: 'vj' = maanden 1–6, 'nj' = maanden 7–12
 function blokOverlapt(sm, em, seizoen) {
