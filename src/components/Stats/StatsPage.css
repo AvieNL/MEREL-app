@@ -876,3 +876,54 @@
 }
 .jaarvergl__delta.pos { color: var(--success, #22c55e); }
 .jaarvergl__delta.neg { color: var(--danger, #ef4444); }
+
+/* ── Omstandigheden sectie ─────────────────────────────────────────────── */
+.stats-omst-item--bijzonder .top-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stats-omst-badge {
+  display: inline-block;
+  min-width: 28px;
+  padding: 1px 5px;
+  background: color-mix(in srgb, var(--warning, #f59e0b) 18%, transparent);
+  color: var(--warning, #f59e0b);
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  flex-shrink: 0;
+}
+.stats-omst-badge--normaal {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
+}
+.stats-omst-bar {
+  background: var(--warning, #f59e0b) !important;
+  opacity: 0.7;
+}
+.stats-omst-pct {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+.stats-omst-normaal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.stats-omst-leeg {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+.stats-omst-code {
+  font-size: 0.82rem;
+}

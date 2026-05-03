@@ -1,6 +1,19 @@
-export const VERSIE = '1.73.2';
+export const VERSIE = '1.73.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.3',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Statistieken: sectie "Omstandigheden" toegevoegd met balkgrafiek van alle niet-standaard omstandighedencodes, inclusief aantal en percentage van totaal',
+    ],
+    wijzigingen_en: [
+      'Statistics: "Circumstances" section added with bar chart of all non-standard circumstance codes, including count and percentage of total',
+    ],
+    wijzigingen_de: [
+      'Statistiken: Abschnitt "Umstände" hinzugefügt mit Balkendiagramm aller nicht-standardmäßigen Umstandscodes, einschließlich Anzahl und Prozentsatz des Gesamts',
+    ],
+  },
   {
     versie: '1.73.2',
     datum: '2026-05-03',

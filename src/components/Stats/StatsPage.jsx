@@ -11,6 +11,7 @@ import { parseDate, dagenTussen, haversineKm, formatDagen, formatAfstand } from 
 import { formatDatum, toYMD, todayISO, yesterdayISO } from '../../utils/dateHelper';
 import { buildEersteVangstMap, normalizeRingnummer } from '../../utils/catchHelper';
 import { STATS_UITGESLOTEN } from '../../data/constants';
+import { euringReference } from '../../data/euring-reference';
 import { useSettings } from '../../hooks/useSettings';
 import './StatsPage.css';
 
@@ -241,6 +242,28 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       : statsRecords,
     [statsRecords, eigenFilter, eigenProjectNamen]
   );
+
+  const omstandighedenStats = useMemo(() => {
+    const codeMap = Object.fromEntries(
+      (euringReference.omstandigheden?.codes || []).map(c => [c.code, c.beschrijving])
+    );
+    const totaal = gefilterdRecords.length;
+    const counts = {};
+    gefilterdRecords.forEach(r => {
+      const code = r.omstandigheden != null ? String(r.omstandigheden).padStart(2, '0') : null;
+      if (!code) return;
+      counts[code] = (counts[code] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([code, n]) => ({
+        code,
+        label: codeMap[code] || `code ${code}`,
+        n,
+        pct: totaal > 0 ? Math.round((n / totaal) * 1000) / 10 : 0,
+        isNormaal: code === '20',
+      }))
+      .sort((a, b) => b.n - a.n);
+  }, [gefilterdRecords]);
 
   const bioExtremen = useMemo(() => {
     const basis = gefilterdRecords.filter(r => r.leeftijd !== '1');
@@ -947,6 +970,46 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             ))}
           </div>
         </div>
+
+        {/* Omstandigheden */}
+        {omstandighedenStats.length > 0 && (() => {
+          const bijzonder = omstandighedenStats.filter(o => !o.isNormaal);
+          const normaal   = omstandighedenStats.find(o => o.isNormaal);
+          const maxN = omstandighedenStats[0].n;
+          return (
+            <div className="section">
+              <h3>Omstandigheden</h3>
+              {bijzonder.length === 0 ? (
+                <p className="stats-omst-leeg">Alle vangsten hebben omstandighedencode 20 (gevangen door ringer).</p>
+              ) : (
+                <>
+                  <div className="top-list">
+                    {bijzonder.map(o => (
+                      <div key={o.code} className="top-item stats-omst-item--bijzonder">
+                        <span className="top-name stats-omst-code">
+                          <span className="stats-omst-badge">{o.code}</span>
+                          {o.label}
+                        </span>
+                        <div className="top-bar-wrap">
+                          <div className="top-bar stats-omst-bar" style={{ width: `${(o.n / maxN) * 100}%` }} />
+                        </div>
+                        <span className="top-count">
+                          {o.n} <span className="stats-omst-pct">({o.pct}%)</span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  {normaal && (
+                    <div className="stats-omst-normaal">
+                      <span className="stats-omst-badge stats-omst-badge--normaal">20</span>
+                      Gevangen door ringer — {normaal.n.toLocaleString('nl-NL')} vangsten ({normaal.pct}%)
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Terugvangsten */}
         {(alleTerugvangsten.length > 0) && (
