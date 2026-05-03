@@ -1,6 +1,22 @@
-export const VERSIE = '1.74.8';
+export const VERSIE = '1.74.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.9',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Roek: "Bij overlap"-zin verwijderd uit geslachtsteksten; grensformule blijft als los bulletpunt bij ♂',
+      'Soortenpagina: determinatiehulp-links tonen nu ↓ voor de naam (pijl naar beneden op de pagina)',
+    ],
+    wijzigingen_en: [
+      'Rook: "Bij overlap" sentence removed from sex determination texts; boundary formula kept as separate bullet for ♂',
+      'Species page: determination aid links now show ↓ before the name (arrow pointing down the page)',
+    ],
+    wijzigingen_de: [
+      'Saatkrähe: "Bei Überlappung"-Satz aus Geschlechtsbestimmungstexten entfernt',
+      'Artendetailseite: Bestimmungshilfe-Links zeigen jetzt ↓ vor dem Namen',
+    ],
+  },
   {
     versie: '1.74.8',
     datum: '2026-05-03',
