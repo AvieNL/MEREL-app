@@ -19,7 +19,7 @@ import { TYPE_CFG, buildNvByRing, getVangstType } from '../../utils/vangstType';
 import SoortDetailEditor from './SoortDetailEditor';
 import DeterminatieButton from '../Determinatie/DeterminatieButton';
 import DeterminatieOverzicht from '../Determinatie/DeterminatieOverzicht';
-import { useDeterminatieAids } from '../../hooks/useDeterminatieAids';
+import { useDeterminatieAids, pullDeterminatieAidsIfNeeded } from '../../hooks/useDeterminatieAids';
 import './SoortDetail.css';
 
 function leeftijdLabel(code) { return LEEFTIJD_LABEL[code] || code; }
@@ -501,7 +501,12 @@ export default function SoortDetail({ records, speciesOverrides }) {
             disabled={refreshing}
             onClick={async () => {
               setRefreshing(true);
-              try { await pullSpeciesIfNeeded(true); } finally { setRefreshing(false); }
+              try {
+                await Promise.all([
+                  pullSpeciesIfNeeded(true),
+                  pullDeterminatieAidsIfNeeded(true),
+                ]);
+              } finally { setRefreshing(false); }
             }}
           >⟳</button>
           {!isViewer && (
