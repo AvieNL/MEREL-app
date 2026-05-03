@@ -1,6 +1,19 @@
-export const VERSIE = '1.74.3';
+export const VERSIE = '1.74.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.4',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: link naar determinatiehulp voor leeftijdsbepaling toegevoegd indien beschikbaar voor de soort',
+    ],
+    wijzigingen_en: [
+      'Species page: link to age determination aid added when available for the species',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Link zum Altersbestimmungs-Hilfsmittel hinzugefügt, sofern für die Art verfügbar',
+    ],
+  },
   {
     versie: '1.74.3',
     datum: '2026-05-03',

@@ -91,6 +91,23 @@
   margin-bottom: 4px;
 }
 
+/* Link naar determinatiehulp vanuit een kaartblok */
+.sd-aid-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.15s;
+}
+
+.sd-aid-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* Legenda bij samengevoegde leeftijdsblokken */
 .leeftijd-legenda {
   display: flex;

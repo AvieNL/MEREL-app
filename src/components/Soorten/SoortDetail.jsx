@@ -449,6 +449,16 @@ export default function SoortDetail({ records, speciesOverrides }) {
               )}
             </div>
           )}
+          {/* Link naar determinatiehulp voor leeftijdsbepaling, indien beschikbaar */}
+          {(() => {
+            const aid = getAidsVoorSoort(soortEuringCode).find(a => a.id.includes('leeftijd'));
+            if (!aid) return null;
+            return (
+              <a href="#determinatiehulp" className="sd-aid-link">
+                {aid.naam} →
+              </a>
+            );
+          })()}
         </div>
       )}
 
