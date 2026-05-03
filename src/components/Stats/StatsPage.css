@@ -878,10 +878,43 @@
 .jaarvergl__delta.neg { color: var(--danger, #ef4444); }
 
 /* ── Omstandigheden sectie ─────────────────────────────────────────────── */
+
+/* Overschrijf de vaste breedte van top-item voor omstandighedenrijen */
+.stats-omst-item--bijzonder {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.stats-omst-item--bijzonder:last-child {
+  border-bottom: none;
+}
 .stats-omst-item--bijzonder .top-name {
+  width: auto;
+  flex-shrink: 1;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.stats-omst-item__row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 8px;
+}
+.stats-omst-item--bijzonder .top-bar-wrap {
+  flex: unset;
+  width: 100%;
+  height: 6px;
+}
+.stats-omst-item--bijzonder .top-count {
+  width: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .stats-omst-badge {
   display: inline-block;

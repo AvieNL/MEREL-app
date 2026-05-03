@@ -986,16 +986,18 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                   <div className="top-list">
                     {bijzonder.map(o => (
                       <div key={o.code} className="top-item stats-omst-item--bijzonder">
-                        <span className="top-name stats-omst-code">
-                          <span className="stats-omst-badge">{o.code}</span>
-                          {o.label}
-                        </span>
+                        <div className="stats-omst-item__row">
+                          <span className="top-name stats-omst-code">
+                            <span className="stats-omst-badge">{o.code}</span>
+                            {o.label}
+                          </span>
+                          <span className="top-count">
+                            {o.n} <span className="stats-omst-pct">({o.pct}%)</span>
+                          </span>
+                        </div>
                         <div className="top-bar-wrap">
                           <div className="top-bar stats-omst-bar" style={{ width: `${(o.n / maxN) * 100}%` }} />
                         </div>
-                        <span className="top-count">
-                          {o.n} <span className="stats-omst-pct">({o.pct}%)</span>
-                        </span>
                       </div>
                     ))}
                   </div>
