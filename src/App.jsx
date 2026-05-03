@@ -175,7 +175,7 @@ function AppShell() {
   }
 
   // Publieke routes: toegankelijk zonder login
-  if (location.pathname.startsWith('/kennis')) {
+  if (!user && location.pathname.startsWith('/kennis')) {
     return <PublicShell />;
   }
 
@@ -236,6 +236,8 @@ function NestApp({ onSwitchModule, activeModule }) {
             <Route path="/prullenbak" element={<PrullenbakPage />} />
             <Route path="/soorten" element={<SoortenPage records={records} />} />
             <Route path="/soorten/:naam" element={<SoortDetail records={records} speciesOverrides={speciesOverrides} />} />
+            <Route path="/kennis/soorten" element={<SoortenPage records={records} />} />
+            <Route path="/kennis/soorten/:naam" element={<SoortDetail records={records} speciesOverrides={speciesOverrides} />} />
             <Route path="/instellingen" element={<InstellingenPage settings={settings} onUpdateSettings={updateSettings} onFullResync={fullResync} />} />
             <Route path="/over" element={<OverPage />} />
             <Route path="/kennis" element={<KennisbankPage />} />
@@ -306,6 +308,12 @@ function MainApp({ onSwitchModule, activeModule }) {
             <SoortenPage records={records} />
           } />
           <Route path="/soorten/:naam" element={
+            <SoortDetail records={records} speciesOverrides={speciesOverrides} />
+          } />
+          <Route path="/kennis/soorten" element={
+            <SoortenPage records={records} />
+          } />
+          <Route path="/kennis/soorten/:naam" element={
             <SoortDetail records={records} speciesOverrides={speciesOverrides} />
           } />
           <Route path="/over" element={<OverPage />} />

@@ -3,6 +3,7 @@ import { IconEdit, IconDelete, NestIcoon } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
+import { useAuth } from '../../context/AuthContext';
 import { useRole } from '../../hooks/useRole';
 import { useNestData } from '../../hooks/useNestData';
 import { useModuleSwitch } from '../../App';
@@ -44,6 +45,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const { naam } = useParams();
   const navigate = useNavigate();
   const decodedNaam = decodeURIComponent(naam);
+  const { user } = useAuth();
   const { isAdmin, isViewer } = useRole();
   const { t, i18n } = useTranslation();
 
@@ -759,8 +761,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
         )}
       </div>
 
-      {/* Mijn vangsten */}
-      <div className="sd-card">
+      {/* Mijn vangsten — alleen voor ingelogde gebruikers */}
+      {user && <div className="sd-card">
         <div className="sd-vangsten-header" onClick={() => setVangstenOpen(o => !o)}>
           <h3 className="sd-card-title sd-card-title--toggle">
             {t('sd_my_catches')}
@@ -912,10 +914,10 @@ export default function SoortDetail({ records, speciesOverrides }) {
             </div>
           </div>
         ))}
-      </div>
+      </div>}
 
-      {/* Nesten */}
-      {nestLegsels.length > 0 && (
+      {/* Nesten — alleen voor ingelogde gebruikers */}
+      {user && nestLegsels.length > 0 && (
         <div className="sd-card">
           <div className="sd-vangsten-header" onClick={() => setNestenOpen(o => !o)}>
             <h3 className="sd-card-title sd-card-title--toggle">

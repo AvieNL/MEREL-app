@@ -1,13 +1,13 @@
-export const VERSIE = '1.72.7';
+export const VERSIE = '1.72.8';
 
 export const CHANGELOG = [
   {
-    versie: '1.72.7',
+    versie: '1.72.8',
     datum: '2026-05-03',
     wijzigingen: [
-      'Kennisbank en soortenpagina\'s zijn nu openbaar toegankelijk zonder inloggen (via /kennis)',
-      'Kennisbank: sectie "Soorten" toegevoegd met gedocumenteerde soorten als klikbare fotokaarten',
-      'Soortenpagina\'s tonen nu ringspecifieke data (vangsten, biometrie) alleen voor ingelogde gebruikers',
+      'Soortenpagina: "Mijn vangsten" en "Nesten" worden verborgen voor niet-ingelogde bezoekers',
+      'Ingelogde gebruikers zien nu hun eigen vangsten op /kennis/soorten/:naam (fix: PublicShell werd ook voor ingelogde gebruikers getoond)',
+      '/kennis/soorten/* routes toegevoegd aan ring- en nestmodule voor ingelogde gebruikers',
     ],
     wijzigingen_en: [
       'Knowledge base and species pages are now publicly accessible without login (via /kennis)',
