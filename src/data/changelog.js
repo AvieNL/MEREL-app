@@ -1,6 +1,19 @@
-export const VERSIE = '1.72.9';
+export const VERSIE = '1.73.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.0',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: aparte bronvelden per sectie (geslachtsbepaling, leeftijdsbepaling, ring & rui) — invoerbaar via de editor, zichtbaar als 📖-icoon',
+    ],
+    wijzigingen_en: [
+      'Species page: separate source fields per section (sex determination, age determination, ring & moult) — editable via the editor, shown as 📖 icon',
+    ],
+    wijzigingen_de: [
+      'Artseite: separate Quellenfelder pro Abschnitt (Geschlechtsbestimmung, Altersbestimmung, Ring & Mauser) — im Editor eingebar, als 📖-Icon angezeigt',
+    ],
+  },
   {
     versie: '1.72.9',
     datum: '2026-05-03',

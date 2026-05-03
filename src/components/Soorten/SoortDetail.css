@@ -1083,9 +1083,17 @@
 /* ─── Biometrie bronvermelding ─────────────────────────────────────────── */
 .sd-bio-bron {
   margin: 8px 0 0 0;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  font-style: italic;
+}
+
+/* ─── Bron-inputrij in editor ──────────────────────────────────────────── */
+.sd-edit-row--bron {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  opacity: 0.75;
+}
+.sd-edit-row--bron:focus-within {
+  opacity: 1;
 }
 
 /* ─── Compact notities (ondersoorten) ─────────────────────────────────── */

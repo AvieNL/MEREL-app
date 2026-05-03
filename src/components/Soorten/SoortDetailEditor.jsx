@@ -346,6 +346,12 @@ export default function SoortDetailEditor({
             />
           </div>
         </div>
+        <div className="sd-edit-row sd-edit-row--bron">
+          <label className="sd-edit-label">\uD83D\uDCD6 Bron</label>
+          <input type="text" className="sd-edit-input" placeholder="bijv. Demongin (2020)"
+            value={editData.bron_geslacht || ''}
+            onChange={e => handleField('bron_geslacht', e.target.value)} />
+        </div>
       </div>
 
       {/* Leeftijdsbepaling */}
@@ -369,12 +375,24 @@ export default function SoortDetailEditor({
             />
           </div>
         </div>
+        <div className="sd-edit-row sd-edit-row--bron">
+          <label className="sd-edit-label">📖 Bron</label>
+          <input type="text" className="sd-edit-input" placeholder="bijv. Demongin (2020)"
+            value={editData.bron_leeftijdsbepaling || ''}
+            onChange={e => handleField('bron_leeftijdsbepaling', e.target.value)} />
+        </div>
       </div>
 
       {/* Ring & Rui */}
       <div className="sd-card">
         <h3 className="sd-card-title">{t('sd_ring_rui')}</h3>
         {EDITABLE_FIELDS.ring.map(f => renderEditField(f.key, f.label))}
+        <div className="sd-edit-row sd-edit-row--bron">
+          <label className="sd-edit-label">📖 Bron</label>
+          <input type="text" className="sd-edit-input" placeholder="bijv. Svensson (2023)"
+            value={editData.bron_ring || ''}
+            onChange={e => handleField('bron_ring', e.target.value)} />
+        </div>
       </div>
 
       {/* Namen + Biometrie naast elkaar */}

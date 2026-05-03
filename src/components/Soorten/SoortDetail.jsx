@@ -203,10 +203,13 @@ export default function SoortDetail({ records, speciesOverrides }) {
     data.euring_code = soort.euring_code || euringLookup[decodedNaam.toLowerCase()] || '';
     data.geslachts_notities_m = soort.geslachts_notities_m ?? soort.geslachts_notities ?? soort.ruitype_notities ?? '';
     data.geslachts_notities_f = soort.geslachts_notities_f ?? '';
+    data.bron_geslacht = soort.bron_geslacht ?? '';
     // Leeftijdsbepaling: apart voor voorjaar en najaar
     // Migratie: oude leeftijds_notities valt terug op voorjaar-veld
     data.leeftijds_notities_vj = soort.leeftijds_notities_vj ?? soort.leeftijds_notities ?? '';
     data.leeftijds_notities_nj = soort.leeftijds_notities_nj ?? '';
+    data.bron_leeftijdsbepaling = soort.bron_leeftijdsbepaling ?? '';
+    data.bron_ring = soort.bron_ring ?? '';
     data.foto = soort.foto ?? '';
     data.foto_crop = soort.foto_crop ?? { x: 50, y: 50, zoom: 1 };
     setEditData(data);
@@ -267,8 +270,11 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
     newData.geslachts_notities_m  = editData.geslachts_notities_m  ?? '';
     newData.geslachts_notities_f  = editData.geslachts_notities_f  ?? '';
+    newData.bron_geslacht         = editData.bron_geslacht         ?? '';
     newData.leeftijds_notities_vj = editData.leeftijds_notities_vj ?? '';
     newData.leeftijds_notities_nj = editData.leeftijds_notities_nj ?? '';
+    newData.bron_leeftijdsbepaling = editData.bron_leeftijdsbepaling ?? '';
+    newData.bron_ring             = editData.bron_ring             ?? '';
     if (editData.foto !== undefined) newData.foto = editData.foto;
     newData.foto_crop = editData.foto_crop ?? null;
 
@@ -531,7 +537,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
       {/* Geslachtsbepaling */}
       {(geslachtsM || geslachtsF) && (
         <div className="sd-card">
-          <h3 className="sd-card-title">{t('sd_gender_det')}</h3>
+          <h3 className="sd-card-title">{t('sd_gender_det')} <BronBadge bron={soort.bron_geslacht} /></h3>
           <div className="sd-det-view">
             {geslachtsM && (
               <div className="sd-det-block">
@@ -552,7 +558,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
       {/* Leeftijdsbepaling */}
       {(leeftijdsVj || leeftijdsNj) && (
         <div className="sd-card">
-          <h3 className="sd-card-title">{t('sd_age_det')}</h3>
+          <h3 className="sd-card-title">{t('sd_age_det')} <BronBadge bron={soort.bron_leeftijdsbepaling} /></h3>
           <div className="sd-det-view">
             {leeftijdsVj && (
               <div className="sd-det-block">
@@ -614,7 +620,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
       {/* Ring & Rui */}
       <div className="sd-card">
-        <h3 className="sd-card-title">{t('sd_ring_rui')}</h3>
+        <h3 className="sd-card-title">{t('sd_ring_rui')} <BronBadge bron={soort.bron_ring} /></h3>
         {EDITABLE_FIELDS.ring.map(f =>
           renderField(f.key, f.label, {
             fallback: f.key === 'euring_code' ? (euringLookup[decodedNaam.toLowerCase()] || '') : undefined,
