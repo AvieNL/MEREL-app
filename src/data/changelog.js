@@ -1,6 +1,22 @@
-export const VERSIE = '1.72.3';
+export const VERSIE = '1.72.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.72.4',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Formulier: geslachts-InfoPanel toont geen matenlijst meer — alleen kwalitatieve kenmerken (broedvlek, uiterlijk) worden getoond; maten worden al gecontroleerd bij de biometrie-invoer',
+      'Formulier: hint toegevoegd dat determinatiehulp beschikbaar is via klik op het label',
+    ],
+    wijzigingen_en: [
+      'Form: sex InfoPanel no longer shows measurement lists — only qualitative features (brood patch, appearance) are shown; measurements are validated during biometry entry',
+      'Form: hint added that determination aid is available via click on the label',
+    ],
+    wijzigingen_de: [
+      'Formular: Geschlechts-InfoPanel zeigt keine Maßlisten mehr — nur qualitative Merkmale (Brutfleck, Aussehen) werden angezeigt; Maße werden bei der Biometrie-Eingabe geprüft',
+      'Formular: Hinweis hinzugefügt, dass Bestimmungshilfe per Klick auf das Label verfügbar ist',
+    ],
+  },
   {
     versie: '1.72.3',
     datum: '2026-05-03',

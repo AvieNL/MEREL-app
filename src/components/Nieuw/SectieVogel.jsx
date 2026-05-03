@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
+import { extractGeslachtsHint } from './NieuwPage.utils';
 import {
   LEEFTIJD_OPTIONS, PULLUS_LEEFTIJD_OPTIONS, NAUWK_LEEFTIJD_OPTIONS,
   BROEDGROOTTE_OPTIONS, GESLACHT_OPTIONS, GESLACHTSBEPALING_OPTIONS,
@@ -74,9 +75,20 @@ export default function SectieVogel() {
                   <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
                 ))}
               </select>
+              {geslachtAid && (
+                <span className="det-beschikbaar-hint">
+                  🔍 Klik op het label hierboven voor de determinatiehulp
+                </span>
+              )}
               <InfoPanel items={[
-                { label: '♂', text: speciesInfo?.geslachts_notities_m || soortOverride?.geslachts_notities_m },
-                { label: '♀', text: speciesInfo?.geslachts_notities_f || soortOverride?.geslachts_notities_f },
+                {
+                  label: '♂',
+                  text: extractGeslachtsHint(speciesInfo?.geslachts_notities_m || soortOverride?.geslachts_notities_m),
+                },
+                {
+                  label: '♀',
+                  text: extractGeslachtsHint(speciesInfo?.geslachts_notities_f || soortOverride?.geslachts_notities_f),
+                },
               ]} />
             </div>
             <div className="form-group">
