@@ -188,6 +188,62 @@
   color: var(--text-muted);
 }
 
+/* ID-kenmerken — vergelijkingstabel */
+.id-tabel-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.id-tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.id-tabel th,
+.id-tabel td {
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.4;
+}
+
+.id-tabel tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Eerste kolom = kenmerksnaam */
+.id-tabel th:first-child,
+.id-tabel td:first-child {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  width: 1%;
+}
+
+/* Kolom voor de soort op deze pagina (index 1) */
+.id-tabel__eigen {
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  color: var(--text);
+  font-weight: 500;
+}
+
+.id-tabel thead .id-tabel__eigen {
+  color: var(--accent);
+  font-weight: 700;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.id-tabel thead th {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--bg-tertiary) 60%, transparent);
+  border-bottom: 1px solid var(--border);
+}
+
 .id-alinea {
   font-size: 0.85rem;
   color: var(--text);

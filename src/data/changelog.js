@@ -1,6 +1,22 @@
-export const VERSIE = '1.74.5';
+export const VERSIE = '1.74.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.6',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: ID-kenmerken ondersteunt vergelijkingstabellen (Roek-kolom uitgelicht) naast de bestaande bulletlijsten per soort',
+      'Roek: ID-kenmerken vervangen door drieweg-vergelijkingstabel Roek / Zwarte Kraai / Bonte Kraai',
+    ],
+    wijzigingen_en: [
+      'Species page: ID features supports comparison tables (own species column highlighted) alongside existing per-species bullet lists',
+      'Rook: ID features replaced with three-way comparison table Rook / Carrion Crow / Hooded Crow',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: ID-Merkmale unterstützt Vergleichstabellen (eigene Artenspalte hervorgehoben)',
+      'Saatkrähe: ID-Merkmale durch Drei-Wege-Vergleichstabelle Saatkrähe / Aaskrähe / Nebelkrähe ersetzt',
+    ],
+  },
   {
     versie: '1.74.5',
     datum: '2026-05-03',

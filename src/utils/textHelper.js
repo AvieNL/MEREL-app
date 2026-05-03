@@ -78,20 +78,72 @@ export function renderLeeftijdMarkdown(text, seizoen = null) {
 }
 
 // Renderer voor ID-kenmerken / verwarringsoorten.
-// Blokken die beginnen met **Onderscheid met [Soort]:** worden als
-// vergelijkingskaart gerenderd met de soortnaam als kop en de
-// bullet-punten als scanbare lijst. Overige alinea's als gewone tekst.
+//
+// Twee blokformaten worden herkend:
+//   **Onderscheid met [Soort]:**      → vergelijkingskaart met bulletlijst
+//   **Vergelijking [A] / [B] / …:**   → vergelijkingstabel (pipe-formaat)
+//     Pipe-rijen direct na de titel:
+//       | Kenmerk | Kolom A | Kolom B |   ← koptekst (1e rij zonder ---)
+//       |---|---|---|                      ← scheidingsrij (overgeslagen)
+//       | waarde | waarde | waarde |      ← datarijen
+//     De 2e kolom (index 1 = soort waarvoor de pagina geldt) krijgt
+//     klasse id-tabel__eigen.
+//
+// Overige alinea's worden als gewone tekst weergegeven.
 export function renderIDKenmerken(text) {
   if (!text) return '';
 
-  const VERGELIJK_RE = /^\*\*Onderscheid met ([^*]+):\*\*/;
+  const ONDERSCHEID_RE = /^\*\*Onderscheid met ([^*]+):\*\*/;
+  const VERGELIJK_RE   = /^\*\*Vergelijking ([^*]+):\*\*/;
+  const PIPE_SEP_RE    = /^\|[\s\-|]+\|$/;          // |---|---| scheidingsrij
   const blocks = text.split(/\n\n+/);
 
   const parts = blocks.map(block => {
-    const match = block.match(VERGELIJK_RE);
-    if (match) {
-      const soortNaam = escapeHtml(match[1].trim());
-      const rest = block.replace(VERGELIJK_RE, '').replace(/^\n/, '');
+    // ── Vergelijkingstabel ────────────────────────────────────────────────
+    const tabelMatch = block.match(VERGELIJK_RE);
+    if (tabelMatch) {
+      const titel = escapeHtml(tabelMatch[1].trim());
+      const lines = block.split('\n').slice(1);           // titel-regel weg
+      const rijen = lines
+        .map(l => l.trim())
+        .filter(l => l.startsWith('|') && !PIPE_SEP_RE.test(l))
+        .map(l =>
+          l.split('|')
+            .filter((_, i, a) => i > 0 && i < a.length - 1)
+            .map(c => inlineMarkdown(c.trim()))
+        );
+
+      if (!rijen.length) return '';
+
+      const [koptekst, ...dataRijen] = rijen;
+      const thHtml = koptekst.map((c, i) =>
+        `<th${i === 1 ? ' class="id-tabel__eigen"' : ''}>${c}</th>`
+      ).join('');
+      const tbodyHtml = dataRijen.map(rij =>
+        `<tr>${rij.map((c, i) =>
+          `<td${i === 1 ? ' class="id-tabel__eigen"' : ''}>${c}</td>`
+        ).join('')}</tr>`
+      ).join('');
+
+      return `<div class="id-vergelijking">` +
+        `<div class="id-vergelijking__header">` +
+          `<span class="id-vergelijking__vs">vs.</span>` +
+          `<span class="id-vergelijking__naam">${titel}</span>` +
+        `</div>` +
+        `<div class="id-tabel-wrap">` +
+          `<table class="id-tabel">` +
+            `<thead><tr>${thHtml}</tr></thead>` +
+            `<tbody>${tbodyHtml}</tbody>` +
+          `</table>` +
+        `</div>` +
+      `</div>`;
+    }
+
+    // ── Bulletlijst per soort ─────────────────────────────────────────────
+    const lijstMatch = block.match(ONDERSCHEID_RE);
+    if (lijstMatch) {
+      const soortNaam = escapeHtml(lijstMatch[1].trim());
+      const rest = block.replace(ONDERSCHEID_RE, '').replace(/^\n/, '');
       const items = rest.split('\n')
         .map(l => l.trim())
         .filter(l => l.startsWith('-'))
@@ -105,12 +157,14 @@ export function renderIDKenmerken(text) {
         `<ul class="id-vergelijking__lijst">${items}</ul>` +
       `</div>`;
     }
-    // Gewone alinea
+
+    // ── Gewone alinea ─────────────────────────────────────────────────────
     return `<p class="id-alinea">${inlineMarkdown(block.replace(/\n/g, '<br>'))}</p>`;
   });
 
   return DOMPurify.sanitize(parts.join(''), {
-    ALLOWED_TAGS: ['div', 'span', 'p', 'ul', 'li', 'strong', 'em', 'u', 'br', 'a'],
+    ALLOWED_TAGS: ['div', 'span', 'p', 'ul', 'li', 'strong', 'em', 'u', 'br', 'a',
+                   'table', 'thead', 'tbody', 'tr', 'th', 'td'],
     ALLOWED_ATTR: ['class', 'href'],
   });
 }
