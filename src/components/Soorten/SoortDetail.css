@@ -17,13 +17,13 @@
 }
 
 .leeftijd-maand {
-  display: inline-block;
+  display: block;
   font-size: 0.7rem;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: lowercase;
   letter-spacing: 0.03em;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 
 .leeftijd-blok--actueel .leeftijd-maand {
