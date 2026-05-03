@@ -1,6 +1,19 @@
-export const VERSIE = '1.73.7';
+export const VERSIE = '1.73.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.8',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: terug-knop gaat nu altijd terug naar de vorige pagina (kennisbank, soortenbrowser, etc.)',
+    ],
+    wijzigingen_en: [
+      'Species page: back button now always returns to the previous page (knowledge base, species browser, etc.)',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Zurück-Schaltfläche kehrt jetzt immer zur vorherigen Seite zurück (Wissensdatenbank, Artenbrowser, etc.)',
+    ],
+  },
   {
     versie: '1.73.7',
     datum: '2026-05-03',
