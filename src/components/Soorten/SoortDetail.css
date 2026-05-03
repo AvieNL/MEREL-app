@@ -627,6 +627,7 @@
   color: var(--text-secondary);
   line-height: 1.6;
   white-space: pre-wrap;
+  margin-left: 10px;
 }
 
 /* Empty text */
