@@ -34,13 +34,15 @@ const aids = [
       {
         conditie: 'Geen broedvlek / niet vastgesteld',
         sub: [
-          { conditie: 'Juveniel / 1e kj', resultaat: 'Niet te bepalen' },
+          { conditie: 'Juveniel / 1e kj — neusgaten (nog) bedekt', resultaat: 'Niet te bepalen' },
           {
-            conditie: 'Adult (2e kj of ouder)',
+            conditie: 'Adult (2e kj of ouder) — neusgaten kaal en bleekgrijs',
             sub: [
               { conditie: 'Vleugel > grenswaarde', resultaat: '♂ Mogelijk man' },
               { conditie: 'Vleugel < grenswaarde', resultaat: '♀ Mogelijk vrouw' },
               { conditie: 'Grenswaarde (mm) = −2,375 × snavellengte tot schedel + 448,75', info: true },
+              { conditie: '♂ typisch: vleugel 295–338 mm · snavel tot schedel 56,5–70 mm · gewicht 405–560 g', info: true },
+              { conditie: '♀ typisch: vleugel 280–320 mm · snavel tot schedel 51–62 mm · gewicht 340–500 g', info: true },
             ],
           },
         ],
@@ -172,42 +174,54 @@ const aids = [
     soorten: ['15630'],
     resultaat_veld: 'leeftijd',
     naam: 'Leeftijdsbepaling Roek',
-    korte_beschrijving: 'Via kopglans, slagpennen, dekveren en vedering kin/wangen',
-    bron: 'Speek (1994) p.191',
+    korte_beschrijving: 'Via kopglans, slagpennen, neusgaten, kin/wangen en optioneel TF6-meting',
+    bron: 'Demongin (2020) p.348–349; Speek (1994) p.191',
     type: 'survey',
     start: 'kop_kleur',
     overzicht: [
-      { conditie: 'Kop matzwart', resultaat: '1e kj', zeker: true },
+      { conditie: 'Kop matzwart — geen of nauwelijks glans; mondholte vleesroze', resultaat: '1e kj', zeker: true },
       {
         conditie: 'Kop min of meer glanzend',
         sub: [
           {
-            conditie: 'Slagpennen zwartachtig bruin, enkele sporen metaalglans, contrasterend met kleine en middelste vleugeldekveren',
+            conditie: 'Slagpennen zwartachtig bruin — zwak of slechts sporen metaalglans, contrasterend met kleine en middelste vleugeldekveren',
             sub: [
               {
-                conditie: 'Veren op kin en wangen; neusgaten bedekt',
+                conditie: 'Veren op kin en wangen; neusgaten bedekt; mondholte roze',
                 sub: [
-                  { conditie: 'Januari t/m mei', resultaat: '2e kj' },
+                  {
+                    conditie: 'Januari t/m mei',
+                    resultaat: '2e kj',
+                    sub: [
+                      { conditie: 'TF6 doorgaans 11–23 mm korter dan TF1 (optionele bevestiging)', info: true },
+                    ],
+                  },
                   { conditie: 'Juni t/m december', resultaat: '1e kj' },
                 ],
               },
-              { conditie: 'Kin en wangen kaal, neusgaten nog bedekt', resultaat: '2e kj (jan–jun)' },
+              { conditie: 'Kin en wangen kaal; neusgaten nog (gedeeltelijk) bedekt', resultaat: '2e kj (jan–jun)' },
             ],
           },
           {
-            conditie: 'Slagpennen zwart met sterk metaalachtige purpergroene glans, overeenkomend met vleugeldekveren',
+            conditie: 'Slagpennen zwart met sterk metaalachtige purper-blauwgroene glans — overeenkomend met vleugeldekveren',
             sub: [
               {
-                conditie: 'Sporen van haren, dons of afgebroken pennen op kin, wangen of neusgaten',
+                conditie: 'Sporen van haren, dons of afgebroken pennen op kin, wangen of neusgaten; mondholte blauwachtig zwart',
                 sub: [
                   { conditie: 'Januari t/m mei', resultaat: '3e kj' },
                   { conditie: 'Juni t/m december', resultaat: '2e kj' },
                 ],
               },
               {
-                conditie: 'Kin, wangen en neusgaten geheel kaal',
+                conditie: 'Kin, wangen en neusgaten geheel kaal; neusgaten bleekgrijs; mondholte blauwachtig zwart',
                 sub: [
-                  { conditie: 'Januari t/m mei', resultaat: 'na 2e kj' },
+                  {
+                    conditie: 'Januari t/m mei',
+                    resultaat: 'na 2e kj',
+                    sub: [
+                      { conditie: 'TF6 doorgaans 18–33 mm korter dan TF1 (optionele bevestiging)', info: true },
+                    ],
+                  },
                   { conditie: 'Juni t/m december', resultaat: 'na 1e kj' },
                 ],
               },
