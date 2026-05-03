@@ -1056,3 +1056,34 @@
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
 }
+
+/* ─── Vleugelformule ───────────────────────────────────────────────────── */
+.sd-vleugelformule {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
+
+.sd-vleugelformule-tekst {
+  font-family: inherit;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 4px 0 0 0;
+  line-height: 1.6;
+}
+
+/* ─── Biometrie bronvermelding ─────────────────────────────────────────── */
+.sd-bio-bron {
+  margin: 8px 0 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ─── Compact notities (ondersoorten) ─────────────────────────────────── */
+.sd-notities-text--compact {
+  font-size: 0.8rem;
+  margin: 4px 0 0 0;
+}

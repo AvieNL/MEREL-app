@@ -76,8 +76,38 @@ function berekenLineaireGrenswaarde(inputs, cfg) {
   return r;
 }
 
+/**
+ * TF6-verschilmeting: berekent TF1 − TF6 en geeft een leeftijdsinterpretatie.
+ * Config bevat 'regels': array van { min_incl?, max_excl?, resultaat }.
+ * De eerste regel waarbij het verschil past wordt gebruikt.
+ */
+function berekenTf6Verschil(inputs, cfg) {
+  const tf1 = parseFloat(String(inputs.tf1 || '').replace(',', '.'));
+  const tf6 = parseFloat(String(inputs.tf6 || '').replace(',', '.'));
+  if (isNaN(tf1) || isNaN(tf6) || tf1 <= 0 || tf6 <= 0) return null;
+
+  const diff = tf1 - tf6;
+
+  for (const regel of (cfg.regels || [])) {
+    const minOk = regel.min_incl == null || diff >= regel.min_incl;
+    const maxOk = regel.max_excl == null || diff < regel.max_excl;
+    if (minOk && maxOk) {
+      return {
+        ...regel.resultaat,
+        uitleg: (regel.resultaat.uitleg_template || '')
+          .replace('{diff}', diff.toFixed(1))
+          .replace('{tf1}', tf1)
+          .replace('{tf6}', tf6)
+          || regel.resultaat.uitleg,
+      };
+    }
+  }
+  return null;
+}
+
 const BEREKEN = {
   lineaire_grenswaarde: berekenLineaireGrenswaarde,
+  tf6_verschil: berekenTf6Verschil,
 };
 
 // ─── Hydrate ─────────────────────────────────────────────────────────────────

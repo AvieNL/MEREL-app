@@ -38,7 +38,7 @@ function isBoekKey(key) {
 
 const LANG_FIELD = { nl: 'naam_nl', en: 'naam_en', de: 'naam_de' };
 
-const BIO_EXTREMEN_KEYS = ['vleugel', 'handpenlengte', 'staartlengte', 'kop_snavel', 'snavel_schedel', 'tarsus_lengte', 'tarsus_dikte', 'gewicht'];
+const BIO_EXTREMEN_KEYS = ['vleugel', 'handpenlengte', 'staartlengte', 'kop_snavel', 'snavel_schedel', 'tarsus_lengte', 'tarsus_dikte', 'snavel_diepte', 'gewicht'];
 
 export default function SoortDetail({ records, speciesOverrides }) {
   const { naam } = useParams();
@@ -55,6 +55,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
     { key: 'snavel_schedel', label: t('sd_bio_snavel_schedel'),  unit: 'mm' },
     { key: 'tarsus_lengte',  label: t('sd_bio_tarsus'),          unit: 'mm' },
     { key: 'tarsus_dikte',   label: t('sd_bio_tarsus_dikte'),    unit: 'mm' },
+    { key: 'snavel_diepte', label: t('sd_bio_snavel_diepte'),   unit: 'mm' },
     { key: 'gewicht',        label: t('sd_bio_gewicht'),         unit: 'g'  },
   ];
 
@@ -90,13 +91,14 @@ export default function SoortDetail({ records, speciesOverrides }) {
       { key: 'euring_code', label: t('sd_ring_euring') },
     ],
     nest: [
-      { key: 'nest_eileg',      label: t('sd_nest_eileg') },
-      { key: 'nest_broedels',   label: t('sd_nest_broedels') },
-      { key: 'nest_eieren',     label: t('sd_nest_eieren') },
-      { key: 'nest_ei_dagen',   label: t('sd_nest_ei_dagen') },
-      { key: 'nest_jong_dagen', label: t('sd_nest_jong_dagen') },
-      { key: 'broed',           label: t('sd_nest_broed'), gender: true },
-      { key: 'zorg',            label: t('sd_nest_zorg'),  gender: true },
+      { key: 'nest_eileg',           label: t('sd_nest_eileg') },
+      { key: 'nest_broedels',        label: t('sd_nest_broedels') },
+      { key: 'nest_eieren',          label: t('sd_nest_eieren') },
+      { key: 'nest_ei_dagen',        label: t('sd_nest_ei_dagen') },
+      { key: 'nest_jong_dagen',      label: t('sd_nest_jong_dagen') },
+      { key: 'broed',                label: t('sd_nest_broed'), gender: true },
+      { key: 'zorg',                 label: t('sd_nest_zorg'),  gender: true },
+      { key: 'eerste_broedleeftijd', label: 'Eerste broedleeftijd' },
     ],
     boeken: ALL_BOEKEN,
   };
@@ -368,6 +370,11 @@ export default function SoortDetail({ records, speciesOverrides }) {
   // Leeftijdsbepaling per seizoen (migratie: oud veld → voorjaar)
   const leeftijdsVj = soort.leeftijds_notities_vj || soort.leeftijds_notities;
   const leeftijdsNj = soort.leeftijds_notities_nj;
+  // Soort-specifieke extra velden
+  const vleugelformule = soort.vleugelformule;
+  const determinatieIdNotities = soort.determinatie_id_notities;
+  const ondersoorten = soort.ondersoorten;
+  const bronBiometrie = soort.bron_biometrie;
 
   // Biometrie: databron per cel bepalen voor weergavekleur + legenda
   const bioUserOverride = speciesOverrides?.getOverride(decodedNaam) || {};
@@ -548,6 +555,14 @@ export default function SoortDetail({ records, speciesOverrides }) {
         </div>
       )}
 
+      {/* ID-kenmerken (soort-specifiek, bijv. onderscheid met vergelijkbare soorten) */}
+      {determinatieIdNotities && (
+        <div className="sd-card">
+          <h3 className="sd-card-title">ID-kenmerken</h3>
+          <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(determinatieIdNotities) }} />
+        </div>
+      )}
+
       {/* Determinatiehulpen (naslag-modus) */}
       {(() => {
         const aids = getAidsVoorSoort(soortEuringCode);
@@ -595,6 +610,12 @@ export default function SoortDetail({ records, speciesOverrides }) {
         {soort.ruitype && (
           <RuitypeInfo ruitype={soort.ruitype} />
         )}
+        {vleugelformule && (
+          <div className="sd-vleugelformule">
+            <span className="sd-label">Vleugelformule</span>
+            <pre className="sd-vleugelformule-tekst">{vleugelformule}</pre>
+          </div>
+        )}
       </div>
 
       {/* Namen + Biometrie naast elkaar */}
@@ -603,6 +624,13 @@ export default function SoortDetail({ records, speciesOverrides }) {
           <h3 className="sd-card-title">{t('sd_names')}</h3>
           {EDITABLE_FIELDS.namen.map(f =>
             renderField(f.key, f.label, { italic: f.key === 'naam_lat' })
+          )}
+          {ondersoorten && (
+            <>
+              <div className="sd-section-divider" />
+              <span className="sd-section-label">Ondersoorten</span>
+              <p className="sd-notities-text sd-notities-text--compact" dangerouslySetInnerHTML={{ __html: renderMarkdown(ondersoorten) }} />
+            </>
           )}
           <div className="sd-section-divider" />
           <span className="sd-section-label">{t('sd_taxonomy')}</span>
@@ -680,6 +708,9 @@ export default function SoortDetail({ records, speciesOverrides }) {
                   </span>
                 )}
               </div>
+            )}
+            {bronBiometrie && (
+              <p className="sd-bio-bron">Bron: {bronBiometrie}</p>
             )}
           </div>
         )}

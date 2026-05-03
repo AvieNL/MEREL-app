@@ -1,6 +1,28 @@
-export const VERSIE = '1.69.0';
+export const VERSIE = '1.70.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.70.0',
+    datum: '2026-05-02',
+    wijzigingen: [
+      'Roek (EURING 15630): uitgebreide data toegevoegd op basis van Demongin (2020) p.348–349 — leeftijdskenmerken voorjaar/najaar, geslachtsindex met maten, vleugelformule, ID-kenmerken t.o.v. Zwarte/Bonte Kraai, ondersoorten, snaveldiepte biometrie',
+      'Leeftijdsbepaling Roek: TF6-meting als optionele extra stap toegevoegd (najaar + adult-tak) — bereken verschil TF1–TF6 voor bevestiging leeftijdsklasse',
+      'Soortpagina: nieuwe velden weergegeven — ID-kenmerken, vleugelformule, ondersoorten, bronvermelding biometrie, eerste broedleeftijd, snaveldiepte op schedel',
+      'Technisch: tf6_verschil bereken-type toegevoegd aan determinatie-interpreter; sd_bio_snavel_diepte vertaald (NL/EN/DE)',
+    ],
+    wijzigingen_en: [
+      'Rook (EURING 15630): extended data added from Demongin (2020) p.348–349 — age criteria spring/autumn, sex index with measurements, wing formula, ID features vs Carrion/Hooded Crow, subspecies, bill depth biometry',
+      'Rook age determination: TF6 measurement added as optional extra step (autumn + adult branch) — calculate TF1–TF6 difference to confirm age class',
+      'Species page: new fields displayed — ID features, wing formula, subspecies, biometry source, first breeding age, bill depth at skull',
+      'Technical: tf6_verschil calculation type added to determination interpreter; sd_bio_snavel_diepte translated (NL/EN/DE)',
+    ],
+    wijzigingen_de: [
+      'Saatkrähe (EURING 15630): erweiterte Daten nach Demongin (2020) S.348–349 — Altersmerkmale Frühjahr/Herbst, Geschlechtsindex mit Maßen, Flügelformel, ID-Merkmale vs. Rabenkrähe/Nebelkrähe, Unterarten, Schnabeltiefe',
+      'Altersbestimmung Saatkrähe: TF6-Messung als optionaler Extra-Schritt hinzugefügt (Herbst + adult-Ast)',
+      'Artendetailseite: neue Felder angezeigt — ID-Merkmale, Flügelformel, Unterarten, Biometriequelle, erstes Brutjahr, Schnabeltiefe am Schädel',
+      'Technisch: tf6_verschil Berechnungstyp im Determinationsinterpreter hinzugefügt',
+    ],
+  },
   {
     versie: '1.69.0',
     datum: '2026-05-02',

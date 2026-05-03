@@ -301,12 +301,7 @@ const aids = [
           {
             waarde: 'jan_mei',
             label: 'Januari t/m mei',
-            resultaat: {
-              waarde: '5',
-              label: '2e kj',
-              zeker: false,
-              uitleg: 'Bruinachtige slagpennen met veren op kin/wangen en bedekte neusgaten; periode januari–mei: 2e kalenderjaar.',
-            },
+            volgende: 'tf6_keuze_jong',
           },
           {
             waarde: 'jun_dec',
@@ -319,6 +314,103 @@ const aids = [
             },
           },
         ],
+      },
+
+      tf6_keuze_jong: {
+        id: 'tf6_keuze_jong',
+        label: 'TF6 meten',
+        type: 'keuze',
+        vraag: 'Wil je de staartveer TF6 meten ter bevestiging?',
+        toelichting: 'Meet de 6e staartveer (TF6) en de 1e staartveer (TF1 = langste). ' +
+          'Bij 2e kj is TF6 doorgaans 11–23 mm korter dan TF1. Optioneel — overslaan geeft hetzelfde basisresultaat.',
+        opties: [
+          {
+            waarde: 'meten',
+            label: 'Ja, TF6 meten',
+            volgende: 'tf6_meting_jong',
+          },
+          {
+            waarde: 'overslaan',
+            label: 'Overslaan',
+            resultaat: {
+              waarde: '5',
+              label: '2e kj',
+              zeker: false,
+              uitleg: 'Bruinachtige slagpennen met veren op kin/wangen en bedekte neusgaten; periode januari–mei: 2e kalenderjaar. (TF6 niet gemeten)',
+            },
+          },
+        ],
+      },
+
+      tf6_meting_jong: {
+        id: 'tf6_meting_jong',
+        label: 'TF6-meting',
+        type: 'meting',
+        vraag: 'Voer de staartveermetingen in',
+        toelichting: 'Meet TF1 (langste staartveer) en TF6 (6e staartveer) op gelijke wijze. Verschil = TF1 − TF6.',
+        inputs: [
+          {
+            key: 'tf1',
+            label: 'TF1 — langste staartveer (mm)',
+            decimalen: 0,
+            min: 100,
+            max: 250,
+            placeholder: 'bijv. 170',
+          },
+          {
+            key: 'tf6',
+            label: 'TF6 — 6e staartveer (mm)',
+            decimalen: 0,
+            min: 80,
+            max: 230,
+            placeholder: 'bijv. 157',
+          },
+        ],
+        bereken_type: 'tf6_verschil',
+        bereken_config: {
+          regels: [
+            {
+              max_excl: 11,
+              resultaat: {
+                waarde: null,
+                fallback_waarde: 'U',
+                label: 'TF6-meting buiten normaal bereik',
+                zeker: false,
+                uitleg_template: 'Verschil TF1 − TF6 = {diff} mm — valt buiten de gepubliceerde normen voor Roek (< 11 mm). Controleer de meting.',
+              },
+            },
+            {
+              min_incl: 11,
+              max_excl: 24,
+              resultaat: {
+                waarde: '5',
+                label: '2e kj (TF6 bevestigt)',
+                zeker: false,
+                uitleg_template: 'TF1 {tf1} mm − TF6 {tf6} mm = {diff} mm verschil. Valt in het bereik 11–23 mm voor 2e kj (Demongin 2020 p.349). Bevestigt 2e kalenderjaar.',
+              },
+            },
+            {
+              min_incl: 24,
+              max_excl: 34,
+              resultaat: {
+                waarde: '5',
+                label: '2e kj (TF6 grensgeval)',
+                zeker: false,
+                uitleg_template: 'TF1 {tf1} mm − TF6 {tf6} mm = {diff} mm verschil. Valt in het adult-bereik (≥ 24 mm). Overig veederij (bruine slagpennen, bedekte neusgaten) wijst op 2e kj — herbeoordeel neusgaten zorgvuldig.',
+              },
+            },
+            {
+              min_incl: 34,
+              resultaat: {
+                waarde: null,
+                fallback_waarde: 'U',
+                label: 'TF6-meting buiten normaal bereik',
+                zeker: false,
+                uitleg_template: 'Verschil TF1 − TF6 = {diff} mm — valt buiten de gepubliceerde normen voor Roek (> 33 mm). Controleer de meting.',
+              },
+            },
+          ],
+        },
       },
 
       kin_sporen: {
@@ -389,12 +481,7 @@ const aids = [
           {
             waarde: 'jan_mei',
             label: 'Januari t/m mei',
-            resultaat: {
-              waarde: '6',
-              label: 'na 2e kj',
-              zeker: false,
-              uitleg: 'Zwarte slagpennen met sterke metaalglans; kin/wangen geheel kaal; periode januari–mei: na 2e kalenderjaar (3e kj of ouder).',
-            },
+            volgende: 'tf6_keuze_adult',
           },
           {
             waarde: 'jun_dec',
@@ -407,6 +494,103 @@ const aids = [
             },
           },
         ],
+      },
+
+      tf6_keuze_adult: {
+        id: 'tf6_keuze_adult',
+        label: 'TF6 meten',
+        type: 'keuze',
+        vraag: 'Wil je de staartveer TF6 meten ter bevestiging?',
+        toelichting: 'Meet de 6e staartveer (TF6) en de 1e staartveer (TF1 = langste). ' +
+          'Bij adult is TF6 doorgaans 18–33 mm korter dan TF1. Optioneel — overslaan geeft hetzelfde basisresultaat.',
+        opties: [
+          {
+            waarde: 'meten',
+            label: 'Ja, TF6 meten',
+            volgende: 'tf6_meting_adult',
+          },
+          {
+            waarde: 'overslaan',
+            label: 'Overslaan',
+            resultaat: {
+              waarde: '6',
+              label: 'na 2e kj',
+              zeker: false,
+              uitleg: 'Zwarte slagpennen met sterke metaalglans; kin/wangen geheel kaal; periode januari–mei: na 2e kalenderjaar (3e kj of ouder). (TF6 niet gemeten)',
+            },
+          },
+        ],
+      },
+
+      tf6_meting_adult: {
+        id: 'tf6_meting_adult',
+        label: 'TF6-meting',
+        type: 'meting',
+        vraag: 'Voer de staartveermetingen in',
+        toelichting: 'Meet TF1 (langste staartveer) en TF6 (6e staartveer) op gelijke wijze. Verschil = TF1 − TF6.',
+        inputs: [
+          {
+            key: 'tf1',
+            label: 'TF1 — langste staartveer (mm)',
+            decimalen: 0,
+            min: 100,
+            max: 250,
+            placeholder: 'bijv. 175',
+          },
+          {
+            key: 'tf6',
+            label: 'TF6 — 6e staartveer (mm)',
+            decimalen: 0,
+            min: 80,
+            max: 230,
+            placeholder: 'bijv. 150',
+          },
+        ],
+        bereken_type: 'tf6_verschil',
+        bereken_config: {
+          regels: [
+            {
+              max_excl: 11,
+              resultaat: {
+                waarde: null,
+                fallback_waarde: 'U',
+                label: 'TF6-meting buiten normaal bereik',
+                zeker: false,
+                uitleg_template: 'Verschil TF1 − TF6 = {diff} mm — valt buiten de gepubliceerde normen voor Roek (< 11 mm). Controleer de meting.',
+              },
+            },
+            {
+              min_incl: 11,
+              max_excl: 18,
+              resultaat: {
+                waarde: '5',
+                label: '2e kj (onverwacht — TF6 wijst op jonger)',
+                zeker: false,
+                uitleg_template: 'TF1 {tf1} mm − TF6 {tf6} mm = {diff} mm verschil. Valt in het bereik voor 2e kj (11–23 mm). Overig veederij (kale neusgaten, glanzende slagpennen) wijst op adult — herbeoordeel neusgaten en kin/wangen zorgvuldig.',
+              },
+            },
+            {
+              min_incl: 18,
+              max_excl: 34,
+              resultaat: {
+                waarde: '6',
+                label: 'na 2e kj (TF6 bevestigt)',
+                zeker: false,
+                uitleg_template: 'TF1 {tf1} mm − TF6 {tf6} mm = {diff} mm verschil. Valt in het adult-bereik 18–33 mm (Demongin 2020 p.349). Bevestigt na 2e kalenderjaar.',
+              },
+            },
+            {
+              min_incl: 34,
+              resultaat: {
+                waarde: null,
+                fallback_waarde: 'U',
+                label: 'TF6-meting buiten normaal bereik',
+                zeker: false,
+                uitleg_template: 'Verschil TF1 − TF6 = {diff} mm — valt buiten de gepubliceerde normen voor Roek (> 33 mm). Controleer de meting.',
+              },
+            },
+          ],
+        },
       },
     },
   },
