@@ -1,6 +1,25 @@
-export const VERSIE = '1.72.2';
+export const VERSIE = '1.72.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.72.3',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Kennisbank: P1/P10-nummering gecorrigeerd — P1 = buitenste handpen (vaak klein/rudimentair, niet per se de vleugelspits); P10 = binnenste',
+      'Kennisbank: waarschuwingstekst verplaatst naar boven de tabel (onder de inleidende tekst)',
+      'Kennisbank: WP-afstand omschrijving gecorrigeerd — WP = punt van de langste handpen (was: punt P1)',
+    ],
+    wijzigingen_en: [
+      'Knowledge base: P1/P10 numbering corrected — P1 = outermost primary (often small/vestigial, not necessarily the wingpoint); P10 = innermost',
+      'Knowledge base: warning text moved above the table (below the intro text)',
+      'Knowledge base: WP-distance description corrected — WP = tip of longest primary (was: tip of P1)',
+    ],
+    wijzigingen_de: [
+      'Wissensdatenbank: P1/P10-Nummerierung korrigiert — P1 = äußerste Handschwinge (oft klein/rudimentär, nicht unbedingt Flügelspitze); P10 = innerste',
+      'Wissensdatenbank: Warntext über die Tabelle verschoben (unter den Einleitungstext)',
+      'Wissensdatenbank: WP-Abstand-Beschreibung korrigiert — WP = Spitze der längsten Handschwinge (war: Spitze P1)',
+    ],
+  },
   {
     versie: '1.72.2',
     datum: '2026-05-03',

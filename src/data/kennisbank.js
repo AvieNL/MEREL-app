@@ -43,59 +43,26 @@ export const KENNISBANK = [
         tekst: 'De nummering van alle verengroepen verloopt van buiten (vleugelspits) naar binnen (richting lichaam). Dit wordt "ascendant numbering" genoemd. Onderstaande tabel geeft de volledige Engelse en Nederlandse benaming per afkorting.',
       },
       {
+        type: 'waarschuwing',
+        tekst: 'Let op: in oudere Engelstalige literatuur worden handpennen soms van binnen naar buiten genummerd (P1 = binnenste). MEREL en Demongin (2020) volgen de Europese conventie: P1 = buitenste handpen (niet per se de vleugelspits — dat verschilt per soort).',
+      },
+      {
         type: 'tabel',
         koptekst: ['Afk.', 'Engels', 'Nederlands', 'Toelichting'],
         rijen: [
-          ['P',   'Primary',            'Handpen',                   'P1 = buitenste (vleugelspits / wingpoint), P10 = binnenste'],
-          ['S',   'Secondary',          'Armpen',                    'S1 = buitenste armpen, aansluitend op P10'],
-          ['T',   'Tertial',            'Elleboogpen',               'De 3 binnenste armpennen (T1–T3); ook wel innerste secondaries'],
+          ['P',   'Primary',            'Handpen',                   'P1 = buitenste handpen (vaak klein of rudimentair, niet per se de vleugelspits); P10 = binnenste. Nummering van buiten naar binnen.'],
+          ['S',   'Secondary',          'Armpen',                    'S1 = buitenste armpen, aansluitend op de binnenste handpen. Nummering van buiten naar binnen.'],
+          ['T',   'Tertial',            'Elleboogpen',               'De 3 binnenste armpennen (T1–T3); anatomisch aansluitend op de elleboog'],
           ['GC',  'Greater covert',     'Armpendekveer',             'Bedekkende dekveer over de basis van de armpennen; GC1 = buitenste'],
           ['MC',  'Median covert',      'Middelste vleugeldekveer',  'Rij dekveren boven de GC'],
           ['LC',  'Lesser covert',      'Kleine vleugeldekveer',     'Kleinste dekverenrij, boven de MC'],
           ['PC',  'Primary covert',     'Handpendekveer',            'Bedekkende dekveer over de basis van de handpennen'],
           ['CC',  'Carpal covert',      'Carpale dekveer',           'Grote dekveer over het carpaalgewricht (vleugelknie)'],
           ['Em',  'Emargination',       'Versmalling buitenvlag',    'Versmalling op de buitenzijde (outer web / vaan) van een handpen'],
-          ['WP',  'Wingpoint',          'Vleugelpunt / handpunt',    'De vleugelspits = punt van langste handpen. WP-maat = lengte totale vleugel (max. akkoordbreedte)'],
+          ['WP',  'Wingpoint',          'Vleugelpunt / handpunt',    'De punt van de LANGSTE handpen (= eigenlijke vleugelspits). Verschilt per soort — vaak P3–P6. WP-maat = totale vleugellengte'],
           ['TF',  'Tail feather',       'Staartveer',                'TF1 = middelste staartveer; TF6 = buitenste staartveer'],
-          ['—',   'Alula',              'Duimvleugel / alula',       '3 kleine veren aan het "duim"-gewricht van de vleugel'],
+          ['—',   'Alula',              'Duimvleugel / alula',       '3 kleine veren aan het "duim"-gewricht van de vleugel, bij het carpaalgewricht'],
         ],
-      },
-      {
-        type: 'koptitel',
-        tekst: 'Nummering — richting per verengroep',
-      },
-      {
-        type: 'definitielijst',
-        items: [
-          {
-            term: 'P (handpennen)',
-            definitie: 'Van buiten naar binnen: P1 = buitenste handpen (vleugelspits), P10 = binnenste. Bij de meeste soorten is P1 de langste veer (= wingpoint).',
-          },
-          {
-            term: 'S (armpennen)',
-            definitie: 'Van buiten naar binnen: S1 = buitenste, aansluitend op P10. Aantal varieert per soort (passeriformen: S1–S9).',
-          },
-          {
-            term: 'T (elleboogpennen)',
-            definitie: 'T1, T2, T3 — de drie binnenste armpennen, anatomisch aansluitend op de elleboog. In de figuur links afgebeeld, nummering van buiten naar binnen.',
-          },
-          {
-            term: 'GC (armpendekveren)',
-            definitie: 'Van buiten naar binnen: GC1 = buitenste, boven S1. Bedekkende rij over de basis van de armpennen.',
-          },
-          {
-            term: 'TF (staartveren)',
-            definitie: 'TF1 = middelste staartveer (centraal paar), TF6 = buitenste staartveer. Verschil TF1−TF6 is een diagnostisch kenmerk bij sommige soorten (bijv. Roek).',
-          },
-          {
-            term: 'WP (wingpoint / vleugelpunt)',
-            definitie: 'De totale vleugellengte (maximum akkoordbreedte) gemeten van de vleugelspits tot aan het carpaalgewricht, aan de gevouwen vleugel. Niet te verwarren met de WP-afstand in de vleugelformule (= afstand wingpoint tot punt van S1/P1).',
-          },
-        ],
-      },
-      {
-        type: 'waarschuwing',
-        tekst: 'Let op: in oudere Engelstalige literatuur worden handpennen soms van binnen naar buiten genummerd (P1 = binnenste). MEREL en Demongin (2020) volgen de Europese conventie: P1 = buitenste handpen (vleugelspits).',
       },
     ],
   },
@@ -123,7 +90,7 @@ export const KENNISBANK = [
           },
           {
             term: 'WP-afstand (S1/P1)',
-            definitie: 'Afstand in mm van de vleugelspits (WP = punt P1) tot de punt van S1, gemeten aan de gevouwen vleugel. Geeft de "vinger" van de vleugel aan.',
+            definitie: 'Afstand in mm van de vleugelspits (WP = punt van de langste handpen) tot de punt van S1, gemeten aan de gevouwen vleugel. Geeft de "vinger" van de vleugel aan.',
           },
           {
             term: 'Emaginatie (Em)',
