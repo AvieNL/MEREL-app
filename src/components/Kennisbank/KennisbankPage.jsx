@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { KENNISBANK, getKennisbankCategorieen } from '../../data/kennisbank';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
+import BronBadge from '../shared/BronBadge';
 import './KennisbankPage.css';
 
 // ── Renderers per sectietype ─────────────────────────────────────────────────
@@ -115,9 +116,7 @@ function ArtikelKaart({ artikel }) {
 
       {open && (
         <div className="kb-artikel-inhoud">
-          {artikel.bron && (
-            <p className="kb-bron">📖 {artikel.bron}</p>
-          )}
+          {artikel.bron && <BronBadge bron={artikel.bron} />}
           {artikel.secties.map((s, i) => renderSectie(s, i))}
         </div>
       )}

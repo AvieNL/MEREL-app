@@ -1,6 +1,19 @@
-export const VERSIE = '1.72.8';
+export const VERSIE = '1.72.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.72.9',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Bronvermeldingen worden nu als subtiel 📖-icoontje getoond met de brontekst bij mouseover (soortenpagina, kennisbank, determinatiemodal)',
+    ],
+    wijzigingen_en: [
+      'Source references are now shown as a subtle 📖 icon with the source text on mouseover (species page, knowledge base, determination modal)',
+    ],
+    wijzigingen_de: [
+      'Quellenangaben werden jetzt als subtiles 📖-Icon mit dem Quelltext beim Mouseover angezeigt (Artsseite, Wissensdatenbank, Bestimmungsmodal)',
+    ],
+  },
   {
     versie: '1.72.8',
     datum: '2026-05-03',

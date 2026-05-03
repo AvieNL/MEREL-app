@@ -1,0 +1,65 @@
+.bron-badge {
+  position: relative;
+  display: inline-block;
+  font-size: 0.85rem;
+  line-height: 1;
+  opacity: 0.45;
+  cursor: help;
+  vertical-align: middle;
+  transition: opacity 0.15s;
+  /* Zorg voor genoeg ruimte voor de tooltip */
+  isolation: isolate;
+}
+
+.bron-badge:hover {
+  opacity: 0.9;
+}
+
+.bron-badge::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 5px 9px;
+  font-size: 0.75rem;
+  font-style: italic;
+  white-space: nowrap;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.bron-badge:hover::after {
+  opacity: 1;
+}
+
+/* Pijltje onderaan tooltip */
+.bron-badge::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--border);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 201;
+}
+
+.bron-badge:hover::before {
+  opacity: 1;
+}

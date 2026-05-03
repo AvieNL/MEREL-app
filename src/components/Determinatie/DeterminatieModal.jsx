@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import BronBadge from '../shared/BronBadge';
 import './Determinatie.css';
 
 /**
@@ -192,7 +193,7 @@ export default function DeterminatieModal({ aid, getAidById, formValues, onGebru
           <h2 className="det-title">{aid.naam}</h2>
           <button type="button" className="det-close" onClick={onSluit} aria-label="Sluiten">×</button>
         </div>
-        {aid.bron && <p className="det-bron">Bron: {aid.bron}</p>}
+        {aid.bron && <BronBadge bron={aid.bron} />}
 
         {/* Voortgangsbalk */}
         <div className="det-voortgang" aria-hidden="true">

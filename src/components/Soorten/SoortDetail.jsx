@@ -18,6 +18,7 @@ import { LEEFTIJD_LABEL } from '../../data/constants';
 import { computeBioRanges } from '../../utils/bioHelper';
 import { TYPE_CFG, buildNvByRing, getVangstType } from '../../utils/vangstType';
 import SoortDetailEditor from './SoortDetailEditor';
+import BronBadge from '../shared/BronBadge';
 import DeterminatieButton from '../Determinatie/DeterminatieButton';
 import DeterminatieOverzicht from '../Determinatie/DeterminatieOverzicht';
 import { useDeterminatieAids, pullDeterminatieAidsIfNeeded } from '../../hooks/useDeterminatieAids';
@@ -593,9 +594,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
                       {aid.korte_beschrijving && (
                         <span className="sd-det-aid-beschrijving">{aid.korte_beschrijving}</span>
                       )}
-                      {aid.bron && (
-                        <span className="sd-det-aid-bron">Bron: {aid.bron}</span>
-                      )}
+                      {aid.bron && <BronBadge bron={aid.bron} />}
                     </div>
                     <DeterminatieButton
                       aid={aid}
@@ -735,7 +734,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
               </div>
             )}
             {bronBiometrie && (
-              <p className="sd-bio-bron">Bron: {bronBiometrie}</p>
+              <div className="sd-bio-bron"><BronBadge bron={bronBiometrie} /></div>
             )}
           </div>
         )}
