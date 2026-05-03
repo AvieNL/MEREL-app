@@ -171,7 +171,7 @@ export default function PulliRingenPage() {
       geslacht:          form.geslacht || 'U',
       status:            '-',
       conditie:          '8',
-      omstandigheden:    '21',
+      omstandigheden:    '27',
       vangstmethode:     'N',
       project:           settings.nestProject || '',
       lat:               nest.lat || '',
