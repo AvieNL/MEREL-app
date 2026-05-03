@@ -44,13 +44,13 @@ export const KENNISBANK = [
       },
       {
         type: 'waarschuwing',
-        tekst: 'Let op: in oudere Engelstalige literatuur worden handpennen soms van binnen naar buiten genummerd (P1 = binnenste). MEREL en Demongin (2020) volgen de Europese conventie: P1 = buitenste handpen (niet per se de vleugelspits — dat verschilt per soort).',
+        tekst: 'Let op: in oudere literatuur worden handpennen soms van binnen naar buiten genummerd (P1 = binnenste). MEREL.app volgt de Europese conventie: P1 = buitenste handpen.',
       },
       {
         type: 'tabel',
         koptekst: ['Afk.', 'Engels', 'Nederlands', 'Toelichting'],
         rijen: [
-          ['P',   'Primary',            'Handpen',                   'P1 = buitenste handpen (vaak klein of rudimentair, niet per se de vleugelspits); P10 = binnenste. Nummering van buiten naar binnen.'],
+          ['P',   'Primary',            'Handpen',                   'P1 = buitenste handpen (vaak klein of rudimentair); P10 = binnenste. Nummering van buiten naar binnen.'],
           ['S',   'Secondary',          'Armpen',                    'S1 = buitenste armpen, aansluitend op de binnenste handpen. Nummering van buiten naar binnen.'],
           ['T',   'Tertial',            'Elleboogpen',               'De 3 binnenste armpennen (T1–T3); anatomisch aansluitend op de elleboog'],
           ['GC',  'Greater covert',     'Armpendekveer',             'Bedekkende dekveer over de basis van de armpennen; GC1 = buitenste'],
