@@ -210,6 +210,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
     data.leeftijds_notities_nj = soort.leeftijds_notities_nj ?? '';
     data.bron_leeftijdsbepaling = soort.bron_leeftijdsbepaling ?? '';
     data.bron_ring = soort.bron_ring ?? '';
+    data.determinatie_id_notities = soort.determinatie_id_notities ?? '';
+    data.bron_id_kenmerken = soort.bron_id_kenmerken ?? '';
     data.foto = soort.foto ?? '';
     data.foto_crop = soort.foto_crop ?? { x: 50, y: 50, zoom: 1 };
     setEditData(data);
@@ -274,7 +276,9 @@ export default function SoortDetail({ records, speciesOverrides }) {
     newData.leeftijds_notities_vj = editData.leeftijds_notities_vj ?? '';
     newData.leeftijds_notities_nj = editData.leeftijds_notities_nj ?? '';
     newData.bron_leeftijdsbepaling = editData.bron_leeftijdsbepaling ?? '';
-    newData.bron_ring             = editData.bron_ring             ?? '';
+    newData.bron_ring              = editData.bron_ring             ?? '';
+    newData.determinatie_id_notities = editData.determinatie_id_notities ?? '';
+    newData.bron_id_kenmerken        = editData.bron_id_kenmerken     ?? '';
     if (editData.foto !== undefined) newData.foto = editData.foto;
     newData.foto_crop = editData.foto_crop ?? null;
 
@@ -579,7 +583,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
       {/* ID-kenmerken (soort-specifiek, bijv. onderscheid met vergelijkbare soorten) */}
       {determinatieIdNotities && (
         <div className="sd-card">
-          <h3 className="sd-card-title">ID-kenmerken</h3>
+          <h3 className="sd-card-title">ID-kenmerken <BronBadge bron={soort.bron_id_kenmerken} /></h3>
           <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(determinatieIdNotities) }} />
         </div>
       )}

@@ -1,6 +1,22 @@
-export const VERSIE = '1.73.0';
+export const VERSIE = '1.73.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.1',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Roek: ingesloten "Bron: ..."-tekst verplaatst uit alle notitievelden naar aparte bronvelden in Supabase',
+      'Soortenpagina: ID-kenmerken toont nu ook 📖-icoon; editor heeft ID-kenmerken sectie gekregen met bronveld',
+    ],
+    wijzigingen_en: [
+      'Rook: embedded "Bron: ..." text moved from all notes fields to dedicated source fields in Supabase',
+      'Species page: ID features now shows 📖 icon; editor has gained an ID features section with source field',
+    ],
+    wijzigingen_de: [
+      'Saatkrähe: eingebetteter "Bron: ..."-Text aus allen Notizfeldern in separate Quellenfelder in Supabase verschoben',
+      'Artseite: ID-Merkmale zeigt jetzt 📖-Icon; Editor hat ID-Merkmale-Abschnitt mit Quellenfeld erhalten',
+    ],
+  },
   {
     versie: '1.73.0',
     datum: '2026-05-03',

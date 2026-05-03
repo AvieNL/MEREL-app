@@ -383,6 +383,22 @@ export default function SoortDetailEditor({
         </div>
       </div>
 
+      {/* ID-kenmerken */}
+      <div className="sd-card">
+        <h3 className="sd-card-title">ID-kenmerken</h3>
+        <FormattedTextarea
+          value={editData.determinatie_id_notities || ''}
+          onChange={e => handleField('determinatie_id_notities', e.target.value)}
+          placeholder="Onderscheid met verwante soorten, herkenningskenmerken…"
+        />
+        <div className="sd-edit-row sd-edit-row--bron">
+          <label className="sd-edit-label">📖 Bron</label>
+          <input type="text" className="sd-edit-input" placeholder="bijv. Demongin (2020)"
+            value={editData.bron_id_kenmerken || ''}
+            onChange={e => handleField('bron_id_kenmerken', e.target.value)} />
+        </div>
+      </div>
+
       {/* Ring & Rui */}
       <div className="sd-card">
         <h3 className="sd-card-title">{t('sd_ring_rui')}</h3>
