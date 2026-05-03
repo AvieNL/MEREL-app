@@ -1,6 +1,19 @@
-export const VERSIE = '1.74.0';
+export const VERSIE = '1.74.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.1',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: legenda toegevoegd bij leeftijdsbepaling die toont welke periode momenteel wordt uitgelicht (huidige datum ±21 dagen)',
+    ],
+    wijzigingen_en: [
+      'Species page: legend added to age determination showing which period is currently highlighted (current date ±21 days)',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Legende zur Altersbestimmung hinzugefügt, die anzeigt, welcher Zeitraum aktuell hervorgehoben wird (aktuelles Datum ±21 Tage)',
+    ],
+  },
   {
     versie: '1.74.0',
     datum: '2026-05-03',

@@ -30,6 +30,26 @@
   color: var(--accent);
 }
 
+/* Legenda bij samengevoegde leeftijdsblokken */
+.leeftijd-legenda {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0 0 8px 0;
+}
+
+.leeftijd-legenda__kleur {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border-left: 3px solid var(--accent);
+  flex-shrink: 0;
+}
+
 /* Markdown links in notitievelden */
 .md-link {
   color: var(--accent);
