@@ -30,43 +30,56 @@
   color: var(--accent);
 }
 
-/* Seizoenstabs bij samengevoegde leeftijdsblokken */
+/* Seizoenstabs bij samengevoegde leeftijdsblokken — map/folder stijl */
 .sd-det-tabs {
   display: flex;
-  gap: 6px;
-  margin-bottom: 10px;
+  gap: 0;
+  /* Onderkant van de tabbar = bovenkant van het inhoudsgebied */
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
 }
 
 .sd-det-tab {
   display: flex;
   align-items: baseline;
   gap: 5px;
-  padding: 5px 14px;
-  border-radius: var(--radius-sm, 4px);
-  border: 1px solid var(--border);
-  background: transparent;
+  padding: 7px 18px 6px;
+  /* Afgeronde hoeken alleen bovenaan */
+  border-radius: var(--radius-sm, 4px) var(--radius-sm, 4px) 0 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: var(--bg-tertiary);
   color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  /* 1px omlaag zodat de inactieve tab-onderkant achter de lijn valt */
+  margin-bottom: -1px;
+  transition: background 0.15s, color 0.15s;
 }
 
-.sd-det-tab:hover {
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
+.sd-det-tab + .sd-det-tab {
+  margin-left: 3px;
+}
+
+.sd-det-tab:hover:not(.sd-det-tab--actief) {
+  background: color-mix(in srgb, var(--bg-secondary) 70%, var(--bg-tertiary));
   color: var(--text);
 }
 
 .sd-det-tab--actief {
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
-  border-color: var(--accent);
+  /* Zelfde achtergrond als de kaartinhoud: naadloos */
+  background: var(--bg-secondary);
+  border-color: var(--border);
+  border-bottom-color: var(--bg-secondary); /* verbergt de scheidingslijn */
   color: var(--accent);
+  font-weight: 600;
 }
 
 .sd-det-tab__sub {
   font-size: 0.68rem;
   font-weight: 400;
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
 /* Legenda bij samengevoegde leeftijdsblokken */
