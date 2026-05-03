@@ -68,6 +68,80 @@ export const KENNISBANK = [
   },
 
   {
+    id: 'veertopografie',
+    categorie: 'Biometrie & morfologie',
+    titel: 'Veertopografie',
+    secties: [
+      {
+        type: 'tekst',
+        tekst: 'Bij het determineren en ringen van vogels is het belangrijk om de verschillende delen van een veer en een aantal typische structuren goed te kunnen benoemen. Onderstaande termen gelden met name voor slag- en staartpennen, maar zijn in grote lijnen ook toepasbaar op andere veren.',
+      },
+      {
+        type: 'koptitel',
+        tekst: 'Basisopbouw van een veer',
+      },
+      {
+        type: 'definitielijst',
+        items: [
+          {
+            term: 'Schacht (rachis)',
+            definitie: 'De centrale, stijve as van de veer waar de baarden aan vastzitten. Het onderste, holle deel dat in de huid steekt, wordt de veerpen of calamus genoemd; het bovendeel waaraan de baarden zitten is de rachis.',
+          },
+          {
+            term: 'Binnenvlag (inner vane)',
+            definitie: 'De zijde van de veer die naar het lichaam van de vogel toe is gericht wanneer de vleugel gesloten is. Bij de rechtervleugel is dit de linkerkant van de veer; bij de linkervleugel de rechterkant.',
+          },
+          {
+            term: 'Buitenvlag (outer vane)',
+            definitie: 'De zijde van de veer die van het lichaam af is gericht wanneer de vleugel gesloten is. Bij de rechtervleugel is dit de rechterkant van de veer; bij de linkervleugel de linkerkant. De buitenvlag is bij veel handpennen smaller dan de binnenvlag.',
+          },
+          {
+            term: 'Top / punt (tip)',
+            definitie: 'Het meest distale uiteinde van de veer, het verst verwijderd van de huid. Hier kijk je naar slijtage, vorm en eventuele lichte of zware randen.',
+          },
+          {
+            term: 'Basis (base)',
+            definitie: 'Het proximale deel van de veer, dicht bij de huid en de overgang naar de veerpen (calamus). Hier zijn soms donsachtige baarden zichtbaar en is het begin of einde van kleurpatronen te zien.',
+          },
+          {
+            term: 'Baarden en baardjes (barbs & barbules)',
+            definitie: 'De zijtakjes die uit de schacht steken (baarden) en de nog fijnere vertakkingen (baardjes) waarmee de veer een samenhangend, gesloten oppervlak vormt. Ze bepalen de "volheid" en structuur van de vlag.',
+          },
+        ],
+      },
+      {
+        type: 'koptitel',
+        tekst: 'Specifieke structuren aan de vlaggen',
+      },
+      {
+        type: 'definitielijst',
+        items: [
+          {
+            term: 'Versmalling buitenvlag (emargination)',
+            definitie: 'Een lokale insnoering in de buitenvlag van een handpen, waarbij de buitenrand op een bepaald traject duidelijk smaller is dan het deel ervoor en erna. Dit geeft de indruk van een "uitgehapt" stuk in de buitenvlag. In Engelstalige literatuur aangeduid als emargination of emarginate primary.',
+          },
+          {
+            term: 'Versmalling binnenvlag (notch)',
+            definitie: 'Een lokale versmalling of inkeping in de binnenvlag van een handpen. De binnenrand wordt op een bepaald punt smaller en verbreedt daarna weer richting top. In het Engels doorgaans een notch genoemd. Bij sommige soorten (zoals fitis/tjiftjaf) is de aanwezigheid, positie of lengte van de notch een belangrijk determinatiekenmerk.',
+          },
+        ],
+      },
+      {
+        type: 'koptitel',
+        tekst: 'Praktische toepassing',
+      },
+      {
+        type: 'lijst',
+        items: [
+          'Emarginaties (versmalling buitenvlag) en notches (versmalling binnenvlag) worden gebruikt voor soort-, leeftijds- en geslachtsbepaling op basis van handpennen.',
+          'In veldgidsen en determinatiehandleidingen voor ringers worden zowel de Nederlandse beschrijving als de Engelse term vermeld — gebruik ze naast elkaar voor consistente verslaglegging.',
+          'Voor digitale invoer in MEREL.app geldt: emargination wordt genoteerd als de pennen waarop versmalling aanwezig is (bijv. Em = P3 P4 P5); de notch-positie als de proximale rand t.o.v. andere pentoppen (bijv. Notch P2 = 8/10).',
+        ],
+      },
+    ],
+  },
+
+  {
     id: 'vleugelformule-begrippen',
     categorie: 'Biometrie & morfologie',
     titel: 'Vleugelformule',

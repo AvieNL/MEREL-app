@@ -1,6 +1,19 @@
-export const VERSIE = '1.74.7';
+export const VERSIE = '1.74.8';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.8',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Kennisbank: nieuw artikel "Veertopografie" toegevoegd — basisopbouw van een veer, binnenvlag/buitenvlag, emargination en notch uitgelegd',
+    ],
+    wijzigingen_en: [
+      'Knowledge base: new article "Feather topography" added — basic feather structure, inner/outer vane, emargination and notch explained',
+    ],
+    wijzigingen_de: [
+      'Wissensdatenbank: neuer Artikel "Federtopografie" hinzugefügt — Grundaufbau einer Feder, Innen-/Außenfahne, Emargination und Notch erklärt',
+    ],
+  },
   {
     versie: '1.74.7',
     datum: '2026-05-03',
