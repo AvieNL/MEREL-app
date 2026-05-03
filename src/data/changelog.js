@@ -1,6 +1,19 @@
-export const VERSIE = '1.74.2';
+export const VERSIE = '1.74.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.3',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Roek: Adult-blok gesplitst in voorjaar (2e kj, EURING 6) en najaar (na 1e kj, EURING 4) zodat het juiste seizoen de juiste leeftijdsaanduiding toont',
+    ],
+    wijzigingen_en: [
+      'Rook: Adult block split into spring (2nd cy, EURING 6) and autumn (after 1st cy, EURING 4) so the correct season shows the correct age designation',
+    ],
+    wijzigingen_de: [
+      'Saatkrähe: Adult-Block in Frühjahr (2. Kj., EURING 6) und Herbst (nach 1. Kj., EURING 4) aufgeteilt',
+    ],
+  },
   {
     versie: '1.74.2',
     datum: '2026-05-03',
