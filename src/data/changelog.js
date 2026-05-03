@@ -1,6 +1,22 @@
-export const VERSIE = '1.72.0';
+export const VERSIE = '1.72.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.72.1',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Kennisbank verplaatst naar de header naast Ringonderzoek en Nestonderzoek (paarse knop ✦)',
+      'Kennisbank bevat alleen generieke theorie — soortspecifieke vleugelformule verwijderd (hoort op de soortenpagina)',
+    ],
+    wijzigingen_en: [
+      'Knowledge base moved to header alongside Ring research and Nest research (purple ✦ button)',
+      'Knowledge base contains only generic theory — species-specific wing formula removed (belongs on the species page)',
+    ],
+    wijzigingen_de: [
+      'Wissensdatenbank in Header verschoben, neben Ringforschung und Nestforschung (lila ✦ Schaltfläche)',
+      'Wissensdatenbank enthält nur generische Theorie — artspezifische Flügelformel entfernt (gehört auf die Artenseite)',
+    ],
+  },
   {
     versie: '1.72.0',
     datum: '2026-05-03',

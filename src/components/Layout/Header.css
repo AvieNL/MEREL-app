@@ -562,6 +562,12 @@
   cursor: default;
 }
 
+.header-module-segment--kennis.active {
+  background: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
+  cursor: default;
+}
+
 .header-module-segment:not(.active):hover {
   background: var(--bg-tertiary);
   color: var(--text-secondary);

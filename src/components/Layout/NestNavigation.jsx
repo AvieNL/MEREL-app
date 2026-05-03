@@ -9,7 +9,6 @@ const ALL_TABS = [
   { path: '/nest/planning',      labelKey: 'nav_nest_planning', icon: '▦', requiresEdit: false },
   { path: '/nest/stats',         labelKey: 'nav_stats',        icon: '◔', requiresEdit: false },
   { path: '/soorten',            labelKey: 'nav_species',      icon: '◉', requiresEdit: false },
-  { path: '/kennis',             labelKey: 'nav_kennisbank',   icon: '✦', requiresEdit: false },
 ];
 
 export default function NestNavigation() {

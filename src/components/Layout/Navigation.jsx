@@ -8,7 +8,6 @@ const ALL_TABS = [
   { path: '/ring/records', labelKey: 'nav_records', icon: '☰' },
   { path: '/ring/stats', labelKey: 'nav_stats', icon: '◔' },
   { path: '/soorten', labelKey: 'nav_species', icon: '◉' },
-  { path: '/kennis', labelKey: 'nav_kennisbank', icon: '✦' },
 ];
 
 export default function Navigation() {

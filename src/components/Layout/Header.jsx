@@ -426,18 +426,25 @@ export default function Header({ onSwitchModule, activeModule }) {
         <div className="header-module-row">
           <div className="header-module-toggle">
             <button
-              className={`header-module-segment header-module-segment--ring${activeModule === 'ring' ? ' active' : ''}`}
-              onClick={() => { if (activeModule !== 'ring') { onSwitchModule('ring'); navigate(getEquivalentPath('ring')); } }}
-              aria-pressed={activeModule === 'ring'}
+              className={`header-module-segment header-module-segment--ring${activeModule === 'ring' && !location.pathname.startsWith('/kennis') ? ' active' : ''}`}
+              onClick={() => { if (location.pathname.startsWith('/kennis') || activeModule !== 'ring') { onSwitchModule('ring'); navigate(getEquivalentPath('ring')); } }}
+              aria-pressed={activeModule === 'ring' && !location.pathname.startsWith('/kennis')}
             >
               ◎ {t('module_ring')}
             </button>
             <button
-              className={`header-module-segment header-module-segment--nest${activeModule === 'nest' ? ' active' : ''}`}
-              onClick={() => { if (activeModule !== 'nest') { onSwitchModule('nest'); navigate(getEquivalentPath('nest')); } }}
-              aria-pressed={activeModule === 'nest'}
+              className={`header-module-segment header-module-segment--nest${activeModule === 'nest' && !location.pathname.startsWith('/kennis') ? ' active' : ''}`}
+              onClick={() => { if (location.pathname.startsWith('/kennis') || activeModule !== 'nest') { onSwitchModule('nest'); navigate(getEquivalentPath('nest')); } }}
+              aria-pressed={activeModule === 'nest' && !location.pathname.startsWith('/kennis')}
             >
               ⌂ {t('module_nest')}
+            </button>
+            <button
+              className={`header-module-segment header-module-segment--kennis${location.pathname.startsWith('/kennis') ? ' active' : ''}`}
+              onClick={() => { if (!location.pathname.startsWith('/kennis')) navigate('/kennis'); }}
+              aria-pressed={location.pathname.startsWith('/kennis')}
+            >
+              ✦ {t('module_kennis')}
             </button>
           </div>
         </div>
