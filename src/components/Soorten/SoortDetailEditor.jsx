@@ -92,14 +92,17 @@ export default function SoortDetailEditor({
   const fileInputRef = useRef(null);
 
   const BIO_FIELDS = [
-    { key: 'vleugel',        label: t('sd_bio_vleugel'),         unit: 'mm' },
-    { key: 'handpenlengte',  label: t('sd_bio_handpen'),         unit: 'mm' },
-    { key: 'staartlengte',   label: t('sd_bio_staart'),          unit: 'mm' },
-    { key: 'kop_snavel',     label: t('sd_bio_kop_snavel'),      unit: 'mm' },
-    { key: 'snavel_schedel', label: t('sd_bio_snavel_schedel'),  unit: 'mm' },
-    { key: 'tarsus_lengte',  label: t('sd_bio_tarsus'),          unit: 'mm' },
-    { key: 'tarsus_dikte',   label: t('sd_bio_tarsus_dikte'),    unit: 'mm' },
-    { key: 'gewicht',        label: t('sd_bio_gewicht'),         unit: 'g'  },
+    { key: 'vleugel',           label: t('sd_bio_vleugel'),           unit: 'mm', hasJuv: true },
+    { key: 'handpenlengte',     label: t('sd_bio_handpen'),           unit: 'mm' },
+    { key: 'staartlengte',      label: t('sd_bio_staart'),            unit: 'mm', hasJuv: true },
+    { key: 'kop_snavel',        label: t('sd_bio_kop_snavel'),        unit: 'mm' },
+    { key: 'snavel_schedel',    label: t('sd_bio_snavel_schedel'),    unit: 'mm' },
+    { key: 'snavel_neusgat',    label: 'Snavel tot neusgat',          unit: 'mm' },
+    { key: 'tarsus_lengte',     label: t('sd_bio_tarsus'),            unit: 'mm' },
+    { key: 'tarsus_dikte',      label: t('sd_bio_tarsus_dikte'),      unit: 'mm' },
+    { key: 'snavel_diepte',     label: t('sd_bio_snavel_diepte'),     unit: 'mm' },
+    { key: 'snavel_diepte_mid', label: 'Snaveldiepte mid. neusgat',   unit: 'mm' },
+    { key: 'gewicht',           label: t('sd_bio_gewicht'),           unit: 'g'  },
   ];
 
   const ALL_BOEKEN = [
@@ -401,8 +404,12 @@ export default function SoortDetailEditor({
               </div>
               {[
                 { prefix: null, label: t('sd_general_abbr'), cls: '' },
-                { prefix: 'M',  label: '\u2642\uFE0E', cls: ' sd-bio-edit-subrow--m' },
-                { prefix: 'F',  label: '\u2640\uFE0E', cls: ' sd-bio-edit-subrow--f' },
+                { prefix: 'M',  label: '\u2642\uFE0E',       cls: ' sd-bio-edit-subrow--m' },
+                { prefix: 'F',  label: '\u2640\uFE0E',       cls: ' sd-bio-edit-subrow--f' },
+                ...(f.hasJuv ? [
+                  { prefix: 'JM', label: '\u2642\uFE0E 1kj', cls: ' sd-bio-edit-subrow--jm' },
+                  { prefix: 'JF', label: '\u2640\uFE0E 1kj', cls: ' sd-bio-edit-subrow--jf' },
+                ] : []),
               ].map(({ prefix, label, cls }) => (
                 <div key={prefix ?? 'alg'} className={`sd-bio-edit-subrow${cls}`}>
                   <span className="sd-bio-gender-lbl">{label}</span>

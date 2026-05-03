@@ -1,6 +1,27 @@
-export const VERSIE = '1.72.5';
+export const VERSIE = '1.72.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.72.6',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina biometrie: juveniele rijen (♂ 1kj / ♀ 1kj) toegevoegd voor vleugel en staartlengte',
+      'Soortenpagina biometrie: "Snavel tot neusgat" en "Snaveldiepte mid. neusgat" toegevoegd als referentievelden',
+      'Soortenpagina rui: ruitiming (maanden) wordt nu getoond in de Ring & Rui sectie indien aanwezig',
+      'Roek: alle verloren data hersteld; nieuwe biometriewaarden toegevoegd (juv vleugel/staart, snavel tot neusgat, snaveldiepte midden neusgat, ruitiming)',
+    ],
+    wijzigingen_en: [
+      'Species page biometry: juvenile rows (♂ 1cy / ♀ 1cy) added for wing and tail length',
+      'Species page biometry: "Bill to nostril" and "Bill depth at mid-nostril" added as reference fields',
+      'Species page moult: moult timing (months) is now shown in the Ring & Moult section if available',
+      'Rook: all lost data restored; new biometry values added (juv wing/tail, bill to nostril, bill depth at mid-nostril, moult timing)',
+    ],
+    wijzigingen_de: [
+      'Artseite Biometrie: Juvenile-Reihen (♂ 1. KJ / ♀ 1. KJ) für Flügel und Schwanzlänge hinzugefügt',
+      'Artseite Biometrie: "Schnabel bis Nasenloch" und "Schnabeltiefe Mitte Nasenloch" als Referenzfelder hinzugefügt',
+      'Artseite Mauser: Mauserzeiten (Monate) werden jetzt im Abschnitt Ring & Mauser angezeigt, falls vorhanden',
+    ],
+  },
   {
     versie: '1.72.5',
     datum: '2026-05-03',

@@ -48,15 +48,17 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const { t, i18n } = useTranslation();
 
   const BIO_FIELDS = [
-    { key: 'vleugel',        label: t('sd_bio_vleugel'),         unit: 'mm' },
-    { key: 'handpenlengte',  label: t('sd_bio_handpen'),         unit: 'mm' },
-    { key: 'staartlengte',   label: t('sd_bio_staart'),          unit: 'mm' },
-    { key: 'kop_snavel',     label: t('sd_bio_kop_snavel'),      unit: 'mm' },
-    { key: 'snavel_schedel', label: t('sd_bio_snavel_schedel'),  unit: 'mm' },
-    { key: 'tarsus_lengte',  label: t('sd_bio_tarsus'),          unit: 'mm' },
-    { key: 'tarsus_dikte',   label: t('sd_bio_tarsus_dikte'),    unit: 'mm' },
-    { key: 'snavel_diepte', label: t('sd_bio_snavel_diepte'),   unit: 'mm' },
-    { key: 'gewicht',        label: t('sd_bio_gewicht'),         unit: 'g'  },
+    { key: 'vleugel',           label: t('sd_bio_vleugel'),           unit: 'mm', hasJuv: true },
+    { key: 'handpenlengte',     label: t('sd_bio_handpen'),           unit: 'mm' },
+    { key: 'staartlengte',      label: t('sd_bio_staart'),            unit: 'mm', hasJuv: true },
+    { key: 'kop_snavel',        label: t('sd_bio_kop_snavel'),        unit: 'mm' },
+    { key: 'snavel_schedel',    label: t('sd_bio_snavel_schedel'),    unit: 'mm' },
+    { key: 'snavel_neusgat',    label: 'Snavel tot neusgat',          unit: 'mm', refOnly: true },
+    { key: 'tarsus_lengte',     label: t('sd_bio_tarsus'),            unit: 'mm' },
+    { key: 'tarsus_dikte',      label: t('sd_bio_tarsus_dikte'),      unit: 'mm' },
+    { key: 'snavel_diepte',     label: t('sd_bio_snavel_diepte'),     unit: 'mm' },
+    { key: 'snavel_diepte_mid', label: 'Snaveldiepte mid. neusgat',   unit: 'mm', refOnly: true },
+    { key: 'gewicht',           label: t('sd_bio_gewicht'),           unit: 'g'  },
   ];
 
   const ALL_BOEKEN = [
@@ -184,9 +186,10 @@ export default function SoortDetail({ records, speciesOverrides }) {
         const key = `bio_${f.key}_${stat}`;
         data[key] = getBioValue(f.key, stat);
       });
-      // Geslachtsspecifieke biometrie
-      ['M', 'F'].forEach(gender => {
+      // Geslachtsspecifieke biometrie (adult + juveniel)
+      ['M', 'F', 'JM', 'JF'].forEach(gender => {
         ['min', 'avg', 'max'].forEach(stat => {
+          if (gender.startsWith('J') && stat === 'avg') return; // geen avg voor juv
           const key = `bio_${f.key}_${gender}_${stat}`;
           data[key] = soort[key] ?? '';
         });
@@ -250,8 +253,9 @@ export default function SoortDetail({ records, speciesOverrides }) {
       ['min', 'max'].forEach(stat => {
         newData[`bio_${f.key}_${stat}`] = editData[`bio_${f.key}_${stat}`] ?? '';
       });
-      ['M', 'F'].forEach(gender => {
+      ['M', 'F', 'JM', 'JF'].forEach(gender => {
         ['min', 'avg', 'max'].forEach(stat => {
+          if (gender.startsWith('J') && stat === 'avg') return;
           const key = `bio_${f.key}_${gender}_${stat}`;
           newData[key] = editData[key] ?? '';
         });
@@ -382,6 +386,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
     getBioValue(b.key, 'min') || getBioValue(b.key, 'max') ||
     soort[`bio_${b.key}_M_min`] || soort[`bio_${b.key}_M_max`] ||
     soort[`bio_${b.key}_F_min`] || soort[`bio_${b.key}_F_max`] ||
+    soort[`bio_${b.key}_JM_min`] || soort[`bio_${b.key}_JM_max`] ||
+    soort[`bio_${b.key}_JF_min`] || soort[`bio_${b.key}_JF_max`] ||
     bioRangesFromCatches[b.key]
   );
   const bioCellCls = (key) => {
@@ -391,7 +397,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
   };
   const hasAdminBio = BIO_FIELDS.some(b =>
     defaultSoort?.[`bio_${b.key}_min`] || defaultSoort?.[`bio_${b.key}_max`] ||
-    defaultSoort?.[`bio_${b.key}_M_min`] || defaultSoort?.[`bio_${b.key}_F_min`]
+    defaultSoort?.[`bio_${b.key}_M_min`] || defaultSoort?.[`bio_${b.key}_F_min`] ||
+    defaultSoort?.[`bio_${b.key}_JM_min`] || defaultSoort?.[`bio_${b.key}_JF_min`]
   );
   const hasUserBio = BIO_FIELDS.some(b => {
     const keys = ['min', 'max'].flatMap(s =>
@@ -615,6 +622,12 @@ export default function SoortDetail({ records, speciesOverrides }) {
         {soort.ruitype && (
           <RuitypeInfo ruitype={soort.ruitype} />
         )}
+        {soort.rui_notities && (
+          <div className="sd-vleugelformule">
+            <span className="sd-label">Ruitiming</span>
+            <pre className="sd-vleugelformule-tekst">{soort.rui_notities}</pre>
+          </div>
+        )}
         {vleugelformule && (
           <div className="sd-vleugelformule">
             <span className="sd-label">Vleugelformule</span>
@@ -650,13 +663,18 @@ export default function SoortDetail({ records, speciesOverrides }) {
               {BIO_FIELDS.map(b => {
                 const minVal = getBioValue(b.key, 'min');
                 const maxVal = getBioValue(b.key, 'max');
-                const gRows = [['M', '\u2642\uFE0E'], ['F', '\u2640\uFE0E']].map(([g, sym]) => ({
-                  g, sym,
+                const gRows = [
+                  ['M',  '\u2642\uFE0E',      ''],
+                  ['F',  '\u2640\uFE0E',      ''],
+                  ['JM', '\u2642\uFE0E 1kj',  'juv'],
+                  ['JF', '\u2640\uFE0E 1kj',  'juv'],
+                ].map(([g, sym, cls]) => ({
+                  g, sym, cls,
                   min: soort[`bio_${b.key}_${g}_min`],
                   max: soort[`bio_${b.key}_${g}_max`],
                   minKey: `bio_${b.key}_${g}_min`,
                 })).filter(r => r.min || r.max);
-                const recRange = bioRangesFromCatches[b.key];
+                const recRange = b.refOnly ? null : bioRangesFromCatches[b.key];
                 if (!minVal && !maxVal && gRows.length === 0 && !recRange) return null;
                 return (
                   <div key={b.key} className="sd-bio-group">
@@ -671,8 +689,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
                         </span>
                       </div>
                     )}
-                    {gRows.map(({ g, sym, min, max, minKey }) => (
-                      <div key={g} className={`sd-bio-subrow sd-bio-subrow--${g.toLowerCase()}`}>
+                    {gRows.map(({ g, sym, cls, min, max, minKey }) => (
+                      <div key={g} className={`sd-bio-subrow sd-bio-subrow--${g.toLowerCase()}${cls ? ` sd-bio-subrow--${cls}` : ''}`}>
                         <span className="sd-bio-subrow-cat">{sym}</span>
                         <span className={bioCellCls(minKey)}>
                           {fmtBio(min) || '—'} – {fmtBio(max) || '—'}

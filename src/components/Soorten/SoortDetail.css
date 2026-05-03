@@ -818,7 +818,8 @@
 }
 
 .sd-bio-subrow-cat {
-  width: 28px;
+  min-width: 28px;
+  width: max-content;
   flex-shrink: 0;
   font-size: 0.72rem;
   color: var(--text-muted);
@@ -826,6 +827,11 @@
 
 .sd-bio-subrow--m .sd-bio-subrow-cat { color: var(--accent); }
 .sd-bio-subrow--f .sd-bio-subrow-cat { color: #e879f9; }
+
+/* Juveniele rijen: iets gedempt */
+.sd-bio-subrow--juv { opacity: 0.8; }
+.sd-bio-subrow--jm .sd-bio-subrow-cat { color: var(--accent); opacity: 0.75; }
+.sd-bio-subrow--jf .sd-bio-subrow-cat { color: #e879f9; opacity: 0.75; }
 
 /* Databron-kleuren biometrie */
 .sd-bio-num {
