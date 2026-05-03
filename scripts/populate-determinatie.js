@@ -365,7 +365,7 @@ const aids = [
         inputs: [
           {
             key: 'tf1',
-            label: 'TF1 — langste staartveer (mm)',
+            label: 'TF1 — middelste staartveer (mm)',
             decimalen: 0,
             min: 100,
             max: 250,
@@ -374,7 +374,7 @@ const aids = [
           },
           {
             key: 'tf6',
-            label: 'TF6 — 6e staartveer (mm)',
+            label: 'TF6 — buitenste staartveer (mm)',
             decimalen: 0,
             min: 80,
             max: 230,
@@ -547,7 +547,7 @@ const aids = [
         inputs: [
           {
             key: 'tf1',
-            label: 'TF1 — langste staartveer (mm)',
+            label: 'TF1 — middelste staartveer (mm)',
             decimalen: 0,
             min: 100,
             max: 250,
@@ -556,7 +556,7 @@ const aids = [
           },
           {
             key: 'tf6',
-            label: 'TF6 — 6e staartveer (mm)',
+            label: 'TF6 — buitenste staartveer (mm)',
             decimalen: 0,
             min: 80,
             max: 230,

@@ -1,6 +1,25 @@
-export const VERSIE = '1.71.0';
+export const VERSIE = '1.71.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.71.1',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Fix terminologie: TF = staartveren (tailfeathers), niet tertials — subsectielabel, veldlabels en determinatie-modal gecorrigeerd',
+      'Fix: "Tarsus" → "Tarsus lengte" in formulierlabel (consistent met soortenpagina)',
+      'Fix: "Handpuntlengte WP" → "Wingpoint" — WP en handpunt zijn hetzelfde, dubbeling verwijderd',
+    ],
+    wijzigingen_en: [
+      'Fix terminology: TF = tail feathers, not tertials — subsection label, field labels and determination modal corrected',
+      'Fix: "Tarsus" → "Tarsus length" in form label',
+      'Fix: "Wing point WP" → "Wing point" — WP and wing point are the same',
+    ],
+    wijzigingen_de: [
+      'Fix Terminologie: TF = Steuerfedern (Tailfeathers), nicht Tertiale — korrigiert in Abschnittsbeschriftung, Feldbezeichnungen und Bestimmungsmodal',
+      'Fix: "Tarsus" → "Tarsuslänge" im Formularlabel',
+      'Fix: "Handpunktlänge WP" → "Handspitze / Wingpoint"',
+    ],
+  },
   {
     versie: '1.71.0',
     datum: '2026-05-03',
