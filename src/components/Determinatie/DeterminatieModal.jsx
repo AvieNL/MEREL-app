@@ -328,7 +328,26 @@ export default function DeterminatieModal({ aid, getAidById, formValues, onGebru
                 <button
                   type="button"
                   className="det-gebruik-btn"
-                  onClick={() => { onGebruik(aid.resultaat_veld, resultaat.waarde ?? resultaat.fallback_waarde ?? '0'); onSluit(); }}
+                  onClick={() => {
+                    // Schrijf ingevulde meting-inputs terug naar het formulier
+                    geschiedenis.forEach(stapId => {
+                      const stap = aid.stappen[stapId];
+                      if (stap?.type !== 'meting') return;
+                      stap.inputs.forEach(inp => {
+                        if (!inp.uit_formulier) return;
+                        const waarde = metingen[inp.key];
+                        if (waarde === undefined || waarde === '' || waarde === null) return;
+                        // Alleen terugschrijven als de waarde verschilt van wat al in het formulier staat
+                        const huidig = formValues?.[inp.uit_formulier];
+                        if (String(waarde) !== String(huidig ?? '')) {
+                          onGebruik(inp.uit_formulier, waarde);
+                        }
+                      });
+                    });
+                    // Schrijf het determinatieresultaat zelf terug
+                    onGebruik(aid.resultaat_veld, resultaat.waarde ?? resultaat.fallback_waarde ?? '0');
+                    onSluit();
+                  }}
                 >
                   Gebruik dit resultaat →
                 </button>

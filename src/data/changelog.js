@@ -1,6 +1,19 @@
-export const VERSIE = '1.72.4';
+export const VERSIE = '1.72.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.72.5',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Determinatiehulp: maten ingevuld in de wizard (vleugel, snavellengte, etc.) worden bij "Gebruik dit resultaat" automatisch overgenomen in het formulier',
+    ],
+    wijzigingen_en: [
+      'Determination aid: measurements entered in the wizard (wing, bill length, etc.) are automatically transferred to the form when clicking "Use this result"',
+    ],
+    wijzigingen_de: [
+      'Bestimmungshilfe: in der Wizard eingegebene Maße (Flügel, Schnabellänge usw.) werden beim Klick auf "Dieses Ergebnis verwenden" automatisch ins Formular übernommen',
+    ],
+  },
   {
     versie: '1.72.4',
     datum: '2026-05-03',
