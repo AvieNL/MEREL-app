@@ -1,6 +1,19 @@
-export const VERSIE = '1.73.6';
+export const VERSIE = '1.73.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.7',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Kennisbank: zoeken op vogelnaam (NL, Latijn, EN, DE) geeft nu ook soortkaarten als resultaat',
+    ],
+    wijzigingen_en: [
+      'Knowledge base: searching by bird name (NL, Latin, EN, DE) now also returns species cards as results',
+    ],
+    wijzigingen_de: [
+      'Wissensdatenbank: Suche nach Vogelname (NL, Latein, EN, DE) gibt jetzt auch Artenkarten als Ergebnis zurück',
+    ],
+  },
   {
     versie: '1.73.6',
     datum: '2026-05-03',

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { KENNISBANK, getKennisbankCategorieen } from '../../data/kennisbank';
 import { useSpeciesRef } from '../../hooks/useSpeciesRef';
@@ -139,24 +139,18 @@ function CategorieBlok({ categorie, artikelen }) {
 
 // ── Soorten-sectie (gedocumenteerde soorten uit Supabase) ────────────────────
 
-function SoortenBankSectie() {
-  const navigate = useNavigate();
-  const allSpecies = useSpeciesRef();
-
-  // Alleen soorten die een foto hebben (= volledig gedocumenteerd)
-  const gedocumenteerd = allSpecies.filter(s => s.foto);
-
-  if (gedocumenteerd.length === 0) return null;
+function SoortenBankSectie({ soorten, onNavigate }) {
+  if (soorten.length === 0) return null;
 
   return (
     <section className="kb-categorie">
-      <h3 className="kb-categorie-titel">Soorten ({gedocumenteerd.length})</h3>
+      <h3 className="kb-categorie-titel">Soorten ({soorten.length})</h3>
       <div className="kb-soorten-grid">
-        {gedocumenteerd.map(soort => (
+        {soorten.map(soort => (
           <button
             key={soort.naam_nl}
             className="kb-soort-kaart"
-            onClick={() => navigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
+            onClick={() => onNavigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
           >
             <img
               className="kb-soort-foto"
@@ -179,10 +173,13 @@ function SoortenBankSectie() {
 
 export default function KennisbankPage() {
   const [zoek, setZoek] = useState('');
+  const navigate = useNavigate();
+  const allSpecies = useSpeciesRef();
   const categorieen = getKennisbankCategorieen();
 
   const q = zoek.toLowerCase().trim();
-  const gefilterd = q
+
+  const gefilterdArtikelen = q
     ? KENNISBANK.filter(a =>
         a.titel.toLowerCase().includes(q) ||
         (a.soort?.toLowerCase().includes(q)) ||
@@ -198,6 +195,18 @@ export default function KennisbankPage() {
         )
       )
     : KENNISBANK;
+
+  const gefilterdSoorten = useMemo(() => {
+    if (!q) return allSpecies.filter(s => s.foto);
+    return allSpecies.filter(s =>
+      s.naam_nl?.toLowerCase().includes(q) ||
+      s.naam_lat?.toLowerCase().includes(q) ||
+      s.naam_en?.toLowerCase().includes(q) ||
+      s.naam_de?.toLowerCase().includes(q)
+    );
+  }, [allSpecies, q]);
+
+  const heeftResultaten = gefilterdArtikelen.length > 0 || gefilterdSoorten.length > 0;
 
   return (
     <div className="page kb-page">
@@ -215,21 +224,47 @@ export default function KennisbankPage() {
       {q ? (
         // Zoekresultaten — plat, zonder categoriegroepering
         <div className="kb-zoekresultaten">
-          {gefilterd.length === 0 ? (
+          {!heeftResultaten ? (
             <p className="kb-leeg">Geen resultaten voor "{zoek}".</p>
           ) : (
-            gefilterd.map(a => <ArtikelKaart key={a.id} artikel={a} />)
+            <>
+              {gefilterdArtikelen.map(a => <ArtikelKaart key={a.id} artikel={a} />)}
+              {gefilterdSoorten.length > 0 && (
+                <section className="kb-categorie">
+                  <h3 className="kb-categorie-titel">Soorten ({gefilterdSoorten.length})</h3>
+                  <div className="kb-soorten-grid">
+                    {gefilterdSoorten.map(soort => (
+                      <button
+                        key={soort.naam_nl}
+                        className="kb-soort-kaart"
+                        onClick={() => navigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
+                      >
+                        {soort.foto ? (
+                          <img className="kb-soort-foto" src={soort.foto} alt={soort.naam_nl} loading="lazy" />
+                        ) : (
+                          <div className="kb-soort-foto kb-soort-foto--leeg">🐦</div>
+                        )}
+                        <div className="kb-soort-info">
+                          <span className="kb-soort-naam">{soort.naam_nl}</span>
+                          <span className="kb-soort-latijn">{soort.naam_lat}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
+            </>
           )}
         </div>
       ) : (
         // Normale weergave per categorie
         <>
           {categorieen.map(cat => {
-            const artikelen = gefilterd.filter(a => a.categorie === cat);
+            const artikelen = gefilterdArtikelen.filter(a => a.categorie === cat);
             if (artikelen.length === 0) return null;
             return <CategorieBlok key={cat} categorie={cat} artikelen={artikelen} />;
           })}
-          <SoortenBankSectie />
+          <SoortenBankSectie soorten={gefilterdSoorten} onNavigate={navigate} />
         </>
       )}
     </div>
