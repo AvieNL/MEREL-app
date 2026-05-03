@@ -1,6 +1,25 @@
-export const VERSIE = '1.72.1';
+export const VERSIE = '1.72.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.72.2',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Kennisbank: nieuw artikel "Vleugelnaamgeving" met volledige EN/NL afkortingstabel (P, S, T, GC, MC, LC, PC, CC, Em, WP, TF, alula)',
+      'Kennisbank: ondersteuning voor afbeeldingen — vleugeldiagram wordt getoond zodra public/kennisbank/vleugeldiagram.jpg beschikbaar is',
+      'Kennisbank: terminologie gecorrigeerd — Em = versmalling buitenvlag (outer web), Notch = versmalling binnenzijde (inner web)',
+    ],
+    wijzigingen_en: [
+      'Knowledge base: new article "Wing naming" with full EN/NL abbreviation table (P, S, T, GC, MC, LC, PC, CC, Em, WP, TF, alula)',
+      'Knowledge base: image support — wing diagram displayed once public/kennisbank/vleugeldiagram.jpg is available',
+      'Knowledge base: terminology corrected — Em = outer web notch, Notch = inner web notch',
+    ],
+    wijzigingen_de: [
+      'Wissensdatenbank: neuer Artikel "Flügelnamen" mit vollständiger EN/NL Abkürzungstabelle (P, S, T, GC, MC, LC, PC, CC, Em, WP, TF, alula)',
+      'Wissensdatenbank: Bildunterstützung — Flügeldiagramm wird angezeigt sobald public/kennisbank/vleugeldiagram.jpg vorhanden ist',
+      'Wissensdatenbank: Terminologie korrigiert — Em = Außenfahnen-Einschnürung, Notch = Innenfahnen-Einschnürung',
+    ],
+  },
   {
     versie: '1.72.1',
     datum: '2026-05-03',

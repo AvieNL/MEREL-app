@@ -251,6 +251,29 @@
   margin-top: 1px;
 }
 
+/* ── Afbeelding ────────────────────────────────────────────────────────────── */
+
+.kb-figuur {
+  margin: 4px 0 0;
+}
+
+.kb-afbeelding {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  display: block;
+  background: #fff; /* diagram heeft witte achtergrond */
+}
+
+.kb-bijschrift {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
 /* ── Zoekresultaten ────────────────────────────────────────────────────────── */
 
 .kb-zoekresultaten {

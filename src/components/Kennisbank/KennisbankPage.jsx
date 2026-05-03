@@ -61,6 +61,22 @@ function SectieKoptitel({ sectie }) {
   return <h4 className="kb-koptitel">{sectie.tekst}</h4>;
 }
 
+function SectieAfbeelding({ sectie }) {
+  return (
+    <figure className="kb-figuur">
+      <img
+        src={sectie.src}
+        alt={sectie.alt}
+        className="kb-afbeelding"
+        loading="lazy"
+      />
+      {sectie.bijschrift && (
+        <figcaption className="kb-bijschrift">{sectie.bijschrift}</figcaption>
+      )}
+    </figure>
+  );
+}
+
 function renderSectie(sectie, i) {
   switch (sectie.type) {
     case 'tekst':           return <SectieTekst key={i} sectie={sectie} />;
@@ -69,6 +85,7 @@ function renderSectie(sectie, i) {
     case 'tabel':           return <SectieTabel key={i} sectie={sectie} />;
     case 'waarschuwing':    return <SectieWaarschuwing key={i} sectie={sectie} />;
     case 'koptitel':        return <SectieKoptitel key={i} sectie={sectie} />;
+    case 'afbeelding':      return <SectieAfbeelding key={i} sectie={sectie} />;
     default:                return null;
   }
 }
