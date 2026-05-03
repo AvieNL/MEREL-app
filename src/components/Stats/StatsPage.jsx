@@ -224,6 +224,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     navigate('/ring/stats/soorten', { state: { soortenTabel: translated, titel } });
   }
   const [tvSorteer, setTvSorteer] = useState('tijd');
+  const [omstOpen, setOmstOpen] = useState(null); // code van openstaande omstandigheid
   const [jaarPopup, setJaarPopup] = useState(null);
   const [vergelijkingOpen, setVergelijkingOpen] = useState(false);
   const [exportVan, setExportVan] = useState('');
@@ -984,22 +985,60 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
               ) : (
                 <>
                   <div className="top-list">
-                    {bijzonder.map(o => (
-                      <div key={o.code} className="top-item stats-omst-item--bijzonder">
-                        <div className="stats-omst-item__row">
-                          <span className="top-name stats-omst-code">
-                            <span className="stats-omst-badge">{o.code}</span>
-                            {o.label}
-                          </span>
-                          <span className="top-count">
-                            {o.n} <span className="stats-omst-pct">({o.pct}%)</span>
-                          </span>
+                    {bijzonder.map(o => {
+                      const isOpen = omstOpen === o.code;
+                      const vogels = isOpen
+                        ? [...gefilterdRecords]
+                            .filter(r => String(r.omstandigheden).padStart(2, '0') === o.code)
+                            .sort((a, b) => (toYMD(b.vangstdatum) || '').localeCompare(toYMD(a.vangstdatum) || ''))
+                        : [];
+                      return (
+                        <div key={o.code} className="top-item stats-omst-item--bijzonder">
+                          <button
+                            className="stats-omst-item__row stats-omst-item__row--btn"
+                            onClick={() => setOmstOpen(isOpen ? null : o.code)}
+                            aria-expanded={isOpen}
+                          >
+                            <span className="top-name stats-omst-code">
+                              <span className="stats-omst-badge">{o.code}</span>
+                              {o.label}
+                            </span>
+                            <span className="top-count">
+                              {o.n} <span className="stats-omst-pct">({o.pct}%)</span>
+                              <span className="stats-omst-toggle">{isOpen ? ' ▴' : ' ▾'}</span>
+                            </span>
+                          </button>
+                          <div className="top-bar-wrap">
+                            <div className="top-bar stats-omst-bar" style={{ width: `${(o.n / maxN) * 100}%` }} />
+                          </div>
+                          {isOpen && (
+                            <div className="stats-omst-detail">
+                              <table className="trektellen-table">
+                                <thead>
+                                  <tr>
+                                    <th>Datum</th>
+                                    <th>Soort</th>
+                                    <th>Ringnummer</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {vogels.map(r => (
+                                    <tr key={r.id}
+                                      className="stats-omst-row"
+                                      onClick={() => navigate('/ring/records', { state: { openId: r.id } })}
+                                    >
+                                      <td>{formatDatum(r.vangstdatum)}</td>
+                                      <td>{displayNaam(r.vogelnaam)}</td>
+                                      <td className="ring-link">{r.ringnummer?.replace(/\./g, '') || '—'}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          )}
                         </div>
-                        <div className="top-bar-wrap">
-                          <div className="top-bar stats-omst-bar" style={{ width: `${(o.n / maxN) * 100}%` }} />
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   {normaal && (
                     <div className="stats-omst-normaal">

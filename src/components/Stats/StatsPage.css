@@ -960,3 +960,32 @@
 .stats-omst-code {
   font-size: 0.82rem;
 }
+.stats-omst-item__row--btn {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+}
+.stats-omst-item__row--btn:hover .top-name {
+  color: var(--accent);
+}
+.stats-omst-toggle {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+.stats-omst-detail {
+  margin-top: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.stats-omst-row {
+  cursor: pointer;
+}
+.stats-omst-row:hover td {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
