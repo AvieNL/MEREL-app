@@ -1,6 +1,19 @@
-export const VERSIE = '1.73.3';
+export const VERSIE = '1.73.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.4',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Nestmodule: omstandigheden bij ringen nestjongen gecorrigeerd naar 27 (in nestkast gevangen of gevonden)',
+    ],
+    wijzigingen_en: [
+      'Nest module: circumstances when ringing nestlings corrected to 27 (caught or found in nest box)',
+    ],
+    wijzigingen_de: [
+      'Nestmodul: Umstände beim Beringen von Nestlingen auf 27 (in Nistkaste gefangen oder gefunden) korrigiert',
+    ],
+  },
   {
     versie: '1.73.3',
     datum: '2026-05-03',
