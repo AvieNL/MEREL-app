@@ -1,6 +1,31 @@
-export const VERSIE = '1.70.0';
+export const VERSIE = '1.71.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.71.0',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Biometrie vervolg: alle biometrie-velden per methode uitgesplitst — apart veld voor snavel punt–schedel (S), punt–neusgat (N), punt–veren (F) en punt–cere (C)',
+      'Biometrie vervolg: nieuwe velden toegevoegd — snaveldiepte, snavelbreedte, TF1 (langste staartveer), TF6 (6e staartveer) en handpuntlengte (WP)',
+      'Biometrie vervolg: subsectie-labels voor overzichtelijke indeling (Tarsus, Staart & tertials, Snavellengte per methode, Snavel overig, Overige biometrie)',
+      'Griel XML-export: snavellengte per methode (F, S, C, N), snaveldiepte (BillDepthBase) en handpuntlengte (StateOfWingPoint) worden nu geëxporteerd',
+      'Determinatie Roek: TF1/TF6 invoervelden koppelen automatisch aan vangstformulier via uit_formulier',
+    ],
+    wijzigingen_en: [
+      'Biometrics continuation: all bill length fields split by method — separate fields for bill tip–skull (S), tip–nostril (N), tip–feathers (F) and tip–cere (C)',
+      'Biometrics continuation: new fields added — bill depth, bill width, TF1 (longest tail feather), TF6 (6th tail feather) and wing point (WP)',
+      'Biometrics continuation: subsection labels for clear layout (Tarsus, Tail & tertials, Bill length by method, Bill other, Other biometrics)',
+      'Griel XML export: bill length by method (F, S, C, N), bill depth (BillDepthBase) and wing point (StateOfWingPoint) now exported',
+      'Rook determination: TF1/TF6 input fields auto-link to catch form via uit_formulier',
+    ],
+    wijzigingen_de: [
+      'Biometrie-Fortsetzung: alle Schnabellängenfelder nach Methode aufgeteilt — eigene Felder für Schnabel Spitze–Schädel (S), Spitze–Nasenloch (N), Spitze–Federn (F) und Spitze–Wachshaut (C)',
+      'Biometrie-Fortsetzung: neue Felder — Schnabeltiefe, Schnabelbreite, TF1 (längste Steuerfeder), TF6 (6. Steuerfeder) und Handpunktlänge (WP)',
+      'Biometrie-Fortsetzung: Abschnittsbeschriftungen zur Übersicht (Tarsus, Schwanz & Tertiale, Schnabellänge je Methode, Schnabel sonstiges, Weitere Biometrie)',
+      'Griel XML-Export: Schnabellänge je Methode (F, S, C, N), Schnabeltiefe (BillDepthBase) und Handpunktlänge (StateOfWingPoint) werden jetzt exportiert',
+      'Saatkrähe-Bestimmung: TF1/TF6-Eingabefelder verknüpfen automatisch mit Fangformular über uit_formulier',
+    ],
+  },
   {
     versie: '1.70.0',
     datum: '2026-05-02',

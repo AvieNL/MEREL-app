@@ -919,3 +919,17 @@
   border-radius: var(--radius-sm);
   margin-bottom: 12px;
 }
+
+/* ── Biometrie vervolg subsectie-labels ── */
+.bio-subsection-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary, #94a3b8);
+  margin: 12px 0 4px 0;
+  padding: 0;
+}
+.bio-subsection-label:first-child {
+  margin-top: 0;
+}

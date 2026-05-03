@@ -186,6 +186,9 @@ export default function SectieBiometrieEnRui() {
         </div>
         {sections.biometrieVervolg && (
           <div className="section-content">
+
+            {/* ── Tarsus ── */}
+            <p className="bio-subsection-label">{t('form_subsection_tarsus')}</p>
             <div className="form-row">
               {renderBioField('tarsus_lengte', t('form_tarsus'))}
               <div className="form-group">
@@ -202,6 +205,9 @@ export default function SectieBiometrieEnRui() {
                   onChange={e => update('achternagel', e.target.value)} />
               </div>
             </div>
+
+            {/* ── Staart & tertials ── */}
+            <p className="bio-subsection-label">{t('form_subsection_tail')}</p>
             <div className="form-row">
               {renderBioField('staartlengte', t('form_tail'))}
               <div className="form-group">
@@ -211,18 +217,61 @@ export default function SectieBiometrieEnRui() {
               </div>
             </div>
             <div className="form-row">
-              {renderBioField('snavel_schedel', t('form_bill'))}
               <div className="form-group">
-                <label>{t('form_bill_method')}</label>
-                <select value={form.snavel_methode} onChange={e => update('snavel_methode', e.target.value)}>
-                  {SNAVEL_METHODE_OPTIONS.map(o => (
-                    <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
-                  ))}
-                </select>
+                <label>{t('form_tf1')}</label>
+                <input type="text" inputMode="decimal" value={form.tf1}
+                  onChange={e => update('tf1', e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>{t('form_tf6')}</label>
+                <input type="text" inputMode="decimal" value={form.tf6}
+                  onChange={e => update('tf6', e.target.value)} />
               </div>
             </div>
+
+            {/* ── Snavellengte per methode ── */}
+            <p className="bio-subsection-label">{t('form_subsection_bill_length')}</p>
+            <div className="form-row">
+              {renderBioField('snavel_schedel', t('form_bill_s'))}
+              {renderBioField('snavel_neusgat', t('form_bill_n'))}
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>{t('form_bill_f')}</label>
+                <input type="text" inputMode="decimal" value={form.snavel_veren}
+                  onChange={e => update('snavel_veren', e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>{t('form_bill_c')}</label>
+                <input type="text" inputMode="decimal" value={form.snavel_cere}
+                  onChange={e => update('snavel_cere', e.target.value)} />
+              </div>
+            </div>
+
+            {/* ── Snavel overig ── */}
+            <p className="bio-subsection-label">{t('form_subsection_bill_other')}</p>
+            <div className="form-row">
+              <div className="form-group">
+                <label>{t('form_bill_depth')}</label>
+                <input type="text" inputMode="decimal" value={form.snavel_diepte}
+                  onChange={e => update('snavel_diepte', e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>{t('form_bill_width')}</label>
+                <input type="text" inputMode="decimal" value={form.snavel_breedte}
+                  onChange={e => update('snavel_breedte', e.target.value)} />
+              </div>
+            </div>
+
+            {/* ── Overig ── */}
+            <p className="bio-subsection-label">{t('form_subsection_other_bio')}</p>
             <div className="form-row">
               {renderBioField('kop_snavel', t('form_head_bill'))}
+              <div className="form-group">
+                <label>{t('form_wing_point')}</label>
+                <input type="text" inputMode="decimal" value={form.handpuntlengte}
+                  onChange={e => update('handpuntlengte', e.target.value)} />
+              </div>
             </div>
           </div>
         )}

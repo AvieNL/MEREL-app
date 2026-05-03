@@ -370,6 +370,7 @@ const aids = [
             min: 100,
             max: 250,
             placeholder: 'bijv. 170',
+            uit_formulier: 'tf1',
           },
           {
             key: 'tf6',
@@ -378,6 +379,7 @@ const aids = [
             min: 80,
             max: 230,
             placeholder: 'bijv. 157',
+            uit_formulier: 'tf6',
           },
         ],
         bereken_type: 'tf6_verschil',
@@ -550,6 +552,7 @@ const aids = [
             min: 100,
             max: 250,
             placeholder: 'bijv. 175',
+            uit_formulier: 'tf1',
           },
           {
             key: 'tf6',
@@ -558,6 +561,7 @@ const aids = [
             min: 80,
             max: 230,
             placeholder: 'bijv. 150',
+            uit_formulier: 'tf6',
           },
         ],
         bereken_type: 'tf6_verschil',

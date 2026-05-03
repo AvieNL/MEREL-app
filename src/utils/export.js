@@ -146,18 +146,20 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
     // WingNotStraightFlat / WingNotStraightNotFlat: niet in onze app
     b('PrimaryLength',                bioDecimal(r.handpenlengte));
     b('TailLength',                   bioDecimal(r.staartlengte));
-    // TailRounding: niet in onze app
-    // BillLengthFrontalEdgeFeathers: niet in onze app
+    // TailRounding: niet in onze app (staart_verschil = verschil langste/kortste pen, niet de Griel-code)
+    b('BillLengthFrontalEdgeFeathers', bioDecimal(r.snavel_veren));
     b('BillLengthBendMandibleForehead', bioDecimal(r.snavel_schedel));
-    // BillLengthFrontalEdgeCere / BillLengthDistalEdgeNostril: niet in onze app
-    // BillDepthBase / BillDepthInnerEdgeNostril / BillDepthGonydealAngle: niet in onze app
+    b('BillLengthFrontalEdgeCere',    bioDecimal(r.snavel_cere));
+    b('BillLengthDistalEdgeNostril',  bioDecimal(r.snavel_neusgat));
+    b('BillDepthBase',                bioDecimal(r.snavel_diepte));
+    // BillDepthInnerEdgeNostril / BillDepthGonydealAngle: niet in onze app
     b('TarsusLengthMaximum',          bioDecimal(r.tarsus_lengte));
     // TarsusLengthMinimum: niet in onze app
     b('TarsusLengthToe',              bioDecimal(r.tarsus_teen));
     b('TarsusWidth',                  bioDecimal(r.tarsus_dikte));
     b('TotalHeadLength',              bioDecimal(r.kop_snavel));
     b('PectoralMuscleScore',          r.borstspier !== undefined && r.borstspier !== null && r.borstspier !== '' ? String(r.borstspier) : null);
-    // StateOfWingPoint: niet in onze app
+    b('StateOfWingPoint',             bioDecimal(r.handpuntlengte));
     b('ClawLength',                   bioDecimal(r.achternagel));
     b('Weight',                       bioDecimal(r.gewicht));
     b('WeighingTime',                 r.weegtijd ? toWeighingTime(r.weegtijd) : null);
