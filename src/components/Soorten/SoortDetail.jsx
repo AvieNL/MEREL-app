@@ -9,7 +9,7 @@ import { useModuleSwitch } from '../../App';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuitypeInfo from './RuitypeInfo';
 import { VangstKaart } from '../Stats/Charts';
-import { renderMarkdown } from '../../utils/textHelper';
+import { renderMarkdown, renderLeeftijdMarkdown } from '../../utils/textHelper';
 import { formatDatum, toYMD } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL } from '../../data/constants';
 import { computeBioRanges } from '../../utils/bioHelper';
@@ -393,20 +393,29 @@ export default function SoortDetail({ records, speciesOverrides }) {
       {(leeftijdsVj || leeftijdsNj) && (
         <div className="sd-card">
           <h3 className="sd-card-title">{t('sd_age_det')} <BronBadge bron={soort.bron_leeftijdsbepaling} /></h3>
-          <div className="sd-det-view">
-            {leeftijdsVj && (
-              <div className="sd-det-block">
-                <span className="sd-det-label sd-det-label--vj">{t('sd_spring')}</span>
-                <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(leeftijdsVj) }} />
-              </div>
-            )}
-            {leeftijdsNj && (
-              <div className="sd-det-block">
-                <span className="sd-det-label sd-det-label--nj">{t('sd_autumn')}</span>
-                <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(leeftijdsNj) }} />
-              </div>
-            )}
-          </div>
+          {leeftijdsVj && !leeftijdsNj ? (
+            // Samengevoegde modus: één tekst met {{MM-MM}} maandblokken
+            <div
+              className="sd-notities-text sd-leeftijd-blokken"
+              dangerouslySetInnerHTML={{ __html: renderLeeftijdMarkdown(leeftijdsVj) }}
+            />
+          ) : (
+            // Klassieke modus: apart voorjaar en najaar
+            <div className="sd-det-view">
+              {leeftijdsVj && (
+                <div className="sd-det-block">
+                  <span className="sd-det-label sd-det-label--vj">{t('sd_spring')}</span>
+                  <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(leeftijdsVj) }} />
+                </div>
+              )}
+              {leeftijdsNj && (
+                <div className="sd-det-block">
+                  <span className="sd-det-label sd-det-label--nj">{t('sd_autumn')}</span>
+                  <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(leeftijdsNj) }} />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 

@@ -1,6 +1,22 @@
-export const VERSIE = '1.73.9';
+export const VERSIE = '1.74.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.0',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: leeftijdsbepaling ondersteunt samengevoegde weergave per leeftijdsklasse met automatische uitlichting van momenteel relevante blokken (±21 dagen buffer)',
+      'Roek: leeftijdsbepaling samengevoegd tot één tekst per leeftijdsklasse met maandmarkeringen',
+    ],
+    wijzigingen_en: [
+      'Species page: age determination supports merged view per age class with automatic highlighting of currently relevant blocks (±21 day buffer)',
+      'Rook: age determination merged into one text per age class with month markers',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Altersbestimmung unterstützt zusammengeführte Ansicht pro Altersklasse mit automatischer Hervorhebung aktuell relevanter Blöcke (±21 Tage Puffer)',
+      'Saatkrähe: Altersbestimmung zu einem Text pro Altersklasse mit Monatsmarkierungen zusammengeführt',
+    ],
+  },
   {
     versie: '1.73.9',
     datum: '2026-05-03',
