@@ -16,6 +16,20 @@
   border-left-color: var(--accent);
 }
 
+.leeftijd-maand {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: lowercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+
+.leeftijd-blok--actueel .leeftijd-maand {
+  color: var(--accent);
+}
+
 /* Markdown links in notitievelden */
 .md-link {
   color: var(--accent);

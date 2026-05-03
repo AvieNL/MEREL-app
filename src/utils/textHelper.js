@@ -31,6 +31,7 @@ export function renderLeeftijdMarkdown(text) {
   const winEnd = new Date(now);
   winEnd.setDate(winEnd.getDate() + BUFFER_DAYS);
 
+  const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
   const MARKER_RE = /^\{\{(\d{2})-(\d{2})\}\}\n?/;
 
   const blocks = text.split(/\n\n+/);
@@ -48,17 +49,22 @@ export function renderLeeftijdMarkdown(text) {
       .replace(/\n/g, '<br>');
 
     let cls = 'leeftijd-blok';
+    let maandLabel = '';
     if (match) {
       const sm = parseInt(match[1], 10);
       const em = parseInt(match[2], 10);
       if (maandRelevant(sm, em, winStart, winEnd)) cls += ' leeftijd-blok--actueel';
+      const isAltijd = sm === 1 && em === 12;
+      maandLabel = isAltijd
+        ? '<span class="leeftijd-maand">altijd</span>'
+        : `<span class="leeftijd-maand">${MAANDEN[sm - 1]}–${MAANDEN[em - 1]}</span>`;
     }
 
-    return `<div class="${cls}">${inner}</div>`;
+    return `<div class="${cls}">${maandLabel}${inner}</div>`;
   });
 
   return DOMPurify.sanitize(parts.join(''), {
-    ALLOWED_TAGS: ['div', 'strong', 'em', 'u', 'br', 'a'],
+    ALLOWED_TAGS: ['div', 'span', 'strong', 'em', 'u', 'br', 'a'],
     ALLOWED_ATTR: ['class', 'href'],
   });
 }
