@@ -34,7 +34,7 @@ export const KENNISBANK = [
     secties: [
       {
         type: 'afbeelding',
-        src: '/kennisbank/vleugeldiagram.jpg',
+        src: '/kennisbank/vleugeldiagram.jpeg',
         alt: 'Schematische bovenaanzicht van een passerine vleugel met alle veernamen en nummering',
         bijschrift: 'Bovenaanzicht van een typische passerine vleugel. Nummering verloopt van buitenste (vleugelspits) naar binnenste veer — "ascendant numbering".',
       },
