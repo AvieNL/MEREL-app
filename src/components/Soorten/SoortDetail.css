@@ -1,3 +1,14 @@
+/* Markdown links in notitievelden */
+.md-link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+.md-link:hover {
+  text-decoration-color: var(--accent);
+}
+
 /* Back button */
 .sd-back {
   margin-bottom: 12px;

@@ -423,7 +423,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
         const aids = getAidsVoorSoort(soortEuringCode);
         if (!aids.length) return null;
         return (
-          <div className="sd-card">
+          <div className="sd-card" id="determinatiehulp">
             <h3 className="sd-card-title">Determinatiehulp</h3>
             <div className="sd-det-aids">
               {aids.map(aid => (

@@ -1,6 +1,22 @@
-export const VERSIE = '1.73.8';
+export const VERSIE = '1.73.9';
 
 export const CHANGELOG = [
+  {
+    versie: '1.73.9',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: markdown ondersteunt nu links ([tekst](url)) in notitievelden',
+      'Roek: geslachtsteksten herschreven met bulletpunten en klikbare link naar determinatiehulp',
+    ],
+    wijzigingen_en: [
+      'Species page: markdown now supports links ([text](url)) in notes fields',
+      'Rook: sex determination texts rewritten with bullet points and clickable link to determination tool',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Markdown unterstützt jetzt Links ([Text](URL)) in Notizfeldern',
+      'Saatkrähe: Geschlechtsbestimmungstexte mit Aufzählungspunkten und klickbarem Link zum Bestimmungswerkzeug neu geschrieben',
+    ],
+  },
   {
     versie: '1.73.8',
     datum: '2026-05-03',

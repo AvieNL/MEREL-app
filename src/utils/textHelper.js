@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 
-// Eenvoudige markdown-renderer: **bold**, *italic*, _underline_
+// Eenvoudige markdown-renderer: **bold**, *italic*, _underline_, [tekst](url)
 export function renderMarkdown(text) {
   if (!text) return '';
   const html = text
@@ -8,8 +8,12 @@ export function renderMarkdown(text) {
     .replace(/\*\*(.*?)\*\*/gs, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/gs, '<em>$1</em>')
     .replace(/_(.*?)_/gs, '<u>$1</u>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="md-link">$1</a>')
     // Extra witregel vóór seizoenskoppen (Voorjaar/Najaar) die niet aan het begin staan
     .replace(/([^\n])\n(Voorjaar|Najaar)/g, '$1\n\n$2')
     .replace(/\n/g, '<br>');
-  return DOMPurify.sanitize(html, { ALLOWED_TAGS: ['strong', 'em', 'u', 'br'] });
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['strong', 'em', 'u', 'br', 'a'],
+    ALLOWED_ATTR: ['href', 'class'],
+  });
 }
