@@ -205,7 +205,7 @@ export function renderLeeftijdActueel(text) {
       if (!maandRelevant(sm, em, winStart, winEnd)) return [];
     }
     const content = match ? block.replace(MARKER_RE, '') : block;
-    return [`<p class="lft-actueel">${inlineMarkdown(content.replace(/\n/g, '<br>'))}</p>`];
+    return [`<p class="lft-actueel">${inlineMarkdown(content).replace(/\n/g, '<br>')}</p>`];
   });
 
   if (!parts.length) return '';
