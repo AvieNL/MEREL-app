@@ -389,6 +389,16 @@ export default function SoortDetail({ records, speciesOverrides }) {
               </div>
             )}
           </div>
+          {/* Link naar determinatiehulp voor geslachtsbepaling, indien beschikbaar */}
+          {(() => {
+            const aid = getAidsVoorSoort(soortEuringCode).find(a => a.id.includes('geslacht'));
+            if (!aid) return null;
+            return (
+              <a href="#determinatiehulp" className="sd-aid-link">
+                {aid.naam} \u2192
+              </a>
+            );
+          })()}
         </div>
       )}
 

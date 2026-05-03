@@ -1,6 +1,19 @@
-export const VERSIE = '1.74.6';
+export const VERSIE = '1.74.7';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.7',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: link naar geslachtsbepaling-aid nu als link onder het veld (zelfde stijl als leeftijdsbepaling), niet meer als inline markdown-link in de tekst',
+    ],
+    wijzigingen_en: [
+      'Species page: link to sex determination aid now shown as link below the field (same style as age determination), no longer as inline markdown link in the text',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Link zum Geschlechtsbestimmungs-Hilfsmittel jetzt als Link unterhalb des Feldes (gleicher Stil wie Altersbestimmung)',
+    ],
+  },
   {
     versie: '1.74.6',
     datum: '2026-05-03',
