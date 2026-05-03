@@ -9,7 +9,7 @@ import { useModuleSwitch } from '../../App';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuitypeInfo from './RuitypeInfo';
 import { VangstKaart } from '../Stats/Charts';
-import { renderMarkdown, renderLeeftijdMarkdown } from '../../utils/textHelper';
+import { renderMarkdown, renderLeeftijdMarkdown, renderIDKenmerken } from '../../utils/textHelper';
 import { formatDatum, toYMD } from '../../utils/dateHelper';
 import { LEEFTIJD_LABEL } from '../../data/constants';
 import { computeBioRanges } from '../../utils/bioHelper';
@@ -466,7 +466,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
       {determinatieIdNotities && (
         <div className="sd-card">
           <h3 className="sd-card-title">ID-kenmerken <BronBadge bron={soort.bron_id_kenmerken} /></h3>
-          <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(determinatieIdNotities) }} />
+          <div dangerouslySetInnerHTML={{ __html: renderIDKenmerken(determinatieIdNotities) }} />
         </div>
       )}
 

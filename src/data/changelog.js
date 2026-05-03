@@ -1,6 +1,19 @@
-export const VERSIE = '1.74.4';
+export const VERSIE = '1.74.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.74.5',
+    datum: '2026-05-03',
+    wijzigingen: [
+      'Soortenpagina: ID-kenmerken toont verwarringssoorten als aparte vergelijkingskaarten met soortnaam als kop en scanbare kenmerkenlijst',
+    ],
+    wijzigingen_en: [
+      'Species page: ID features renders confusing species as separate comparison cards with species name as header and scannable feature list',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: ID-Merkmale zeigt Verwechslungsarten als separate Vergleichskarten mit Artnamen als Kopfzeile',
+    ],
+  },
   {
     versie: '1.74.4',
     datum: '2026-05-03',

@@ -77,6 +77,58 @@ export function renderLeeftijdMarkdown(text, seizoen = null) {
   });
 }
 
+// Renderer voor ID-kenmerken / verwarringsoorten.
+// Blokken die beginnen met **Onderscheid met [Soort]:** worden als
+// vergelijkingskaart gerenderd met de soortnaam als kop en de
+// bullet-punten als scanbare lijst. Overige alinea's als gewone tekst.
+export function renderIDKenmerken(text) {
+  if (!text) return '';
+
+  const VERGELIJK_RE = /^\*\*Onderscheid met ([^*]+):\*\*/;
+  const blocks = text.split(/\n\n+/);
+
+  const parts = blocks.map(block => {
+    const match = block.match(VERGELIJK_RE);
+    if (match) {
+      const soortNaam = escapeHtml(match[1].trim());
+      const rest = block.replace(VERGELIJK_RE, '').replace(/^\n/, '');
+      const items = rest.split('\n')
+        .map(l => l.trim())
+        .filter(l => l.startsWith('-'))
+        .map(l => `<li>${inlineMarkdown(l.replace(/^-\s*/, ''))}</li>`)
+        .join('');
+      return `<div class="id-vergelijking">` +
+        `<div class="id-vergelijking__header">` +
+          `<span class="id-vergelijking__vs">vs.</span>` +
+          `<span class="id-vergelijking__naam">${soortNaam}</span>` +
+        `</div>` +
+        `<ul class="id-vergelijking__lijst">${items}</ul>` +
+      `</div>`;
+    }
+    // Gewone alinea
+    return `<p class="id-alinea">${inlineMarkdown(block.replace(/\n/g, '<br>'))}</p>`;
+  });
+
+  return DOMPurify.sanitize(parts.join(''), {
+    ALLOWED_TAGS: ['div', 'span', 'p', 'ul', 'li', 'strong', 'em', 'u', 'br', 'a'],
+    ALLOWED_ATTR: ['class', 'href'],
+  });
+}
+
+// Inline markdown helper (gedeeld)
+function inlineMarkdown(text) {
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.*?)\*\*/gs, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/gs, '<em>$1</em>')
+    .replace(/_(.*?)_/gs, '<u>$1</u>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="md-link">$1</a>');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 // Controleer of een blok overlapt met het opgegeven seizoen.
 // seizoen: 'vj' = maanden 1–6, 'nj' = maanden 7–12
 function blokOverlapt(sm, em, seizoen) {
