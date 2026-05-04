@@ -1,6 +1,23 @@
-export const VERSIE = '1.76.0';
+export const VERSIE = '1.77.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.77.0',
+    datum: '2026-05-04',
+    wijzigingen: [
+      'Leeftijdsbepaling Roek: mondholte toegevoegd als actieve stap (vleesroze = bevestigt 1e kj; blauwzwart = oriëntatie bij glanzende kop)',
+      'Soortenpagina & ringformulier: minimale vangstset per soort zichtbaar (maten + observaties met belang-indicator)',
+      'Roek: vangst_checklist ingevuld (vleugel, snavel tot schedel, TF6, gewicht, neusgaten/kin/loren, mondholte, broedvlek)',
+    ],
+    wijzigingen_en: [
+      'Rook age determination: mouth colour added as active step',
+      'Species page & ring form: minimal catch set per species shown (measurements + observations with importance indicator)',
+    ],
+    wijzigingen_de: [
+      'Saatkrähe Altersbestimmung: Mundhöhlenfarbe als aktiver Schritt hinzugefügt',
+      'Artendetailseite & Ringformular: minimaler Erfassungssatz je Art sichtbar',
+    ],
+  },
   {
     versie: '1.76.0',
     datum: '2026-05-04',

@@ -473,6 +473,77 @@
   font-weight: 600;
 }
 
+/* ─── Vangst-checklist (minimale set per soort) ────────────────────────── */
+.vangst-checklist {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.vangst-checklist__titel {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.vangst-checklist__lijst {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vcl-item {
+  display: grid;
+  grid-template-columns: 16px 1fr auto auto;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  min-height: 22px;
+}
+
+.vcl-icon {
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+.vcl-label {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.vcl-belang {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.vcl-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.vcl-dot--aan {
+  background: var(--accent);
+}
+
+.vcl-note {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  grid-column: 2 / -1;
+  padding-left: 0;
+  line-height: 1.3;
+}
+
 /* Biometrie waarschuwingen */
 .bio-warnings {
   margin-bottom: 12px;

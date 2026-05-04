@@ -1431,6 +1431,73 @@
   grid-column: 1 / -1;
 }
 
+/* ─── Minimale vangstset ───────────────────────────────────────────────── */
+.sd-vangstset-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 6px 0 0 15px;
+  padding: 0;
+}
+
+.sd-vangstset-rij {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+.sd-vangstset-rij:last-child {
+  border-bottom: none;
+}
+
+.sd-vangstset-dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 500;
+  min-width: 170px;
+  flex-shrink: 0;
+}
+
+.sd-vangstset-icon {
+  font-size: 0.72rem;
+}
+
+.sd-vangstset-dd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.sd-vangstset-belang {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.sd-vcl-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.sd-vcl-dot--aan {
+  background: var(--accent);
+}
+
+.sd-vangstset-note {
+  font-size: 0.73rem;
+  color: var(--text-muted);
+}
+
 /* ─── Biometrie bronvermelding ─────────────────────────────────────────── */
 .sd-bio-bron {
   margin: 8px 0 0 0;

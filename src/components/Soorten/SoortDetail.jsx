@@ -614,6 +614,29 @@ export default function SoortDetail({ records, speciesOverrides }) {
             </div>
           );
         })()}
+        {soort.vangst_checklist?.length > 0 && (
+          <div className="sd-vleugelformule">
+            <span className="sd-label">Minimale vangstset</span>
+            <dl className="sd-vangstset-grid">
+              {soort.vangst_checklist.map((item, i) => (
+                <div key={i} className="sd-vangstset-rij">
+                  <dt className="sd-vangstset-dt">
+                    <span className="sd-vangstset-icon">{item.type === 'meting' ? '📏' : '👁'}</span>
+                    {item.label}
+                  </dt>
+                  <dd className="sd-vangstset-dd">
+                    <span className="sd-vangstset-belang">
+                      {[...Array(3)].map((_, b) => (
+                        <span key={b} className={b < item.belang ? 'sd-vcl-dot sd-vcl-dot--aan' : 'sd-vcl-dot'} />
+                      ))}
+                    </span>
+                    {item.note && <span className="sd-vangstset-note">{item.note}</span>}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
       </div>
 
       {/* Namen + Biometrie naast elkaar */}
