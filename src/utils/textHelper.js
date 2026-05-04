@@ -17,7 +17,7 @@ export function renderMarkdown(text) {
         .filter(l => l.trim().startsWith('- '))
         .map(l => `<li>${l.trim().slice(2)}</li>`)
         .join('');
-      return '\n<ul>' + items + '</ul>';
+      return '<ul>' + items + '</ul>';
     })
     .replace(/\n/g, '<br>');
   return DOMPurify.sanitize(html, {
