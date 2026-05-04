@@ -36,6 +36,16 @@ export default function DeterminatieModal({ aid, getAidById, formValues, onGebru
     verwerkStap(aid.start, {}, {}, [], effectief);
   }
 
+  // Herstart zonder auto-resolve — zodat de gebruiker alle stappen handmatig doorloopt
+  function herstart() {
+    setGeschiedenis([]);
+    setKeuzes({});
+    setMetingen({});
+    setResultaat(null);
+    setVerwijzingAid(null);
+    verwerkStap(aid.start, {}, {}, [], null);
+  }
+
   /**
    * Probeer stap automatisch op te lossen vanuit formulierwaarden.
    * effectiefFormValues is formValues + eventuele overrides na een geneste terugkoppeling.
@@ -353,7 +363,7 @@ export default function DeterminatieModal({ aid, getAidById, formValues, onGebru
                   Gebruik dit resultaat →
                 </button>
               )}
-              <button type="button" className="det-opnieuw-btn" onClick={startSurvey}>
+              <button type="button" className="det-opnieuw-btn" onClick={herstart}>
                 Opnieuw
               </button>
             </div>
