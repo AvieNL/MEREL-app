@@ -57,13 +57,18 @@ const updates = {
   // Overige velden
   eerste_broedleeftijd: '3Y',
 
-  // Vleugelformule — tabelformaat: key: value per regel, meerdere met · gescheiden
-  vleugelformule:
-    'WP: (3)4\n' +
-    'HP: 10 (P1 kort)\n' +
-    'S: 6\n' +
-    'T: 4\n' +
-    'TF: 12',
+  // Pennen-structuur (JSON) → tabel "Vleugelpunt / Handpennen / Armpennen / Tertials / Staartpennen"
+  pennen_structuur: {
+    wp:      '(3)4',
+    hp:      10,
+    hp_note: 'P1 kort',
+    ap:      6,
+    tp:      4,
+    sp:      12,
+  },
+
+  // Vleugelformule — leeg: geen extra formule-info voor Kauw in Demongin p.347
+  vleugelformule: '',
 
   // Ruitiming — geen bron in tekst (bron_ring), geen markdown-titels met ** hier
   rui_notities:
