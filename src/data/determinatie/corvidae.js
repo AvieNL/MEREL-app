@@ -1,6 +1,7 @@
 /**
  * Determinatiehulpen voor Corvidae (kraaivogels)
  * EURING-codes: Roek = 15630 (Corvus frugilegus)
+ *               Kauw = 15600 (Corvus monedula)
  */
 
 // Grenswaarde vleugel bij gegeven snavellengte tot schedel
@@ -413,6 +414,211 @@ export const corvidae = [
               label: 'na 1e kj',
               zeker: false,
               uitleg: 'Zwarte slagpennen met sterke metaalglans; kin/wangen geheel kaal; periode juni–december: na 1e kalenderjaar (2e kj of ouder).',
+            },
+          },
+        ],
+      },
+
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Kauw (EURING 15600 — Corvus monedula)
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: 'kauw-leeftijd',
+    soorten: ['15600'],           // Corvus monedula (Kauw)
+    resultaat_veld: 'leeftijd',
+    naam: 'Leeftijdsbepaling Kauw',
+    korte_beschrijving: 'Via iriskleur en vleugelvedering',
+    bron: 'Demongin (2020) p.347–348',
+    type: 'survey',
+    start: 'iris_kleur',
+    stappen: {
+
+      iris_kleur: {
+        id: 'iris_kleur',
+        label: 'Iriskleur',
+        type: 'keuze',
+        vraag: 'Welke kleur heeft de iris?',
+        toelichting: 'De iriskleur is de betrouwbaarste leeftijdsindicator voor de Kauw en verandert met de leeftijd.',
+        opties: [
+          {
+            waarde: 'blauwgrijs',
+            label: 'Blauwgrijs (helder, gelijkmatig blauwgrijs)',
+            volgende: 'vleugelvedering',
+          },
+          {
+            waarde: 'bruin',
+            label: 'Egaal bruin (donkerbruin, niet gemengd)',
+            resultaat: {
+              waarde: '3',
+              label: '1e kj (herfst/winter)',
+              zeker: false,
+              uitleg: 'Egaal bruine iris is kenmerkend voor 1e kj in herfst en winter, nadat de juveniele blauwgrijze iris is veranderd. Bevestig via vleugelvedering: juv armpennen en tertials dof bruinzwart.',
+            },
+          },
+          {
+            waarde: 'variabel',
+            label: 'Gemengd of variabel (lichtbruin t/m grijswit, vuil wit)',
+            resultaat: {
+              waarde: '5',
+              label: '2e kj (lente)',
+              zeker: false,
+              uitleg: 'Wisselende iriskleur — lichtbruin, grijsachtig of zelfs (vuil) wit — is typisch voor de 2e-kalenderjaar vogel in het voorjaar, tijdens de transitie naar het witte adultiris. TF zijn doorgaans zwaar versleten (vanaf maart).',
+            },
+          },
+          {
+            waarde: 'wit',
+            label: 'Helder wit of zilvergrijs (egaal, niet gemengd)',
+            resultaat: {
+              waarde: '4',
+              label: 'Adult (na 2e kj)',
+              zeker: false,
+              uitleg: 'Heldere witte of zilvergrijs iris is kenmerkend voor adulte Kauwen (3e kalenderjaar en ouder). In lente zijn TF breed en vers, met groene of blauwe glans.',
+            },
+          },
+        ],
+      },
+
+      vleugelvedering: {
+        id: 'vleugelvedering',
+        label: 'Vleugelvedering',
+        type: 'keuze',
+        vraag: 'Hoe zijn de armpennen en tertials vergeleken met de dekveren?',
+        toelichting: 'Vergelijk kleur en glans van de armpennen en tertials met de kleine en middelste vleugeldekveren.',
+        opties: [
+          {
+            waarde: 'contrast',
+            label: 'Armpennen en tertials dof bruinzwart — contrasterend met gevormde kleine/middelste vleugeldekveren',
+            resultaat: {
+              waarde: '3',
+              label: '1e kj (zomer)',
+              zeker: true,
+              uitleg: 'Blauwgrijze iris in combinatie met bruinzwarte, niet-glanzende armpennen en tertials bevestigt een juveniele vogel in het eerste kalenderjaar (zomer na uitvliegen).',
+            },
+          },
+          {
+            waarde: 'geen_contrast',
+            label: 'Weinig of geen contrast — armpennen en tertials uniform glanzend',
+            resultaat: {
+              waarde: null,
+              fallback_waarde: 'U',
+              label: 'Niet eenduidig te bepalen',
+              zeker: false,
+              uitleg: 'Blauwgrijze iris met weinig vleugelcontrast is ongebruikelijk. Mogelijk gaat het om een vroeg 2e kj dat nog niet volledig van iris is gewisseld, of er is een fout in de iriskleurschatting. Overweeg opnieuw te beoordelen.',
+            },
+          },
+        ],
+      },
+
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: 'kauw-geslacht',
+    soorten: ['15600'],           // Corvus monedula (Kauw)
+    resultaat_veld: 'geslacht',
+    naam: 'Geslachtsbepaling Kauw',
+    korte_beschrijving: 'Via broedvlek (basisindicator); metingen populatieafhankelijk',
+    bron: 'Demongin (2020) p.347–348',
+    type: 'survey',
+    start: 'broedvlek',
+    stappen: {
+
+      broedvlek: {
+        id: 'broedvlek',
+        label: 'Broedvlek',
+        type: 'keuze',
+        vraag: 'Is er een broedvlek aanwezig?',
+        toelichting: 'Alleen ♀ vertoont een duidelijke broedvlek. Let op: ♂ kan een kleine broedvlek beperkt tot de buik hebben, minder gevasculariseerd — voel het verschil in textuur.',
+        uit_formulier: {
+          veld: 'broedvlek',
+          // Only auto-resolve 'nee' — cannot distinguish 'duidelijk' from 'klein' from the raw form value
+          transform: v => (!v || v === '0' || v === '') ? 'nee' : null,
+        },
+        opties: [
+          {
+            waarde: 'duidelijk',
+            label: 'Ja, duidelijk aanwezig (ook op borst of flanken)',
+            resultaat: {
+              waarde: 'F',
+              label: '♀ Vrouw',
+              zeker: true,
+              uitleg: 'Een duidelijke broedvlek is een zekere ♀-indicator.',
+            },
+          },
+          {
+            waarde: 'klein',
+            label: 'Klein, beperkt tot buik, minder gevasculariseerd',
+            volgende: 'cp_na_klein_bp',
+          },
+          {
+            waarde: 'nee',
+            label: 'Afwezig of niet vastgesteld',
+            volgende: 'cp_check',
+          },
+        ],
+      },
+
+      cp_na_klein_bp: {
+        id: 'cp_na_klein_bp',
+        label: 'CP (na kleine BP)',
+        type: 'keuze',
+        vraag: 'Is er een cloaca-uitstulping (CP) aanwezig?',
+        toelichting: 'Een kleine broedvlek beperkt tot de buik kan bij ♂ voorkomen. CP helpt het geslacht te bevestigen, maar kan soms moeilijk te beoordelen zijn.',
+        opties: [
+          {
+            waarde: 'ja',
+            label: 'Ja, CP aanwezig',
+            resultaat: {
+              waarde: 'M',
+              label: '♂ Man',
+              zeker: false,
+              uitleg: 'Kleine broedvlek + CP wijst op ♂. Een kleine buikbroedvlek met minder vascularisatie en CP is een ♂-indicator. Let op: CP kan moeilijk te beoordelen zijn.',
+            },
+          },
+          {
+            waarde: 'nee',
+            label: 'Nee / niet te beoordelen',
+            resultaat: {
+              waarde: null,
+              fallback_waarde: 'U',
+              label: 'Onzeker',
+              zeker: false,
+              uitleg: 'Een kleine buikbroedvlek zonder bevestiging via CP geeft geen uitsluitsel. Metingen kunnen helpen als de populatie (ondersoort) bekend is — zie de geslachtsnotities.',
+            },
+          },
+        ],
+      },
+
+      cp_check: {
+        id: 'cp_check',
+        label: 'CP (geen broedvlek)',
+        type: 'keuze',
+        vraag: 'Is er een cloaca-uitstulping (CP) aanwezig?',
+        toelichting: 'Zonder broedvlek is CP het enige veldkenmerk voor ♂. Dit kan soms lastig te beoordelen zijn (Demongin).',
+        opties: [
+          {
+            waarde: 'ja',
+            label: 'Ja, CP aanwezig',
+            resultaat: {
+              waarde: 'M',
+              label: '♂ Man',
+              zeker: false,
+              uitleg: 'Afwezigheid van broedvlek + aanwezigheid van CP wijst op ♂. Let op: CP kan moeilijk te beoordelen zijn.',
+            },
+          },
+          {
+            waarde: 'nee',
+            label: 'Nee / niet te beoordelen',
+            resultaat: {
+              waarde: null,
+              fallback_waarde: 'U',
+              label: 'Niet te bepalen',
+              zeker: false,
+              uitleg: 'Zonder broedvlek of CP is het geslacht niet betrouwbaar vast te stellen in het veld. Metingen kunnen bijdragen als de populatie (ondersoort) bekend is — zie de geslachtsnotities.',
             },
           },
         ],
