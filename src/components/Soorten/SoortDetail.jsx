@@ -395,7 +395,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
             if (!aid) return null;
             return (
               <a href="#determinatiehulp" className="sd-aid-link">
-                \u2193 {aid.naam}
+                {'\u2193'} {aid.naam}
               </a>
             );
           })()}
