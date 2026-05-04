@@ -626,9 +626,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
           {ondersoorten && (
             <>
               <div className="sd-section-divider" />
-              <span className="sd-section-label">
-                Ondersoorten <BronBadge bron={soort.bron_ondersoorten} />
-              </span>
+              <span className="sd-section-label">Ondersoorten</span>
+              <BronBadge bron={soort.bron_ondersoorten} />
               <p className="sd-notities-text sd-notities-text--compact" dangerouslySetInnerHTML={{ __html: renderMarkdown(ondersoorten) }} />
             </>
           )}
