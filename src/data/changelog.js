@@ -5,8 +5,7 @@ export const CHANGELOG = [
     versie: '1.76.0',
     datum: '2026-05-04',
     wijzigingen: [
-      'Soortenpagina Ring & Rui: "Veerstructuur" hernoemd naar "Vleugelkenmerken" en verplaatst vóór vleugelformule',
-      'Soortenpagina Ring & Rui: vleugelformule wordt nu als gestructureerde tabel weergegeven (kopteksten, kv-rijen, positieregels)',
+      'Soortenpagina Ring & Rui: vleugelkenmerken en vleugelformule samengevoegd tot één sectie "Vleugelformule" (kenmerken bovenaan, formule-details eronder)',
     ],
     wijzigingen_en: [
       'Species page Ring & Moult: "Feather structure" renamed to "Wing features" and moved before wing formula',
