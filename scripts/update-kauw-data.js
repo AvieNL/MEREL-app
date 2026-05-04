@@ -59,7 +59,7 @@ const updates = {
 
   // Pennen-structuur (JSON) → tabel "Vleugelpunt / Handpennen / Armpennen / Tertials / Staartpennen"
   pennen_structuur: {
-    wp:      '(3)4',
+    wp:      'P4 (soms P3)',
     hp:      10,
     hp_note: 'P1 kort',
     ap:      6,
