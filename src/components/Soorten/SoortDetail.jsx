@@ -531,26 +531,20 @@ export default function SoortDetail({ records, speciesOverrides }) {
             <pre className="sd-vleugelformule-tekst">{soort.rui_notities}</pre>
           </div>
         )}
-        {vleugelformule && (
-          <div className="sd-vleugelformule">
-            <span className="sd-label">Vleugelformule</span>
-            <pre className="sd-vleugelformule-tekst">{vleugelformule}</pre>
-          </div>
-        )}
         {soort.pennen_structuur && (() => {
           const ps = typeof soort.pennen_structuur === 'string'
             ? JSON.parse(soort.pennen_structuur)
             : soort.pennen_structuur;
           const rijen = [
-            ps.wp  ? { label: 'Vleugelpunt',  waarde: ps.wp,               note: null } : null,
-            ps.hp  ? { label: 'Handpennen',   waarde: ps.hp,               note: ps.hp_note || null } : null,
-            ps.ap  ? { label: 'Armpennen',    waarde: ps.ap,               note: ps.ap_note || null } : null,
-            ps.tp  ? { label: 'Tertials',     waarde: ps.tp,               note: ps.tp_note || null } : null,
-            ps.sp  ? { label: 'Staartpennen', waarde: ps.sp,               note: ps.sp_note || null } : null,
+            ps.wp  ? { label: 'Vleugelpunt',  waarde: ps.wp,  note: null              } : null,
+            ps.hp  ? { label: 'Handpennen',   waarde: ps.hp,  note: ps.hp_note || null } : null,
+            ps.ap  ? { label: 'Armpennen',    waarde: ps.ap,  note: ps.ap_note || null } : null,
+            ps.tp  ? { label: 'Tertials',     waarde: ps.tp,  note: ps.tp_note || null } : null,
+            ps.sp  ? { label: 'Staartpennen', waarde: ps.sp,  note: ps.sp_note || null } : null,
           ].filter(Boolean);
           return (
             <div className="sd-vleugelformule">
-              <span className="sd-label">Veerstructuur</span>
+              <span className="sd-label">Vleugelkenmerken</span>
               <dl className="sd-pennen-grid">
                 {rijen.map(r => (
                   <div key={r.label} className="sd-pennen-rij">
@@ -561,6 +555,72 @@ export default function SoortDetail({ records, speciesOverrides }) {
                     </dd>
                   </div>
                 ))}
+              </dl>
+            </div>
+          );
+        })()}
+        {vleugelformule && (() => {
+          // Parse vrije tekst → tabelrijen: header | rij (kv) | vol (breedte-vol)
+          const parseVF = (tekst) => {
+            const result = [];
+            for (const rawLine of tekst.split('\n')) {
+              const line = rawLine.trim();
+              if (!line) continue;
+              // Koptekst: regel eindigt op ':'
+              if (line.endsWith(':')) {
+                result.push({ type: 'kop', tekst: line.slice(0, -1) });
+                continue;
+              }
+              // Meerdere kv-paren gescheiden door '·'
+              if (line.includes('·')) {
+                const delen = line.split('·').map(d => d.trim()).filter(Boolean);
+                const alleKV = delen.every(d => { const ci = d.indexOf(':'); return ci > 0 && ci < d.length - 1; });
+                if (alleKV) {
+                  for (const d of delen) {
+                    const ci = d.indexOf(':');
+                    result.push({ type: 'rij', label: d.slice(0, ci).trim(), waarde: d.slice(ci + 1).trim() });
+                  }
+                  continue;
+                }
+                // Niet allemaal kv → opsplitsen als vol-rijen
+                for (const d of delen) result.push({ type: 'vol', tekst: d });
+                continue;
+              }
+              // Enkelvoudig kv-paar
+              const ci = line.indexOf(':');
+              if (ci > 0 && ci < line.length - 1) {
+                result.push({ type: 'rij', label: line.slice(0, ci).replace(/\s+/g, ' ').trim(), waarde: line.slice(ci + 1).trim() });
+                continue;
+              }
+              result.push({ type: 'vol', tekst: line });
+            }
+            return result;
+          };
+          const rijen = parseVF(vleugelformule);
+          return (
+            <div className="sd-vleugelformule">
+              <span className="sd-label">Vleugelformule</span>
+              <dl className="sd-pennen-grid sd-pennen-grid--vf">
+                {rijen.map((r, i) => {
+                  if (r.type === 'kop') return (
+                    <div key={i} className="sd-pennen-rij sd-pennen-rij--kop">
+                      <dt className="sd-pennen-koptekst" colSpan={2}>{r.tekst}</dt>
+                    </div>
+                  );
+                  if (r.type === 'vol') return (
+                    <div key={i} className="sd-pennen-rij sd-pennen-rij--vol">
+                      <dt className="sd-pennen-voltekst">{r.tekst}</dt>
+                    </div>
+                  );
+                  return (
+                    <div key={i} className="sd-pennen-rij">
+                      <dt className="sd-pennen-dt">{r.label}</dt>
+                      <dd className="sd-pennen-dd">
+                        <span className="sd-pennen-waarde">{r.waarde}</span>
+                      </dd>
+                    </div>
+                  );
+                })}
               </dl>
             </div>
           );

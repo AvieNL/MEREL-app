@@ -1397,6 +1397,40 @@
   color: var(--text-secondary);
 }
 
+/* Vleugelformule-variant: bredere labels */
+.sd-pennen-grid--vf .sd-pennen-dt {
+  min-width: 160px;
+}
+
+/* Koptekstrij (bijv. "WP-afstand per pen") */
+.sd-pennen-rij--kop {
+  padding-top: 8px;
+  border-bottom: none;
+}
+
+.sd-pennen-rij--kop + .sd-pennen-rij {
+  border-top: none;
+}
+
+.sd-pennen-koptekst {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Volledig brede rij (geen label) */
+.sd-pennen-rij--vol {
+  border-bottom: none;
+}
+
+.sd-pennen-voltekst {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  grid-column: 1 / -1;
+}
+
 /* ─── Biometrie bronvermelding ─────────────────────────────────────────── */
 .sd-bio-bron {
   margin: 8px 0 0 0;
