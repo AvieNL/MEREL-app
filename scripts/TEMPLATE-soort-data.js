@@ -18,6 +18,11 @@
  *     GEEN inline bron aan het einde.
  *
  * 5.  leeftijds_notities_nj — altijd '' (lege string) voor tabs-modus.
+ *     !! NOOIT inhoud in nj zetten !! Zodra nj inhoud heeft, valt SoortDetail
+ *     terug naar klassieke modus (renderMarkdown) en worden {{MM-MM}}-blokken
+ *     NIET verwerkt maar als ruwe tekst getoond.
+ *     Najaarblokken horen in vj met {{07-12}}-maandmarkers — renderLeeftijdMarkdown
+ *     filtert ze op basis van de gekozen tab (vj = jan–jun, nj = jul–dec).
  *
  * 6.  geslachts_notities_m/f — ALLEEN bullets (- item), geen kopregels,
  *     GEEN maten (staan in biometrie), GEEN inline bron.

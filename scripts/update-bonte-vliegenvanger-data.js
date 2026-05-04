@@ -70,17 +70,20 @@ const updates = {
     '**Juveniel [3]** Gedeeltelijke postrui juni–augustus: lichaamsveren, gewoonlijk alle kleine vleugeldekveren, geen tot alle middelste dekveren, 0–4 grote armpendekveren (gem. 2), uitzonderlijk 1 binnenste tertial. Gedeeltelijke prebroedselrui in de winter (zie Adult). 2e kj ruiet vaker een slagpen dan adulten.\n\n' +
     '**Adult [4/6]** Complete postbroedselrui van juni/juli tot augustus/september, soms met 1–4 binnenste slagpennen behouden (vaak asymmetrisch). Gedeeltelijke prebroedselrui januari–maart: lichaamsveren, kleine en middelste vleugeldekveren, grote armpendekveren (gem. 6, soms alle), tertials, soms binnenste slagpennen (max. 4), zelden tertiaaldekveren.',
 
-  // Leeftijdsbepaling najaar — {{MM-MM}} maandblokken
-  leeftijds_notities_nj:
+  // Leeftijdsbepaling — ALLES in leeftijds_notities_vj met {{MM-MM}} maandblokken.
+  // leeftijds_notities_nj = '' activeert de tabs-modus in SoortDetail.jsx.
+  // Najaarblokken: {{07-10}} → zichtbaar in NJ-tab (jul–dec filter).
+  // Voorjaarblokken: {{04-06}} → zichtbaar in VJ-tab (jan–jun filter).
+  // {{01-12}} → altijd zichtbaar in beide tabs.
+  leeftijds_notities_nj: '',
+
+  leeftijds_notities_vj:
     '{{07-10}}\n' +
     '**1e kj (EURING 3) — herfst:**\n' +
     'Gewoonlijk witte zoom op middelste tertial breed op buitenvlag maar zeer smal op binnenvlag, met inkeping bij schacht. Verruide binnenste grote armpendekveren met wittige rand (soms bruinachtig), zonder duidelijke bleke punt, centrum iets donkerder — contrasterende met juveniele dekveren met brede wittige punt (let op: 3 buitenste juv. dekveren met smallere buffrand kunnen lijken op ruigrens). Binnenzijde bovensnavel gewoonlijk bleekroosgrijzig (soms grijs vanaf september). Staartpennen vaak licht spits (maar soms afgerond), licht versleten. Iris donkergrijs zonder bruintint.\n\n' +
     '{{07-10}}\n' +
     '**Adult (EURING 4) — herfst:**\n' +
-    'Witte zoom op middelste tertial smal, gelijkmatig en doorlopend, zonder inkeping bij schacht. Binnenste grote armpendekveren smal omzoomd bleekbuff of wittig, zonder inkeping. Geen 2e witte vleugelbaan op middelste dekveren. Soms verbleeking en slijtage aan behouden slagpennen. Binnenzijde bovensnavel zwart of donkergrijs, soms grijs. Staartpennen gewoonlijk afgerond, vers en glad.',
-
-  // Leeftijdsbepaling voorjaar — {{MM-MM}} maandblokken
-  leeftijds_notities_vj:
+    'Witte zoom op middelste tertial smal, gelijkmatig en doorlopend, zonder inkeping bij schacht. Binnenste grote armpendekveren smal omzoomd bleekbuff of wittig, zonder inkeping. Geen 2e witte vleugelbaan op middelste dekveren. Soms verbleking en slijtage aan behouden slagpennen. Binnenzijde bovensnavel zwart of donkergrijs, soms grijs. Staartpennen gewoonlijk afgerond, vers en glad.\n\n' +
     '{{04-06}}\n' +
     '**2e kj ♂ M (EURING 5 M) — voorjaar:**\n' +
     'Duidelijk contrast tussen zwartachtige prebroedsel binnenste grote armpendekveren en middelste dekveren, en bruinachtige juveniele buitenste dekveren (m.n. handpendekveren en alula). Juv. buitenste dekveren versleten en verbleekt; juv. GC4 met vrij brede bleke punt of geheel versleten. Handpendekveren bruinachtig, iets bleker dan adult, vrij spits en versleten. Handpennen vaak bruinig en meer versleten dan adult. Als juv. TF nog aanwezig: bruingrijs of dof bruinzwart, duidelijk versleten, soms spits; binnenvlag TF6 gewoonlijk met duidelijk wit venster.\n\n' +
