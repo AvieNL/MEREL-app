@@ -68,18 +68,22 @@ const updates = {
     '**Adult [4]** Complete postbroedselrui van half-mei/begin-juli tot half-augustus/half-oktober. Rui van 2e kj begint iets eerder dan die van adulten.\n\n' +
     '*Bron: Demongin (2020) p.347–348*',
 
-  leeftijds_notities_nj:
-    '**Juveniel / 1e kj [3J]** (zomer–vroeg najaar)\n' +
-    'Kruin bruinzwart, weinig glans, weinig contrast met donkere nek. Iris blauwgrijs. Dekveren en tertials vers, maar geen metaalglans.\n\n' +
-    '**1e kj [3J]** (herfst–winter)\n' +
-    'Iris egaal bruin. Juveniele armpennen, grote armpendekveren en tertials dof bruinzwart met zwakke purpertint; contrasterend met gevormde kleine en middelste vleugeldekveren. TF smaller en afgeronder dan adult, donkergrijs-bruin met beperkte metaalglans.\n\n' +
-    '*Bron: Demongin (2020) p.347–348*',
+  // Tabs-formaat: leeftijds_notities_nj leeg laten, alles in vj met {{MM-MM}}-maandblokken
+  leeftijds_notities_nj: '',
 
   leeftijds_notities_vj:
-    '**2e kj lente [3/5]** (maart–juni)\n' +
+    '{{06-10}}\n' +
+    '**1e kj (EURING 3) — na uitvliegen (zomer):**\n' +
+    'Iris blauwgrijs (helder, gelijkmatig). Kruin bruinzwart met weinig glans en weinig contrast met de donkere nek. Vers juveniel verenkleed; dekveren zonder of met minimale metaalglans.\n\n' +
+    '{{09-03}}\n' +
+    '**1e kj (EURING 3) — herfst en winter:**\n' +
+    'Iris egaal bruin (donkerbruin, niet gemengd). Juveniele armpennen, grote armpendekveren en tertials dof bruinzwart met zwakke purpertint in vers kleed — contrasterend met gevormde kleine en middelste vleugeldekveren. TF smaller en afgeronder dan bij adult, donkergrijs-bruin met beperkte metaalglans.\n\n' +
+    '{{03-07}}\n' +
+    '**2e kj lente (EURING 5):**\n' +
     'Iris variabel: wisselend lichtbruin, grijsachtig of zelfs (vuil) wit — nog niet eenduidig zilvergrijs. Juveniele armpennen en tertials zwaar versleten (zichtbaar vanaf maart). Juveniele S en grote armpendekveren bruinzwart, contrasterende met gevormde dekveren.\n\n' +
-    '**Adult [4/6]** (lente)\n' +
-    'Iris helder wit of zilvergrijs. Geen contrast in vleugel: armpennen, tertials en dekveren uniform zwart met sterke paarsblauwe of blauwgroene glans. TF breed en fris, zwartachtig met groene of blauwe glans; begint te slijten pas vanaf eind-mei (met name ♀).\n\n' +
+    '{{01-12}}\n' +
+    '**Adult (EURING 4/6):**\n' +
+    'Iris helder wit of zilvergrijs. Geen contrast in vleugel: armpennen, tertials en dekveren uniform zwart met sterke paarsblauwe of blauwgroene glans. TF breed, zwartachtig met groene of blauwe glans; in lente vrij fris en begint te slijten pas vanaf eind-mei (met name ♀).\n\n' +
     '*Bron: Demongin (2020) p.347–348*',
 
   geslachts_notities_m:
