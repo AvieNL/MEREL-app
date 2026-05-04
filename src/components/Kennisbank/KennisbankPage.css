@@ -320,6 +320,7 @@
   object-fit: cover;
   display: block;
   background: var(--bg-primary);
+  overflow: hidden;
 }
 
 .kb-soort-info {

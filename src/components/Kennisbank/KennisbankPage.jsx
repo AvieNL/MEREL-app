@@ -146,24 +146,32 @@ function SoortenBankSectie({ soorten, onNavigate }) {
     <section className="kb-categorie">
       <h3 className="kb-categorie-titel">Soorten ({soorten.length})</h3>
       <div className="kb-soorten-grid">
-        {soorten.map(soort => (
-          <button
-            key={soort.naam_nl}
-            className="kb-soort-kaart"
-            onClick={() => onNavigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
-          >
-            <img
-              className="kb-soort-foto"
-              src={soort.foto}
-              alt={soort.naam_nl}
-              loading="lazy"
-            />
-            <div className="kb-soort-info">
-              <span className="kb-soort-naam">{soort.naam_nl}</span>
-              <span className="kb-soort-latijn">{soort.naam_lat}</span>
-            </div>
-          </button>
-        ))}
+        {soorten.map(soort => {
+          const c = soort.foto_crop ?? { x: 50, y: 50, zoom: 1 };
+          return (
+            <button
+              key={soort.naam_nl}
+              className="kb-soort-kaart"
+              onClick={() => onNavigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
+            >
+              <img
+                className="kb-soort-foto"
+                src={soort.foto}
+                alt={soort.naam_nl}
+                loading="lazy"
+                style={{
+                  objectPosition: `${c.x}% ${c.y}%`,
+                  transform: c.zoom !== 1 ? `scale(${c.zoom})` : undefined,
+                  transformOrigin: `${c.x}% ${c.y}%`,
+                }}
+              />
+              <div className="kb-soort-info">
+                <span className="kb-soort-naam">{soort.naam_nl}</span>
+                <span className="kb-soort-latijn">{soort.naam_lat}</span>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </section>
   );
@@ -233,23 +241,36 @@ export default function KennisbankPage() {
                 <section className="kb-categorie">
                   <h3 className="kb-categorie-titel">Soorten ({gefilterdSoorten.length})</h3>
                   <div className="kb-soorten-grid">
-                    {gefilterdSoorten.map(soort => (
-                      <button
-                        key={soort.naam_nl}
-                        className="kb-soort-kaart"
-                        onClick={() => navigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
-                      >
-                        {soort.foto ? (
-                          <img className="kb-soort-foto" src={soort.foto} alt={soort.naam_nl} loading="lazy" />
-                        ) : (
-                          <div className="kb-soort-foto kb-soort-foto--leeg">🐦</div>
-                        )}
-                        <div className="kb-soort-info">
-                          <span className="kb-soort-naam">{soort.naam_nl}</span>
-                          <span className="kb-soort-latijn">{soort.naam_lat}</span>
-                        </div>
-                      </button>
-                    ))}
+                    {gefilterdSoorten.map(soort => {
+                      const c = soort.foto_crop ?? { x: 50, y: 50, zoom: 1 };
+                      return (
+                        <button
+                          key={soort.naam_nl}
+                          className="kb-soort-kaart"
+                          onClick={() => navigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
+                        >
+                          {soort.foto ? (
+                            <img
+                              className="kb-soort-foto"
+                              src={soort.foto}
+                              alt={soort.naam_nl}
+                              loading="lazy"
+                              style={{
+                                objectPosition: `${c.x}% ${c.y}%`,
+                                transform: c.zoom !== 1 ? `scale(${c.zoom})` : undefined,
+                                transformOrigin: `${c.x}% ${c.y}%`,
+                              }}
+                            />
+                          ) : (
+                            <div className="kb-soort-foto kb-soort-foto--leeg">🐦</div>
+                          )}
+                          <div className="kb-soort-info">
+                            <span className="kb-soort-naam">{soort.naam_nl}</span>
+                            <span className="kb-soort-latijn">{soort.naam_lat}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </section>
               )}
