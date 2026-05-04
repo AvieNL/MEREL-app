@@ -126,7 +126,13 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const [nestenOpen, setNestenOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [fotoUploading, setFotoUploading] = useState(false);
+  const [fotoEditMode, setFotoEditMode] = useState(false);
+  const [editFoto, setEditFoto] = useState(null);
+  const [editCrop, setEditCrop] = useState({ x: 50, y: 50, zoom: 1 });
+  const [isDragging, setIsDragging] = useState(false);
   const fotoInputRef = useRef(null);
+  const previewRef = useRef(null);
+  const dragRef = useRef(null);
   const [leeftijdSeizoen, setLeeftijdSeizoen] = useState(
     () => new Date().getMonth() + 1 <= 6 ? 'vj' : 'nj'
   );
@@ -314,7 +320,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
   };
 
   // Foto upload helpers (admin only)
-  function resizeImage(file, maxWidth = 400) {
+  function resizeImage(file, maxWidth = 600) {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = e => {
@@ -326,7 +332,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
           const canvas = document.createElement('canvas');
           canvas.width = w; canvas.height = h;
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          resolve(canvas.toDataURL('image/jpeg', 0.8));
+          resolve(canvas.toDataURL('image/jpeg', 0.82));
         };
         img.src = e.target.result;
       };
@@ -334,13 +340,65 @@ export default function SoortDetail({ records, speciesOverrides }) {
     });
   }
 
-  async function handleFotoUpload(e) {
+  // Bestandskiezer → enter edit mode met nieuwe foto
+  async function handleFotoFileSelect(e) {
     const file = e.target.files?.[0];
-    if (!file || !soort) return;
+    if (!file) return;
+    const dataUrl = await resizeImage(file);
+    setEditFoto(dataUrl);
+    setEditCrop({ x: 50, y: 50, zoom: 1 });
+    setFotoEditMode(true);
+    if (fotoInputRef.current) fotoInputRef.current.value = '';
+  }
+
+  // Klik op foto-div (admin): enter edit mode
+  function handleFotoClick() {
+    if (!isAdmin) return;
+    if (foto && !fotoEditMode) {
+      // Bestaande foto → bewerk bijsnijding (gebruik huidige crop als startpunt)
+      setEditFoto(foto);
+      setEditCrop(fotoCrop);
+      setFotoEditMode(true);
+    } else if (!foto) {
+      // Geen foto → open bestandskiezer
+      fotoInputRef.current?.click();
+    }
+  }
+
+  // Drag om positie aan te passen
+  function getDragPos(e) {
+    if (e.touches) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+  }
+
+  function handleDragStart(e) {
+    e.preventDefault();
+    const pos = getDragPos(e);
+    dragRef.current = { startX: pos.x, startY: pos.y, startCropX: editCrop.x, startCropY: editCrop.y };
+    setIsDragging(true);
+  }
+
+  function handleDragMove(e) {
+    if (!isDragging || !dragRef.current || !previewRef.current) return;
+    const { startX, startY, startCropX, startCropY } = dragRef.current;
+    const pos = getDragPos(e);
+    const rect = previewRef.current.getBoundingClientRect();
+    const sensitivity = 100 / editCrop.zoom;
+    const newX = Math.max(0, Math.min(100, startCropX - ((pos.x - startX) / rect.width) * sensitivity));
+    const newY = Math.max(0, Math.min(100, startCropY - ((pos.y - startY) / rect.height) * sensitivity));
+    setEditCrop(prev => ({ ...prev, x: newX, y: newY }));
+  }
+
+  function handleDragEnd() {
+    setIsDragging(false);
+    dragRef.current = null;
+  }
+
+  // Opslaan naar Supabase
+  async function handleFotoSave() {
+    if (!soort || !editFoto) return;
     setFotoUploading(true);
     try {
-      const dataUrl = await resizeImage(file, 400);
-      // Haal huidige data-blob op
       const { data: row, error: fetchErr } = await supabase
         .from('species')
         .select('data')
@@ -348,26 +406,25 @@ export default function SoortDetail({ records, speciesOverrides }) {
         .single();
       if (fetchErr) throw fetchErr;
       const existingData = row?.data ?? {};
-      const newData = {
-        ...existingData,
-        foto: dataUrl,
-        foto_crop: { x: 50, y: 50, zoom: 1 },
-      };
       const { error: updateErr } = await supabase
         .from('species')
-        .update({ data: newData })
+        .update({ data: { ...existingData, foto: editFoto, foto_crop: editCrop } })
         .eq('naam_nl', soort.naam_nl);
       if (updateErr) throw updateErr;
-      // Force-ververs de species-cache
       await pullSpeciesIfNeeded(true);
+      setFotoEditMode(false);
     } catch (err) {
-      console.error('Foto upload mislukt:', err.message);
-      alert('Foto uploaden mislukt: ' + err.message);
+      console.error('Foto opslaan mislukt:', err.message);
+      alert('Foto opslaan mislukt: ' + err.message);
     } finally {
       setFotoUploading(false);
-      // Reset file input
-      if (fotoInputRef.current) fotoInputRef.current.value = '';
     }
+  }
+
+  function handleFotoCancel() {
+    setFotoEditMode(false);
+    setEditFoto(null);
+    setEditCrop({ x: 50, y: 50, zoom: 1 });
   }
 
   return (
@@ -378,47 +435,38 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
       {/* Hero */}
       <div className="sd-hero">
-        <div className="sd-foto-wrap">
-          <div className="sd-foto">
-            {foto ? (
-              <img
-                src={foto}
-                alt={soort.naam_nl}
-                style={{
-                  width: '100%', height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: `${fotoCrop.x}% ${fotoCrop.y}%`,
-                  transform: fotoCrop.zoom !== 1 ? `scale(${fotoCrop.zoom})` : undefined,
-                  transformOrigin: `${fotoCrop.x}% ${fotoCrop.y}%`,
-                  pointerEvents: 'none', userSelect: 'none', display: 'block',
-                }}
-              />
-            ) : (
-              <div className="sd-foto-placeholder">
-                <span>🐦</span>
-              </div>
-            )}
-          </div>
-          {isAdmin && (
-            <>
-              <button
-                className={`sd-foto-upload-btn${fotoUploading ? ' sd-foto-upload-btn--busy' : ''}`}
-                title={foto ? 'Foto vervangen' : 'Foto toevoegen'}
-                disabled={fotoUploading}
-                onClick={() => fotoInputRef.current?.click()}
-              >
-                {fotoUploading ? '…' : '📷'}
-              </button>
-              <input
-                ref={fotoInputRef}
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleFotoUpload}
-              />
-            </>
+        <div
+          className={`sd-foto${isAdmin ? ' sd-foto--editable' : ''}`}
+          onClick={handleFotoClick}
+          title={isAdmin ? (foto ? 'Klik om foto te bewerken' : 'Klik om foto toe te voegen') : undefined}
+        >
+          {foto ? (
+            <img
+              src={foto}
+              alt={soort.naam_nl}
+              style={{
+                width: '100%', height: '100%',
+                objectFit: 'cover',
+                objectPosition: `${fotoCrop.x}% ${fotoCrop.y}%`,
+                transform: fotoCrop.zoom !== 1 ? `scale(${fotoCrop.zoom})` : undefined,
+                transformOrigin: `${fotoCrop.x}% ${fotoCrop.y}%`,
+                pointerEvents: 'none', userSelect: 'none', display: 'block',
+              }}
+            />
+          ) : (
+            <div className="sd-foto-placeholder">
+              <span>🐦</span>
+              {isAdmin && <span className="sd-foto-hint">+ foto</span>}
+            </div>
           )}
         </div>
+        <input
+          ref={fotoInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={handleFotoFileSelect}
+        />
         <div className="sd-hero-info">
           <h2 className="sd-title">
             {displayNaam}
@@ -453,6 +501,64 @@ export default function SoortDetail({ records, speciesOverrides }) {
           >⟳</button>
         </div>
       </div>
+
+      {/* Foto bewerken (admin) */}
+      {isAdmin && fotoEditMode && editFoto && (
+        <div className="sd-foto-edit-panel">
+          <div
+            ref={previewRef}
+            className={`sd-foto-preview${isDragging ? ' sd-foto-dragging' : ''}`}
+            onMouseDown={handleDragStart}
+            onMouseMove={handleDragMove}
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            onTouchStart={handleDragStart}
+            onTouchMove={handleDragMove}
+            onTouchEnd={handleDragEnd}
+          >
+            <img
+              src={editFoto}
+              alt="voorvertoning"
+              style={{
+                width: '100%', height: '100%',
+                objectFit: 'cover',
+                objectPosition: `${editCrop.x}% ${editCrop.y}%`,
+                transform: editCrop.zoom !== 1 ? `scale(${editCrop.zoom})` : undefined,
+                transformOrigin: `${editCrop.x}% ${editCrop.y}%`,
+                pointerEvents: 'none', userSelect: 'none', display: 'block',
+              }}
+            />
+            <div className="sd-foto-drag-hint">↕ Sleep om te positioneren</div>
+          </div>
+          <div className="sd-foto-edit-controls">
+            <div className="sd-foto-zoom-row">
+              <span className="sd-foto-zoom-label">Zoom</span>
+              <input
+                type="range" min="1" max="3" step="0.05"
+                value={editCrop.zoom}
+                onChange={e => setEditCrop(prev => ({ ...prev, zoom: parseFloat(e.target.value) }))}
+                className="sd-foto-zoom-slider"
+              />
+              <span className="sd-foto-zoom-val">{editCrop.zoom.toFixed(2)}×</span>
+            </div>
+            <div className="sd-foto-edit-btns">
+              <button className="sd-foto-btn" onClick={() => fotoInputRef.current?.click()}>
+                📷 Andere foto
+              </button>
+              <button
+                className="sd-foto-btn sd-foto-btn--save"
+                disabled={fotoUploading}
+                onClick={handleFotoSave}
+              >
+                {fotoUploading ? 'Bezig…' : 'Opslaan'}
+              </button>
+              <button className="sd-foto-btn sd-foto-btn--cancel" onClick={handleFotoCancel}>
+                Annuleren
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Geslachtsbepaling */}
       {(geslachtsM || geslachtsF) && (
