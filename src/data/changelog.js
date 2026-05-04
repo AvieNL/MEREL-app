@@ -1,6 +1,22 @@
-export const VERSIE = '1.75.0';
+export const VERSIE = '1.76.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.76.0',
+    datum: '2026-05-04',
+    wijzigingen: [
+      'Soortenpagina: nieuwe sectie "Veerstructuur" in Ring & Rui toont vleugelpunt, aantal handpennen/armpennen/tertials/staartpennen per soort',
+      'Roek: veerstructuur ingevuld (WP P4 (soms P3), 10 HP P1 kort, 6 AP, 5 tertials, 12 SP)',
+    ],
+    wijzigingen_en: [
+      'Species page: new "Feather structure" section in Ring & Moult shows wing point, number of primaries/secondaries/tertials/tail feathers per species',
+      'Rook: feather structure filled in (WP P4 (sometimes P3), 10 PP P1 short, 6 SS, 5 tertials, 12 TP)',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: neuer Abschnitt "Federstruktur" in Ring & Mauser zeigt Flügelspitze, Anzahl Hand-/Armschwingen/Tertialen/Schwanzfedern je Art',
+      'Saatkrähe: Federstruktur eingetragen (Flügelspitze P4 (manchmal P3), 10 HS P1 kurz, 6 AS, 5 Tertialen, 12 Steuerfedern)',
+    ],
+  },
   {
     versie: '1.75.0',
     datum: '2026-05-03',

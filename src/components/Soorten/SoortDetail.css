@@ -1351,6 +1351,52 @@
   line-height: 1.6;
 }
 
+/* ─── Veerstructuur-grid ───────────────────────────────────────────────── */
+.sd-pennen-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 6px 0 0 15px;
+  padding: 0;
+}
+
+.sd-pennen-rij {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+.sd-pennen-rij:last-child {
+  border-bottom: none;
+}
+
+.sd-pennen-dt {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  min-width: 90px;
+  flex-shrink: 0;
+}
+
+.sd-pennen-dd {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+}
+
+.sd-pennen-waarde {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sd-pennen-note {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
 /* ─── Biometrie bronvermelding ─────────────────────────────────────────── */
 .sd-bio-bron {
   margin: 8px 0 0 0;

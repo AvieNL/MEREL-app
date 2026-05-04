@@ -537,6 +537,34 @@ export default function SoortDetail({ records, speciesOverrides }) {
             <pre className="sd-vleugelformule-tekst">{vleugelformule}</pre>
           </div>
         )}
+        {soort.pennen_structuur && (() => {
+          const ps = typeof soort.pennen_structuur === 'string'
+            ? JSON.parse(soort.pennen_structuur)
+            : soort.pennen_structuur;
+          const rijen = [
+            ps.wp  ? { label: 'Vleugelpunt',  waarde: ps.wp,               note: null } : null,
+            ps.hp  ? { label: 'Handpennen',   waarde: ps.hp,               note: ps.hp_note || null } : null,
+            ps.ap  ? { label: 'Armpennen',    waarde: ps.ap,               note: ps.ap_note || null } : null,
+            ps.tp  ? { label: 'Tertials',     waarde: ps.tp,               note: ps.tp_note || null } : null,
+            ps.sp  ? { label: 'Staartpennen', waarde: ps.sp,               note: ps.sp_note || null } : null,
+          ].filter(Boolean);
+          return (
+            <div className="sd-vleugelformule">
+              <span className="sd-label">Veerstructuur</span>
+              <dl className="sd-pennen-grid">
+                {rijen.map(r => (
+                  <div key={r.label} className="sd-pennen-rij">
+                    <dt className="sd-pennen-dt">{r.label}</dt>
+                    <dd className="sd-pennen-dd">
+                      <span className="sd-pennen-waarde">{r.waarde}</span>
+                      {r.note && <span className="sd-pennen-note">{r.note}</span>}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Namen + Biometrie naast elkaar */}
