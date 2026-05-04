@@ -1,6 +1,19 @@
-export const VERSIE = '1.80.1';
+export const VERSIE = '1.81.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.81.0',
+    datum: '2026-05-04',
+    wijzigingen: [
+      'Bonte Vliegenvanger (EURING 13490): biometrie, ruitiming, leeftijds- en geslachtsbepaling, ID-kenmerken, ondersoorten en vangst-checklist toegevoegd (Demongin p.317–320)',
+    ],
+    wijzigingen_en: [
+      'Pied Flycatcher (EURING 13490): biometrics, moult, age/sex criteria, ID features, subspecies and catch checklist added (Demongin p.317–320)',
+    ],
+    wijzigingen_de: [
+      'Trauerschnäpper (EURING 13490): Biometrie, Mauser, Alters-/Geschlechtsbestimmung, ID-Merkmale, Unterarten und Fangcheckliste hinzugefügt (Demongin S.317–320)',
+    ],
+  },
   {
     versie: '1.80.1',
     datum: '2026-05-04',
