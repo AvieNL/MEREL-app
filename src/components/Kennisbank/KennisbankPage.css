@@ -316,11 +316,13 @@
 
 .kb-soort-foto {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  display: block;
-  background: var(--bg-primary);
+  aspect-ratio: 1 / 1;
   overflow: hidden;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
 }
 
 .kb-soort-info {

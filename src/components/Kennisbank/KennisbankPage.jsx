@@ -154,17 +154,21 @@ function SoortenBankSectie({ soorten, onNavigate }) {
               className="kb-soort-kaart"
               onClick={() => onNavigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
             >
-              <img
-                className="kb-soort-foto"
-                src={soort.foto}
-                alt={soort.naam_nl}
-                loading="lazy"
-                style={{
-                  objectPosition: `${c.x}% ${c.y}%`,
-                  transform: c.zoom !== 1 ? `scale(${c.zoom})` : undefined,
-                  transformOrigin: `${c.x}% ${c.y}%`,
-                }}
-              />
+              <div className="kb-soort-foto">
+                <img
+                  src={soort.foto}
+                  alt={soort.naam_nl}
+                  loading="lazy"
+                  style={{
+                    width: '100%', height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: `${c.x}% ${c.y}%`,
+                    transform: c.zoom !== 1 ? `scale(${c.zoom})` : undefined,
+                    transformOrigin: `${c.x}% ${c.y}%`,
+                    display: 'block', pointerEvents: 'none',
+                  }}
+                />
+              </div>
               <div className="kb-soort-info">
                 <span className="kb-soort-naam">{soort.naam_nl}</span>
                 <span className="kb-soort-latijn">{soort.naam_lat}</span>
@@ -249,21 +253,23 @@ export default function KennisbankPage() {
                           className="kb-soort-kaart"
                           onClick={() => navigate(`/kennis/soorten/${encodeURIComponent(soort.naam_nl)}`)}
                         >
-                          {soort.foto ? (
-                            <img
-                              className="kb-soort-foto"
-                              src={soort.foto}
-                              alt={soort.naam_nl}
-                              loading="lazy"
-                              style={{
-                                objectPosition: `${c.x}% ${c.y}%`,
-                                transform: c.zoom !== 1 ? `scale(${c.zoom})` : undefined,
-                                transformOrigin: `${c.x}% ${c.y}%`,
-                              }}
-                            />
-                          ) : (
-                            <div className="kb-soort-foto kb-soort-foto--leeg">🐦</div>
-                          )}
+                          <div className={`kb-soort-foto${soort.foto ? '' : ' kb-soort-foto--leeg'}`}>
+                            {soort.foto ? (
+                              <img
+                                src={soort.foto}
+                                alt={soort.naam_nl}
+                                loading="lazy"
+                                style={{
+                                  width: '100%', height: '100%',
+                                  objectFit: 'cover',
+                                  objectPosition: `${c.x}% ${c.y}%`,
+                                  transform: c.zoom !== 1 ? `scale(${c.zoom})` : undefined,
+                                  transformOrigin: `${c.x}% ${c.y}%`,
+                                  display: 'block', pointerEvents: 'none',
+                                }}
+                              />
+                            ) : '🐦'}
+                          </div>
                           <div className="kb-soort-info">
                             <span className="kb-soort-naam">{soort.naam_nl}</span>
                             <span className="kb-soort-latijn">{soort.naam_lat}</span>
