@@ -57,9 +57,13 @@ const updates = {
   // Overige velden
   eerste_broedleeftijd: '3Y',
 
-  // Vleugelformule — geen bron in tekst (bron_ring)
+  // Vleugelformule — tabelformaat: key: value per regel, meerdere met · gescheiden
   vleugelformule:
-    'WP = (3)4; 10 P (P1 kort); 6 S + 4 T; 12 TF',
+    'WP: (3)4\n' +
+    'HP: 10 (P1 kort)\n' +
+    'S: 6\n' +
+    'T: 4\n' +
+    'TF: 12',
 
   // Ruitiming — geen bron in tekst (bron_ring), geen markdown-titels met ** hier
   rui_notities:
@@ -83,17 +87,15 @@ const updates = {
     '**Adult (EURING 4/6):**\n' +
     'Iris helder wit of zilvergrijs. Geen contrast in vleugel: armpennen, tertials en dekveren uniform zwart met sterke paarsblauwe of blauwgroene glans. TF breed, zwartachtig met groene of blauwe glans; in lente vrij fris en begint te slijten pas vanaf eind-mei (met name ♀ V).',
 
-  // Geslachtsbepaling — geen maten (staan in biometrie), geen inline bron, met bullets
+  // Geslachtsbepaling — geen maten (staan in biometrie), geen inline bron, geen kopregels, met bullets
   geslachts_notities_m:
-    '**♂ M — Kenmerken:**\n' +
     '- Geen zekere kleurmarkering; niet betrouwbaar op kleur of tekening alleen te herkennen.\n' +
     '- Gebruik metingen als populatie (ondersoort) bekend is.\n' +
     '- CP (broedknobbel) soms aanwezig.',
 
   geslachts_notities_f:
-    '**♀ V — Kenmerken:**\n' +
-    '- Duidelijke broedvlek is een betrouwbare ♀-indicator.\n' +
-    '- ♂ kan kleine broedvlek beperkt tot buik hebben (minder gevasculariseerd — voel het verschil).\n' +
+    '- Duidelijke broedvlek is een betrouwbare ♀ V-indicator.\n' +
+    '- ♂ M kan kleine broedvlek beperkt tot buik hebben (minder gevasculariseerd — voel het verschil).\n' +
     '- In N en O Europa (soemmerringii): ♀ V heeft gemiddeld minder bleke en minder duidelijke kraag dan ♂ M — alleen bruikbaar bij directe vergelijking binnen een paar.',
 
   // ID-kenmerken — tabelformaat via **Vergelijking ...:** prefix, geen inline bron
