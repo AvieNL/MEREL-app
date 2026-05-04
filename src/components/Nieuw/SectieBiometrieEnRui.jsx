@@ -252,9 +252,21 @@ export default function SectieBiometrieEnRui() {
             <p className="bio-subsection-label">{t('form_subsection_bill_other')}</p>
             <div className="form-row">
               <div className="form-group">
-                <label>{t('form_bill_depth')} <code className="field-key-debug">snavel_diepte</code></label>
-                <input type="text" inputMode="decimal" value={form.snavel_diepte}
-                  onChange={e => update('snavel_diepte', e.target.value)} />
+                <label>{t('form_bill_depth_base')} <code className="field-key-debug">snavel_hoogte_basis</code></label>
+                <input type="text" inputMode="decimal" value={form.snavel_hoogte_basis}
+                  onChange={e => update('snavel_hoogte_basis', e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>{t('form_bill_depth_nostril')} <code className="field-key-debug">snavel_hoogte_neusgat</code></label>
+                <input type="text" inputMode="decimal" value={form.snavel_hoogte_neusgat}
+                  onChange={e => update('snavel_hoogte_neusgat', e.target.value)} />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>{t('form_bill_depth_gonys')} <code className="field-key-debug">snavel_hoogte_gonys</code></label>
+                <input type="text" inputMode="decimal" value={form.snavel_hoogte_gonys}
+                  onChange={e => update('snavel_hoogte_gonys', e.target.value)} />
               </div>
               <div className="form-group">
                 <label>{t('form_bill_width')} <code className="field-key-debug">snavel_breedte</code></label>

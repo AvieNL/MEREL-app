@@ -146,13 +146,21 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
     // WingNotStraightFlat / WingNotStraightNotFlat: niet in onze app
     b('PrimaryLength',                bioDecimal(r.handpenlengte));
     b('TailLength',                   bioDecimal(r.staartlengte));
-    // TailRounding: niet in onze app (staart_verschil = verschil langste/kortste pen, niet de Griel-code)
+    // TailRounding: abs verschil langste/kortste staartveer — uit tf1/tf6 of staart_verschil
+    const tailRounding = (() => {
+      const t1 = parseFloat(r.tf1);
+      const t6 = parseFloat(r.tf6);
+      if (!isNaN(t1) && !isNaN(t6)) return String(Math.abs(t1 - t6));
+      return r.staart_verschil ? String(r.staart_verschil) : null;
+    })();
+    b('TailRounding',                 tailRounding && parseFloat(tailRounding) > 0 ? tailRounding : null);
     b('BillLengthFrontalEdgeFeathers', bioDecimal(r.snavel_veren));
     b('BillLengthBendMandibleForehead', bioDecimal(r.snavel_schedel));
     b('BillLengthFrontalEdgeCere',    bioDecimal(r.snavel_cere));
     b('BillLengthDistalEdgeNostril',  bioDecimal(r.snavel_neusgat));
-    b('BillDepthBase',                bioDecimal(r.snavel_diepte));
-    // BillDepthInnerEdgeNostril / BillDepthGonydealAngle: niet in onze app
+    b('BillDepthBase',                bioDecimal(r.snavel_hoogte_basis ?? r.snavel_diepte));  // snavel_diepte = legacy veldnaam
+    b('BillDepthInnerEdgeNostril',    bioDecimal(r.snavel_hoogte_neusgat));
+    b('BillDepthGonydealAngle',       bioDecimal(r.snavel_hoogte_gonys));
     b('TarsusLengthMaximum',          bioDecimal(r.tarsus_lengte));
     // TarsusLengthMinimum: niet in onze app
     b('TarsusLengthToe',              bioDecimal(r.tarsus_teen));
@@ -165,9 +173,16 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
     b('WeighingTime',                 r.weegtijd ? toWeighingTime(r.weegtijd) : null);
     // FatScoreKaiser / FatScoreGosler: niet in onze app
     b('FatScoreBusse',                r.vet !== undefined && r.vet !== '' ? String(r.vet) : null);
-    // PrimaryMoultShort / PrimaryScore / Moult / PrimaryMoult: niet in onze app
+    // PrimaryMoultShort: niet in onze app
+    // PrimaryScore: handpen_score (int 0–50)
+    b('PrimaryScore',                 r.handpen_score !== undefined && r.handpen_score !== '' ? String(parseInt(r.handpen_score, 10)) : null);
+    // Moult: niet in onze app
+    // PrimaryMoult: 10 chars [012345VX], afgeleid van ruikaart P1–P10
+    b('PrimaryMoult',                 r.primary_moult && r.primary_moult.length === 10 && /^[012345VX]{10}$/i.test(r.primary_moult) ? r.primary_moult.toUpperCase() : null);
     b('BodyMoult',                    r.rui_lichaam || null);
-    // PlumageCode / OldGreaterCoverts / Alula: niet in onze app
+    // PlumageCode / Alula: niet in onze app
+    // OldGreaterCoverts: oude_dekveren (int 0–10)
+    b('OldGreaterCoverts',            r.oude_dekveren !== undefined && r.oude_dekveren !== '' ? String(parseInt(r.oude_dekveren, 10)) : null);
     b('SexingMethod',                 r.geslachtsbepaling || null);
     b('Handicap',                     r.handicap || null);
     b('Cloaca',                       r.cloaca || null);

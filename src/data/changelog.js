@@ -1,6 +1,27 @@
-export const VERSIE = '1.78.0';
+export const VERSIE = '1.79.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.79.0',
+    datum: '2026-05-04',
+    wijzigingen: [
+      'Griel XML-export: PrimaryMoult (ruikaart P1–P10), PrimaryScore (handpen_score) en OldGreaterCoverts (oude_dekveren) worden nu geëxporteerd',
+      'Griel XML-export: TailRounding wordt nu automatisch berekend uit TF1/TF6 of staart_verschil',
+      'Griel XML-export: BillDepthBase, BillDepthInnerEdgeNostril en BillDepthGonydealAngle toegevoegd',
+      'Ringformulier: snavel_diepte hernoemd naar snavel_hoogte_basis, twee nieuwe snavelhoogte-velden toegevoegd (neusgat, gonys)',
+    ],
+    wijzigingen_en: [
+      'Griel XML export: PrimaryMoult, PrimaryScore and OldGreaterCoverts now exported',
+      'Griel XML export: TailRounding auto-calculated from TF1/TF6 or staart_verschil',
+      'Griel XML export: BillDepthBase, BillDepthInnerEdgeNostril and BillDepthGonydealAngle added',
+      'Ring form: snavel_diepte renamed to snavel_hoogte_basis, two new bill depth fields added',
+    ],
+    wijzigingen_de: [
+      'Griel XML-Export: PrimaryMoult, PrimaryScore und OldGreaterCoverts werden jetzt exportiert',
+      'Griel XML-Export: TailRounding wird automatisch aus TF1/TF6 oder staart_verschil berechnet',
+      'Ringformular: snavel_diepte umbenannt in snavel_hoogte_basis, zwei neue Schnabelhöhe-Felder hinzugefügt',
+    ],
+  },
   {
     versie: '1.78.0',
     datum: '2026-05-04',

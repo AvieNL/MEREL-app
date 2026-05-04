@@ -262,12 +262,16 @@ export default function NieuwPage() {
     setRuikaart(prev => {
       const next = [...prev];
       next[index] = value;
+      const primaries = next.slice(9, 19);
       // Auto-sum primaries (index 9-18) naar handpen_score
-      const hasAnyPrimary = next.slice(9, 19).some(v => v !== '');
+      const hasAnyPrimary = primaries.some(v => v !== '');
       if (hasAnyPrimary) {
-        const primSum = next.slice(9, 19).reduce((sum, v) => sum + (parseInt(v) || 0), 0);
+        const primSum = primaries.reduce((sum, v) => sum + (parseInt(v) || 0), 0);
         update('handpen_score', String(primSum));
       }
+      // Auto-derive primary_moult string (10 chars [012345VX]) voor Griel-export
+      const moultStr = primaries.map(v => (/^[012345VX]$/i.test(v) ? v.toUpperCase() : '0')).join('');
+      update('primary_moult', hasAnyPrimary ? moultStr : '');
       return next;
     });
     // Auto-advance naar volgend veld bij geldig karakter
