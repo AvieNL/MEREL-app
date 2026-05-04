@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { NestIcoon } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -334,7 +334,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
     });
   }
 
-  const handleFotoUpload = useCallback(async (e) => {
+  async function handleFotoUpload(e) {
     const file = e.target.files?.[0];
     if (!file || !soort) return;
     setFotoUploading(true);
@@ -368,7 +368,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
       // Reset file input
       if (fotoInputRef.current) fotoInputRef.current.value = '';
     }
-  }, [soort]);
+  }
 
   return (
     <div className="page soort-detail">
