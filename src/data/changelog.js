@@ -1,6 +1,19 @@
-export const VERSIE = '1.77.0';
+export const VERSIE = '1.78.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.78.0',
+    datum: '2026-05-04',
+    wijzigingen: [
+      'Soortenpagina: foto uploaden hersteld voor admins (📷-knop rechtsonder de foto)',
+    ],
+    wijzigingen_en: [
+      'Species page: photo upload restored for admins (📷 button on photo)',
+    ],
+    wijzigingen_de: [
+      'Artendetailseite: Foto-Upload für Admins wiederhergestellt (📷-Schaltfläche am Foto)',
+    ],
+  },
   {
     versie: '1.77.0',
     datum: '2026-05-04',

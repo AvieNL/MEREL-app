@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { NestIcoon } from '../shared/Icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSpeciesRef, pullSpeciesIfNeeded } from '../../hooks/useSpeciesRef';
 import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabase';
 import { useNestData } from '../../hooks/useNestData';
 import { useModuleSwitch } from '../../App';
 import { buildEuringLookup } from '../../utils/euring-lookup';
@@ -42,7 +43,9 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const { naam } = useParams();
   const navigate = useNavigate();
   const decodedNaam = decodeURIComponent(naam);
-  const { user } = useAuth();
+  const { user, profile, simulatedRole } = useAuth();
+  const effectiveRole = simulatedRole || profile?.rol;
+  const isAdmin = effectiveRole === 'admin';
   const { t, i18n } = useTranslation();
 
   const BIO_FIELDS = [
@@ -122,6 +125,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
   const [vangstenOpen, setVangstenOpen] = useState(false);
   const [nestenOpen, setNestenOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [fotoUploading, setFotoUploading] = useState(false);
+  const fotoInputRef = useRef(null);
   const [leeftijdSeizoen, setLeeftijdSeizoen] = useState(
     () => new Date().getMonth() + 1 <= 6 ? 'vj' : 'nj'
   );
@@ -308,6 +313,63 @@ export default function SoortDetail({ records, speciesOverrides }) {
     );
   };
 
+  // Foto upload helpers (admin only)
+  function resizeImage(file, maxWidth = 400) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const scale = Math.min(1, maxWidth / img.width);
+          const w = Math.round(img.width * scale);
+          const h = Math.round(img.height * scale);
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.8));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  const handleFotoUpload = useCallback(async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !soort) return;
+    setFotoUploading(true);
+    try {
+      const dataUrl = await resizeImage(file, 400);
+      // Haal huidige data-blob op
+      const { data: row, error: fetchErr } = await supabase
+        .from('species')
+        .select('data')
+        .eq('naam_nl', soort.naam_nl)
+        .single();
+      if (fetchErr) throw fetchErr;
+      const existingData = row?.data ?? {};
+      const newData = {
+        ...existingData,
+        foto: dataUrl,
+        foto_crop: { x: 50, y: 50, zoom: 1 },
+      };
+      const { error: updateErr } = await supabase
+        .from('species')
+        .update({ data: newData })
+        .eq('naam_nl', soort.naam_nl);
+      if (updateErr) throw updateErr;
+      // Force-ververs de species-cache
+      await pullSpeciesIfNeeded(true);
+    } catch (err) {
+      console.error('Foto upload mislukt:', err.message);
+      alert('Foto uploaden mislukt: ' + err.message);
+    } finally {
+      setFotoUploading(false);
+      // Reset file input
+      if (fotoInputRef.current) fotoInputRef.current.value = '';
+    }
+  }, [soort]);
+
   return (
     <div className="page soort-detail">
       <button className="btn-secondary page-back" onClick={() => navigate(-1)}>
@@ -316,24 +378,45 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
       {/* Hero */}
       <div className="sd-hero">
-        <div className="sd-foto">
-          {foto ? (
-            <img
-              src={foto}
-              alt={soort.naam_nl}
-              style={{
-                width: '100%', height: '100%',
-                objectFit: 'cover',
-                objectPosition: `${fotoCrop.x}% ${fotoCrop.y}%`,
-                transform: fotoCrop.zoom !== 1 ? `scale(${fotoCrop.zoom})` : undefined,
-                transformOrigin: `${fotoCrop.x}% ${fotoCrop.y}%`,
-                pointerEvents: 'none', userSelect: 'none', display: 'block',
-              }}
-            />
-          ) : (
-            <div className="sd-foto-placeholder">
-              <span>🐦</span>
-            </div>
+        <div className="sd-foto-wrap">
+          <div className="sd-foto">
+            {foto ? (
+              <img
+                src={foto}
+                alt={soort.naam_nl}
+                style={{
+                  width: '100%', height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: `${fotoCrop.x}% ${fotoCrop.y}%`,
+                  transform: fotoCrop.zoom !== 1 ? `scale(${fotoCrop.zoom})` : undefined,
+                  transformOrigin: `${fotoCrop.x}% ${fotoCrop.y}%`,
+                  pointerEvents: 'none', userSelect: 'none', display: 'block',
+                }}
+              />
+            ) : (
+              <div className="sd-foto-placeholder">
+                <span>🐦</span>
+              </div>
+            )}
+          </div>
+          {isAdmin && (
+            <>
+              <button
+                className={`sd-foto-upload-btn${fotoUploading ? ' sd-foto-upload-btn--busy' : ''}`}
+                title={foto ? 'Foto vervangen' : 'Foto toevoegen'}
+                disabled={fotoUploading}
+                onClick={() => fotoInputRef.current?.click()}
+              >
+                {fotoUploading ? '…' : '📷'}
+              </button>
+              <input
+                ref={fotoInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleFotoUpload}
+              />
+            </>
           )}
         </div>
         <div className="sd-hero-info">
