@@ -1,6 +1,19 @@
-export const VERSIE = '1.80.0';
+export const VERSIE = '1.80.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.80.1',
+    datum: '2026-05-04',
+    wijzigingen: [
+      'Ringformulier: vangst-checklist verplaatst naar binnen soort-info-inhoud — voorkomt overflow bij lange notes',
+    ],
+    wijzigingen_en: [
+      'Ring form: catch checklist moved inside soort-info-inhoud — prevents overflow with long notes',
+    ],
+    wijzigingen_de: [
+      'Ringformular: Vangst-Checkliste in soort-info-inhoud verschoben — verhindert Überlauf bei langen Notizen',
+    ],
+  },
   {
     versie: '1.80.0',
     datum: '2026-05-04',

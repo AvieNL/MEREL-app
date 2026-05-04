@@ -135,7 +135,7 @@ const updates = {
     { label: 'Snavelhoogte neusgat', type: 'meting', belang: 2, note: '♂ M 12,8–14,0 mm · ♀ V 11,8–13,4 mm (Demongin)' },
     { label: 'Tarsus', type: 'meting', belang: 1 },
     { label: 'Gewicht', type: 'meting', belang: 2 },
-    { label: 'Iriskleur', type: 'obs', belang: 3, note: 'Blauwgrijs = juv/1e kj (zomer) · Bruin = 1e kj (herfst/winter) · Variabel = 2e kj lente · Wit/zilvergrijs = adult' },
+    { label: 'Iriskleur', type: 'obs', belang: 3, note: 'Blauwgrijs=juv · Bruin=1kj · Variabel=2kj · Wit=adult' },
     { label: 'Broedvlek', type: 'obs', belang: 3, note: 'Aanwezig = zeker ♀ V; let op: ♂ M kan kleine BP op buik hebben' },
   ],
 };

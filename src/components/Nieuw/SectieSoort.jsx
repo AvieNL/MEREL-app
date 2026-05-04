@@ -144,28 +144,28 @@ export default function SectieSoort() {
                     </div>
                   </div>
                 )}
-              </div>
 
-              {/* Vangst-checklist: minimale set per soort */}
-              {speciesInfo.vangst_checklist?.length > 0 && (
-                <div className="vangst-checklist">
-                  <span className="vangst-checklist__titel">Leg minimaal vast</span>
-                  <ul className="vangst-checklist__lijst">
-                    {speciesInfo.vangst_checklist.map((item, i) => (
-                      <li key={i} className={`vcl-item vcl-item--${item.type}`}>
-                        <span className="vcl-icon">{item.type === 'meting' ? '📏' : '👁'}</span>
-                        <span className="vcl-label">{item.label}</span>
-                        <span className="vcl-belang">
-                          {[...Array(3)].map((_, b) => (
-                            <span key={b} className={b < item.belang ? 'vcl-dot vcl-dot--aan' : 'vcl-dot'} />
-                          ))}
-                        </span>
-                        {item.note && <span className="vcl-note">{item.note}</span>}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                {/* Vangst-checklist: minimale set per soort — binnen inhoud zodat hij altijd de volledige breedte pakt */}
+                {speciesInfo.vangst_checklist?.length > 0 && (
+                  <div className="vangst-checklist">
+                    <span className="vangst-checklist__titel">Leg minimaal vast</span>
+                    <ul className="vangst-checklist__lijst">
+                      {speciesInfo.vangst_checklist.map((item, i) => (
+                        <li key={i} className={`vcl-item vcl-item--${item.type}`}>
+                          <span className="vcl-icon">{item.type === 'meting' ? '📏' : '👁'}</span>
+                          <span className="vcl-label">{item.label}</span>
+                          <span className="vcl-belang">
+                            {[...Array(3)].map((_, b) => (
+                              <span key={b} className={b < item.belang ? 'vcl-dot vcl-dot--aan' : 'vcl-dot'} />
+                            ))}
+                          </span>
+                          {item.note && <span className="vcl-note">{item.note}</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
 
               {speciesInfo.foto && (
                 <div className="soort-info-foto">
