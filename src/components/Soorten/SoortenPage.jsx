@@ -161,6 +161,30 @@ export default function SoortenPage({ records }) {
               className="soort-card"
               onClick={() => navigate(`/soorten/${encodeURIComponent(s.naam_nl)}`)}
             >
+              {(() => {
+                const c = s.foto_crop ?? { x: 50, y: 50, zoom: 1 };
+                return (
+                  <div className="soort-thumb">
+                    {s.foto ? (
+                      <img
+                        src={s.foto}
+                        alt={s.naam_nl}
+                        style={{
+                          width: '100%', height: '100%',
+                          objectFit: 'cover',
+                          objectPosition: `${c.x}% ${c.y}%`,
+                          transform: c.zoom !== 1 ? `scale(${c.zoom})` : undefined,
+                          transformOrigin: `${c.x}% ${c.y}%`,
+                          display: 'block',
+                          pointerEvents: 'none',
+                        }}
+                      />
+                    ) : (
+                      <span className="soort-thumb-placeholder">🐦</span>
+                    )}
+                  </div>
+                );
+              })()}
               <div className="soort-info">
                 <strong>
                   {displayNaam(s.naam_nl)}
