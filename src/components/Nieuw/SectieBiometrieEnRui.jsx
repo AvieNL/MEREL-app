@@ -48,7 +48,7 @@ export default function SectieBiometrieEnRui() {
             </div>
             <div className="form-row-3">
               <div className="form-group">
-                <label>{t('form_moult_score')} <code className="field-key-debug">rui_lichaam</code></label>
+                <label>{t('form_moult_score')}</label>
                 <select value={form.rui_lichaam} onChange={e => update('rui_lichaam', e.target.value)}>
                   {RUI_LICHAAM_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
@@ -56,7 +56,7 @@ export default function SectieBiometrieEnRui() {
                 </select>
               </div>
               <div className="form-group">
-                <label>{t('form_fat')} <code className="field-key-debug">vet</code></label>
+                <label>{t('form_fat')}</label>
                 <select value={form.vet} onChange={e => update('vet', e.target.value)}>
                   {VET_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
@@ -64,7 +64,7 @@ export default function SectieBiometrieEnRui() {
                 </select>
               </div>
               <div className="form-group">
-                <label>{t('form_flight_muscle')} <code className="field-key-debug">borstspier</code></label>
+                <label>{t('form_flight_muscle')}</label>
                 <select value={form.borstspier} onChange={e => update('borstspier', e.target.value)}>
                   {VLIEGSPIER_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
@@ -75,7 +75,7 @@ export default function SectieBiometrieEnRui() {
             <div className="form-row">
               {renderBioField('gewicht', t('form_weight'))}
               <div className="form-group">
-                <label>{t('form_weigh_time')} <code className="field-key-debug">weegtijd</code></label>
+                <label>{t('form_weigh_time')}</label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -87,7 +87,7 @@ export default function SectieBiometrieEnRui() {
             </div>
             <div className="form-row-3">
               <div className="form-group">
-                <label>{t('form_cloaca')} <code className="field-key-debug">cloaca</code></label>
+                <label>{t('form_cloaca')}</label>
                 <select value={form.cloaca} onChange={e => update('cloaca', e.target.value)}>
                   {CLOACA_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
@@ -98,7 +98,7 @@ export default function SectieBiometrieEnRui() {
                 )}
               </div>
               <div className="form-group">
-                <label>{t('form_brood_patch')} <code className="field-key-debug">broedvlek</code></label>
+                <label>{t('form_brood_patch')}</label>
                 <select value={form.broedvlek} onChange={e => update('broedvlek', e.target.value)}>
                   {BROEDVLEK_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
@@ -106,7 +106,7 @@ export default function SectieBiometrieEnRui() {
                 </select>
               </div>
               <div className="form-group">
-                <label>{t('form_handicap')} <code className="field-key-debug">handicap</code></label>
+                <label>{t('form_handicap')}</label>
                 <select value={form.handicap} onChange={e => update('handicap', e.target.value)}>
                   {HANDICAP_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{getOptLabel(o, lang)}</option>
@@ -163,12 +163,12 @@ export default function SectieBiometrieEnRui() {
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label>{t('form_handpen_total')} <code className="field-key-debug">handpen_score</code></label>
+                <label>{t('form_handpen_total')}</label>
                 <input type="text" value={form.handpen_score}
                   onChange={e => update('handpen_score', e.target.value)} />
               </div>
               <div className="form-group">
-                <label>{t('form_old_coverts')} <code className="field-key-debug">oude_dekveren</code></label>
+                <label>{t('form_old_coverts')}</label>
                 <input type="text" value={form.oude_dekveren}
                   onChange={e => update('oude_dekveren', e.target.value)} />
               </div>
@@ -192,7 +192,7 @@ export default function SectieBiometrieEnRui() {
             <div className="form-row">
               {renderBioField('tarsus_lengte', t('form_tarsus'))}
               <div className="form-group">
-                <label>{t('form_tarsus_toe')} <code className="field-key-debug">tarsus_teen</code></label>
+                <label>{t('form_tarsus_toe')}</label>
                 <input type="text" inputMode="decimal" value={form.tarsus_teen}
                   onChange={e => update('tarsus_teen', e.target.value)} />
               </div>
@@ -200,7 +200,7 @@ export default function SectieBiometrieEnRui() {
             <div className="form-row">
               {renderBioField('tarsus_dikte', t('form_tarsus_thickness'))}
               <div className="form-group">
-                <label>{t('form_hind_claw')} <code className="field-key-debug">achternagel</code></label>
+                <label>{t('form_hind_claw')}</label>
                 <input type="text" inputMode="decimal" value={form.achternagel}
                   onChange={e => update('achternagel', e.target.value)} />
               </div>
@@ -211,19 +211,19 @@ export default function SectieBiometrieEnRui() {
             <div className="form-row">
               {renderBioField('staartlengte', t('form_tail'))}
               <div className="form-group">
-                <label>{t('form_tail_diff')} <code className="field-key-debug">staart_verschil</code></label>
+                <label>{t('form_tail_diff')}</label>
                 <input type="text" inputMode="decimal" value={form.staart_verschil}
                   onChange={e => update('staart_verschil', e.target.value)} />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label>{t('form_tf1')} <code className="field-key-debug">tf1</code></label>
+                <label>{t('form_tf1')}</label>
                 <input type="text" inputMode="decimal" value={form.tf1}
                   onChange={e => update('tf1', e.target.value)} />
               </div>
               <div className="form-group">
-                <label>{t('form_tf6')} <code className="field-key-debug">tf6</code></label>
+                <label>{t('form_tf6')}</label>
                 <input type="text" inputMode="decimal" value={form.tf6}
                   onChange={e => update('tf6', e.target.value)} />
               </div>
@@ -237,12 +237,12 @@ export default function SectieBiometrieEnRui() {
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label>{t('form_bill_f')} <code className="field-key-debug">snavel_veren</code></label>
+                <label>{t('form_bill_f')}</label>
                 <input type="text" inputMode="decimal" value={form.snavel_veren}
                   onChange={e => update('snavel_veren', e.target.value)} />
               </div>
               <div className="form-group">
-                <label>{t('form_bill_c')} <code className="field-key-debug">snavel_cere</code></label>
+                <label>{t('form_bill_c')}</label>
                 <input type="text" inputMode="decimal" value={form.snavel_cere}
                   onChange={e => update('snavel_cere', e.target.value)} />
               </div>
@@ -252,24 +252,24 @@ export default function SectieBiometrieEnRui() {
             <p className="bio-subsection-label">{t('form_subsection_bill_other')}</p>
             <div className="form-row">
               <div className="form-group">
-                <label>{t('form_bill_depth_base')} <code className="field-key-debug">snavel_hoogte_basis</code></label>
+                <label>{t('form_bill_depth_base')}</label>
                 <input type="text" inputMode="decimal" value={form.snavel_hoogte_basis}
                   onChange={e => update('snavel_hoogte_basis', e.target.value)} />
               </div>
               <div className="form-group">
-                <label>{t('form_bill_depth_nostril')} <code className="field-key-debug">snavel_hoogte_neusgat</code></label>
+                <label>{t('form_bill_depth_nostril')}</label>
                 <input type="text" inputMode="decimal" value={form.snavel_hoogte_neusgat}
                   onChange={e => update('snavel_hoogte_neusgat', e.target.value)} />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label>{t('form_bill_depth_gonys')} <code className="field-key-debug">snavel_hoogte_gonys</code></label>
+                <label>{t('form_bill_depth_gonys')}</label>
                 <input type="text" inputMode="decimal" value={form.snavel_hoogte_gonys}
                   onChange={e => update('snavel_hoogte_gonys', e.target.value)} />
               </div>
               <div className="form-group">
-                <label>{t('form_bill_width')} <code className="field-key-debug">snavel_breedte</code></label>
+                <label>{t('form_bill_width')}</label>
                 <input type="text" inputMode="decimal" value={form.snavel_breedte}
                   onChange={e => update('snavel_breedte', e.target.value)} />
               </div>

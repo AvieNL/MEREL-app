@@ -638,7 +638,7 @@ export default function NieuwPage() {
     const genderMismatch = fieldGenderHint && form.geslacht && form.geslacht !== fieldGenderHint && form.geslacht !== 'U';
     return (
       <div className="form-group">
-        <label>{label} <code className="field-key-debug">{key}</code></label>
+        <label>{label}</label>
         <input type="text" inputMode="decimal" value={form[key]}
           className={warning ? 'input-warn' : ''}
           onChange={e => update(key, e.target.value)} />
