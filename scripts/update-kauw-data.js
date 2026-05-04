@@ -38,11 +38,11 @@ const updates = {
   bio_snavel_schedel_F_min: '29.5',
   bio_snavel_schedel_F_max: '33.0',
 
-  // Snavelhoogte op neusgat (bill depth at middle of nostrils)
-  bio_snavel_hoogte_neusgat_M_min: '12.8',
-  bio_snavel_hoogte_neusgat_M_max: '14.0',
-  bio_snavel_hoogte_neusgat_F_min: '11.8',
-  bio_snavel_hoogte_neusgat_F_max: '13.4',
+  // Snaveldiepte midden neusgat (bio_snavel_diepte_mid → BIO_FIELDS key in SoortDetail)
+  bio_snavel_diepte_mid_M_min: '12.8',
+  bio_snavel_diepte_mid_M_max: '14.0',
+  bio_snavel_diepte_mid_F_min: '11.8',
+  bio_snavel_diepte_mid_F_max: '13.4',
 
   bio_tarsus_lengte_M_min: '39.5',
   bio_tarsus_lengte_M_max: '46.0',
