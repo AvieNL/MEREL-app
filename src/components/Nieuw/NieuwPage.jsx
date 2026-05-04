@@ -372,6 +372,16 @@ export default function NieuwPage() {
     }
   }, [speciesInfo?.naam_nl, displayNaam]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Auto-bereken staart_verschil uit TF1 en TF6 als beide ingevuld zijn
+  useEffect(() => {
+    const t1 = parseFloat(form.tf1);
+    const t6 = parseFloat(form.tf6);
+    if (!isNaN(t1) && !isNaN(t6)) {
+      const verschil = Math.abs(t1 - t6).toFixed(1);
+      update('staart_verschil', verschil);
+    }
+  }, [form.tf1, form.tf6, update]);
+
   const searchSpecies = useCallback((query) => {
     // Huidige taal eerst doorzoeken
     const lang = i18n.language;
