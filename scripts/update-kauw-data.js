@@ -112,6 +112,14 @@ const updates = {
     '**C. m. cirtensis** (NO Algerije): Iets kleiner; intermediate tussen monedula en spermologus; bleek en mat, geen kraagspoor.\n\n' +
     '*Bron: Demongin (2020) p.347–348*',
 
+  // Bronvermeldingen per sectie (zichtbaar naast sectietitels op de soortenpagina)
+  bron_biometrie:         'Demongin (2020) p.347–348',
+  bron_leeftijdsbepaling: 'Demongin (2020) p.347–348',
+  bron_geslacht:          'Demongin (2020) p.347–348',
+  bron_id_kenmerken:      'Demongin (2020) p.347–348',
+  bron_ondersoorten:      'Demongin (2020) p.347–348',
+  bron_ring:              'Demongin (2020) p.347',
+
   vangst_checklist: [
     { label: 'Vleugel', type: 'meting', belang: 3, note: 'Hoofdmaat; bij bekende populatie nuttig voor geslacht' },
     { label: 'Snavel tot schedel', type: 'meting', belang: 2, note: 'Bij bekende populatie nuttig voor geslacht' },
