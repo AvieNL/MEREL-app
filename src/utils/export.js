@@ -159,7 +159,7 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
     b('TarsusWidth',                  bioDecimal(r.tarsus_dikte));
     b('TotalHeadLength',              bioDecimal(r.kop_snavel));
     b('PectoralMuscleScore',          r.borstspier !== undefined && r.borstspier !== null && r.borstspier !== '' ? String(r.borstspier) : null);
-    b('StateOfWingPoint',             bioDecimal(r.handpuntlengte));
+    // StateOfWingPoint: enumeration A/B/G/M/U/V (slijtage), geen meting — veld vervallen
     b('ClawLength',                   bioDecimal(r.achternagel));
     b('Weight',                       bioDecimal(r.gewicht));
     b('WeighingTime',                 r.weegtijd ? toWeighingTime(r.weegtijd) : null);
