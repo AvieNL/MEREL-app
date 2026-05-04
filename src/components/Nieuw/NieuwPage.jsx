@@ -374,8 +374,9 @@ export default function NieuwPage() {
 
   // Auto-bereken staart_verschil uit TF1 en TF6 als beide ingevuld zijn
   useEffect(() => {
-    const t1 = parseFloat(form.tf1);
-    const t6 = parseFloat(form.tf6);
+    const parse = v => parseFloat(String(v).replace(',', '.'));
+    const t1 = parse(form.tf1);
+    const t6 = parse(form.tf6);
     if (!isNaN(t1) && !isNaN(t6)) {
       const verschil = Math.abs(t1 - t6).toFixed(1);
       update('staart_verschil', verschil);
