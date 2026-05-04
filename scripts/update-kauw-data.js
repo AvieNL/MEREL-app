@@ -57,18 +57,16 @@ const updates = {
   // Overige velden
   eerste_broedleeftijd: '3Y',
 
-  bron_biometrie: 'Demongin (2020) p.347–348',
-
+  // Vleugelformule — geen bron in tekst (bron_ring)
   vleugelformule:
-    'WP = (3)4; 10 P (P1 kort); 6 S + 4 T; 12 TF\n' +
-    'Bron: Demongin (2020) p.347',
+    'WP = (3)4; 10 P (P1 kort); 6 S + 4 T; 12 TF',
 
+  // Ruitiming — geen bron in tekst (bron_ring), geen markdown-titels met ** hier
   rui_notities:
     '**Juveniel [3]** Gedeeltelijke postrui juli–september: lichaamsveren, alle of deel van kleine en middelste vleugeldekveren, zelden enkele grote armpendekveren, uitzonderlijk enkele tertials of TF.\n\n' +
-    '**Adult [4]** Complete postbroedselrui van half-mei/begin-juli tot half-augustus/half-oktober. Rui van 2e kj begint iets eerder dan die van adulten.\n\n' +
-    '*Bron: Demongin (2020) p.347–348*',
+    '**Adult [4]** Complete postbroedselrui van half-mei/begin-juli tot half-augustus/half-oktober. Rui van 2e kj begint iets eerder dan die van adulten.',
 
-  // Tabs-formaat: leeftijds_notities_nj leeg laten, alles in vj met {{MM-MM}}-maandblokken
+  // Leeftijdsbepaling — samengevoegde modus met {{MM-MM}}-maandblokken, geen inline bron
   leeftijds_notities_nj: '',
 
   leeftijds_notities_vj:
@@ -83,38 +81,38 @@ const updates = {
     'Iris variabel: wisselend lichtbruin, grijsachtig of zelfs (vuil) wit — nog niet eenduidig zilvergrijs. Juveniele armpennen en tertials zwaar versleten (zichtbaar vanaf maart). Juveniele S en grote armpendekveren bruinzwart, contrasterende met gevormde dekveren.\n\n' +
     '{{01-12}}\n' +
     '**Adult (EURING 4/6):**\n' +
-    'Iris helder wit of zilvergrijs. Geen contrast in vleugel: armpennen, tertials en dekveren uniform zwart met sterke paarsblauwe of blauwgroene glans. TF breed, zwartachtig met groene of blauwe glans; in lente vrij fris en begint te slijten pas vanaf eind-mei (met name ♀).\n\n' +
-    '*Bron: Demongin (2020) p.347–348*',
+    'Iris helder wit of zilvergrijs. Geen contrast in vleugel: armpennen, tertials en dekveren uniform zwart met sterke paarsblauwe of blauwgroene glans. TF breed, zwartachtig met groene of blauwe glans; in lente vrij fris en begint te slijten pas vanaf eind-mei (met name ♀ V).',
 
+  // Geslachtsbepaling — geen maten (staan in biometrie), geen inline bron, met bullets
   geslachts_notities_m:
-    '**♂ Maten (Demongin 2020 p.347–348):**\n' +
-    'Vleugel 220–249(255) mm · Snavel tot schedel ±32–36,5 mm · Snavelhoogte neusgat 12,8–14,0 mm · Tarsus 39,5–46 mm · Gewicht 174–265 g.\n\n' +
-    'Geen zekere kleurmarkering; mannetjes vallen niet betrouwbaar op te herkennen aan kleur of tekening alleen — gebruik metingen als populatie (ondersoort) bekend is. CP soms aanwezig.\n\n' +
-    '*Bron: Demongin (2020) p.347–348*',
+    '**♂ M — Kenmerken:**\n' +
+    '- Geen zekere kleurmarkering; niet betrouwbaar op kleur of tekening alleen te herkennen.\n' +
+    '- Gebruik metingen als populatie (ondersoort) bekend is.\n' +
+    '- CP (broedknobbel) soms aanwezig.',
 
   geslachts_notities_f:
-    '**♀ Maten (Demongin 2020 p.347–348):**\n' +
-    'Vleugel 215–240(247) mm · Snavel tot schedel 29,5–33(35) mm · Snavelhoogte neusgat 11,8–13,4 mm · Tarsus 32,5–44 mm · Gewicht 175–271 g.\n\n' +
-    'Duidelijke broedvlek is een betrouwbare ♀-indicator. M kan kleine broedvlek beperkt tot buik hebben (minder gevasculariseerd — voel het verschil). In N en E Europa (soemmerringii) heeft ♀ gemiddeld een minder bleke en minder duidelijke kraag dan ♂ — alleen bruikbaar bij directe vergelijking binnen een paar.\n\n' +
-    '*Bron: Demongin (2020) p.347–348*',
+    '**♀ V — Kenmerken:**\n' +
+    '- Duidelijke broedvlek is een betrouwbare ♀-indicator.\n' +
+    '- ♂ kan kleine broedvlek beperkt tot buik hebben (minder gevasculariseerd — voel het verschil).\n' +
+    '- In N en O Europa (soemmerringii): ♀ V heeft gemiddeld minder bleke en minder duidelijke kraag dan ♂ M — alleen bruikbaar bij directe vergelijking binnen een paar.',
 
+  // ID-kenmerken — tabelformaat via **Vergelijking ...:** prefix, geen inline bron
   determinatie_id_notities:
-    '**Westelijke Kauw vs Daurische Kauw (C. dauuricus):**\n' +
+    '**Vergelijking Westelijke Kauw / Daurische Kauw (C. dauuricus):**\n' +
     '| Kenmerk | Westelijke Kauw | Daurische Kauw |\n' +
     '|---|---|---|\n' +
     '| Iris | Blauwgrijs (juv) → bruin (1e kj) → wit/zilvergrijs (ad) | Altijd donkerbruin |\n' +
     '| Pied morph | Nee | Buik en kraag witachtig (adult + sommige imm) |\n' +
-    '| Dark morph | Nee | Gezicht, keel en bovenborst zwarter dan overige onderbuik; oordeksel met zilvergrijs streepjes |\n' +
+    '| Dark morph | Nee | Gezicht, keel en bovenborst zwarter; oordeksel met zilvergrijs streepjes |\n' +
     '| Nek (slijtage) | Bleker in versleten kleed | Blijft donker in versleten kleed |\n\n' +
-    '**Hybridisatie** mogelijk: kraagpartij grijs; nek achter deels zwartachtig; oordeksel donkergrijs zonder merkteken of witte strepen.\n\n' +
-    '*Bron: Demongin (2020) p.347–348*',
+    '**Hybridisatie** mogelijk: kraagpartij grijs; nek achter deels zwartachtig; oordeksel donkergrijs zonder merkteken of witte strepen.',
 
+  // Ondersoorten — geen inline bron
   ondersoorten:
-    '**C. m. monedula** (Fennoscandia, centraal Europa t/m N ex-Joegoslavië en Karpaten): Kraag lichtgrijs in vers kleed, donkerder en matter in versleten kleed; zelden opvallender kraagvlek aan zijkant halsonderkant. Mantel en flanken iets bleker dan vleugels, keel en kruin. ♀ heeft vaker beperktere, minder witte kraag dan ♂.\n\n' +
+    '**C. m. monedula** (Fennoscandia, centraal Europa t/m N ex-Joegoslavië en Karpaten): Kraag lichtgrijs in vers kleed, donkerder en matter in versleten kleed; zelden opvallender kraagvlek aan zijkant halsonderkant. Mantel en flanken iets bleker dan vleugels, keel en kruin. ♀ V heeft vaker beperktere, minder witte kraag dan ♂ M.\n\n' +
     '**C. m. soemmerringii** (Rusland, O. Balticum, O. Europa, Balkan, Klein-Azië, Kaukasus, t/m Mongolië): Doorgaans duidelijke bleekgrijswitte kraag + vlekken aan halszijde in vers kleed; kroon duidelijk zwart contrasterende met bleekgrijze nek en oordeksel. Meest gecontrasteerd; vleugels zwart sterk contrasterende met rest lichaam.\n\n' +
     '**C. m. spermologus** (W en centraal Europa incl. NL, Groot-Brittannië en Italië; Marokko, NO Algerije): Geen of nauwelijks spoor van bleke kraag op nek. Snavel iets sterker. Donkerder dan beide andere ondersoorten; onderbuik en kopzijde van gelijke grijstint. Inclusief ibericus (Spanje). In NL meest voorkomend.\n\n' +
-    '**C. m. cirtensis** (NO Algerije): Iets kleiner; intermediate tussen monedula en spermologus; bleek en mat, geen kraagspoor.\n\n' +
-    '*Bron: Demongin (2020) p.347–348*',
+    '**C. m. cirtensis** (NO Algerije): Iets kleiner; intermediate tussen monedula en spermologus; bleek en mat, geen kraagspoor.',
 
   // Bronvermeldingen per sectie (zichtbaar naast sectietitels op de soortenpagina)
   bron_biometrie:         'Demongin (2020) p.347–348',
@@ -127,11 +125,11 @@ const updates = {
   vangst_checklist: [
     { label: 'Vleugel', type: 'meting', belang: 3, note: 'Hoofdmaat; bij bekende populatie nuttig voor geslacht' },
     { label: 'Snavel tot schedel', type: 'meting', belang: 2, note: 'Bij bekende populatie nuttig voor geslacht' },
-    { label: 'Snavelhoogte neusgat', type: 'meting', belang: 2, note: '♂ 12,8–14,0 mm · ♀ 11,8–13,4 mm (Demongin)' },
+    { label: 'Snavelhoogte neusgat', type: 'meting', belang: 2, note: '♂ M 12,8–14,0 mm · ♀ V 11,8–13,4 mm (Demongin)' },
     { label: 'Tarsus', type: 'meting', belang: 1 },
     { label: 'Gewicht', type: 'meting', belang: 2 },
     { label: 'Iriskleur', type: 'obs', belang: 3, note: 'Blauwgrijs = juv/1e kj (zomer) · Bruin = 1e kj (herfst/winter) · Variabel = 2e kj lente · Wit/zilvergrijs = adult' },
-    { label: 'Broedvlek', type: 'obs', belang: 3, note: 'Aanwezig = zeker ♀; let op: ♂ kan kleine BP op buik hebben' },
+    { label: 'Broedvlek', type: 'obs', belang: 3, note: 'Aanwezig = zeker ♀ V; let op: ♂ M kan kleine BP op buik hebben' },
   ],
 };
 

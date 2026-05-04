@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 
-// Eenvoudige markdown-renderer: **bold**, *italic*, _underline_, [tekst](url)
+// Eenvoudige markdown-renderer: **bold**, *italic*, _underline_, [tekst](url), - bulletlijst
 export function renderMarkdown(text) {
   if (!text) return '';
   const html = text
@@ -11,9 +11,17 @@ export function renderMarkdown(text) {
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="md-link">$1</a>')
     // Extra witregel vóór seizoenskoppen (Voorjaar/Najaar) die niet aan het begin staan
     .replace(/([^\n])\n(Voorjaar|Najaar)/g, '$1\n\n$2')
+    // Bulletlijsten: groepeer opeenvolgende '- ' regels in <ul><li>
+    .replace(/((?:^|\n)- [^\n]+)+/g, match => {
+      const items = match.trim().split('\n')
+        .filter(l => l.trim().startsWith('- '))
+        .map(l => `<li>${l.trim().slice(2)}</li>`)
+        .join('');
+      return '\n<ul>' + items + '</ul>';
+    })
     .replace(/\n/g, '<br>');
   return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['strong', 'em', 'u', 'br', 'a'],
+    ALLOWED_TAGS: ['strong', 'em', 'u', 'br', 'a', 'ul', 'li'],
     ALLOWED_ATTR: ['href', 'class'],
   });
 }

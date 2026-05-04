@@ -567,13 +567,13 @@ export default function SoortDetail({ records, speciesOverrides }) {
           <div className="sd-det-view">
             {geslachtsM && (
               <div className="sd-det-block">
-                <span className="sd-det-label sd-det-label--m">{'\u2642\uFE0E'} {t('sd_male')}</span>
+                <span className="sd-det-label sd-det-label--m">{'\u2642\uFE0E'} M</span>
                 <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(geslachtsM) }} />
               </div>
             )}
             {geslachtsF && (
               <div className="sd-det-block">
-                <span className="sd-det-label sd-det-label--f">{'\u2640\uFE0E'} {t('sd_female')}</span>
+                <span className="sd-det-label sd-det-label--f">{'\u2640\uFE0E'} V</span>
                 <p className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(geslachtsF) }} />
               </div>
             )}
@@ -717,7 +717,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
         {soort.rui_notities && (
           <div className="sd-vleugelformule">
             <span className="sd-label">Ruitiming</span>
-            <pre className="sd-vleugelformule-tekst">{soort.rui_notities}</pre>
+            <div className="sd-notities-text" dangerouslySetInnerHTML={{ __html: renderMarkdown(soort.rui_notities) }} />
           </div>
         )}
         {(soort.pennen_structuur || vleugelformule) && (() => {
@@ -857,10 +857,10 @@ export default function SoortDetail({ records, speciesOverrides }) {
                 const minVal = getBioValue(b.key, 'min');
                 const maxVal = getBioValue(b.key, 'max');
                 const gRows = [
-                  ['M',  '\u2642\uFE0E',      ''],
-                  ['F',  '\u2640\uFE0E',      ''],
-                  ['JM', '\u2642\uFE0E 1kj',  'juv'],
-                  ['JF', '\u2640\uFE0E 1kj',  'juv'],
+                  ['M',  '\u2642\uFE0E M',     ''],
+                  ['F',  '\u2640\uFE0E V',     ''],
+                  ['JM', '\u2642\uFE0E M 1kj', 'juv'],
+                  ['JF', '\u2640\uFE0E V 1kj', 'juv'],
                 ].map(([g, sym, cls]) => ({
                   g, sym, cls,
                   min: soort[`bio_${b.key}_${g}_min`],
@@ -982,8 +982,8 @@ export default function SoortDetail({ records, speciesOverrides }) {
                 <div key={g} className="sd-stat">
                   <div className="sd-stat-value">{count}</div>
                   <div className="sd-stat-label">
-                    {g === 'M' ? <><span className="sd-gender-icon--m">{'\u2642\uFE0E'}</span> {t('sd_male')}</> :
-                     g === 'F' ? <><span className="sd-gender-icon--f">{'\u2640\uFE0E'}</span> {t('sd_female')}</> :
+                    {g === 'M' ? <><span className="sd-gender-icon--m">{'\u2642\uFE0E'}</span> M</> :
+                     g === 'F' ? <><span className="sd-gender-icon--f">{'\u2640\uFE0E'}</span> V</> :
                      t('sd_unknown')}
                   </div>
                 </div>

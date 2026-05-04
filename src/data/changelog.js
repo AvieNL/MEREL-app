@@ -1,6 +1,31 @@
-export const VERSIE = '1.79.0';
+export const VERSIE = '1.80.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.80.0',
+    datum: '2026-05-04',
+    wijzigingen: [
+      'Soortenpagina: ♂/♀-symbolen tonen nu overal ook M en V',
+      'Soortenpagina: ruitiming gebruikt nu markdown-rendering (vet/cursief werkt correct)',
+      'Soortenpagina: geslachtsbepaling toont nu bullets voor kenmerken',
+      'Soortenpagina: ID-kenmerken tabel wordt nu correct weergegeven',
+      'Kauw: geslachts- en leeftijdsnotities, ID-kenmerken, ruitiming en ondersoorten verbeterd (geen inline bronnen meer)',
+    ],
+    wijzigingen_en: [
+      'Species page: ♂/♀ symbols now show M and F everywhere',
+      'Species page: moult timing now uses markdown rendering',
+      'Species page: gender determination now shows bullet points',
+      'Species page: ID features table now renders correctly',
+      'Jackdaw: gender/age notes, ID features, moult timing and subspecies improved',
+    ],
+    wijzigingen_de: [
+      'Artenseite: ♂/♀-Symbole zeigen jetzt überall auch M und W',
+      'Artenseite: Mauserzeiten verwenden jetzt Markdown-Rendering',
+      'Artenseite: Geschlechtsbestimmung zeigt jetzt Aufzählungspunkte',
+      'Artenseite: ID-Merkmale-Tabelle wird jetzt korrekt angezeigt',
+      'Dohle: Geschlechts-/Altersnotizen, ID-Merkmale, Mauserzeiten und Unterarten verbessert',
+    ],
+  },
   {
     versie: '1.79.0',
     datum: '2026-05-04',
