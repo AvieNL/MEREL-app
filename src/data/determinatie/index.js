@@ -11,12 +11,13 @@
 
 import { corvidae } from './corvidae';
 import { columbidae } from './columbidae';
+import { ficedula } from './ficedula';
 
 // ─── Statische fallback-index ────────────────────────────────────────────────
 // Wordt gevuld met de hardcoded aids EN daarna overschreven door populateFromAids()
 // zodra de DB-pull voltooid is.
 
-const alleAids = [...corvidae, ...columbidae];
+const alleAids = [...corvidae, ...columbidae, ...ficedula];
 
 let _byEuring = {};
 let _byId = {};

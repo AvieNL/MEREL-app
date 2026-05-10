@@ -1,6 +1,19 @@
-export const VERSIE = '1.83.0';
+export const VERSIE = '1.84.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.84.0',
+    datum: '2026-05-10',
+    wijzigingen: [
+      'Bonte Vliegenvanger: determinatiehulpen toegevoegd — leeftijdsbepaling (herfst: handpendekveren + ruicentra; voorjaar: PC-slijtage + dekverencontrast) en geslachtsbepaling (voorjaar: voorhoofdsvlek + LP; herfst: LP + TF-kleur + TF6-rand)',
+    ],
+    wijzigingen_en: [
+      'Pied Flycatcher: identification aids added — age (autumn: primary coverts + moult centres; spring: PC wear + covert contrast) and sex (spring: forehead patch + LP; autumn: LP + TF colour + TF6 edge)',
+    ],
+    wijzigingen_de: [
+      'Trauerschnäpper: Bestimmungshilfen hinzugefügt — Alter (Herbst: Handdecken + Mauserzentren; Frühjahr: Handdeckenverschleiß + Deckenkontrast) und Geschlecht (Frühjahr: Stirnfleck + LP; Herbst: LP + TF-Farbe + TF6-Rand)',
+    ],
+  },
   {
     versie: '1.83.0',
     datum: '2026-05-10',
