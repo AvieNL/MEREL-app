@@ -1,6 +1,22 @@
-export const VERSIE = '1.82.0';
+export const VERSIE = '1.83.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.83.0',
+    datum: '2026-05-10',
+    wijzigingen: [
+      'Houtduif: determinatiehulpen toegevoegd — leeftijdsbepaling (handpendekveren + ruicentra) en geslachtsbepaling (kopbreedte)',
+      'Determinatie-interpreter: nieuw bereken-type drempelwaarde toegevoegd',
+    ],
+    wijzigingen_en: [
+      'Wood Pigeon: identification aids added — age (primary coverts + moult centres) and sex (head width)',
+      'Determinatie interpreter: new bereken-type drempelwaarde added',
+    ],
+    wijzigingen_de: [
+      'Ringeltaube: Bestimmungshilfen hinzugefügt — Alter (Handdecken + Mauserzentren) und Geschlecht (Kopfbreite)',
+      'Determinatie-Interpreter: neuer bereken-Typ drempelwaarde hinzugefügt',
+    ],
+  },
   {
     versie: '1.82.0',
     datum: '2026-05-10',

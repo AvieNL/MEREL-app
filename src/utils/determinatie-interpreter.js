@@ -105,9 +105,34 @@ function berekenTf6Verschil(inputs, cfg) {
   return null;
 }
 
+/**
+ * Drempelwaarde: vergelijkt één veld met een vaste drempel.
+ * Config: { veld, drempel, resultaat_groter_gelijk, resultaat_kleiner }
+ */
+function berekenDrempelwaarde(inputs, cfg) {
+  const v = parseFloat(String(inputs[cfg.veld] || '').replace(',', '.'));
+  if (isNaN(v) || v <= 0) return null;
+
+  function vulUitleg(template) {
+    return (template || '').replace('{v}', v).replace('{drempel}', cfg.drempel);
+  }
+
+  if (v >= cfg.drempel) {
+    const r = { ...cfg.resultaat_groter_gelijk };
+    r.uitleg = vulUitleg(r.uitleg_template);
+    delete r.uitleg_template;
+    return r;
+  }
+  const r = { ...cfg.resultaat_kleiner };
+  r.uitleg = vulUitleg(r.uitleg_template);
+  delete r.uitleg_template;
+  return r;
+}
+
 const BEREKEN = {
   lineaire_grenswaarde: berekenLineaireGrenswaarde,
-  tf6_verschil: berekenTf6Verschil,
+  tf6_verschil:         berekenTf6Verschil,
+  drempelwaarde:        berekenDrempelwaarde,
 };
 
 // ─── Hydrate ─────────────────────────────────────────────────────────────────
