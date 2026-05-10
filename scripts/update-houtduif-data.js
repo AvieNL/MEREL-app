@@ -63,6 +63,7 @@ const updates = {
     hp:      11,
     hp_note: 'P1 sterk gereduceerd',
     ap:      11,
+    ap_note: '(soms 12; extr. 10–15)',
     tp:      3,
     sp:      12,
   },
@@ -72,8 +73,8 @@ const updates = {
 
   // Ruitiming — geen inline bron
   rui_notities:
-    '**Juveniel [3]** Complete gesuspendeerde postrui, start ~6 weken na uitvliegen met lichaamsveren en P11. Rui gewoonlijk gesuspendeerd in november/december en hervat in maart/april; zelden actieve rui jan–feb. Vroege vogels kunnen zonder onderbreking volledig ruien (behalve deel slagpennen). S ruien oplopend v.a. S1 en divergent v.a. S9–S10; daarna gesuspendeerd met juv. (S2) S3–S8 (S9). S-rui hervat bij volgende ruiseizoenen; S5–S6 soms pas na 1–2 jaar geruid. Een klein deel van de vogels (5–10%, waarschijnlijk late broedsels) begint de postrui pas in het voorjaar van het 2e kj (v.a. mrt/apr).\n\n' +
-    '**Adult [4/6]** Complete postbroedselrui (behalve deel van slagpennen). P-rui start april–begin mei, soms gesuspendeerd jun–aug en hervat in september; afgerond in okt/nov of soms eind december. Soms 1–2 buitenste P niet geruid (worden hervat in mrt–apr). Lichaamsveren, S en staart grotendeels geruid aug–okt. S ruien oplopend v.a. S1 en divergent v.a. S9–S11; elk jaar slechts deel van S geruid, waardoor 2 S-generaties tegelijk zichtbaar zijn (vaak asymmetrisch tussen de vleugels).',
+    '**Juveniel [3]** Complete gesuspendeerde postrui, start ~6 weken na uitvliegen met lichaamsveren en P11. Rui gewoonlijk gesuspendeerd in november/december en hervat in maart/april; zelden actieve rui jan–feb. Vroege vogels kunnen zonder onderbreking volledig ruien (behalve slagpennen). S ruien oplopend v.a. S1 en divergent v.a. S9–S10; daarna gesuspendeerd met juv. (S2) S3 (S4)–(S6) S8 (S9). S-rui hervat bij volgende ruiseizoenen; S5–S6 soms pas na 1–2 jaar geruid. Een klein deel van de vogels (5–10%, waarschijnlijk late broedsels) begint de postrui pas in het voorjaar van het 2e kj (v.a. mrt/apr).\n\n' +
+    '**Adult [4/6]** Complete postbroedselrui (behalve deel van slagpennen). P-rui start april–begin mei, soms gesuspendeerd jun–aug en hervat in september; afgerond in eind oktober–half november, vaak pas in eind december. Soms 1–2 buitenste P niet geruid (worden hervat in mrt–apr). Lichaamsveren, S en staart grotendeels geruid eind augustus–half oktober. S ruien oplopend v.a. S1 en divergent v.a. S9–S11; elk jaar slechts deel van S geruid, waardoor 2 S-generaties tegelijk zichtbaar zijn (vaak asymmetrisch tussen de vleugels).',
 
   // Leeftijdsbepaling — ALLES in vj; nj = '' voor tabs-modus.
   // {{07-11}} blokken → zichtbaar in NJ-tab
@@ -105,8 +106,7 @@ const updates = {
   geslachts_notities_m:
     '- Onderbuik sterker roséachtig (vineus).\n' +
     '- Kop gemiddeld breder: ≥22 mm achter de ogen.\n' +
-    '- Betrouwbaarst te herkennen in direct vergelijk met ♀ V van hetzelfde paar.\n' +
-    '- CP (uitstekende cloaca) soms aanwezig.',
+    '- Betrouwbaarst te herkennen in direct vergelijk met ♀ V van hetzelfde paar.',
 
   geslachts_notities_f:
     '- Onderbuik roséachtig met grijze tint (minder uitgesproken dan ♂ M).\n' +
@@ -115,11 +115,11 @@ const updates = {
 
   // ID-kenmerken — geen vergelijkingstabel in Demongin; veldkenmerken als alinea
   determinatie_id_notities:
-    'Brede witte halvemaan dwars over de vleugel (zichtbaar in vlucht). Van onderen: staart grijs met witte subterminalband en zwarte eindband. Volwassen vogels met groene irisatie en witte vlek op halszijde. Juvenielen missen de witte nekband en irisatie.',
+    'Brede witte halvemaan dwars over de vleugel (zichtbaar in vlucht). Van onderen: staart grijs met witte subterminalband en zwarte eindband.',
 
   // Ondersoorten — slechts 1 ondersoort in Europa
   ondersoorten:
-    '**C. p. palumbus** (Europa, O tot W Siberië en Irak; enige ondersoort in NL): Lichte variatie in kleur; subtiele veerverschillen. In totaal 6 ondersoorten wereldwijd, maar alleen palumbus relevant voor Nederlandse ringaars.',
+    '**C. p. palumbus** (Europa, O tot W Siberië en Irak; enige ondersoort in NL): Lichte variatie in kleur; subtiele veerverschillen. In totaal 6 ondersoorten wereldwijd, maar alleen palumbus relevant voor Nederlandse ringers.',
 
   // Bronvermeldingen per sectie
   bron_biometrie:         'Demongin (2020) p.182 (ssp palumbus, snavel = tot verenlijn)',
