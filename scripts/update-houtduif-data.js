@@ -111,7 +111,7 @@ const updates = {
   geslachts_notities_f:
     '- Onderbuik roséachtig met grijze tint (minder uitgesproken dan ♂ M).\n' +
     '- Kop gemiddeld smaller: ≤22 mm achter de ogen.\n' +
-    '- Duidelijke broedvlek is een betrouwbare ♀ V-indicator.',
+    '- Betrouwbaarst te herkennen in direct vergelijk met ♂ M van hetzelfde paar.',
 
   // ID-kenmerken — geen vergelijkingstabel in Demongin; veldkenmerken als alinea
   determinatie_id_notities:
@@ -139,7 +139,6 @@ const updates = {
     { label: 'Handpendekveren', type: 'obs', belang: 3, note: 'Buffrand = 1kj · Grijs = adult' },
     { label: 'Ruipatroon P', type: 'obs', belang: 3, note: '2 centra = 2kj · 1 centrum = 1kj of adult' },
     { label: 'Witte nekband', type: 'obs', belang: 2, note: 'Afwezig = juveniel' },
-    { label: 'Broedvlek', type: 'obs', belang: 3, note: 'Aanwezig = zeker ♀ V' },
   ],
 };
 
