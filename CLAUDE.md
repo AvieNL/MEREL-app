@@ -136,3 +136,151 @@ Toon gele waarschuwing bij waarde buiten range — blokkeer opslaan NIET.
 - Engelse namen voor technische concepten (state, handler, export, sync)
 - Bij elke commit: versienummer en changelog.js bijwerken
 - Na elke voltooide taak/prompt: altijd changelog.js bijwerken, committen én pushen naar GitHub — zonder uitzondering
+
+---
+
+## Workflow: soortdata toevoegen vanuit Demongin
+
+### Wanneer
+Thijs levert de tekst van één of meer pagina's uit Demongin. Taak: zet alle aanwezige informatie over die soort om naar app-data. Voeg niets toe uit eigen kennis — alleen wat expliciet in de aangeleverde brontekst staat.
+
+### Bronfideliteit — absolute regel
+**Nooit iets verzinnen of aanvullen.** Als iets niet in de aangeleverde tekst staat, laat het veld leeg (`''`) of laat het weg. Bij twijfel: weglaten. Dit geldt ook voor:
+- Broedvlek als geslachtsindicator (staat zelden expliciet vermeld)
+- CP (uitstekende cloaca) tenzij letterlijk genoemd
+- Aantallen uit het hoofd (e.g. "typisch 10 handpennen") — alleen overnemen als getal + context in bron staat
+- Gedrag, voedsel, habitat — niet relevant voor ringersdata
+
+### Stap 1 — Script schrijven: `scripts/update-[soort]-data.js`
+
+Gebruik `scripts/TEMPLATE-soort-data.js` als startpunt. Alle velden in het `data`-object:
+
+#### Biometrie (`biometrie_*`)
+- Velden: `vleugel`, `staart`, `tarsus`, `gewicht`, `p8`, `snavel_schedel`, `snavel_schedel_is_bill_to_feathers` (bool), `kop_snavel`
+- Per veld: `{ min, max }` voor algemeen, `{ M: {min,max}, F: {min,max} }` voor geslachtsspecifiek
+- Subaspecies: `biometrie_ssp` object met subspecies-naam als key
+- Eenheid altijd mm of g — uit bron overnemen
+
+#### Penveren (`pennen_structuur`)
+```js
+{ wp: 'P3–P4', hp: 10, hp_note: '...', ap: 9, ap_note: '(soms 12; extr. 10–15)', tp: 3, sp: 12 }
+```
+`ap_note` en `hp_note` zijn optioneel. Alleen opnemen als de bron een range of uitzondering noemt.
+
+#### Rui (`rui_notities`)
+Vrije Markdown-tekst. Kalendermaanden als afkorting (jan/feb/…). Geen functies of {{MM}}-markers hier.
+
+#### Leeftijd en geslacht — KRITIEKE REGELS
+- **`leeftijds_notities_nj` ALTIJD `''` (lege string).** Zodra dit veld inhoud heeft, valt `SoortDetail.jsx` terug naar "klassieke modus" die `{{MM-MM}}`-blokken niet verwerkt.
+- **Alle seizoensgebonden tekst gaat in `leeftijds_notities_vj`**, ook herfst-specifieke passages. Gebruik `{{07-12}}` en `{{01-06}}` blokken om tekst per seizoen te tonen.
+- `{{MM1-MM2}}` toont de inhoud alleen als de huidige maand binnen het bereik valt (jan=1, dec=12). Blokken mogen genest worden maar niet overlappen.
+
+#### Bron-velden
+Alle literatuurverwijzingen uitsluitend in:
+`bron_biometrie`, `bron_leeftijdsbepaling`, `bron_geslacht`, `bron_id_kenmerken`, `bron_ondersoorten`, `bron_ring`
+Formaat: `'Demongin (2020) p.XXX'`
+**Nooit** een bronnaam inline in lopende tekst zetten.
+
+#### Andere velden
+- `determinatie_id_notities` — uitsluitend veld-identificatiekenmerken (wat zie je aan de vogel). Geen leeftijds- of geslachtsinformatie hier.
+- `vangst_checklist` — array van strings: wat te controleren bij vangst, alleen wat in bron staat
+- `ondersoorten` — array van `{ naam, verspreiding, kenmerken }`, "ringers" niet "ringaars"
+- `eerste_broedleeftijd` — string zoals `'2Y'`
+- `nestgegevens` — `{ eileg, broedels, eieren_min, eieren_max, broedtijd_min, broedtijd_max, nestjong_min, nestjong_max, broedzorg_dagen_min, broedzorg_dagen_max }`
+
+#### Script uitvoeren
+```bash
+node scripts/update-[soort]-data.js
+```
+Controleer output op errors. Bij success: ✓ Updated [soort].
+
+---
+
+### Stap 2 — Determinatiehulp (altijd proberen)
+
+Als de brontekst criteria bevat voor leeftijds- of geslachtsbepaling: maak een determinatiehulp.
+
+#### Architectuur
+| Laag | Bestand | Formaat |
+|---|---|---|
+| Static fallback | `src/data/determinatie/[familie].js` | Native JS-functies (`transform`, `bereken`) |
+| Supabase | `scripts/seed-[soort]-determinatie.js` | `transform_type` strings, `bereken_type` + `bereken_config` |
+| Interpreter | `src/utils/determinatie-interpreter.js` | Converteert strings → functies via `hydrateAid()` |
+| Registry | `src/data/determinatie/index.js` | Importeert alle familie-bestanden |
+
+#### Familie-bestanden (static fallback)
+Bestaande bestanden:
+- `corvidae.js` — Roek (EURING 15820), Kauw (15980)
+- `columbidae.js` — Houtduif (06700)
+- `ficedula.js` — Bonte Vliegenvanger (13490)
+
+Nieuwe familie → nieuw bestand `[familie].js` exporteert `export const [familie] = [...]`.
+Daarna in `index.js` importeren en toevoegen aan `alleAids`.
+
+#### Seizoen-split
+Vrijwel altijd is een seizoen-stap de eerste stap. Gebruik `uit_formulier` om het vangstdatum-veld automatisch om te zetten:
+- Static: `transform: datumNaarPeriode` (functie bovenaan het bestand definiëren)
+- Supabase: `transform_type: 'datum_naar_periode'`
+
+`datumNaarPeriode` → jan–mei = `'jan_mei'`, jun–dec = `'jun_dec'`
+
+#### Stap-typen
+- `keuze` — meerkeuze, elke optie heeft `waarde` + `label` + (`volgende` of `resultaat`)
+- `meting` — numerieke invoer, heeft `inputs[]` en `bereken_type` + `bereken_config`
+
+#### Bereken-typen (meting-stappen)
+| `bereken_type` | Gebruik |
+|---|---|
+| `drempelwaarde` | Één drempel: ≥ drempel → resultaat A, < drempel → resultaat B |
+| `lineaire_grenswaarde` | Lineaire formule met M/F grenzen |
+| `tf6_verschil` | TF6-specifieke berekening |
+
+`drempelwaarde` config:
+```js
+bereken_config: {
+  veld: 'kopbreedte',
+  drempel: 22,
+  resultaat_groter_gelijk: { waarde: 'M', label: '...', zeker: false, uitleg_template: '...' },
+  resultaat_kleiner:        { waarde: 'F', label: '...', zeker: false, uitleg_template: '...' },
+}
+```
+`uitleg_template` mag `{v}` (ingevoerde waarde) en `{drempel}` bevatten.
+
+#### Resultaat-object
+```js
+resultaat: {
+  waarde: '3',        // EURING-code (leeftijd) of 'M'/'F'/'U' (geslacht)
+  label: '1e kj',    // leesbare naam
+  zeker: false,       // true alleen als kenmerk absoluut onderscheidend is
+  uitleg: '...',      // uitleg voor de ringer
+  fallback_waarde: 'U', // optioneel: als waarde null is, gebruik dit als fallback
+}
+```
+
+#### Onzekere gevallen
+Als geslachtsbepaling niet mogelijk is (overlap 1e kj herfst e.d.):
+```js
+resultaat: { waarde: null, fallback_waarde: 'U', label: 'Niet te bepalen', zeker: false, uitleg: '...' }
+```
+
+#### Seed-script uitvoeren
+```bash
+node scripts/seed-[soort]-determinatie.js
+```
+
+---
+
+### Stap 3 — Integratie checklist
+
+Na elke nieuwe soort, in volgorde:
+1. `node scripts/update-[soort]-data.js` — data naar Supabase
+2. `src/data/determinatie/[familie].js` aanmaken of uitbreiden (static fallback)
+3. `src/data/determinatie/index.js` — import + toevoegen aan `alleAids`
+4. `node scripts/seed-[soort]-determinatie.js` — determinatiehulpen naar Supabase
+5. `src/data/changelog.js` + `package.json` — versie ophogen (minor bump)
+6. `git add ... && git commit && git push`
+
+### Versie-conventies
+- Minor bump (x.**Y**.0) per nieuwe soort of functie
+- Patch bump (x.x.**Z**) voor fixes op bestaande data
+- Changelog in NL + EN + DE
