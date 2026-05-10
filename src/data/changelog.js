@@ -1,6 +1,19 @@
-export const VERSIE = '1.81.0';
+export const VERSIE = '1.82.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.82.0',
+    datum: '2026-05-10',
+    wijzigingen: [
+      'Houtduif (EURING 06700): biometrie, ruitiming, leeftijds- en geslachtsbepaling, ID-kenmerken, ondersoorten en vangst-checklist toegevoegd (Demongin p.182–183)',
+    ],
+    wijzigingen_en: [
+      'Wood Pigeon (EURING 06700): biometrics, moult, age/sex criteria, ID features, subspecies and catch checklist added (Demongin p.182–183)',
+    ],
+    wijzigingen_de: [
+      'Ringeltaube (EURING 06700): Biometrie, Mauser, Alters-/Geschlechtsbestimmung, ID-Merkmale, Unterarten und Fangcheckliste hinzugefügt (Demongin S.182–183)',
+    ],
+  },
   {
     versie: '1.81.0',
     datum: '2026-05-04',
