@@ -1,6 +1,19 @@
-export const VERSIE = '1.85.5';
+export const VERSIE = '1.85.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.85.6',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Roek: literatuurreferenties toegevoegd (4 items incl. Demongin 2016)',
+    ],
+    wijzigingen_en: [
+      'Rook: literature references added (4 items incl. Demongin 2016)',
+    ],
+    wijzigingen_de: [
+      'Saatkrähe: Literaturangaben hinzugefügt (4 Einträge inkl. Demongin 2016)',
+    ],
+  },
   {
     versie: '1.85.5',
     datum: '2026-05-11',
