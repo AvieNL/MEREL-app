@@ -1,6 +1,22 @@
-export const VERSIE = '1.88.6';
+export const VERSIE = '1.89.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.89.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Koolmees (14640): volledige soortdata toegevoegd — biometrie ssp. major, rui, leeftijds- en geslachtsbepaling, ID-kenmerken (afwijkende vogels, verwisseling Turkestan Mees, hybridisatie), 12 major-ondersoorten + 2 groepen, 19 referenties',
+      'Koolmees: determinatiehulp — leeftijd (wangenkleur → PC vs. GC) en geslacht (BP → buikvlek breedte/kleur)',
+    ],
+    wijzigingen_en: [
+      'Great Tit (14640): full species data added — biometrics ssp. major, moult, age/sex determination, ID notes (aberrant birds, confusion with Turkestan Tit, hybridisation), 12 major subspecies + 2 groups, 19 references',
+      'Great Tit: determination aid — age (cheek colour → PC vs. GC) and sex (BP → belly patch width/colour)',
+    ],
+    wijzigingen_de: [
+      'Kohlmeise (14640): vollständige Artdaten hinzugefügt — Biometrie ssp. major, Mauser, Alters-/Geschlechtsbestimmung, Kennzeichen (Aberrante, Verwechslung Buchara-Meise, Hybridisierung), 12 major-Unterarten + 2 Gruppen, 19 Referenzen',
+      'Kohlmeise: Bestimmungshilfe — Alter (Wangenfarbe → PC vs. GC) und Geschlecht (BP → Bauchfleck Breite/Farbe)',
+    ],
+  },
   {
     versie: '1.88.6',
     datum: '2026-05-11',
