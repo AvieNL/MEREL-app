@@ -1,6 +1,19 @@
-export const VERSIE = '1.88.4';
+export const VERSIE = '1.88.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.88.5',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Ruitiming (rui_notities): leeftijdsnamen bijgewerkt voor alle 6 soorten — "Juveniel [3]" → "1e kj (3)", "Adult [6]" → "na 2e kj (6)" etc.; Roek-koppen nu vetgedrukt Markdown',
+    ],
+    wijzigingen_en: [
+      'Moult timing (rui_notities): age labels updated for all 6 species — "Juveniel [3]" → "1e kj (3)", "Adult [6]" → "na 2e kj (6)" etc.; Rook headings now bold Markdown',
+    ],
+    wijzigingen_de: [
+      'Mauser-Timing (rui_notities): Altersbezeichnungen für alle 6 Arten aktualisiert — "Juveniel [3]" → "1e kj (3)", "Adult [6]" → "na 2e kj (6)" usw.; Saatkrähe-Überschriften jetzt Markdown-fett',
+    ],
+  },
   {
     versie: '1.88.4',
     datum: '2026-05-11',
