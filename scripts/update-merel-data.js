@@ -68,43 +68,43 @@ const updates = {
   leeftijds_notities_vj: [
 
     NJ +
-    '**3J** Bovenzijde, LC en MC met bleke streping. Onderzijde gespikkeld.\n♂ M: TF zwart of bijna zwart, soms moeilijk te beoordelen. Centrum bovenste keel zwartachtig.\n♀ V: TF olijfbruin, soms moeilijk te beoordelen. Centrum bovenste keel licht gespikkeld.',
+    '**3J** Bovenzijde, LC en MC met bleke streping. Onderzijde gespikkeld.\n♂ M: staartveren zwart of bijna zwart, soms moeilijk te beoordelen. Centrum bovenste keel zwartachtig.\n♀ V: staartveren olijfbruin, soms moeilijk te beoordelen. Centrum bovenste keel licht gespikkeld.',
 
     NJ +
-    '**1e kj (3) ♂ M** Contrast buitenste GC (zwartbruin of bruin, soms bleke punt) met binnenste GC (zwart, geruid). Als alle GC geruid: zoek contrast met juv PC, in alula, in T of tussen T en S. Bovenzijde bruinzwart, nooit olijftint. TF zwart maar P en S bruin. Snavel gewoonlijk bruinzwart tot dec–jan, dan progressief geel wordend. Juv centrale TF gewoonlijk smal en puntig.',
+    '**1e kj (3) ♂ M** Contrast buitenste GC (zwartbruin of bruin, soms bleke punt) met binnenste GC (zwart, geruid). Als alle GC geruid: zoek contrast met juv PC, in alula, in T of tussen T en S. Bovenzijde bruinzwart, nooit olijftint. Staartveren zwart maar P en S bruin. Snavel gewoonlijk bruinzwart tot dec–jan, dan progressief geel wordend. Juv centrale staartveer gewoonlijk smal en puntig.',
 
     NJ +
-    '**1e kj (3) ♀ V** Zelfde soort contrast in vleugel als ♂ M. Juv veren roestbruin of grijsbruin, geruide veren olijfbruin. Snavel donker, gewoonlijk zonder geel vóór vroeg voorjaar. Juv centrale TF gewoonlijk smal en puntig.',
+    '**1e kj (3) ♀ V** Zelfde soort contrast in vleugel als ♂ M. Juv veren roestbruin of grijsbruin, geruide veren olijfbruin. Snavel donker, gewoonlijk zonder geel vóór vroeg voorjaar. Juv centrale staartveer gewoonlijk smal en puntig.',
 
     NJ +
-    '**na 1e kj (4) ♂ M** Volledig zwart of donker bruinzwart. Alle GC en T egaal zwart: geen contrast in vleugel. Snavel geel tot oranjeGeel. Centrale TF gewoonlijk breed.',
+    '**na 1e kj (4) ♂ M** Volledig zwart of donker bruinzwart. Alle GC en T egaal zwart: geen contrast in vleugel. Snavel geel tot oranjeGeel. Centrale staartveer gewoonlijk breed.',
 
     NJ +
-    '**na 1e kj (4) ♀ V** Bovenzijde donker grijsbruin, gewoonlijk met olijftint. Alle GC egaal donker olijfbruin: geen contrast in vleugel. Snavel donker roze of donker geelbruin, zelden zo geel als bij ♂ M. Centrale TF gewoonlijk breed.',
+    '**na 1e kj (4) ♀ V** Bovenzijde donker grijsbruin, gewoonlijk met olijftint. Alle GC egaal donker olijfbruin: geen contrast in vleugel. Snavel donker roze of donker geelbruin, zelden zo geel als bij ♂ M. Centrale staartveer gewoonlijk breed.',
 
     VJ +
-    '**2e kj (5) ♂ M** Contrast buitenste GC (zwartbruin, soms bleke punt) met binnenste GC (zwart, geruid). Als alle GC geruid: zoek contrast met juv PC, in alula, in T of tussen T en S. Snavel soms gedeeltelijk donker tot apr. Juv centrale TF gewoonlijk nog smal en puntig.',
+    '**2e kj (5) ♂ M** Contrast buitenste GC (zwartbruin, soms bleke punt) met binnenste GC (zwart, geruid). Als alle GC geruid: zoek contrast met juv PC, in alula, in T of tussen T en S. Snavel soms gedeeltelijk donker tot apr. Juv centrale staartveer gewoonlijk nog smal en puntig.',
 
     VJ +
-    '**2e kj (5) ♀ V** Zelfde soort contrast als in het najaar: juv veren roestbruin of grijsbruin, geruide veren olijfbruin. Juv centrale TF gewoonlijk nog smal en puntig. Moeilijk te ouderdomsbepalen in jun–jul door slijtage.',
+    '**2e kj (5) ♀ V** Zelfde soort contrast als in het najaar: juv veren roestbruin of grijsbruin, geruide veren olijfbruin. Juv centrale staartveer gewoonlijk nog smal en puntig. Moeilijk te ouderdomsbepalen in jun–jul door slijtage.',
 
     VJ +
-    '**Volwassen — niet nader te dateren** Geen GC-contrast: vleugel gelijkmatig versleten. Centrale TF breed. Kan 2e kj (5) zijn waarvan het contrast door slijtage verdwenen is (met name ♀ V in jun–jul), of ouder.',
+    '**Volwassen — niet nader te dateren** Geen GC-contrast: vleugel gelijkmatig versleten. Centrale staartveer breed. Kan 2e kj (5) zijn waarvan het contrast door slijtage verdwenen is (met name ♀ V in jun–jul), of ouder.',
 
   ].join('\n\n'),
 
   // ── Geslacht ──────────────────────────────────────────────────────────────
   geslachts_notities_m:
-    '- Volledig zwart of donker bruinzwart verenkleed; TF zwart\n' +
+    '- Volledig zwart of donker bruinzwart verenkleed; staartveren zwart\n' +
     '- 1e kj (3) ♂ M: P en S bruin; snavel bruinzwart tot dec–jan, dan progressief geel wordend\n' +
     '- na 1e kj (4) ♂ M: snavel geel tot oranjeGeel; 2e kj (5) ♂ M soms snavel gedeeltelijk donker tot apr\n' +
-    '- Juv (3J) ♂ M: TF zwart of bijna zwart (soms moeilijk te beoordelen); centrum bovenste keel zwartachtig',
+    '- Juv (3J) ♂ M: staartveren zwart of bijna zwart (soms moeilijk te beoordelen); centrum bovenste keel zwartachtig',
 
   geslachts_notities_f:
     '- Bovenzijde donker grijsbruin, gewoonlijk met olijftint; keel en borst roestbruin gestreept of gevlekt zwart\n' +
-    '- TF olijfbruin; snavel donker roze of donker geelbruin, zelden zo geel als bij ♂ M\n' +
+    '- Staartveren olijfbruin; snavel donker roze of donker geelbruin, zelden zo geel als bij ♂ M\n' +
     '- Kleur onderzijde individueel sterk variabel, zonder correlatie met leeftijd\n' +
-    '- Juv (3J) ♀ V: TF olijfbruin (soms moeilijk te beoordelen); centrum bovenste keel licht gespikkeld',
+    '- Juv (3J) ♀ V: staartveren olijfbruin (soms moeilijk te beoordelen); centrum bovenste keel licht gespikkeld',
 
   // ── ID-kenmerken ──────────────────────────────────────────────────────────
   determinatie_id_notities:
@@ -144,9 +144,9 @@ const updates = {
     { label: 'Vleugel',          type: 'meting', belang: 3 },
     { label: 'Gewicht',          type: 'meting', belang: 2 },
     { label: 'Tarsus',           type: 'meting', belang: 2 },
-    { label: 'TF kleur',         type: 'obs',    belang: 3, note: 'Zwart = ♂ M · Olijfbruin = ♀ V (bij juv soms moeilijk)' },
+    { label: 'Staartveren kleur',         type: 'obs',    belang: 3, note: 'Zwart = ♂ M · Olijfbruin = ♀ V (bij juv soms moeilijk)' },
     { label: 'GC contrast',      type: 'obs',    belang: 3, note: 'Buitenste juv vs binnenste geruide GC = 1e kj · Egale GC = na 1e kj' },
-    { label: 'Centrale TF vorm', type: 'obs',    belang: 2, note: 'Smal en puntig = 1e kj · Breed = na 1e kj' },
+    { label: 'Centrale staartveer vorm', type: 'obs',    belang: 2, note: 'Smal en puntig = 1e kj · Breed = na 1e kj' },
     { label: 'Snavelkleur',      type: 'obs',    belang: 2, note: 'Bruinzwart tot dec–jan = 1e kj ♂ M · Geel-oranje = na 1e kj ♂ M' },
   ],
 
