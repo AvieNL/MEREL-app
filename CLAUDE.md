@@ -194,7 +194,7 @@ Formaat (zie Merel en Roek als voorbeeld):
 ```
 
 **Opmaakregels vleugelformule:**
-- **Eerste regel altijd**: `Vleugelpunt (WP): <P-nummers>` als rij-entry. Haakjes voor optionele pennen: `(P3) P4 (P5)`. Bereik met koppelteken: `(P3) P4–P10`. Nooit de ruwe Demongin-notatie `WP=(3)4(5)` als vol-chip opslaan.
+- **Vleugelpunt NIET herhalen in vleugelformule** als `pennen_structuur.wp` al is ingesteld — dat veld rendert al als "Vleugelpunt"-rij bóven de FORMULE-scheider. Alleen toevoegen als pennen_structuur.wp ontbreekt. De ruwe Demongin-notatie `WP=(3)4(5)` als vol-chip is altijd fout.
 - **Beschrijvende kenmerken** (P-lengtes, positie, ratio's): gebruik `label: waarde` notatie zodat ze als nette label-waarde rijen renderen, bijv. `P5 en P6: lang · P1: relatief lang · P2: kort` of `P1: 8/9(10) boven P2 · P2: 5/6 boven P3`
 - **WP-afstanden per pen**: gebruik `Pn WP: xx–yy mm` notatie, bijv. `P1 WP: 63–80 mm · P2 WP: 10–15 mm`
 - **Uitgerand/Inkeping**: gebruik bereiknotatie met koppelteken als pennen aaneengesloten zijn, bijv. `Uitgerand: P3–P6 · Inkeping: P2–P4 (P5)`

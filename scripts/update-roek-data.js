@@ -72,7 +72,6 @@ const updates = {
 
   // Vleugelformule
   vleugelformule:
-    'Vleugelpunt (WP): (P3) P4–P10\n' +
     'P1: 8/9(10) boven P2 · P2: 5/6 boven P3\n' +
     'P1 WP: 89–125 mm · P2 WP: 18–41 mm · P3 WP: 0–10 mm · P5 WP: 4–14 mm · P6 WP: 31–47 mm\n' +
     'Uitgerand: P2–P5 · Inkeping: P1–P4\n' +

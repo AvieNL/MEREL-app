@@ -1,6 +1,19 @@
-export const VERSIE = '1.94.3';
+export const VERSIE = '1.94.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.94.4',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Vleugelformule Merel + Roek: dubbele Vleugelpunt-rij verwijderd — pennen_structuur.wp toont al "Vleugelpunt" boven de FORMULE-scheider',
+    ],
+    wijzigingen_en: [
+      'Wing formula Blackbird + Rook: duplicate Wing point row removed — pennen_structuur.wp already renders "Vleugelpunt" above the FORMULA separator',
+    ],
+    wijzigingen_de: [
+      'Flügelformel Amsel + Saatkrähe: doppelte Flügelpunkt-Zeile entfernt — pennen_structuur.wp zeigt "Vleugelpunt" bereits oberhalb des FORMULE-Trenners',
+    ],
+  },
   {
     versie: '1.94.3',
     datum: '2026-05-11',
