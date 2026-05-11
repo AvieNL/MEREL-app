@@ -210,8 +210,20 @@ Seizoensovergang: `**na 1e kj (4)** — in/na postjuv-rui → in jan: 2e kj (5)`
 Cross-referentie: `**2e kj (5)** (= vorig najaar: na 1e kj (4))`
 Nooit "Adult" als standalone label — gebruik altijd de EURING-naam.
 
-**⚠️ Markdown alinea-scheiding — altijd \n\n, nooit \n**
-Tussen elke kop (`**...**`) en de volgende tekst of tabel altijd een lege regel (`\n\n`). Een enkele `\n` wordt door de Markdown-renderer omgezet naar `<br>` die als literal tekst verschijnt. Dit geldt ook als de kop eindigt met inline tekst of cursief, bijv. `**Kop** _Latijnse naam_\n\n`.
+**⚠️ Markdown alinea-scheiding — \n\n tussen alinea's, maar NIET binnen tabelblokken**
+`renderIDKenmerken()` splitst `determinatie_id_notities` op `\n\n`. Een `**Vergelijking ...:**`-kop en alle bijbehorende pipe-tabelrijen moeten in hetzelfde blok staan — gescheiden door `\n`, **nooit** `\n\n`. Zodra `\n\n` na de Vergelijking-kop staat, wordt de tabel als losse alinea gerenderd met `<br>` tussen elke rij.
+
+Correcte structuur voor een tabelblok:
+```
+**Vergelijking A / B / C:**
+| Kenmerk | A | B | C |
+|---|---|---|---|
+| Rij | ... | ... | ... |
+
+**Volgende alinea...**
+```
+
+Voor overige koppen (`**Hybridisatie...**`, `**Afwijkende vogels**`, etc.) wél `\n\n` voor de volgende alinea — anders toont de renderer `<br>` na de kop.
 
 **⚠️ Geslachtssymbolen — altijd met letter**
 Schrijf ALTIJD de letter direct achter het geslachtssymbool. Nooit het symbool alleen.

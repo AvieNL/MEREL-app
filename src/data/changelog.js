@@ -1,6 +1,19 @@
-export const VERSIE = '1.88.5';
+export const VERSIE = '1.88.6';
 
 export const CHANGELOG = [
+  {
+    versie: '1.88.6',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Pimpelmees en GBS: vergelijkingstabel in ID-kenmerken hersteld — titelregel en tabelrijen moeten in hetzelfde blok staan (\\n, niet \\n\\n), anders rendert de renderer elke rij als losse alinea met <br>',
+    ],
+    wijzigingen_en: [
+      'Blue Tit and GSW: comparison table in ID notes restored — title and table rows must be in the same block (\\n, not \\n\\n), otherwise renderer shows each row as a separate paragraph with <br>',
+    ],
+    wijzigingen_de: [
+      'Blaumeise und Buntspecht: Vergleichstabelle in Kennzeichen wiederhergestellt — Titelzeile und Tabellenzeilen müssen im selben Block stehen (\\n, nicht \\n\\n)',
+    ],
+  },
   {
     versie: '1.88.5',
     datum: '2026-05-11',
