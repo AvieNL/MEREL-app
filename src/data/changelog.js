@@ -1,6 +1,25 @@
-export const VERSIE = '1.92.0';
+export const VERSIE = '1.93.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.93.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Huismus (15910): volledige soortdata toegevoegd — biometrie (vleugel + staart M/F apart, snavel schedel + snavelhoogte + tarsus + gewicht M&F gezamenlijk), rui (sterk variabele postjuv-rui door verlengd broedseizoen), leeftijds- en geslachtsbepaling, vergelijkingstabel Huismus/Italiaanse Mus/Spaanse Mus/Ringmus, hybridisatie, 5 ondersoorten (domesticus, balearoibericus, biblicus, tingitanus, niloticus), 34 referenties',
+      'Huismus: determinatiehulp — leeftijd NJ (actieve rui → P1 afstand tot PC: ≤5 mm = 1e kj, 5–9 mm = na 1e kj) en leeftijd VJ (geslacht → ♂ M via MC kleur: prox. helft zwart = 1e/2e kj, vrijwel volledig wit = na 1e/2e kj; ♀ V niet te bepalen → EURING 2)',
+      'Huismus: geslachtsdeterminatie — keel/bovenborst kleur (zwart = ♂ M zeker, gelbwit = ♀ V zeker)',
+    ],
+    wijzigingen_en: [
+      'House Sparrow (15910): full species data added — biometrics (wing + tail M/F separate, bill to skull + bill depth + tarsus + weight M&F combined), moult (highly variable postjuv moult due to extended breeding season), age/sex determination, comparison table House Sparrow/Italian Sparrow/Spanish Sparrow/Tree Sparrow, hybridization, 5 subspecies (domesticus, balearoibericus, biblicus, tingitanus, niloticus), 34 references',
+      'House Sparrow: determination aid — age autumn (active moult → P1 distance above PC: ≤5 mm = 1st cy, 5–9 mm = after 1st cy) and age spring (sex → ♂ M via MC colour: proximal half black = 1st/2nd cy, almost fully white = after 1st/2nd cy; ♀ F not ageable → EURING 2)',
+      'House Sparrow: sex determination — throat/upper breast colour (black = ♂ M certain, yellowish-white = ♀ F certain)',
+    ],
+    wijzigingen_de: [
+      'Haussperling (15910): vollständige Artdaten hinzugefügt — Biometrie (Flügel + Schwanz M/V getrennt, Schnabel bis Schädel + Schnabelhöhe + Tarsus + Gewicht M&V gemeinsam), Mauser (stark variable Postjuv-Mauser durch verlängerter Brutsaison), Alters-/Geschlechtsbestimmung, Vergleichstabelle Haussperling/Italiensperling/Weidensperling/Feldsperling, Hybridisierung, 5 Unterarten (domesticus, balearoibericus, biblicus, tingitanus, niloticus), 34 Referenzen',
+      'Haussperling: Bestimmungshilfe — Alter Herbst (aktive Mauser → P1-Abstand über PC: ≤5 mm = 1. Kj., 5–9 mm = nach 1. Kj.) und Alter Frühjahr (Geschlecht → ♂ M via MC-Farbe: prox. Hälfte schwarz = 1./2. Kj., fast vollständig weiß = nach 1./2. Kj.; ♀ V nicht bestimmbar → EURING 2)',
+      'Haussperling: Geschlechtsbestimmung — Kehle/Oberbrust-Farbe (schwarz = ♂ M sicher, gelblichweiß = ♀ V sicher)',
+    ],
+  },
   {
     versie: '1.92.0',
     datum: '2026-05-11',
