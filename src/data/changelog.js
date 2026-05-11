@@ -1,6 +1,19 @@
-export const VERSIE = '1.87.3';
+export const VERSIE = '1.87.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.87.4',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Grote Bonte Specht: aberrante vogels en hybridisatie toegevoegd aan ID-kenmerken (Syrische Specht, Middelste Bonte Specht, Witrugspecht, Witvleugelspecht)',
+    ],
+    wijzigingen_en: [
+      'Great Spotted Woodpecker: aberrant birds and hybridisation added to ID notes (Syrian, Middle Spotted, White-backed, White-winged Woodpecker)',
+    ],
+    wijzigingen_de: [
+      'Buntspecht: Aberrante Vögel und Hybridisierung zu Kennzeichen hinzugefügt (Syrischer Specht, Mittelspecht, Weißrückenspecht, Weißflügelspecht)',
+    ],
+  },
   {
     versie: '1.87.3',
     datum: '2026-05-11',
