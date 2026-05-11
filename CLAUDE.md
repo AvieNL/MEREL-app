@@ -211,7 +211,7 @@ Formaat: `'Demongin (2020) p.XXX'`
 **Nooit** een bronnaam inline in lopende tekst zetten.
 
 #### Andere velden
-- `determinatie_id_notities` — uitsluitend veld-identificatiekenmerken (wat zie je aan de vogel). Geen leeftijds- of geslachtsinformatie hier.
+- `determinatie_id_notities` — veld-identificatiekenmerken (wat zie je aan de vogel). Geen leeftijds- of geslachtsinformatie hier. **Altijd opnemen als Demongin dit vermeldt: aberrante vogels, hybridisatie en verwisselbare soorten.**
 - `vangst_checklist` — array van strings: wat te controleren bij vangst, alleen wat in bron staat
 - `referenties_literatuur` — array van strings (bijv. `'Jenni & Winkler (1994)'`): de REFERENCES-sectie uit Demongin. Wordt getoond als inklapbare "Literatuur"-sectie onderaan de soortenpagina.
 - `ondersoorten` — array van `{ naam, verspreiding, kenmerken }`, "ringers" niet "ringaars"
