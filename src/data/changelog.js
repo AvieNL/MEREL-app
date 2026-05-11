@@ -1,6 +1,19 @@
-export const VERSIE = '1.87.0';
+export const VERSIE = '1.87.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.87.1',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Grote Bonte Specht: leeftijdstekst gecorrigeerd — iris-secties verwijderd (onbetrouwbaar per Demongin), EURING-codes gecorrigeerd ([4] voor 1e kj na rui), voorjaar-blok toont nu correct 2e kj [5] i.p.v. "1e kj"',
+    ],
+    wijzigingen_en: [
+      'Great Spotted Woodpecker: age text corrected — iris sections removed (unreliable per Demongin), EURING codes fixed ([4] for 1st-year after moult), spring block now correctly shows 2nd cy [5]',
+    ],
+    wijzigingen_de: [
+      'Buntspecht: Alterstext korrigiert — Iris-Abschnitte entfernt (laut Demongin unzuverlässig), EURING-Codes korrigiert, Frühjahrsblock zeigt jetzt korrekt 2. Kj. [5]',
+    ],
+  },
   {
     versie: '1.87.0',
     datum: '2026-05-11',

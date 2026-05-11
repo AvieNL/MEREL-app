@@ -1,0 +1,58 @@
+/**
+ * fix-gbs-leeftijd-tekst.js
+ * Herschrijft leeftijds_notities_vj van de Grote Bonte Specht (08760):
+ * - Iris-secties verwijderd (Demongin: onbetrouwbaar als enig kenmerk)
+ * - EURING-codes gecorrigeerd ([4] voor 1e kj na rui; [5] voor 2e kj voorjaar)
+ * - Irruptie-notitie verplaatst naar juiste blok (herfst, voor rui)
+ * - Voorjaar-blok gecorrigeerd: vorig jaar geboren vogels = 2e kj [5], niet 1e kj
+ */
+
+import { createClient } from '@supabase/supabase-js';
+import { config } from 'dotenv';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+config({ path: join(__dirname, '../.env.local') });
+
+const sb = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+const { data: row, error: fetchErr } = await sb.from('species')
+  .select('euring_code, naam_nl, data')
+  .eq('euring_code', '08760')
+  .single();
+
+if (fetchErr) { console.error('Ophalen mislukt:', fetchErr.message); process.exit(1); }
+
+const leeftijds_notities_vj =
+  '{{07-12}}\n' +
+  '**1e kj vóór postjuv-rui [3]**\n' +
+  'Kroon dof rood met zwarte rand; nek zwart. Buikzijde en onderstaartdekveren roze of dof rood. P2 t/m P10 met witte of lichtbeige punt; PC breed. P1 steekt 5–12 mm boven de PC uit (P1–WP = 61–74). Let op: bij irrupties (major uit N-Europa) kan de rui traag verlopen waardoor de kroon tot in okt rood blijft.\n\n' +
+  '**1e kj in/na postjuv-rui [4]**\n' +
+  'LC, MC en nieuwe mantelveertjes pas gemoult, contrasterend met doffe, bruinere juv PC en buitenste GC. Buitenste GC doorgaans bruiner dan nieuw gemoult dekveermateriaal.\n\n' +
+  '**2e kj / 3e kj [5/7]**\n' +
+  'Vergelijkbaar met adult, maar aangehouden juv PC puntiger, smaller, duidelijk bruiner en meer versleten. Soms aangehouden juv S meer versleten en gebleekt; lijn van witte vlekken op S-punten niet recht.\n\n' +
+  '**Adult [6]**\n' +
+  'Alle PC egaal glanzend zwart, zonder contrast (incidenteel enkele bruinere PC aangehouden). Kroon zwart. P2 t/m P5 (P6) zonder witte punt. P1 steekt 3–5 mm boven de PC uit (P1–WP = 75–88).\n\n' +
+  '{{01-06}}\n' +
+  '**2e kj [5]**\n' +
+  'Aangehouden juv PC puntiger, smaller, duidelijk bruiner en meer versleten dan verse veren. Soms aangehouden juv S meer versleten en gebleekt; lijn van witte vlekken op S-punten niet recht.\n\n' +
+  '**3e kj [7]**\n' +
+  'Alleen te onderscheiden van adult als juv PC aangehouden — volg dan de criteria van 2e kj. Anders niet van adult te onderscheiden.\n\n' +
+  '**Adult [6]**\n' +
+  'Alle PC egaal glanzend zwart. Kroon zwart. P2 t/m P5 (P6) zonder witte punt. P1 steekt 3–5 mm boven de PC uit (P1–WP = 75–88).';
+
+const newData = {
+  ...row.data,
+  leeftijds_notities_vj,
+  leeftijds_notities_nj: '',
+};
+
+const { error } = await sb.from('species').upsert({
+  euring_code: row.euring_code,
+  naam_nl: row.naam_nl,
+  data: newData,
+});
+
+if (error) { console.error('Upsert mislukt:', error.message); process.exit(1); }
+console.log('✓ Grote Bonte Specht leeftijdstekst gecorrigeerd');
