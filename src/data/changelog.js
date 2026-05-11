@@ -1,6 +1,19 @@
-export const VERSIE = '1.85.3';
+export const VERSIE = '1.85.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.85.4',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Houtduif: literatuurreferenties toegevoegd (8 items incl. Demongin 2016)',
+    ],
+    wijzigingen_en: [
+      'Common Wood Pigeon: literature references added (8 items incl. Demongin 2016)',
+    ],
+    wijzigingen_de: [
+      'Ringeltaube: Literaturangaben hinzugefügt (8 Einträge inkl. Demongin 2016)',
+    ],
+  },
   {
     versie: '1.85.3',
     datum: '2026-05-11',
