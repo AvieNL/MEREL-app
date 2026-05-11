@@ -1,6 +1,22 @@
-export const VERSIE = '1.87.4';
+export const VERSIE = '1.88.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.88.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Pimpelmees (14620): volledige soortdata toegevoegd — biometrie, rui, leeftijds- en geslachtsbepaling, ID-kenmerken (tabel Pimpelmees/Afrikaanse Pimpelmees/Azuurmees, hybridisatie Koolmees en Azuurmees), 11 ondersoorten, 18 literatuurreferenties',
+      'Pimpelmees: determinatiehulp toegevoegd — leeftijdsbepaling (wangen → PC-kleur vs. GC) en geslachtsbepaling (BP/cloaca → dekverenkleur)',
+    ],
+    wijzigingen_en: [
+      'Blue Tit (14620): full species data added — biometrics, moult, age and sex determination, ID notes (comparison table Blue Tit/African Blue Tit/Azure Tit, hybridisation with Great Tit and Azure Tit), 11 subspecies, 18 literature references',
+      'Blue Tit: determination aid added — age (cheek colour → PC colour vs. GC) and sex (BP/cloaca → covert colour)',
+    ],
+    wijzigingen_de: [
+      'Blaumeise (14620): vollständige Artdaten hinzugefügt — Biometrie, Mauser, Alters- und Geschlechtsbestimmung, Kennzeichen (Vergleichstabelle Blaumeise/Afrikanische Blaumeise/Lasurmeise, Hybridisierung mit Kohlmeise und Lasurmeise), 11 Unterarten, 18 Literaturangaben',
+      'Blaumeise: Bestimmungshilfe hinzugefügt — Alter (Wangenfarbe → PC-Farbe vs. GC) und Geschlecht (BP/Kloake → Deckenfarbe)',
+    ],
+  },
   {
     versie: '1.87.4',
     datum: '2026-05-11',
