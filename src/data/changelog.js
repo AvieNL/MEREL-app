@@ -1,6 +1,19 @@
-export const VERSIE = '1.94.1';
+export const VERSIE = '1.94.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.94.2',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Merel: vleugelformule volledig geherstructureerd — WP-afstanden en kenmerken tonen nu als nette label-waarde rijen (P1 WP: 63–80 mm, P5 en P6: lang, etc.), Bron verwijderd uit formule-widget',
+    ],
+    wijzigingen_en: [
+      'Blackbird: wing formula restructured — WP distances and features now display as clean label-value rows (P1 WP: 63–80 mm, P5 en P6: lang, etc.), Source removed from formula widget',
+    ],
+    wijzigingen_de: [
+      'Amsel: Flügelformel neu strukturiert — WP-Abstände und Merkmale werden jetzt als saubere Label-Wert-Zeilen angezeigt (P1 WP: 63–80 mm, P5 en P6: lang, usw.), Quelle aus dem Formel-Widget entfernt',
+    ],
+  },
   {
     versie: '1.94.1',
     datum: '2026-05-11',

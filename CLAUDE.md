@@ -185,13 +185,21 @@ Gebruik `scripts/TEMPLATE-soort-data.js` als startpunt. Alle velden in het `data
 #### Vleugelformule (`vleugelformule`) — altijd opnemen als Demongin de tabel geeft
 Als Demongin een vleugelformuletabel geeft (P-WP afstanden, uitrandingen, inkepingen), ALTIJD opslaan als geformatteerde string. Nooit `''` laten staan als er data is.
 
-Formaat (zie Roek als voorbeeld):
+Formaat (zie Merel als voorbeeld):
 ```
-'WP=(3)4(5) · P5 en P6 lang · P1 relatief lang · P2 kort\n' +
-'P1 WP 63–80 mm · P2 WP 10–15 mm · P3 WP (0)1–4 mm · P6 WP 2–7 mm · P10 WP 21–31 mm\n' +
-'Uitgerand: P3 P4 P5 P6 · Inkeping: P2 P3 P4 (P5)\n' +
-'Bron: Demongin (2016) p.XXX'
+'WP=(3)4(5)\n' +
+'P5 en P6: lang · P1: relatief lang · P2: kort\n' +
+'P1 WP: 63–80 mm · P2 WP: 10–15 mm · P3 WP: (0)1–4 mm · P6 WP: 2–7 mm · P10 WP: 21–31 mm\n' +
+'Uitgerand: P3–P6 · Inkeping: P2–P4 (P5)'
 ```
+
+**Opmaakregels vleugelformule:**
+- **Eerste regel**: alleen de WP-formuulecode als los vol-item, bijv. `WP=(3)4(5)` — geen colon, geen `·`
+- **Beschrijvende kenmerken** (P-lengtes, positie): gebruik `label: waarde` notatie zodat ze als nette label-waarde rijen renderen, bijv. `P5 en P6: lang · P1: relatief lang · P2: kort`
+- **WP-afstanden per pen**: gebruik `Pn WP: xx–yy mm` notatie, bijv. `P1 WP: 63–80 mm · P2 WP: 10–15 mm`
+- **Uitgerand/Inkeping**: gebruik bereiknotatie met koppelteken als pennen aaneengesloten zijn, bijv. `Uitgerand: P3–P6 · Inkeping: P2–P4 (P5)`
+- **Geen Bron-regel** in de vleugelformule — bronstaat in `bron_ring`
+- De `·` parser maakt alle items op één regel tot rij-entries **als alle delen** een colon bevatten (`label: waarde`). Ontbreekt één colon → alles wordt vol-chip. Zorg dus dat ALLE items op een regel hetzelfde patroon volgen.
 - Demongin "Em" = emarginations = **uitgerand** (P-nummers van buiten naar binnen, Demongin-telling)
 - Demongin "Notch" = notch = **inkeping**
 - Demongin P-nummering is omgekeerd aan Griel: Demongin P1 = buitenste; Griel P10 = buitenste
