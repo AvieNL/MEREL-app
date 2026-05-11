@@ -1,6 +1,19 @@
-export const VERSIE = '1.85.2';
+export const VERSIE = '1.85.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.85.3',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Bonte Vliegenvanger: literatuurreferenties toegevoegd (37 items incl. Demongin 2016)',
+    ],
+    wijzigingen_en: [
+      'Pied Flycatcher: literature references added (37 items incl. Demongin 2016)',
+    ],
+    wijzigingen_de: [
+      'Trauerschnäpper: Literaturangaben hinzugefügt (37 Einträge inkl. Demongin 2016)',
+    ],
+  },
   {
     versie: '1.85.2',
     datum: '2026-05-11',
