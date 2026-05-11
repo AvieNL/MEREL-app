@@ -1,6 +1,25 @@
-export const VERSIE = '1.86.0';
+export const VERSIE = '1.87.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.87.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Grote Bonte Specht (08760): biometrie (ssp. major), rui, leeftijd, geslacht, ID, 14 ondersoorten, 17 referenties toegevoegd',
+      'Grote Bonte Specht: determinatiehulpen leeftijd (PC-kleur) en geslacht (nekrood / kroonvlek) toegevoegd',
+      'Nieuw determinatie-familiebestand: picidae.js',
+    ],
+    wijzigingen_en: [
+      'Great Spotted Woodpecker (08760): biometrics (ssp. major), moult, age, sex, ID, 14 subspecies, 17 references added',
+      'Great Spotted Woodpecker: ID aids added for age (PC colour) and sex (nape red / crown patch)',
+      'New ID-aid family file: picidae.js',
+    ],
+    wijzigingen_de: [
+      'Buntspecht (08760): Biometrie (ssp. major), Mauser, Alter, Geschlecht, Kennzeichen, 14 Unterarten, 17 Literaturangaben hinzugefügt',
+      'Buntspecht: Bestimmungshilfen Alter (PC-Farbe) und Geschlecht (Rotfärbung Nacken / Stirnfleck) hinzugefügt',
+      'Neue Bestimmungshilfen-Familiendatei: picidae.js',
+    ],
+  },
   {
     versie: '1.86.0',
     datum: '2026-05-11',
