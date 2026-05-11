@@ -182,6 +182,28 @@ Gebruik `scripts/TEMPLATE-soort-data.js` als startpunt. Alle velden in het `data
 ```
 `ap_note` en `hp_note` zijn optioneel. Alleen opnemen als de bron een range of uitzondering noemt.
 
+#### Vleugelformule (`vleugelformule`) — altijd opnemen als Demongin de tabel geeft
+Als Demongin een vleugelformuletabel geeft (P-WP afstanden, uitrandingen, inkepingen), ALTIJD opslaan als geformatteerde string. Nooit `''` laten staan als er data is.
+
+Formaat (zie Roek als voorbeeld):
+```
+'WP=(3)4(5) · P5 en P6 lang · P1 relatief lang · P2 kort\n' +
+'P1 WP 63–80 mm · P2 WP 10–15 mm · P3 WP (0)1–4 mm · P6 WP 2–7 mm · P10 WP 21–31 mm\n' +
+'Uitgerand: P3 P4 P5 P6 · Inkeping: P2 P3 P4 (P5)\n' +
+'Bron: Demongin (2016) p.XXX'
+```
+- Demongin "Em" = emarginations = **uitgerand** (P-nummers van buiten naar binnen, Demongin-telling)
+- Demongin "Notch" = notch = **inkeping**
+- Demongin P-nummering is omgekeerd aan Griel: Demongin P1 = buitenste; Griel P10 = buitenste
+- Laat regels weg als de bron de data niet geeft (bv. geen Em/Notch)
+
+**Demongin-afkortingen in determinatieteksten:**
+- **TF** = tail feathers (staartveren) — NOOIT tertialen
+- **T** = tertials (tertialen)
+- **P** = primaries (handpennen), **S** = secondaries (armpennen)
+- **GC/MC/LC** = grote/middelste/kleine vleugeldekveren
+- **CC** = carpal coverts (carpaaldekveren), **PC** = primary coverts (handpendekveren)
+
 #### Rui (`rui_notities`)
 Vrije Markdown-tekst. Kalendermaanden als afkorting (jan/feb/…). Geen functies of {{MM}}-markers hier.
 
