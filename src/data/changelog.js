@@ -1,6 +1,22 @@
-export const VERSIE = '1.89.1';
+export const VERSIE = '1.90.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.90.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Heggenmus (10840): volledige soortdata toegevoegd — biometrie (vleugel M/F apart, overige M&F gezamenlijk), rui, leeftijds- en geslachtsbepaling, ID-kenmerken, 4 ondersoortgroepen (modularis, mabbotti/meinertzhageni/euxina/fuscata, occidentalis/hebridium, obscura), 12 referenties',
+      'Heggenmus: determinatiehulp — leeftijd (seizoen → streeppatroon borst → GC vlekken) en geslacht (BP/cloaca → kin/keel kleur)',
+    ],
+    wijzigingen_en: [
+      'Dunnock (10840): full species data added — biometrics (wing M/F separate, other M&F combined), moult, age/sex determination, ID notes, 4 subspecies groups (modularis, mabbotti/meinertzhageni/euxina/fuscata, occidentalis/hebridium, obscura), 12 references',
+      'Dunnock: determination aid — age (season → breast streaking → GC spots) and sex (BP/cloaca → chin/throat colour)',
+    ],
+    wijzigingen_de: [
+      'Heckenbraunelle (10840): vollständige Artdaten hinzugefügt — Biometrie (Flügel M/F getrennt, übrige M&F gemeinsam), Mauser, Alters-/Geschlechtsbestimmung, Kennzeichen, 4 Unterartgruppen, 12 Referenzen',
+      'Heckenbraunelle: Bestimmungshilfe — Alter (Jahreszeit → Bruststreifung → GC-Flecken) und Geschlecht (BP/Kloake → Kinn-/Kehlfarbe)',
+    ],
+  },
   {
     versie: '1.89.1',
     datum: '2026-05-11',
