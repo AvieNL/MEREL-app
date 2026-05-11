@@ -1,6 +1,19 @@
-export const VERSIE = '1.88.0';
+export const VERSIE = '1.88.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.88.1',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Grote Bonte Specht: opmaak ID-kenmerken hersteld — koppen kregen dubbele regelafstand zodat Markdown correct rendert (geen <br>); "Aberrante vogels" hernoemd naar "Afwijkende vogels"',
+    ],
+    wijzigingen_en: [
+      'Great Spotted Woodpecker: ID notes formatting fixed — headings now use double newline for correct Markdown rendering (no <br>); "Aberrante vogels" renamed to "Afwijkende vogels"',
+    ],
+    wijzigingen_de: [
+      'Buntspecht: Formatierung der Kennzeichen korrigiert — Überschriften erhalten doppelte Zeilenabstände für korrektes Markdown-Rendering (kein <br>); "Aberrante Vögel" in "Afwijkende vogels" umbenannt',
+    ],
+  },
   {
     versie: '1.88.0',
     datum: '2026-05-11',
