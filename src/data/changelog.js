@@ -1,6 +1,19 @@
-export const VERSIE = '1.87.2';
+export const VERSIE = '1.87.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.87.3',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Grote Bonte Specht: elke leeftijdsalinea voorzien van seizoensmarker — tabbladen Voorjaar/Najaar tonen nu correct alleen de relevante leeftijdscategorieën',
+    ],
+    wijzigingen_en: [
+      'Great Spotted Woodpecker: each age paragraph now has its own seasonal marker — Spring/Autumn tabs now correctly show only relevant age categories',
+    ],
+    wijzigingen_de: [
+      'Buntspecht: jeder Altersabsatz hat jetzt eine eigene Saisonmarkierung — Frühjahr/Herbst-Tabs zeigen jetzt korrekt nur relevante Alterskategorien',
+    ],
+  },
   {
     versie: '1.87.2',
     datum: '2026-05-11',
