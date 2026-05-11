@@ -1,6 +1,22 @@
-export const VERSIE = '1.91.1';
+export const VERSIE = '1.92.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.92.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Holenduif (06680): volledige soortdata toegevoegd — biometrie ssp. oenas (snavel = bill to feathers), rui (sterk variabele postjuv-rui), leeftijds- en geslachtsbepaling, vergelijkingstabel met Geelsnavelduif, eerste_broedleeftijd 2Y, 4 referenties',
+      'Holenduif: determinatiehulp — leeftijd (seizoen → MC/LC/T kleur + buitenste PC → VJ gesuspendeerde rui) en geslacht (adult-check → T/scapulars kleur)',
+    ],
+    wijzigingen_en: [
+      'Stock Dove (06680): full species data added — biometrics ssp. oenas (bill to feathers), moult (highly variable postjuv moult), age/sex determination, comparison table with Yellow-eyed Pigeon, first breeding age 2Y, 4 references',
+      'Stock Dove: determination aid — age (season → MC/LC/T colour + outer PC → spring suspended moult) and sex (adult check → T/scapulars colour)',
+    ],
+    wijzigingen_de: [
+      'Hohltaube (06680): vollständige Artdaten hinzugefügt — Biometrie ssp. oenas (Schnabel = bill to feathers), Mauser (stark variable Postjuv-Mauser), Alters-/Geschlechtsbestimmung, Vergleichstabelle mit Gelbaugen-Taube, Erstbrütalter 2Y, 4 Referenzen',
+      'Hohltaube: Bestimmungshilfe — Alter (Jahreszeit → MC/LC/T-Farbe + äußere PC → Frühjahr suspendierte Mauser) und Geschlecht (Adult-Check → T/Scapulars-Farbe)',
+    ],
+  },
   {
     versie: '1.91.1',
     datum: '2026-05-11',
