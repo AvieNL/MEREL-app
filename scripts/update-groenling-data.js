@@ -98,13 +98,13 @@ const updates = {
 
   // ── Geslacht ────────────────────────────────────────────────────────────
   geslachts_notities_m:
-    '- BP en CP betrouwbaar.\n' +
+    '- BP en cloaca betrouwbaar.\n' +
     '- Uiterlijk P3–P5 (zie fig. 4 Demongin).\n' +
     '- Geel van binnenweb TF4–TF6 reikt tot aan de donkere schacht over ten minste 10 mm (overlap met ♀ V mogelijk).\n' +
     '- Lengte van het zwarte gebied aan de punt van TF5 gemeten langs de schacht < 31 mm.',
 
   geslachts_notities_f:
-    '- BP en CP betrouwbaar.\n' +
+    '- BP en cloaca betrouwbaar.\n' +
     '- Uiterlijk P3–P5 (zie fig. 4 Demongin).\n' +
     '- Geel van binnenweb TF4–TF6 reikt niet tot de donkere schacht, of uitzonderlijk over minder dan 10 mm (overlap met ♂ M mogelijk).\n' +
     '- Lengte van het zwarte gebied aan de punt van TF5 gemeten langs de schacht > 31 mm.\n' +
@@ -169,7 +169,7 @@ const updates = {
     { label: 'Snaveldiepte (basis)', type: 'meting', belang: 2 },
     { label: 'Tarsus',               type: 'meting', belang: 1 },
     { label: 'Gewicht',              type: 'meting', belang: 2 },
-    { label: 'BP / CP',              type: 'obs',    belang: 3, note: 'Betrouwbaar voor geslachtsbepaling' },
+    { label: 'BP / cloaca',              type: 'obs',    belang: 3, note: 'Betrouwbaar voor geslachtsbepaling' },
     { label: 'P3–P5 uiterlijk',      type: 'obs',    belang: 3, note: '♂ M vs ♀ V op basis van handpenprofiel' },
     { label: 'TF4–TF6 geel (binnenweb)', type: 'meting', belang: 3, note: '≥10 mm tot schacht → ♂ M; overlap mogelijk' },
     { label: 'TF5 zwarte punt (schacht)', type: 'meting', belang: 2, note: '<31 mm → ♂ M; >31 mm → ♀ V' },

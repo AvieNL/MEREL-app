@@ -104,7 +104,7 @@ const updates = {
     '- Centrale staartpennen donkerbruinzwart of zelden zwart.\n' +
     '- ♂ M 1kj: soms TF1–TF3 duidelijk zwartachtig; bovenstaartdekveren nooit bruingrijs.\n' +
     '- In grijze individuen dekveren donkergrijs, contrasterende met bleekbruingrijze kleine dekveren.\n' +
-    '- CP (uitstekende cloaca) soms aanwezig.',
+    '- Uitstekende cloaca soms aanwezig.',
 
   geslachts_notities_f:
     '- Geen wit op voorhoofd (soms enkele bleekwitte veertjes aan basis bij slijtage).\n' +

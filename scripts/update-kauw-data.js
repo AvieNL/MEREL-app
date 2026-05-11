@@ -96,7 +96,7 @@ const updates = {
   geslachts_notities_m:
     '- Geen zekere kleurmarkering; niet betrouwbaar op kleur of tekening alleen te herkennen.\n' +
     '- Gebruik metingen als populatie (ondersoort) bekend is.\n' +
-    '- CP (uitstekende cloaca) soms aanwezig.',
+    '- Uitstekende cloaca soms aanwezig.',
 
   geslachts_notities_f:
     '- Duidelijke broedvlek is een betrouwbare ♀ V-indicator.\n' +

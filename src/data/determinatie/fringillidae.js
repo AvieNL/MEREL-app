@@ -204,7 +204,7 @@ export const fringillidae = [
     soorten: ['16490'],
     resultaat_veld: 'geslacht',
     naam: 'Geslachtsbepaling Groenling',
-    korte_beschrijving: 'BP/CP betrouwbaar; TF4–TF6 geel + TF5-meting ondersteunen bij alle leeftijden',
+    korte_beschrijving: 'BP/cloaca betrouwbaar; TF4–TF6 geel + TF5-meting ondersteunen bij alle leeftijden',
     bron: 'Demongin (2020) p.361–362',
     type: 'survey',
     start: 'bp_cp',
@@ -212,10 +212,10 @@ export const fringillidae = [
 
       bp_cp: {
         id: 'bp_cp',
-        label: 'Broedvlek / CP',
+        label: 'Broedvlek / cloaca',
         type: 'keuze',
-        vraag: 'Is er een broedvlek (BP) of uitstekende cloaca (CP) aanwezig?',
-        toelichting: 'BP en CP zijn betrouwbare geslachtsindicatoren bij de Groenling op elke leeftijd.',
+        vraag: 'Is er een broedvlek (BP) of uitstekende cloaca aanwezig?',
+        toelichting: 'BP en uitstekende cloaca zijn betrouwbare geslachtsindicatoren bij de Groenling op elke leeftijd.',
         opties: [
           {
             waarde: 'bp',
@@ -229,17 +229,17 @@ export const fringillidae = [
           },
           {
             waarde: 'cp',
-            label: 'Uitstekende cloaca (CP) aanwezig',
+            label: 'Uitstekende cloaca aanwezig',
             resultaat: {
               waarde: 'M',
               label: '♂ Man',
               zeker: true,
-              uitleg: 'Uitstekende cloaca (CP) is een zekere ♂ M-indicator bij de Groenling.',
+              uitleg: 'Uitstekende cloaca is een zekere ♂ M-indicator bij de Groenling.',
             },
           },
           {
             waarde: 'geen',
-            label: 'Geen BP of CP',
+            label: 'Geen BP of cloaca',
             volgende: 'tf_geel',
           },
         ],

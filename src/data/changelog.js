@@ -1,6 +1,19 @@
-export const VERSIE = '1.85.1';
+export const VERSIE = '1.85.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.85.2',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Alle soorten: "CP" vervangen door "uitstekende cloaca" of "cloaca" in soortpagina\'s en determinatiehulpen (Kauw, Bonte Vliegenvanger, Groenling, Roek)',
+    ],
+    wijzigingen_en: [
+      'All species: replaced "CP" with "uitstekende cloaca" / "cloaca" in species pages and identification aids',
+    ],
+    wijzigingen_de: [
+      'Alle Arten: "CP" durch "Kloake" / "vorstehende Kloake" ersetzt in Artendetailseiten und Bestimmungshilfen',
+    ],
+  },
   {
     versie: '1.85.1',
     datum: '2026-05-11',

@@ -754,17 +754,17 @@ const aids = [
         id: 'cp_na_klein_bp',
         label: 'CP (na kleine BP)',
         type: 'keuze',
-        vraag: 'Is er een cloaca-uitstulping (CP) aanwezig?',
-        toelichting: 'Een kleine broedvlek beperkt tot de buik kan bij ♂ voorkomen. CP helpt het geslacht te bevestigen, maar kan soms moeilijk te beoordelen zijn.',
+        vraag: 'Is er een uitstekende cloaca aanwezig?',
+        toelichting: 'Een kleine broedvlek beperkt tot de buik kan bij ♂ voorkomen. Uitstekende cloaca helpt het geslacht te bevestigen, maar kan soms moeilijk te beoordelen zijn.',
         opties: [
           {
             waarde: 'ja',
-            label: 'Ja, CP aanwezig',
+            label: 'Ja, uitstekende cloaca aanwezig',
             resultaat: {
               waarde: 'M',
               label: '♂ Man',
               zeker: false,
-              uitleg: 'Kleine broedvlek + CP wijst op ♂. Een kleine buikbroedvlek met minder vascularisatie en CP is een ♂-indicator. Let op: CP kan moeilijk te beoordelen zijn.',
+              uitleg: 'Kleine broedvlek + CP wijst op ♂. Een kleine buikbroedvlek met minder vascularisatie en CP is een ♂-indicator. Let op: cloaca kan soms moeilijk te beoordelen zijn.',
             },
           },
           {
@@ -775,7 +775,7 @@ const aids = [
               fallback_waarde: 'U',
               label: 'Onzeker',
               zeker: false,
-              uitleg: 'Een kleine buikbroedvlek zonder bevestiging via CP geeft geen uitsluitsel. Metingen kunnen helpen als de populatie (ondersoort) bekend is — zie de geslachtsnotities.',
+              uitleg: 'Een kleine buikbroedvlek zonder bevestiging via uitstekende cloaca geeft geen uitsluitsel. Metingen kunnen helpen als de populatie (ondersoort) bekend is — zie de geslachtsnotities.',
             },
           },
         ],
@@ -785,17 +785,17 @@ const aids = [
         id: 'cp_check',
         label: 'CP (geen broedvlek)',
         type: 'keuze',
-        vraag: 'Is er een cloaca-uitstulping (CP) aanwezig?',
-        toelichting: 'Zonder broedvlek is CP het enige veldkenmerk voor ♂. Dit kan soms lastig te beoordelen zijn (Demongin).',
+        vraag: 'Is er een uitstekende cloaca aanwezig?',
+        toelichting: 'Zonder broedvlek is uitstekende cloaca het enige veldkenmerk voor ♂. Dit kan soms lastig te beoordelen zijn (Demongin).',
         opties: [
           {
             waarde: 'ja',
-            label: 'Ja, CP aanwezig',
+            label: 'Ja, uitstekende cloaca aanwezig',
             resultaat: {
               waarde: 'M',
               label: '♂ Man',
               zeker: false,
-              uitleg: 'Afwezigheid van broedvlek + aanwezigheid van CP wijst op ♂. Let op: CP kan moeilijk te beoordelen zijn.',
+              uitleg: 'Afwezigheid van broedvlek + aanwezigheid van uitstekende cloaca wijst op ♂. Let op: cloaca kan soms moeilijk te beoordelen zijn.',
             },
           },
           {
@@ -806,7 +806,7 @@ const aids = [
               fallback_waarde: 'U',
               label: 'Niet te bepalen',
               zeker: false,
-              uitleg: 'Zonder broedvlek of CP is het geslacht niet betrouwbaar vast te stellen in het veld. Metingen kunnen bijdragen als de populatie (ondersoort) bekend is — zie de geslachtsnotities.',
+              uitleg: 'Zonder broedvlek of uitstekende cloaca is het geslacht niet betrouwbaar vast te stellen in het veld. Metingen kunnen bijdragen als de populatie (ondersoort) bekend is — zie de geslachtsnotities.',
             },
           },
         ],
