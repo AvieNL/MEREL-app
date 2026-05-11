@@ -1641,3 +1641,16 @@
   font-size: 0.8rem;
   margin: 4px 0 0 0;
 }
+
+/* ─── Literatuurlijst ──────────────────────────────────────────────────── */
+.sd-literatuur-list {
+  margin: 10px 0 0 0;
+  padding: 0 0 0 16px;
+  list-style: disc;
+}
+.sd-literatuur-list li {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  padding: 1px 0;
+}

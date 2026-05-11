@@ -185,6 +185,7 @@ Formaat: `'Demongin (2020) p.XXX'`
 #### Andere velden
 - `determinatie_id_notities` — uitsluitend veld-identificatiekenmerken (wat zie je aan de vogel). Geen leeftijds- of geslachtsinformatie hier.
 - `vangst_checklist` — array van strings: wat te controleren bij vangst, alleen wat in bron staat
+- `referenties_literatuur` — array van strings (bijv. `'Jenni & Winkler (1994)'`): de REFERENCES-sectie uit Demongin. Wordt getoond als inklapbare "Literatuur"-sectie onderaan de soortenpagina.
 - `ondersoorten` — array van `{ naam, verspreiding, kenmerken }`, "ringers" niet "ringaars"
 - `eerste_broedleeftijd` — string zoals `'2Y'`
 - `nestgegevens` — `{ eileg, broedels, eieren_min, eieren_max, broedtijd_min, broedtijd_max, nestjong_min, nestjong_max, broedzorg_dagen_min, broedzorg_dagen_max }`

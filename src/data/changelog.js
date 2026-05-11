@@ -1,6 +1,22 @@
-export const VERSIE = '1.84.1';
+export const VERSIE = '1.85.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.85.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Groenling (EURING 16490): biometrie, rui, leeftijds- en geslachtsbepaling, ID-kenmerken, ondersoorten en vangst-checklist toegevoegd (Demongin p.361–362)',
+      'Soortpagina: inklapbare literatuurlijst toegevoegd (referenties_literatuur)',
+    ],
+    wijzigingen_en: [
+      'European Greenfinch (EURING 16490): biometrics, moult, age/sex criteria, ID features, subspecies and catch checklist added (Demongin p.361–362)',
+      'Species page: collapsible literature list added (referenties_literatuur)',
+    ],
+    wijzigingen_de: [
+      'Grünfink (EURING 16490): Biometrie, Mauser, Alters-/Geschlechtsbestimmung, ID-Merkmale, Unterarten und Fangcheckliste hinzugefügt (Demongin S.361–362)',
+      'Artendetailseite: aufklappbare Literaturliste hinzugefügt (referenties_literatuur)',
+    ],
+  },
   {
     versie: '1.84.1',
     datum: '2026-05-11',

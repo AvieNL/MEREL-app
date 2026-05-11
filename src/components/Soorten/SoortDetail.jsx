@@ -123,6 +123,7 @@ export default function SoortDetail({ records, speciesOverrides }) {
     : defaultSoort;
 
   const [vangstenOpen, setVangstenOpen] = useState(false);
+  const [literatuurOpen, setLiteratuurOpen] = useState(false);
   const [nestenOpen, setNestenOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [fotoUploading, setFotoUploading] = useState(false);
@@ -951,6 +952,21 @@ export default function SoortDetail({ records, speciesOverrides }) {
           </div>
         )}
       </div>
+
+      {/* Literatuur */}
+      {(soort.referenties_literatuur?.length > 0) && (
+        <div className="sd-card">
+          <div className="sd-vangsten-header" onClick={() => setLiteratuurOpen(o => !o)}>
+            <h3 className="sd-card-title sd-card-title--toggle">Literatuur</h3>
+            <span className={`sd-vangsten-toggle${literatuurOpen ? ' sd-vangsten-toggle--open' : ''}`}>▼</span>
+          </div>
+          {literatuurOpen && (
+            <ul className="sd-literatuur-list">
+              {soort.referenties_literatuur.map((r, i) => <li key={i}>{r}</li>)}
+            </ul>
+          )}
+        </div>
+      )}
 
       {/* Mijn vangsten — alleen voor ingelogde gebruikers */}
       {user && <div className="sd-card">
