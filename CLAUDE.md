@@ -210,6 +210,16 @@ Seizoensovergang: `**na 1e kj (4)** — in/na postjuv-rui → in jan: 2e kj (5)`
 Cross-referentie: `**2e kj (5)** (= vorig najaar: na 1e kj (4))`
 Nooit "Adult" als standalone label — gebruik altijd de EURING-naam.
 
+**⚠️ Geslachtssymbolen — altijd met letter**
+Schrijf ALTIJD de letter direct achter het geslachtssymbool. Nooit het symbool alleen.
+
+| Symbool | Schrijf altijd | Betekenis |
+|---|---|---|
+| ♂ | ♂ M | mannetje |
+| ♀ | ♀ V | vrouwtje |
+
+Dit geldt overal in soortdata: in `geslachts_notities_m`, `geslachts_notities_f`, `leeftijds_notities_vj`, `determinatie_id_notities`, `vangst_checklist`, uitleg-teksten in determinatiehulpen, en alle overige vrije tekstvelden.
+
 ---
 
 - **`leeftijds_notities_nj` ALTIJD `''` (lege string).** Zodra dit veld inhoud heeft, valt `SoortDetail.jsx` terug naar "klassieke modus" die `{{MM-MM}}`-blokken niet verwerkt.

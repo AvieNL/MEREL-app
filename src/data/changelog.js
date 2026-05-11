@@ -1,6 +1,19 @@
-export const VERSIE = '1.88.2';
+export const VERSIE = '1.88.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.88.3',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Geslachtssymbolen: ♂ en ♀ worden voortaan altijd gevolgd door de letter M of V — Pimpelmees en Grote Bonte Specht bijgewerkt',
+    ],
+    wijzigingen_en: [
+      'Sex symbols: ♂ and ♀ now always followed by the letter M or V — Blue Tit and Great Spotted Woodpecker updated',
+    ],
+    wijzigingen_de: [
+      'Geschlechtssymbole: ♂ und ♀ werden jetzt immer von dem Buchstaben M oder V gefolgt — Blaumeise und Buntspecht aktualisiert',
+    ],
+  },
   {
     versie: '1.88.2',
     datum: '2026-05-11',
