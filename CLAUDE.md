@@ -156,7 +156,8 @@ Thijs levert de tekst van één of meer pagina's uit Demongin. Taak: zet alle aa
 Gebruik `scripts/TEMPLATE-soort-data.js` als startpunt. Alle velden in het `data`-object:
 
 #### Biometrie (`biometrie_*`)
-- Velden: `vleugel`, `staart`, `tarsus`, `gewicht`, `p8`, `snavel_schedel`, `snavel_schedel_is_bill_to_feathers` (bool), `kop_snavel`
+- Velden: `vleugel`, `staartlengte`, `tarsus_lengte`, `gewicht`, `p8`, `snavel_schedel`, `snavel_schedel_is_bill_to_feathers` (bool), `kop_snavel`, `snavel_diepte_mid` (snavelhoogte bij neusgat)
+- Prefix in Supabase: `bio_[veld]_M_min` / `bio_[veld]_M_max` / `bio_[veld]_F_min` / `bio_[veld]_F_max`
 - Per veld: `{ min, max }` voor algemeen, `{ M: {min,max}, F: {min,max} }` voor geslachtsspecifiek
 - Subaspecies: `biometrie_ssp` object met subspecies-naam als key
 - Eenheid altijd mm of g — uit bron overnemen

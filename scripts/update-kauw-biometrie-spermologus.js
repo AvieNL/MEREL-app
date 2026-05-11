@@ -32,10 +32,10 @@ const updates = {
   bio_vleugel_F_min: '212',
   bio_vleugel_F_max: '247',
 
-  bio_staart_M_min: '116',
-  bio_staart_M_max: '146',
-  bio_staart_F_min: '109',
-  bio_staart_F_max: '139',
+  bio_staartlengte_M_min: '116',
+  bio_staartlengte_M_max: '146',
+  bio_staartlengte_F_min: '109',
+  bio_staartlengte_F_max: '139',
 
   bio_snavel_schedel_M_min: '34.1',
   bio_snavel_schedel_M_max: '40.1',
