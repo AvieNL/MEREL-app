@@ -72,11 +72,11 @@ const updates = {
 
   // Vleugelformule
   vleugelformule:
-    'WP=(3)4;10 · P1=8/9(10) boven P2 · P2=5/6 boven P3\n' +
-    'P1 WP 89–125 mm · P2 WP 18–41 mm · P3 WP 0–10 mm · P5 WP 4–14 mm · P6 WP 31–47 mm\n' +
+    'Vleugelpunt (WP): (P3) P4–P10\n' +
+    'P1: 8/9(10) boven P2 · P2: 5/6 boven P3\n' +
+    'P1 WP: 89–125 mm · P2 WP: 18–41 mm · P3 WP: 0–10 mm · P5 WP: 4–14 mm · P6 WP: 31–47 mm\n' +
     'Uitgerand: P2–P5 · Inkeping: P1–P4\n' +
-    'P6 is NIET uitgerand (onderscheid met Zwarte en Bonte Kraai waarbij P6 WEL uitgerand is).\n' +
-    'Bron: Demongin (2020) p.348',
+    'P6 is NIET uitgerand (onderscheid met Zwarte en Bonte Kraai waarbij P6 WEL uitgerand is).',
 
   // ID-kenmerken ten opzichte van vergelijkbare soorten
   determinatie_id_notities:

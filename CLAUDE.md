@@ -185,19 +185,20 @@ Gebruik `scripts/TEMPLATE-soort-data.js` als startpunt. Alle velden in het `data
 #### Vleugelformule (`vleugelformule`) — altijd opnemen als Demongin de tabel geeft
 Als Demongin een vleugelformuletabel geeft (P-WP afstanden, uitrandingen, inkepingen), ALTIJD opslaan als geformatteerde string. Nooit `''` laten staan als er data is.
 
-Formaat (zie Merel als voorbeeld):
+Formaat (zie Merel en Roek als voorbeeld):
 ```
-'WP=(3)4(5)\n' +
+'Vleugelpunt (WP): (P3) P4 (P5)\n' +
 'P5 en P6: lang · P1: relatief lang · P2: kort\n' +
 'P1 WP: 63–80 mm · P2 WP: 10–15 mm · P3 WP: (0)1–4 mm · P6 WP: 2–7 mm · P10 WP: 21–31 mm\n' +
 'Uitgerand: P3–P6 · Inkeping: P2–P4 (P5)'
 ```
 
 **Opmaakregels vleugelformule:**
-- **Eerste regel**: alleen de WP-formuulecode als los vol-item, bijv. `WP=(3)4(5)` — geen colon, geen `·`
-- **Beschrijvende kenmerken** (P-lengtes, positie): gebruik `label: waarde` notatie zodat ze als nette label-waarde rijen renderen, bijv. `P5 en P6: lang · P1: relatief lang · P2: kort`
+- **Eerste regel altijd**: `Vleugelpunt (WP): <P-nummers>` als rij-entry. Haakjes voor optionele pennen: `(P3) P4 (P5)`. Bereik met koppelteken: `(P3) P4–P10`. Nooit de ruwe Demongin-notatie `WP=(3)4(5)` als vol-chip opslaan.
+- **Beschrijvende kenmerken** (P-lengtes, positie, ratio's): gebruik `label: waarde` notatie zodat ze als nette label-waarde rijen renderen, bijv. `P5 en P6: lang · P1: relatief lang · P2: kort` of `P1: 8/9(10) boven P2 · P2: 5/6 boven P3`
 - **WP-afstanden per pen**: gebruik `Pn WP: xx–yy mm` notatie, bijv. `P1 WP: 63–80 mm · P2 WP: 10–15 mm`
 - **Uitgerand/Inkeping**: gebruik bereiknotatie met koppelteken als pennen aaneengesloten zijn, bijv. `Uitgerand: P3–P6 · Inkeping: P2–P4 (P5)`
+- **Notities** (soort-specifieke opmerkingen): als vol-chip op eigen regel, bijv. `P6 is NIET uitgerand (...)` — geen colon aan het begin
 - **Geen Bron-regel** in de vleugelformule — bronstaat in `bron_ring`
 - De `·` parser maakt alle items op één regel tot rij-entries **als alle delen** een colon bevatten (`label: waarde`). Ontbreekt één colon → alles wordt vol-chip. Zorg dus dat ALLE items op een regel hetzelfde patroon volgen.
 - Demongin "Em" = emarginations = **uitgerand** (P-nummers van buiten naar binnen, Demongin-telling)

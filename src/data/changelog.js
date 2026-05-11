@@ -1,6 +1,19 @@
-export const VERSIE = '1.94.2';
+export const VERSIE = '1.94.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.94.3',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Vleugelformule Merel + Roek: WP-formuulecode omgezet naar nette label-waarde rij "Vleugelpunt (WP)" · alle P-lengte ratios en WP-afstanden nu ook als gestructureerde rijen · Bron verwijderd uit Roek-widget',
+    ],
+    wijzigingen_en: [
+      'Wing formula Blackbird + Rook: WP formula code converted to labelled row "Vleugelpunt (WP)" · all P-length ratios and WP distances now also structured rows · Source removed from Rook widget',
+    ],
+    wijzigingen_de: [
+      'Flügelformel Amsel + Saatkrähe: WP-Formelkode in beschriftete Zeile "Vleugelpunt (WP)" umgewandelt · alle P-Längenverhältnisse und WP-Abstände nun auch als strukturierte Zeilen · Quelle aus Saatkrähe-Widget entfernt',
+    ],
+  },
   {
     versie: '1.94.2',
     datum: '2026-05-11',
