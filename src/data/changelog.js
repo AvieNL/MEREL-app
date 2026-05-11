@@ -1,6 +1,22 @@
-export const VERSIE = '1.90.0';
+export const VERSIE = '1.91.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.91.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Winterkoning (10660): volledige soortdata toegevoegd — biometrie (vleugel + gewicht M/F apart, kop+snavel M/F apart, overige gezamenlijk), rui, leeftijds- en geslachtsbepaling (incl. morfometrische formules), ID-kenmerken, 6 ondersoorten, 10 referenties',
+      'Winterkoning: determinatiehulp — leeftijd (seizoen → onderstaartdekveren → GC kleur/contrast) en geslacht (BP/cloaca → formule in uitleg)',
+    ],
+    wijzigingen_en: [
+      'Wren (10660): full species data added — biometrics (wing + weight M/F separate, head+bill M/F separate, other combined), moult, age/sex determination (incl. morphometric formulas), ID notes, 6 subspecies, 10 references',
+      'Wren: determination aid — age (season → undertail coverts → GC colour/contrast) and sex (BP/cloaca → formula in explanation)',
+    ],
+    wijzigingen_de: [
+      'Zaunkönig (10660): vollständige Artdaten hinzugefügt — Biometrie (Flügel + Gewicht M/F getrennt, Kopf+Schnabel M/F getrennt, übrige gemeinsam), Mauser, Alters-/Geschlechtsbestimmung (inkl. morphometrische Formeln), Kennzeichen, 6 Unterarten, 10 Referenzen',
+      'Zaunkönig: Bestimmungshilfe — Alter (Jahreszeit → Unterschwanzdecken → GC-Farbe/Kontrast) und Geschlecht (BP/Kloake → Formel in Erläuterung)',
+    ],
+  },
   {
     versie: '1.90.0',
     datum: '2026-05-11',

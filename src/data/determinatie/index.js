@@ -16,12 +16,13 @@ import { fringillidae } from './fringillidae';
 import { picidae } from './picidae';
 import { paridae } from './paridae';
 import { prunellidae } from './prunellidae';
+import { troglodytidae } from './troglodytidae';
 
 // ─── Statische fallback-index ────────────────────────────────────────────────
 // Wordt gevuld met de hardcoded aids EN daarna overschreven door populateFromAids()
 // zodra de DB-pull voltooid is.
 
-const alleAids = [...corvidae, ...columbidae, ...ficedula, ...fringillidae, ...picidae, ...paridae, ...prunellidae];
+const alleAids = [...corvidae, ...columbidae, ...ficedula, ...fringillidae, ...picidae, ...paridae, ...prunellidae, ...troglodytidae];
 
 let _byEuring = {};
 let _byId = {};
