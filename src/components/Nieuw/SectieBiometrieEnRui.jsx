@@ -44,7 +44,7 @@ export default function SectieBiometrieEnRui() {
           <div className="section-content">
             <div className="form-row">
               {renderBioField('vleugel', t('form_wing'))}
-              {renderBioField('handpenlengte', t('form_p8'))}
+              {renderBioField('handpenlengte', t('form_p8'), '= P3 (Demongin)')}
             </div>
             <div className="form-row-3">
               <div className="form-group">

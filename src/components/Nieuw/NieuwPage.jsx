@@ -621,7 +621,7 @@ export default function NieuwPage() {
     }, 50);
   }
 
-  function renderBioField(key, label) {
+  function renderBioField(key, label, caption) {
     const range = bioRanges[key];
     const warning = warnings.find(w => w.key === key);
     // Geslachtsimplicatie per veld
@@ -638,7 +638,10 @@ export default function NieuwPage() {
     const genderMismatch = fieldGenderHint && form.geslacht && form.geslacht !== fieldGenderHint && form.geslacht !== 'U';
     return (
       <div className="form-group">
-        <label>{label}</label>
+        <label>
+          {label}
+          {caption && <span className="field-caption">{caption}</span>}
+        </label>
         <input type="text" inputMode="decimal" value={form[key]}
           className={warning ? 'input-warn' : ''}
           onChange={e => update(key, e.target.value)} />

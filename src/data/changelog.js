@@ -1,6 +1,19 @@
-export const VERSIE = '1.91.0';
+export const VERSIE = '1.91.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.91.1',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Formulier: P8-veld toont caption "= P3 (Demongin)" — verduidelijkt het verschil tussen de Griel-telling (P1 binnenste) en Demongin (P1 buitenste)',
+    ],
+    wijzigingen_en: [
+      'Form: P8 field now shows caption "= P3 (Demongin)" — clarifies the difference between the Griel/Dutch counting system (P1 innermost) and Demongin (P1 outermost)',
+    ],
+    wijzigingen_de: [
+      'Formular: P8-Feld zeigt Caption "= P3 (Demongin)" — verdeutlicht den Unterschied zwischen dem Griel-System (P1 innen) und Demongin (P1 außen)',
+    ],
+  },
   {
     versie: '1.91.0',
     datum: '2026-05-11',

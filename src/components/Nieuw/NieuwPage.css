@@ -218,6 +218,16 @@
 }
 .field-hint em { font-style: normal; opacity: 0.7; }
 
+/* Caption onder veldlabel (bijv. P8 = P3 Demongin) */
+.field-caption {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: normal;
+  color: var(--text-muted);
+  margin-top: 1px;
+  opacity: 0.8;
+}
+
 /* Bron-kleur bereik */
 .field-hint--literatuur   { color: var(--text-secondary); }
 .field-hint--eigen-invoer { color: var(--warning, #f97316); }
