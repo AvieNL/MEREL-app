@@ -1,6 +1,22 @@
-export const VERSIE = '1.88.3';
+export const VERSIE = '1.88.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.88.4',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Leeftijdsnamen bijgewerkt: Houtduif, Bonte Vliegenvanger, Kauw en Roek — "Adult (EURING X)" → Nederlandse naam (code), bijv. "na 1e kj (4)", "na 2e kj (6)"',
+      'Pimpelmees ID-kenmerken: <br> opgelost bij hybridisatieteksten (enkelvoudige \\n → \\n\\n na koppen)',
+    ],
+    wijzigingen_en: [
+      'Age labels updated: Wood Pigeon, Pied Flycatcher, Jackdaw and Rook — "Adult (EURING X)" → Dutch name (code), e.g. "na 1e kj (4)", "na 2e kj (6)"',
+      'Blue Tit ID notes: <br> resolved in hybridisation texts (single \\n → \\n\\n after headings)',
+    ],
+    wijzigingen_de: [
+      'Altersbezeichnungen aktualisiert: Ringeltaube, Trauerschnäpper, Dohle und Saatkrähe — "Adult (EURING X)" → Niederländischer Name (Code), z.B. "na 1e kj (4)", "na 2e kj (6)"',
+      'Blaumeise Kennzeichen: <br> bei Hybridisierungstexten behoben (einzelnes \\n → \\n\\n nach Überschriften)',
+    ],
+  },
   {
     versie: '1.88.3',
     datum: '2026-05-11',

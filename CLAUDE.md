@@ -210,6 +210,9 @@ Seizoensovergang: `**na 1e kj (4)** — in/na postjuv-rui → in jan: 2e kj (5)`
 Cross-referentie: `**2e kj (5)** (= vorig najaar: na 1e kj (4))`
 Nooit "Adult" als standalone label — gebruik altijd de EURING-naam.
 
+**⚠️ Markdown alinea-scheiding — altijd \n\n, nooit \n**
+Tussen elke kop (`**...**`) en de volgende tekst of tabel altijd een lege regel (`\n\n`). Een enkele `\n` wordt door de Markdown-renderer omgezet naar `<br>` die als literal tekst verschijnt. Dit geldt ook als de kop eindigt met inline tekst of cursief, bijv. `**Kop** _Latijnse naam_\n\n`.
+
 **⚠️ Geslachtssymbolen — altijd met letter**
 Schrijf ALTIJD de letter direct achter het geslachtssymbool. Nooit het symbool alleen.
 
