@@ -1,6 +1,19 @@
-export const VERSIE = '1.84.0';
+export const VERSIE = '1.84.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.84.1',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Kauw: biometriematen vervangen door ssp. spermologus (in NL meest voorkomend); staartmaten toegevoegd',
+    ],
+    wijzigingen_en: [
+      'Jackdaw: biometrics updated to ssp. spermologus (most common in NL); tail measurements added',
+    ],
+    wijzigingen_de: [
+      'Dohle: Biometriedaten auf ssp. spermologus aktualisiert (in NL am häufigsten); Schwanzmaße hinzugefügt',
+    ],
+  },
   {
     versie: '1.84.0',
     datum: '2026-05-10',
