@@ -83,7 +83,13 @@ const updates = {
     '**na 1e kj (4) ♀ V** Bovenzijde donker grijsbruin, gewoonlijk met olijftint. Alle GC egaal donker olijfbruin: geen contrast in vleugel. Snavel donker roze of donker geelbruin, zelden zo geel als bij ♂ M. Centrale TF gewoonlijk breed.',
 
     VJ +
-    '**Voorjaar — leeftijdsbepaling** Zelfde GC-contrast als in het najaar. Volledig vleugel gelijkmatig versleten bij na 1e kj. 2e kj ♂ M (5 M) soms snavel gedeeltelijk donker tot apr. Veel 2e kj ♀ V (5 V) moeilijk te ouderdomsbepalen in jun–jul door slijtage.',
+    '**2e kj (5) ♂ M** Contrast buitenste GC (zwartbruin, soms bleke punt) met binnenste GC (zwart, geruid). Als alle GC geruid: zoek contrast met juv PC, in alula, in T of tussen T en S. Snavel soms gedeeltelijk donker tot apr. Juv centrale TF gewoonlijk nog smal en puntig.',
+
+    VJ +
+    '**2e kj (5) ♀ V** Zelfde soort contrast als in het najaar: juv veren roestbruin of grijsbruin, geruide veren olijfbruin. Juv centrale TF gewoonlijk nog smal en puntig. Moeilijk te ouderdomsbepalen in jun–jul door slijtage.',
+
+    VJ +
+    '**Volwassen — niet nader te dateren** Geen GC-contrast: vleugel gelijkmatig versleten. Centrale TF breed. Kan 2e kj (5) zijn waarvan het contrast door slijtage verdwenen is (met name ♀ V in jun–jul), of ouder.',
 
   ].join('\n\n'),
 
