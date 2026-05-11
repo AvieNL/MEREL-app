@@ -1,6 +1,19 @@
-export const VERSIE = '1.87.1';
+export const VERSIE = '1.87.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.87.2',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Grote Bonte Specht: seizoenscontinuïteit in leeftijdsbepaling gecorrigeerd — [4 nj]→[5 vj], [5 nj]→[7 vj], [7 nj]→[9 vj] nu expliciet zichtbaar; 4e kj [9 vj] toegevoegd',
+    ],
+    wijzigingen_en: [
+      'Great Spotted Woodpecker: seasonal age continuity corrected — [4 autumn]→[5 spring], [5 autumn]→[7 spring], [7 autumn]→[9 spring] now explicitly shown; 4th cy [9 spring] added',
+    ],
+    wijzigingen_de: [
+      'Buntspecht: saisonale Alterskontinuität korrigiert — [4 Herbst]→[5 Frühjahr], [5 Herbst]→[7 Frühjahr], [7 Herbst]→[9 Frühjahr] jetzt explizit sichtbar; 4. Kj. [9 Frühjahr] ergänzt',
+    ],
+  },
   {
     versie: '1.87.1',
     datum: '2026-05-11',
