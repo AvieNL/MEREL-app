@@ -1,6 +1,19 @@
-export const VERSIE = '1.85.6';
+export const VERSIE = '1.86.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.86.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Soortenpagina: filteropties verbeterd — 3-weg schakelaar (Beide/Wel/Geen) voor Foto, Gevangen en Determinatiehulp; filter "Zonder EURING" verwijderd',
+    ],
+    wijzigingen_en: [
+      'Species page: improved filters — 3-way switch (Both/Yes/No) for Photo, Caught and ID-aid; removed "No EURING" filter',
+    ],
+    wijzigingen_de: [
+      'Artenübersicht: verbesserte Filter — 3-Wege-Schalter (Beide/Ja/Nein) für Foto, Gefangen und Bestimmungshilfe; Filter "Ohne EURING" entfernt',
+    ],
+  },
   {
     versie: '1.85.6',
     datum: '2026-05-11',

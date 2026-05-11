@@ -132,11 +132,62 @@
 .soorten-filter-panel {
   flex-shrink: 0;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 10px;
   padding-bottom: 10px;
 }
+
+/* ── Tri-state switches ───────────────────────────────────────────────────── */
+
+.soorten-filter-switches {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tri-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tri-switch-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.tri-switch {
+  display: flex;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tri-switch-btn {
+  padding: 6px 14px;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  border-right: 1px solid var(--border);
+}
+
+.tri-switch-btn:last-child {
+  border-right: none;
+}
+
+.tri-switch-btn--on {
+  background: var(--accent);
+  color: #000;
+  font-weight: 600;
+}
+
+/* ── Chip filters (admin) ─────────────────────────────────────────────────── */
 
 .soorten-filter-chips {
   display: flex;
