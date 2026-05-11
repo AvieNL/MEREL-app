@@ -1,6 +1,25 @@
-export const VERSIE = '1.85.0';
+export const VERSIE = '1.85.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.85.1',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Groenling: seizoenblokken gecorrigeerd ({{06-11}}→{{07-12}}, {{01-05}}→{{01-06}}), figuurverwijzingen verwijderd',
+      'Groenling: determinatiehulpen toegevoegd (leeftijd: ruigrens + TF-slijtage; geslacht: BP/CP → TF-geel → TF5-meting)',
+      'Determinatie: nieuw familie-bestand fringillidae.js (Groenling 16490)',
+    ],
+    wijzigingen_en: [
+      'Greenfinch: seasonal blocks corrected, figure references removed',
+      'Greenfinch: identification aids added (age: moult limit + TF wear; sex: BP/CP → TF yellow → TF5 measurement)',
+      'Identification: new family file fringillidae.js (Greenfinch 16490)',
+    ],
+    wijzigingen_de: [
+      'Grünfink: Saisonblöcke korrigiert, Figurverweise entfernt',
+      'Grünfink: Bestimmungshilfen hinzugefügt (Alter: Mauser­grenze + TF-Verschleiß; Geschlecht: BP/CP → TF-Gelb → TF5-Messung)',
+      'Bestimmung: neue Familiendatei fringillidae.js (Grünfink 16490)',
+    ],
+  },
   {
     versie: '1.85.0',
     datum: '2026-05-11',
