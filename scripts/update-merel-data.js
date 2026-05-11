@@ -58,7 +58,7 @@ const updates = {
   vleugelformule:
     'WP=(3)4(5) · P5 en P6 lang · P1 relatief lang · P2 kort\n' +
     'P1 WP 63–80 mm · P2 WP 10–15 mm · P3 WP (0)1–4 mm · P5 WP 0–(2) mm · P6 WP 2–7 mm · P10 WP 21–31 mm\n' +
-    'Uitgerand: P3 P4 P5 P6 · Inkeping: P2 P3 P4 (P5)\n' +
+    'Uitgerand: P3–P6 · Inkeping: P2–P4 (P5)\n' +
     'Bron: Demongin (2016) p.264',
 
   // ── Rui ───────────────────────────────────────────────────────────────────

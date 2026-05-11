@@ -1,6 +1,19 @@
-export const VERSIE = '1.94.0';
+export const VERSIE = '1.94.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.94.1',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Merel: vleugelformule Uitgerand/Inkeping opmaak verbeterd — compacte bereiknotatie (P3–P6, P2–P4) i.p.v. losse pennummers, conform Roek-opmaak',
+    ],
+    wijzigingen_en: [
+      'Blackbird: wing formula Emarginated/Notched formatting improved — compact range notation (P3–P6, P2–P4) instead of individual pen numbers, consistent with Rook layout',
+    ],
+    wijzigingen_de: [
+      'Amsel: Flügelformel Ausgerandung/Einschnürung Formatierung verbessert — kompakte Bereichsnotation (P3–P6, P2–P4) statt einzelner Federnummern, einheitlich mit Saatkrähe-Layout',
+    ],
+  },
   {
     versie: '1.94.0',
     datum: '2026-05-11',
