@@ -141,13 +141,27 @@ Toon gele waarschuwing bij waarde buiten range — blokkeer opslaan NIET.
 
 ## Workflow: soortdata toevoegen vanuit Demongin
 
+### ⚠️ VERPLICHTE VOLGORDE — altijd alle 6 stappen uitvoeren
+
+Bij elke nieuwe soort worden ALLE stappen uitgevoerd zonder uitzondering, in deze volgorde:
+1. `node scripts/update-[soort]-data.js`
+2. `src/data/determinatie/[familie].js` aanmaken of uitbreiden
+3. `src/data/determinatie/index.js` bijwerken
+4. `node scripts/seed-[soort]-determinatie.js`
+5. `src/data/changelog.js` + `package.json` versie ophogen
+6. `git add ... && git commit && git push`
+
+**Stap 2–4 zijn niet optioneel.** De determinatiehulp hoort altijd bij een nieuwe soort, ook als er niet expliciet om gevraagd wordt. Volg daarna de gedetailleerde uitleg per stap hieronder.
+
+---
+
 ### Wanneer
 Thijs levert de tekst van één of meer pagina's uit Demongin. Taak: zet alle aanwezige informatie over die soort om naar app-data. Voeg niets toe uit eigen kennis — alleen wat expliciet in de aangeleverde brontekst staat.
 
 ### Bronfideliteit — absolute regel
 **Nooit iets verzinnen of aanvullen.** Als iets niet in de aangeleverde tekst staat, laat het veld leeg (`''`) of laat het weg. Bij twijfel: weglaten. Dit geldt ook voor:
 - Broedvlek als geslachtsindicator (staat zelden expliciet vermeld)
-- CP (uitstekende cloaca) tenzij letterlijk genoemd
+- Uitstekende cloaca tenzij letterlijk genoemd (schrijf altijd "uitstekende cloaca", nooit de afkorting "CP")
 - Aantallen uit het hoofd (e.g. "typisch 10 handpennen") — alleen overnemen als getal + context in bron staat
 - Gedrag, voedsel, habitat — niet relevant voor ringersdata
 
@@ -272,15 +286,9 @@ node scripts/seed-[soort]-determinatie.js
 
 ---
 
-### Stap 3 — Integratie checklist
+### Stap 3 — Uitvoeren (zie verplichte volgorde bovenaan deze sectie)
 
-Na elke nieuwe soort, in volgorde:
-1. `node scripts/update-[soort]-data.js` — data naar Supabase
-2. `src/data/determinatie/[familie].js` aanmaken of uitbreiden (static fallback)
-3. `src/data/determinatie/index.js` — import + toevoegen aan `alleAids`
-4. `node scripts/seed-[soort]-determinatie.js` — determinatiehulpen naar Supabase
-5. `src/data/changelog.js` + `package.json` — versie ophogen (minor bump)
-6. `git add ... && git commit && git push`
+Volg de 6 stappen bovenaan deze sectie. Stap 2–4 (determinatiehulp) nooit overslaan, ook niet als er niet expliciet om gevraagd wordt.
 
 ### Versie-conventies
 - Minor bump (x.**Y**.0) per nieuwe soort of functie
