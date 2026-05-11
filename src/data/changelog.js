@@ -1,6 +1,19 @@
-export const VERSIE = '1.94.4';
+export const VERSIE = '1.95.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.95.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Roodborst (10990): volledige soortdata toegevoegd — biometrie ssp. rubecula en melophilus (vleugel + staart + gewicht M/V apart, snavel bill to skull + tarsus MF gezamenlijk), rui (gedeeltelijke postjuv gem. 3–6 GC), leeftijds- en geslachtsbepaling, vleugelformule P2–P10, aberrante kleurvariant (vergelijking met Blauwstaart Tarsiger cyanurus), vergelijkingstabel juv Roodborst / Siberische Calliope, 6 ondersoorten, 23 referenties, determinatiehulp leeftijd (GC-contrast + alula + staartveer vorm, NJ/VJ) en geslacht (vleugelmeting drie zones)',
+    ],
+    wijzigingen_en: [
+      'Robin (10990): full species data added — biometrics ssp. rubecula and melophilus (wing + tail + weight M/F separate, bill to skull + tarsus MF combined), moult (partial post-juv avg 3–6 GC), age and sex determination, wing formula P2–P10, aberrant colour variant (comparison with Red-flanked Bluetail Tarsiger cyanurus), comparison table juv Robin / Siberian Rubythroat, 6 subspecies, 23 references, age determination aid (GC contrast + alula + tail feather shape, autumn/spring) and sex determination aid (wing measurement three zones)',
+    ],
+    wijzigingen_de: [
+      'Rotkehlchen (10990): vollständige Artdaten hinzugefügt — Biometrie ssp. rubecula und melophilus (Flügel + Schwanz + Gewicht M/W getrennt, Schnabel Totallänge + Tarsus MF zusammen), Mauser (partielle Postjuv-Mauser Ø 3–6 GC), Alters- und Geschlechtsbestimmung, Flügelformel P2–P10, aberrante Farb­variante (Vergleich mit Blauschwanz Tarsiger cyanurus), Vergleichstabelle juv Rotkehlchen / Sibirische Calliope, 6 Unterarten, 23 Referenzen, Altersbestimmungshilfe (GC-Kontrast + Alula + Schwanzfederform, Herbst/Frühjahr) und Geschlechtsbestimmungshilfe (Flügelmessung drei Zonen)',
+    ],
+  },
   {
     versie: '1.94.4',
     datum: '2026-05-11',
