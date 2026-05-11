@@ -1,6 +1,19 @@
-export const VERSIE = '1.89.0';
+export const VERSIE = '1.89.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.89.1',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Ruitiming opmaak: lege regel onder leeftijdskop verwijderd voor GBS, Pimpelmees, Koolmees en Roek — leeftijdskop en tekst staan nu op dezelfde regel',
+    ],
+    wijzigingen_en: [
+      'Moult timing formatting: blank line below age heading removed for GSW, Blue Tit, Great Tit and Rook — heading and text now on the same line',
+    ],
+    wijzigingen_de: [
+      'Mauserformat: Leerzeile unter Altersüberschrift entfernt für Buntspecht, Blaumeise, Kohlmeise und Saatkrähe — Überschrift und Text stehen jetzt in derselben Zeile',
+    ],
+  },
   {
     versie: '1.89.0',
     datum: '2026-05-11',

@@ -185,6 +185,12 @@ Gebruik `scripts/TEMPLATE-soort-data.js` als startpunt. Alle velden in het `data
 #### Rui (`rui_notities`)
 Vrije Markdown-tekst. Kalendermaanden als afkorting (jan/feb/…). Geen functies of {{MM}}-markers hier.
 
+**⚠️ Opmaak rui_notities — leeftijdskop altijd inline**
+`renderMarkdown()` converteert ALLE `\n` naar `<br>`. Een `\n\n` na een leeftijdskop levert een zichtbare lege regel op.
+- ✅ Correct: `**1e kj (3)** Gedeeltelijke postjuv-rui van...` (kop + spatie + tekst, zelfde regel)
+- ❌ Fout: `**1e kj (3)**\n\nGedeeltelijke...` (lege regel tussen kop en tekst)
+Secties worden van elkaar gescheiden met `\n\n` (lege regel). Nooit `\n\n` ná een leeftijdskop.
+
 #### Leeftijd en geslacht — KRITIEKE REGELS
 
 **⚠️ EURING leeftijdscodes — altijd met Nederlandse naam**
