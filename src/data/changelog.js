@@ -1,6 +1,19 @@
-export const VERSIE = '1.88.1';
+export const VERSIE = '1.88.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.88.2',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Leeftijdsteksten Pimpelmees en Grote Bonte Specht: altijd Nederlandse leeftijdsnaam naast EURING-code — bijv. "1e kj (3)", "na 1e kj (4)", "2e kj (5)", "na 2e kj (6)" i.p.v. alleen "Adult [4]"',
+    ],
+    wijzigingen_en: [
+      'Age texts Blue Tit and Great Spotted Woodpecker: always Dutch age label alongside EURING code — e.g. "1e kj (3)", "na 1e kj (4)", "2e kj (5)", "na 2e kj (6)" instead of just "Adult [4]"',
+    ],
+    wijzigingen_de: [
+      'Alterstexte Blaumeise und Buntspecht: immer niederländische Altersbezeichnung neben EURING-Code — z.B. "1e kj (3)", "na 1e kj (4)", "2e kj (5)", "na 2e kj (6)" statt nur "Adult [4]"',
+    ],
+  },
   {
     versie: '1.88.1',
     datum: '2026-05-11',

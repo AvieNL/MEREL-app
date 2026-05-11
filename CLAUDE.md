@@ -186,21 +186,47 @@ Gebruik `scripts/TEMPLATE-soort-data.js` als startpunt. Alle velden in het `data
 Vrije Markdown-tekst. Kalendermaanden als afkorting (jan/feb/…). Geen functies of {{MM}}-markers hier.
 
 #### Leeftijd en geslacht — KRITIEKE REGELS
+
+**⚠️ EURING leeftijdscodes — altijd met Nederlandse naam**
+Schrijf ALTIJD de Nederlandse leeftijdsnaam én de EURING-code (tussen haakjes). Nooit alleen de code. Formaat: `**Nederlandse naam (EURING X)**`
+
+| EURING | Nederlandse naam | Toelichting |
+|---|---|---|
+| 0 | leeftijd onbekend | |
+| 1 | pullus | nestjong |
+| 1J | pullus, vliegvlug | strek genoeg om in buurt van nest te zijn |
+| 2 | volgroeid | leeftijd onbekend, maar volwassen |
+| 3 | 1e kj | 1e kalenderjaar, juveniel |
+| 3J | 1e kj, deels in jeugdkleed | 1e kj tijdens/na gedeeltelijke rui |
+| 4 | na 1e kj | bevestigd ≥ 2e kj, maar niet nader te dateren |
+| 5 | 2e kj | 2e kalenderjaar |
+| 6 | na 2e kj | bevestigd ≥ 3e kj, maar niet nader te dateren |
+| 7 | 3e kj | 3e kalenderjaar |
+| 8 | na 3e kj | bevestigd ≥ 4e kj, maar niet nader te dateren |
+| 9 | 4e kj | 4e kalenderjaar |
+
+Voorbeelden: `**1e kj (3)**`, `**na 1e kj (4)**`, `**2e kj (5)**`, `**na 2e kj (6)**`
+Seizoensovergang: `**na 1e kj (4)** — in/na postjuv-rui → in jan: 2e kj (5)`
+Cross-referentie: `**2e kj (5)** (= vorig najaar: na 1e kj (4))`
+Nooit "Adult" als standalone label — gebruik altijd de EURING-naam.
+
+---
+
 - **`leeftijds_notities_nj` ALTIJD `''` (lege string).** Zodra dit veld inhoud heeft, valt `SoortDetail.jsx` terug naar "klassieke modus" die `{{MM-MM}}`-blokken niet verwerkt.
 - **Alle seizoensgebonden tekst gaat in `leeftijds_notities_vj`**, ook herfst-specifieke passages. Gebruik `{{07-12}}` en `{{01-06}}` blokken om tekst per seizoen te tonen.
 - `{{MM1-MM2}}` toont de inhoud alleen als de huidige maand binnen het bereik valt (jan=1, dec=12). Blokken mogen genest worden maar niet overlappen.
 - **⚠️ ELKE alinea krijgt zijn eigen marker.** `renderLeeftijdMarkdown` splitst op `\n\n` en filtert per alinea — alleen alinea's die zélf beginnen met `{{MM-MM}}` worden gefilterd. Alinea's zónder marker verschijnen in BEIDE tabbladen. Bij meerdere alinea's per seizoen dus elke alinea herhalen met de marker:
   ```
   {{07-12}}
-  **1e kj [3]**
+  **1e kj (3)**
   Tekst...
 
   {{07-12}}
-  **Adult [6]**
+  **na 2e kj (6)**
   Tekst...
 
   {{01-06}}
-  **2e kj [5]**
+  **2e kj (5)**
   Tekst...
   ```
 
@@ -211,7 +237,7 @@ Formaat: `'Demongin (2020) p.XXX'`
 **Nooit** een bronnaam inline in lopende tekst zetten.
 
 #### Andere velden
-- `determinatie_id_notities` — veld-identificatiekenmerken (wat zie je aan de vogel). Geen leeftijds- of geslachtsinformatie hier. **Altijd opnemen als Demongin dit vermeldt: aberrante vogels, hybridisatie en verwisselbare soorten.**
+- `determinatie_id_notities` — veld-identificatiekenmerken (wat zie je aan de vogel). Geen leeftijds- of geslachtsinformatie hier. **Altijd opnemen als Demongin dit vermeldt: afwijkende vogels (aberrant), hybridisatie en verwisselbare soorten.** Gebruik "Afwijkende vogels" als koptekst (niet "Aberrante vogels").
 - `vangst_checklist` — array van strings: wat te controleren bij vangst, alleen wat in bron staat
 - `referenties_literatuur` — array van strings (bijv. `'Jenni & Winkler (1994)'`): de REFERENCES-sectie uit Demongin. Wordt getoond als inklapbare "Literatuur"-sectie onderaan de soortenpagina.
 - `ondersoorten` — array van `{ naam, verspreiding, kenmerken }`, "ringers" niet "ringaars"
