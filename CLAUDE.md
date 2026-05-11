@@ -189,6 +189,20 @@ Vrije Markdown-tekst. Kalendermaanden als afkorting (jan/feb/…). Geen functies
 - **`leeftijds_notities_nj` ALTIJD `''` (lege string).** Zodra dit veld inhoud heeft, valt `SoortDetail.jsx` terug naar "klassieke modus" die `{{MM-MM}}`-blokken niet verwerkt.
 - **Alle seizoensgebonden tekst gaat in `leeftijds_notities_vj`**, ook herfst-specifieke passages. Gebruik `{{07-12}}` en `{{01-06}}` blokken om tekst per seizoen te tonen.
 - `{{MM1-MM2}}` toont de inhoud alleen als de huidige maand binnen het bereik valt (jan=1, dec=12). Blokken mogen genest worden maar niet overlappen.
+- **⚠️ ELKE alinea krijgt zijn eigen marker.** `renderLeeftijdMarkdown` splitst op `\n\n` en filtert per alinea — alleen alinea's die zélf beginnen met `{{MM-MM}}` worden gefilterd. Alinea's zónder marker verschijnen in BEIDE tabbladen. Bij meerdere alinea's per seizoen dus elke alinea herhalen met de marker:
+  ```
+  {{07-12}}
+  **1e kj [3]**
+  Tekst...
+
+  {{07-12}}
+  **Adult [6]**
+  Tekst...
+
+  {{01-06}}
+  **2e kj [5]**
+  Tekst...
+  ```
 
 #### Bron-velden
 Alle literatuurverwijzingen uitsluitend in:
