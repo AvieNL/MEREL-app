@@ -1,6 +1,22 @@
-export const VERSIE = '1.93.0';
+export const VERSIE = '1.94.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.94.0',
+    datum: '2026-05-11',
+    wijzigingen: [
+      'Merel (11870): volledige soortdata toegevoegd — biometrie ssp. merula en aterrimus (vleugel + staart + gewicht M/V apart, snavel bill to skull + tarsus MF gezamenlijk), rui (gedeeltelijke postjuv gem. 5–7 GC), leeftijds- en geslachtsbepaling, vergelijkingstabel Merel/Beflijster met vleugelformule, leucisme, hybridisatie (5 soorten), 3 Europese ondersoorten, 14 referenties',
+      'Merel: determinatiehulp — leeftijd (GC contrast: buitenste juv vs binnenste geruide GC; NJ → 1e kj (3) / na 1e kj (4); VJ → 2e kj (5) / niet nader te dateren) en geslacht (TF kleur: zwart = ♂ M, olijfbruin = ♀ V; juv back-up via keel centrum)',
+    ],
+    wijzigingen_en: [
+      'Common Blackbird (11870): full species data added — biometrics ssp. merula and aterrimus (wing + tail + weight M/F separate, bill to skull + tarsus MF combined), moult (partial postjuv avg 5–7 GC), age/sex determination, comparison table Blackbird/Ring Ouzel with wing formula, leucism, hybridisation (5 species), 3 European subspecies, 14 references',
+      'Blackbird: determination aid — age (GC contrast: outer juv vs inner moulted GC; autumn → 1st cy (3) / after 1st cy (4); spring → 2nd cy (5) / not more specifically determinable) and sex (TF colour: black = ♂ M, olive-brown = ♀ F; juv backup via throat centre)',
+    ],
+    wijzigingen_de: [
+      'Amsel (11870): vollständige Artdaten hinzugefügt — Biometrie ssp. merula und aterrimus (Flügel + Schwanz + Gewicht M/V getrennt, Schnabel bis Schädel + Tarsus MF gemeinsam), Mauser (partielle Postjuv-Mauser durchschnittlich 5–7 GC), Alters-/Geschlechtsbestimmung, Vergleichstabelle Amsel/Ringdrossel mit Flügelformel, Leucismus, Hybridisierung (5 Arten), 3 europäische Unterarten, 14 Referenzen',
+      'Amsel: Bestimmungshilfe — Alter (GC-Kontrast: äußere Juv-GC vs. innere gemauserte GC; Herbst → 1. Kj. (3) / nach 1. Kj. (4); Frühjahr → 2. Kj. (5) / nicht genauer bestimmbar) und Geschlecht (TF-Farbe: schwarz = ♂ M, olivbraun = ♀ V; Juv-Rückfall über Kehlzentrum)',
+    ],
+  },
   {
     versie: '1.93.0',
     datum: '2026-05-11',
