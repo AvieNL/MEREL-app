@@ -1219,7 +1219,8 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
               {curiosa.totaalGewichtG > 0 && (() => {
                 const kg = (curiosa.totaalGewichtG / 1000).toFixed(1);
-                const katten = Math.round(curiosa.totaalGewichtG / 4000);
+                const struisvogels = (curiosa.totaalGewichtG / 156000).toFixed(1);
+                const toonStruisvogel = curiosa.totaalGewichtG >= 15600; // toon vanaf 0,1×
                 return (
                   <div className="curiosum-rij">
                     <span className="curiosum-label">Totaalgewicht</span>
@@ -1227,7 +1228,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                       {kg} kg
                       <span className="curiosum-sub">
                         ({curiosa.gewichtN} vogels gewogen
-                        {katten >= 2 ? ` · ≈ ${katten}× een kat` : ''})
+                        {toonStruisvogel ? ` · ≈ ${struisvogels}× een struisvogel` : ''})
                       </span>
                     </span>
                   </div>
@@ -1236,7 +1237,8 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
 
               {curiosa.totaalVleugelMm > 0 && (() => {
                 const m = (curiosa.totaalVleugelMm / 1000).toFixed(1);
-                const velden = Math.round(curiosa.totaalVleugelMm / 105000);
+                const albatros = (curiosa.totaalVleugelMm / 3500).toFixed(1);
+                const toonAlbatros = curiosa.totaalVleugelMm >= 350; // toon vanaf 0,1×
                 return (
                   <div className="curiosum-rij">
                     <span className="curiosum-label">Vleugels aan elkaar</span>
@@ -1244,7 +1246,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                       {m} m
                       <span className="curiosum-sub">
                         ({curiosa.vleugelN} vleugels gemeten
-                        {velden >= 1 ? ` · ≈ ${velden}× een voetbalveld` : ''})
+                        {toonAlbatros ? ` · ≈ ${albatros}× een Wanderalbatros` : ''})
                       </span>
                     </span>
                   </div>

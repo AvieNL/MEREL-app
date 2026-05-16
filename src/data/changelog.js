@@ -1,6 +1,19 @@
-export const VERSIE = '1.96.0';
+export const VERSIE = '1.96.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.96.1',
+    datum: '2026-05-16',
+    wijzigingen: [
+      'Statistieken: gewichtsvergelijking gewijzigd van "× een kat" naar "× een struisvogel" (156 kg, zwaarste vogel ter wereld) · vleugellengtevergelijking gewijzigd van "× een voetbalveld" naar "× een Wanderalbatros" (spanwijdte 350 cm, grootste ter wereld)',
+    ],
+    wijzigingen_en: [
+      'Statistics: weight comparison changed from "× a cat" to "× an ostrich" (156 kg, heaviest bird in the world) · wing length comparison changed from "× a football pitch" to "× a Wandering Albatross" (wingspan 350 cm, largest in the world)',
+    ],
+    wijzigingen_de: [
+      'Statistiken: Gewichtsvergleich von "× eine Katze" auf "× ein Strauß" (156 kg, schwerster Vogel der Welt) geändert · Flügellängenvergleich von "× ein Fußballfeld" auf "× ein Wanderalbatros" (Spannweite 350 cm, größte der Welt) geändert',
+    ],
+  },
   {
     versie: '1.96.0',
     datum: '2026-05-16',
