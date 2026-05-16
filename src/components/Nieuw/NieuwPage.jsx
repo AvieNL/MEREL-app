@@ -26,6 +26,17 @@ import { useModuleSwitch } from '../../App';
 import { NieuwFormContext } from './NieuwFormContext';
 import { db } from '../../lib/db';
 
+// 🐦 Easter egg — altijd beschikbaar, ook als Dexie-cache niet bijgewerkt is
+const KRULLEVAAR = {
+  naam_nl:  'Krullevaar',
+  naam_lat: 'Ciconia pettefletensis',
+  naam_en:  'Curly Stork',
+  naam_de:  'Kräuselstorch',
+  naam_fr:  'Cigogne frisée',
+  naam_es:  'Cigüeña rizada',
+  euring_code: '00001',
+};
+
 const NEST_RING_CONTEXT_KEY = 'vrs-ring-uit-nest';
 const EDIT_RECORD_KEY = 'vrs-edit-record';
 import SectieSoort from './SectieSoort';
@@ -75,10 +86,11 @@ export default function NieuwPage() {
   }
   const nestContext = nestContextRef.current || null;
   const speciesRefData = useSpeciesRef();
-  const speciesData = useMemo(
-    () => speciesRefData.filter(s => s.naam_nl),
-    [speciesRefData]
-  );
+  const speciesData = useMemo(() => {
+    const basis = speciesRefData.filter(s => s.naam_nl);
+    if (!basis.find(s => s.naam_nl === 'Krullevaar')) basis.push(KRULLEVAAR);
+    return basis;
+  }, [speciesRefData]);
   const euringLookup = useMemo(() => buildEuringLookup(speciesRefData), [speciesRefData]);
 
   const ruitypenConfig = useRuitypen();

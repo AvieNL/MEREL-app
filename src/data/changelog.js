@@ -1,6 +1,19 @@
-export const VERSIE = '1.96.2';
+export const VERSIE = '1.96.3';
 
 export const CHANGELOG = [
+  {
+    versie: '1.96.3',
+    datum: '2026-05-16',
+    wijzigingen: [
+      '🐦 Krullevaar verschijnt nu altijd in de soortenlijst en het invoerformulier, ook als de Dexie-cache nog niet ververst is',
+    ],
+    wijzigingen_en: [
+      '🐦 Krullevaar now always appears in the species list and entry form, even if the Dexie cache has not yet been refreshed',
+    ],
+    wijzigingen_de: [
+      '🐦 Krullevaar erscheint jetzt immer in der Artenliste und im Eingabeformular, auch wenn der Dexie-Cache noch nicht aktualisiert wurde',
+    ],
+  },
   {
     versie: '1.96.2',
     datum: '2026-05-16',

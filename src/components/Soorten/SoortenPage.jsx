@@ -38,6 +38,18 @@ function TriSwitch({ label, value, onChange }) {
   );
 }
 
+// 🐦 Easter egg — altijd beschikbaar, ook als Dexie-cache niet bijgewerkt is
+const KRULLEVAAR = {
+  naam_nl:  'Krullevaar',
+  naam_lat: 'Ciconia pettefletensis',
+  naam_en:  'Curly Stork',
+  naam_de:  'Kräuselstorch',
+  naam_fr:  'Cigogne frisée',
+  naam_es:  'Cigüeña rizada',
+  euring_code: '00001',
+  foto: null,
+};
+
 const CHIP_DEFS = [
   { key: 'nlIsLat', label: 'NL = Lat' },
   { key: 'geenEn',  label: 'Geen EN' },
@@ -56,10 +68,12 @@ export default function SoortenPage({ records }) {
   const speciesRef = useSpeciesRef();
   const displayNaam = useDisplayNaam();
 
-  const soorten = useMemo(
-    () => speciesRef.filter(s => s.naam_nl && !s.naam_nl.includes('groene tekst')),
-    [speciesRef]
-  );
+  const soorten = useMemo(() => {
+    const basis = speciesRef.filter(s => s.naam_nl && !s.naam_nl.includes('groene tekst'));
+    // Krullevaar injecteren als hij nog niet in de cache zit
+    if (!basis.find(s => s.naam_nl === 'Krullevaar')) basis.push(KRULLEVAAR);
+    return basis;
+  }, [speciesRef]);
 
   const euringLookup = useMemo(() => buildEuringLookup(speciesRef), [speciesRef]);
 
