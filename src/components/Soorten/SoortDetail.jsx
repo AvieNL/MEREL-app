@@ -9,6 +9,7 @@ import { useNestData } from '../../hooks/useNestData';
 import { useModuleSwitch } from '../../App';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuitypeInfo from './RuitypeInfo';
+import KrullevaarPage from './KrullevaarPage';
 import { VangstKaart } from '../Stats/Charts';
 import { renderMarkdown, renderLeeftijdMarkdown, renderIDKenmerken } from '../../utils/textHelper';
 import { formatDatum, toYMD } from '../../utils/dateHelper';
@@ -232,6 +233,11 @@ export default function SoortDetail({ records, speciesOverrides }) {
         <div className="empty-state">{t('sd_loading')}</div>
       </div>
     );
+  }
+
+  // 🐦 Easter egg — Krullevaar uit Pluk van de Petteflet
+  if (decodedNaam === 'Krullevaar' || defaultSoort?.euring_code === '00001') {
+    return <KrullevaarPage />;
   }
 
   if (!defaultSoort) {

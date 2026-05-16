@@ -1,6 +1,19 @@
-export const VERSIE = '1.96.1';
+export const VERSIE = '1.96.2';
 
 export const CHANGELOG = [
+  {
+    versie: '1.96.2',
+    datum: '2026-05-16',
+    wijzigingen: [
+      '🐦 Easter egg: Krullevaar (EURING 00001, Ciconia pettefletensis) toegevoegd — soortpagina met vallende veren, volledige nep-Demongin data en registratie geblokkeerd',
+    ],
+    wijzigingen_en: [
+      '🐦 Easter egg: Krullevaar (EURING 00001, Ciconia pettefletensis) added — species page with falling feathers, full mock Demongin data and registration blocked',
+    ],
+    wijzigingen_de: [
+      '🐦 Easter Egg: Krullevaar (EURING 00001, Ciconia pettefletensis) hinzugefügt — Artseite mit fallenden Federn, vollständige Mock-Demongin-Daten und Registrierung gesperrt',
+    ],
+  },
   {
     versie: '1.96.1',
     datum: '2026-05-16',

@@ -1,0 +1,124 @@
+/* ── Veren-animatie ─────────────────────────────────────────────────────────── */
+
+.kv-veren-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+@keyframes kv-veer-vallen {
+  0% {
+    transform: translateY(-80px) translateX(0) rotate(var(--rot-start));
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  30% {
+    transform: translateY(30vh) translateX(var(--sway)) rotate(calc(var(--rot-start) + 180deg));
+  }
+  60% {
+    transform: translateY(60vh) translateX(calc(var(--sway) * -0.5)) rotate(calc(var(--rot-start) + 360deg));
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) translateX(calc(var(--sway) * 0.3)) rotate(var(--rot-end));
+    opacity: 0;
+  }
+}
+
+.kv-veer {
+  position: absolute;
+  top: 0;
+  display: inline-block;
+  animation: kv-veer-vallen ease-in-out infinite;
+  user-select: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+}
+
+/* ── Pagina-layout ──────────────────────────────────────────────────────────── */
+
+.kv-page {
+  position: relative; /* zodat de veren-container fixed t.o.v. viewport werkt */
+}
+
+.kv-hero {
+  border-left: 4px solid var(--accent);
+}
+
+.kv-meta {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  opacity: 0.65;
+}
+
+/* ── Quote ──────────────────────────────────────────────────────────────────── */
+
+.kv-quote-sectie {
+  background: var(--surface-raised, rgba(255,255,255,0.04));
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+
+.kv-quote {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--accent);
+  margin: 0 0 8px 0;
+  padding: 0;
+  border: none;
+}
+
+.kv-bron {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin: 0;
+}
+
+/* ── Biometrie-tabel ─────────────────────────────────────────────────────────── */
+
+.kv-bio-tabel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.kv-bio-rij {
+  display: flex;
+  gap: 16px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border, rgba(255,255,255,0.08));
+  font-size: 0.9rem;
+}
+
+.kv-bio-rij span:first-child {
+  min-width: 100px;
+  color: var(--text-secondary, rgba(255,255,255,0.55));
+  flex-shrink: 0;
+}
+
+/* ── Checklist ───────────────────────────────────────────────────────────────── */
+
+.kv-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.kv-checklist li {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border, rgba(255,255,255,0.08));
+}
+
+.kv-checklist em {
+  opacity: 0.55;
+  font-style: normal;
+}

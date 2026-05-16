@@ -515,6 +515,16 @@ export default function NieuwPage() {
   function handleSubmit(e) {
     e.preventDefault();
 
+    // 🐦 Easter egg — Krullevaar laat zich niet registreren
+    if (euringCode === '00001' || form.vogelnaam?.toLowerCase() === 'krullevaar') {
+      setFormErrors([{
+        key: 'vogelnaam',
+        label: 'De Krullevaar laat zich niet registreren. Dat heeft Pluk ook al geprobeerd.',
+        section: 'nieuweVangst',
+      }]);
+      return;
+    }
+
     // Valideer verplichte velden
     const errors = [];
     for (const f of requiredFields) {
