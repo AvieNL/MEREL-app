@@ -1,6 +1,19 @@
-export const VERSIE = '1.95.0';
+export const VERSIE = '1.96.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.96.0',
+    datum: '2026-05-16',
+    wijzigingen: [
+      'Ekster (15490): volledige soortdata toegevoegd — biometrie ssp. pica (vleugel + staart + gewicht M/V apart, bill to skull + kop+snavel + snaveldiepte bij cere + tarsus MF apart, ad/juv gecombineerd), rui, leeftijds- en geslachtsbepaling, 5 Europese/N-Afrikaanse ondersoorten, hybridisatie, 7 referenties, determinatiehulp leeftijd (iris kleur 3J → vliegveren glans + moultgrens, NJ/VJ) en geslacht (broedvlek + vleugelmeting drie zones)',
+    ],
+    wijzigingen_en: [
+      'Magpie (15490): full species data added — biometrics ssp. pica (wing + tail + weight M/F separate, bill to skull + head+bill + bill depth at cere + tarsus M/F separate, ad/juv combined), moult, age and sex determination, 5 European/N-African subspecies, hybridisation, 7 references, age determination aid (iris colour 3J → flight feather gloss + moult limit, autumn/spring) and sex determination aid (brood patch + wing measurement three zones)',
+    ],
+    wijzigingen_de: [
+      'Elster (15490): vollständige Artdaten hinzugefügt — Biometrie ssp. pica (Flügel + Schwanz + Gewicht M/W getrennt, Schnabel Totallänge + Kopf+Schnabel + Schnabeltiefe am Cere + Tarsus M/W getrennt, adult/juv kombiniert), Mauser, Alters- und Geschlechtsbestimmung, 5 europäische/nordafrikanische Unterarten, Hybridisierung, 7 Referenzen, Altersbestimmungshilfe (Irisfarbe 3J → Gefiederglanz + Mauser­grenze, Herbst/Frühjahr) und Geschlechtsbestimmungshilfe (Brutfleck + Flügelmessung drei Zonen)',
+    ],
+  },
   {
     versie: '1.95.0',
     datum: '2026-05-11',
