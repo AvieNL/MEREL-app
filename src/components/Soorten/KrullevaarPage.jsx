@@ -76,11 +76,21 @@ export default function KrullevaarPage() {
 
       {/* Hero */}
       <div className="sd-hero kv-hero">
+        <div className="kv-hero-foto-wrap">
+          <img
+            src="/krullevaar.jpg"
+            alt="De Krullevaar — illustratie Fiep Westendorp"
+            className="kv-hero-foto"
+          />
+        </div>
         <div className="sd-hero-info">
           <h1 className="sd-naam-nl">Krullevaar</h1>
           <div className="sd-naam-lat">Ciconia pettefletensis</div>
           <div className="kv-meta">
             EURING 00001 &nbsp;·&nbsp; Ringmaat: Geen &nbsp;·&nbsp; Ruitype: Onbekend
+          </div>
+          <div className="kv-illustratie-credit">
+            Ill. Fiep Westendorp (1971)
           </div>
         </div>
       </div>

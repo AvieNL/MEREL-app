@@ -1,6 +1,19 @@
-export const VERSIE = '1.96.3';
+export const VERSIE = '1.96.4';
 
 export const CHANGELOG = [
+  {
+    versie: '1.96.4',
+    datum: '2026-05-16',
+    wijzigingen: [
+      '🐦 Krullevaar: illustratie van Fiep Westendorp (1971) toegevoegd aan soortpagina',
+    ],
+    wijzigingen_en: [
+      '🐦 Krullevaar: Fiep Westendorp (1971) illustration added to species page',
+    ],
+    wijzigingen_de: [
+      '🐦 Krullevaar: Illustration von Fiep Westendorp (1971) zur Artseite hinzugefügt',
+    ],
+  },
   {
     versie: '1.96.3',
     datum: '2026-05-16',
