@@ -1,6 +1,19 @@
-export const VERSIE = '1.96.4';
+export const VERSIE = '1.96.5';
 
 export const CHANGELOG = [
+  {
+    versie: '1.96.5',
+    datum: '2026-05-16',
+    wijzigingen: [
+      '🐦 Krullevaar: opmaak gelijkgetrokken met overige soortpagina\'s (sd-card layout), vallende veren nu oranje',
+    ],
+    wijzigingen_en: [
+      '🐦 Krullevaar: layout aligned with other species pages (sd-card layout), falling feathers now orange',
+    ],
+    wijzigingen_de: [
+      '🐦 Krullevaar: Layout an andere Artseiten angeglichen (sd-card-Layout), fallende Federn jetzt orange',
+    ],
+  },
   {
     versie: '1.96.4',
     datum: '2026-05-16',

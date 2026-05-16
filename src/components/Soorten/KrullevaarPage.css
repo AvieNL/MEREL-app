@@ -13,18 +13,14 @@
     transform: translateY(-80px) translateX(0) rotate(var(--rot-start));
     opacity: 0;
   }
-  8% {
-    opacity: 1;
-  }
+  8% { opacity: 1; }
   30% {
     transform: translateY(30vh) translateX(var(--sway)) rotate(calc(var(--rot-start) + 180deg));
   }
   60% {
     transform: translateY(60vh) translateX(calc(var(--sway) * -0.5)) rotate(calc(var(--rot-start) + 360deg));
   }
-  88% {
-    opacity: 1;
-  }
+  88% { opacity: 1; }
   100% {
     transform: translateY(105vh) translateX(calc(var(--sway) * 0.3)) rotate(var(--rot-end));
     opacity: 0;
@@ -37,61 +33,24 @@
   display: inline-block;
   animation: kv-veer-vallen ease-in-out infinite;
   user-select: none;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+  /* Oranje tint passend bij de Fiep Westendorp-illustratie */
+  filter: sepia(1) saturate(8) brightness(1.05) drop-shadow(0 2px 6px rgba(0,0,0,0.25));
 }
 
-/* ── Pagina-layout ──────────────────────────────────────────────────────────── */
+/* ── Foto — iets groter dan standaard 80×80 voor het portret ────────────────── */
 
-.kv-page {
-  position: relative; /* zodat de veren-container fixed t.o.v. viewport werkt */
-}
-
-.kv-hero {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  border-left: 4px solid var(--accent);
-  padding: 12px 16px;
-}
-
-.kv-hero-foto-wrap {
-  flex-shrink: 0;
-  width: 110px;
-}
-
-.kv-hero-foto {
-  width: 110px;
-  height: 188px;            /* ~452:774 verhouding */
-  object-fit: cover;
-  object-position: top;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+.kv-foto {
+  width: 80px !important;
+  height: 110px !important;
+  border-radius: 12px;
+  overflow: hidden;
   background: #fff;
-}
-
-.kv-illustratie-credit {
-  margin-top: 8px;
-  font-size: 0.72rem;
-  opacity: 0.45;
-  font-style: italic;
-}
-
-.kv-meta {
-  margin-top: 6px;
-  font-size: 0.8rem;
-  opacity: 0.65;
 }
 
 /* ── Quote ──────────────────────────────────────────────────────────────────── */
 
-.kv-quote-sectie {
-  background: var(--surface-raised, rgba(255,255,255,0.04));
-  border-radius: 10px;
-  padding: 16px 20px;
-}
-
 .kv-quote {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-style: italic;
   color: var(--accent);
   margin: 0 0 8px 0;
@@ -101,30 +60,8 @@
 
 .kv-bron {
   font-size: 0.8rem;
-  opacity: 0.6;
+  opacity: 0.55;
   margin: 0;
-}
-
-/* ── Biometrie-tabel ─────────────────────────────────────────────────────────── */
-
-.kv-bio-tabel {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.kv-bio-rij {
-  display: flex;
-  gap: 16px;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--border, rgba(255,255,255,0.08));
-  font-size: 0.9rem;
-}
-
-.kv-bio-rij span:first-child {
-  min-width: 100px;
-  color: var(--text-secondary, rgba(255,255,255,0.55));
-  flex-shrink: 0;
 }
 
 /* ── Checklist ───────────────────────────────────────────────────────────────── */
@@ -142,6 +79,10 @@
 .kv-checklist li {
   padding: 6px 0;
   border-bottom: 1px solid var(--border, rgba(255,255,255,0.08));
+}
+
+.kv-checklist li:last-child {
+  border-bottom: none;
 }
 
 .kv-checklist em {
