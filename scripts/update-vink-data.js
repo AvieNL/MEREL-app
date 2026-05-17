@@ -114,7 +114,7 @@ const updates = {
   determinatie_id_notities:
     'Karakteristieke combinatie van witte vleugelstrepen (basis van handpennen en armpennen, ' +
     'alle middelste vleugeldekveren en deel van de kleine vleugeldekveren) en TF6 met veel wit.\n\n' +
-    '**Hybridisatie:**\n' +
+    '**Hybridisatie:**\n\n' +
     'Hybridisatie met Keep *(Fringilla montifringilla)* mogelijk.',
 
   bron_id_kenmerken: 'Demongin (2020) p.357–358',
