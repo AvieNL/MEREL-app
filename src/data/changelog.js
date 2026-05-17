@@ -1,6 +1,22 @@
-export const VERSIE = '1.98.0';
+export const VERSIE = '1.99.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.99.0',
+    datum: '2026-05-17',
+    wijzigingen: [
+      'Zanglijster (12000): volledige soortdata toegevoegd — biometrie ssp. philomelos (vleugel + staart M/V apart, snavel-schedel + tarsus + gewicht gecombineerd MV), vleugelformule (P1 zeer kort, P2 lang, P5/P6 kort, WP-afstanden, uitgerand P3–P5, inkeping P2–P3), rui, leeftijdsbepaling (GC-contrast + TF1-vorm NJ/VJ), 4 ondersoorten incl. clarkei voor Nederland, hybridisatie met Merel, 9 referenties, determinatiehulp leeftijd (GC-contrast + TF1-vorm) en geslacht (broedplakvlek)',
+      'Bulk FR/ES namen aangevuld voor 2892 soorten via IOC World Bird List v15.2 (99,1% compleet)',
+    ],
+    wijzigingen_en: [
+      'Song Thrush (12000): full species data added — biometrics ssp. philomelos (wing + tail M/F separate, bill-to-skull + tarsus + weight combined MF), wing formula (P1 very short, P2 long, P5/P6 short, WP distances, emarginated P3–P5, notch P2–P3), moult, age determination (GC contrast + TF1 shape autumn/spring), 4 subspecies incl. clarkei for Netherlands, hybridisation with Common Blackbird, 9 references, age determination aid (GC contrast + TF1 shape) and sex determination aid (brood patch)',
+      'Bulk FR/ES names filled for 2892 species via IOC World Bird List v15.2 (99.1% complete)',
+    ],
+    wijzigingen_de: [
+      'Singdrossel (12000): vollständige Artdaten hinzugefügt — Biometrie ssp. philomelos (Flügel + Schwanz M/W getrennt, Schnabellänge + Tarsus + Gewicht kombiniert MW), Flügelformel (P1 sehr kurz, P2 lang, P5/P6 kurz, WP-Abstände, ausgerandet P3–P5, Kerbe P2–P3), Mauser, Altersbestimmung (GC-Kontrast + TF1-Form Herbst/Frühjahr), 4 Unterarten inkl. clarkei für Niederlande, Hybridisierung mit Amsel, 9 Referenzen, Alters- und Geschlechtsbestimmungshilfe (Brutfleck)',
+      'Bulk FR/ES-Namen für 2892 Arten über IOC World Bird List v15.2 ergänzt (99,1 % vollständig)',
+    ],
+  },
   {
     versie: '1.98.0',
     datum: '2026-05-17',
