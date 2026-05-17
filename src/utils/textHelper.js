@@ -2,7 +2,7 @@ import DOMPurify from 'dompurify';
 
 // Eenvoudige markdown-renderer: **bold**, *italic*, _underline_, [tekst](url), - bulletlijst
 export function renderMarkdown(text) {
-  if (!text) return '';
+  if (!text || typeof text !== 'string') return '';
   const html = text
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/\*\*(.*?)\*\*/gs, '<strong>$1</strong>')
@@ -31,7 +31,7 @@ export function renderMarkdown(text) {
 // krijgen class 'leeftijd-blok--actueel'.
 // seizoen: 'vj' (jan–jun) | 'nj' (jul–dec) | null (alles tonen)
 export function renderLeeftijdMarkdown(text, seizoen = null) {
-  if (!text) return '';
+  if (!text || typeof text !== 'string') return '';
 
   const BUFFER_DAYS = 21;
   const now = new Date();
@@ -99,7 +99,7 @@ export function renderLeeftijdMarkdown(text, seizoen = null) {
 //
 // Overige alinea's worden als gewone tekst weergegeven.
 export function renderIDKenmerken(text) {
-  if (!text) return '';
+  if (!text || typeof text !== 'string') return '';
 
   const ONDERSCHEID_RE = /^\*\*Onderscheid met ([^*]+):\*\*/;
   const VERGELIJK_RE   = /^\*\*Vergelijking ([^*]+):\*\*/;
@@ -179,6 +179,7 @@ export function renderIDKenmerken(text) {
 
 // Inline markdown helper (gedeeld)
 function inlineMarkdown(text) {
+  if (!text || typeof text !== 'string') return '';
   return text
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/\*\*(.*?)\*\*/gs, '<strong>$1</strong>')
@@ -188,6 +189,7 @@ function inlineMarkdown(text) {
 }
 
 function escapeHtml(str) {
+  if (!str || typeof str !== 'string') return '';
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
