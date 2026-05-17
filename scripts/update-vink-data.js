@@ -45,10 +45,6 @@ const updates = {
   // ── Pennen ─────────────────────────────────────────────────────────────
   pennen_structuur: {
     wp: '(3) 4 (5)',
-    hp: 10,
-    ap: 9,
-    tp: 3,
-    sp: 12,
   },
 
   vleugelformule: '',
