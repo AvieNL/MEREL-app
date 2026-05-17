@@ -150,12 +150,12 @@ const updates = {
 
   // ── Vangst-checklist ───────────────────────────────────────────────────
   vangst_checklist: [
-    'Kleur borst: rozerood = ♂ M, buff-bruin = ♀ V',
-    'LC randbreedte: 2–4 mm = ♂ M, 0–2 mm = ♀ V (juv)',
-    'PC kleur vs GC: bleker = 1e kj',
-    'TF1 vorm: puntig/versleten = 1e kj; afgerond/fris = adult',
-    'Tertiaalrand: diffuse grens = 1e kj; scherpe rufous tip = adult',
-    'Meet vleugel: ≥89 mm = zeker ♂ M',
+    { label: 'Borstkleur',          type: 'observatie', belang: 3, note: 'rozerood = ♂ M · buff-bruin = ♀ V' },
+    { label: 'Vleugellengte',       type: 'meting',     belang: 3, note: '≥89 mm = zeker ♂ M' },
+    { label: 'PC-kleur vs GC',      type: 'observatie', belang: 3, note: 'bleker = 1e kj' },
+    { label: 'TF1 vorm',            type: 'observatie', belang: 2, note: 'puntig/versleten = 1e kj · afgerond = adult' },
+    { label: 'Tertiaaltoestand',    type: 'observatie', belang: 2, note: 'diffuse grens = 1e kj · rufous tip = adult' },
+    { label: 'LC randbreedte (juv)', type: 'meting',    belang: 2, note: '2–4 mm = ♂ M · 0–2 mm = ♀ V' },
   ],
 
   // ── Referenties ────────────────────────────────────────────────────────
