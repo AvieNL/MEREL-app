@@ -1,6 +1,19 @@
-export const VERSIE = '1.96.5';
+export const VERSIE = '1.97.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.97.0',
+    datum: '2026-05-17',
+    wijzigingen: [
+      'Vink (16360): volledige soortdata toegevoegd — biometrie ssp. coelebs (vleugel + staart M/V apart, snavel-schedel + tarsus + gewicht gecombineerd MV), rui, leeftijds- en geslachtsbepaling, 9 ondersoorten in 3 groepen (coelebs, spodiogenys, canariensis), hybridisatie met Keep, 17 referenties, determinatiehulp leeftijd (PC-kleur vs GC + tertiaaltoestand NJ; TF1-vorm VJ) en geslacht (borstkleur → vleugeldrempel ≥89 mm)',
+    ],
+    wijzigingen_en: [
+      'Chaffinch (16360): full species data added — biometrics ssp. coelebs (wing + tail M/F separate, bill-to-skull + tarsus + weight combined MF), moult, age and sex determination, 9 subspecies in 3 groups (coelebs, spodiogenys, canariensis), hybridisation with Brambling, 17 references, age determination aid (PC colour vs GC + tertial condition autumn; TF1 shape spring) and sex determination aid (breast colour → wing threshold ≥89 mm)',
+    ],
+    wijzigingen_de: [
+      'Buchfink (16360): vollständige Artdaten hinzugefügt — Biometrie ssp. coelebs (Flügel + Schwanz M/W getrennt, Schnabellänge + Tarsus + Gewicht kombiniert MW), Mauser, Alters- und Geschlechtsbestimmung, 9 Unterarten in 3 Gruppen (coelebs, spodiogenys, canariensis), Hybridisierung mit Bergfink, 17 Referenzen, Altersbestimmungshilfe (PC-Farbe vs GC + Tertialtoestand Herbst; TF1-Form Frühjahr) und Geschlechtsbestimmungshilfe (Brustfarbe → Flügelschwelle ≥89 mm)',
+    ],
+  },
   {
     versie: '1.96.5',
     datum: '2026-05-16',
