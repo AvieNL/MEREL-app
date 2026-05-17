@@ -123,59 +123,29 @@ const updates = {
 
   bron_id_kenmerken: 'Demongin (2020) p.357–358',
 
-  // ── Ondersoorten ───────────────────────────────────────────────────────
-  ondersoorten: [
-    {
-      naam: 'coelebs-groep (Continentaal Europa)',
-      verspreiding: 'Europa (excl. W en ZO) tot Centraal-Siberië',
-      kenmerken: 'Nominaatvorm. ♂ M met borst meer rozeroze dan rufous-bruin; keel en wangen iets donkerder rufous-roze. ' +
-        'Lichte en clineale variatie binnen de groep. Sspp. sarda, syriaca, solomkoi, alexandrovi, balearica, ' +
-        'tyrrhenica en caucasica worden soms bij coelebs ingedeeld.',
-    },
-    {
-      naam: 'gengleri',
-      verspreiding: 'Britse Eilanden, Ierland',
-      kenmerken: 'Gemiddeld kleiner, iets donkerder en meer rufous op de onderdelen bij ♂ M dan coelebs. ' +
-        'Onverzorgde uitstraling, ook bij ♀ V. In vers postbroeds verenkleed vrijwel niet of niet te onderscheiden.',
-    },
-    {
-      naam: 'balearica',
-      verspreiding: 'Iberisch Schiereiland, Balearen',
-      kenmerken: 'Kleiner dan coelebs, blekere onderdelen.',
-    },
-    {
-      naam: 'tyrrhenica',
-      verspreiding: 'Corsica',
-      kenmerken: 'Vleugel kort. Sterk contrast tussen donkere wijnrode onderdelen en rufous-kaneelkleurige wangen.',
-    },
-    {
-      naam: 'sarda',
-      verspreiding: 'Sardinië',
-      kenmerken: 'Vleugel kort. Snavel diep. Mantel vrij dof bruin.',
-    },
-    {
-      naam: 'solomkoi',
-      verspreiding: 'Van de Balkan tot de Krim en westelijk van de Kaukasus',
-      kenmerken: 'Blekere onderdelen dan coelebs. Snavel gemiddeld steviger.',
-    },
-    {
-      naam: 'syriaca',
-      verspreiding: 'Levant, Cyprus, ZO-Turkije, N-Irak',
-      kenmerken: 'Mantel van ♂ M bleker, stuit geelgroen.',
-    },
-    {
-      naam: 'spodiogenys-groep (N-Afrika, Azoren, Madeira)',
-      verspreiding: '4 ondersoorten',
-      kenmerken: 'Wangen even blauwgrijs als de kruin. Loren zwart. Mantel groen. Onderdelen bleek. ' +
-        'Binnenvlag van TF4–TF6 grotendeels wit (TF4 geheel donker bij coelebs-groep).',
-    },
-    {
-      naam: 'canariensis-groep (Canarische Eilanden)',
-      verspreiding: '3 ondersoorten',
-      kenmerken: 'Bovenzijde leisteengrijs. Zijkant hoofd oker of oranje-buff als de borst. ' +
-        'Weinig wit op vleugel en staart. Duidelijk te onderscheiden van de Blauwe Vink *(F. teydea)*.',
-    },
-  ],
+  // ── Ondersoorten (markdown string) ────────────────────────────────────
+  ondersoorten:
+    '**Groep 1 — coelebs** (Continentaal Europa, excl. W en ZO, tot Centraal-Siberië)\n' +
+    'Nominaatvorm. ♂ M borst meer rozeroze dan rufous-bruin; keel en wangen iets donkerder rufous-roze. ' +
+    'Lichte clineale variatie. Sspp. sarda, syriaca, solomkoi, alexandrovi, balearica, tyrrhenica en caucasica worden soms bij coelebs ingedeeld.\n\n' +
+    '**gengleri** (Britse Eilanden, Ierland)\n' +
+    'Gemiddeld kleiner, iets donkerder, meer rufous op de onderdelen bij ♂ M. Onverzorgde uitstraling, ook bij ♀ V. In vers postbroeds verenkleed vrijwel niet te onderscheiden van coelebs.\n\n' +
+    '**balearica** (Iberisch Schiereiland, Balearen)\n' +
+    'Kleiner dan coelebs, blekere onderdelen.\n\n' +
+    '**tyrrhenica** (Corsica)\n' +
+    'Vleugel kort. Sterk contrast tussen donkere wijnrode onderdelen en rufous-kaneelkleurige wangen.\n\n' +
+    '**sarda** (Sardinië)\n' +
+    'Vleugel kort. Snavel diep. Mantel vrij dof bruin.\n\n' +
+    '**solomkoi** (Balkan tot Krim en W-Kaukasus)\n' +
+    'Blekere onderdelen dan coelebs. Snavel gemiddeld steviger.\n\n' +
+    '**syriaca** (Levant, Cyprus, ZO-Turkije, N-Irak)\n' +
+    'Mantel van ♂ M bleker, stuit geelgroen.\n\n' +
+    '**Groep 2 — spodiogenys** (N-Afrika, Azoren, Madeira — 4 ondersoorten)\n' +
+    'Wangen even blauwgrijs als kruin. Loren zwart. Mantel groen. Onderdelen bleek. ' +
+    'Binnenvlag van TF4–TF6 grotendeels wit (TF4 geheel donker bij coelebs-groep).\n\n' +
+    '**Groep 3 — canariensis** (Canarische Eilanden — 3 ondersoorten)\n' +
+    'Bovenzijde leisteengrijs. Zijkant hoofd oker of oranje-buff als de borst. ' +
+    'Weinig wit op vleugel en staart. Onderscheid van Blauwe Vink *(F. teydea)* noodzakelijk.',
 
   bron_ondersoorten: 'Demongin (2020) p.357',
 
