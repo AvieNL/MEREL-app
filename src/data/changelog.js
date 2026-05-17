@@ -1,6 +1,19 @@
-export const VERSIE = '1.97.0';
+export const VERSIE = '1.98.0';
 
 export const CHANGELOG = [
+  {
+    versie: '1.98.0',
+    datum: '2026-05-17',
+    wijzigingen: [
+      'Zwartkop (12770): volledige soortdata toegevoegd — biometrie ssp. atricapilla (vleugel + staart M/V apart, snavel-schedel + tarsus + gewicht gecombineerd MV), vleugelformule (P1 lang, P2 relatief kort, WP-afstanden P1–P10, uitgerand P3–P5, inkeping P2–P3), rui, leeftijds- en geslachtsbepaling (NJ: GC-contrast + iris; VJ: TF-slijtage ♂ M), 5 ondersoorten, hybridisatie met Tuinfluiter, 26 referenties, determinatiehulp leeftijd en geslacht (petje kleur)',
+    ],
+    wijzigingen_en: [
+      'Blackcap (12770): full species data added — biometrics ssp. atricapilla (wing + tail M/F separate, bill-to-skull + tarsus + weight combined MF), wing formula (P1 long, P2 relatively short, WP distances P1–P10, emarginated P3–P5, notch P2–P3), moult, age and sex determination (autumn: GC contrast + iris; spring: TF wear ♂ M), 5 subspecies, hybridisation with Garden Warbler, 26 references, age and sex determination aids (cap colour)',
+    ],
+    wijzigingen_de: [
+      'Mönchsgrasmücke (12770): vollständige Artdaten hinzugefügt — Biometrie ssp. atricapilla (Flügel + Schwanz M/W getrennt, Schnabellänge + Tarsus + Gewicht kombiniert MW), Flügelformel (P1 lang, P2 relativ kurz, WP-Abstände P1–P10, ausgerandet P3–P5, Kerbe P2–P3), Mauser, Alters- und Geschlechtsbestimmung (Herbst: GC-Kontrast + Iris; Frühjahr: TF-Abnutzung ♂ M), 5 Unterarten, Hybridisierung mit Gartengrasmücke, 26 Referenzen, Alters- und Geschlechtsbestimmungshilfe (Käppchenfarbe)',
+    ],
+  },
   {
     versie: '1.97.0',
     datum: '2026-05-17',
