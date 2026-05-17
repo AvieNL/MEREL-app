@@ -286,28 +286,28 @@ export const turdidae = [
     soorten: ['12000'],
     resultaat_veld: 'geslacht',
     naam: 'Geslachtsbepaling Zanglijster',
-    korte_beschrijving: 'Duidelijke broedplakvlek (BP) aanwezig = ♀ V',
+    korte_beschrijving: 'Duidelijke broedvlek (BP) aanwezig = ♀ V',
     bron: 'Demongin (2020) p.266',
     type: 'survey',
     start: 'bp_aanwezig',
     overzicht: [
-      { conditie: 'Duidelijke broedplakvlek (BP) aanwezig', resultaat: '♀ V' },
+      { conditie: 'Duidelijke broedvlek (BP) aanwezig', resultaat: '♀ V' },
       { conditie: 'Geen of onduidelijke BP', resultaat: 'Niet te bepalen' },
     ],
     stappen: {
 
       bp_aanwezig: {
         id: 'bp_aanwezig',
-        label: 'Broedplakvlek',
+        label: 'Broedvlek',
         type: 'keuze',
-        vraag: 'Is er een duidelijke broedplakvlek (BP) aanwezig?',
+        vraag: 'Is er een duidelijke broedvlek (BP) aanwezig?',
         opties: [
           {
             waarde: 'ja',
             label: 'Ja — duidelijke BP zichtbaar',
             resultaat: {
               waarde: 'F', label: '♀ Vrouw', zeker: false,
-              uitleg: 'Een duidelijke broedplakvlek (BP) duidt op ♀ V.',
+              uitleg: 'Een duidelijke broedvlek (BP) duidt op ♀ V.',
             },
           },
           {

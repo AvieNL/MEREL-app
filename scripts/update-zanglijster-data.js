@@ -100,7 +100,7 @@ const updates = {
   geslachts_notities_m: '',
 
   geslachts_notities_f:
-    '- Duidelijke broedplakvlek (BP) duidt op ♀ V.',
+    '- Duidelijke broedvlek (BP) duidt op ♀ V.',
 
   bron_geslacht: 'Demongin (2020) p.266',
 
@@ -142,7 +142,7 @@ const updates = {
     { label: 'GC-contrast',      type: 'observatie', belang: 3, note: 'olijf binnenste vs. roestbruin buitenste GC = 1e kj (3)' },
     { label: 'TF1-vorm',         type: 'observatie', belang: 2, note: 'puntig = 1e kj · minder puntig = adult' },
     { label: 'PC-kleur',         type: 'observatie', belang: 2, note: 'roestig + geel-buff buitenvlag = 1e kj · olijf = adult' },
-    { label: 'Broedplakvlek',    type: 'observatie', belang: 2, note: 'duidelijke BP aanwezig = ♀ V' },
+    { label: 'Broedvlek',    type: 'observatie', belang: 2, note: 'duidelijke BP aanwezig = ♀ V' },
     { label: 'GC-inkeping (vj)', type: 'observatie', belang: 1, note: 'driehoekige inkeping op versleten GC = 2e kj (5)' },
   ],
 
