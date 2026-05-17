@@ -107,13 +107,13 @@ const updates = {
     '**Najaar:**\n' +
     '- Na 1e kj ♂ M (4 M): Petje zwart, gewoonlijk zonder bruine tinten, behalve smalle randen in vers verenkleed; uitzonderlijk duidelijke bruine randen.\n' +
     '- 1e kj ♂ M (3 M): Petje gewoonlijk zwart met bruine eindtips (vooral op het voorhoofd) of geheel zwart. Uitzonderlijk geheel bruin — iets minder bruin en meer olijftint dan bij de meeste ♀ V; til de kruinveren op om groeiende of verborgen zwarte veren te zien.\n' +
-    '- 3J ♂ M: Bruine rand van kruinveren vaak zwartachtig aangelopen.\n\n' +
+    '- 3J ♂ M: Bruine rand van kruinveren vaak zwartachtig aangelopen.\n' +
     '**Voorjaar:**\n' +
     '- Petje geheel zwart of zwart met enkele bruine veren.',
 
   geslachts_notities_f:
     '**Najaar:**\n' +
-    '- ♀ V na postjuv-rui: Petje helder bruin. Let op: zeldzame 1e kj ♂ M kan geheel bruin petje hebben — til de kruinveren op om groeiende zwarte veren te zien. Geslachtsbepaling van echte juvenielen (3J) is onbetrouwbaar.\n\n' +
+    '- ♀ V na postjuv-rui: Petje helder bruin. Let op: zeldzame 1e kj ♂ M kan geheel bruin petje hebben — til de kruinveren op om groeiende zwarte veren te zien. Geslachtsbepaling van echte juvenielen (3J) is onbetrouwbaar.\n' +
     '**Voorjaar:**\n' +
     '- Petje bruin.',
 
