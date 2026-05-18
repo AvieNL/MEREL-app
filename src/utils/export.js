@@ -101,9 +101,11 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
     const captureLines = [
       tag('Modus', 'Insert'),
       tag('ReportingDate', reportingDate),
-      `    <Executor>`,
-      `      <ActingUserProjectID>${xmlEsc(String(actingId).trim())}</ActingUserProjectID>`,
-      `    </Executor>`,
+      ...(actingId ? [
+        `    <Executor>`,
+        `      <ActingUserProjectID>${xmlEsc(String(actingId).trim())}</ActingUserProjectID>`,
+        `    </Executor>`,
+      ] : []),
       tag('RingScheme',                  r.centrale || 'NLA'),
       tag('RingNumber',                  r.ringnummer || ''),
       tag('CatchDate',                   catchDate),

@@ -1,6 +1,19 @@
-export const VERSIE = '1.99.0';
+export const VERSIE = '1.99.1';
 
 export const CHANGELOG = [
+  {
+    versie: '1.99.1',
+    datum: '2026-05-18',
+    wijzigingen: [
+      'Fix: Griel XML-export geen lege <ActingUserProjectID> meer bij vangsten zonder project — element wordt nu weggelaten als er geen geldig AUPI-nummer is',
+    ],
+    wijzigingen_en: [
+      'Fix: Griel XML export no longer emits empty <ActingUserProjectID> for catches without a project — element is omitted when no valid AUPI number is available',
+    ],
+    wijzigingen_de: [
+      'Fix: Griel-XML-Export erzeugt kein leeres <ActingUserProjectID> mehr bei Fängen ohne Projekt — Element wird weggelassen, wenn keine gültige AUPI-Nummer vorhanden ist',
+    ],
+  },
   {
     versie: '1.99.0',
     datum: '2026-05-17',
