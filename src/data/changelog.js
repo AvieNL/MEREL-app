@@ -1,6 +1,19 @@
-export const VERSIE = '1.99.1';
+export const VERSIE = '2.0.0';
 
 export const CHANGELOG = [
+  {
+    versie: '2.0.0',
+    datum: '2026-07-08',
+    wijzigingen: [
+      'Nieuw: zoönose-bemonsteringsprotocol in Nieuwe Vangst — toont automatisch het protocol (bloed, naald, swab, teken, veren) als de soort op de bemonsteringslijst staat, zichtbaar van 1 jul t/m 31 okt. Merel (groep 2 USUV + groep 3 WNV, serumbuis + FTA, naald 0,5 mm oranje, keel + cloaca-swab) en Zwartkop (groep 1 trek, FTA, naald 0,3 mm geel, keel-swab optioneel) toegevoegd.',
+    ],
+    wijzigingen_en: [
+      'New: zoonosis sampling protocol panel in New Catch — shows automatically for species on the sampling list (blood, needle, swab, ticks, feathers), visible July 1–October 31. Common Blackbird (groups 2 USUV + 3 WNV, serum tube + FTA, 0.5 mm orange needle, throat + cloaca swab) and Eurasian Blackcap (group 1 migration, FTA, 0.3 mm yellow needle, throat swab optional) added.',
+    ],
+    wijzigingen_de: [
+      'Neu: Zoonose-Beprobungsprotokoll in Neuer Fang — zeigt automatisch das Protokoll (Blut, Nadel, Abstrich, Zecken, Federn) für Arten auf der Beprobungsliste, sichtbar 1. Jul.–31. Okt. Amsel (Gruppe 2 USUV + Gruppe 3 WNV, Serumröhrchen + FTA, 0,5 mm orange Nadel, Rachen- + Kloakenabstrich) und Mönchsgrasmücke (Gruppe 1 Zug, FTA, 0,3 mm gelbe Nadel, Rachenabstrich optional) hinzugefügt.',
+    ],
+  },
   {
     versie: '1.99.1',
     datum: '2026-05-18',

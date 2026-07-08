@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import { useDisplayNaam } from '../../hooks/useDisplayNaam';
+import ZoonosePanel from './ZoonosePanel';
 import './NieuwPage.css';
 
 export default function SectieSoort() {
@@ -165,6 +166,9 @@ export default function SectieSoort() {
                     </ul>
                   </div>
                 )}
+
+                {/* Zoönose-bemonsteringsprotocol (1 jul – 31 okt) */}
+                <ZoonosePanel euringCode={euringCode} />
               </div>
 
               {speciesInfo.foto && (

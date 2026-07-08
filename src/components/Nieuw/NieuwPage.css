@@ -1036,3 +1036,102 @@
 .bio-subsection-label:first-child {
   margin-top: 0;
 }
+
+/* ── Zoönose-panel ───────────────────────────────────────────────────────── */
+.zoonose-panel {
+  margin-top: 10px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--warning) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warning) 28%, transparent);
+  padding: 9px 12px 8px;
+}
+
+.zoonose-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.zoonose-titel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--warning);
+}
+
+.zoonose-seizoen {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.zoonose-groepen {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.zoonose-groep {
+  font-size: 0.67rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--warning) 18%, transparent);
+  color: var(--warning);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
+  white-space: nowrap;
+}
+
+.zoonose-items {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.zoonose-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.zoonose-icon {
+  color: color-mix(in srgb, var(--warning) 70%, var(--text-secondary));
+  line-height: 0;
+}
+
+.zoonose-item-label {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.zoonose-item-value {
+  font-size: 0.72rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.zoonose-naald-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.zoonose-voetnoot {
+  margin: 6px 0 0;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
