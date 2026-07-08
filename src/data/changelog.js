@@ -1,6 +1,22 @@
-export const VERSIE = '2.0.0';
+export const VERSIE = '2.0.1';
 
 export const CHANGELOG = [
+  {
+    versie: '2.0.1',
+    datum: '2026-07-08',
+    wijzigingen: [
+      'Fix: zoönose-panel zichtbaar ongeacht hulpModus-instelling',
+      'Fix: EURING-code Merel gecorrigeerd van 12820 naar 11870',
+    ],
+    wijzigingen_en: [
+      'Fix: zoonosis panel now visible regardless of hulpModus setting',
+      'Fix: Merel EURING code corrected from 12820 to 11870',
+    ],
+    wijzigingen_de: [
+      'Fix: Zoonose-Panel jetzt unabhängig von der hulpModus-Einstellung sichtbar',
+      'Fix: EURING-Code Amsel von 12820 auf 11870 korrigiert',
+    ],
+  },
   {
     versie: '2.0.0',
     datum: '2026-07-08',
