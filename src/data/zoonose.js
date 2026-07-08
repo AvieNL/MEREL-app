@@ -14,7 +14,7 @@ export const NAALD_SPEC = {
 export const ZOONOSE_DATA = {
 
   // Merel — Groep 2 (USUV) + Groep 3 (WNV)
-  '12820': {
+  '11870': {
     groepen: ['2 (USUV)', '3 (WNV)'],
     bloed: { serumbuis: true, fta: true },
     naald: '0.5',
