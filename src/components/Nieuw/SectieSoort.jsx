@@ -167,8 +167,6 @@ export default function SectieSoort() {
                   </div>
                 )}
 
-                {/* Zoönose-bemonsteringsprotocol (1 jul – 31 okt) */}
-                <ZoonosePanel euringCode={euringCode} />
               </div>
 
               {speciesInfo.foto && (
@@ -194,6 +192,9 @@ export default function SectieSoort() {
               )}
             </div>
           )}
+
+          {/* Zoönose-bemonsteringsprotocol (1 jul – 31 okt) — altijd tonen, ook in basis-modus */}
+          {speciesInfo && <ZoonosePanel euringCode={euringCode} />}
         </div>
       )}
     </div>
