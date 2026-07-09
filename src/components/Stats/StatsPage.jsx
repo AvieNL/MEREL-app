@@ -31,6 +31,10 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 }
 
+function isBemonsterd(r) {
+  return r.gemanipuleerd === 'M' && !!String(r.barcode ?? '').trim();
+}
+
 function computeStats(records) {
   const soorten = new Set();
   const perSoort = {};
@@ -38,6 +42,7 @@ function computeStats(records) {
   const perProject = {};
   let nieuw = 0;
   let terugvangst = 0;
+  let bemonsterd = 0;
 
   records.forEach(r => {
     const rauweNaam = r.vogelnaam || 'Onbekend';
@@ -53,6 +58,8 @@ function computeStats(records) {
       terugvangst++;
     }
 
+    if (isBemonsterd(r)) bemonsterd++;
+
     if (r.vangstdatum) {
       const parts = r.vangstdatum.split('-');
       let maandKey;
@@ -67,7 +74,7 @@ function computeStats(records) {
     }
 
     if (r.project) {
-      if (!perProject[r.project]) perProject[r.project] = { totaal: 0, nieuw: 0, terugvangst: 0, soorten: new Set() };
+      if (!perProject[r.project]) perProject[r.project] = { totaal: 0, nieuw: 0, terugvangst: 0, soorten: new Set(), bemonsterd: 0 };
       perProject[r.project].totaal++;
       if (r.metalenringinfo !== 4 && r.metalenringinfo !== '4') {
         perProject[r.project].nieuw++;
@@ -75,6 +82,7 @@ function computeStats(records) {
         perProject[r.project].terugvangst++;
       }
       perProject[r.project].soorten.add(key);
+      if (isBemonsterd(r)) perProject[r.project].bemonsterd++;
     }
   });
 
@@ -88,10 +96,10 @@ function computeStats(records) {
     .sort((a, b) => b.totaal - a.totaal);
 
   const projectTabel = Object.entries(perProject)
-    .map(([naam, p]) => ({ naam, totaal: p.totaal, nieuw: p.nieuw, terugvangst: p.terugvangst, soorten: p.soorten.size }))
+    .map(([naam, p]) => ({ naam, totaal: p.totaal, nieuw: p.nieuw, terugvangst: p.terugvangst, soorten: p.soorten.size, bemonsterd: p.bemonsterd }))
     .sort((a, b) => b.totaal - a.totaal);
 
-  return { total: records.length, soorten: soorten.size, nieuw, terugvangst, topSoorten, perMaand, perProject, soortenTabel, projectTabel };
+  return { total: records.length, soorten: soorten.size, nieuw, terugvangst, bemonsterd, topSoorten, perMaand, perProject, soortenTabel, projectTabel };
 }
 
 function computeTerugvangsten(records, fallbackLat, fallbackLon, referentieRecords) {
@@ -227,6 +235,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   const [omstOpen, setOmstOpen] = useState(null); // code van openstaande omstandigheid
   const [jaarPopup, setJaarPopup] = useState(null);
   const [vergelijkingOpen, setVergelijkingOpen] = useState(false);
+  const [zoonoseOpen, setZoonoseOpen] = useState(false);
   const [exportVan, setExportVan] = useState('');
   const [exportTot, setExportTot] = useState('');
   const [eigenFilter, setEigenFilter] = useState(true);
@@ -357,6 +366,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
     [statsRecords]
   );
   const huidigeStats = useMemo(() => computeStats(huidigeRecords), [huidigeRecords]);
+  const huidigeZoonose = useMemo(() => huidigeRecords.filter(isBemonsterd).length, [huidigeRecords]);
 
   const historischeRecords = useMemo(
     () => gefilterdRecords.filter(r => r.uploaded || r.bron === 'griel_import'),
@@ -436,6 +446,23 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   }, [huidigeRecords, historischeRecords, huidigeStats]);
 
   const totaalStats = useMemo(() => computeStats(gefilterdRecords), [gefilterdRecords]);
+
+  const zoonoseStats = useMemo(() => {
+    const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+    const perMaand = MAANDEN.map(label => ({ label, count: 0 }));
+    const perSoort = {};
+    gefilterdRecords.filter(isBemonsterd).forEach(r => {
+      const d = parseDate(r.vangstdatum);
+      if (d) perMaand[d.getMonth()].count++;
+      const soort = r.vogelnaam || 'Onbekend';
+      perSoort[soort] = (perSoort[soort] || 0) + 1;
+    });
+    const topSoorten = Object.entries(perSoort)
+      .map(([naam, count]) => ({ naam, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+    return { perMaand, topSoorten };
+  }, [gefilterdRecords]);
 
   // Jaar-op-jaar vergelijking
   const beschikbareJaren = useMemo(() => {
@@ -696,6 +723,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             <div className="stat-value">{huidigeStats.terugvangst}</div>
             <div className="stat-label">{t('stats_recatch')}</div>
           </div>
+          {huidigeZoonose > 0 && (
+            <div className="stat-card stat-card--zoonose">
+              <div className="stat-value">{huidigeZoonose}</div>
+              <div className="stat-label">Bemonsterd</div>
+            </div>
+          )}
         </div>
 
         {huidigeStats.soortenTabel.length > 0 ? (
@@ -833,6 +866,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
             <div className="stat-value">{totaalStats.terugvangst}</div>
             <div className="stat-label">{t('stats_recatches')}</div>
           </div>
+          {totaalStats.bemonsterd > 0 && (
+            <div className="stat-card stat-card--zoonose">
+              <div className="stat-value">{totaalStats.bemonsterd}</div>
+              <div className="stat-label">Bemonsterd</div>
+            </div>
+          )}
         </div>
 
         {/* Grafieken */}
@@ -872,6 +911,51 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
               </div>
             )}
           </>
+        )}
+
+        {/* Zoönose-bemonstering */}
+        {totaalStats.bemonsterd > 0 && (
+          <div className="section">
+            <button
+              type="button"
+              className="section-toggle"
+              onClick={() => setZoonoseOpen(o => !o)}
+            >
+              <span>Zoönose-bemonstering</span>
+              <span className={`tv-vergelijking__pijl${zoonoseOpen ? ' open' : ''}`}>▾</span>
+            </button>
+            {zoonoseOpen && (
+              <>
+                {zoonoseStats.perMaand.some(m => m.count > 0) && (
+                  <BarChartSimple
+                    data={zoonoseStats.perMaand}
+                    title="Bemonsterde vogels per maand"
+                    color="var(--warning)"
+                  />
+                )}
+                {zoonoseStats.topSoorten.length > 0 && (
+                  <div className="trektellen-table-wrap">
+                    <table className="trektellen-table">
+                      <thead>
+                        <tr>
+                          <th className="tt-col-soort">Soort</th>
+                          <th className="tt-col-num">Bemonsterd</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {zoonoseStats.topSoorten.map(s => (
+                          <tr key={s.naam}>
+                            <td className="tt-col-soort">{displayNaam(s.naam)}</td>
+                            <td className="tt-col-num tt-col-total">{s.count}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         )}
 
         {/* Jaar-op-jaar vergelijking */}
@@ -1131,6 +1215,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                     <th className="tt-col-num">{t('stats_col_new')}</th>
                     <th className="tt-col-num">{t('stats_col_recatch')}</th>
                     <th className="tt-col-num">{t('stats_species')}</th>
+                    {totaalStats.bemonsterd > 0 && <th className="tt-col-num">Bem.</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -1148,6 +1233,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                         <td className="tt-col-num">{p.nieuw || ''}</td>
                         <td className="tt-col-num">{p.terugvangst || ''}</td>
                         <td className="tt-col-num">{p.soorten}</td>
+                        {totaalStats.bemonsterd > 0 && <td className="tt-col-num">{p.bemonsterd || ''}</td>}
                       </tr>
                     );
                   })}

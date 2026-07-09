@@ -100,6 +100,15 @@
   letter-spacing: 0.06em;
 }
 
+.stat-card--zoonose {
+  border: 1px solid color-mix(in srgb, var(--warning) 50%, transparent);
+  background: color-mix(in srgb, var(--warning) 8%, var(--bg-secondary));
+}
+
+.stat-card--zoonose .stat-value {
+  color: var(--warning);
+}
+
 .stat-card--link {
   cursor: pointer;
   transition: background 0.15s;

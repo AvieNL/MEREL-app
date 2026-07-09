@@ -1,6 +1,22 @@
-export const VERSIE = '2.1.1';
+export const VERSIE = '2.2.0';
 
 export const CHANGELOG = [
+  {
+    versie: '2.2.0',
+    datum: '2026-07-09',
+    wijzigingen: [
+      'Stats: zoönose-bemonstering zichtbaar in dagvangsten, totalen en projectentabel (Gemanipuleerd=M + barcode ingevuld)',
+      'Stats: grafiek "Bemonsterde vogels per maand" en top-soorten tabel in inklapbare sectie',
+    ],
+    wijzigingen_en: [
+      'Stats: zoonosis sampling counts shown in daily catches, totals, and project table (Manipulated=M + barcode filled)',
+      'Stats: chart "Sampled birds per month" and top-species table in collapsible section',
+    ],
+    wijzigingen_de: [
+      'Statistiken: Zoonose-Beprobung in Tagesfängen, Gesamtstatistik und Projekttabelle sichtbar (Manipuliert=M + Barcode ausgefüllt)',
+      'Statistiken: Diagramm "Beprobte Vögel pro Monat" und Top-Arten-Tabelle in ausklappbarer Sektion',
+    ],
+  },
   {
     versie: '2.1.1',
     datum: '2026-07-09',
