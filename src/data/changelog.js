@@ -1,6 +1,19 @@
-export const VERSIE = '2.0.1';
+export const VERSIE = '2.1.0';
 
 export const CHANGELOG = [
+  {
+    versie: '2.1.0',
+    datum: '2026-07-09',
+    wijzigingen: [
+      'Zoönose-protocol uitgebreid naar 42 soorten: watervogels (pijlstaart, smient, wintertaling, zomertaling, meerkoet, knobbelzwaan, wilde eend), roofvogels (boomvalk, bruine/grauwe kiekendief, wespendief), steltlopers (grutto, kluut, tureluur; bontbekplevier, kleine plevier, strandplevier), zangvogels West-Afrika (blauwborst, boompieper, bonte vliegenvanger, gekraagde roodstaart, grasmus, kleine karekiet, tapuit, tuinfluiter, spotvogel, zwartkop), Oost-Afrika (bosrietzanger, braamsluiper, grauwe klauwier), overig (kwartel, stadsduif, merel, kraaiachtigen, huismus, ringmus). Veren toegevoegd aan alle soorten.',
+    ],
+    wijzigingen_en: [
+      'Zoonosis protocol extended to 42 species across waterfowl, raptors, waders, West/East African migrants, and other common species. Feathers added to all species.',
+    ],
+    wijzigingen_de: [
+      'Zoonose-Protokoll auf 42 Arten erweitert: Wasservögel, Greifvögel, Watvögel, West-/Ostafrika-Zugvögel und weitere häufige Arten. Federn für alle Arten ergänzt.',
+    ],
+  },
   {
     versie: '2.0.1',
     datum: '2026-07-08',
