@@ -9,6 +9,7 @@ import { useNestData } from '../../hooks/useNestData';
 import { useModuleSwitch } from '../../App';
 import { buildEuringLookup } from '../../utils/euring-lookup';
 import RuitypeInfo from './RuitypeInfo';
+import ZoonosePanel from '../Nieuw/ZoonosePanel';
 import KrullevaarPage from './KrullevaarPage';
 import { VangstKaart } from '../Stats/Charts';
 import { renderMarkdown, renderLeeftijdMarkdown, renderIDKenmerken } from '../../utils/textHelper';
@@ -834,6 +835,13 @@ export default function SoortDetail({ records, speciesOverrides }) {
           </div>
         )}
       </div>
+
+      {/* Zoönose-bemonsteringsprotocol */}
+      {soortEuringCode && (
+        <div className="sd-card">
+          <ZoonosePanel euringCode={soortEuringCode} altijdTonen={true} />
+        </div>
+      )}
 
       {/* Namen + Biometrie naast elkaar */}
       <div className="sd-two-cards">

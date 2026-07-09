@@ -1,6 +1,19 @@
-export const VERSIE = '2.1.0';
+export const VERSIE = '2.1.1';
 
 export const CHANGELOG = [
+  {
+    versie: '2.1.1',
+    datum: '2026-07-09',
+    wijzigingen: [
+      'Zoönose-protocol ook zichtbaar op soortenpagina (het hele jaar, met vermelding "Bemonstering: 1 jul – 31 okt")',
+    ],
+    wijzigingen_en: [
+      'Zoonosis protocol also shown on species detail page (year-round, with note "Sampling: 1 Jul – 31 Oct")',
+    ],
+    wijzigingen_de: [
+      'Zoonose-Protokoll auch auf der Artenseite sichtbar (ganzjährig, mit Hinweis "Beprobung: 1. Jul – 31. Okt")',
+    ],
+  },
   {
     versie: '2.1.0',
     datum: '2026-07-09',

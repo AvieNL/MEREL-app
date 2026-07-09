@@ -1,4 +1,5 @@
 import { ZOONOSE_DATA, ZOONOSE_SEIZOEN, NAALD_SPEC } from '../../data/zoonose';
+import './ZoonosePanel.css';
 
 // ── Iconen ────────────────────────────────────────────────────────────────────
 
@@ -69,9 +70,11 @@ function swabLabel(swab) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function ZoonosePanel({ euringCode }) {
+// altijdTonen=true: seizoensgate overgeslagen, panel toont het hele jaar (met seizoenslabel)
+export default function ZoonosePanel({ euringCode, altijdTonen = false }) {
   const maand = new Date().getMonth() + 1;
-  if (maand < ZOONOSE_SEIZOEN.van || maand > ZOONOSE_SEIZOEN.tot) return null;
+  const inSeizoen = maand >= ZOONOSE_SEIZOEN.van && maand <= ZOONOSE_SEIZOEN.tot;
+  if (!altijdTonen && !inSeizoen) return null;
 
   const key = euringCode ? String(parseInt(euringCode, 10)) : null;
   const info = key ? ZOONOSE_DATA[key] : null;
@@ -79,12 +82,15 @@ export default function ZoonosePanel({ euringCode }) {
 
   const naaldSpec = NAALD_SPEC[info.naald] || {};
   const heeftOptSwab = info.swab.keel === 'optioneel' || info.swab.cloaca === 'optioneel';
+  const panelClass = `zoonose-panel${altijdTonen ? ' zoonose-panel--detail' : ' zoonose-panel--form'}`;
 
   return (
-    <div className="zoonose-panel">
+    <div className={panelClass}>
       <div className="zoonose-header">
         <span className="zoonose-titel">Zoönose-onderzoek</span>
-        <span className="zoonose-seizoen">1 jul – 31 okt</span>
+        <span className="zoonose-seizoen">
+          {altijdTonen ? 'Bemonstering: 1 jul – 31 okt' : (inSeizoen ? '⬤ actief' : '1 jul – 31 okt')}
+        </span>
         <div className="zoonose-groepen">
           {info.groepen.map(g => (
             <span key={g} className="zoonose-groep">Gr. {g}</span>
