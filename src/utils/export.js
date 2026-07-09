@@ -114,6 +114,8 @@ export function exportGrielXML(records, projects = [], projectAupis = {}, euring
       tag('VerificationOfMetalRing',     r.verificatie ?? 0),
       tag('MetalRingInformation',        r.metalenringinfo ?? 1),
       tag('OtherMarks',                  r.andere_merktekens || 'ZZ'),
+      ...(r.andere_merktekens_code ? [tag('OtherMarksCode', r.andere_merktekens_code)] : []),
+      ...(r.andere_merktekens_details ? [tag('OtherMarkDetails', r.andere_merktekens_details)] : []),
       tag('Species',                     specCode),
       tag('Manipulated',                 r.gemanipuleerd || 'N'),
       tag('MovedBefore',                 r.verplaatst ?? 0),

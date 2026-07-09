@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNieuwForm } from './NieuwFormContext';
 import {
-  ANDERE_MERKTEKENS_OPTIONS, VERIFICATIE_OPTIONS, LEEFTIJD_LABELS, getOptLabel,
+  ANDERE_MERKTEKENS_OPTIONS, VERIFICATIE_OPTIONS, LEEFTIJD_LABELS, KLEURRING_HINTS, getOptLabel,
 } from './NieuwPage.constants';
 import { formatDatum } from '../../utils/dateHelper';
 import './NieuwPage.css';
@@ -25,9 +25,13 @@ export default function SectieRinggegevens() {
     ringcentraleOptions,
     autoFilledRingId,
     getCodesForSelect,
+    euringCode,
   } = useNieuwForm();
 
   const [vergelijkingOpen, setVergelijkingOpen] = useState(false);
+
+  const kleurringHint = euringCode ? KLEURRING_HINTS[String(parseInt(euringCode, 10))] : null;
+  const heeftMerkteken = form.andere_merktekens && form.andere_merktekens !== 'ZZ';
 
   return (
     <div className="section">
@@ -202,6 +206,41 @@ export default function SectieRinggegevens() {
                 ))}
               </select>
             </div>
+            {heeftMerkteken && (
+              <>
+                <div className="form-group">
+                  <label>Andere merktekens — code</label>
+                  <input
+                    type="text"
+                    value={form.andere_merktekens_code || ''}
+                    onChange={e => update('andere_merktekens_code', e.target.value)}
+                    placeholder="bv. Y-E000, G-A1"
+                    maxLength={40}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Andere merktekens — details</label>
+                  <input
+                    type="text"
+                    value={form.andere_merktekens_details || ''}
+                    onChange={e => update('andere_merktekens_details', e.target.value)}
+                    placeholder="bv. kleurring gelijmd links tarsus"
+                    maxLength={100}
+                  />
+                </div>
+                {kleurringHint && (
+                  <div className="kleurring-hint">
+                    <span className="kleurring-hint__titel">Kleurring — {form.vogelnaam}</span>
+                    <ul className="kleurring-hint__list">
+                      <li>{kleurringHint.positie}</li>
+                      <li>{kleurringHint.aflezing}</li>
+                      <li>{kleurringHint.tekens} tekens · {kleurringHint.bevestiging}</li>
+                      <li>Voorbeeld: <code>{kleurringHint.code_voorbeeld}</code></li>
+                    </ul>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       )}

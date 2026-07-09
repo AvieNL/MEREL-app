@@ -1,6 +1,25 @@
-export const VERSIE = '2.2.0';
+export const VERSIE = '2.2.1';
 
 export const CHANGELOG = [
+  {
+    versie: '2.2.1',
+    datum: '2026-07-09',
+    wijzigingen: [
+      'Kleurringen: andere_merktekens-dropdown gecorrigeerd naar officiële EURING-codes (BB=toegevoegd, BC=reeds aanwezig, etc.)',
+      'Kleurringen: code-veld en details-veld toegevoegd aan formulier (zichtbaar zodra merkteken ≠ ZZ); exporteert naar OtherMarksCode/OtherMarkDetails in Griel XML',
+      'Kleurringen: soort-specifieke hint voor Kauw en Ekster (positie, aflezing, codeformaat)',
+    ],
+    wijzigingen_en: [
+      'Colour rings: other_marks dropdown corrected to official EURING codes (BB=added, BC=already present, etc.)',
+      'Colour rings: code field and details field added to form (visible when mark ≠ ZZ); exports to OtherMarksCode/OtherMarkDetails in Griel XML',
+      'Colour rings: species-specific hint for Jackdaw and Magpie (position, reading direction, code format)',
+    ],
+    wijzigingen_de: [
+      'Farbringe: Andere-Kennzeichen-Dropdown auf offizielle EURING-Codes korrigiert (BB=hinzugefügt, BC=bereits vorhanden, etc.)',
+      'Farbringe: Code-Feld und Details-Feld im Formular hinzugefügt (sichtbar wenn Kennzeichen ≠ ZZ); exportiert als OtherMarksCode/OtherMarkDetails in Griel-XML',
+      'Farbringe: Artspezifischer Hinweis für Kauw (Dohle) und Ekster (Elster)',
+    ],
+  },
   {
     versie: '2.2.0',
     datum: '2026-07-09',

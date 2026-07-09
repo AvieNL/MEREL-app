@@ -1036,3 +1036,36 @@
 .bio-subsection-label:first-child {
   margin-top: 0;
 }
+
+/* ── Kleurring-hint ── */
+.kleurring-hint {
+  grid-column: 1 / -1;
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-secondary));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 0.83rem;
+}
+
+.kleurring-hint__titel {
+  font-weight: 600;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.kleurring-hint__list {
+  margin: 0;
+  padding: 0 0 0 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.kleurring-hint__list code {
+  font-family: var(--font-mono, monospace);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 3px;
+  padding: 1px 4px;
+  color: var(--accent);
+  font-size: 0.85em;
+}
