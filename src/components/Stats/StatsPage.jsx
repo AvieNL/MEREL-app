@@ -35,6 +35,10 @@ function isBemonsterd(r) {
   return r.gemanipuleerd === 'M' && !!String(r.barcode ?? '').trim();
 }
 
+function isKleurgeringd(r) {
+  return !!(r.andere_merktekens) && r.andere_merktekens !== 'ZZ';
+}
+
 function computeStats(records) {
   const soorten = new Set();
   const perSoort = {};
@@ -236,6 +240,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   const [jaarPopup, setJaarPopup] = useState(null);
   const [vergelijkingOpen, setVergelijkingOpen] = useState(false);
   const [zoonoseOpen, setZoonoseOpen] = useState(false);
+  const [kleurringOpen, setKleurringOpen] = useState(false);
   const [exportVan, setExportVan] = useState('');
   const [exportTot, setExportTot] = useState('');
   const [eigenFilter, setEigenFilter] = useState(true);
@@ -367,6 +372,7 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
   );
   const huidigeStats = useMemo(() => computeStats(huidigeRecords), [huidigeRecords]);
   const huidigeZoonose = useMemo(() => huidigeRecords.filter(isBemonsterd).length, [huidigeRecords]);
+  const huidigeKleurgeringd = useMemo(() => huidigeRecords.filter(isKleurgeringd).length, [huidigeRecords]);
 
   const historischeRecords = useMemo(
     () => gefilterdRecords.filter(r => r.uploaded || r.bron === 'griel_import'),
@@ -462,6 +468,24 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
     return { perMaand, topSoorten };
+  }, [gefilterdRecords]);
+
+  const kleurringRecords = useMemo(() => {
+    return gefilterdRecords
+      .filter(isKleurgeringd)
+      .map(r => ({
+        id: r.id,
+        datum: r.vangstdatum,
+        soort: r.vogelnaam || 'Onbekend',
+        ringnummer: r.ringnummer || '',
+        type: r.andere_merktekens || '',
+        code: r.andere_merktekens_code || '',
+        details: r.andere_merktekens_details || '',
+      }))
+      .sort((a, b) => {
+        const da = parseDate(a.datum), db = parseDate(b.datum);
+        return (db?.getTime() ?? 0) - (da?.getTime() ?? 0);
+      });
   }, [gefilterdRecords]);
 
   // Jaar-op-jaar vergelijking
@@ -729,6 +753,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
               <div className="stat-label">Bemonsterd</div>
             </div>
           )}
+          {huidigeKleurgeringd > 0 && (
+            <div className="stat-card stat-card--kleurring">
+              <div className="stat-value">{huidigeKleurgeringd}</div>
+              <div className="stat-label">Kleurgeringd</div>
+            </div>
+          )}
         </div>
 
         {huidigeStats.soortenTabel.length > 0 ? (
@@ -872,6 +902,12 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
               <div className="stat-label">Bemonsterd</div>
             </div>
           )}
+          {kleurringRecords.length > 0 && (
+            <div className="stat-card stat-card--kleurring">
+              <div className="stat-value">{kleurringRecords.length}</div>
+              <div className="stat-label">Kleurgeringd</div>
+            </div>
+          )}
         </div>
 
         {/* Grafieken */}
@@ -954,6 +990,51 @@ export default function StatsPage({ records, recordsLoading = false, markAllAsUp
                   </div>
                 )}
               </>
+            )}
+          </div>
+        )}
+
+        {/* Kleurringen */}
+        {kleurringRecords.length > 0 && (
+          <div className="section">
+            <button
+              type="button"
+              className="section-toggle"
+              onClick={() => setKleurringOpen(o => !o)}
+            >
+              <span>Kleurringen</span>
+              <span className={`tv-vergelijking__pijl${kleurringOpen ? ' open' : ''}`}>▾</span>
+            </button>
+            {kleurringOpen && (
+              <div className="trektellen-table-wrap">
+                <table className="trektellen-table">
+                  <thead>
+                    <tr>
+                      <th className="tt-col-soort">Datum</th>
+                      <th className="tt-col-soort">Soort</th>
+                      <th className="tt-col-soort">Ringnummer</th>
+                      <th className="tt-col-soort">Type</th>
+                      <th className="tt-col-soort">Code</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {kleurringRecords.map(r => (
+                      <tr
+                        key={r.id}
+                        className="tt-row--link"
+                        onClick={() => navigate('/ring/records', { state: { openId: r.id } })}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <td className="tt-col-soort">{formatDatum(r.datum) || '—'}</td>
+                        <td className="tt-col-soort">{displayNaam(r.soort)}</td>
+                        <td className="tt-col-soort">{r.ringnummer || '—'}</td>
+                        <td className="tt-col-soort">{r.type}</td>
+                        <td className="tt-col-soort">{r.code || '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}

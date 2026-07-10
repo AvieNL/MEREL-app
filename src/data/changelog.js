@@ -1,6 +1,22 @@
-export const VERSIE = '2.2.4';
+export const VERSIE = '2.2.5';
 
 export const CHANGELOG = [
+  {
+    versie: '2.2.5',
+    datum: '2026-07-10',
+    wijzigingen: [
+      'Stats: kleurgeringde vogels zichtbaar als stat-card in dagvangsten en totalen',
+      'Stats: inklapbare tabel "Kleurringen" met datum, soort, ringnummer, type en code',
+    ],
+    wijzigingen_en: [
+      'Stats: colour-ringed birds shown as stat-card in daily catches and totals',
+      'Stats: collapsible table "Colour rings" with date, species, ring number, type and code',
+    ],
+    wijzigingen_de: [
+      'Statistiken: farbberingte Vögel als Stat-Karte in Tagesfängen und Gesamtstatistik',
+      'Statistiken: ausklappbare Tabelle "Farbringe" mit Datum, Art, Ringnummer, Typ und Code',
+    ],
+  },
   {
     versie: '2.2.4',
     datum: '2026-07-10',

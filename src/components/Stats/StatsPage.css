@@ -109,6 +109,15 @@
   color: var(--warning);
 }
 
+.stat-card--kleurring {
+  border: 1px solid color-mix(in srgb, var(--success) 50%, transparent);
+  background: color-mix(in srgb, var(--success) 8%, var(--bg-secondary));
+}
+
+.stat-card--kleurring .stat-value {
+  color: var(--success);
+}
+
 .stat-card--link {
   cursor: pointer;
   transition: background 0.15s;
