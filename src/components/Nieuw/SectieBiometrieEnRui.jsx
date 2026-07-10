@@ -191,14 +191,14 @@ export default function SectieBiometrieEnRui() {
             <p className="bio-subsection-label">{t('form_subsection_tarsus')}</p>
             <div className="form-row">
               {renderBioField('tarsus_lengte', t('form_tarsus'))}
+              {renderBioField('tarsus_dikte', t('form_tarsus_thickness'))}
+            </div>
+            <div className="form-row">
               <div className="form-group">
                 <label>{t('form_tarsus_toe')}</label>
                 <input type="text" inputMode="decimal" value={form.tarsus_teen}
                   onChange={e => update('tarsus_teen', e.target.value)} />
               </div>
-            </div>
-            <div className="form-row">
-              {renderBioField('tarsus_dikte', t('form_tarsus_thickness'))}
               <div className="form-group">
                 <label>{t('form_hind_claw')}</label>
                 <input type="text" inputMode="decimal" value={form.achternagel}

@@ -1,6 +1,19 @@
-export const VERSIE = '2.2.5';
+export const VERSIE = '2.2.6';
 
 export const CHANGELOG = [
+  {
+    versie: '2.2.6',
+    datum: '2026-07-10',
+    wijzigingen: [
+      'Biometrie: volgorde tarsus-velden aangepast — tarsus lengte | tarsus dikte, daarna tarsus-teen | achternagel',
+    ],
+    wijzigingen_en: [
+      'Biometrics: tarsus field order adjusted — tarsus length | tarsus thickness, then tarsus-toe | hind claw',
+    ],
+    wijzigingen_de: [
+      'Biometrie: Reihenfolge der Tarsus-Felder angepasst — Tarsuslänge | Tarsusdicke, dann Tarsus-Zehe | Hinterkralle',
+    ],
+  },
   {
     versie: '2.2.5',
     datum: '2026-07-10',
