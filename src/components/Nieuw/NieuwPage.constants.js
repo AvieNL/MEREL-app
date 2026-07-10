@@ -333,6 +333,8 @@ export const KLEURRING_HINTS = {
     positie: 'Kleurring links tarsus, metaal rechts',
     aflezing: 'Horizontale inscriptie — ring rechtop zetten',
     bevestiging: 'Kleurring lijmen',
+    project_url: 'https://submit.cr-birding.org/projects/185/',
+    project_label: 'CR-birding project #185',
   },
 };
 

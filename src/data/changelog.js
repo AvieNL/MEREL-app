@@ -1,6 +1,19 @@
-export const VERSIE = '2.2.2';
+export const VERSIE = '2.2.3';
 
 export const CHANGELOG = [
+  {
+    versie: '2.2.3',
+    datum: '2026-07-10',
+    wijzigingen: [
+      'Kleurring Ekster: link naar CR-birding project #185 toegevoegd aan soort-hint',
+    ],
+    wijzigingen_en: [
+      'Colour ring Magpie: link to CR-birding project #185 added to species hint',
+    ],
+    wijzigingen_de: [
+      'Farbring Elster: Link zu CR-birding Projekt #185 in Arthinweis hinzugefügt',
+    ],
+  },
   {
     versie: '2.2.2',
     datum: '2026-07-10',
