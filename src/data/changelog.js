@@ -1,6 +1,19 @@
-export const VERSIE = '2.2.3';
+export const VERSIE = '2.2.4';
 
 export const CHANGELOG = [
+  {
+    versie: '2.2.4',
+    datum: '2026-07-10',
+    wijzigingen: [
+      'Kleurring Roek: soort-hint toegevoegd met link naar CR-birding Roek-project',
+    ],
+    wijzigingen_en: [
+      'Colour ring Rook: species hint added with link to CR-birding Rook project',
+    ],
+    wijzigingen_de: [
+      'Farbring Saatkrähe: Arthinweis mit Link zu CR-birding Saatkrähen-Projekt hinzugefügt',
+    ],
+  },
   {
     versie: '2.2.3',
     datum: '2026-07-10',

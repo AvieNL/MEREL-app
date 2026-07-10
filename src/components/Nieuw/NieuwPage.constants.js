@@ -327,6 +327,15 @@ export const KLEURRING_HINTS = {
     project_url: 'https://submit.cr-birding.org/projects/30/',
     project_label: 'CR-birding project #30',
   },
+  '15630': { // Roek (Corvus frugilegus)
+    code_voorbeeld: 'Y-E000, L-XXX, W-CA',
+    tekens: '2–4',
+    positie: 'Kleurring links tarsus, metaal rechts',
+    aflezing: 'Van onder naar boven aflezen',
+    bevestiging: 'Kleurring lijmen (ringen zijn erg breekbaar — goed verhitten!)',
+    project_url: 'https://cr-birding.org/node/6422',
+    project_label: 'CR-birding Roek-project',
+  },
   '15490': { // Ekster (Pica pica)
     code_voorbeeld: 'G-A1, O-12',
     tekens: '2',
