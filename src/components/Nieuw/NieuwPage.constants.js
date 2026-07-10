@@ -324,6 +324,8 @@ export const KLEURRING_HINTS = {
     positie: 'Kleurring links tarsus, metaal rechts',
     aflezing: 'Van onder naar boven aflezen',
     bevestiging: 'Kleurring lijmen',
+    project_url: 'https://submit.cr-birding.org/projects/30/',
+    project_label: 'CR-birding project #30',
   },
   '15490': { // Ekster (Pica pica)
     code_voorbeeld: 'G-A1, O-12',

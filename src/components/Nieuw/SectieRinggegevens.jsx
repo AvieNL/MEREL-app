@@ -236,6 +236,14 @@ export default function SectieRinggegevens() {
                       <li>{kleurringHint.aflezing}</li>
                       <li>{kleurringHint.tekens} tekens · {kleurringHint.bevestiging}</li>
                       <li>Voorbeeld: <code>{kleurringHint.code_voorbeeld}</code></li>
+                      {kleurringHint.project_url && (
+                        <li>
+                          Project:{' '}
+                          <a href={kleurringHint.project_url} target="_blank" rel="noopener noreferrer" className="kleurring-hint__link">
+                            {kleurringHint.project_label}
+                          </a>
+                        </li>
+                      )}
                     </ul>
                   </div>
                 )}

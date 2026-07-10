@@ -1,6 +1,19 @@
-export const VERSIE = '2.2.1';
+export const VERSIE = '2.2.2';
 
 export const CHANGELOG = [
+  {
+    versie: '2.2.2',
+    datum: '2026-07-10',
+    wijzigingen: [
+      'Kleurring Kauw: link naar CR-birding project #30 toegevoegd aan soort-hint',
+    ],
+    wijzigingen_en: [
+      'Colour ring Jackdaw: link to CR-birding project #30 added to species hint',
+    ],
+    wijzigingen_de: [
+      'Farbring Dohle: Link zu CR-birding Projekt #30 in Arthinweis hinzugefügt',
+    ],
+  },
   {
     versie: '2.2.1',
     datum: '2026-07-09',
