@@ -11,13 +11,12 @@
 }
 
 .nav-tab {
-  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8px 4px;
+  padding: 6px 4px;
   color: var(--text-muted);
   text-decoration: none;
   font-size: 0.7rem;
@@ -35,23 +34,20 @@
 
 .nav-icon {
   font-size: 1.3rem;
-  margin-bottom: 2px;
 }
 
 .nav-badge {
-  position: absolute;
-  top: 6px;
-  right: 6px;
   background: transparent;
   border: 1px solid var(--text-muted);
   color: var(--text-muted);
-  font-size: 0.58rem;
+  font-size: 0.55rem;
   font-weight: 600;
   line-height: 1;
   padding: 1px 3px;
-  border-radius: 6px;
+  border-radius: 5px;
   min-width: 14px;
   text-align: center;
+  margin: 1px 0 2px;
   pointer-events: none;
 }
 

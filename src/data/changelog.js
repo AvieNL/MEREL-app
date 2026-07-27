@@ -1,6 +1,19 @@
-export const VERSIE = '2.3.5';
+export const VERSIE = '2.3.6';
 
 export const CHANGELOG = [
+  {
+    versie: '2.3.6',
+    datum: '2026-07-27',
+    wijzigingen: [
+      'Navigatiebadges: gestapeld tussen icoon en label, geen absolute positionering meer — altijd gecentreerd',
+    ],
+    wijzigingen_en: [
+      'Navigation badges: stacked between icon and label, no absolute positioning — always centred',
+    ],
+    wijzigingen_de: [
+      'Navigations-Badges: zwischen Icon und Label gestapelt, keine absolute Positionierung mehr — immer zentriert',
+    ],
+  },
   {
     versie: '2.3.5',
     datum: '2026-07-27',

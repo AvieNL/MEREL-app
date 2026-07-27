@@ -23,10 +23,10 @@ export default function Navigation({ navCounts = {} }) {
           end={tab.end ?? false}
           className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
         >
-          {tab.badge != null && (
-            <span className="nav-badge">{tab.badge}</span>
-          )}
           <span className="nav-icon">{tab.icon}</span>
+          <span className="nav-badge" style={{ visibility: tab.badge != null ? 'visible' : 'hidden' }}>
+            {tab.badge ?? 0}
+          </span>
           <span className="nav-label">{t(tab.labelKey)}</span>
         </NavLink>
       ))}
