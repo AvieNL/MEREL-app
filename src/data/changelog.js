@@ -1,6 +1,19 @@
-export const VERSIE = '2.3.4';
+export const VERSIE = '2.3.5';
 
 export const CHANGELOG = [
+  {
+    versie: '2.3.5',
+    datum: '2026-07-27',
+    wijzigingen: [
+      'Navigatiebadges: badge staat nu in de rechterbovenhoek van de tab — icoon en label blijven volledig gecentreerd',
+    ],
+    wijzigingen_en: [
+      'Navigation badges: badge now sits in the top-right corner of the tab — icon and label remain fully centred',
+    ],
+    wijzigingen_de: [
+      'Navigations-Badges: Badge steht jetzt in der oberen rechten Ecke des Tabs — Icon und Label bleiben vollständig zentriert',
+    ],
+  },
   {
     versie: '2.3.4',
     datum: '2026-07-27',
