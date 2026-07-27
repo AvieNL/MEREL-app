@@ -1,6 +1,19 @@
-export const VERSIE = '2.2.6';
+export const VERSIE = '2.3.0';
 
 export const CHANGELOG = [
+  {
+    versie: '2.3.0',
+    datum: '2026-07-10',
+    wijzigingen: [
+      'Middelste Bonte Specht: biometrie (vleugel, staart, snavel, tarsus, gewicht), rui, leeftijds- en geslachtsbepaling, ID-kenmerken, ondersoorten en determinatiehulp toegevoegd (Demongin p.212)',
+    ],
+    wijzigingen_en: [
+      'Middle Spotted Woodpecker: biometrics (wing, tail, bill, tarsus, weight), moult, age and sex determination, ID features, subspecies and determination guide added (Demongin p.212)',
+    ],
+    wijzigingen_de: [
+      'Mittelspecht: Biometrie (Flügel, Schwanz, Schnabel, Tarsus, Gewicht), Mauser, Alters- und Geschlechtsbestimmung, ID-Merkmale, Unterarten und Bestimmungshilfe hinzugefügt (Demongin S.212)',
+    ],
+  },
   {
     versie: '2.2.6',
     datum: '2026-07-10',
