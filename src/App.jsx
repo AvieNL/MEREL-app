@@ -259,13 +259,14 @@ function MainApp({ onSwitchModule, activeModule }) {
   const { settings, updateSettings } = useSettings();
   const { ringStrengen, addRingstreng, updateRingstreng, deleteRingstreng, advanceHuidige } = useRingStrengen();
 
-  const todayStr = new Date().toISOString().slice(0, 10);
   const navCounts = useMemo(() => {
+    const d = new Date();
+    const todayStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     const total = records.length;
     const today = records.filter(r => r.vangstdatum === todayStr).length;
     const soorten = new Set(records.map(r => r.vogelnaam).filter(Boolean)).size;
     return { total, today, soorten };
-  }, [records, todayStr]);
+  }, [records]);
 
   return (
     <div className="app-shell">

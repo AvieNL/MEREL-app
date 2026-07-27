@@ -1,6 +1,19 @@
-export const VERSIE = '2.3.2';
+export const VERSIE = '2.3.3';
 
 export const CHANGELOG = [
+  {
+    versie: '2.3.3',
+    datum: '2026-07-27',
+    wijzigingen: [
+      'Navigatiebadges: grijze kleur, volledig getal (geen afkapping), dagtelling op basis van lokale tijdzone gecorrigeerd',
+    ],
+    wijzigingen_en: [
+      'Navigation badges: grey colour, full number (no truncation), today\'s count corrected to local timezone',
+    ],
+    wijzigingen_de: [
+      'Navigations-Badges: graue Farbe, vollständige Zahl (keine Kürzung), Tagesanzahl auf lokale Zeitzone korrigiert',
+    ],
+  },
   {
     versie: '2.3.2',
     datum: '2026-07-27',

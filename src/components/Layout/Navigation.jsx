@@ -26,7 +26,7 @@ export default function Navigation({ navCounts = {} }) {
           <span className="nav-icon-wrap">
             <span className="nav-icon">{tab.icon}</span>
             {tab.badge != null && (
-              <span className="nav-badge">{tab.badge > 999 ? '999+' : tab.badge}</span>
+              <span className="nav-badge">{tab.badge}</span>
             )}
           </span>
           <span className="nav-label">{t(tab.labelKey)}</span>
