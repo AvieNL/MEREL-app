@@ -260,8 +260,7 @@ function MainApp({ onSwitchModule, activeModule }) {
   const { ringStrengen, addRingstreng, updateRingstreng, deleteRingstreng, advanceHuidige } = useRingStrengen();
 
   const navCounts = useMemo(() => {
-    const d = new Date();
-    const todayStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const todayStr = new Date().toISOString().slice(0, 10);
     const total = records.length;
     const today = records.filter(r => r.vangstdatum === todayStr).length;
     const soorten = new Set(records.map(r => r.vogelnaam).filter(Boolean)).size;

@@ -1,6 +1,19 @@
-export const VERSIE = '2.3.3';
+export const VERSIE = '2.3.4';
 
 export const CHANGELOG = [
+  {
+    versie: '2.3.4',
+    datum: '2026-07-27',
+    wijzigingen: [
+      'Navigatiebadges: gecentreerd, grijze omlijning zonder vulling, grijze tekst, dagtelling hersteld',
+    ],
+    wijzigingen_en: [
+      'Navigation badges: centred, grey outline without fill, grey text, daily count restored',
+    ],
+    wijzigingen_de: [
+      'Navigations-Badges: zentriert, grauer Rahmen ohne Füllung, grauer Text, Tagesanzahl wiederhergestellt',
+    ],
+  },
   {
     versie: '2.3.3',
     datum: '2026-07-27',

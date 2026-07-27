@@ -34,9 +34,11 @@
 
 .nav-icon-wrap {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 44px;
+  height: 28px;
   margin-bottom: 2px;
 }
 
@@ -46,23 +48,19 @@
 
 .nav-badge {
   position: absolute;
-  top: -5px;
-  right: -10px;
-  background: var(--text-muted);
-  color: var(--bg-secondary);
-  font-size: 0.6rem;
-  font-weight: 700;
+  top: 0;
+  right: 0;
+  background: transparent;
+  border: 1px solid var(--text-muted);
+  color: var(--text-muted);
+  font-size: 0.58rem;
+  font-weight: 600;
   line-height: 1;
-  padding: 2px 4px;
-  border-radius: 8px;
-  min-width: 16px;
+  padding: 1px 3px;
+  border-radius: 6px;
+  min-width: 14px;
   text-align: center;
   pointer-events: none;
-}
-
-.nav-tab.active .nav-badge {
-  background: var(--accent);
-  color: var(--bg);
 }
 
 .nav-label {
