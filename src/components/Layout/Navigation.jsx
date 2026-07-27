@@ -3,17 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { useRole } from '../../hooks/useRole';
 import './Navigation.css';
 
-const ALL_TABS = [
-  { path: '/ring/', labelKey: 'nav_new', icon: '＋', requiresEdit: true },
-  { path: '/ring/records', labelKey: 'nav_records', icon: '☰' },
-  { path: '/ring/stats', labelKey: 'nav_stats', icon: '◔' },
-  { path: '/soorten', labelKey: 'nav_species', icon: '◉' },
-];
-
-export default function Navigation() {
+export default function Navigation({ navCounts = {} }) {
   const { canAdd } = useRole();
   const { t } = useTranslation();
-  const tabs = ALL_TABS.filter(tab => !tab.requiresEdit || canAdd);
+
+  const tabs = [
+    ...(canAdd ? [{ path: '/ring/', labelKey: 'nav_new', icon: '＋', end: true }] : []),
+    { path: '/ring/records', labelKey: 'nav_records', icon: '☰', badge: navCounts.total > 0 ? navCounts.total : null },
+    { path: '/ring/stats', labelKey: 'nav_stats', icon: '◔', badge: navCounts.today > 0 ? navCounts.today : null },
+    { path: '/soorten', labelKey: 'nav_species', icon: '◉', badge: navCounts.soorten > 0 ? navCounts.soorten : null },
+  ];
 
   return (
     <nav className="bottom-nav">
@@ -21,10 +20,15 @@ export default function Navigation() {
         <NavLink
           key={tab.path}
           to={tab.path}
-          end={tab.path === '/ring/'}
+          end={tab.end ?? false}
           className={({ isActive }) => `nav-tab ${isActive ? 'active' : ''}`}
         >
-          <span className="nav-icon">{tab.icon}</span>
+          <span className="nav-icon-wrap">
+            <span className="nav-icon">{tab.icon}</span>
+            {tab.badge != null && (
+              <span className="nav-badge">{tab.badge > 999 ? '999+' : tab.badge}</span>
+            )}
+          </span>
           <span className="nav-label">{t(tab.labelKey)}</span>
         </NavLink>
       ))}

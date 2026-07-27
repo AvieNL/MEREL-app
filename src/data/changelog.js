@@ -1,6 +1,19 @@
-export const VERSIE = '2.3.1';
+export const VERSIE = '2.3.2';
 
 export const CHANGELOG = [
+  {
+    versie: '2.3.2',
+    datum: '2026-07-27',
+    wijzigingen: [
+      'Navigatie: badges toegevoegd — Vogels toont totaal aantal vangsten, Stats toont vangsten van vandaag, Soorten toont aantal gevangen soorten',
+    ],
+    wijzigingen_en: [
+      'Navigation: badges added — Vogels shows total catch count, Stats shows today\'s count, Soorten shows number of species caught',
+    ],
+    wijzigingen_de: [
+      'Navigation: Badges hinzugefügt — Vogels zeigt Gesamtfänge, Stats zeigt heutige Fänge, Soorten zeigt Artenanzahl',
+    ],
+  },
   {
     versie: '2.3.1',
     datum: '2026-07-27',

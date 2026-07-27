@@ -32,9 +32,36 @@
   color: var(--accent);
 }
 
+.nav-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
 .nav-icon {
   font-size: 1.3rem;
-  margin-bottom: 2px;
+}
+
+.nav-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 8px;
+  min-width: 16px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.nav-tab.active .nav-badge {
+  background: var(--accent);
 }
 
 .nav-label {

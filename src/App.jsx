@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useCallback, createContext, useContext } from 'react';
+import { lazy, Suspense, useState, useCallback, useMemo, createContext, useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from './i18n/index.js';
@@ -259,6 +259,14 @@ function MainApp({ onSwitchModule, activeModule }) {
   const { settings, updateSettings } = useSettings();
   const { ringStrengen, addRingstreng, updateRingstreng, deleteRingstreng, advanceHuidige } = useRingStrengen();
 
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const navCounts = useMemo(() => {
+    const total = records.length;
+    const today = records.filter(r => r.vangstdatum === todayStr).length;
+    const soorten = new Set(records.map(r => r.vogelnaam).filter(Boolean)).size;
+    return { total, today, soorten };
+  }, [records, todayStr]);
+
   return (
     <div className="app-shell">
       <Header onSwitchModule={onSwitchModule} activeModule={activeModule} />
@@ -330,7 +338,7 @@ function MainApp({ onSwitchModule, activeModule }) {
         </Routes>
         </Suspense>
       </main>
-      <Navigation />
+      <Navigation navCounts={navCounts} />
     </div>
   );
 }
