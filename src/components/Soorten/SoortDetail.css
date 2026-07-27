@@ -1642,6 +1642,31 @@
   margin: 4px 0 0 0;
 }
 
+/* ─── Zoönose eigen telling ────────────────────────────────────────────── */
+.sd-zoonose-eigen {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.sd-zoonose-eigen__count {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--warning, #f59e0b);
+  line-height: 1;
+}
+.sd-zoonose-eigen__label {
+  font-size: 0.82rem;
+  color: var(--text);
+}
+.sd-zoonose-eigen__note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
 /* ─── Literatuurlijst ──────────────────────────────────────────────────── */
 .sd-literatuur-list {
   margin: 10px 0 0 0;

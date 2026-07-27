@@ -1,6 +1,19 @@
-export const VERSIE = '2.3.0';
+export const VERSIE = '2.3.1';
 
 export const CHANGELOG = [
+  {
+    versie: '2.3.1',
+    datum: '2026-07-27',
+    wijzigingen: [
+      'Soortenpagina: zoönose-telling toegevoegd — toont hoe vaak een soort door jou is bemonsterd',
+    ],
+    wijzigingen_en: [
+      'Species page: zoonosis count added — shows how many times you have sampled a species',
+    ],
+    wijzigingen_de: [
+      'Artenseite: Zoonose-Zähler hinzugefügt — zeigt, wie oft eine Art von dir beprobt wurde',
+    ],
+  },
   {
     versie: '2.3.0',
     datum: '2026-07-10',

@@ -151,6 +151,11 @@ export default function SoortDetail({ records, speciesOverrides }) {
 
   const nvByRing = useMemo(() => buildNvByRing(records), [records]);
 
+  const bemonsterdCount = useMemo(
+    () => soortRecords.filter(r => r.gemanipuleerd === 'M' && !!String(r.barcode ?? '').trim()).length,
+    [soortRecords]
+  );
+
   // Biometriebereiken berekend uit eigen vangsten (min 3 records, geen pullus)
   const bioRangesFromCatches = useMemo(
     () => computeBioRanges(soortRecords.filter(r => r.leeftijd !== '1')),
@@ -840,6 +845,15 @@ export default function SoortDetail({ records, speciesOverrides }) {
       {soortEuringCode && (
         <div className="sd-card">
           <ZoonosePanel euringCode={soortEuringCode} altijdTonen={true} />
+          {bemonsterdCount > 0 && (
+            <div className="sd-zoonose-eigen">
+              <span className="sd-zoonose-eigen__count">{bemonsterdCount}</span>
+              <span className="sd-zoonose-eigen__label">
+                {bemonsterdCount === 1 ? 'keer bemonsterd door jou' : 'keer bemonsterd door jou'}
+              </span>
+              <span className="sd-zoonose-eigen__note">(1 jul – 31 okt)</span>
+            </div>
+          )}
         </div>
       )}
 
