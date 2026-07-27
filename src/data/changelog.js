@@ -1,6 +1,13 @@
-export const VERSIE = '2.3.6';
+export const VERSIE = '2.3.7';
 
 export const CHANGELOG = [
+  {
+    versie: '2.3.7',
+    datum: '2026-07-27',
+    wijzigingen: ['Navigatiebadges: boven het icoon geplaatst'],
+    wijzigingen_en: ['Navigation badges: moved above the icon'],
+    wijzigingen_de: ['Navigations-Badges: über dem Icon platziert'],
+  },
   {
     versie: '2.3.6',
     datum: '2026-07-27',
