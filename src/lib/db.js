@@ -101,3 +101,9 @@ db.version(15).stores({
 db.version(16).stores({
   determinatie_aid: 'id',
 });
+
+// Versie 17: waarnemingen-module — lokale cache van eigen waarnemingen (observation.org + CSV)
+// Elke rij is één waarneming; user_id koppelt aan de ingelogde gebruiker.
+db.version(17).stores({
+  waarnemingen: 'id, user_id, datum, country_code, euring_code, [user_id+datum]',
+});

@@ -1,6 +1,25 @@
-export const VERSIE = '2.3.7';
+export const VERSIE = '2.4.0';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.0',
+    datum: '2026-10-24',
+    wijzigingen: [
+      'Nieuwe module: Vogelwaarnemingen — lifelist, landenlijst en jaarlijst',
+      'Importeer waarnemingen via observation.org API of CSV-export',
+      'Kruisverwijzing met ringvangsten op EURING-code',
+    ],
+    wijzigingen_en: [
+      'New module: Bird Sightings — lifelist, country list and year list',
+      'Import observations via observation.org API or CSV export',
+      'Cross-reference with ringing records by EURING code',
+    ],
+    wijzigingen_de: [
+      'Neues Modul: Vogelbeobachtungen — Lebensliste, Länderliste und Jahresliste',
+      'Beobachtungen via observation.org API oder CSV-Export importieren',
+      'Querverweise mit Ringfangdaten über EURING-Code',
+    ],
+  },
   {
     versie: '2.3.7',
     datum: '2026-07-27',

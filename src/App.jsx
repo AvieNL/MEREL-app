@@ -32,6 +32,7 @@ const AdminPage       = lazy(() => import('./components/Admin/AdminPage'));
 const ReferentiebibliotheekPage = lazy(() => import('./components/Referentiebibliotheek/ReferentiebibliotheekPage'));
 const KennisbankPage    = lazy(() => import('./components/Kennisbank/KennisbankPage'));
 const RuitypenPage      = lazy(() => import('./components/Ruitypen/RuitypenPage'));
+const WaarneemingenApp  = lazy(() => import('./components/Waarnemingen/WaarneemingenApp'));
 const NestOverzichtPage = lazy(() => import('./components/Nest/NestOverzichtPage'));
 const NieuwNestPage     = lazy(() => import('./components/Nest/NieuwNestPage'));
 const NestDetailPage    = lazy(() => import('./components/Nest/NestDetailPage'));
@@ -203,7 +204,13 @@ function AppShell() {
       )}
       {effectiveModule === 'ring'
         ? <MainApp onSwitchModule={hasNestAccess ? selectModule : null} activeModule="ring" />
-        : <NestApp onSwitchModule={selectModule} activeModule="nest" />
+        : effectiveModule === 'nest'
+          ? <NestApp onSwitchModule={selectModule} activeModule="nest" />
+          : (
+            <Suspense fallback={<PageSpinner />}>
+              <WaarneemingenApp onSwitchModule={selectModule} />
+            </Suspense>
+          )
       }
     </>
     </ModuleSwitchContext.Provider>

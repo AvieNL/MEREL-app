@@ -1,0 +1,128 @@
+/**
+ * observation.org API client.
+ * Auth: Authorization: Token <token>
+ * Observations for a specific user: GET /api/v1/observations/?observer_id=<id>
+ */
+
+const BASE_URL = 'https://api.observation.org/api/v1';
+
+export async function fetchUserObservations({ token, observerId, onProgress }) {
+  const headers = { Authorization: `Token ${token}` };
+  let results = [];
+  let url = `${BASE_URL}/observations/?observer_id=${observerId}&limit=100`;
+  let page = 0;
+
+  while (url) {
+    const res = await fetch(url, { headers });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`API fout ${res.status}: ${text.slice(0, 200)}`);
+    }
+    const data = await res.json();
+    const items = data.results ?? [];
+    results = results.concat(items);
+    page++;
+    onProgress?.({ fetched: results.length, total: data.count ?? null, page });
+    url = data.next ?? null;
+    if (!url) break;
+    // Respect rate limits
+    await new Promise(r => setTimeout(r, 200));
+  }
+
+  return results.map(normaliseObservation);
+}
+
+export async function validateToken(token) {
+  const res = await fetch(`${BASE_URL}/observations/?limit=1`, {
+    headers: { Authorization: `Token ${token}` },
+  });
+  return res.ok || res.status === 401 ? res.status : null;
+}
+
+/**
+ * Normalize a raw observation.org record into our internal schema.
+ */
+export function normaliseObservation(raw) {
+  const species = raw.species_detail ?? {};
+  const location = raw.location_detail ?? {};
+  return {
+    id: String(raw.id),
+    datum: raw.date,
+    species_obs_id: raw.species,
+    species_name_nl: species.name ?? '',
+    species_name_lat: species.scientific_name ?? '',
+    euring_code: species.euring_code ? String(species.euring_code) : '',
+    country_code: location.country_code ?? raw.country_code ?? '',
+    country_name: location.country ?? '',
+    location_name: location.name ?? raw.location_name ?? '',
+    rarity: raw.rarity ?? 0,
+    validation_status: raw.validation_status ?? '',
+    count: raw.number ?? 1,
+    permalink: raw.permalink ?? '',
+    has_photo: (raw.photos?.length ?? 0) > 0,
+    source: 'api',
+    imported_at: new Date().toISOString(),
+  };
+}
+
+/**
+ * Parse a waarneming.nl / observation.org CSV export.
+ * The CSV format exported by waarneming.nl uses semicolon separators.
+ */
+export function parseCsv(csvText) {
+  const lines = csvText.trim().split('\n');
+  if (lines.length < 2) return [];
+
+  const raw = lines[0];
+  // Detect separator: semicolon or comma
+  const sep = raw.includes(';') ? ';' : ',';
+  const headers = raw.split(sep).map(h => h.trim().replace(/"/g, '').toLowerCase());
+
+  const get = (row, ...keys) => {
+    for (const k of keys) {
+      const idx = headers.indexOf(k);
+      if (idx >= 0 && row[idx] !== undefined) return row[idx].replace(/"/g, '').trim();
+    }
+    return '';
+  };
+
+  const results = [];
+  for (let i = 1; i < lines.length; i++) {
+    const row = lines[i].split(sep);
+    if (row.length < 3) continue;
+
+    const id = get(row, 'id', 'observation_id', 'waarneming_id') || `csv-${i}`;
+    const datum = normaliseDatum(get(row, 'date', 'datum', 'observation_date'));
+    if (!datum) continue;
+
+    results.push({
+      id: `csv-${id}`,
+      datum,
+      species_obs_id: null,
+      species_name_nl: get(row, 'dutch name', 'nederlandsenaam', 'soort', 'species_nl', 'naam'),
+      species_name_lat: get(row, 'scientific name', 'latijnsenaam', 'soort_latijn', 'species_lat', 'scientific'),
+      euring_code: get(row, 'euring', 'euring_code'),
+      country_code: get(row, 'country_code', 'landcode', 'land_code'),
+      country_name: get(row, 'country', 'land'),
+      location_name: get(row, 'location', 'locatie', 'location_name', 'stad'),
+      rarity: Number(get(row, 'rarity', 'zeldzaamheid')) || 0,
+      validation_status: get(row, 'validation_status', 'status'),
+      count: Number(get(row, 'number', 'aantal')) || 1,
+      permalink: get(row, 'permalink', 'url', 'link'),
+      has_photo: false,
+      source: 'csv',
+      imported_at: new Date().toISOString(),
+    });
+  }
+  return results;
+}
+
+function normaliseDatum(raw) {
+  if (!raw) return null;
+  // Accepts dd-mm-yyyy, yyyy-mm-dd, dd/mm/yyyy
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+  const parts = raw.split(/[-/]/);
+  if (parts.length !== 3) return null;
+  if (parts[0].length === 4) return `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+  return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+}

@@ -32,6 +32,15 @@ export default function ModuleSelector({ onSelect }) {
               <span className="module-card__desc">{t('module_nest_desc')}</span>
             </button>
           )}
+
+          <button
+            className="module-card"
+            onClick={() => onSelect('waarnemingen')}
+          >
+            <span className="module-card__icon">🔭</span>
+            <span className="module-card__label">{t('module_waarnemingen')}</span>
+            <span className="module-card__desc">{t('module_waarnemingen_desc')}</span>
+          </button>
         </div>
       </div>
     </div>
