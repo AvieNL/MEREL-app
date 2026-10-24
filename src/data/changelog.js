@@ -1,6 +1,22 @@
-export const VERSIE = '2.4.4';
+export const VERSIE = '2.4.5';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.5',
+    datum: '2026-10-24',
+    wijzigingen: [
+      'fix: alleen vogels worden geïmporteerd uit CSV (species type = bird)',
+      'fix: landcode correct afgeleid uit "country division" (bijv. NL-GE → NL)',
+    ],
+    wijzigingen_en: [
+      'fix: only birds imported from CSV (species type = bird)',
+      'fix: country code correctly derived from "country division" (e.g. NL-GE → NL)',
+    ],
+    wijzigingen_de: [
+      'fix: nur Vögel werden aus CSV importiert (species type = bird)',
+      'fix: Ländercode korrekt aus "country division" abgeleitet (z.B. NL-GE → NL)',
+    ],
+  },
   {
     versie: '2.4.4',
     datum: '2026-10-24',

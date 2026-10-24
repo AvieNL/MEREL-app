@@ -104,9 +104,17 @@ export function parseCsv(csvText) {
     const row = lines[i].split(sep);
     if (row.length < 3) continue;
 
+    // Alleen vogels importeren
+    const speciesType = get(row, 'species type', 'species_type', 'soortengroep', 'group').toLowerCase();
+    if (speciesType && !speciesType.includes('bird') && !speciesType.includes('vogel') && speciesType !== '') continue;
+
     const id = get(row, 'id', 'observation_id', 'waarneming_id') || `csv-${i}`;
     const datum = normaliseDatum(get(row, 'date', 'datum', 'observation_date'));
     if (!datum) continue;
+
+    // country division = ISO subdivisie zoals "NL-GE" → eerste 2 tekens = landcode
+    const countryDivision = get(row, 'country division', 'country_code', 'landcode', 'land_code');
+    const countryCode = countryDivision.length >= 2 ? countryDivision.slice(0, 2).toUpperCase() : countryDivision;
 
     results.push({
       id: `csv-${id}`,
@@ -115,7 +123,7 @@ export function parseCsv(csvText) {
       species_name_nl: get(row, 'species name', 'dutch name', 'nederlandsenaam', 'nederlandse naam', 'soort', 'species_nl', 'naam', 'vernacular name', 'species_name_nl'),
       species_name_lat: get(row, 'scientific name', 'wetenschappelijke naam', 'latijnsenaam', 'soort_latijn', 'species_lat', 'scientific', 'species_name_lat'),
       euring_code: get(row, 'euring', 'euring_code'),
-      country_code: get(row, 'country division', 'country_code', 'landcode', 'land_code'),
+      country_code: countryCode,
       country_name: get(row, 'country', 'land'),
       location_name: get(row, 'location', 'locatie', 'location_name', 'stad'),
       lat: parseCoord(get(row, 'lat', 'latitude', 'breedtegraad', 'y_coordinaat', 'y')),
@@ -123,7 +131,7 @@ export function parseCsv(csvText) {
       rarity: Number(get(row, 'rarity', 'zeldzaamheid')) || 0,
       validation_status: get(row, 'validation_status', 'status'),
       count: Number(get(row, 'number', 'aantal')) || 1,
-      permalink: get(row, 'permalink', 'url', 'link'),
+      permalink: get(row, 'link', 'permalink', 'url'),
       has_photo: false,
       source: 'csv',
       imported_at: new Date().toISOString(),
