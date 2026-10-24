@@ -1,18 +1,40 @@
-export const VERSIE = '2.4.2';
+export const VERSIE = '2.4.3';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.3',
+    datum: '2026-10-24',
+    wijzigingen: [
+      'fix: geen dubbele Latijnse naam in overzicht als Nederlandse naam ontbreekt',
+      'CSV-parser: meer kolomnamen herkend voor Nederlandse/wetenschappelijke naam',
+    ],
+    wijzigingen_en: [
+      'fix: no duplicate Latin name in overview when Dutch name is missing',
+      'CSV parser: more column name variants recognised',
+    ],
+    wijzigingen_de: [
+      'fix: kein doppelter lateinischer Name wenn niederländischer Name fehlt',
+      'CSV-Parser: mehr Spaltennamen erkannt',
+    ],
+  },
   {
     versie: '2.4.2',
     datum: '2026-10-24',
     wijzigingen: [
-      'Instellingenpagina Waarnemingen: CSV-import als primaire methode met stap-voor-stap instructies',
+      'Kaartpagina in Waarnemingen-module (Leaflet, filterbaar per land)',
+      'GPS-coördinaten opgeslagen vanuit API en CSV',
+      'Instellingenpagina: CSV-import als primaire methode met stap-voor-stap instructies',
       'API-import verplaatst naar inklapbare sectie (alleen voor partners observation.org)',
     ],
     wijzigingen_en: [
+      'Map page in Observations module (Leaflet, filterable by country)',
+      'GPS coordinates stored from API and CSV',
       'Observations settings: CSV import as primary method with step-by-step instructions',
       'API import moved to collapsible section (partners only)',
     ],
     wijzigingen_de: [
+      'Kartenseite im Beobachtungsmodul (Leaflet, nach Land filterbar)',
+      'GPS-Koordinaten aus API und CSV gespeichert',
       'Einstellungen Beobachtungen: CSV-Import als Hauptmethode mit Schritt-für-Schritt-Anleitung',
       'API-Import in einklappbaren Bereich verschoben (nur für Partner)',
     ],
