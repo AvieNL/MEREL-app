@@ -104,17 +104,17 @@ export function parseCsv(csvText) {
     const row = lines[i].split(sep);
     if (row.length < 3) continue;
 
-    // Alleen vogels importeren
-    const speciesType = get(row, 'species type', 'species_type', 'soortengroep', 'group').toLowerCase();
-    if (speciesType && !speciesType.includes('bird') && !speciesType.includes('vogel') && speciesType !== '') continue;
+    // Alleen vogels importeren — species group = "Vogels" of "Birds"
+    const speciesGroup = get(row, 'species group', 'species_group', 'soortengroep').toLowerCase();
+    if (speciesGroup && speciesGroup !== 'vogels' && speciesGroup !== 'birds') continue;
 
     const id = get(row, 'id', 'observation_id', 'waarneming_id') || `csv-${i}`;
     const datum = normaliseDatum(get(row, 'date', 'datum', 'observation_date'));
     if (!datum) continue;
 
-    // country division = ISO subdivisie zoals "NL-GE" → eerste 2 tekens = landcode
-    const countryDivision = get(row, 'country division', 'country_code', 'landcode', 'land_code');
-    const countryCode = countryDivision.length >= 2 ? countryDivision.slice(0, 2).toUpperCase() : countryDivision;
+    // Landcode afleiden uit landnaam
+    const countryName = get(row, 'country', 'land');
+    const countryCode = countryNameToCode(countryName) || countryName.slice(0, 2).toUpperCase();
 
     results.push({
       id: `csv-${id}`,
@@ -138,6 +138,36 @@ export function parseCsv(csvText) {
     });
   }
   return results;
+}
+
+const COUNTRY_CODES = {
+  'nederland': 'NL', 'netherlands': 'NL', 'the netherlands': 'NL',
+  'duitsland': 'DE', 'germany': 'DE', 'deutschland': 'DE',
+  'belgië': 'BE', 'belgie': 'BE', 'belgium': 'BE',
+  'frankrijk': 'FR', 'france': 'FR',
+  'spanje': 'ES', 'spain': 'ES', 'españa': 'ES',
+  'portugal': 'PT',
+  'verenigd koninkrijk': 'GB', 'united kingdom': 'GB', 'great britain': 'GB',
+  'ierland': 'IE', 'ireland': 'IE',
+  'denemarken': 'DK', 'denmark': 'DK',
+  'zweden': 'SE', 'sweden': 'SE', 'sverige': 'SE',
+  'noorwegen': 'NO', 'norway': 'NO', 'norge': 'NO',
+  'finland': 'FI', 'suomi': 'FI',
+  'zwitserland': 'CH', 'switzerland': 'CH', 'schweiz': 'CH',
+  'oostenrijk': 'AT', 'austria': 'AT', 'österreich': 'AT',
+  'italië': 'IT', 'italie': 'IT', 'italy': 'IT', 'italia': 'IT',
+  'griekenland': 'GR', 'greece': 'GR',
+  'turkije': 'TR', 'turkey': 'TR', 'türkiye': 'TR',
+  'marokko': 'MA', 'morocco': 'MA', 'maroc': 'MA',
+  'senegal': 'SN',
+  'gambia': 'GM',
+  'ghana': 'GH',
+  'kenya': 'KE', 'kenia': 'KE',
+  'tanzania': 'TZ',
+};
+
+function countryNameToCode(name) {
+  return COUNTRY_CODES[name.toLowerCase().trim()] ?? null;
 }
 
 function parseCoord(raw) {

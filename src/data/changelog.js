@@ -1,6 +1,22 @@
-export const VERSIE = '2.4.5';
+export const VERSIE = '2.4.6';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.6',
+    datum: '2026-10-24',
+    wijzigingen: [
+      'fix: vogelfilter gebruikt nu species group "Vogels" (was species type)',
+      'fix: landcode afgeleid uit landnaam (Nederland → NL, etc.)',
+    ],
+    wijzigingen_en: [
+      'fix: bird filter now uses species group "Vogels" (was species type)',
+      'fix: country code derived from country name (Nederland → NL, etc.)',
+    ],
+    wijzigingen_de: [
+      'fix: Vogelfilter nutzt jetzt species group "Vogels" (war species type)',
+      'fix: Ländercode aus Ländername abgeleitet (Nederland → NL, usw.)',
+    ],
+  },
   {
     versie: '2.4.5',
     datum: '2026-10-24',
