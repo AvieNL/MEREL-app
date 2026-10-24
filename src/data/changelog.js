@@ -1,6 +1,25 @@
-export const VERSIE = '2.4.3';
+export const VERSIE = '2.4.4';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.4',
+    datum: '2026-10-24',
+    wijzigingen: [
+      'fix: CSV-parser herkent tab-gescheiden waarneming.nl export correct',
+      'fix: "species name" kolom wordt nu als Nederlandse naam ingelezen',
+      'fix: GPS-coördinaten via "lat"/"lng" kolommen correct opgeslagen',
+    ],
+    wijzigingen_en: [
+      'fix: CSV parser correctly handles tab-separated waarneming.nl export',
+      'fix: "species name" column now read as Dutch name',
+      'fix: GPS coordinates from "lat"/"lng" columns correctly stored',
+    ],
+    wijzigingen_de: [
+      'fix: CSV-Parser erkennt tab-getrennte waarneming.nl-Exporte korrekt',
+      'fix: Spalte "species name" wird als niederländischer Name eingelesen',
+      'fix: GPS-Koordinaten aus "lat"/"lng"-Spalten korrekt gespeichert',
+    ],
+  },
   {
     versie: '2.4.3',
     datum: '2026-10-24',

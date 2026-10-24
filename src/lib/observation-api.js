@@ -87,8 +87,8 @@ export function parseCsv(csvText) {
   if (lines.length < 2) return [];
 
   const raw = lines[0];
-  // Detect separator: semicolon or comma
-  const sep = raw.includes(';') ? ';' : ',';
+  // Detect separator: tab, semicolon or comma
+  const sep = raw.includes('\t') ? '\t' : raw.includes(';') ? ';' : ',';
   const headers = raw.split(sep).map(h => h.trim().replace(/"/g, '').toLowerCase());
 
   const get = (row, ...keys) => {
@@ -112,14 +112,14 @@ export function parseCsv(csvText) {
       id: `csv-${id}`,
       datum,
       species_obs_id: null,
-      species_name_nl: get(row, 'dutch name', 'nederlandsenaam', 'nederlandse naam', 'soort', 'species_nl', 'naam', 'vernacular name', 'species_name_nl'),
+      species_name_nl: get(row, 'species name', 'dutch name', 'nederlandsenaam', 'nederlandse naam', 'soort', 'species_nl', 'naam', 'vernacular name', 'species_name_nl'),
       species_name_lat: get(row, 'scientific name', 'wetenschappelijke naam', 'latijnsenaam', 'soort_latijn', 'species_lat', 'scientific', 'species_name_lat'),
       euring_code: get(row, 'euring', 'euring_code'),
-      country_code: get(row, 'country_code', 'landcode', 'land_code'),
+      country_code: get(row, 'country division', 'country_code', 'landcode', 'land_code'),
       country_name: get(row, 'country', 'land'),
       location_name: get(row, 'location', 'locatie', 'location_name', 'stad'),
-      lat: parseCoord(get(row, 'latitude', 'lat', 'breedtegraad', 'y_coordinaat', 'y')),
-      lon: parseCoord(get(row, 'longitude', 'lon', 'lng', 'lengtegraad', 'x_coordinaat', 'x')),
+      lat: parseCoord(get(row, 'lat', 'latitude', 'breedtegraad', 'y_coordinaat', 'y')),
+      lon: parseCoord(get(row, 'lng', 'lon', 'longitude', 'lengtegraad', 'x_coordinaat', 'x')),
       rarity: Number(get(row, 'rarity', 'zeldzaamheid')) || 0,
       validation_status: get(row, 'validation_status', 'status'),
       count: Number(get(row, 'number', 'aantal')) || 1,
