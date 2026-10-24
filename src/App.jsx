@@ -184,8 +184,8 @@ function AppShell() {
     return <LoginPage />;
   }
 
-  // Gebruikers zonder nestonderzoek-toegang gaan altijd naar ring
-  const effectiveModule = !hasNestAccess ? 'ring' : module;
+  // Gebruikers zonder nestonderzoek-toegang kunnen niet naar nest; waarnemingen is altijd beschikbaar
+  const effectiveModule = (!hasNestAccess && (module === 'nest' || !module)) ? 'ring' : module;
 
   if (!effectiveModule) {
     return <ModuleSelector onSelect={selectModule} />;

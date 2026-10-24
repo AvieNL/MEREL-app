@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useWaarnemingen } from '../../hooks/useWaarnemingen';
+import Header from '../Layout/Header';
 import OverzichtPage from './OverzichtPage';
 import LifelistPage from './LifelistPage';
 import LandenPage from './LandenPage';
@@ -32,24 +33,7 @@ export default function WaarneemingenApp({ onSwitchModule }) {
 
   return (
     <div className="app-shell">
-      <header style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '10px 16px', background: 'var(--bg-secondary)',
-        borderBottom: '1px solid var(--border)', gap: 12,
-      }}>
-        <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>
-          🔭 Vogelwaarnemingen
-        </span>
-        {onSwitchModule && (
-          <button
-            onClick={() => onSwitchModule(null)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer',
-              color: 'var(--text-muted)', fontSize: '0.8rem', padding: 0 }}
-          >
-            Wissel module
-          </button>
-        )}
-      </header>
+      <Header onSwitchModule={onSwitchModule} activeModule="waarnemingen" />
 
       <main className="app-content">
         {renderTab()}

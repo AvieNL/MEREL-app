@@ -146,7 +146,9 @@ export default function Header({ onSwitchModule, activeModule }) {
   const activeThema = THEMAS.find(th => th.mode === mode) || THEMAS[0];
 
   const handleTitleClick = () => {
-    navigate(activeModule === 'nest' ? '/nest' : '/ring/');
+    if (activeModule === 'nest') navigate('/nest');
+    else if (activeModule === 'waarnemingen') { /* geen route, WaarneemingenApp heeft eigen navigatie */ }
+    else navigate('/ring/');
   };
 
   function getEquivalentPath(toModule) {
@@ -177,8 +179,8 @@ export default function Header({ onSwitchModule, activeModule }) {
           <span className="header-versie">v{VERSIE}</span>
           {!onSwitchModule && (
             <span className={`header-module-pill header-module-pill--${activeModule || 'ring'}`}>
-              {activeModule === 'nest' ? '⌂' : '◎'}
-              <span>{activeModule === 'nest' ? t('module_nest') : t('module_ring')}</span>
+              {activeModule === 'nest' ? '⌂' : activeModule === 'waarnemingen' ? '🔭' : '◎'}
+              <span>{activeModule === 'nest' ? t('module_nest') : activeModule === 'waarnemingen' ? t('module_waarnemingen') : t('module_ring')}</span>
             </span>
           )}
         </div>
@@ -445,6 +447,13 @@ export default function Header({ onSwitchModule, activeModule }) {
               aria-pressed={location.pathname.startsWith('/kennis')}
             >
               ✦ {t('module_kennis')}
+            </button>
+            <button
+              className={`header-module-segment header-module-segment--waarnemingen${activeModule === 'waarnemingen' ? ' active' : ''}`}
+              onClick={() => { if (activeModule !== 'waarnemingen') onSwitchModule('waarnemingen'); }}
+              aria-pressed={activeModule === 'waarnemingen'}
+            >
+              🔭 {t('module_waarnemingen')}
             </button>
           </div>
         </div>

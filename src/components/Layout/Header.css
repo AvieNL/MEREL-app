@@ -568,6 +568,12 @@
   cursor: default;
 }
 
+.header-module-segment--waarnemingen.active {
+  background: rgba(251, 146, 60, 0.15);
+  color: #fb923c;
+  cursor: default;
+}
+
 .header-module-segment:not(.active):hover {
   background: var(--bg-tertiary);
   color: var(--text-secondary);
