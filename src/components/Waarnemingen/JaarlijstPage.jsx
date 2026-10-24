@@ -80,7 +80,9 @@ export default function JaarlijstPage({ waarnemingen }) {
           </span>
           <div className="w-obs-main">
             <div className="w-obs-name">{entry.species_name_nl || entry.species_name_lat}</div>
-            {entry.species_name_lat && <div className="w-obs-lat">{entry.species_name_lat}</div>}
+            {entry.species_name_lat && entry.species_name_nl && entry.species_name_lat !== entry.species_name_nl && (
+              <div className="w-obs-lat">{entry.species_name_lat}</div>
+            )}
           </div>
           <div className="w-obs-meta">
             <span className="w-obs-date">{formatDate(entry.first_date)}</span>

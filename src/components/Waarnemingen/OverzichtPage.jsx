@@ -63,7 +63,9 @@ export function ObsRow({ obs }) {
     <div className="w-obs-row">
       <div className="w-obs-main">
         <div className="w-obs-name">{obs.species_name_nl || obs.species_name_lat || '?'}</div>
-        {obs.species_name_lat && <div className="w-obs-lat">{obs.species_name_lat}</div>}
+        {obs.species_name_lat && obs.species_name_nl && obs.species_name_lat !== obs.species_name_nl && (
+          <div className="w-obs-lat">{obs.species_name_lat}</div>
+        )}
         {obs.location_name && (
           <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 1 }}>{obs.location_name}</div>
         )}

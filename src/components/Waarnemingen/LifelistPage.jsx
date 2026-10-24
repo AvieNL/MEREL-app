@@ -108,7 +108,9 @@ function LifelistRow({ entry }) {
           <span className="w-obs-name">{entry.species_name_nl || entry.species_name_lat}</span>
           {entry.geringd && <span className="w-ring-badge">geringd</span>}
         </div>
-        {entry.species_name_lat && <div className="w-obs-lat">{entry.species_name_lat}</div>}
+        {entry.species_name_lat && entry.species_name_nl && entry.species_name_lat !== entry.species_name_nl && (
+          <div className="w-obs-lat">{entry.species_name_lat}</div>
+        )}
         <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 2 }}>
           {entry.countries.join(' · ')} · {entry.count}×
         </div>
