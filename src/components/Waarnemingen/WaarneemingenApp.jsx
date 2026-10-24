@@ -5,6 +5,7 @@ import OverzichtPage from './OverzichtPage';
 import LifelistPage from './LifelistPage';
 import LandenPage from './LandenPage';
 import JaarlijstPage from './JaarlijstPage';
+import KaartPage from './KaartPage';
 import WInstellingenPage from './WInstellingenPage';
 import './WaarneemingenApp.css';
 
@@ -13,6 +14,7 @@ const TABS = [
   { id: 'lifelist',    label: 'Lifelist',    icon: '✦' },
   { id: 'landen',      label: 'Landen',      icon: '⊕' },
   { id: 'jaar',        label: 'Jaarlijst',   icon: '◷' },
+  { id: 'kaart',       label: 'Kaart',       icon: '⬡' },
   { id: 'instellingen', label: 'Inst.',      icon: '⚙' },
 ];
 
@@ -26,6 +28,7 @@ export default function WaarneemingenApp({ onSwitchModule }) {
       case 'lifelist':    return <LifelistPage waarnemingen={waarnemingen} />;
       case 'landen':      return <LandenPage waarnemingen={waarnemingen} />;
       case 'jaar':        return <JaarlijstPage waarnemingen={waarnemingen} />;
+      case 'kaart':       return <KaartPage waarnemingen={waarnemingen} />;
       case 'instellingen': return <WInstellingenPage waarnemingen={waarnemingen} onImport={importWaarnemingen} onClear={clearAllWaarnemingen} />;
       default:            return null;
     }

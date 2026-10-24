@@ -45,6 +45,17 @@ export async function validateToken(token) {
 export function normaliseObservation(raw) {
   const species = raw.species_detail ?? {};
   const location = raw.location_detail ?? {};
+
+  // Extract coordinates: API returns GeoJSON Point or flat lat/lon fields
+  let lat = null, lon = null;
+  if (raw.point?.coordinates?.length === 2) {
+    [lon, lat] = raw.point.coordinates; // GeoJSON: [lon, lat]
+  } else if (raw.lat != null && raw.lon != null) {
+    lat = Number(raw.lat); lon = Number(raw.lon);
+  } else if (location.lat != null && location.lon != null) {
+    lat = Number(location.lat); lon = Number(location.lon);
+  }
+
   return {
     id: String(raw.id),
     datum: raw.date,
@@ -55,6 +66,8 @@ export function normaliseObservation(raw) {
     country_code: location.country_code ?? raw.country_code ?? '',
     country_name: location.country ?? '',
     location_name: location.name ?? raw.location_name ?? '',
+    lat: lat !== null && !isNaN(lat) ? lat : null,
+    lon: lon !== null && !isNaN(lon) ? lon : null,
     rarity: raw.rarity ?? 0,
     validation_status: raw.validation_status ?? '',
     count: raw.number ?? 1,
@@ -105,6 +118,8 @@ export function parseCsv(csvText) {
       country_code: get(row, 'country_code', 'landcode', 'land_code'),
       country_name: get(row, 'country', 'land'),
       location_name: get(row, 'location', 'locatie', 'location_name', 'stad'),
+      lat: parseCoord(get(row, 'latitude', 'lat', 'breedtegraad', 'y_coordinaat', 'y')),
+      lon: parseCoord(get(row, 'longitude', 'lon', 'lng', 'lengtegraad', 'x_coordinaat', 'x')),
       rarity: Number(get(row, 'rarity', 'zeldzaamheid')) || 0,
       validation_status: get(row, 'validation_status', 'status'),
       count: Number(get(row, 'number', 'aantal')) || 1,
@@ -115,6 +130,12 @@ export function parseCsv(csvText) {
     });
   }
   return results;
+}
+
+function parseCoord(raw) {
+  if (!raw) return null;
+  const n = Number(raw.replace(',', '.'));
+  return isNaN(n) || n === 0 ? null : n;
 }
 
 function normaliseDatum(raw) {

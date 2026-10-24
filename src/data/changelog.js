@@ -1,6 +1,31 @@
-export const VERSIE = '2.4.0';
+export const VERSIE = '2.4.2';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.2',
+    datum: '2026-10-24',
+    wijzigingen: [
+      'Instellingenpagina Waarnemingen: CSV-import als primaire methode met stap-voor-stap instructies',
+      'API-import verplaatst naar inklapbare sectie (alleen voor partners observation.org)',
+    ],
+    wijzigingen_en: [
+      'Observations settings: CSV import as primary method with step-by-step instructions',
+      'API import moved to collapsible section (partners only)',
+    ],
+    wijzigingen_de: [
+      'Einstellungen Beobachtungen: CSV-Import als Hauptmethode mit Schritt-für-Schritt-Anleitung',
+      'API-Import in einklappbaren Bereich verschoben (nur für Partner)',
+    ],
+  },
+  {
+    versie: '2.4.1',
+    datum: '2026-10-24',
+    wijzigingen: [
+      'fix: Waarnemingen-module zichtbaar in module-toggle balk',
+    ],
+    wijzigingen_en: ['fix: Observations module visible in module-toggle bar'],
+    wijzigingen_de: ['fix: Beobachtungsmodul in Modulumschaltleiste sichtbar'],
+  },
   {
     versie: '2.4.0',
     datum: '2026-10-24',
