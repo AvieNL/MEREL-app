@@ -1,6 +1,25 @@
-export const VERSIE = '2.4.7';
+export const VERSIE = '2.4.8';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.8',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: landen tonen nu altijd de naam uit de data (niet hardcoded)',
+      'fix: 60+ landnamen toegevoegd aan ISO-code mapping (Tsjechië, Hongarije, IJsland, enz.)',
+      'fix: foute fallback-codes (TS, HO, IJ, ZU) vervangen door correcte ISO-codes',
+    ],
+    wijzigingen_en: [
+      'fix: countries now always show name from data (not hardcoded)',
+      'fix: 60+ country names added to ISO code mapping',
+      'fix: incorrect fallback codes (TS, HO, IJ, ZU) replaced with correct ISO codes',
+    ],
+    wijzigingen_de: [
+      'fix: Länder zeigen jetzt immer den Namen aus den Daten',
+      'fix: 60+ Ländernamen zur ISO-Code-Zuordnung hinzugefügt',
+      'fix: falsche Fallback-Codes durch korrekte ISO-Codes ersetzt',
+    ],
+  },
   {
     versie: '2.4.7',
     datum: '2026-10-25',

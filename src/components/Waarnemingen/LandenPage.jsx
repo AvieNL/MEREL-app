@@ -1,15 +1,6 @@
 import { useMemo, useState } from 'react';
 import { countryFlag } from './utils';
 
-const COUNTRY_NAMES = {
-  NL: 'Nederland', BE: 'België', DE: 'Duitsland', FR: 'Frankrijk', GB: 'Groot-Brittannië',
-  ES: 'Spanje', PT: 'Portugal', IT: 'Italië', SE: 'Zweden', NO: 'Noorwegen', DK: 'Denemarken',
-  FI: 'Finland', PL: 'Polen', AT: 'Oostenrijk', CH: 'Zwitserland', GR: 'Griekenland',
-  TR: 'Turkije', MA: 'Marokko', DZ: 'Algerije', TN: 'Tunesië', EG: 'Egypte',
-  SN: 'Senegal', NG: 'Nigeria', KE: 'Kenia', ZA: 'Zuid-Afrika', US: 'Verenigde Staten',
-  CA: 'Canada', MX: 'Mexico', BR: 'Brazilië', AR: 'Argentinië', AU: 'Australië',
-  NZ: 'Nieuw-Zeeland', JP: 'Japan', IN: 'India', ZW: 'Zimbabwe', TZ: 'Tanzania',
-};
 
 export default function LandenPage({ waarnemingen }) {
   const [expanded, setExpanded] = useState(null);
@@ -26,9 +17,11 @@ export default function LandenPage({ waarnemingen }) {
       .map(({ code, obs }) => {
         const species = new Set(obs.map(w => w.species_name_lat || w.species_name_nl).filter(Boolean));
         const sorted = [...obs].sort((a, b) => a.datum.localeCompare(b.datum));
+        // Gebruik opgeslagen landnaam uit de data; val terug op de code
+        const storedName = obs.find(w => w.country_name)?.country_name || code;
         return {
           code,
-          name: COUNTRY_NAMES[code] ?? code,
+          name: storedName,
           obs_count: obs.length,
           species_count: species.size,
           first_date: sorted[0]?.datum ?? '',
