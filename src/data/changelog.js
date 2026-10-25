@@ -1,6 +1,19 @@
-export const VERSIE = '2.7.2';
+export const VERSIE = '2.7.3';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.3',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: klik op "Geringd"-tegel in lifelist filtert op geringde soorten',
+    ],
+    wijzigingen_en: [
+      'ux: clicking the "Ringed" tile on the lifelist filters to ringed species only',
+    ],
+    wijzigingen_de: [
+      'ux: Klick auf die "Beringt"-Kachel in der Lifelist filtert auf beringte Arten',
+    ],
+  },
   {
     versie: '2.7.2',
     datum: '2026-10-25',

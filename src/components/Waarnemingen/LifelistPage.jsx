@@ -5,6 +5,7 @@ import SoortDetailPanel from './SoortDetailPanel';
 
 export default function LifelistPage({ waarnemingen }) {
   const [query, setQuery] = useState('');
+  const [filterGeringd, setFilterGeringd] = useState(false);
   const [selectedKey, setSelectedKey] = useState(null);
   const { records } = useRecords();
 
@@ -46,13 +47,17 @@ export default function LifelistPage({ waarnemingen }) {
   }, [waarnemingen, ringVogelnamen]);
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return lifelist;
-    const q = query.toLowerCase();
-    return lifelist.filter(e =>
-      (e.species_name_nl || '').toLowerCase().includes(q) ||
-      (e.species_name_lat || '').toLowerCase().includes(q)
-    );
-  }, [lifelist, query]);
+    let list = lifelist;
+    if (filterGeringd) list = list.filter(e => e.geringd);
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      list = list.filter(e =>
+        (e.species_name_nl || '').toLowerCase().includes(q) ||
+        (e.species_name_lat || '').toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [lifelist, query, filterGeringd]);
 
   if (selectedKey) {
     return (
@@ -83,7 +88,10 @@ export default function LifelistPage({ waarnemingen }) {
           <div className="w-tile-value">{lifelist.length}</div>
           <div className="w-tile-label">Soorten</div>
         </div>
-        <div className="w-tile">
+        <div
+          className={`w-tile w-tile--clickable${filterGeringd ? ' w-tile--active' : ''}`}
+          onClick={() => setFilterGeringd(f => !f)}
+        >
           <div className="w-tile-value">{lifelist.filter(e => e.geringd).length}</div>
           <div className="w-tile-label">Geringd</div>
         </div>
@@ -107,7 +115,7 @@ export default function LifelistPage({ waarnemingen }) {
 
       {filtered.length === 0 && (
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textAlign: 'center', padding: '24px 0' }}>
-          Geen resultaten voor "{query}"
+          {query.trim() ? `Geen resultaten voor "${query}"` : 'Geen geringde soorten gevonden'}
         </p>
       )}
     </div>

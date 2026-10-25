@@ -386,6 +386,20 @@
   margin-top: 4px;
 }
 
+.w-tile--clickable {
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.w-tile--clickable:hover {
+  border-color: var(--accent);
+}
+
+.w-tile--active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg-secondary));
+}
+
 /* Search / filter bar */
 .w-search {
   width: 100%;
