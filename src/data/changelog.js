@@ -1,6 +1,19 @@
-export const VERSIE = '2.5.1';
+export const VERSIE = '2.5.2';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.2',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'feat: eBird-lijsten tonen nu Nederlandse namen (locale=nl) in plaats van Engelse',
+    ],
+    wijzigingen_en: [
+      'feat: eBird lists now show Dutch names (locale=nl) instead of English',
+    ],
+    wijzigingen_de: [
+      'feat: eBird-Listen zeigen jetzt niederländische Namen',
+    ],
+  },
   {
     versie: '2.5.1',
     datum: '2026-10-25',

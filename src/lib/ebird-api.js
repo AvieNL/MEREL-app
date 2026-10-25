@@ -39,7 +39,7 @@ async function fetchTaxonomyBatch(codes, apiKey) {
   for (let i = 0; i < codes.length; i += BATCH) {
     const batch = codes.slice(i, i + BATCH);
     const data = await ebirdFetch(
-      `/ref/taxonomy/ebird?fmt=json&species=${batch.join(',')}`,
+      `/ref/taxonomy/ebird?fmt=json&locale=nl&species=${batch.join(',')}`,
       apiKey
     );
     results.push(...data);
@@ -47,11 +47,11 @@ async function fetchTaxonomyBatch(codes, apiKey) {
   return results;
 }
 
-// Returns array of { sciName, comName, code } for all species in a country.
-// Results are cached for 1 week in localStorage.
+// Returns array of { sciName, comName, code } for all species in a country/region.
+// comName is in Dutch (locale=nl). Results are cached for 1 week in localStorage.
 export async function fetchCountrySpecies(countryCode, apiKey) {
   if (!apiKey) return null;
-  const cacheKey = `ebird_v1_spp_${countryCode}`;
+  const cacheKey = `ebird_v2_spp_${countryCode}`;
   const cached = readCache(cacheKey);
   if (cached) return cached;
 
@@ -74,11 +74,11 @@ export async function fetchCountrySpecies(countryCode, apiKey) {
 // Cached for 1 week because the taxonomy changes rarely.
 export async function fetchWorldSpecies(apiKey) {
   if (!apiKey) return null;
-  const cacheKey = 'ebird_v1_world';
+  const cacheKey = 'ebird_v2_world';
   const cached = readCache(cacheKey);
   if (cached) return cached;
 
-  const taxonomy = await ebirdFetch('/ref/taxonomy/ebird?fmt=json', apiKey);
+  const taxonomy = await ebirdFetch('/ref/taxonomy/ebird?fmt=json&locale=nl', apiKey);
   const data = taxonomy
     .filter(t => t.category === 'species')
     .map(t => ({ sciName: t.sciName, comName: t.comName, code: t.speciesCode }));
@@ -180,7 +180,7 @@ export function clearEbirdCache() {
   const toRemove = [];
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (k?.startsWith('ebird_v1_')) toRemove.push(k);
+    if (k?.startsWith('ebird_v1_') || k?.startsWith('ebird_v2_')) toRemove.push(k);
   }
   toRemove.forEach(k => localStorage.removeItem(k));
 }
