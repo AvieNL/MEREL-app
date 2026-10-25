@@ -1,6 +1,22 @@
-export const VERSIE = '2.5.6';
+export const VERSIE = '2.5.7';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.7',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: permalink nu directe link naar de individuele waarneming op waarneming.nl',
+      'fix: cloud-sync haalt nu alle waarnemingen op (was beperkt tot 1000 door Supabase-limiet)',
+    ],
+    wijzigingen_en: [
+      'fix: permalink now links directly to the individual observation on waarneming.nl',
+      'fix: cloud sync now fetches all observations (was limited to 1000 by Supabase default)',
+    ],
+    wijzigingen_de: [
+      'fix: Permalink verlinkt jetzt direkt zur einzelnen Beobachtung auf waarneming.nl',
+      'fix: Cloud-Sync lädt jetzt alle Beobachtungen (war auf 1000 durch Supabase-Limit begrenzt)',
+    ],
+  },
   {
     versie: '2.5.6',
     datum: '2026-10-25',

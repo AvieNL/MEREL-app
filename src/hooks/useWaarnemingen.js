@@ -14,18 +14,27 @@ export function useWaarnemingen() {
     []
   );
 
-  // Pull all records from Supabase into Dexie (called on first load of new device)
+  // Pull all records from Supabase into Dexie, paginated (Supabase max 1000 per request)
   async function syncFromSupabase() {
     if (!user) return 0;
-    const { data, error } = await supabase
-      .from('waarnemingen')
-      .select('*')
-      .eq('user_id', user.id);
-    if (error) throw error;
-    if (!data?.length) return 0;
+    const all = [];
+    let from = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from('waarnemingen')
+        .select('*')
+        .eq('user_id', user.id)
+        .range(from, from + BATCH_SIZE - 1);
+      if (error) throw error;
+      if (!data?.length) break;
+      all.push(...data);
+      if (data.length < BATCH_SIZE) break;
+      from += BATCH_SIZE;
+    }
+    if (!all.length) return 0;
     await db.waarnemingen.where('user_id').equals(user.id).delete();
-    await db.waarnemingen.bulkPut(data);
-    return data.length;
+    await db.waarnemingen.bulkPut(all);
+    return all.length;
   }
 
   // Import items: upsert to Supabase (cloud), then cache in Dexie

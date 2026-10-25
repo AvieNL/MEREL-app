@@ -132,7 +132,7 @@ export function parseCsv(csvText) {
       rarity: Number(get(row, 'rarity', 'zeldzaamheid')) || 0,
       validation_status: get(row, 'validation_status', 'status'),
       count: Number(get(row, 'number', 'aantal')) || 1,
-      permalink: get(row, 'link', 'permalink', 'url'),
+      permalink: /^\d+$/.test(id) ? `https://waarneming.nl/observation/${id}/` : (get(row, 'link', 'permalink', 'url') || ''),
       province: get(row, 'country division', 'country_division', 'provincie', 'regio', 'subdivision') || '',
       has_photo: false,
       source: 'csv',
