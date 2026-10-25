@@ -1,6 +1,26 @@
-export const VERSIE = '2.4.9';
+export const VERSIE = '2.4.10';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.10',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'feat: landdetailpagina met statistieken, kaart en soortenoverzicht',
+      'feat: klikbaar land → volledig statistiekpaneel (soorten, waarnemingen, jaren, geringd)',
+      'feat: per land: jaaroverzicht als staafdiagram, Leaflet-kaart met locaties, alfabetische soortlijst',
+      'feat: vanuit landpagina doorklikken naar soortdetailpagina',
+    ],
+    wijzigingen_en: [
+      'feat: country detail page with statistics, map and species list',
+      'feat: clickable country → full stats panel (species, observations, years, ringed)',
+      'feat: per country: year chart, Leaflet map with locations, alphabetical species list',
+      'feat: navigate from country page to species detail page',
+    ],
+    wijzigingen_de: [
+      'feat: Länderdetailseite mit Statistiken, Karte und Artenliste',
+      'feat: anklickbares Land → vollständiges Statistikpanel',
+    ],
+  },
   {
     versie: '2.4.9',
     datum: '2026-10-25',

@@ -1,9 +1,13 @@
 import { useMemo, useState } from 'react';
 import { countryFlag } from './utils';
+import LandDetailPanel from './LandDetailPanel';
+import { useRecords } from '../../hooks/useRecords';
 
 
 export default function LandenPage({ waarnemingen }) {
   const [expanded, setExpanded] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const { records } = useRecords();
 
   const byCountry = useMemo(() => {
     const map = new Map();
@@ -24,13 +28,22 @@ export default function LandenPage({ waarnemingen }) {
           name: storedName,
           obs_count: obs.length,
           species_count: species.size,
-          first_date: sorted[0]?.datum ?? '',
-          last_date: sorted[sorted.length - 1]?.datum ?? '',
-          species_list: [...species].sort((a, b) => a.localeCompare(b, 'nl')),
         };
       })
       .sort((a, b) => b.species_count - a.species_count);
   }, [waarnemingen]);
+
+  if (selectedCountry) {
+    return (
+      <LandDetailPanel
+        countryCode={selectedCountry.code}
+        countryName={selectedCountry.name}
+        waarnemingen={waarnemingen}
+        ringRecords={records}
+        onClose={() => setSelectedCountry(null)}
+      />
+    );
+  }
 
   if (waarnemingen.length === 0) {
     return (
@@ -57,38 +70,18 @@ export default function LandenPage({ waarnemingen }) {
       </div>
 
       {byCountry.map(country => (
-        <div key={country.code}>
-          <div
-            className="w-country-row"
-            style={{ cursor: 'pointer' }}
-            onClick={() => setExpanded(expanded === country.code ? null : country.code)}
-          >
-            <span className="w-country-flag">{countryFlag(country.code)}</span>
-            <div className="w-country-info">
-              <div className="w-country-name">{country.name}</div>
-              <div className="w-country-count">{country.species_count} soorten · {country.obs_count} waarnemingen</div>
-            </div>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-              {expanded === country.code ? '▲' : '▼'}
-            </span>
+        <div
+          key={country.code}
+          className="w-country-row"
+          style={{ cursor: 'pointer' }}
+          onClick={() => setSelectedCountry(country)}
+        >
+          <span className="w-country-flag">{countryFlag(country.code)}</span>
+          <div className="w-country-info">
+            <div className="w-country-name">{country.name}</div>
+            <div className="w-country-count">{country.species_count} soorten · {country.obs_count} waarnemingen</div>
           </div>
-
-          {expanded === country.code && (
-            <div style={{
-              padding: '8px 12px 12px 52px',
-              borderBottom: '1px solid var(--border)',
-              background: 'var(--bg-tertiary)',
-            }}>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 8 }}>
-                Eerste: {formatDate(country.first_date)} · Laatste: {formatDate(country.last_date)}
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 8px' }}>
-                {country.species_list.map(sp => (
-                  <span key={sp} style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{sp}</span>
-                ))}
-              </div>
-            </div>
-          )}
+          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>›</span>
         </div>
       ))}
     </div>
