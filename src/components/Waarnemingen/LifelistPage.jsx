@@ -8,9 +8,9 @@ export default function LifelistPage({ waarnemingen }) {
   const [selectedKey, setSelectedKey] = useState(null);
   const { records } = useRecords();
 
-  // Build set of EURING codes from ring records for cross-reference
-  const ringEuringCodes = useMemo(() => new Set(
-    records.map(r => r.euring_code).filter(Boolean)
+  // Build set of normalized Dutch species names from ring records for cross-reference
+  const ringVogelnamen = useMemo(() => new Set(
+    records.map(r => (r.vogelnaam || '').toLowerCase().trim()).filter(Boolean)
   ), [records]);
 
   // Build lifelist: one entry per unique species (by lat name, fallback nl)
@@ -37,12 +37,13 @@ export default function LifelistPage({ waarnemingen }) {
       if (w.datum < entry.first_date) entry.first_date = w.datum;
       if (w.datum > entry.last_date) entry.last_date = w.datum;
       if (w.country_code) entry.countries.add(w.country_code);
-      if (w.euring_code && ringEuringCodes.has(w.euring_code)) entry.geringd = true;
+      const nlNorm = (w.species_name_nl || '').toLowerCase().trim();
+      if (nlNorm && ringVogelnamen.has(nlNorm)) entry.geringd = true;
     }
     return [...map.values()]
       .map(e => ({ ...e, countries: [...e.countries] }))
       .sort((a, b) => (a.species_name_nl || a.species_name_lat || '').localeCompare(b.species_name_nl || b.species_name_lat || '', 'nl'));
-  }, [waarnemingen, ringEuringCodes]);
+  }, [waarnemingen, ringVogelnamen]);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return lifelist;

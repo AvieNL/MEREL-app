@@ -1,6 +1,19 @@
-export const VERSIE = '2.7.1';
+export const VERSIE = '2.7.2';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.2',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: "Geringd" teller op lifelist klopte niet — matching nu op Nederlandse naam i.p.v. EURING-code',
+    ],
+    wijzigingen_en: [
+      'fix: "Ringed" counter on lifelist was incorrect — matching now by Dutch name instead of EURING code',
+    ],
+    wijzigingen_de: [
+      'fix: "Beringt"-Zähler in der Lifelist war falsch — Abgleich jetzt über niederländischen Namen statt EURING-Code',
+    ],
+  },
   {
     versie: '2.7.1',
     datum: '2026-10-25',
