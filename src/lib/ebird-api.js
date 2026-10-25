@@ -51,7 +51,7 @@ async function fetchTaxonomyBatch(codes, apiKey) {
 // comName is in Dutch (locale=nl). Results are cached for 1 week in localStorage.
 export async function fetchCountrySpecies(countryCode, apiKey) {
   if (!apiKey) return null;
-  const cacheKey = `ebird_v2_spp_${countryCode}`;
+  const cacheKey = `ebird_v3_spp_${countryCode}`;
   const cached = readCache(cacheKey);
   if (cached) return cached;
 

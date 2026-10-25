@@ -1,6 +1,19 @@
-export const VERSIE = '2.7.6';
+export const VERSIE = '2.7.7';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.7',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: "Nog te zien" op landenpagina toonde soorten die al gezien waren — eBird-cache geforceerd herladen (NL-namen) + omgekeerde naam-lookup toegevoegd',
+    ],
+    wijzigingen_en: [
+      'fix: "Still to see" on country page showed species already seen — forced eBird cache reload (Dutch names) + added reverse name lookup',
+    ],
+    wijzigingen_de: [
+      'fix: "Noch zu sehen" auf der Länderseite zeigte bereits gesehene Arten — eBird-Cache erzwungen (niederl. Namen) + umgekehrte Namenssuche hinzugefügt',
+    ],
+  },
   {
     versie: '2.7.6',
     datum: '2026-10-25',

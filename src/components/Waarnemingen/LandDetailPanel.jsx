@@ -88,12 +88,35 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
       .catch(err => setChecklist({ status: 'error', data: null, error: err.message }));
   }, [countryCode]);
 
+  // Omgekeerde lookup: eBird Dutch comName → normSciName.
+  // Hiermee kan een user-Dutch-naam ook via de sciName gevonden worden,
+  // zelfs als species_name_lat leeg is in de import-CSV.
+  const ebirdNlToSciNorm = useMemo(() => {
+    if (!checklist.data) return new Map();
+    const map = new Map();
+    for (const s of checklist.data) {
+      const nl = (s.comName || '').toLowerCase().trim();
+      if (nl) map.set(nl, normSciName(s.sciName));
+    }
+    return map;
+  }, [checklist.data]);
+
+  // Uitgebreide "gezien"-set: ook via omgekeerde NL→sciName lookup.
+  const seenSciNormFull = useMemo(() => {
+    const set = new Set(seenSciNorm);
+    for (const nl of seenNlLower) {
+      const sci = ebirdNlToSciNorm.get(nl);
+      if (sci) set.add(sci);
+    }
+    return set;
+  }, [seenSciNorm, seenNlLower, ebirdNlToSciNorm]);
+
   const checklistStats = useMemo(() => {
     if (checklist.status !== 'done' || !checklist.data) return null;
     const ebirdNorms = new Set(checklist.data.map(s => normSciName(s.sciName)));
     const total = checklist.data.length;
     const isSeen = s =>
-      seenSciNorm.has(normSciName(s.sciName)) ||
+      seenSciNormFull.has(normSciName(s.sciName)) ||
       seenNlLower.has((s.comName || '').toLowerCase().trim());
     const seen = checklist.data.filter(isSeen);
     const unseen = checklist.data.filter(s => !isSeen(s));
@@ -131,7 +154,7 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
     splits.sort((a, b) => (a[0].name_nl || '').localeCompare(b[0].name_nl || '', 'nl'));
 
     return { total, seenCount: seen.length, unseen, noMatch, splits };
-  }, [checklist, seenSciNorm, seenNlLower, obs]);
+  }, [checklist, seenSciNormFull, seenNlLower, obs]);
 
   useEffect(() => {
     if (!mapRef.current || withCoords.length === 0) return;
