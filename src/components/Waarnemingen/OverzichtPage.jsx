@@ -6,6 +6,7 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
   const [importing, setImporting] = useState(false);
   const [progress, setProgress] = useState(null);
   const [importStatus, setImportStatus] = useState(null);
+  const [lastImport, setLastImport] = useState(() => localStorage.getItem('w_last_import'));
   const fileRef = useRef(null);
 
   const [zoek, setZoek] = useState('');
@@ -27,7 +28,10 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
       const n = await onImport(items, (done, total) =>
         setProgress(`Uploaden: ${done} / ${total}…`)
       );
-      setImportStatus({ ok: true, msg: `${n} waarnemingen geïmporteerd.` });
+      const now = new Date().toISOString();
+      localStorage.setItem('w_last_import', now);
+      setLastImport(now);
+      setImportStatus({ ok: true, msg: `${n} waarnemingen geïmporteerd (bestaande bijgewerkt, nieuwe toegevoegd).` });
     } catch (err) {
       setImportStatus({ ok: false, msg: `Fout: ${err.message}` });
     } finally {
@@ -63,12 +67,17 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
       <input type="file" accept=".csv,.txt" ref={fileRef} style={{ display: 'none' }} onChange={handleCsvImport} />
       <button
         className="btn-secondary"
-        style={{ width: '100%', marginBottom: 12 }}
+        style={{ width: '100%', marginBottom: lastImport ? 4 : 12 }}
         onClick={() => fileRef.current?.click()}
         disabled={importing}
       >
         {importing ? progress || 'Bezig…' : '+ CSV importeren'}
       </button>
+      {lastImport && !importing && (
+        <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: 12 }}>
+          Laatste import: {formatDatetime(lastImport)} — opnieuw importeren voegt nieuwe toe en werkt bestaande bij.
+        </p>
+      )}
       {importStatus && (
         <p style={{ fontSize: '0.82rem', marginBottom: 12, color: importStatus.ok ? 'var(--success)' : 'var(--danger)' }}>
           {importStatus.msg}
@@ -157,6 +166,13 @@ export function ObsRow({ obs }) {
       {obs.permalink && <span className="w-obs-link">↗</span>}
     </div>
   );
+}
+
+function formatDatetime(iso) {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  } catch { return ''; }
 }
 
 function formatDate(iso) {

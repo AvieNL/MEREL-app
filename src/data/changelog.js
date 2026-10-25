@@ -1,6 +1,22 @@
-export const VERSIE = '2.6.9';
+export const VERSIE = '2.7.0';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.0',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: datum van laatste CSV-import zichtbaar naast de importknop',
+      'ux: melding verduidelijkt dat herimporten veilig is (upsert: nieuwe toegevoegd, bestaande bijgewerkt)',
+    ],
+    wijzigingen_en: [
+      'ux: date of last CSV import shown next to the import button',
+      'ux: message clarifies that re-importing is safe (upsert: new added, existing updated)',
+    ],
+    wijzigingen_de: [
+      'ux: Datum des letzten CSV-Imports neben dem Import-Button sichtbar',
+      'ux: Hinweis erklärt, dass erneuter Import sicher ist (Upsert: neue hinzugefügt, bestehende aktualisiert)',
+    ],
+  },
   {
     versie: '2.6.9',
     datum: '2026-10-25',
