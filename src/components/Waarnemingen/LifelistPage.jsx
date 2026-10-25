@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useRecords } from '../../hooks/useRecords';
 import { countryFlag, formatDate } from './utils';
 import SoortDetailPanel from './SoortDetailPanel';
+import RarityIcon from './RarityIcon';
 
 export default function LifelistPage({ waarnemingen }) {
   const [query, setQuery] = useState('');
@@ -29,6 +30,7 @@ export default function LifelistPage({ waarnemingen }) {
           first_date: w.datum,
           last_date: w.datum,
           count: 0,
+          rarity: 0,
           countries: new Set(),
           geringd: false,
         });
@@ -37,6 +39,7 @@ export default function LifelistPage({ waarnemingen }) {
       entry.count++;
       if (w.datum < entry.first_date) entry.first_date = w.datum;
       if (w.datum > entry.last_date) entry.last_date = w.datum;
+      if ((w.rarity ?? 0) > entry.rarity) entry.rarity = w.rarity ?? 0;
       if (w.country_code) entry.countries.add(w.country_code);
       const nlNorm = (w.species_name_nl || '').toLowerCase().trim();
       if (nlNorm && ringVogelnamen.has(nlNorm)) entry.geringd = true;
@@ -134,6 +137,7 @@ function LifelistRow({ entry, onClick }) {
       <div className="w-ll-top">
         <span className="w-ll-name">{entry.species_name_nl || entry.species_name_lat}</span>
         {entry.geringd && <span className="w-ring-badge">◎</span>}
+        <RarityIcon rarity={entry.rarity} />
         <span className="w-ll-flags">
           {entry.countries.map(c => (
             <span key={c} title={c}>{countryFlag(c)}</span>

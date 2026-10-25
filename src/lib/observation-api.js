@@ -78,6 +78,19 @@ export function normaliseObservation(raw) {
   };
 }
 
+function parseRarity(val) {
+  if (!val) return 0;
+  const n = Number(val);
+  if (!isNaN(n) && n > 0) return Math.min(5, Math.floor(n));
+  const lower = val.toLowerCase().trim();
+  if (lower === 'gewoon' || lower === 'common') return 1;
+  if (lower === 'ongewoon' || lower === 'uncommon' || lower === 'fairly rare') return 2;
+  if (lower === 'zeldzaam' || lower === 'rare') return 3;
+  if (lower === 'zeer zeldzaam' || lower === 'very rare') return 4;
+  if (lower.includes('uitzonderlijk') || lower === 'exceptional' || lower === 'extremely rare') return 5;
+  return 0;
+}
+
 /**
  * Parse a waarneming.nl / observation.org CSV export.
  * The CSV format exported by waarneming.nl uses semicolon separators.
@@ -158,7 +171,7 @@ export function parseCsv(csvText) {
       location_name: get(row, 'location', 'locatie', 'location_name', 'stad'),
       lat: parseCoord(get(row, 'lat', 'latitude', 'breedtegraad', 'y_coordinaat', 'y')),
       lon: parseCoord(get(row, 'lng', 'lon', 'longitude', 'lengtegraad', 'x_coordinaat', 'x')),
-      rarity: Number(get(row, 'rarity', 'zeldzaamheid')) || 0,
+      rarity: parseRarity(get(row, 'rarity', 'zeldzaamheid', 'zeldzaamheidsklasse', 'rarity category')),
       validation_status: get(row, 'validation_status', 'status'),
       count: Number(get(row, 'number', 'aantal')) || 1,
       permalink: /^\d+$/.test(id) ? `https://waarneming.nl/observation/${id}/` : (get(row, 'link', 'permalink', 'url') || ''),

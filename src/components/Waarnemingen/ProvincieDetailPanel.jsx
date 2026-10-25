@@ -43,6 +43,7 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
       sp.count++;
       if (w.datum < sp.first) sp.first = w.datum;
       if (w.datum > sp.last) sp.last = w.datum;
+      if ((w.rarity ?? 0) > sp.rarity) sp.rarity = w.rarity ?? 0;
       if (!earliest || w.datum < earliest) earliest = w.datum;
       if (!latest || w.datum > latest) latest = w.datum;
       const yr = w.datum?.slice(0, 4);

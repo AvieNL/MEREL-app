@@ -1,6 +1,25 @@
-export const VERSIE = '2.7.8';
+export const VERSIE = '2.7.9';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.9',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: zeldzaamheidsiconen (◆) nu zichtbaar in lifelist, landen- en provinciedetail',
+      'fix: zeldzaamheid gebaseerd op hoogste waarde over alle waarnemingen van de soort (ipv alleen de eerste)',
+      'fix: CSV-import herkent nu ook tekst-zeldzaamheidswaarden (Zeldzaam, Ongewoon, etc.)',
+    ],
+    wijzigingen_en: [
+      'fix: rarity icons (◆) now visible in lifelist, country and province detail',
+      'fix: rarity based on highest value across all observations of the species (instead of just the first)',
+      'fix: CSV import now recognises text rarity values (Zeldzaam, Ongewoon, etc.)',
+    ],
+    wijzigingen_de: [
+      'fix: Seltenheitssymbole (◆) jetzt in Lifelist, Länder- und Provinzdetail sichtbar',
+      'fix: Seltenheit basiert auf dem höchsten Wert über alle Beobachtungen der Art (statt nur der ersten)',
+      'fix: CSV-Import erkennt jetzt auch Text-Seltenheitswerte (Zeldzaam, Ongewoon, etc.)',
+    ],
+  },
   {
     versie: '2.7.8',
     datum: '2026-10-25',
