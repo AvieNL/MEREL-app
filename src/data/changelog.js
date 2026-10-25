@@ -1,6 +1,30 @@
-export const VERSIE = '2.5.0';
+export const VERSIE = '2.5.1';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.1',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: eBird-matching gebruikt nu genus+soortnaam (Clements vs IOC taxonomieverschillen)',
+      'feat: nieuwe tab Volledigheid met wereldoverzicht, werelddelen en provincies',
+      'feat: wereld — gezien vs eBird-wereldtaxonomie (~10 700 soorten) met voortgangsbalk',
+      'feat: werelddelen — soorten en landen per continent geaggregeerd',
+      'feat: provincies — klikbaar, met soortlijst, kaart en eBird-volledigheid per provincie',
+      'feat: CSV-import slaat nu ook provincieregio op (hernim import voor provinciedata)',
+    ],
+    wijzigingen_en: [
+      'fix: eBird matching now uses genus+species (handles Clements vs IOC taxonomy differences)',
+      'feat: new Volledigheid tab with world overview, continents and provinces',
+      'feat: world — seen vs eBird world taxonomy (~10 700 species) with progress bar',
+      'feat: continents — species and countries aggregated per continent',
+      'feat: provinces — clickable, with species list, map and eBird completeness',
+      'feat: CSV import now stores province/region field (re-import for province data)',
+    ],
+    wijzigingen_de: [
+      'fix: eBird-Abgleich nutzt jetzt Gattung+Art (Clements vs IOC)',
+      'feat: neuer Tab Volledigheid mit Welt-, Kontinent- und Provinzübersicht',
+    ],
+  },
   {
     versie: '2.5.0',
     datum: '2026-10-25',

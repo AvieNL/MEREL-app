@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
-import { countryFlag, formatDate, RARITY_LABELS } from './utils';
+import { countryFlag, formatDate, RARITY_LABELS, normSciName } from './utils';
 import SoortDetailPanel from './SoortDetailPanel';
 import { fetchCountrySpecies, getEbirdKey } from '../../lib/ebird-api';
 
@@ -63,14 +63,17 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
   const withCoords = useMemo(() => obs.filter(w => w.lat != null && w.lon != null), [obs]);
 
   // eBird checklist
-  const seenSciNames = useMemo(
-    () => new Set(obs.map(w => w.species_name_lat).filter(Boolean)),
+  // Normalise to genus+epithet to bridge Clements vs IOC taxonomy differences
+  const seenSciNorm = useMemo(
+    () => new Set(obs.map(w => normSciName(w.species_name_lat)).filter(Boolean)),
     [obs]
   );
 
   useEffect(() => {
     const key = getEbirdKey();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!key) { setChecklist({ status: 'no-key', data: null, error: null }); return; }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setChecklist({ status: 'loading', data: null, error: null });
     fetchCountrySpecies(countryCode, key)
       .then(data => setChecklist({ status: 'done', data, error: null }))
@@ -80,10 +83,10 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
   const checklistStats = useMemo(() => {
     if (checklist.status !== 'done' || !checklist.data) return null;
     const total = checklist.data.length;
-    const seen = checklist.data.filter(s => seenSciNames.has(s.sciName));
-    const unseen = checklist.data.filter(s => !seenSciNames.has(s.sciName));
+    const seen = checklist.data.filter(s => seenSciNorm.has(normSciName(s.sciName)));
+    const unseen = checklist.data.filter(s => !seenSciNorm.has(normSciName(s.sciName)));
     return { total, seenCount: seen.length, unseen };
-  }, [checklist, seenSciNames]);
+  }, [checklist, seenSciNorm]);
 
   useEffect(() => {
     if (!mapRef.current || withCoords.length === 0) return;

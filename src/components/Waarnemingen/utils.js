@@ -19,6 +19,14 @@ export function countryFlag(code) {
   );
 }
 
+// Normalise to genus+epithet only (first two words, lowercase).
+// eBird (Clements) and IOC sometimes differ in subspecies or author treatment
+// but almost always agree on the first two words.
+export function normSciName(name) {
+  if (!name) return '';
+  return name.trim().toLowerCase().split(/\s+/).slice(0, 2).join(' ');
+}
+
 export function groupBy(arr, key) {
   const map = new Map();
   for (const item of arr) {
