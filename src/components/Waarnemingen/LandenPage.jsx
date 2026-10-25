@@ -77,11 +77,9 @@ export default function LandenPage({ waarnemingen }) {
           onClick={() => setSelectedCountry(country)}
         >
           <span className="w-country-flag">{countryFlag(country.code)}</span>
-          <div className="w-country-info">
-            <div className="w-country-name">{country.name}</div>
-            <div className="w-country-count">{country.species_count} soorten · {country.obs_count} waarnemingen</div>
-          </div>
-          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>›</span>
+          <span className="w-country-name">{country.name}</span>
+          <span className="w-country-count">{country.species_count} sp · {country.obs_count}×</span>
+          <span className="w-country-chevron">›</span>
         </div>
       ))}
     </div>

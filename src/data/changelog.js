@@ -1,6 +1,19 @@
-export const VERSIE = '2.7.3';
+export const VERSIE = '2.7.4';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.4',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: landenrijen compact op 1 regel (vlag · naam · soorten · chevron)',
+    ],
+    wijzigingen_en: [
+      'ux: country rows compact, single line (flag · name · species · chevron)',
+    ],
+    wijzigingen_de: [
+      'ux: Länder-Zeilen kompakt auf 1 Zeile (Flagge · Name · Arten · Chevron)',
+    ],
+  },
   {
     versie: '2.7.3',
     datum: '2026-10-25',
