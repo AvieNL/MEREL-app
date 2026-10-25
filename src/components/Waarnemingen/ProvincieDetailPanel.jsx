@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
-import { countryFlag, formatDate, RARITY_LABELS, normSciName } from './utils';
+import { countryFlag, formatDate, normSciName } from './utils';
+import RarityIcon from './RarityIcon';
 import SoortDetailPanel from './SoortDetailPanel';
 import { fetchCountrySpecies, getEbirdKey, provinceToEbirdCode } from '../../lib/ebird-api';
 
@@ -327,9 +328,7 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span className="w-obs-name">{sp.name_nl}</span>
                 {sp.geringd && <span className="w-ring-badge">geringd</span>}
-                {sp.rarity >= 2 && (
-                  <span style={{ fontSize: '0.65rem', color: '#f59e0b' }}>{RARITY_LABELS[sp.rarity]}</span>
-                )}
+                <RarityIcon rarity={sp.rarity} />
               </div>
               {sp.name_lat && sp.name_lat !== sp.name_nl && (
                 <div className="w-obs-lat">{sp.name_lat}</div>

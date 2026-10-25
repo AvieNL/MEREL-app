@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { RARITY_LABELS } from './utils';
+import RarityIcon from './RarityIcon';
 
 export default function OverzichtPage({ waarnemingen }) {
   const sorted = useMemo(() =>
@@ -55,14 +55,15 @@ export default function OverzichtPage({ waarnemingen }) {
 }
 
 export function ObsRow({ obs }) {
-  const rarityClass = obs.rarity > 0 ? `w-rarity w-rarity-${Math.min(obs.rarity, 5)}` : null;
-  const rarityLabel = RARITY_LABELS[obs.rarity] ?? null;
   const datum = obs.datum ? formatDate(obs.datum) : '';
 
   return (
     <div className="w-obs-row">
       <div className="w-obs-main">
-        <div className="w-obs-name">{obs.species_name_nl || obs.species_name_lat || '?'}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <span className="w-obs-name">{obs.species_name_nl || obs.species_name_lat || '?'}</span>
+          <RarityIcon rarity={obs.rarity} />
+        </div>
         {obs.species_name_lat && obs.species_name_nl && obs.species_name_lat !== obs.species_name_nl && (
           <div className="w-obs-lat">{obs.species_name_lat}</div>
         )}
@@ -73,7 +74,6 @@ export function ObsRow({ obs }) {
       <div className="w-obs-meta">
         <span className="w-obs-date">{datum}</span>
         {obs.country_code && <span className="w-obs-country">{obs.country_code}</span>}
-        {rarityLabel && obs.rarity >= 2 && <span className={rarityClass}>{rarityLabel}</span>}
       </div>
     </div>
   );

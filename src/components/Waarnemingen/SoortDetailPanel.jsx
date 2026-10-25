@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useRef } from 'react';
-import { countryFlag, formatDate, RARITY_LABELS } from './utils';
+import { countryFlag, formatDate } from './utils';
+import RarityIcon from './RarityIcon';
 
 export default function SoortDetailPanel({ speciesKey, waarnemingen, ringRecords, onClose }) {
   const mapRef = useRef(null);
@@ -196,7 +197,7 @@ export default function SoortDetailPanel({ speciesKey, waarnemingen, ringRecords
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 1, display: 'flex', gap: 6, alignItems: 'center' }}>
                 {w.country_code && <span>{countryFlag(w.country_code)} {w.country_name || w.country_code}</span>}
                 {w.count > 1 && <span>{w.count}×</span>}
-                {w.rarity >= 2 && <span style={{ color: '#f59e0b' }}>{RARITY_LABELS[w.rarity]}</span>}
+                <RarityIcon rarity={w.rarity} />
                 {w.has_photo && <span>📷</span>}
               </div>
             </div>

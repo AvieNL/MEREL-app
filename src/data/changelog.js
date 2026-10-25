@@ -1,6 +1,21 @@
-export const VERSIE = '2.5.3';
+export const VERSIE = '2.5.4';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.4',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'feat: zeldzaamheidsiconen (◆) naast soortnamen in alle waarnemingslijsten',
+      'feat: ◆ amber = vrij zeldzaam, ◆◆ oranje = zeldzaam, ◆ rood = zeer zeldzaam, ◆◆ donkerrood = extreem zeldzaam',
+    ],
+    wijzigingen_en: [
+      'feat: rarity icons (◆) next to species names in all observation lists',
+      'feat: ◆ amber = fairly rare, ◆◆ orange = rare, ◆ red = very rare, ◆◆ dark red = extremely rare',
+    ],
+    wijzigingen_de: [
+      'feat: Seltenheitssymbole (◆) neben Artnamen in allen Beobachtungslisten',
+    ],
+  },
   {
     versie: '2.5.3',
     datum: '2026-10-25',

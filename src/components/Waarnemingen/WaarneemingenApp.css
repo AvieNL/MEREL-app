@@ -128,7 +128,7 @@
   color: var(--text-muted);
 }
 
-/* Rarity badge */
+/* Rarity badge (legacy text-badge, still used in OverzichtPage) */
 .w-rarity {
   font-size: 0.65rem;
   font-weight: 700;
@@ -138,10 +138,24 @@
 }
 
 .w-rarity-1 { color: var(--text-secondary); border-color: var(--border); }
-.w-rarity-2 { color: var(--accent); border-color: var(--accent); }
-.w-rarity-3 { color: var(--success); border-color: var(--success); }
-.w-rarity-4 { color: var(--warning); border-color: var(--warning); }
-.w-rarity-5 { color: var(--danger, #ef4444); border-color: var(--danger, #ef4444); }
+.w-rarity-2 { color: #f59e0b; border-color: #f59e0b; }
+.w-rarity-3 { color: #f97316; border-color: #f97316; }
+.w-rarity-4 { color: #ef4444; border-color: #ef4444; }
+.w-rarity-5 { color: #dc2626; border-color: #dc2626; }
+
+/* Rarity icon (diamond ◆) — inline next to species name */
+.w-rarity-icon {
+  display: inline-block;
+  font-size: 0.6rem;
+  line-height: 1;
+  cursor: default;
+  flex-shrink: 0;
+  letter-spacing: -1px;
+}
+.w-rarity-icon-2 { color: #f59e0b; }
+.w-rarity-icon-3 { color: #f97316; }
+.w-rarity-icon-4 { color: #ef4444; }
+.w-rarity-icon-5 { color: #dc2626; }
 
 /* Ring cross-reference badge */
 .w-ring-badge {
