@@ -1,6 +1,22 @@
-export const VERSIE = '2.7.7';
+export const VERSIE = '2.7.8';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.8',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: soortlijsten in land-, provincie- en volledigheidsdetail nu in lifelist-stijl (naam, latijn, datumrange, geringd-badge)',
+      'fix: geringd-badge in land- en provinciedetail matchte op EURING-code (nooit gevuld) — nu op Nederlandse naam',
+    ],
+    wijzigingen_en: [
+      'ux: species lists in country, province and completeness detail now use lifelist style (name, latin, date range, ringed badge)',
+      'fix: ringed badge in country/province detail matched on EURING code (never populated) — now on Dutch name',
+    ],
+    wijzigingen_de: [
+      'ux: Artlisten in Land-, Provinz- und Vollständigkeitsdetail jetzt im Lifelist-Stil (Name, Latein, Datumsbereich, Beringt-Badge)',
+      'fix: Beringt-Badge in Land-/Provinzdetail glich EURING-Code ab (nie befüllt) — jetzt niederländischer Name',
+    ],
+  },
   {
     versie: '2.7.7',
     datum: '2026-10-25',

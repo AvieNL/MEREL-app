@@ -223,10 +223,10 @@ export default function VolledigheidsPage({ waarnemingen }) {
                     Deze soorten staan in jouw lijst maar zijn niet herkend in de eBird-wereldtaxonomie. Mogelijke oorzaken: andere geslachtsnaam (Clements vs IOC), hybride, niet-erkende soort, of onvolledige naam in de import.
                   </div>
                   {worldStats.noMatch.map(sp => (
-                    <div key={sp.name_lat || sp.name_nl} style={{ padding: '5px 0', borderBottom: '1px solid var(--border)' }}>
-                      <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{sp.name_nl}</div>
+                    <div key={sp.name_lat || sp.name_nl} className="w-ll-row">
+                      <div className="w-ll-top"><span className="w-ll-name">{sp.name_nl || sp.name_lat}</span></div>
                       {sp.name_lat && sp.name_lat !== sp.name_nl && (
-                        <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>{sp.name_lat}</div>
+                        <div className="w-ll-sub"><span className="w-ll-lat">{sp.name_lat}</span></div>
                       )}
                     </div>
                   ))}

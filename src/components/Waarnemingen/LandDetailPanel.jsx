@@ -48,9 +48,9 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
       if (yr) byYear[yr] = (byYear[yr] || 0) + 1;
     }
 
-    const ringEuring = new Set(ringRecords.map(r => r.euring_code).filter(Boolean));
+    const ringVogelnamen = new Set(ringRecords.map(r => (r.vogelnaam || '').toLowerCase().trim()).filter(Boolean));
     const speciesList = [...speciesMap.values()]
-      .map(sp => ({ ...sp, geringd: sp.euring_code && ringEuring.has(sp.euring_code) }))
+      .map(sp => ({ ...sp, geringd: !!(sp.name_nl && ringVogelnamen.has(sp.name_nl.toLowerCase().trim())) }))
       .sort((a, b) => (a.name_nl || a.name_lat).localeCompare(b.name_nl || b.name_lat, 'nl'));
 
     return {
@@ -294,9 +294,13 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
                 {showUnseen && (
                   <div style={{ marginBottom: 12 }}>
                     {checklistStats.unseen.map(sp => (
-                      <div key={sp.code} style={{ padding: '5px 0', borderBottom: '1px solid var(--border)' }}>
-                        <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{sp.comName}</div>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>{sp.sciName}</div>
+                      <div key={sp.code} className="w-ll-row">
+                        <div className="w-ll-top">
+                          <span className="w-ll-name">{sp.comName}</span>
+                        </div>
+                        {sp.sciName && (
+                          <div className="w-ll-sub"><span className="w-ll-lat">{sp.sciName}</span></div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -319,10 +323,10 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
                       Deze soorten staan in jouw lijst maar zijn niet herkend in de eBird-taxonomie.
                     </div>
                     {checklistStats.noMatch.map(sp => (
-                      <div key={sp.name_lat || sp.name_nl} style={{ padding: '5px 0', borderBottom: '1px solid var(--border)' }}>
-                        <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{sp.name_nl}</div>
+                      <div key={sp.name_lat || sp.name_nl} className="w-ll-row">
+                        <div className="w-ll-top"><span className="w-ll-name">{sp.name_nl || sp.name_lat}</span></div>
                         {sp.name_lat && sp.name_lat !== sp.name_nl && (
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>{sp.name_lat}</div>
+                          <div className="w-ll-sub"><span className="w-ll-lat">{sp.name_lat}</span></div>
                         )}
                       </div>
                     ))}
@@ -349,14 +353,12 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
                       Dit verklaart het verschil tussen jouw soortentelling en de eBird-teller.
                     </div>
                     {checklistStats.splits.map(group => (
-                      <div key={group[0].name_lat || group[0].name_nl} style={{
-                        padding: '6px 0', borderBottom: '1px solid var(--border)',
-                      }}>
+                      <div key={group[0].name_lat || group[0].name_nl}>
                         {group.map(sp => (
-                          <div key={sp.name_lat || sp.name_nl} style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                            {sp.name_nl}
+                          <div key={sp.name_lat || sp.name_nl} className="w-ll-row">
+                            <div className="w-ll-top"><span className="w-ll-name">{sp.name_nl || sp.name_lat}</span></div>
                             {sp.name_lat && sp.name_lat !== sp.name_nl && (
-                              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic', marginLeft: 6 }}>{sp.name_lat}</span>
+                              <div className="w-ll-sub"><span className="w-ll-lat">{sp.name_lat}</span></div>
                             )}
                           </div>
                         ))}
@@ -413,22 +415,21 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
         {/* Soorten */}
         <p className="w-section-title">Soorten ({stats.speciesCount})</p>
         {stats.speciesList.map(sp => (
-          <div key={sp.key} className="w-obs-row" style={{ cursor: 'pointer' }}
+          <div key={sp.key} className="w-ll-row" style={{ cursor: 'pointer' }}
             onClick={() => setSelectedSpecies(sp.key)}>
-            <div className="w-obs-main">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span className="w-obs-name">{sp.name_nl}</span>
-                {sp.geringd && <span className="w-ring-badge">geringd</span>}
-                <RarityIcon rarity={sp.rarity} />
+            <div className="w-ll-top">
+              <span className="w-ll-name">{sp.name_nl || sp.name_lat}</span>
+              {sp.geringd && <span className="w-ring-badge">◎</span>}
+              <RarityIcon rarity={sp.rarity} />
+              <span className="w-ll-count">{sp.count}×</span>
+              <span className="w-ll-chevron">›</span>
+            </div>
+            {(sp.name_lat && sp.name_lat !== sp.name_nl || sp.first) && (
+              <div className="w-ll-sub">
+                {sp.name_lat && sp.name_lat !== sp.name_nl && <span className="w-ll-lat">{sp.name_lat}</span>}
+                {sp.first && <span className="w-ll-dates">{sp.first === sp.last ? formatDate(sp.first) : `${formatDate(sp.first)} – ${formatDate(sp.last)}`}</span>}
               </div>
-              {sp.name_lat && sp.name_lat !== sp.name_nl && (
-                <div className="w-obs-lat">{sp.name_lat}</div>
-              )}
-            </div>
-            <div className="w-obs-meta">
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{sp.count}×</span>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>›</span>
-            </div>
+            )}
           </div>
         ))}
     </div>
