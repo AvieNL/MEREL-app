@@ -93,8 +93,10 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
     const noMatchMap = new Map();
     for (const w of obs) {
       const norm = normSciName(w.species_name_lat);
-      if (norm && !ebirdNorms.has(norm) && !noMatchMap.has(norm)) {
-        noMatchMap.set(norm, { name_nl: w.species_name_nl || w.species_name_lat, name_lat: w.species_name_lat });
+      const key = norm || (w.species_name_nl || '').toLowerCase();
+      if (!key) continue;
+      if (!ebirdNorms.has(norm) && !noMatchMap.has(key)) {
+        noMatchMap.set(key, { name_nl: w.species_name_nl || w.species_name_lat, name_lat: w.species_name_lat });
       }
     }
     const noMatch = [...noMatchMap.values()]

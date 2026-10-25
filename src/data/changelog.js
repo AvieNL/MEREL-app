@@ -1,6 +1,19 @@
-export const VERSIE = '2.5.7';
+export const VERSIE = '2.5.8';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.8',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: "Geen eBird-match"-lijst toont nu ook soorten zonder Latijnse naam',
+    ],
+    wijzigingen_en: [
+      'fix: "No eBird match" list now also shows species without a Latin name',
+    ],
+    wijzigingen_de: [
+      'fix: "Kein eBird-Match"-Liste zeigt jetzt auch Arten ohne lateinischen Namen',
+    ],
+  },
   {
     versie: '2.5.7',
     datum: '2026-10-25',
