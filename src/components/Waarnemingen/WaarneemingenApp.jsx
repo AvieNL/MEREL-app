@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useWaarnemingen } from '../../hooks/useWaarnemingen';
 import Header from '../Layout/Header';
 import OverzichtPage from './OverzichtPage';
@@ -22,7 +22,17 @@ const TABS = [
 
 export default function WaarneemingenApp({ onSwitchModule }) {
   const [activeTab, setActiveTab] = useState('overzicht');
-  const { waarnemingen, importWaarnemingen, clearAllWaarnemingen } = useWaarnemingen();
+  const { waarnemingen, importWaarnemingen, clearAllWaarnemingen, syncFromSupabase } = useWaarnemingen();
+  const didSync = useRef(false);
+
+  // Auto-pull from Supabase when local Dexie is empty (first use on a new device)
+  useEffect(() => {
+    if (didSync.current) return;
+    if (waarnemingen === undefined) return; // still loading
+    if (waarnemingen.length > 0) { didSync.current = true; return; }
+    didSync.current = true;
+    syncFromSupabase().catch(() => {});
+  }, [waarnemingen, syncFromSupabase]);
 
   const renderTab = () => {
     switch (activeTab) {
@@ -32,7 +42,7 @@ export default function WaarneemingenApp({ onSwitchModule }) {
       case 'jaar':        return <JaarlijstPage waarnemingen={waarnemingen} />;
       case 'volledigheid': return <VolledigheidsPage waarnemingen={waarnemingen} />;
       case 'kaart':       return <KaartPage waarnemingen={waarnemingen} />;
-      case 'instellingen': return <WInstellingenPage waarnemingen={waarnemingen} onImport={importWaarnemingen} onClear={clearAllWaarnemingen} />;
+      case 'instellingen': return <WInstellingenPage waarnemingen={waarnemingen} onImport={importWaarnemingen} onClear={clearAllWaarnemingen} onSync={syncFromSupabase} />;
       default:            return null;
     }
   };

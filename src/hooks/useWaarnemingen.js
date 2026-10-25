@@ -1,6 +1,9 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../lib/db';
+import { supabase } from '../lib/supabase';
+
+const BATCH_SIZE = 500;
 
 export function useWaarnemingen() {
   const { user } = useAuth();
@@ -11,21 +14,55 @@ export function useWaarnemingen() {
     []
   );
 
-  async function importWaarnemingen(items) {
+  // Pull all records from Supabase into Dexie (called on first load of new device)
+  async function syncFromSupabase() {
+    if (!user) return 0;
+    const { data, error } = await supabase
+      .from('waarnemingen')
+      .select('*')
+      .eq('user_id', user.id);
+    if (error) throw error;
+    if (!data?.length) return 0;
+    await db.waarnemingen.where('user_id').equals(user.id).delete();
+    await db.waarnemingen.bulkPut(data);
+    return data.length;
+  }
+
+  // Import items: upsert to Supabase (cloud), then cache in Dexie
+  // onProgress(done, total) is called after each batch
+  async function importWaarnemingen(items, onProgress) {
     if (!user) return 0;
     const withUser = items.map(item => ({ ...item, user_id: user.id }));
+
+    for (let i = 0; i < withUser.length; i += BATCH_SIZE) {
+      const batch = withUser.slice(i, i + BATCH_SIZE);
+      const { error } = await supabase
+        .from('waarnemingen')
+        .upsert(batch, { onConflict: 'id,user_id' });
+      if (error) throw error;
+      onProgress?.(Math.min(i + BATCH_SIZE, withUser.length), withUser.length);
+    }
+
     await db.waarnemingen.bulkPut(withUser);
     return withUser.length;
   }
 
   async function deleteWaarneming(id) {
+    if (user) {
+      await supabase.from('waarnemingen').delete().eq('id', id).eq('user_id', user.id);
+    }
     await db.waarnemingen.delete(id);
   }
 
   async function clearAllWaarnemingen() {
     if (!user) return;
+    const { error } = await supabase
+      .from('waarnemingen')
+      .delete()
+      .eq('user_id', user.id);
+    if (error) throw error;
     await db.waarnemingen.where('user_id').equals(user.id).delete();
   }
 
-  return { waarnemingen, importWaarnemingen, deleteWaarneming, clearAllWaarnemingen };
+  return { waarnemingen, importWaarnemingen, deleteWaarneming, clearAllWaarnemingen, syncFromSupabase };
 }

@@ -1,6 +1,26 @@
-export const VERSIE = '2.5.4';
+export const VERSIE = '2.5.5';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.5',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'feat: waarnemingen worden opgeslagen in de cloud (Supabase) bij CSV-import',
+      'feat: automatisch synchroniseren op nieuw apparaat als lokale cache leeg is',
+      'feat: "Nu synchroniseren van cloud"-knop in instellingen',
+      'feat: upload-voortgang zichtbaar bij grote CSV-bestanden',
+    ],
+    wijzigingen_en: [
+      'feat: observations are stored in the cloud (Supabase) on CSV import',
+      'feat: auto-sync from cloud on a new device when local cache is empty',
+      'feat: "Sync from cloud now" button in settings',
+      'feat: upload progress shown for large CSV files',
+    ],
+    wijzigingen_de: [
+      'feat: Beobachtungen werden beim CSV-Import in der Cloud (Supabase) gespeichert',
+      'feat: Automatische Synchronisation auf neuem Gerät wenn lokaler Cache leer ist',
+    ],
+  },
   {
     versie: '2.5.4',
     datum: '2026-10-25',

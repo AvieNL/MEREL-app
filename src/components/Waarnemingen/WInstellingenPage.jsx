@@ -5,7 +5,7 @@ import { getEbirdKey, setEbirdKey, clearEbirdCache } from '../../lib/ebird-api';
 const STORAGE_TOKEN_KEY = 'w_obs_token';
 const STORAGE_USER_KEY  = 'w_obs_user_id';
 
-export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
+export default function WInstellingenPage({ waarnemingen, onImport, onClear, onSync }) {
   const [token, setToken]   = useState(() => localStorage.getItem(STORAGE_TOKEN_KEY) ?? '');
   const [userId, setUserId] = useState(() => localStorage.getItem(STORAGE_USER_KEY) ?? '');
   const [ebirdKey, setEbirdKeyState] = useState(() => getEbirdKey());
@@ -13,6 +13,7 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
   const [status, setStatus] = useState(null);
   const [progress, setProgress] = useState(null);
   const [importing, setImporting] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const fileRef = useRef(null);
 
   async function handleCsvImport(e) {
@@ -20,6 +21,7 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
     if (!file) return;
     setImporting(true);
     setStatus(null);
+    setProgress(null);
     try {
       const text = await file.text();
       const items = parseCsv(text);
@@ -27,20 +29,44 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
         setStatus({ type: 'error', msg: 'Geen waarnemingen gevonden in CSV. Controleer het formaat (puntkomma- of komma-gescheiden).' });
         return;
       }
-      const n = await onImport(items);
-      setStatus({ type: 'ok', msg: `${n} waarnemingen geïmporteerd uit CSV.` });
+      setProgress(`Uploaden naar cloud: 0 / ${items.length}…`);
+      const n = await onImport(items, (done, total) =>
+        setProgress(`Uploaden naar cloud: ${done} / ${total}…`)
+      );
+      setStatus({ type: 'ok', msg: `${n} waarnemingen geïmporteerd en opgeslagen in de cloud.` });
     } catch (err) {
-      setStatus({ type: 'error', msg: `CSV-fout: ${err.message}` });
+      setStatus({ type: 'error', msg: `Importfout: ${err.message}` });
     } finally {
       setImporting(false);
+      setProgress(null);
       e.target.value = '';
     }
   }
 
   async function handleClear() {
-    if (!window.confirm('Alle lokale waarnemingen verwijderen? Dit kan niet ongedaan worden gemaakt.')) return;
-    await onClear();
-    setStatus({ type: 'ok', msg: 'Alle waarnemingen verwijderd.' });
+    if (!window.confirm('Alle waarnemingen verwijderen uit de cloud én op dit apparaat? Dit kan niet ongedaan worden gemaakt.')) return;
+    setImporting(true);
+    try {
+      await onClear();
+      setStatus({ type: 'ok', msg: 'Alle waarnemingen verwijderd.' });
+    } catch (err) {
+      setStatus({ type: 'error', msg: `Verwijderen mislukt: ${err.message}` });
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  async function handleSync() {
+    setSyncing(true);
+    setStatus(null);
+    try {
+      const n = await onSync();
+      setStatus({ type: 'ok', msg: n > 0 ? `${n} waarnemingen gesynchroniseerd van cloud.` : 'Cloud is leeg — importeer eerst een CSV.' });
+    } catch (err) {
+      setStatus({ type: 'error', msg: `Synchronisatie mislukt: ${err.message}` });
+    } finally {
+      setSyncing(false);
+    }
   }
 
   function saveCredentials() {
@@ -67,8 +93,11 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
         onProgress: ({ fetched, total, page }) =>
           setProgress(`Pagina ${page} — ${fetched}${total ? ` / ${total}` : ''} waarnemingen opgehaald…`),
       });
-      const n = await onImport(items);
-      setStatus({ type: 'ok', msg: `${n} waarnemingen geïmporteerd via API.` });
+      setProgress(`Uploaden naar cloud: 0 / ${items.length}…`);
+      const n = await onImport(items, (done, total) =>
+        setProgress(`Uploaden naar cloud: ${done} / ${total}…`)
+      );
+      setStatus({ type: 'ok', msg: `${n} waarnemingen geïmporteerd via API en opgeslagen in de cloud.` });
     } catch (err) {
       setStatus({ type: 'error', msg: `Importfout: ${err.message}` });
     } finally {
@@ -76,6 +105,8 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
       setProgress(null);
     }
   }
+
+  const busy = importing || syncing;
 
   return (
     <div className="w-page">
@@ -114,10 +145,19 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
         className="btn-primary"
         style={{ width: '100%' }}
         onClick={() => fileRef.current?.click()}
-        disabled={importing}
+        disabled={busy}
       >
         {importing ? 'Bezig…' : 'CSV-bestand kiezen en importeren'}
       </button>
+
+      {progress && (
+        <div style={{
+          marginTop: 10, padding: '8px 12px', borderRadius: 'var(--radius)',
+          background: 'var(--bg-secondary)', fontSize: '0.8rem', color: 'var(--text-muted)',
+        }}>
+          {progress}
+        </div>
+      )}
 
       {status && (
         <div style={{
@@ -137,18 +177,36 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
 
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '24px 0' }} />
 
+      {/* ── Cloud-synchronisatie ── */}
+      <p className="w-section-title">Cloud</p>
+      <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 12, lineHeight: 1.5 }}>
+        Waarnemingen worden automatisch opgeslagen in de cloud (Supabase) en zijn daarna
+        op elk ingelogd apparaat beschikbaar. Op een nieuw apparaat worden ze bij het
+        openen van de Waarnemingen-module automatisch opgehaald.
+      </p>
+      <button
+        className="btn-secondary"
+        style={{ width: '100%' }}
+        onClick={handleSync}
+        disabled={busy}
+      >
+        {syncing ? 'Synchroniseren…' : 'Nu synchroniseren van cloud'}
+      </button>
+
+      <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '24px 0' }} />
+
       {/* ── Gegevens ── */}
       <p className="w-section-title">Gegevens</p>
       <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 12 }}>
-        Lokaal opgeslagen: <strong>{waarnemingen.length}</strong> waarnemingen
+        Lokaal gecached: <strong>{waarnemingen.length}</strong> waarnemingen
       </p>
       <button
         className="btn-danger"
         style={{ width: '100%' }}
         onClick={handleClear}
-        disabled={importing || waarnemingen.length === 0}
+        disabled={busy || waarnemingen.length === 0}
       >
-        Alle waarnemingen wissen
+        Alle waarnemingen wissen (cloud + lokaal)
       </button>
 
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '24px 0' }} />
@@ -230,11 +288,11 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
             <p className="w-form-hint">Zichtbaar in de URL: waarneming.nl/users/<strong>12345</strong>/</p>
           </div>
           <button className="btn-secondary" style={{ width: '100%', marginBottom: 8 }}
-            onClick={saveCredentials} disabled={importing}>
+            onClick={saveCredentials} disabled={busy}>
             Opslaan
           </button>
           <button className="btn-primary" style={{ width: '100%' }}
-            onClick={handleApiImport} disabled={importing || !token.trim() || !userId.trim()}>
+            onClick={handleApiImport} disabled={busy || !token.trim() || !userId.trim()}>
             {importing ? 'Bezig…' : 'Importeer via API'}
           </button>
           {progress && <div className="w-progress">{progress}</div>}
