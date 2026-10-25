@@ -9,8 +9,6 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
   const fileRef = useRef(null);
 
   const [zoek, setZoek] = useState('');
-  const [filterLand, setFilterLand] = useState('');
-  const [filterJaar, setFilterJaar] = useState('');
 
   async function handleCsvImport(e) {
     const file = e.target.files?.[0];
@@ -43,35 +41,22 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
   const soorten = useMemo(() => new Set(waarnemingen.map(w => w.species_name_lat || w.species_name_nl).filter(Boolean)).size, [waarnemingen]);
   const landen = useMemo(() => new Set(waarnemingen.map(w => w.country_code).filter(Boolean)).size, [waarnemingen]);
 
-  const jaren = useMemo(() => {
-    const s = new Set(waarnemingen.map(w => w.datum?.slice(0, 4)).filter(Boolean));
-    return [...s].sort((a, b) => b.localeCompare(a));
-  }, [waarnemingen]);
-
-  const topLanden = useMemo(() => {
-    const counts = {};
-    for (const w of waarnemingen) {
-      if (w.country_code) counts[w.country_code] = (counts[w.country_code] || 0) + 1;
-    }
-    return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([c]) => c);
-  }, [waarnemingen]);
-
   const filtered = useMemo(() => {
     let list = [...waarnemingen].sort((a, b) => b.datum.localeCompare(a.datum));
-    if (filterLand) list = list.filter(w => w.country_code === filterLand);
-    if (filterJaar) list = list.filter(w => w.datum?.startsWith(filterJaar));
-    if (zoek.trim()) {
-      const q = zoek.trim().toLowerCase();
+    const q = zoek.trim().toLowerCase();
+    if (q) {
       list = list.filter(w =>
         (w.species_name_nl || '').toLowerCase().includes(q) ||
         (w.species_name_lat || '').toLowerCase().includes(q) ||
-        (w.location_name || '').toLowerCase().includes(q)
+        (w.location_name || '').toLowerCase().includes(q) ||
+        (w.country_code || '').toLowerCase().includes(q) ||
+        (w.province || '').toLowerCase().includes(q)
       );
     }
     return list;
-  }, [waarnemingen, filterLand, filterJaar, zoek]);
+  }, [waarnemingen, zoek]);
 
-  const hasFilter = zoek.trim() || filterLand || filterJaar;
+  const hasFilter = !!zoek.trim();
 
   const importBtn = onImport && (
     <>
@@ -131,39 +116,6 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
         value={zoek}
         onChange={e => setZoek(e.target.value)}
       />
-
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
-        {jaren.map(j => (
-          <button key={j} onClick={() => setFilterJaar(filterJaar === j ? '' : j)}
-            style={{
-              fontSize: '0.72rem', padding: '3px 9px', borderRadius: 10, border: '1px solid var(--border)',
-              background: filterJaar === j ? 'var(--accent)' : 'var(--bg-secondary)',
-              color: filterJaar === j ? '#fff' : 'var(--text-secondary)', cursor: 'pointer',
-            }}>
-            {j}
-          </button>
-        ))}
-        {topLanden.map(c => (
-          <button key={c} onClick={() => setFilterLand(filterLand === c ? '' : c)}
-            style={{
-              fontSize: '0.72rem', padding: '3px 9px', borderRadius: 10, border: '1px solid var(--border)',
-              background: filterLand === c ? 'var(--accent)' : 'var(--bg-secondary)',
-              color: filterLand === c ? '#fff' : 'var(--text-secondary)', cursor: 'pointer',
-            }}>
-            {countryFlag(c)} {c}
-          </button>
-        ))}
-        {hasFilter && (
-          <button onClick={() => { setZoek(''); setFilterLand(''); setFilterJaar(''); }}
-            style={{
-              fontSize: '0.72rem', padding: '3px 9px', borderRadius: 10,
-              border: '1px solid var(--border)', background: 'none',
-              color: 'var(--text-muted)', cursor: 'pointer',
-            }}>
-            ✕ wis filters
-          </button>
-        )}
-      </div>
 
       <p className="w-section-title">
         {hasFilter ? `${filtered.length.toLocaleString('nl')} resultaten` : 'Recente waarnemingen'}

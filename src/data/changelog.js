@@ -1,6 +1,19 @@
-export const VERSIE = '2.6.8';
+export const VERSIE = '2.6.9';
 
 export const CHANGELOG = [
+  {
+    versie: '2.6.9',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: filterpillen verwijderd, alleen zoekveld behouden — zoekt in soort, locatie, provincie en landcode',
+    ],
+    wijzigingen_en: [
+      'ux: filter pills removed, search field only — searches species, location, province and country code',
+    ],
+    wijzigingen_de: [
+      'ux: Filter-Pills entfernt, nur Suchfeld — sucht in Art, Ort, Provinz und Ländercode',
+    ],
+  },
   {
     versie: '2.6.8',
     datum: '2026-10-25',
