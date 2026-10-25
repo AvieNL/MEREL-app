@@ -112,9 +112,10 @@ export function parseCsv(csvText) {
     const datum = normaliseDatum(get(row, 'date', 'datum', 'observation_date'));
     if (!datum) continue;
 
-    // Landcode afleiden uit landnaam
-    const countryName = get(row, 'country', 'land');
-    const countryCode = countryNameToCode(countryName) || countryName.toUpperCase().slice(0, 2) || 'XX';
+    // Landcode afleiden uit landnaam; normaliseer ook de naam
+    const rawCountryName = get(row, 'country', 'land');
+    const countryCode = countryNameToCode(rawCountryName) || 'XX';
+    const countryName = canonicalCountryName(countryCode, rawCountryName);
 
     results.push({
       id: `csv-${id}`,
@@ -124,7 +125,7 @@ export function parseCsv(csvText) {
       species_name_lat: get(row, 'scientific name', 'wetenschappelijke naam', 'latijnsenaam', 'soort_latijn', 'species_lat', 'scientific', 'species_name_lat'),
       euring_code: get(row, 'euring', 'euring_code'),
       country_code: countryCode,
-      country_name: get(row, 'country', 'land'),
+      country_name: countryName,
       location_name: get(row, 'location', 'locatie', 'location_name', 'stad'),
       lat: parseCoord(get(row, 'lat', 'latitude', 'breedtegraad', 'y_coordinaat', 'y')),
       lon: parseCoord(get(row, 'lng', 'lon', 'longitude', 'lengtegraad', 'x_coordinaat', 'x')),
@@ -181,6 +182,12 @@ const COUNTRY_CODES = {
   'sierra leone': 'SL',
   'jordanië': 'JO', 'jordanie': 'JO', 'jordan': 'JO',
   'joegoslavië': 'RS', 'servië': 'RS', 'serbia': 'RS',
+  'sremski': 'RS', 'južnobački': 'RS', 'juznobackl': 'RS', 'severno-banatski': 'RS',
+  // Nederlandse provincies → NL
+  'noord-holland': 'NL', 'zuid-holland': 'NL', 'zeeland': 'NL', 'utrecht': 'NL',
+  'flevoland': 'NL', 'friesland': 'NL', 'fryslân': 'NL', 'groningen': 'NL',
+  'drenthe': 'NL', 'overijssel': 'NL', 'gelderland': 'NL',
+  'noord-brabant': 'NL', 'limburg': 'NL',
   'zuid-afrika': 'ZA', 'south africa': 'ZA',
   'malta': 'MT',
   'polen': 'PL', 'poland': 'PL', 'polska': 'PL',
@@ -222,7 +229,7 @@ const COUNTRY_CODES = {
   'india': 'IN',
   'japan': 'JP',
   'indonesië': 'ID', 'indonesie': 'ID', 'indonesia': 'ID',
-  'verenigde staten': 'US', 'united states': 'US', 'usa': 'US',
+  'verenigde staten': 'US', 'verenigde staten van amerika': 'US', 'united states': 'US', 'united states of america': 'US', 'usa': 'US',
   'canada': 'CA',
   'mexico': 'MX',
   'brazilië': 'BR', 'brazilie': 'BR', 'brazil': 'BR',
@@ -231,8 +238,33 @@ const COUNTRY_CODES = {
   'nieuw-zeeland': 'NZ', 'new zealand': 'NZ',
 };
 
+// Canonical Dutch country names per ISO code
+const CANONICAL_COUNTRY_NAME = {
+  NL: 'Nederland', DE: 'Duitsland', BE: 'België', FR: 'Frankrijk', GB: 'Groot-Brittannië',
+  ES: 'Spanje', PT: 'Portugal', IT: 'Italië', SE: 'Zweden', NO: 'Noorwegen', DK: 'Denemarken',
+  FI: 'Finland', PL: 'Polen', AT: 'Oostenrijk', CH: 'Zwitserland', GR: 'Griekenland',
+  TR: 'Turkije', MA: 'Marokko', SN: 'Senegal', GM: 'Gambia', GH: 'Ghana',
+  KE: 'Kenia', TZ: 'Tanzania', ZA: 'Zuid-Afrika', US: 'Verenigde Staten', CA: 'Canada',
+  MX: 'Mexico', BR: 'Brazilië', AR: 'Argentinië', AU: 'Australië', NZ: 'Nieuw-Zeeland',
+  JP: 'Japan', IN: 'India', ZW: 'Zimbabwe', CZ: 'Tsjechië', HU: 'Hongarije',
+  LV: 'Letland', LT: 'Litouwen', EE: 'Estland', IS: 'IJsland', LU: 'Luxemburg',
+  LI: 'Liechtenstein', RO: 'Roemenië', RU: 'Rusland', TH: 'Thailand', VE: 'Venezuela',
+  CU: 'Cuba', SR: 'Suriname', SL: 'Sierra Leone', RS: 'Servië', SK: 'Slowakije',
+  SI: 'Slovenië', HR: 'Kroatië', BG: 'Bulgarije', UA: 'Oekraïne', BY: 'Wit-Rusland',
+  MT: 'Malta', AL: 'Albanië', MK: 'Noord-Macedonië', BA: 'Bosnië-Herzegovina',
+  TN: 'Tunesië', DZ: 'Algerije', EG: 'Egypte', MR: 'Mauritanië', ML: 'Mali',
+  NE: 'Niger', NG: 'Nigeria', GN: 'Guinee', GW: 'Guinee-Bissau', CI: 'Ivoorkust',
+  BF: 'Burkina Faso', CM: 'Kameroen', ET: 'Ethiopië', MZ: 'Mozambique',
+  MG: 'Madagaskar', NA: 'Namibië', BW: 'Botswana', ZM: 'Zambia', IL: 'Israël',
+  IR: 'Iran', IQ: 'Irak', CN: 'China', ID: 'Indonesië',
+};
+
 function countryNameToCode(name) {
   return COUNTRY_CODES[name.toLowerCase().trim()] ?? null;
+}
+
+function canonicalCountryName(code, fallback) {
+  return CANONICAL_COUNTRY_NAME[code] ?? fallback;
 }
 
 function parseCoord(raw) {

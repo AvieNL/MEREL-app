@@ -1,6 +1,26 @@
-export const VERSIE = '2.4.8';
+export const VERSIE = '2.4.9';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.9',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: "Verenigde Staten van Amerika" → US (was VE)',
+      'fix: Nederlandse provincienamen (Zuid-Holland, Noord-Holland enz.) → NL',
+      'fix: Servische regio\'s (Sremski, Juznobackl enz.) → RS',
+      'fix: landnamen worden gecanoniseerd bij import (consistent per land)',
+    ],
+    wijzigingen_en: [
+      'fix: "Verenigde Staten van Amerika" → US (was VE)',
+      'fix: Dutch province names (Zuid-Holland etc.) → NL',
+      'fix: Serbian regions (Sremski etc.) → RS',
+      'fix: country names normalised on import',
+    ],
+    wijzigingen_de: [
+      'fix: niederländische Provinznamen → NL, serbische Regionen → RS',
+      'fix: Ländernamen werden beim Import normalisiert',
+    ],
+  },
   {
     versie: '2.4.8',
     datum: '2026-10-25',
