@@ -32,19 +32,21 @@ export function useWaarnemingen() {
   // onProgress(done, total) is called after each batch
   async function importWaarnemingen(items, onProgress) {
     if (!user) return 0;
-    const withUser = items.map(item => ({ ...item, user_id: user.id }));
+    const seen = new Map();
+    for (const item of items) seen.set(item.id, item);
+    const unique = [...seen.values()].map(item => ({ ...item, user_id: user.id }));
 
-    for (let i = 0; i < withUser.length; i += BATCH_SIZE) {
-      const batch = withUser.slice(i, i + BATCH_SIZE);
+    for (let i = 0; i < unique.length; i += BATCH_SIZE) {
+      const batch = unique.slice(i, i + BATCH_SIZE);
       const { error } = await supabase
         .from('waarnemingen')
         .upsert(batch, { onConflict: 'id,user_id' });
       if (error) throw error;
-      onProgress?.(Math.min(i + BATCH_SIZE, withUser.length), withUser.length);
+      onProgress?.(Math.min(i + BATCH_SIZE, unique.length), unique.length);
     }
 
-    await db.waarnemingen.bulkPut(withUser);
-    return withUser.length;
+    await db.waarnemingen.bulkPut(unique);
+    return unique.length;
   }
 
   async function deleteWaarneming(id) {
