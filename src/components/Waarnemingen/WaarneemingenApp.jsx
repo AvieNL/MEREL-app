@@ -32,14 +32,16 @@ export default function WaarneemingenApp({ onSwitchModule }) {
     syncFromSupabase().catch(() => {});
   }, [waarnemingen, syncFromSupabase]);
 
+  const w = waarnemingen ?? [];
+
   const renderTab = () => {
     switch (activeTab) {
-      case 'overzicht':   return <OverzichtPage waarnemingen={waarnemingen} onImport={importWaarnemingen} />;
-      case 'lifelist':    return <LifelistPage waarnemingen={waarnemingen} />;
-      case 'landen':      return <LandenPage waarnemingen={waarnemingen} />;
-      case 'jaar':        return <JaarlijstPage waarnemingen={waarnemingen} />;
-      case 'volledigheid': return <VolledigheidsPage waarnemingen={waarnemingen} />;
-      case 'kaart':       return <KaartPage waarnemingen={waarnemingen} />;
+      case 'overzicht':   return <OverzichtPage waarnemingen={w} onImport={importWaarnemingen} />;
+      case 'lifelist':    return <LifelistPage waarnemingen={w} />;
+      case 'landen':      return <LandenPage waarnemingen={w} />;
+      case 'jaar':        return <JaarlijstPage waarnemingen={w} />;
+      case 'volledigheid': return <VolledigheidsPage waarnemingen={w} />;
+      case 'kaart':       return <KaartPage waarnemingen={w} />;
       default:            return null;
     }
   };

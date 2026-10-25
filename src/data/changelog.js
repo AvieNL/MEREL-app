@@ -1,6 +1,22 @@
-export const VERSIE = '2.6.6';
+export const VERSIE = '2.6.7';
 
 export const CHANGELOG = [
+  {
+    versie: '2.6.7',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: overzicht herlaadt niet meer onnodig bij pagina-refresh (Dexie laad-status correct bepaald)',
+      'ux: landcodes in het overzicht tonen nu vlaggenemoji',
+    ],
+    wijzigingen_en: [
+      'fix: overview no longer unnecessarily reloads on page refresh (Dexie load state now correct)',
+      'ux: country codes in the overview now show flag emoji',
+    ],
+    wijzigingen_de: [
+      'fix: Übersicht lädt bei Seitenaktualisierung nicht mehr unnötig neu',
+      'ux: Ländercodes in der Übersicht zeigen jetzt Flaggen-Emoji',
+    ],
+  },
   {
     versie: '2.6.6',
     datum: '2026-10-25',

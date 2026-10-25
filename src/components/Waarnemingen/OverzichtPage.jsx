@@ -130,7 +130,11 @@ export function ObsRow({ obs }) {
       </div>
       <div className="w-obs-meta">
         <span className="w-obs-date">{datum}</span>
-        {obs.country_code && <span className="w-obs-country">{obs.country_code}</span>}
+        {obs.country_code && (
+          <span className="w-obs-country" title={obs.country_code}>
+            {countryFlag(obs.country_code)}
+          </span>
+        )}
         {obs.permalink && <span style={{ fontSize: '0.65rem', color: 'var(--accent)' }}>↗</span>}
       </div>
     </div>
@@ -141,4 +145,11 @@ function formatDate(iso) {
   if (!iso) return '';
   const [y, m, d] = iso.split('-');
   return `${d}-${m}-${y}`;
+}
+
+function countryFlag(code) {
+  if (!code || code.length !== 2) return '';
+  return String.fromCodePoint(
+    ...code.toUpperCase().split('').map(c => 0x1F1E6 + c.charCodeAt(0) - 65)
+  );
 }

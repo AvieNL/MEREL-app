@@ -8,10 +8,10 @@ const BATCH_SIZE = 500;
 export function useWaarnemingen() {
   const { user } = useAuth();
 
+  // undefined = Dexie nog aan het laden; [] = echt leeg; array = data
   const waarnemingen = useLiveQuery(
     () => user ? db.waarnemingen.where('user_id').equals(user.id).toArray() : [],
-    [user?.id],
-    []
+    [user?.id]
   );
 
   // Pull all records from Supabase into Dexie, paginated (Supabase max 1000 per request)
