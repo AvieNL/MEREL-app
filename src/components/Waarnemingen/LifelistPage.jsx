@@ -44,9 +44,13 @@ export default function LifelistPage({ waarnemingen }) {
       const nlNorm = (w.species_name_nl || '').toLowerCase().trim();
       if (nlNorm && ringVogelnamen.has(nlNorm)) entry.geringd = true;
     }
-    return [...map.values()]
-      .map(e => ({ ...e, countries: [...e.countries] }))
-      .sort((a, b) => (a.species_name_nl || a.species_name_lat || '').localeCompare(b.species_name_nl || b.species_name_lat || '', 'nl'));
+    const result = [...map.values()].map(e => ({ ...e, countries: [...e.countries] }));
+    const r0 = result.filter(e => e.rarity === 0).length;
+    const r1 = result.filter(e => e.rarity === 1).length;
+    const r2plus = result.filter(e => e.rarity >= 2).length;
+    // eslint-disable-next-line no-console
+    console.log(`[Waarnemingen] rarity debug: ${result.length} soorten | 0: ${r0} | 1 (gewoon): ${r1} | ≥2 (zeldzaam): ${r2plus}`);
+    return result.sort((a, b) => (a.species_name_nl || a.species_name_lat || '').localeCompare(b.species_name_nl || b.species_name_lat || '', 'nl'));
   }, [waarnemingen, ringVogelnamen]);
 
   const filtered = useMemo(() => {
@@ -101,6 +105,12 @@ export default function LifelistPage({ waarnemingen }) {
         <div className="w-tile">
           <div className="w-tile-value">{lifelist.reduce((s, e) => s + e.countries.length, 0)}</div>
           <div className="w-tile-label">Landrecords</div>
+        </div>
+        <div className="w-tile" style={{ background: '#1e293b', border: '1px dashed #f59e0b' }}>
+          <div className="w-tile-value" style={{ color: '#f59e0b', fontSize: '0.8rem' }}>
+            {lifelist.filter(e => e.rarity === 0).length}/{lifelist.filter(e => e.rarity === 1).length}/{lifelist.filter(e => e.rarity >= 2).length}
+          </div>
+          <div className="w-tile-label" style={{ color: '#f59e0b', fontSize: '0.6rem' }}>r0/r1/r2+</div>
         </div>
       </div>
 
