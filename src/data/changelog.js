@@ -1,6 +1,19 @@
-export const VERSIE = '2.5.5';
+export const VERSIE = '2.5.6';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.6',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'feat: doorklikken naar waarneming.nl vanuit het overzicht (↗)',
+    ],
+    wijzigingen_en: [
+      'feat: click through to waarneming.nl from the overview (↗)',
+    ],
+    wijzigingen_de: [
+      'feat: Direktlink zu waarneming.nl aus der Übersicht (↗)',
+    ],
+  },
   {
     versie: '2.5.5',
     datum: '2026-10-25',

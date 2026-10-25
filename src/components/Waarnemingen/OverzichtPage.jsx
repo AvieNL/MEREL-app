@@ -58,7 +58,11 @@ export function ObsRow({ obs }) {
   const datum = obs.datum ? formatDate(obs.datum) : '';
 
   return (
-    <div className="w-obs-row">
+    <div
+      className="w-obs-row"
+      style={{ cursor: obs.permalink ? 'pointer' : 'default' }}
+      onClick={() => obs.permalink && window.open(obs.permalink, '_blank', 'noopener')}
+    >
       <div className="w-obs-main">
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <span className="w-obs-name">{obs.species_name_nl || obs.species_name_lat || '?'}</span>
@@ -74,6 +78,7 @@ export function ObsRow({ obs }) {
       <div className="w-obs-meta">
         <span className="w-obs-date">{datum}</span>
         {obs.country_code && <span className="w-obs-country">{obs.country_code}</span>}
+        {obs.permalink && <span style={{ fontSize: '0.65rem', color: 'var(--accent)' }}>↗</span>}
       </div>
     </div>
   );
