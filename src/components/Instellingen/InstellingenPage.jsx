@@ -8,6 +8,7 @@ import { pullNestData } from '../../hooks/useNestSync';
 import { useProjects } from '../../hooks/useProjects';
 import { db } from '../../lib/db';
 import { supabase } from '../../lib/supabase';
+import { getEbirdKey, setEbirdKey, clearEbirdCache } from '../../lib/ebird-api';
 import CloudStatus from './CloudStatus';
 import './InstellingenPage.css';
 
@@ -28,6 +29,8 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
   const [nestPushResult, setNestPushResult] = useState(null);
   const [sovonNr, setSovonNr] = useState(profile?.sovon_registratienummer || '');
   const [sovonSaved, setSovonSaved] = useState(false);
+  const [ebirdKeyVal, setEbirdKeyVal] = useState(() => profile?.ebird_key || getEbirdKey());
+  const [ebirdSaved, setEbirdSaved] = useState(false);
 
   async function pushNestData() {
     if (!user) return;
@@ -233,6 +236,54 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
                 {t(taal.key)}
               </button>
             ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="section">
+        <h3>eBird</h3>
+        <div className="section-content">
+          <p className="admin-hint">
+            Met een gratis eBird API-sleutel zie je per land hoeveel procent van de soorten je al hebt gezien
+            in de Waarnemingen-module. Vraag een sleutel aan via <strong>ebird.org/api/keygen</strong>.
+          </p>
+          <div className="form-group">
+            <label>API-sleutel</label>
+            <input
+              type="password"
+              value={ebirdKeyVal}
+              onChange={e => setEbirdKeyVal(e.target.value)}
+              placeholder="Bijv. jce2r5xxxxxxxx"
+              autoComplete="off"
+            />
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              className="btn-secondary"
+              onClick={async () => {
+                setEbirdKey(ebirdKeyVal);
+                clearEbirdCache();
+                try { await updateProfile({ ebird_key: ebirdKeyVal.trim() }); } catch { /* ignore */ }
+                setEbirdSaved(true);
+                setTimeout(() => setEbirdSaved(false), 2000);
+              }}
+            >
+              Opslaan
+            </button>
+            {ebirdKeyVal && (
+              <button
+                className="btn-secondary"
+                onClick={async () => {
+                  setEbirdKeyVal('');
+                  setEbirdKey('');
+                  clearEbirdCache();
+                  try { await updateProfile({ ebird_key: '' }); } catch { /* ignore */ }
+                }}
+              >
+                Verwijderen
+              </button>
+            )}
+            {ebirdSaved && <span className="instellingen-saved">Opgeslagen</span>}
           </div>
         </div>
       </div>

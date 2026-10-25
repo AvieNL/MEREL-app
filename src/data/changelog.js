@@ -1,6 +1,19 @@
-export const VERSIE = '2.6.1';
+export const VERSIE = '2.6.2';
 
 export const CHANGELOG = [
+  {
+    versie: '2.6.2',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: eBird API-sleutel verplaatst naar de algemene Instellingen-pagina',
+    ],
+    wijzigingen_en: [
+      'ux: eBird API key moved to the main Settings page',
+    ],
+    wijzigingen_de: [
+      'ux: eBird API-Schlüssel in die allgemeine Einstellungsseite verschoben',
+    ],
+  },
   {
     versie: '2.6.1',
     datum: '2026-10-25',
