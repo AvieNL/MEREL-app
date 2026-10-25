@@ -44,6 +44,8 @@
 .w-page {
   padding: 16px;
   padding-bottom: 80px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* Section headers */

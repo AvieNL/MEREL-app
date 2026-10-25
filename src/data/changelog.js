@@ -1,6 +1,19 @@
-export const VERSIE = '2.6.4';
+export const VERSIE = '2.6.5';
 
 export const CHANGELOG = [
+  {
+    versie: '2.6.5',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: Waarnemingen-module heeft nu dezelfde smalle centreerde layout als Ring en Nest',
+    ],
+    wijzigingen_en: [
+      'ux: Observations module now uses the same narrow centered layout as Ring and Nest',
+    ],
+    wijzigingen_de: [
+      'ux: Beobachtungsmodul verwendet jetzt dasselbe schmale zentrierte Layout wie Ring und Nest',
+    ],
+  },
   {
     versie: '2.6.4',
     datum: '2026-10-25',
