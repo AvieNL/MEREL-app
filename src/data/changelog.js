@@ -1,6 +1,19 @@
-export const VERSIE = '2.6.2';
+export const VERSIE = '2.6.3';
 
 export const CHANGELOG = [
+  {
+    versie: '2.6.3',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: kennisbank-link verplaatst van de module-toggle naar het hamburgermenu',
+    ],
+    wijzigingen_en: [
+      'ux: knowledge base link moved from module toggle to hamburger menu',
+    ],
+    wijzigingen_de: [
+      'ux: Wissensdatenbank-Link vom Modul-Umschalter ins Hamburger-Menü verschoben',
+    ],
+  },
   {
     versie: '2.6.2',
     datum: '2026-10-25',
