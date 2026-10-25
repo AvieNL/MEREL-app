@@ -1,6 +1,22 @@
-export const VERSIE = '2.6.7';
+export const VERSIE = '2.6.8';
 
 export const CHANGELOG = [
+  {
+    versie: '2.6.8',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: overzicht-rijen compacter (één regel: vlag, naam, locatie, datum)',
+      'ux: filters op overzicht — zoekbalk + jaarpillen + top-8 landen',
+    ],
+    wijzigingen_en: [
+      'ux: overview rows more compact (one line: flag, name, location, date)',
+      'ux: filters on overview — search bar + year pills + top-8 countries',
+    ],
+    wijzigingen_de: [
+      'ux: Übersichtszeilen kompakter (eine Zeile: Flagge, Name, Ort, Datum)',
+      'ux: Filter in der Übersicht — Suchfeld + Jahrpillen + Top-8-Länder',
+    ],
+  },
   {
     versie: '2.6.7',
     datum: '2026-10-25',

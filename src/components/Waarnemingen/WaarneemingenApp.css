@@ -79,52 +79,65 @@
   font-size: 0.9rem;
 }
 
-/* Observation row */
+/* Observation row — compact single-line */
 .w-obs-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 0;
+  gap: 6px;
+  padding: 5px 0;
   border-bottom: 1px solid var(--border);
+  min-height: 0;
 }
 
 .w-obs-row:last-child {
   border-bottom: none;
 }
 
-.w-obs-main {
-  flex: 1;
-  min-width: 0;
+.w-obs-flag {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
 .w-obs-name {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-shrink: 0;
+  max-width: 40%;
 }
 
-.w-obs-lat {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  font-style: italic;
-  margin-top: 1px;
-}
-
-.w-obs-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
+.w-obs-loc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
 }
 
 .w-obs-date {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-secondary);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
+.w-obs-date--push {
+  margin-left: auto;
+}
+
+.w-obs-link {
+  font-size: 0.6rem;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* legacy */
 .w-obs-country {
   font-size: 0.7rem;
   color: var(--text-muted);

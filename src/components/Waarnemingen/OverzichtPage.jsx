@@ -8,6 +8,10 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
   const [importStatus, setImportStatus] = useState(null);
   const fileRef = useRef(null);
 
+  const [zoek, setZoek] = useState('');
+  const [filterLand, setFilterLand] = useState('');
+  const [filterJaar, setFilterJaar] = useState('');
+
   async function handleCsvImport(e) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -34,14 +38,40 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
       e.target.value = '';
     }
   }
-  const sorted = useMemo(() =>
-    [...waarnemingen].sort((a, b) => b.datum.localeCompare(a.datum)),
-    [waarnemingen]
-  );
 
   const totaal = waarnemingen.length;
   const soorten = useMemo(() => new Set(waarnemingen.map(w => w.species_name_lat || w.species_name_nl).filter(Boolean)).size, [waarnemingen]);
   const landen = useMemo(() => new Set(waarnemingen.map(w => w.country_code).filter(Boolean)).size, [waarnemingen]);
+
+  const jaren = useMemo(() => {
+    const s = new Set(waarnemingen.map(w => w.datum?.slice(0, 4)).filter(Boolean));
+    return [...s].sort((a, b) => b.localeCompare(a));
+  }, [waarnemingen]);
+
+  const topLanden = useMemo(() => {
+    const counts = {};
+    for (const w of waarnemingen) {
+      if (w.country_code) counts[w.country_code] = (counts[w.country_code] || 0) + 1;
+    }
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([c]) => c);
+  }, [waarnemingen]);
+
+  const filtered = useMemo(() => {
+    let list = [...waarnemingen].sort((a, b) => b.datum.localeCompare(a.datum));
+    if (filterLand) list = list.filter(w => w.country_code === filterLand);
+    if (filterJaar) list = list.filter(w => w.datum?.startsWith(filterJaar));
+    if (zoek.trim()) {
+      const q = zoek.trim().toLowerCase();
+      list = list.filter(w =>
+        (w.species_name_nl || '').toLowerCase().includes(q) ||
+        (w.species_name_lat || '').toLowerCase().includes(q) ||
+        (w.location_name || '').toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [waarnemingen, filterLand, filterJaar, zoek]);
+
+  const hasFilter = zoek.trim() || filterLand || filterJaar;
 
   const importBtn = onImport && (
     <>
@@ -77,6 +107,7 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
   return (
     <div className="w-page">
       {importBtn}
+
       <div className="w-tiles">
         <div className="w-tile">
           <div className="w-tile-value">{totaal.toLocaleString('nl')}</div>
@@ -92,51 +123,86 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
         </div>
       </div>
 
-      <p className="w-section-title">Recente waarnemingen</p>
+      {/* ── Filters ── */}
+      <input
+        className="w-search"
+        type="search"
+        placeholder="Zoek soort of locatie…"
+        value={zoek}
+        onChange={e => setZoek(e.target.value)}
+      />
 
-      {sorted.slice(0, 100).map(w => (
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+        {jaren.map(j => (
+          <button key={j} onClick={() => setFilterJaar(filterJaar === j ? '' : j)}
+            style={{
+              fontSize: '0.72rem', padding: '3px 9px', borderRadius: 10, border: '1px solid var(--border)',
+              background: filterJaar === j ? 'var(--accent)' : 'var(--bg-secondary)',
+              color: filterJaar === j ? '#fff' : 'var(--text-secondary)', cursor: 'pointer',
+            }}>
+            {j}
+          </button>
+        ))}
+        {topLanden.map(c => (
+          <button key={c} onClick={() => setFilterLand(filterLand === c ? '' : c)}
+            style={{
+              fontSize: '0.72rem', padding: '3px 9px', borderRadius: 10, border: '1px solid var(--border)',
+              background: filterLand === c ? 'var(--accent)' : 'var(--bg-secondary)',
+              color: filterLand === c ? '#fff' : 'var(--text-secondary)', cursor: 'pointer',
+            }}>
+            {countryFlag(c)} {c}
+          </button>
+        ))}
+        {hasFilter && (
+          <button onClick={() => { setZoek(''); setFilterLand(''); setFilterJaar(''); }}
+            style={{
+              fontSize: '0.72rem', padding: '3px 9px', borderRadius: 10,
+              border: '1px solid var(--border)', background: 'none',
+              color: 'var(--text-muted)', cursor: 'pointer',
+            }}>
+            ✕ wis filters
+          </button>
+        )}
+      </div>
+
+      <p className="w-section-title">
+        {hasFilter ? `${filtered.length.toLocaleString('nl')} resultaten` : 'Recente waarnemingen'}
+      </p>
+
+      {filtered.slice(0, 200).map(w => (
         <ObsRow key={w.id} obs={w} />
       ))}
 
-      {sorted.length > 100 && (
+      {filtered.length > 200 && (
         <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem', padding: '12px 0' }}>
-          Nog {sorted.length - 100} waarnemingen — gebruik Lifelist of Jaarlijst voor volledig overzicht
+          {filtered.length - 200} meer — verfijn je filter
         </p>
+      )}
+
+      {filtered.length === 0 && hasFilter && (
+        <div className="w-empty">
+          <p className="w-empty-text">Geen waarnemingen gevonden.</p>
+        </div>
       )}
     </div>
   );
 }
 
 export function ObsRow({ obs }) {
-  const datum = obs.datum ? formatDate(obs.datum) : '';
-
   return (
     <div
-      className="w-obs-row"
+      className="w-obs-row w-obs-row--compact"
       style={{ cursor: obs.permalink ? 'pointer' : 'default' }}
       onClick={() => obs.permalink && window.open(obs.permalink, '_blank', 'noopener')}
     >
-      <div className="w-obs-main">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <span className="w-obs-name">{obs.species_name_nl || obs.species_name_lat || '?'}</span>
-          <RarityIcon rarity={obs.rarity} />
-        </div>
-        {obs.species_name_lat && obs.species_name_nl && obs.species_name_lat !== obs.species_name_nl && (
-          <div className="w-obs-lat">{obs.species_name_lat}</div>
-        )}
-        {obs.location_name && (
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 1 }}>{obs.location_name}</div>
-        )}
-      </div>
-      <div className="w-obs-meta">
-        <span className="w-obs-date">{datum}</span>
-        {obs.country_code && (
-          <span className="w-obs-country" title={obs.country_code}>
-            {countryFlag(obs.country_code)}
-          </span>
-        )}
-        {obs.permalink && <span style={{ fontSize: '0.65rem', color: 'var(--accent)' }}>↗</span>}
-      </div>
+      <span className="w-obs-flag">{countryFlag(obs.country_code)}</span>
+      <span className="w-obs-name">{obs.species_name_nl || obs.species_name_lat || '?'}</span>
+      <RarityIcon rarity={obs.rarity} />
+      {obs.location_name && (
+        <span className="w-obs-loc">{obs.location_name}</span>
+      )}
+      <span className="w-obs-date w-obs-date--push">{obs.datum ? formatDate(obs.datum) : ''}</span>
+      {obs.permalink && <span className="w-obs-link">↗</span>}
     </div>
   );
 }
@@ -144,7 +210,7 @@ export function ObsRow({ obs }) {
 function formatDate(iso) {
   if (!iso) return '';
   const [y, m, d] = iso.split('-');
-  return `${d}-${m}-${y}`;
+  return `${d}-${m}-${y.slice(2)}`;
 }
 
 function countryFlag(code) {
