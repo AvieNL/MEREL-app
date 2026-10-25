@@ -1,7 +1,39 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import RarityIcon from './RarityIcon';
+import { parseCsv } from '../../lib/observation-api';
 
-export default function OverzichtPage({ waarnemingen }) {
+export default function OverzichtPage({ waarnemingen, onImport }) {
+  const [importing, setImporting] = useState(false);
+  const [progress, setProgress] = useState(null);
+  const [importStatus, setImportStatus] = useState(null);
+  const fileRef = useRef(null);
+
+  async function handleCsvImport(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImporting(true);
+    setImportStatus(null);
+    setProgress(null);
+    try {
+      const text = await file.text();
+      const items = parseCsv(text);
+      if (items.length === 0) {
+        setImportStatus({ ok: false, msg: 'Geen waarnemingen gevonden in CSV.' });
+        return;
+      }
+      setProgress(`Uploaden: 0 / ${items.length}…`);
+      const n = await onImport(items, (done, total) =>
+        setProgress(`Uploaden: ${done} / ${total}…`)
+      );
+      setImportStatus({ ok: true, msg: `${n} waarnemingen geïmporteerd.` });
+    } catch (err) {
+      setImportStatus({ ok: false, msg: `Fout: ${err.message}` });
+    } finally {
+      setImporting(false);
+      setProgress(null);
+      e.target.value = '';
+    }
+  }
   const sorted = useMemo(() =>
     [...waarnemingen].sort((a, b) => b.datum.localeCompare(a.datum)),
     [waarnemingen]
@@ -11,12 +43,32 @@ export default function OverzichtPage({ waarnemingen }) {
   const soorten = useMemo(() => new Set(waarnemingen.map(w => w.species_name_lat || w.species_name_nl).filter(Boolean)).size, [waarnemingen]);
   const landen = useMemo(() => new Set(waarnemingen.map(w => w.country_code).filter(Boolean)).size, [waarnemingen]);
 
+  const importBtn = onImport && (
+    <>
+      <input type="file" accept=".csv,.txt" ref={fileRef} style={{ display: 'none' }} onChange={handleCsvImport} />
+      <button
+        className="btn-secondary"
+        style={{ width: '100%', marginBottom: 12 }}
+        onClick={() => fileRef.current?.click()}
+        disabled={importing}
+      >
+        {importing ? progress || 'Bezig…' : '+ CSV importeren'}
+      </button>
+      {importStatus && (
+        <p style={{ fontSize: '0.82rem', marginBottom: 12, color: importStatus.ok ? 'var(--success)' : 'var(--danger)' }}>
+          {importStatus.msg}
+        </p>
+      )}
+    </>
+  );
+
   if (totaal === 0) {
     return (
       <div className="w-page">
+        {importBtn}
         <div className="w-empty">
           <span className="w-empty-icon">🔭</span>
-          <p className="w-empty-text">Nog geen waarnemingen geïmporteerd.<br />Ga naar Inst. om je API-token in te stellen of een CSV te importeren.</p>
+          <p className="w-empty-text">Nog geen waarnemingen geïmporteerd.</p>
         </div>
       </div>
     );
@@ -24,6 +76,7 @@ export default function OverzichtPage({ waarnemingen }) {
 
   return (
     <div className="w-page">
+      {importBtn}
       <div className="w-tiles">
         <div className="w-tile">
           <div className="w-tile-value">{totaal.toLocaleString('nl')}</div>

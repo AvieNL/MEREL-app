@@ -6,7 +6,6 @@ import LifelistPage from './LifelistPage';
 import LandenPage from './LandenPage';
 import JaarlijstPage from './JaarlijstPage';
 import KaartPage from './KaartPage';
-import WInstellingenPage from './WInstellingenPage';
 import VolledigheidsPage from './VolledigheidsPage';
 import './WaarneemingenApp.css';
 
@@ -17,7 +16,6 @@ const TABS = [
   { id: 'volledigheid',  label: 'Volledigheid',  icon: '◈' },
   { id: 'jaar',          label: 'Jaarlijst',     icon: '◷' },
   { id: 'kaart',         label: 'Kaart',         icon: '⬡' },
-  { id: 'instellingen',  label: 'Inst.',         icon: '⚙' },
 ];
 
 export default function WaarneemingenApp({ onSwitchModule }) {
@@ -36,13 +34,12 @@ export default function WaarneemingenApp({ onSwitchModule }) {
 
   const renderTab = () => {
     switch (activeTab) {
-      case 'overzicht':   return <OverzichtPage waarnemingen={waarnemingen} />;
+      case 'overzicht':   return <OverzichtPage waarnemingen={waarnemingen} onImport={importWaarnemingen} />;
       case 'lifelist':    return <LifelistPage waarnemingen={waarnemingen} />;
       case 'landen':      return <LandenPage waarnemingen={waarnemingen} />;
       case 'jaar':        return <JaarlijstPage waarnemingen={waarnemingen} />;
       case 'volledigheid': return <VolledigheidsPage waarnemingen={waarnemingen} />;
       case 'kaart':       return <KaartPage waarnemingen={waarnemingen} />;
-      case 'instellingen': return <WInstellingenPage waarnemingen={waarnemingen} onImport={importWaarnemingen} onClear={clearAllWaarnemingen} onSync={syncFromSupabase} />;
       default:            return null;
     }
   };

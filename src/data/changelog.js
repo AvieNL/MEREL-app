@@ -1,6 +1,24 @@
-export const VERSIE = '2.6.5';
+export const VERSIE = '2.6.6';
 
 export const CHANGELOG = [
+  {
+    versie: '2.6.6',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: aparte Waarnemingen-instellingentab verwijderd — CSV-import staat nu op de overzichtspagina',
+      'ux: waarnemingen cloud-sync en CSV-import geïntegreerd in de hoofd-Instellingen',
+      'fix: eBird API-sleutelveld gebruikt nu hetzelfde lettertype als de rest van de pagina',
+    ],
+    wijzigingen_en: [
+      'ux: separate Observations settings tab removed — CSV import now on the overview page',
+      'ux: observations cloud sync and CSV import integrated into the main Settings page',
+      'fix: eBird API key field now uses the same font as the rest of the page',
+    ],
+    wijzigingen_de: [
+      'ux: separater Beobachtungseinstellungen-Tab entfernt — CSV-Import jetzt auf der Übersichtsseite',
+      'ux: Beobachtungen Cloud-Sync und CSV-Import in die allgemeine Einstellungen integriert',
+    ],
+  },
   {
     versie: '2.6.5',
     datum: '2026-10-25',

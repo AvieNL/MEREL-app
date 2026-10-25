@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n/index.js';
 import { useAuth } from '../../context/AuthContext';
@@ -9,6 +9,8 @@ import { useProjects } from '../../hooks/useProjects';
 import { db } from '../../lib/db';
 import { supabase } from '../../lib/supabase';
 import { getEbirdKey, setEbirdKey, clearEbirdCache } from '../../lib/ebird-api';
+import { useWaarnemingen } from '../../hooks/useWaarnemingen';
+import { parseCsv } from '../../lib/observation-api';
 import CloudStatus from './CloudStatus';
 import './InstellingenPage.css';
 
@@ -31,6 +33,12 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
   const [sovonSaved, setSovonSaved] = useState(false);
   const [ebirdKeyVal, setEbirdKeyVal] = useState(() => profile?.ebird_key || getEbirdKey());
   const [ebirdSaved, setEbirdSaved] = useState(false);
+  const { waarnemingen, syncFromSupabase, importWaarnemingen, clearAllWaarnemingen } = useWaarnemingen();
+  const [wSyncing, setWSyncing] = useState(false);
+  const [wImporting, setWImporting] = useState(false);
+  const [wProgress, setWProgress] = useState(null);
+  const [wStatus, setWStatus] = useState(null);
+  const wFileRef = useRef(null);
 
   async function pushNestData() {
     if (!user) return;
@@ -72,6 +80,59 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
     await updateProfile(updates);
     setSovonSaved(true);
     setTimeout(() => setSovonSaved(false), 2000);
+  }
+
+  async function handleWCsvImport(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setWImporting(true);
+    setWStatus(null);
+    setWProgress(null);
+    try {
+      const text = await file.text();
+      const items = parseCsv(text);
+      if (items.length === 0) {
+        setWStatus({ ok: false, msg: 'Geen waarnemingen gevonden in CSV.' });
+        return;
+      }
+      setWProgress(`Uploaden: 0 / ${items.length}…`);
+      const n = await importWaarnemingen(items, (done, total) =>
+        setWProgress(`Uploaden: ${done} / ${total}…`)
+      );
+      setWStatus({ ok: true, msg: `${n} waarnemingen geïmporteerd.` });
+    } catch (err) {
+      setWStatus({ ok: false, msg: `Fout: ${err.message}` });
+    } finally {
+      setWImporting(false);
+      setWProgress(null);
+      e.target.value = '';
+    }
+  }
+
+  async function handleWSync() {
+    setWSyncing(true);
+    setWStatus(null);
+    try {
+      const n = await syncFromSupabase();
+      setWStatus({ ok: true, msg: n > 0 ? `${n} waarnemingen opgehaald van cloud.` : 'Cloud is leeg — importeer eerst een CSV.' });
+    } catch (err) {
+      setWStatus({ ok: false, msg: `Synchronisatie mislukt: ${err.message}` });
+    } finally {
+      setWSyncing(false);
+    }
+  }
+
+  async function handleWClear() {
+    if (!window.confirm('Alle waarnemingen verwijderen uit de cloud én op dit apparaat?')) return;
+    setWImporting(true);
+    try {
+      await clearAllWaarnemingen();
+      setWStatus({ ok: true, msg: 'Alle waarnemingen verwijderd.' });
+    } catch (err) {
+      setWStatus({ ok: false, msg: `Verwijderen mislukt: ${err.message}` });
+    } finally {
+      setWImporting(false);
+    }
   }
 
   return (
@@ -255,6 +316,7 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
               onChange={e => setEbirdKeyVal(e.target.value)}
               placeholder="Bijv. jce2r5xxxxxxxx"
               autoComplete="off"
+              style={{ fontFamily: 'inherit' }}
             />
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
@@ -285,6 +347,58 @@ export default function InstellingenPage({ settings, onUpdateSettings, onFullRes
             )}
             {ebirdSaved && <span className="instellingen-saved">Opgeslagen</span>}
           </div>
+        </div>
+      </div>
+
+      <div className="section">
+        <h3>Waarnemingen</h3>
+        <div className="section-content">
+          <p className="admin-hint">
+            Gecached op dit apparaat: <strong>{(waarnemingen?.length ?? 0).toLocaleString('nl')}</strong> waarnemingen.
+            Importeer een CSV-export van waarneming.nl of synchroniseer vanuit de cloud.
+          </p>
+          <input type="file" accept=".csv,.txt" ref={wFileRef} style={{ display: 'none' }} onChange={handleWCsvImport} />
+          <div className="sync-acties">
+            <div className="sync-actie">
+              <div className="sync-actie-tekst">
+                <strong>CSV importeren</strong>
+                <span>Exporteer je waarnemingen op waarneming.nl en importeer het bestand hier.</span>
+              </div>
+              <div className="sync-actie-controls">
+                <button className="btn-secondary sync-force-btn" onClick={() => wFileRef.current?.click()} disabled={wImporting || wSyncing}>
+                  {wImporting ? 'Bezig…' : 'CSV kiezen'}
+                </button>
+              </div>
+            </div>
+            <div className="sync-actie">
+              <div className="sync-actie-tekst">
+                <strong>Ophalen van cloud</strong>
+                <span>Haal eerder geïmporteerde waarnemingen op vanuit Supabase.</span>
+              </div>
+              <div className="sync-actie-controls">
+                <button className="btn-secondary sync-force-btn" onClick={handleWSync} disabled={wImporting || wSyncing}>
+                  {wSyncing ? 'Synchroniseren…' : 'Nu synchroniseren'}
+                </button>
+              </div>
+            </div>
+            <div className="sync-actie">
+              <div className="sync-actie-tekst">
+                <strong>Alles wissen</strong>
+                <span>Verwijdert alle waarnemingen uit de cloud én lokaal.</span>
+              </div>
+              <div className="sync-actie-controls">
+                <button className="btn-secondary sync-force-btn" onClick={handleWClear} disabled={wImporting || wSyncing || !(waarnemingen?.length)}>
+                  Wissen
+                </button>
+              </div>
+            </div>
+          </div>
+          {wProgress && <p className="sync-last-time" style={{ marginTop: 8 }}>{wProgress}</p>}
+          {wStatus && (
+            <p style={{ marginTop: 8, fontSize: '0.82rem', color: wStatus.ok ? 'var(--success)' : 'var(--danger)' }}>
+              {wStatus.msg}
+            </p>
+          )}
         </div>
       </div>
 
