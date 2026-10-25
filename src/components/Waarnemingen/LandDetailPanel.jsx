@@ -9,6 +9,7 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
   const [checklist, setChecklist] = useState({ status: 'idle', data: null, error: null });
   const [showUnseen, setShowUnseen] = useState(false);
   const [showNoMatch, setShowNoMatch] = useState(false);
+  const [showSplits, setShowSplits] = useState(false);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
@@ -103,7 +104,25 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
     }
     const noMatch = [...noMatchMap.values()]
       .sort((a, b) => (a.name_nl || a.name_lat).localeCompare(b.name_nl || b.name_lat, 'nl'));
-    return { total, seenCount: seen.length, unseen, noMatch };
+
+    // User species that share the same eBird norm (splits in obs taxonomy, lumped in eBird)
+    const ebirdNormToUser = new Map(); // ebirdNorm → [{ name_nl, name_lat }]
+    for (const w of obs) {
+      const norm = normSciName(w.species_name_lat);
+      if (!norm || !ebirdNorms.has(norm)) continue;
+      const key = w.species_name_lat || w.species_name_nl;
+      if (!key) continue;
+      if (!ebirdNormToUser.has(norm)) ebirdNormToUser.set(norm, new Map());
+      const userMap = ebirdNormToUser.get(norm);
+      if (!userMap.has(key)) userMap.set(key, { name_nl: w.species_name_nl || w.species_name_lat, name_lat: w.species_name_lat });
+    }
+    const splits = [];
+    for (const [, userMap] of ebirdNormToUser) {
+      if (userMap.size > 1) splits.push([...userMap.values()]);
+    }
+    splits.sort((a, b) => (a[0].name_nl || '').localeCompare(b[0].name_nl || '', 'nl'));
+
+    return { total, seenCount: seen.length, unseen, noMatch, splits };
   }, [checklist, seenSciNorm, obs]);
 
   useEffect(() => {
@@ -268,15 +287,15 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
                 <button onClick={() => setShowNoMatch(v => !v)} style={{
                   background: 'none', border: 'none', cursor: 'pointer',
                   color: 'var(--text-muted)', fontSize: '0.78rem', padding: 0,
-                  display: 'flex', alignItems: 'center', gap: 6, marginBottom: 16,
+                  display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8,
                 }}>
                   <span>{showNoMatch ? '▲' : '▼'}</span>
                   <span style={{ color: '#f59e0b' }}>Geen eBird-match ({checklistStats.noMatch.length})</span>
                 </button>
                 {showNoMatch && (
-                  <div style={{ marginBottom: 20 }}>
+                  <div style={{ marginBottom: 12 }}>
                     <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: 8 }}>
-                      Deze soorten staan in jouw lijst maar zijn niet herkend in de eBird-taxonomie (andere geslachtsnaam of niet-erkende soort).
+                      Deze soorten staan in jouw lijst maar zijn niet herkend in de eBird-taxonomie.
                     </div>
                     {checklistStats.noMatch.map(sp => (
                       <div key={sp.name_lat || sp.name_nl} style={{ padding: '5px 0', borderBottom: '1px solid var(--border)' }}>
@@ -284,6 +303,42 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
                         {sp.name_lat && sp.name_lat !== sp.name_nl && (
                           <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>{sp.name_lat}</div>
                         )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+            {checklistStats.splits.length > 0 && (
+              <>
+                <button onClick={() => setShowSplits(v => !v)} style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'var(--text-muted)', fontSize: '0.78rem', padding: 0,
+                  display: 'flex', alignItems: 'center', gap: 6, marginBottom: 16,
+                }}>
+                  <span>{showSplits ? '▲' : '▼'}</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>
+                    Taxonomisch anders ({checklistStats.splits.reduce((n, g) => n + g.length, 0)} jouw soorten → {checklistStats.splits.length} eBird-soorten)
+                  </span>
+                </button>
+                {showSplits && (
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: 8 }}>
+                      Jouw lijst telt deze als aparte soorten, maar eBird beschouwt ze als één soort.
+                      Dit verklaart het verschil tussen jouw soortentelling en de eBird-teller.
+                    </div>
+                    {checklistStats.splits.map(group => (
+                      <div key={group[0].name_lat || group[0].name_nl} style={{
+                        padding: '6px 0', borderBottom: '1px solid var(--border)',
+                      }}>
+                        {group.map(sp => (
+                          <div key={sp.name_lat || sp.name_nl} style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                            {sp.name_nl}
+                            {sp.name_lat && sp.name_lat !== sp.name_nl && (
+                              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic', marginLeft: 6 }}>{sp.name_lat}</span>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     ))}
                   </div>

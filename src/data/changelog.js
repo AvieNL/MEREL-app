@@ -1,6 +1,21 @@
-export const VERSIE = '2.5.8';
+export const VERSIE = '2.5.9';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.9',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'feat: "Taxonomisch anders"-sectie toont splits (jouw soorten die eBird samenvoegt)',
+      'feat: verklaart het verschil tussen jouw soortentelling en de eBird-teller in landen',
+    ],
+    wijzigingen_en: [
+      'feat: "Taxonomically different" section shows splits (your species that eBird lumps)',
+      'feat: explains the difference between your species count and the eBird count per country',
+    ],
+    wijzigingen_de: [
+      'feat: "Taxonomisch anders"-Abschnitt zeigt Splits (deine Arten, die eBird zusammenfasst)',
+    ],
+  },
   {
     versie: '2.5.8',
     datum: '2026-10-25',
