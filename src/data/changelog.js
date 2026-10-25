@@ -1,6 +1,19 @@
-export const VERSIE = '2.7.4';
+export const VERSIE = '2.7.5';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.5',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: detail-panelen (land, provincie, soort) waren te breed — nu max 600px gecentreerd zoals de rest',
+    ],
+    wijzigingen_en: [
+      'fix: detail panels (country, province, species) were full-width — now max 600px centred like the rest',
+    ],
+    wijzigingen_de: [
+      'fix: Detailpanele (Land, Provinz, Art) waren zu breit — jetzt max. 600px zentriert wie der Rest',
+    ],
+  },
   {
     versie: '2.7.4',
     datum: '2026-10-25',

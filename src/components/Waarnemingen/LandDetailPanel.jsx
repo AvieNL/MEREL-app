@@ -184,20 +184,24 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
       <div style={{
         position: 'sticky', top: 0, zIndex: 10,
         background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)',
-        padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 12,
       }}>
-        <button onClick={onClose} style={{
-          background: 'none', border: 'none', cursor: 'pointer',
-          color: 'var(--text-secondary)', fontSize: '1.3rem', lineHeight: 1, padding: '2px 6px',
-        }}>←</button>
-        <span style={{ fontSize: '1.6rem' }}>{countryFlag(countryCode)}</span>
-        <div>
-          <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>{countryName}</div>
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{countryCode}</div>
+        <div style={{
+          maxWidth: 600, margin: '0 auto', padding: '10px 16px',
+          display: 'flex', alignItems: 'center', gap: 12,
+        }}>
+          <button onClick={onClose} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: 'var(--text-secondary)', fontSize: '1.3rem', lineHeight: 1, padding: '2px 6px',
+          }}>←</button>
+          <span style={{ fontSize: '1.6rem' }}>{countryFlag(countryCode)}</span>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>{countryName}</div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{countryCode}</div>
+          </div>
         </div>
       </div>
 
-      <div style={{ padding: '16px 16px 80px' }}>
+      <div style={{ maxWidth: 600, margin: '0 auto', padding: '16px 16px 80px' }}>
         {/* Stat tiles */}
         <div className="w-tiles" style={{ marginBottom: 20 }}>
           <div className="w-tile">
