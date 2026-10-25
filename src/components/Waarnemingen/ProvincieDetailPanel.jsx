@@ -151,31 +151,21 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
   }
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 200,
-      background: 'var(--bg-primary)',
-      display: 'flex', flexDirection: 'column',
-      overflowY: 'auto',
-    }}>
-      <div style={{
-        position: 'sticky', top: 0, zIndex: 10,
-        background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border)',
-      }}>
-        <div style={{ maxWidth: 600, margin: '0 auto', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button onClick={onClose} style={{
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: 'var(--text-secondary)', fontSize: '1.3rem', lineHeight: 1, padding: '2px 6px',
-          }}>←</button>
-          <span style={{ fontSize: '1.4rem' }}>{countryFlag(countryCode)}</span>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>{province}</div>
-            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{ebirdCode || countryCode}</div>
-          </div>
+    <div className="w-page">
+      {/* Terugknop + titel */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+        <button onClick={onClose} style={{
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: 'var(--text-secondary)', fontSize: '1.3rem', lineHeight: 1, padding: '2px 4px',
+        }}>←</button>
+        <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>{countryFlag(countryCode)}</span>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>{province}</div>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{ebirdCode || countryCode}</div>
         </div>
       </div>
 
-      <div style={{ maxWidth: 600, margin: '0 auto', padding: '16px 16px 80px' }}>
-        <div className="w-tiles" style={{ marginBottom: 20 }}>
+      <div className="w-tiles" style={{ marginBottom: 20 }}>
           <div className="w-tile">
             <div className="w-tile-value">{stats.speciesCount}</div>
             <div className="w-tile-label">Soorten</div>
@@ -350,7 +340,6 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
             </div>
           </div>
         ))}
-      </div>
     </div>
   );
 }

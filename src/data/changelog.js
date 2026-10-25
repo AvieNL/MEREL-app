@@ -1,6 +1,19 @@
-export const VERSIE = '2.7.5';
+export const VERSIE = '2.7.6';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.6',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: detail-panelen (land, provincie, soort) vervingen de app-header niet meer — renderen nu als gewone paginainhoud',
+    ],
+    wijzigingen_en: [
+      'fix: detail panels (country, province, species) no longer replace the app header — now render as normal page content',
+    ],
+    wijzigingen_de: [
+      'fix: Detailpanele (Land, Provinz, Art) ersetzen den App-Header nicht mehr — werden jetzt als normaler Seiteninhalt gerendert',
+    ],
+  },
   {
     versie: '2.7.5',
     datum: '2026-10-25',
