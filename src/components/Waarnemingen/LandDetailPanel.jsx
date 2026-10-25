@@ -1,9 +1,12 @@
 import { useMemo, useEffect, useRef, useState } from 'react';
 import { countryFlag, formatDate, RARITY_LABELS } from './utils';
 import SoortDetailPanel from './SoortDetailPanel';
+import { fetchCountrySpecies, getEbirdKey } from '../../lib/ebird-api';
 
 export default function LandDetailPanel({ countryCode, countryName, waarnemingen, ringRecords, onClose }) {
   const [selectedSpecies, setSelectedSpecies] = useState(null);
+  const [checklist, setChecklist] = useState({ status: 'idle', data: null, error: null });
+  const [showUnseen, setShowUnseen] = useState(false);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
@@ -58,6 +61,29 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
   }, [obs, ringRecords]);
 
   const withCoords = useMemo(() => obs.filter(w => w.lat != null && w.lon != null), [obs]);
+
+  // eBird checklist
+  const seenSciNames = useMemo(
+    () => new Set(obs.map(w => w.species_name_lat).filter(Boolean)),
+    [obs]
+  );
+
+  useEffect(() => {
+    const key = getEbirdKey();
+    if (!key) { setChecklist({ status: 'no-key', data: null, error: null }); return; }
+    setChecklist({ status: 'loading', data: null, error: null });
+    fetchCountrySpecies(countryCode, key)
+      .then(data => setChecklist({ status: 'done', data, error: null }))
+      .catch(err => setChecklist({ status: 'error', data: null, error: err.message }));
+  }, [countryCode]);
+
+  const checklistStats = useMemo(() => {
+    if (checklist.status !== 'done' || !checklist.data) return null;
+    const total = checklist.data.length;
+    const seen = checklist.data.filter(s => seenSciNames.has(s.sciName));
+    const unseen = checklist.data.filter(s => !seenSciNames.has(s.sciName));
+    return { total, seenCount: seen.length, unseen };
+  }, [checklist, seenSciNames]);
 
   useEffect(() => {
     if (!mapRef.current || withCoords.length === 0) return;
@@ -145,6 +171,84 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
             </div>
           )}
         </div>
+
+        {/* eBird Volledigheid */}
+        {checklist.status === 'no-key' && (
+          <div style={{
+            background: 'color-mix(in srgb, var(--accent) 8%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)',
+            borderRadius: 8, padding: '10px 14px', marginBottom: 20,
+            fontSize: '0.8rem', color: 'var(--text-secondary)',
+          }}>
+            Stel een <strong style={{ color: 'var(--text-primary)' }}>eBird API-sleutel</strong> in via Instellingen om te zien hoeveel procent van de soorten je al hebt gezien.
+          </div>
+        )}
+        {checklist.status === 'loading' && (
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 20 }}>
+            Volledigheid ophalen…
+          </div>
+        )}
+        {checklist.status === 'error' && (
+          <div style={{ fontSize: '0.78rem', color: 'var(--danger, #ef4444)', marginBottom: 20 }}>
+            eBird: {checklist.error}
+          </div>
+        )}
+        {checklistStats && (
+          <>
+            <p className="w-section-title">
+              Volledigheid ({checklistStats.seenCount} / {checklistStats.total} soorten)
+            </p>
+            <div style={{ marginBottom: 6 }}>
+              <div style={{
+                height: 10, borderRadius: 5,
+                background: 'var(--bg-secondary)', border: '1px solid var(--border)',
+                overflow: 'hidden', marginBottom: 6,
+              }}>
+                <div style={{
+                  height: '100%',
+                  width: `${Math.round((checklistStats.seenCount / checklistStats.total) * 100)}%`,
+                  background: 'var(--accent)',
+                  borderRadius: 5,
+                  transition: 'width 0.3s',
+                }} />
+              </div>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 12 }}>
+                <strong style={{ color: 'var(--text-primary)' }}>
+                  {Math.round((checklistStats.seenCount / checklistStats.total) * 100)}%
+                </strong>
+                {' '}— {checklistStats.seenCount} van {checklistStats.total} eBird-soorten gezien
+                <span style={{ color: 'var(--text-muted)' }}> · {checklistStats.unseen.length} nog te zien</span>
+              </div>
+            </div>
+            {checklistStats.unseen.length > 0 && (
+              <>
+                <button onClick={() => setShowUnseen(v => !v)} style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'var(--text-muted)', fontSize: '0.78rem', padding: 0,
+                  display: 'flex', alignItems: 'center', gap: 6, marginBottom: 16,
+                }}>
+                  <span>{showUnseen ? '▲' : '▼'}</span>
+                  <span>Nog te zien ({checklistStats.unseen.length})</span>
+                </button>
+                {showUnseen && (
+                  <div style={{ marginBottom: 20 }}>
+                    {checklistStats.unseen.map(sp => (
+                      <div key={sp.code} style={{
+                        padding: '6px 0', borderBottom: '1px solid var(--border)',
+                        display: 'flex', justifyContent: 'space-between',
+                      }}>
+                        <div>
+                          <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{sp.comName}</div>
+                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>{sp.sciName}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        )}
 
         {/* Periode */}
         {stats.earliest && (

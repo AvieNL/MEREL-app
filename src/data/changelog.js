@@ -1,6 +1,24 @@
-export const VERSIE = '2.4.10';
+export const VERSIE = '2.5.0';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.0',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'feat: eBird volledigheid per land — stel een gratis eBird API-sleutel in en zie hoeveel % van de soorten je al hebt gezien',
+      'feat: per land: voortgangsbalk + teller gezien/totaal + inklapbare lijst "nog te zien"',
+      'feat: eBird API-sleutel instellen via Instellingen, resultaten worden 1 week gecached',
+    ],
+    wijzigingen_en: [
+      'feat: eBird completeness per country — set a free eBird API key and see what % of species you have seen',
+      'feat: per country: progress bar + seen/total count + collapsible "still to see" list',
+      'feat: set eBird API key in Settings, results cached for 1 week',
+    ],
+    wijzigingen_de: [
+      'feat: eBird-Vollständigkeit pro Land — kostenlosen eBird API-Schlüssel eingeben und % gesehener Arten sehen',
+      'feat: pro Land: Fortschrittsbalken + gesehen/gesamt + einklappbare Fehlende-Arten-Liste',
+    ],
+  },
   {
     versie: '2.4.10',
     datum: '2026-10-25',

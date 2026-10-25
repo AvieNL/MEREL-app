@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { fetchUserObservations, parseCsv } from '../../lib/observation-api';
+import { getEbirdKey, setEbirdKey, clearEbirdCache } from '../../lib/ebird-api';
 
 const STORAGE_TOKEN_KEY = 'w_obs_token';
 const STORAGE_USER_KEY  = 'w_obs_user_id';
@@ -7,6 +8,7 @@ const STORAGE_USER_KEY  = 'w_obs_user_id';
 export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
   const [token, setToken]   = useState(() => localStorage.getItem(STORAGE_TOKEN_KEY) ?? '');
   const [userId, setUserId] = useState(() => localStorage.getItem(STORAGE_USER_KEY) ?? '');
+  const [ebirdKey, setEbirdKeyState] = useState(() => getEbirdKey());
   const [showApi, setShowApi] = useState(false);
   const [status, setStatus] = useState(null);
   const [progress, setProgress] = useState(null);
@@ -148,6 +150,52 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear }) {
       >
         Alle waarnemingen wissen
       </button>
+
+      <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '24px 0' }} />
+
+      {/* ── eBird checklist ── */}
+      <p className="w-section-title">Volledigheid per land (eBird)</p>
+      <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: 12, lineHeight: 1.5 }}>
+        Met een gratis eBird API-sleutel zie je per land hoeveel procent van de soorten je al hebt gezien.
+        Vraag een sleutel aan via <strong>ebird.org/api/keygen</strong> (gratis account vereist).
+      </p>
+      <div className="w-form-group">
+        <label className="w-form-label">eBird API-sleutel</label>
+        <input
+          className="w-form-input"
+          type="password"
+          value={ebirdKey}
+          onChange={e => setEbirdKeyState(e.target.value)}
+          placeholder="Bijv. jce2r5xxxxxxxx"
+          autoComplete="off"
+        />
+      </div>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button
+          className="btn-secondary"
+          style={{ flex: 1 }}
+          onClick={() => {
+            setEbirdKey(ebirdKey);
+            clearEbirdCache();
+            setStatus({ type: 'ok', msg: 'eBird API-sleutel opgeslagen. Cache gewist.' });
+          }}
+        >
+          Opslaan
+        </button>
+        {ebirdKey && (
+          <button
+            className="btn-danger"
+            onClick={() => {
+              setEbirdKeyState('');
+              setEbirdKey('');
+              clearEbirdCache();
+              setStatus({ type: 'ok', msg: 'eBird API-sleutel verwijderd.' });
+            }}
+          >
+            Verwijderen
+          </button>
+        )}
+      </div>
 
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '24px 0' }} />
 
