@@ -114,32 +114,32 @@ export default function LifelistPage({ waarnemingen }) {
 }
 
 function LifelistRow({ entry, onClick }) {
+  const hasLat = entry.species_name_lat && entry.species_name_nl && entry.species_name_lat !== entry.species_name_nl;
+  const dateRange = entry.first_date === entry.last_date
+    ? formatDate(entry.first_date)
+    : `${formatDate(entry.first_date)} – ${formatDate(entry.last_date)}`;
+
   return (
-    <div className="w-obs-row" onClick={onClick} style={{ cursor: 'pointer' }}>
-      <div className="w-obs-main">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span className="w-obs-name">{entry.species_name_nl || entry.species_name_lat}</span>
-          {entry.geringd && <span className="w-ring-badge">geringd</span>}
-        </div>
-        {entry.species_name_lat && entry.species_name_nl && entry.species_name_lat !== entry.species_name_nl && (
-          <div className="w-obs-lat">{entry.species_name_lat}</div>
-        )}
-        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 3, display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+    <div className="w-ll-row" onClick={onClick}>
+      {/* Regel 1: naam · geringd · vlaggen · aantal */}
+      <div className="w-ll-top">
+        <span className="w-ll-name">{entry.species_name_nl || entry.species_name_lat}</span>
+        {entry.geringd && <span className="w-ring-badge">◎</span>}
+        <span className="w-ll-flags">
           {entry.countries.map(c => (
             <span key={c} title={c}>{countryFlag(c)}</span>
           ))}
-          <span style={{ marginLeft: 2 }}>{entry.count}×</span>
+        </span>
+        <span className="w-ll-count">{entry.count}×</span>
+        <span className="w-ll-chevron">›</span>
+      </div>
+      {/* Regel 2: Latijnse naam + datumrange (alleen als relevant) */}
+      {(hasLat || entry.first_date) && (
+        <div className="w-ll-sub">
+          {hasLat && <span className="w-ll-lat">{entry.species_name_lat}</span>}
+          <span className="w-ll-dates">{dateRange}</span>
         </div>
-      </div>
-      <div className="w-obs-meta">
-        <span className="w-obs-date">{formatDate(entry.first_date)}</span>
-        {entry.first_date !== entry.last_date && (
-          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-            – {formatDate(entry.last_date)}
-          </span>
-        )}
-        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>›</span>
-      </div>
+      )}
     </div>
   );
 }

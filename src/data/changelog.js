@@ -1,6 +1,19 @@
-export const VERSIE = '2.7.0';
+export const VERSIE = '2.7.1';
 
 export const CHANGELOG = [
+  {
+    versie: '2.7.1',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'ux: lifelist-rijen compacter — max 2 regels, Nederlandse naam volledig uitgeschreven',
+    ],
+    wijzigingen_en: [
+      'ux: lifelist rows more compact — max 2 lines, Dutch name fully written out',
+    ],
+    wijzigingen_de: [
+      'ux: Lifelist-Zeilen kompakter — max. 2 Zeilen, niederländischer Name vollständig ausgeschrieben',
+    ],
+  },
   {
     versie: '2.7.0',
     datum: '2026-10-25',

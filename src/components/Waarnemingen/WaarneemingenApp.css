@@ -137,6 +137,75 @@
   flex-shrink: 0;
 }
 
+/* Lifelist row */
+.w-ll-row {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.w-ll-row:last-child { border-bottom: none; }
+
+.w-ll-top {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.w-ll-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.w-ll-flags {
+  display: flex;
+  gap: 1px;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.w-ll-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.w-ll-chevron {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.w-ll-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 1px;
+}
+
+.w-ll-lat {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.w-ll-dates {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 /* legacy */
 .w-obs-country {
   font-size: 0.7rem;
