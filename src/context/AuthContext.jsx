@@ -89,6 +89,10 @@ export function AuthProvider({ children }) {
         setProfileError(true);
       }
       setProfile(data ?? null);
+      // Sync device-local settings from profile
+      if (data?.ebird_key) {
+        localStorage.setItem('w_ebird_key', data.ebird_key);
+      }
     } catch (err) {
       console.error('Profiel laden mislukt:', err.message);
       setProfileError(true);

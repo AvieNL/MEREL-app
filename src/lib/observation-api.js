@@ -83,25 +83,54 @@ export function normaliseObservation(raw) {
  * The CSV format exported by waarneming.nl uses semicolon separators.
  */
 export function parseCsv(csvText) {
-  const lines = csvText.trim().split('\n');
+  // Split into lines, handling \r\n and \n
+  const lines = csvText.trim().split(/\r?\n/);
   if (lines.length < 2) return [];
 
   const raw = lines[0];
   // Detect separator: tab, semicolon or comma
   const sep = raw.includes('\t') ? '\t' : raw.includes(';') ? ';' : ',';
-  const headers = raw.split(sep).map(h => h.trim().replace(/"/g, '').toLowerCase());
+
+  // RFC 4180-compliant field splitter (handles quoted fields with embedded separators)
+  function splitRow(line) {
+    const fields = [];
+    let cur = '';
+    let inQuote = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuote) {
+        if (ch === '"') {
+          if (line[i + 1] === '"') { cur += '"'; i++; } // escaped quote
+          else inQuote = false;
+        } else {
+          cur += ch;
+        }
+      } else if (ch === '"') {
+        inQuote = true;
+      } else if (ch === sep) {
+        fields.push(cur.trim());
+        cur = '';
+      } else {
+        cur += ch;
+      }
+    }
+    fields.push(cur.trim());
+    return fields;
+  }
+
+  const headers = splitRow(raw).map(h => h.replace(/"/g, '').toLowerCase());
 
   const get = (row, ...keys) => {
     for (const k of keys) {
       const idx = headers.indexOf(k);
-      if (idx >= 0 && row[idx] !== undefined) return row[idx].replace(/"/g, '').trim();
+      if (idx >= 0 && row[idx] !== undefined) return row[idx].trim();
     }
     return '';
   };
 
   const results = [];
   for (let i = 1; i < lines.length; i++) {
-    const row = lines[i].split(sep);
+    const row = splitRow(lines[i]);
     if (row.length < 3) continue;
 
     // Alleen vogels importeren — species group = "Vogels" of "Birds"

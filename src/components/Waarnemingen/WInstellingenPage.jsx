@@ -1,11 +1,13 @@
 import { useState, useRef } from 'react';
 import { fetchUserObservations, parseCsv } from '../../lib/observation-api';
 import { getEbirdKey, setEbirdKey, clearEbirdCache } from '../../lib/ebird-api';
+import { useAuth } from '../../context/AuthContext';
 
 const STORAGE_TOKEN_KEY = 'w_obs_token';
 const STORAGE_USER_KEY  = 'w_obs_user_id';
 
 export default function WInstellingenPage({ waarnemingen, onImport, onClear, onSync }) {
+  const { updateProfile } = useAuth();
   const [token, setToken]   = useState(() => localStorage.getItem(STORAGE_TOKEN_KEY) ?? '');
   const [userId, setUserId] = useState(() => localStorage.getItem(STORAGE_USER_KEY) ?? '');
   const [ebirdKey, setEbirdKeyState] = useState(() => getEbirdKey());
@@ -232,10 +234,15 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear, onS
         <button
           className="btn-secondary"
           style={{ flex: 1 }}
-          onClick={() => {
+          onClick={async () => {
             setEbirdKey(ebirdKey);
             clearEbirdCache();
-            setStatus({ type: 'ok', msg: 'eBird API-sleutel opgeslagen. Cache gewist.' });
+            try {
+              await updateProfile({ ebird_key: ebirdKey.trim() });
+              setStatus({ type: 'ok', msg: 'eBird API-sleutel opgeslagen op alle apparaten.' });
+            } catch {
+              setStatus({ type: 'ok', msg: 'eBird API-sleutel lokaal opgeslagen (cloud-sync mislukt).' });
+            }
           }}
         >
           Opslaan
@@ -243,10 +250,11 @@ export default function WInstellingenPage({ waarnemingen, onImport, onClear, onS
         {ebirdKey && (
           <button
             className="btn-danger"
-            onClick={() => {
+            onClick={async () => {
               setEbirdKeyState('');
               setEbirdKey('');
               clearEbirdCache();
+              try { await updateProfile({ ebird_key: '' }); } catch { /* ignore */ }
               setStatus({ type: 'ok', msg: 'eBird API-sleutel verwijderd.' });
             }}
           >

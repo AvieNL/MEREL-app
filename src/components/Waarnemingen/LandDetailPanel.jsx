@@ -71,6 +71,11 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
     () => new Set(obs.map(w => normSciName(w.species_name_lat)).filter(Boolean)),
     [obs]
   );
+  // Dutch name fallback: for species where Latin name is missing or doesn't match
+  const seenNlLower = useMemo(
+    () => new Set(obs.map(w => (w.species_name_nl || '').toLowerCase().trim()).filter(Boolean)),
+    [obs]
+  );
 
   useEffect(() => {
     const key = getEbirdKey();
@@ -87,8 +92,11 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
     if (checklist.status !== 'done' || !checklist.data) return null;
     const ebirdNorms = new Set(checklist.data.map(s => normSciName(s.sciName)));
     const total = checklist.data.length;
-    const seen = checklist.data.filter(s => seenSciNorm.has(normSciName(s.sciName)));
-    const unseen = checklist.data.filter(s => !seenSciNorm.has(normSciName(s.sciName)));
+    const isSeen = s =>
+      seenSciNorm.has(normSciName(s.sciName)) ||
+      seenNlLower.has((s.comName || '').toLowerCase().trim());
+    const seen = checklist.data.filter(isSeen);
+    const unseen = checklist.data.filter(s => !isSeen(s));
     // User's species that have no counterpart in the eBird list
     const noMatchMap = new Map();
     for (const w of obs) {
@@ -123,7 +131,7 @@ export default function LandDetailPanel({ countryCode, countryName, waarnemingen
     splits.sort((a, b) => (a[0].name_nl || '').localeCompare(b[0].name_nl || '', 'nl'));
 
     return { total, seenCount: seen.length, unseen, noMatch, splits };
-  }, [checklist, seenSciNorm, obs]);
+  }, [checklist, seenSciNorm, seenNlLower, obs]);
 
   useEffect(() => {
     if (!mapRef.current || withCoords.length === 0) return;

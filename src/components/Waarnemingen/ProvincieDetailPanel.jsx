@@ -70,6 +70,10 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
     () => new Set(obs.map(w => normSciName(w.species_name_lat)).filter(Boolean)),
     [obs]
   );
+  const seenNlLower = useMemo(
+    () => new Set(obs.map(w => (w.species_name_nl || '').toLowerCase().trim()).filter(Boolean)),
+    [obs]
+  );
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -88,8 +92,11 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
     if (checklist.status !== 'done' || !checklist.data) return null;
     const ebirdNorms = new Set(checklist.data.map(s => normSciName(s.sciName)));
     const total = checklist.data.length;
-    const seen = checklist.data.filter(s => seenSciNorm.has(normSciName(s.sciName)));
-    const unseen = checklist.data.filter(s => !seenSciNorm.has(normSciName(s.sciName)));
+    const isSeen = s =>
+      seenSciNorm.has(normSciName(s.sciName)) ||
+      seenNlLower.has((s.comName || '').toLowerCase().trim());
+    const seen = checklist.data.filter(isSeen);
+    const unseen = checklist.data.filter(s => !isSeen(s));
     const noMatchMap = new Map();
     for (const w of obs) {
       const norm = normSciName(w.species_name_lat);
@@ -102,7 +109,7 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
     const noMatch = [...noMatchMap.values()]
       .sort((a, b) => (a.name_nl || a.name_lat).localeCompare(b.name_nl || b.name_lat, 'nl'));
     return { total, seenCount: seen.length, unseen, noMatch };
-  }, [checklist, seenSciNorm, obs]);
+  }, [checklist, seenSciNorm, seenNlLower, obs]);
 
   useEffect(() => {
     if (!mapRef.current || withCoords.length === 0) return;

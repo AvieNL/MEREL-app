@@ -32,14 +32,21 @@ export default function VolledigheidsPage({ waarnemingen }) {
     () => new Set(waarnemingen.map(w => normSciName(w.species_name_lat)).filter(Boolean)),
     [waarnemingen]
   );
+  const globalNlLower = useMemo(
+    () => new Set(waarnemingen.map(w => (w.species_name_nl || '').toLowerCase().trim()).filter(Boolean)),
+    [waarnemingen]
+  );
 
   // World completeness vs eBird taxonomy
   const worldStats = useMemo(() => {
     if (worldList.status !== 'done' || !worldList.data) return null;
     const ebirdNorms = new Set(worldList.data.map(s => normSciName(s.sciName)));
     const total = worldList.data.length;
-    const seen = worldList.data.filter(s => globalSciNorm.has(normSciName(s.sciName)));
-    const unseen = worldList.data.filter(s => !globalSciNorm.has(normSciName(s.sciName)));
+    const isSeen = s =>
+      globalSciNorm.has(normSciName(s.sciName)) ||
+      globalNlLower.has((s.comName || '').toLowerCase().trim());
+    const seen = worldList.data.filter(isSeen);
+    const unseen = worldList.data.filter(s => !isSeen(s));
     // Species in the user's lifelist that don't match any eBird species
     const noMatchMap = new Map();
     for (const w of waarnemingen) {
@@ -53,7 +60,7 @@ export default function VolledigheidsPage({ waarnemingen }) {
     const noMatch = [...noMatchMap.values()]
       .sort((a, b) => (a.name_nl || a.name_lat).localeCompare(b.name_nl || b.name_lat, 'nl'));
     return { total, seenCount: seen.length, unseen, noMatch };
-  }, [worldList, globalSciNorm, waarnemingen]);
+  }, [worldList, globalSciNorm, globalNlLower, waarnemingen]);
 
   // Continent aggregation from user data
   const continents = useMemo(() => {

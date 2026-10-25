@@ -1,6 +1,24 @@
-export const VERSIE = '2.5.9';
+export const VERSIE = '2.6.1';
 
 export const CHANGELOG = [
+  {
+    versie: '2.6.1',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'feat: eBird API-sleutel opgeslagen in Supabase-profiel — beschikbaar op alle apparaten',
+      'fix: eBird-matching ook op Nederlandse naam als Latijnse naam ontbreekt of afwijkt',
+      'fix: CSV-parser herkent nu aanhalingstekens correct (locaties met puntkomma\'s)',
+    ],
+    wijzigingen_en: [
+      'feat: eBird API key stored in Supabase profile — available on all devices',
+      'fix: eBird matching now also uses Dutch name as fallback when Latin name is missing',
+      'fix: CSV parser now handles quoted fields correctly (locations with semicolons)',
+    ],
+    wijzigingen_de: [
+      'feat: eBird API-Schlüssel im Supabase-Profil gespeichert — auf allen Geräten verfügbar',
+      'fix: eBird-Matching verwendet jetzt auch den niederländischen Namen als Fallback',
+    ],
+  },
   {
     versie: '2.5.9',
     datum: '2026-10-25',
