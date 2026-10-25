@@ -13,6 +13,7 @@ export default function VolledigheidsPage({ waarnemingen }) {
   const { records: ringRecords } = useRecords();
   const [worldList, setWorldList] = useState({ status: 'idle', data: null, error: null });
   const [showWorldUnseen, setShowWorldUnseen] = useState(false);
+  const [showWorldNoMatch, setShowWorldNoMatch] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState(null);
 
   const ebirdKey = getEbirdKey();
@@ -35,11 +36,22 @@ export default function VolledigheidsPage({ waarnemingen }) {
   // World completeness vs eBird taxonomy
   const worldStats = useMemo(() => {
     if (worldList.status !== 'done' || !worldList.data) return null;
+    const ebirdNorms = new Set(worldList.data.map(s => normSciName(s.sciName)));
     const total = worldList.data.length;
     const seen = worldList.data.filter(s => globalSciNorm.has(normSciName(s.sciName)));
     const unseen = worldList.data.filter(s => !globalSciNorm.has(normSciName(s.sciName)));
-    return { total, seenCount: seen.length, unseen };
-  }, [worldList, globalSciNorm]);
+    // Species in the user's lifelist that don't match any eBird species
+    const noMatchMap = new Map();
+    for (const w of waarnemingen) {
+      const norm = normSciName(w.species_name_lat);
+      if (norm && !ebirdNorms.has(norm) && !noMatchMap.has(norm)) {
+        noMatchMap.set(norm, { name_nl: w.species_name_nl || w.species_name_lat, name_lat: w.species_name_lat });
+      }
+    }
+    const noMatch = [...noMatchMap.values()]
+      .sort((a, b) => (a.name_nl || a.name_lat).localeCompare(b.name_nl || b.name_lat, 'nl'));
+    return { total, seenCount: seen.length, unseen, noMatch };
+  }, [worldList, globalSciNorm, waarnemingen]);
 
   // Continent aggregation from user data
   const continents = useMemo(() => {
@@ -182,6 +194,33 @@ export default function VolledigheidsPage({ waarnemingen }) {
                       ... en {(worldStats.unseen.length - MAX_UNSEEN).toLocaleString('nl')} meer
                     </div>
                   )}
+                </div>
+              )}
+            </>
+          )}
+          {worldStats.noMatch.length > 0 && (
+            <>
+              <button onClick={() => setShowWorldNoMatch(v => !v)} style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: 'var(--text-muted)', fontSize: '0.78rem', padding: 0,
+                display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12,
+              }}>
+                <span>{showWorldNoMatch ? '▲' : '▼'}</span>
+                <span style={{ color: '#f59e0b' }}>Geen eBird-match ({worldStats.noMatch.length})</span>
+              </button>
+              {showWorldNoMatch && (
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: 8 }}>
+                    Deze soorten staan in jouw lijst maar zijn niet herkend in de eBird-wereldtaxonomie. Mogelijke oorzaken: andere geslachtsnaam (Clements vs IOC), hybride, niet-erkende soort, of onvolledige naam in de import.
+                  </div>
+                  {worldStats.noMatch.map(sp => (
+                    <div key={sp.name_lat || sp.name_nl} style={{ padding: '5px 0', borderBottom: '1px solid var(--border)' }}>
+                      <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{sp.name_nl}</div>
+                      {sp.name_lat && sp.name_lat !== sp.name_nl && (
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>{sp.name_lat}</div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
             </>

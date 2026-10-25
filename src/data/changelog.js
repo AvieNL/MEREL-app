@@ -1,6 +1,21 @@
-export const VERSIE = '2.5.2';
+export const VERSIE = '2.5.3';
 
 export const CHANGELOG = [
+  {
+    versie: '2.5.3',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'feat: "Geen eBird-match"-lijst in landen-, provincie- en wereldoverzicht',
+      'feat: toont welke eigen soorten niet herkend worden in eBird (andere geslachtsnaam, hybride, etc.)',
+    ],
+    wijzigingen_en: [
+      'feat: "No eBird match" list in country, province and world overview',
+      'feat: shows which own species are not recognised in eBird taxonomy',
+    ],
+    wijzigingen_de: [
+      'feat: "Kein eBird-Match"-Liste in Länder-, Provinz- und Weltübersicht',
+    ],
+  },
   {
     versie: '2.5.2',
     datum: '2026-10-25',

@@ -7,6 +7,7 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
   const [selectedSpecies, setSelectedSpecies] = useState(null);
   const [checklist, setChecklist] = useState({ status: 'idle', data: null, error: null });
   const [showUnseen, setShowUnseen] = useState(false);
+  const [showNoMatch, setShowNoMatch] = useState(false);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
@@ -84,11 +85,21 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
 
   const checklistStats = useMemo(() => {
     if (checklist.status !== 'done' || !checklist.data) return null;
+    const ebirdNorms = new Set(checklist.data.map(s => normSciName(s.sciName)));
     const total = checklist.data.length;
     const seen = checklist.data.filter(s => seenSciNorm.has(normSciName(s.sciName)));
     const unseen = checklist.data.filter(s => !seenSciNorm.has(normSciName(s.sciName)));
-    return { total, seenCount: seen.length, unseen };
-  }, [checklist, seenSciNorm]);
+    const noMatchMap = new Map();
+    for (const w of obs) {
+      const norm = normSciName(w.species_name_lat);
+      if (norm && !ebirdNorms.has(norm) && !noMatchMap.has(norm)) {
+        noMatchMap.set(norm, { name_nl: w.species_name_nl || w.species_name_lat, name_lat: w.species_name_lat });
+      }
+    }
+    const noMatch = [...noMatchMap.values()]
+      .sort((a, b) => (a.name_nl || a.name_lat).localeCompare(b.name_nl || b.name_lat, 'nl'));
+    return { total, seenCount: seen.length, unseen, noMatch };
+  }, [checklist, seenSciNorm, obs]);
 
   useEffect(() => {
     if (!mapRef.current || withCoords.length === 0) return;
@@ -227,16 +238,11 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
                   <span>Nog te zien ({checklistStats.unseen.length})</span>
                 </button>
                 {showUnseen && (
-                  <div style={{ marginBottom: 20 }}>
+                  <div style={{ marginBottom: 12 }}>
                     {checklistStats.unseen.slice(0, 200).map(sp => (
-                      <div key={sp.code} style={{
-                        padding: '6px 0', borderBottom: '1px solid var(--border)',
-                        display: 'flex', justifyContent: 'space-between',
-                      }}>
-                        <div>
-                          <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{sp.comName}</div>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>{sp.sciName}</div>
-                        </div>
+                      <div key={sp.code} style={{ padding: '5px 0', borderBottom: '1px solid var(--border)' }}>
+                        <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{sp.comName}</div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>{sp.sciName}</div>
                       </div>
                     ))}
                     {checklistStats.unseen.length > 200 && (
@@ -244,6 +250,33 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
                         ... en {checklistStats.unseen.length - 200} meer
                       </div>
                     )}
+                  </div>
+                )}
+              </>
+            )}
+            {checklistStats.noMatch.length > 0 && (
+              <>
+                <button onClick={() => setShowNoMatch(v => !v)} style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'var(--text-muted)', fontSize: '0.78rem', padding: 0,
+                  display: 'flex', alignItems: 'center', gap: 6, marginBottom: 16,
+                }}>
+                  <span>{showNoMatch ? '▲' : '▼'}</span>
+                  <span style={{ color: '#f59e0b' }}>Geen eBird-match ({checklistStats.noMatch.length})</span>
+                </button>
+                {showNoMatch && (
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: 8 }}>
+                      Staan in jouw lijst maar zijn niet herkend in de eBird-taxonomie.
+                    </div>
+                    {checklistStats.noMatch.map(sp => (
+                      <div key={sp.name_lat || sp.name_nl} style={{ padding: '5px 0', borderBottom: '1px solid var(--border)' }}>
+                        <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{sp.name_nl}</div>
+                        {sp.name_lat && sp.name_lat !== sp.name_nl && (
+                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>{sp.name_lat}</div>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
               </>
