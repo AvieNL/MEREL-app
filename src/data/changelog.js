@@ -1,6 +1,22 @@
-export const VERSIE = '2.4.6';
+export const VERSIE = '2.4.7';
 
 export const CHANGELOG = [
+  {
+    versie: '2.4.7',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'Lifelist: klik op een soort voor detailpagina met kaart, landen (vlaggen), jaaroverzicht en alle waarnemingen',
+      'Lifelist: landen worden als vlaggen getoond',
+    ],
+    wijzigingen_en: [
+      'Lifelist: tap a species for detail page with map, countries (flags), year chart and all sightings',
+      'Lifelist: countries shown as flag emojis',
+    ],
+    wijzigingen_de: [
+      'Lebensliste: Tippen auf eine Art öffnet Detailseite mit Karte, Ländern (Flaggen), Jahresübersicht und allen Beobachtungen',
+      'Lebensliste: Länder als Flaggen-Emoji angezeigt',
+    ],
+  },
   {
     versie: '2.4.6',
     datum: '2026-10-24',

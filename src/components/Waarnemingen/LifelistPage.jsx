@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useRecords } from '../../hooks/useRecords';
-import { formatDate } from './utils';
+import { countryFlag, formatDate } from './utils';
+import SoortDetailPanel from './SoortDetailPanel';
 
 export default function LifelistPage({ waarnemingen }) {
   const [query, setQuery] = useState('');
+  const [selectedKey, setSelectedKey] = useState(null);
   const { records } = useRecords();
 
   // Build set of EURING codes from ring records for cross-reference
@@ -51,6 +53,17 @@ export default function LifelistPage({ waarnemingen }) {
     );
   }, [lifelist, query]);
 
+  if (selectedKey) {
+    return (
+      <SoortDetailPanel
+        speciesKey={selectedKey}
+        waarnemingen={waarnemingen}
+        ringRecords={records}
+        onClose={() => setSelectedKey(null)}
+      />
+    );
+  }
+
   if (waarnemingen.length === 0) {
     return (
       <div className="w-page">
@@ -88,7 +101,7 @@ export default function LifelistPage({ waarnemingen }) {
       />
 
       {filtered.map(entry => (
-        <LifelistRow key={entry.key} entry={entry} />
+        <LifelistRow key={entry.key} entry={entry} onClick={() => setSelectedKey(entry.key)} />
       ))}
 
       {filtered.length === 0 && (
@@ -100,9 +113,9 @@ export default function LifelistPage({ waarnemingen }) {
   );
 }
 
-function LifelistRow({ entry }) {
+function LifelistRow({ entry, onClick }) {
   return (
-    <div className="w-obs-row">
+    <div className="w-obs-row" onClick={onClick} style={{ cursor: 'pointer' }}>
       <div className="w-obs-main">
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span className="w-obs-name">{entry.species_name_nl || entry.species_name_lat}</span>
@@ -111,8 +124,11 @@ function LifelistRow({ entry }) {
         {entry.species_name_lat && entry.species_name_nl && entry.species_name_lat !== entry.species_name_nl && (
           <div className="w-obs-lat">{entry.species_name_lat}</div>
         )}
-        <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 2 }}>
-          {entry.countries.join(' · ')} · {entry.count}×
+        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 3, display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+          {entry.countries.map(c => (
+            <span key={c} title={c}>{countryFlag(c)}</span>
+          ))}
+          <span style={{ marginLeft: 2 }}>{entry.count}×</span>
         </div>
       </div>
       <div className="w-obs-meta">
@@ -122,6 +138,7 @@ function LifelistRow({ entry }) {
             – {formatDate(entry.last_date)}
           </span>
         )}
+        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>›</span>
       </div>
     </div>
   );
