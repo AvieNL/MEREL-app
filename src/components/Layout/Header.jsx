@@ -103,6 +103,10 @@ export default function Header({ onSwitchModule, activeModule }) {
 
   function goTo(path) {
     setMenuOpen(false);
+    // WaarneemingenApp heeft geen <Routes> — shared pagina's vereisen module-switch naar ring
+    if (activeModule === 'waarnemingen' && onSwitchModule) {
+      onSwitchModule('ring');
+    }
     navigate(path);
   }
 

@@ -1,6 +1,19 @@
-export const VERSIE = '2.6.3';
+export const VERSIE = '2.6.4';
 
 export const CHANGELOG = [
+  {
+    versie: '2.6.4',
+    datum: '2026-10-25',
+    wijzigingen: [
+      'fix: hamburgermenu-links (instellingen, kennisbank, over) werken nu ook vanuit de Waarnemingen-module',
+    ],
+    wijzigingen_en: [
+      'fix: hamburger menu links (settings, knowledge base, about) now work from the Observations module too',
+    ],
+    wijzigingen_de: [
+      'fix: Hamburger-Menü-Links (Einstellungen, Wissensdatenbank, Über) funktionieren jetzt auch im Beobachtungsmodul',
+    ],
+  },
   {
     versie: '2.6.3',
     datum: '2026-10-25',
