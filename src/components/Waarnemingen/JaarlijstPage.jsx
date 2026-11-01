@@ -19,9 +19,21 @@ export default function JaarlijstPage({ waarnemingen }) {
       const key = w.species_name_lat || w.species_name_nl;
       if (key) map.get(yr).add(key);
     }
-    return [...map.entries()]
-      .map(([yr, sp]) => ({ yr, species: sp.size }))
+    const sorted = [...map.entries()]
+      .map(([yr, sp]) => ({ yr, species: sp.size, set: sp }))
       .sort((a, b) => a.yr.localeCompare(b.yr));
+
+    // Lifers = soorten die in dit jaar voor het eerst voorkomen
+    const seen = new Set();
+    for (const entry of sorted) {
+      let lifers = 0;
+      for (const sp of entry.set) {
+        if (!seen.has(sp)) { lifers++; seen.add(sp); }
+      }
+      entry.lifers = lifers;
+      entry.returning = entry.species - lifers;
+    }
+    return sorted;
   }, [waarnemingen]);
 
   const { jaarlijst, totalObs, byMonth } = useMemo(() => {
@@ -67,6 +79,7 @@ export default function JaarlijstPage({ waarnemingen }) {
   }
 
   const maxYear = Math.max(...byYear.map(y => y.species), 1);
+  const CHART_H = 100;
   const maxMonth = Math.max(...byMonth, 1);
 
   return (
@@ -75,24 +88,38 @@ export default function JaarlijstPage({ waarnemingen }) {
       {byYear.length > 1 && (
         <>
           <p className="w-section-title">Soorten per jaar</p>
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 72, marginBottom: 4 }}>
-            {byYear.map(({ yr, species }) => (
-              <div
-                key={yr}
-                style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}
-                onClick={() => setSelectedYear(yr)}
-                title={`${yr}: ${species} soorten`}
-              >
-                <div style={{
-                  width: '100%', borderRadius: '3px 3px 0 0',
-                  background: yr === selectedYear ? 'var(--accent)' : 'color-mix(in srgb, var(--accent) 40%, var(--bg-secondary))',
-                  height: `${Math.max(8, (species / maxYear) * 56)}px`,
-                  transition: 'height 0.3s, background 0.2s',
-                }} />
-              </div>
-            ))}
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: CHART_H, marginBottom: 4 }}>
+            {byYear.map(({ yr, species, lifers, returning }) => {
+              const totalH = Math.max(8, (species / maxYear) * (CHART_H - 8));
+              const liferH = Math.round((lifers / species) * totalH);
+              const retH = totalH - liferH;
+              const dim = yr !== selectedYear;
+              return (
+                <div
+                  key={yr}
+                  style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'stretch', cursor: 'pointer' }}
+                  onClick={() => setSelectedYear(yr)}
+                  title={`${yr}: ${species} soorten (${lifers} nieuw, ${returning} terugkerend)`}
+                >
+                  {liferH > 0 && <div style={{
+                    height: liferH,
+                    borderRadius: retH === 0 ? '3px 3px 0 0' : '0',
+                    background: '#22c55e',
+                    opacity: dim ? 0.35 : 0.9,
+                    transition: 'height 0.3s, opacity 0.2s',
+                  }} />}
+                  {retH > 0 && <div style={{
+                    height: retH,
+                    borderRadius: liferH === 0 ? '3px 3px 0 0' : '0',
+                    background: 'var(--accent)',
+                    opacity: dim ? 0.3 : 0.75,
+                    transition: 'height 0.3s, opacity 0.2s',
+                  }} />}
+                </div>
+              );
+            })}
           </div>
-          <div style={{ display: 'flex', gap: 4, marginBottom: 20 }}>
+          <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
             {byYear.map(({ yr }) => (
               <div key={yr} style={{
                 flex: 1, textAlign: 'center',
@@ -104,6 +131,16 @@ export default function JaarlijstPage({ waarnemingen }) {
                 {yr.slice(2)}
               </div>
             ))}
+          </div>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.68rem', color: 'var(--text-muted)' }}>
+              <div style={{ width: 10, height: 10, borderRadius: 2, background: '#22c55e', opacity: 0.9 }} />
+              Nieuw (lifers)
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.68rem', color: 'var(--text-muted)' }}>
+              <div style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--accent)', opacity: 0.75 }} />
+              Terugkerend
+            </div>
           </div>
         </>
       )}
