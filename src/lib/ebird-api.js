@@ -22,15 +22,22 @@ function writeCache(key, data) {
   try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data })); } catch { /* ignore quota errors */ }
 }
 
-async function ebirdFetch(path, apiKey) {
-  const res = await fetch(`https://api.ebird.org/v2${path}`, {
-    headers: { 'X-eBirdApiToken': apiKey },
-  });
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error(`eBird ${res.status}${text ? ': ' + text.slice(0, 200) : ''}`);
+async function ebirdFetch(path, apiKey, timeoutMs = 20000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(`https://api.ebird.org/v2${path}`, {
+      headers: { 'X-eBirdApiToken': apiKey },
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`eBird ${res.status}${text ? ': ' + text.slice(0, 200) : ''}`);
+    }
+    return res.json();
+  } finally {
+    clearTimeout(timer);
   }
-  return res.json();
 }
 
 async function fetchTaxonomyBatch(codes, apiKey) {
@@ -217,7 +224,10 @@ export async function enrichObservationsRarity(observations, apiKey, onProgress)
       if (list?.length) {
         regionSpecies.set(code, new Set(list.map(s => normSci(s.sciName))));
       }
-    } catch { /* skip unavailable regions */ }
+    } catch (err) {
+      const isTimeout = err?.name === 'AbortError';
+      console.warn(`eBird: regio ${code} overgeslagen (${isTimeout ? 'timeout' : err?.message})`);
+    }
     onProgress?.(++done, total, code);
   }
 
