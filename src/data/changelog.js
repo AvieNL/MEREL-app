@@ -1,6 +1,19 @@
-export const VERSIE = '2.8.6';
+export const VERSIE = '2.8.7';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.7',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'feat: jaarlijst toont lifers (groen) bovenaan, daarna terugkerende soorten — met sectiekoppen en aantallen',
+    ],
+    wijzigingen_en: [
+      'feat: year list shows lifers (green) at the top, then returning species — with section headers and counts',
+    ],
+    wijzigingen_de: [
+      'feat: Jahresliste zeigt Lifers (grün) oben, dann wiederkehrende Arten — mit Abschnittsköpfen und Anzahlen',
+    ],
+  },
   {
     versie: '2.8.6',
     datum: '2026-11-01',

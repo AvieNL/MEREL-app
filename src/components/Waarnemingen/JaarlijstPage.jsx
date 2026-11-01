@@ -38,6 +38,15 @@ export default function JaarlijstPage({ waarnemingen }) {
 
   const { jaarlijst, totalObs, byMonth } = useMemo(() => {
     const inYear = waarnemingen.filter(w => w.datum?.startsWith(selectedYear));
+
+    // Soorten die vóór het geselecteerde jaar al gezien zijn
+    const seenBefore = new Set(
+      waarnemingen
+        .filter(w => w.datum && w.datum.slice(0, 4) < selectedYear)
+        .map(w => w.species_name_lat || w.species_name_nl)
+        .filter(Boolean)
+    );
+
     const map = new Map();
     for (const w of inYear) {
       const key = w.species_name_lat || w.species_name_nl;
@@ -49,13 +58,20 @@ export default function JaarlijstPage({ waarnemingen }) {
           species_name_lat: w.species_name_lat,
           first_date: w.datum,
           count: 0,
+          isLifer: !seenBefore.has(key),
         });
       }
       const entry = map.get(key);
       entry.count++;
       if (w.datum < entry.first_date) entry.first_date = w.datum;
     }
-    const list = [...map.values()].sort((a, b) => a.first_date.localeCompare(b.first_date));
+
+    const sorted = [...map.values()].sort((a, b) => a.first_date.localeCompare(b.first_date));
+    // Lifers bovenaan, daarna terugkerend — binnen elke groep op datum
+    const list = [
+      ...sorted.filter(e => e.isLifer),
+      ...sorted.filter(e => !e.isLifer),
+    ];
 
     // Nieuwe soorten per maand
     const monthCounts = Array(12).fill(0);
@@ -213,25 +229,41 @@ export default function JaarlijstPage({ waarnemingen }) {
       )}
 
       {/* Lijst */}
-      <p className="w-section-title">Jaarlijst {selectedYear}</p>
+      {jaarlijst.some(e => e.isLifer) && (
+        <p className="w-section-title" style={{ color: '#22c55e' }}>
+          Lifers ({jaarlijst.filter(e => e.isLifer).length})
+        </p>
+      )}
 
-      {jaarlijst.map((entry, idx) => (
-        <div key={entry.key} className="w-obs-row">
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', minWidth: 28 }}>
-            {idx + 1}.
-          </span>
-          <div className="w-obs-main">
-            <div className="w-obs-name">{entry.species_name_nl || entry.species_name_lat}</div>
-            {entry.species_name_lat && entry.species_name_nl && entry.species_name_lat !== entry.species_name_nl && (
-              <div className="w-obs-lat">{entry.species_name_lat}</div>
+      {jaarlijst.map((entry, idx) => {
+        const firstReturning = !entry.isLifer && idx > 0 && jaarlijst[idx - 1].isLifer;
+        return (
+          <>
+            {firstReturning && (
+              <p key="terugkerend-header" className="w-section-title" style={{ marginTop: 16 }}>
+                Terugkerend ({jaarlijst.filter(e => !e.isLifer).length})
+              </p>
             )}
-          </div>
-          <div className="w-obs-meta">
-            <span className="w-obs-date">{formatDate(entry.first_date)}</span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{entry.count}×</span>
-          </div>
-        </div>
-      ))}
+            <div key={entry.key} className="w-obs-row">
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', minWidth: 28 }}>
+                {idx + 1}.
+              </span>
+              <div className="w-obs-main">
+                <div className="w-obs-name" style={entry.isLifer ? { color: '#4ade80' } : {}}>
+                  {entry.species_name_nl || entry.species_name_lat}
+                </div>
+                {entry.species_name_lat && entry.species_name_nl && entry.species_name_lat !== entry.species_name_nl && (
+                  <div className="w-obs-lat">{entry.species_name_lat}</div>
+                )}
+              </div>
+              <div className="w-obs-meta">
+                <span className="w-obs-date">{formatDate(entry.first_date)}</span>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{entry.count}×</span>
+              </div>
+            </div>
+          </>
+        );
+      })}
 
       {jaarlijst.length === 0 && (
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textAlign: 'center', padding: '24px 0' }}>
