@@ -126,7 +126,7 @@ export default function KaartPage({ waarnemingen }) {
           ))}
         </div>
       )}
-      <div ref={mapRef} style={{ flex: 1, minHeight: 300 }} />
+      <div ref={mapRef} style={{ flex: 1, minHeight: 300, isolation: 'isolate' }} />
       <div style={{ padding: '6px 12px', fontSize: '0.72rem', color: 'var(--text-muted)', borderTop: '1px solid var(--border)', background: 'var(--bg-secondary)' }}>
         {filtered.length} waarnemingen op kaart · {withCoords.length} van {waarnemingen.length} hebben coördinaten
       </div>

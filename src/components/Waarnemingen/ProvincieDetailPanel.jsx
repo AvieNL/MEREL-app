@@ -317,7 +317,7 @@ export default function ProvincieDetailPanel({ province, countryCode, waarneming
         {withCoords.length > 0 && (
           <>
             <p className="w-section-title">Kaart ({withCoords.length} locaties)</p>
-            <div ref={mapRef} style={{ height: 220, borderRadius: 8, overflow: 'hidden', marginBottom: 20, border: '1px solid var(--border)' }} />
+            <div ref={mapRef} style={{ height: 220, borderRadius: 8, overflow: 'hidden', marginBottom: 20, border: '1px solid var(--border)', isolation: 'isolate' }} />
           </>
         )}
 
