@@ -137,6 +137,37 @@
   flex-shrink: 0;
 }
 
+/* Obs row – two-line variant (main + meta) */
+.w-obs-row .w-obs-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.w-obs-row .w-obs-main .w-obs-name {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: unset;
+}
+
+.w-obs-lat {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.w-obs-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  gap: 2px;
+}
+
 /* Lifelist row */
 .w-ll-row {
   padding: 6px 0;
