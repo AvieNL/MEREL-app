@@ -1,6 +1,22 @@
-export const VERSIE = '2.8.0';
+export const VERSIE = '2.8.1';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.1',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'fix: kaart in soortdetail glijdt niet meer over de navigatiebalk',
+      'fix: waarnemingslijst in soortdetail heeft nu dezelfde opmaak als de overzichtspagina',
+    ],
+    wijzigingen_en: [
+      'fix: map in species detail no longer slides over the navigation bar',
+      'fix: observation list in species detail now matches the overview page layout',
+    ],
+    wijzigingen_de: [
+      'fix: Karte im Artdetail überlagert nicht mehr die Navigationsleiste',
+      'fix: Beobachtungsliste im Artdetail hat jetzt dasselbe Layout wie die Übersichtsseite',
+    ],
+  },
   {
     versie: '2.8.0',
     datum: '2026-11-01',

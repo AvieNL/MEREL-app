@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useRef } from 'react';
-import { countryFlag, formatDate } from './utils';
-import RarityIcon from './RarityIcon';
+import { formatDate } from './utils';
+import { ObsRow } from './OverzichtPage';
 
 export default function SoortDetailPanel({ speciesKey, waarnemingen, ringRecords, onClose }) {
   const mapRef = useRef(null);
@@ -168,32 +168,13 @@ export default function SoortDetailPanel({ speciesKey, waarnemingen, ringRecords
         {withCoords.length > 0 && (
           <>
             <p className="w-section-title">Kaart ({withCoords.length} locaties)</p>
-            <div ref={mapRef} style={{ height: 220, borderRadius: 8, overflow: 'hidden', marginBottom: 20, border: '1px solid var(--border)' }} />
+            <div ref={mapRef} style={{ height: 220, borderRadius: 8, overflow: 'hidden', marginBottom: 20, border: '1px solid var(--border)', isolation: 'isolate' }} />
           </>
         )}
 
         {/* Alle waarnemingen */}
         <p className="w-section-title">Alle waarnemingen</p>
-        {sightings.map(w => (
-          <div key={w.id} className="w-obs-row" style={{ cursor: w.permalink ? 'pointer' : 'default' }}
-            onClick={() => w.permalink && window.open(w.permalink, '_blank', 'noopener')}>
-            <div className="w-obs-main">
-              <div style={{ fontSize: '0.82rem', color: 'var(--text-primary)' }}>
-                {w.location_name || '—'}
-              </div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 1, display: 'flex', gap: 6, alignItems: 'center' }}>
-                {w.country_code && <span>{countryFlag(w.country_code)} {w.country_name || w.country_code}</span>}
-                {w.count > 1 && <span>{w.count}×</span>}
-                <RarityIcon rarity={w.rarity} />
-                {w.has_photo && <span>📷</span>}
-              </div>
-            </div>
-            <div className="w-obs-meta">
-              <span className="w-obs-date">{formatDate(w.datum)}</span>
-              {w.permalink && <span style={{ fontSize: '0.65rem', color: 'var(--accent)' }}>↗</span>}
-            </div>
-          </div>
-        ))}
+        {sightings.map(w => <ObsRow key={w.id} obs={w} />)}
     </div>
   );
 }
