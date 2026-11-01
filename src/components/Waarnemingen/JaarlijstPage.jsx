@@ -149,20 +149,22 @@ export default function JaarlijstPage({ waarnemingen }) {
       )}
 
       {/* Jaarselector */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 0, marginBottom: 16, overflowX: 'auto', scrollbarWidth: 'none' }}>
         {years.map(y => (
           <button
             key={y}
             onClick={() => setSelectedYear(y)}
             style={{
-              padding: '5px 12px',
-              borderRadius: 'var(--radius)',
-              border: `1px solid ${y === selectedYear ? 'var(--accent)' : 'var(--border)'}`,
-              background: y === selectedYear ? 'color-mix(in srgb, var(--accent) 15%, transparent)' : 'var(--bg-tertiary)',
-              color: y === selectedYear ? 'var(--accent)' : 'var(--text-secondary)',
+              padding: '4px 10px',
+              border: 'none',
+              borderBottom: `2px solid ${y === selectedYear ? 'var(--accent)' : 'transparent'}`,
+              background: 'none',
+              color: y === selectedYear ? 'var(--accent)' : 'var(--text-muted)',
               fontWeight: y === selectedYear ? 700 : 400,
-              fontSize: '0.85rem',
+              fontSize: '0.82rem',
               cursor: 'pointer',
+              flexShrink: 0,
+              whiteSpace: 'nowrap',
             }}
           >
             {y}

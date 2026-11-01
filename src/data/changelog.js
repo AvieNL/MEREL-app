@@ -1,6 +1,19 @@
-export const VERSIE = '2.8.5';
+export const VERSIE = '2.8.6';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.6',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'fix: jaarselector vervangen door compacte scrollbare tab-strip zonder blokken',
+    ],
+    wijzigingen_en: [
+      'fix: year selector replaced with compact scrollable tab strip without blocks',
+    ],
+    wijzigingen_de: [
+      'fix: Jahresauswahl durch kompakten scrollbaren Tab-Streifen ohne Blöcke ersetzt',
+    ],
+  },
   {
     versie: '2.8.5',
     datum: '2026-11-01',
