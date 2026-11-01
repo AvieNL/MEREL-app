@@ -1,6 +1,25 @@
-export const VERSIE = '2.8.3';
+export const VERSIE = '2.8.4';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.4',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'feat: jaargrafiek groter en gestapeld — groen=lifers, blauw=terugkerend; tooltip met details',
+      'feat: tooltip op maandgrafiek met soortaantal per maand',
+      'fix: jaarlijst opmaak gecorrigeerd (namen niet meer afgekapt, datum 2-cijferig jaar)',
+    ],
+    wijzigingen_en: [
+      'feat: year chart taller and stacked — green=lifers, blue=returning; tooltip with details',
+      'feat: tooltip on monthly chart with species count per month',
+      'fix: year list layout fixed (names no longer truncated, date uses 2-digit year)',
+    ],
+    wijzigingen_de: [
+      'feat: Jahresdiagramm größer und gestapelt — grün=Lifers, blau=wiederkehrend; Tooltip mit Details',
+      'feat: Tooltip auf Monatsdiagramm mit Artenanzahl pro Monat',
+      'fix: Jahreslisten-Layout korrigiert (Namen nicht mehr abgeschnitten, Datum 2-stelliges Jahr)',
+    ],
+  },
   {
     versie: '2.8.3',
     datum: '2026-11-01',
