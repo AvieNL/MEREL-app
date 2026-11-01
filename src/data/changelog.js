@@ -1,6 +1,19 @@
-export const VERSIE = '2.8.1';
+export const VERSIE = '2.8.2';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.2',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'feat: tabblad "Landen" samengevoegd met "Volledigheid" — landenlijst staat nu als sectie in de Volledigheid-pagina',
+    ],
+    wijzigingen_en: [
+      'feat: "Countries" tab merged into "Completeness" — country list is now a section on the Completeness page',
+    ],
+    wijzigingen_de: [
+      'feat: Tab "Länder" mit "Vollständigkeit" zusammengeführt — Länderliste ist jetzt ein Abschnitt auf der Vollständigkeitsseite',
+    ],
+  },
   {
     versie: '2.8.1',
     datum: '2026-11-01',

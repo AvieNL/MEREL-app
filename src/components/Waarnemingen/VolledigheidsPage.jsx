@@ -6,6 +6,7 @@ import {
 } from '../../lib/ebird-api';
 import { useRecords } from '../../hooks/useRecords';
 import ProvincieDetailPanel from './ProvincieDetailPanel';
+import LandDetailPanel from './LandDetailPanel';
 
 const MAX_UNSEEN = 300;
 
@@ -15,6 +16,7 @@ export default function VolledigheidsPage({ waarnemingen }) {
   const [showWorldUnseen, setShowWorldUnseen] = useState(false);
   const [showWorldNoMatch, setShowWorldNoMatch] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   const ebirdKey = getEbirdKey();
 
@@ -103,6 +105,34 @@ export default function VolledigheidsPage({ waarnemingen }) {
       .map(p => ({ ...p, speciesCount: p.species.size }))
       .sort((a, b) => b.speciesCount - a.speciesCount);
   }, [waarnemingen]);
+
+  const byCountry = useMemo(() => {
+    const map = new Map();
+    for (const w of waarnemingen) {
+      const code = w.country_code || 'XX';
+      if (!map.has(code)) map.set(code, { code, obs: [] });
+      map.get(code).obs.push(w);
+    }
+    return [...map.values()]
+      .map(({ code, obs }) => {
+        const species = new Set(obs.map(w => w.species_name_lat || w.species_name_nl).filter(Boolean));
+        const storedName = obs.find(w => w.country_name)?.country_name || code;
+        return { code, name: storedName, obs_count: obs.length, species_count: species.size };
+      })
+      .sort((a, b) => b.species_count - a.species_count);
+  }, [waarnemingen]);
+
+  if (selectedCountry) {
+    return (
+      <LandDetailPanel
+        countryCode={selectedCountry.code}
+        countryName={selectedCountry.name}
+        waarnemingen={waarnemingen}
+        ringRecords={ringRecords}
+        onClose={() => setSelectedCountry(null)}
+      />
+    );
+  }
 
   if (selectedProvince) {
     return (
@@ -256,6 +286,28 @@ export default function VolledigheidsPage({ waarnemingen }) {
                   {c.speciesCount} soorten · {c.countryCount} {c.countryCount === 1 ? 'land' : 'landen'} · {c.obsCount.toLocaleString('nl')} waarnemingen
                 </div>
               </div>
+            </div>
+          ))}
+        </>
+      )}
+
+      {/* Landen */}
+      {byCountry.length > 0 && (
+        <>
+          <p className="w-section-title" style={{ marginTop: 24 }}>Landen</p>
+          {byCountry.map(country => (
+            <div
+              key={country.code}
+              className="w-country-row"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setSelectedCountry(country)}
+            >
+              <span className="w-country-flag">{countryFlag(country.code)}</span>
+              <div className="w-country-info">
+                <div className="w-country-name">{country.name}</div>
+                <div className="w-country-count">{country.species_count} soorten · {country.obs_count} waarnemingen</div>
+              </div>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>›</span>
             </div>
           ))}
         </>

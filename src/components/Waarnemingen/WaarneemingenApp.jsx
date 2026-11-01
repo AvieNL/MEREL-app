@@ -3,7 +3,6 @@ import { useWaarnemingen } from '../../hooks/useWaarnemingen';
 import Header from '../Layout/Header';
 import OverzichtPage from './OverzichtPage';
 import LifelistPage from './LifelistPage';
-import LandenPage from './LandenPage';
 import JaarlijstPage from './JaarlijstPage';
 import KaartPage from './KaartPage';
 import VolledigheidsPage from './VolledigheidsPage';
@@ -12,7 +11,6 @@ import './WaarneemingenApp.css';
 const TABS = [
   { id: 'overzicht',     label: 'Overzicht',     icon: '◎' },
   { id: 'lifelist',      label: 'Lifelist',      icon: '✦' },
-  { id: 'landen',        label: 'Landen',        icon: '⊕' },
   { id: 'volledigheid',  label: 'Volledigheid',  icon: '◈' },
   { id: 'jaar',          label: 'Jaarlijst',     icon: '◷' },
   { id: 'kaart',         label: 'Kaart',         icon: '⬡' },
@@ -38,7 +36,6 @@ export default function WaarneemingenApp({ onSwitchModule }) {
     switch (activeTab) {
       case 'overzicht':   return <OverzichtPage waarnemingen={w} onImport={importWaarnemingen} />;
       case 'lifelist':    return <LifelistPage waarnemingen={w} />;
-      case 'landen':      return <LandenPage waarnemingen={w} />;
       case 'jaar':        return <JaarlijstPage waarnemingen={w} />;
       case 'volledigheid': return <VolledigheidsPage waarnemingen={w} />;
       case 'kaart':       return <KaartPage waarnemingen={w} />;
