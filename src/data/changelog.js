@@ -1,6 +1,19 @@
-export const VERSIE = '2.8.4';
+export const VERSIE = '2.8.5';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.5',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'fix: jaargrafiek groter (160px) en hoger contrast — geen opacity-dimming meer, geselecteerd jaar gemarkeerd met indicator',
+    ],
+    wijzigingen_en: [
+      'fix: year chart taller (160px) and higher contrast — no more opacity dimming, selected year marked with indicator',
+    ],
+    wijzigingen_de: [
+      'fix: Jahresdiagramm höher (160px) und mehr Kontrast — kein Opacity-Dimming mehr, ausgewähltes Jahr mit Indikator markiert',
+    ],
+  },
   {
     versie: '2.8.4',
     datum: '2026-11-01',

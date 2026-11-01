@@ -79,7 +79,7 @@ export default function JaarlijstPage({ waarnemingen }) {
   }
 
   const maxYear = Math.max(...byYear.map(y => y.species), 1);
-  const CHART_H = 100;
+  const CHART_H = 160;
   const maxMonth = Math.max(...byMonth, 1);
 
   return (
@@ -88,12 +88,12 @@ export default function JaarlijstPage({ waarnemingen }) {
       {byYear.length > 1 && (
         <>
           <p className="w-section-title">Soorten per jaar</p>
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: CHART_H, marginBottom: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: CHART_H, marginBottom: 0 }}>
             {byYear.map(({ yr, species, lifers, returning }) => {
-              const totalH = Math.max(8, (species / maxYear) * (CHART_H - 8));
+              const totalH = Math.max(6, (species / maxYear) * (CHART_H - 6));
               const liferH = Math.round((lifers / species) * totalH);
               const retH = totalH - liferH;
-              const dim = yr !== selectedYear;
+              const selected = yr === selectedYear;
               return (
                 <div
                   key={yr}
@@ -104,22 +104,25 @@ export default function JaarlijstPage({ waarnemingen }) {
                   {liferH > 0 && <div style={{
                     height: liferH,
                     borderRadius: retH === 0 ? '3px 3px 0 0' : '0',
-                    background: '#22c55e',
-                    opacity: dim ? 0.35 : 0.9,
-                    transition: 'height 0.3s, opacity 0.2s',
+                    background: selected ? '#4ade80' : '#22c55e',
+                    transition: 'height 0.3s',
                   }} />}
                   {retH > 0 && <div style={{
                     height: retH,
                     borderRadius: liferH === 0 ? '3px 3px 0 0' : '0',
-                    background: 'var(--accent)',
-                    opacity: dim ? 0.3 : 0.75,
-                    transition: 'height 0.3s, opacity 0.2s',
+                    background: selected ? 'var(--accent)' : '#1e6fa8',
+                    transition: 'height 0.3s',
                   }} />}
                 </div>
               );
             })}
           </div>
-          <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
+          <div style={{ display: 'flex', gap: 3, marginBottom: 6 }}>
+            {byYear.map(({ yr }) => (
+              <div key={yr} style={{ flex: 1, height: 3, borderRadius: 2, background: yr === selectedYear ? 'var(--accent)' : 'transparent' }} />
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 3, marginBottom: 8 }}>
             {byYear.map(({ yr }) => (
               <div key={yr} style={{
                 flex: 1, textAlign: 'center',
