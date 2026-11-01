@@ -1,6 +1,19 @@
-export const VERSIE = '2.8.7';
+export const VERSIE = '2.8.8';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.8',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'feat: soorten in jaarlijst zijn klikbaar — opent soortdetailpagina met kaart en alle waarnemingen',
+    ],
+    wijzigingen_en: [
+      'feat: species in year list are clickable — opens species detail page with map and all observations',
+    ],
+    wijzigingen_de: [
+      'feat: Arten in der Jahresliste sind klickbar — öffnet Artdetailseite mit Karte und allen Beobachtungen',
+    ],
+  },
   {
     versie: '2.8.7',
     datum: '2026-11-01',

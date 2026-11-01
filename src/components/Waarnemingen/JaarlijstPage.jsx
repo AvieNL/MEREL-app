@@ -1,8 +1,13 @@
 import { useMemo, useState } from 'react';
+import { useRecords } from '../../hooks/useRecords';
+import SoortDetailPanel from './SoortDetailPanel';
 
 const MONTHS = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
 
 export default function JaarlijstPage({ waarnemingen }) {
+  const { records } = useRecords();
+  const [selectedKey, setSelectedKey] = useState(null);
+
   const years = useMemo(() => {
     const set = new Set(waarnemingen.map(w => w.datum?.slice(0, 4)).filter(Boolean));
     return [...set].sort((a, b) => b.localeCompare(a));
@@ -82,6 +87,17 @@ export default function JaarlijstPage({ waarnemingen }) {
 
     return { jaarlijst: list, totalObs: inYear.length, byMonth: monthCounts };
   }, [waarnemingen, selectedYear]);
+
+  if (selectedKey) {
+    return (
+      <SoortDetailPanel
+        speciesKey={selectedKey}
+        waarnemingen={waarnemingen}
+        ringRecords={records}
+        onClose={() => setSelectedKey(null)}
+      />
+    );
+  }
 
   if (waarnemingen.length === 0) {
     return (
@@ -244,7 +260,7 @@ export default function JaarlijstPage({ waarnemingen }) {
                 Terugkerend ({jaarlijst.filter(e => !e.isLifer).length})
               </p>
             )}
-            <div key={entry.key} className="w-obs-row">
+            <div key={entry.key} className="w-obs-row" style={{ cursor: 'pointer' }} onClick={() => setSelectedKey(entry.key)}>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', minWidth: 28 }}>
                 {idx + 1}.
               </span>
