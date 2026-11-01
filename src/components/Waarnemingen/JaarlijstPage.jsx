@@ -148,7 +148,8 @@ export default function JaarlijstPage({ waarnemingen }) {
           <p className="w-section-title">Nieuwe soorten per maand</p>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 72, marginBottom: 4 }}>
             {byMonth.map((n, i) => (
-              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+              <div key={i} title={n > 0 ? `${MONTHS[i]}: ${n} soort${n !== 1 ? 'en' : ''}` : `${MONTHS[i]}: geen`}
+                style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
                 <div style={{
                   width: '100%', borderRadius: '3px 3px 0 0',
                   background: n > 0 ? 'var(--accent)' : 'var(--bg-secondary)',
