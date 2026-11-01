@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useRef } from 'react';
-import { formatDate } from './utils';
+import { countryFlag, formatDate } from './utils';
 import { ObsRow } from './OverzichtPage';
 
 export default function SoortDetailPanel({ speciesKey, waarnemingen, ringRecords, onClose }) {
