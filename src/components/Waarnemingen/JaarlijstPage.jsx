@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 
+const MONTHS = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+
 export default function JaarlijstPage({ waarnemingen }) {
   const years = useMemo(() => {
     const set = new Set(waarnemingen.map(w => w.datum?.slice(0, 4)).filter(Boolean));
@@ -8,7 +10,7 @@ export default function JaarlijstPage({ waarnemingen }) {
 
   const [selectedYear, setSelectedYear] = useState(() => years[0] ?? new Date().getFullYear().toString());
 
-  const jaarlijst = useMemo(() => {
+  const { jaarlijst, totalObs, byMonth } = useMemo(() => {
     const inYear = waarnemingen.filter(w => w.datum?.startsWith(selectedYear));
     const map = new Map();
     for (const w of inYear) {
@@ -27,8 +29,16 @@ export default function JaarlijstPage({ waarnemingen }) {
       entry.count++;
       if (w.datum < entry.first_date) entry.first_date = w.datum;
     }
-    return [...map.values()]
-      .sort((a, b) => a.first_date.localeCompare(b.first_date));
+    const list = [...map.values()].sort((a, b) => a.first_date.localeCompare(b.first_date));
+
+    // Nieuwe soorten per maand
+    const monthCounts = Array(12).fill(0);
+    for (const entry of list) {
+      const m = parseInt(entry.first_date.slice(5, 7), 10) - 1;
+      if (m >= 0 && m < 12) monthCounts[m]++;
+    }
+
+    return { jaarlijst: list, totalObs: inYear.length, byMonth: monthCounts };
   }, [waarnemingen, selectedYear]);
 
   if (waarnemingen.length === 0) {
@@ -42,9 +52,11 @@ export default function JaarlijstPage({ waarnemingen }) {
     );
   }
 
+  const maxMonth = Math.max(...byMonth, 1);
+
   return (
     <div className="w-page">
-      {/* Year selector */}
+      {/* Jaarselector */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
         {years.map(y => (
           <button
@@ -66,12 +78,47 @@ export default function JaarlijstPage({ waarnemingen }) {
         ))}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
-        <p className="w-section-title" style={{ margin: 0 }}>Jaarlijst {selectedYear}</p>
-        <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 700 }}>
-          {jaarlijst.length} soorten
-        </span>
+      {/* Stat-tegels */}
+      <div className="w-tiles" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginBottom: 20 }}>
+        <div className="w-tile">
+          <div className="w-tile-value">{jaarlijst.length}</div>
+          <div className="w-tile-label">Soorten</div>
+        </div>
+        <div className="w-tile">
+          <div className="w-tile-value">{totalObs.toLocaleString('nl')}</div>
+          <div className="w-tile-label">Waarnemingen</div>
+        </div>
       </div>
+
+      {/* Maandgrafiek */}
+      {jaarlijst.length > 0 && (
+        <>
+          <p className="w-section-title">Nieuwe soorten per maand</p>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 72, marginBottom: 4 }}>
+            {byMonth.map((n, i) => (
+              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                <div style={{
+                  width: '100%', borderRadius: '3px 3px 0 0',
+                  background: n > 0 ? 'var(--accent)' : 'var(--bg-secondary)',
+                  opacity: n > 0 ? 0.8 : 1,
+                  height: n > 0 ? `${Math.max(8, (n / maxMonth) * 56)}px` : '4px',
+                  transition: 'height 0.3s',
+                }} />
+              </div>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 4, marginBottom: 20 }}>
+            {MONTHS.map((m, i) => (
+              <div key={i} style={{ flex: 1, textAlign: 'center', fontSize: '0.6rem', color: 'var(--text-muted)' }}>
+                {m}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Lijst */}
+      <p className="w-section-title">Jaarlijst {selectedYear}</p>
 
       {jaarlijst.map((entry, idx) => (
         <div key={entry.key} className="w-obs-row">

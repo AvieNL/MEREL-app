@@ -1,6 +1,19 @@
-export const VERSIE = '2.8.2';
+export const VERSIE = '2.8.3';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.3',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'feat: jaarlijst toont nu stat-tegels (soorten, waarnemingen) en een maandgrafiek met nieuwe soorten per maand',
+    ],
+    wijzigingen_en: [
+      'feat: year list now shows stat tiles (species, observations) and a monthly bar chart of new species per month',
+    ],
+    wijzigingen_de: [
+      'feat: Jahresliste zeigt jetzt Stat-Kacheln (Arten, Beobachtungen) und ein monatliches Balkendiagramm neuer Arten',
+    ],
+  },
   {
     versie: '2.8.2',
     datum: '2026-11-01',
