@@ -4,33 +4,23 @@ import { useAuth } from '../../context/AuthContext';
 import './LoginPage.css';
 
 export default function LoginPage() {
-  const { login, register } = useAuth();
+  const { login } = useAuth();
   const { t } = useTranslation(['common', 'forms', 'errors']);
-  const [mode, setMode] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
-    setSuccess('');
     setLoading(true);
     try {
-      if (mode === 'login') {
-        await login(email, password);
-      } else {
-        await register(email, password);
-        setSuccess(t('errors:register_success'));
-        setMode('login');
-      }
+      await login(email, password);
     } catch (err) {
       const messages = {
         'Invalid login credentials': t('errors:invalid_credentials'),
         'Email not confirmed':       t('errors:email_not_confirmed'),
-        'User already registered':   t('errors:user_already_registered'),
       };
       setError(messages[err.message] || err.message);
     } finally {
@@ -53,23 +43,6 @@ export default function LoginPage() {
           </div>
           <h1>{t('app_name')}</h1>
           <p>{t('app_subtitle')}</p>
-        </div>
-
-        <div className="login-tabs">
-          <button
-            type="button"
-            className={mode === 'login' ? 'active' : ''}
-            onClick={() => { setMode('login'); setError(''); setSuccess(''); }}
-          >
-            {t('nav_login', 'Inloggen')}
-          </button>
-          <button
-            type="button"
-            className={mode === 'register' ? 'active' : ''}
-            onClick={() => { setMode('register'); setError(''); setSuccess(''); }}
-          >
-            {t('nav_register', 'Registreren')}
-          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
@@ -102,13 +75,9 @@ export default function LoginPage() {
           </div>
 
           {error && <div className="login-error" role="alert">{error}</div>}
-          {success && <div className="login-success" role="status">{success}</div>}
 
           <button type="submit" className="login-btn" disabled={loading}>
-            {loading
-              ? t('btn_busy')
-              : mode === 'login' ? t('nav_login') : t('nav_account_create', 'Account aanmaken')
-            }
+            {loading ? t('btn_busy') : t('nav_login')}
           </button>
         </form>
       </div>

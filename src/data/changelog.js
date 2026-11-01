@@ -1,6 +1,19 @@
-export const VERSIE = '2.8.9';
+export const VERSIE = '2.8.10';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.10',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'fix: registratie uitgeschakeld — app is alleen toegankelijk voor bestaande gebruikers',
+    ],
+    wijzigingen_en: [
+      'fix: registration disabled — app is only accessible for existing users',
+    ],
+    wijzigingen_de: [
+      'fix: Registrierung deaktiviert — App ist nur für bestehende Benutzer zugänglich',
+    ],
+  },
   {
     versie: '2.8.9',
     datum: '2026-11-01',
