@@ -10,6 +10,20 @@ export default function JaarlijstPage({ waarnemingen }) {
 
   const [selectedYear, setSelectedYear] = useState(() => years[0] ?? new Date().getFullYear().toString());
 
+  const byYear = useMemo(() => {
+    const map = new Map();
+    for (const w of waarnemingen) {
+      const yr = w.datum?.slice(0, 4);
+      if (!yr) continue;
+      if (!map.has(yr)) map.set(yr, new Set());
+      const key = w.species_name_lat || w.species_name_nl;
+      if (key) map.get(yr).add(key);
+    }
+    return [...map.entries()]
+      .map(([yr, sp]) => ({ yr, species: sp.size }))
+      .sort((a, b) => a.yr.localeCompare(b.yr));
+  }, [waarnemingen]);
+
   const { jaarlijst, totalObs, byMonth } = useMemo(() => {
     const inYear = waarnemingen.filter(w => w.datum?.startsWith(selectedYear));
     const map = new Map();
@@ -52,10 +66,48 @@ export default function JaarlijstPage({ waarnemingen }) {
     );
   }
 
+  const maxYear = Math.max(...byYear.map(y => y.species), 1);
   const maxMonth = Math.max(...byMonth, 1);
 
   return (
     <div className="w-page">
+      {/* Jaargrafiek */}
+      {byYear.length > 1 && (
+        <>
+          <p className="w-section-title">Soorten per jaar</p>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 72, marginBottom: 4 }}>
+            {byYear.map(({ yr, species }) => (
+              <div
+                key={yr}
+                style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}
+                onClick={() => setSelectedYear(yr)}
+                title={`${yr}: ${species} soorten`}
+              >
+                <div style={{
+                  width: '100%', borderRadius: '3px 3px 0 0',
+                  background: yr === selectedYear ? 'var(--accent)' : 'color-mix(in srgb, var(--accent) 40%, var(--bg-secondary))',
+                  height: `${Math.max(8, (species / maxYear) * 56)}px`,
+                  transition: 'height 0.3s, background 0.2s',
+                }} />
+              </div>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 4, marginBottom: 20 }}>
+            {byYear.map(({ yr }) => (
+              <div key={yr} style={{
+                flex: 1, textAlign: 'center',
+                fontSize: byYear.length > 8 ? '0.52rem' : '0.6rem',
+                color: yr === selectedYear ? 'var(--accent)' : 'var(--text-muted)',
+                fontWeight: yr === selectedYear ? 700 : 400,
+                cursor: 'pointer',
+              }} onClick={() => setSelectedYear(yr)}>
+                {yr.slice(2)}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
       {/* Jaarselector */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
         {years.map(y => (
