@@ -1,6 +1,19 @@
-export const VERSIE = '2.8.8';
+export const VERSIE = '2.8.9';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.9',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'feat: tabblad "Kaart" verwijderd — kaarten zijn beschikbaar in soort-, land- en provinciedetail',
+    ],
+    wijzigingen_en: [
+      'feat: "Map" tab removed — maps are available in species, country and province detail pages',
+    ],
+    wijzigingen_de: [
+      'feat: Tab "Karte" entfernt — Karten sind in Art-, Land- und Provinzdetailseiten verfügbar',
+    ],
+  },
   {
     versie: '2.8.8',
     datum: '2026-11-01',

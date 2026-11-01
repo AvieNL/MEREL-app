@@ -4,7 +4,6 @@ import Header from '../Layout/Header';
 import OverzichtPage from './OverzichtPage';
 import LifelistPage from './LifelistPage';
 import JaarlijstPage from './JaarlijstPage';
-import KaartPage from './KaartPage';
 import VolledigheidsPage from './VolledigheidsPage';
 import './WaarneemingenApp.css';
 
@@ -13,7 +12,6 @@ const TABS = [
   { id: 'lifelist',      label: 'Lifelist',      icon: '✦' },
   { id: 'volledigheid',  label: 'Volledigheid',  icon: '◈' },
   { id: 'jaar',          label: 'Jaarlijst',     icon: '◷' },
-  { id: 'kaart',         label: 'Kaart',         icon: '⬡' },
 ];
 
 export default function WaarneemingenApp({ onSwitchModule }) {
@@ -38,7 +36,6 @@ export default function WaarneemingenApp({ onSwitchModule }) {
       case 'lifelist':    return <LifelistPage waarnemingen={w} />;
       case 'jaar':        return <JaarlijstPage waarnemingen={w} />;
       case 'volledigheid': return <VolledigheidsPage waarnemingen={w} />;
-      case 'kaart':       return <KaartPage waarnemingen={w} />;
       default:            return null;
     }
   };
