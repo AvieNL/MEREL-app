@@ -318,6 +318,21 @@
   flex-shrink: 0;
 }
 
+.w-country-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.w-country-info .w-country-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.w-country-info .w-country-count {
+  margin-top: 1px;
+}
+
 /* Import progress */
 .w-progress {
   margin: 16px 0;
