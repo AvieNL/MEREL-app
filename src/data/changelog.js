@@ -1,6 +1,25 @@
-export const VERSIE = '2.8.0';
+export const VERSIE = '2.9.0';
 
 export const CHANGELOG = [
+  {
+    versie: '2.9.0',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'feat: zeldzaamheid automatisch bepalen via eBird — knop "Zeldzaamheid ophalen" in Overzicht',
+      'feat: soorten op landniveau die niet in de eBird-lijst staan krijgen zeldzaamheid 4 (◆ rood)',
+      'feat: soorten die wel in het land maar niet in de provincie staan krijgen zeldzaamheid 3 (◆◆ oranje)',
+    ],
+    wijzigingen_en: [
+      'feat: automatic rarity enrichment via eBird — "Fetch rarity" button in Overview',
+      'feat: species not in the eBird country list receive rarity 4 (◆ red)',
+      'feat: species in the country but not in the province list receive rarity 3 (◆◆ orange)',
+    ],
+    wijzigingen_de: [
+      'feat: automatische Seltenheitsanreicherung via eBird — Schaltfläche "Seltenheit abrufen" in Übersicht',
+      'feat: Arten, die nicht in der eBird-Länderliste stehen, erhalten Seltenheit 4 (◆ rot)',
+      'feat: Arten im Land, aber nicht in der Provinz, erhalten Seltenheit 3 (◆◆ orange)',
+    ],
+  },
   {
     versie: '2.8.0',
     datum: '2026-11-01',

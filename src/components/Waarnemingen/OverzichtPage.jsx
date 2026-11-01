@@ -1,15 +1,38 @@
 import { useMemo, useState, useRef } from 'react';
 import RarityIcon from './RarityIcon';
 import { parseCsv } from '../../lib/observation-api';
+import { getEbirdKey } from '../../lib/ebird-api';
 
-export default function OverzichtPage({ waarnemingen, onImport }) {
+export default function OverzichtPage({ waarnemingen, onImport, onEnrichRarity }) {
   const [importing, setImporting] = useState(false);
   const [progress, setProgress] = useState(null);
   const [importStatus, setImportStatus] = useState(null);
   const [lastImport, setLastImport] = useState(() => localStorage.getItem('w_last_import'));
   const fileRef = useRef(null);
+  const [enriching, setEnriching] = useState(false);
+  const [enrichProgress, setEnrichProgress] = useState(null);
+  const [enrichStatus, setEnrichStatus] = useState(null);
+  const ebirdKey = getEbirdKey();
 
   const [zoek, setZoek] = useState('');
+
+  async function handleEnrichRarity() {
+    if (!onEnrichRarity || !ebirdKey) return;
+    setEnriching(true);
+    setEnrichStatus(null);
+    setEnrichProgress('Verbinden met eBird…');
+    try {
+      const n = await onEnrichRarity(ebirdKey, (done, total, code) =>
+        setEnrichProgress(`Regio's ophalen: ${done} / ${total} (${code})…`)
+      );
+      setEnrichStatus({ ok: true, msg: n > 0 ? `Zeldzaamheid bijgewerkt voor ${n} waarnemingen.` : 'Zeldzaamheid was al up-to-date.' });
+    } catch (err) {
+      setEnrichStatus({ ok: false, msg: `Fout: ${err.message}` });
+    } finally {
+      setEnriching(false);
+      setEnrichProgress(null);
+    }
+  }
 
   async function handleCsvImport(e) {
     const file = e.target.files?.[0];
@@ -82,6 +105,31 @@ export default function OverzichtPage({ waarnemingen, onImport }) {
         <p style={{ fontSize: '0.82rem', marginBottom: 12, color: importStatus.ok ? 'var(--success)' : 'var(--danger)' }}>
           {importStatus.msg}
         </p>
+      )}
+
+      {/* ── Zeldzaamheid via eBird ── */}
+      {onEnrichRarity && (
+        <>
+          {ebirdKey ? (
+            <button
+              className="btn-secondary"
+              style={{ width: '100%', marginBottom: 4 }}
+              onClick={handleEnrichRarity}
+              disabled={enriching || importing}
+            >
+              {enriching ? enrichProgress || 'Bezig…' : '◆ Zeldzaamheid ophalen via eBird'}
+            </button>
+          ) : (
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 8 }}>
+              Voeg een eBird API-sleutel toe in <strong>Instellingen → eBird</strong> om zeldzaamheidsiconen te tonen.
+            </p>
+          )}
+          {enrichStatus && (
+            <p style={{ fontSize: '0.82rem', marginBottom: 12, color: enrichStatus.ok ? 'var(--success)' : 'var(--danger)' }}>
+              {enrichStatus.msg}
+            </p>
+          )}
+        </>
       )}
     </>
   );
