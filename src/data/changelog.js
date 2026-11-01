@@ -1,6 +1,22 @@
-export const VERSIE = '2.7.9';
+export const VERSIE = '2.8.0';
 
 export const CHANGELOG = [
+  {
+    versie: '2.8.0',
+    datum: '2026-11-01',
+    wijzigingen: [
+      'feat: alle CSV-velden worden nu opgeslagen — tijd, geslacht, leeftijdsstadium, activiteit, methode, notities, foto/geluid, nauwkeurigheid, UUID, validator, e.v.a.',
+      'feat: migratiescript toegevoegd voor Supabase (scripts/add-waarnemingen-velden.sql)',
+    ],
+    wijzigingen_en: [
+      'feat: all CSV fields now stored — time, sex, life stage, activity, method, notes, photo/sound, accuracy, UUID, validator, and more',
+      'feat: migration script added for Supabase (scripts/add-waarnemingen-velden.sql)',
+    ],
+    wijzigingen_de: [
+      'feat: alle CSV-Felder werden jetzt gespeichert — Zeit, Geschlecht, Altersstadium, Aktivität, Methode, Notizen, Foto/Ton, Genauigkeit, UUID, Validator u.v.m.',
+      'feat: Migrationsskript für Supabase hinzugefügt (scripts/add-waarnemingen-velden.sql)',
+    ],
+  },
   {
     versie: '2.7.9',
     datum: '2026-10-25',
