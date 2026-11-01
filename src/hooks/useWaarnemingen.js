@@ -2,7 +2,6 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../lib/db';
 import { supabase } from '../lib/supabase';
-import { enrichObservationsRarity } from '../lib/ebird-api';
 
 const BATCH_SIZE = 500;
 
@@ -76,37 +75,5 @@ export function useWaarnemingen() {
     await db.waarnemingen.where('user_id').equals(user.id).delete();
   }
 
-  // Enrich rarity=0 observations using eBird species lists (country + province level).
-  // Updates Dexie and Supabase. Returns the number of observations updated.
-  async function enrichRarity(apiKey, onProgress) {
-    if (!user || !apiKey) return 0;
-    const all = await db.waarnemingen.where('user_id').equals(user.id).toArray();
-    const updates = await enrichObservationsRarity(all, apiKey, onProgress);
-    if (!updates.length) return 0;
-
-    // Update Dexie locally
-    await Promise.all(updates.map(({ id, rarity }) => db.waarnemingen.update(id, { rarity })));
-
-    // Update Supabase: grouped by rarity value for efficiency
-    const byRarity = new Map();
-    for (const { id, rarity } of updates) {
-      if (!byRarity.has(rarity)) byRarity.set(rarity, []);
-      byRarity.get(rarity).push(id);
-    }
-    for (const [rarity, ids] of byRarity) {
-      for (let i = 0; i < ids.length; i += 100) {
-        const batch = ids.slice(i, i + 100);
-        const { error } = await supabase
-          .from('waarnemingen')
-          .update({ rarity })
-          .in('id', batch)
-          .eq('user_id', user.id);
-        if (error) throw error;
-      }
-    }
-
-    return updates.length;
-  }
-
-  return { waarnemingen, importWaarnemingen, deleteWaarneming, clearAllWaarnemingen, syncFromSupabase, enrichRarity };
+  return { waarnemingen, importWaarnemingen, deleteWaarneming, clearAllWaarnemingen, syncFromSupabase };
 }

@@ -20,7 +20,7 @@ const TABS = [
 
 export default function WaarneemingenApp({ onSwitchModule }) {
   const [activeTab, setActiveTab] = useState('overzicht');
-  const { waarnemingen, importWaarnemingen, clearAllWaarnemingen, syncFromSupabase, enrichRarity } = useWaarnemingen();
+  const { waarnemingen, importWaarnemingen, clearAllWaarnemingen, syncFromSupabase } = useWaarnemingen();
   const didSync = useRef(false);
 
   // Auto-pull from Supabase when local Dexie is empty (first use on a new device)
@@ -36,7 +36,7 @@ export default function WaarneemingenApp({ onSwitchModule }) {
 
   const renderTab = () => {
     switch (activeTab) {
-      case 'overzicht':   return <OverzichtPage waarnemingen={w} onImport={importWaarnemingen} onEnrichRarity={enrichRarity} />;
+      case 'overzicht':   return <OverzichtPage waarnemingen={w} onImport={importWaarnemingen} />;
       case 'lifelist':    return <LifelistPage waarnemingen={w} />;
       case 'landen':      return <LandenPage waarnemingen={w} />;
       case 'jaar':        return <JaarlijstPage waarnemingen={w} />;
